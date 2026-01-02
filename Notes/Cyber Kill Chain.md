@@ -4,7 +4,9 @@ categories:
 topic@security:
   - "[[Security General]]"
 created: 2026-01-01T22:39:10+01:00
-modified: 2026-01-02T08:05:32+01:00
+modified: 2026-01-02T09:43:34+01:00
+aliases:
+  - Cyber Attack Lifecycle
 ---
 # Phase 1: Reconnaissance
 

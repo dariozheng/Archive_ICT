@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Cyber Kill Chain.md",
+                "file": "Categories/Security.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cyber Kill Chain"
+              "title": "Security"
             }
           }
         ],
@@ -179,13 +179,23 @@
               "icon": "lucide-list",
               "title": "Outline of Public Cloud Shared Responsibility Model"
             }
+          },
+          {
+            "id": "4358fb8c6f77a4fb",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {},
+              "icon": "spreadsheet",
+              "title": "Advanced Tables"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -197,39 +207,40 @@
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
       "obsidian-git:Open Git source control": false,
-      "templater-obsidian:Templater": false
+      "templater-obsidian:Templater": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "cc87b040a0b4466b",
+  "active": "4358fb8c6f77a4fb",
   "lastOpenFiles": [
-    "Notes/Public Cloud Shared Responsibility Model.md",
-    "Notes/Man-in-the-Middle Attacks.md",
-    "Notes/Unauthorized Packet Sniffing.md",
-    "Notes/Traffic Flows.md",
-    "Notes/Security Measures.md",
-    "Notes/Distributed Denial-of-Service (DDoS).md",
-    "Notes/Enterprise Network Segmentation.md",
-    "Notes/Cyber Kill Chain.md",
-    "Notes/Cloud Access Security Broker.md",
-    "Notes/Buffer Overflow Attack.md",
-    "Notes/Bots and Botnets.md",
+    "Categories/Topics/Security/Security General.md",
     "Categories/Security.md",
     "Categories/Networking.md",
     "Categories/Hardware.md",
-    "Categories/Cloud Computing.md",
+    "Notes/Public Cloud Shared Responsibility Model.md",
+    "Notes/Security Measures.md",
+    "Notes/Traffic Flows.md",
+    "Notes/Cyber Kill Chain.md",
+    "Notes/Buffer Overflow Attack.md",
     "Categories/Topics/Cloud Computing/Cloud Computing General.md",
-    "Categories/Topics/Networking/Networking General.md",
-    "Categories/Topics/Security/Network-Based Attacks.md",
-    "Categories/Topics/Security/Security General.md",
-    "Templates/Cloud Computing Template.md",
-    "Templates/Hardware Template.md",
     "Templates/Networking Template.md",
     "Templates/Security Template.md",
+    "Templates/Hardware Template.md",
+    "Templates/Cloud Computing Template.md",
+    "Notes/Denial-of-Service (DoS).md",
+    "Notes/Distributed Denial-of-Service (DDoS).md",
+    "Categories/Topics/Security/Network-Based Attacks.md",
+    "Categories/Cloud Computing.md",
+    "Notes/Man-in-the-Middle Attacks.md",
+    "Notes/Unauthorized Packet Sniffing.md",
+    "Notes/Enterprise Network Segmentation.md",
+    "Notes/Cloud Access Security Broker.md",
+    "Notes/Bots and Botnets.md",
+    "Categories/Topics/Networking/Networking General.md",
     "Notes/Untitled.md",
     "Notes/Untitled.base",
     "Notes/Cloud Services.md",
     "Templates/Bases/Topic/Networking/Networking General.base",
-    "Notes/Network Scanning.md",
     "Templates/Bases/Security.base",
     "Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
     "Templates/Bases/Topic/Networking/Untitled.base",
