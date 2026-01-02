@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Categories/Security.md",
+                "file": "Notes/Unauthorized Packet Sniffing.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Security"
+              "title": "Unauthorized Packet Sniffing"
             }
           }
         ],
@@ -68,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#security",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/Public Cloud Shared Responsibility Model.md",
+                "file": "Notes/Unauthorized Packet Sniffing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Public Cloud Shared Responsibility Model"
+              "title": "Backlinks for Unauthorized Packet Sniffing"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/Public Cloud Shared Responsibility Model.md",
+                "file": "Notes/Unauthorized Packet Sniffing.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Public Cloud Shared Responsibility Model"
+              "title": "Outgoing links from Unauthorized Packet Sniffing"
             }
           },
           {
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Public Cloud Shared Responsibility Model.md",
+                "file": "Notes/Unauthorized Packet Sniffing.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Public Cloud Shared Responsibility Model"
+              "title": "Outline of Unauthorized Packet Sniffing"
             }
           },
           {
@@ -191,11 +191,12 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -211,37 +212,37 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "4358fb8c6f77a4fb",
+  "active": "cc87b040a0b4466b",
   "lastOpenFiles": [
-    "Categories/Topics/Security/Security General.md",
-    "Categories/Security.md",
-    "Categories/Networking.md",
-    "Categories/Hardware.md",
-    "Notes/Public Cloud Shared Responsibility Model.md",
-    "Notes/Security Measures.md",
     "Notes/Traffic Flows.md",
+    "Notes/Security Measures.md",
+    "Notes/Public Cloud Shared Responsibility Model.md",
+    "Notes/Network Scanning.md",
+    "Notes/Man-in-the-Middle Attacks.md",
+    "Notes/IP Spoofing.md",
+    "Notes/Enterprise Network Segmentation.md",
+    "Notes/Distributed Denial-of-Service (DDoS).md",
+    "Notes/Denial-of-Service (DoS).md",
     "Notes/Cyber Kill Chain.md",
+    "Notes/Cloud Services.md",
+    "Notes/Cloud Access Security Broker.md",
     "Notes/Buffer Overflow Attack.md",
-    "Categories/Topics/Cloud Computing/Cloud Computing General.md",
+    "Notes/Bots and Botnets.md",
+    "Templates/Cloud Computing Template.md",
+    "Templates/Hardware Template.md",
     "Templates/Networking Template.md",
     "Templates/Security Template.md",
-    "Templates/Hardware Template.md",
-    "Templates/Cloud Computing Template.md",
-    "Notes/Denial-of-Service (DoS).md",
-    "Notes/Distributed Denial-of-Service (DDoS).md",
+    "Notes/Unauthorized Packet Sniffing.md",
+    "Categories/Security.md",
+    "Categories/Networking.md",
+    "Categories/Topics/Security/Security General.md",
+    "Templates/Bases/Security.base",
+    "Categories/Hardware.md",
+    "Categories/Topics/Cloud Computing/Cloud Computing General.md",
     "Categories/Topics/Security/Network-Based Attacks.md",
     "Categories/Cloud Computing.md",
-    "Notes/Man-in-the-Middle Attacks.md",
-    "Notes/Unauthorized Packet Sniffing.md",
-    "Notes/Enterprise Network Segmentation.md",
-    "Notes/Cloud Access Security Broker.md",
-    "Notes/Bots and Botnets.md",
-    "Categories/Topics/Networking/Networking General.md",
-    "Notes/Untitled.md",
     "Notes/Untitled.base",
-    "Notes/Cloud Services.md",
     "Templates/Bases/Topic/Networking/Networking General.base",
-    "Templates/Bases/Security.base",
     "Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
     "Templates/Bases/Topic/Networking/Untitled.base",
     "Templates/Bases/Topic/Security/Security General.base",

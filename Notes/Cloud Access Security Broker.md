@@ -3,8 +3,9 @@ categories:
   - "[[Cloud Computing]]"
 topic@cloud:
   - "[[Cloud Computing General]]"
+tags:
 created: 2026-01-01T22:38:35+01:00
-modified: 2026-01-02T08:09:46+01:00
+modified: 2026-01-02T10:21:27+01:00
 ---
 <mark style="background: #FFB86CA6;"><strong>Cloud Access Security Broker</strong> (CASB) solutions insert <strong>inspection</strong>, <strong>threat-detection</strong>, and <strong>governance</strong> over the access</mark> <mark style="background: #ABF7F7A6;">to</mark> and <mark style="background: #BBFABBA6;">use</mark> <mark style="background: #FFB86CA6;">of software-as-a-service (SaaS) applications</mark>, such as Microsoft 365, Google Workspace, Dropbox, and Salesforce, just to name a few.
 ![[CASB elements.png]]

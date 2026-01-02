@@ -3,8 +3,9 @@ categories:
   - "[[Cloud Computing]]"
 topic@cloud:
   - "[[Cloud Computing General]]"
+tags:
 created: 2026-01-01T23:07:21+01:00
-modified: 2026-01-02T09:05:24+01:00
+modified: 2026-01-02T10:21:32+01:00
 ---
 Cloud services are resources not hosted within a corporate infrastructure but managed by a third-party service provider.
 

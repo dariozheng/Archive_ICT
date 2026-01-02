@@ -6,8 +6,9 @@ topic@networking:
   - "[[Networking General]]"
 topic@cloud:
   - "[[Cloud Computing General]]"
+tags:
 created: 2025-12-31T16:46:31+01:00
-modified: 2026-01-02T08:10:09+01:00
+modified: 2026-01-02T10:22:11+01:00
 ---
 Cloud-based applications—and the data that go with them—are becoming increasingly distributed among varying environments to improve agility and reduce costs. 
 

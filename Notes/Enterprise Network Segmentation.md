@@ -3,8 +3,9 @@ categories:
   - "[[Networking]]"
 topic@networking:
   - "[[Networking General]]"
+tags:
 created: 2026-01-01T23:08:38+01:00
-modified: 2026-01-02T08:06:59+01:00
+modified: 2026-01-02T10:22:01+01:00
 ---
 Segmenting an enterprise network is an important strategy to enhance network security, efficiency, and ease of management. 
 
