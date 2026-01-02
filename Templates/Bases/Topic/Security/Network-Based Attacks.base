@@ -1,0 +1,10 @@
+properties:
+  file.name:
+    displayName: Page
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - and:
+            - note["topic@security"].contains(link("Network-Based Attacks"))

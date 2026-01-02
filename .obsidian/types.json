@@ -1,0 +1,14 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "layer": "multitext",
+    "categories": "multitext",
+    "created": "datetime",
+    "last": "date",
+    "modified": "datetime",
+    "creation": "datetime",
+    "section": "multitext"
+  }
+}

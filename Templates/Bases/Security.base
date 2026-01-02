@@ -1,0 +1,25 @@
+properties:
+  file.name:
+    displayName: Page
+  note.section:
+    displayName: Section
+  note.topic:
+    displayName: Topic
+  note.topic@security:
+    displayName: Topic
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - categories.contains(link("Security"))
+        - '!file.name.contains("Template")'
+    order:
+      - file.name
+      - modified
+      - topic@security
+    sort:
+      - property: section
+        direction: ASC
+    columnSize:
+      note.modified: 117

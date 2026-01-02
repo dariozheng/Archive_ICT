@@ -1,0 +1,9 @@
+properties:
+  file.name:
+    displayName: Page
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - note["topic@cloud"].contains(link("Cloud Computing General"))

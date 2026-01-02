@@ -1,0 +1,38 @@
+.theme-light .view-content .inline-color {
+    --inline-title-color: hotpink;
+}
+
+.theme-dark .view-content .inline-color {
+    --inline-title-color: gold;
+}
+
+.view-content .wideish {
+    --my-custom-width: 1000px; /* default is 700px */
+    --file-line-width: var(--my-custom-width);
+    --line-width: var(--my-custom-width); /* for the Minimal theme if you are often switching themes */
+}
+
+.view-content .dark-note-rises {
+    background-color: rgb(68,68,68);
+    --text-normal: rgb(209,209,209);
+    color: var(--text-normal);
+    --metadata-label-text-color: orange;
+    --metadata-input-text-color: var(--text-normal);
+
+    & .cm-content {
+        caret-color: rgba(49,177,235,1);
+    }
+}
+
+.writing.markdown-source-view .cm-line:not(.HyperMD-header, .HyperMD-codeblock),
+.writing.markdown-preview-view p {
+    text-indent: 1.75em;
+}
+
+.gutter-grey .cm-lineNumbers {
+    background-color: rgba(211,211,211,0.2);
+}
+
+.no-inline .inline-title {
+   display: none;
+}

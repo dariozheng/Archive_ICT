@@ -1,0 +1,24 @@
+properties:
+  file.name:
+    displayName: Page
+  note.topic:
+    displayName: Topic
+  note.topic@networking:
+    displayName: Topic
+  note.topic@cloud:
+    displayName: Topic
+views:
+  - type: table
+    name: Table
+    filters:
+      and:
+        - categories.contains(link("Cloud Computing"))
+        - '!file.name.contains("Template")'
+    order:
+      - file.name
+      - topic@cloud
+    sort:
+      - property: topic
+        direction: DESC
+      - property: file.name
+        direction: ASC

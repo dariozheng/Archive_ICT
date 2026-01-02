@@ -1,0 +1,10 @@
+filters:
+  and:
+    - categories.contains(link("Hardware"))
+    - '!file.name.contains("Template")'
+properties:
+  file.name:
+    displayName: Page
+views:
+  - type: table
+    name: Table
