@@ -2,4 +2,4 @@
 tags:
   - categories
 ---
-![[Cloud Computing.base]]
+![[Networking.base]]
