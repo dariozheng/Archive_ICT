@@ -2,6 +2,6 @@
 categories:
   - "[[Hardware]]"
 topic@hardware:
-created: {{date:YYYY-MM-DDTHH:mm:ssZ}}
+created: <% tp.date.now("YYYY-MM-DDTHH:mm:ssZ") %>
 modified:
 ---
