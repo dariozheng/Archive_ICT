@@ -1,13 +1,18 @@
 ---
 categories:
   - "[[Cloud Computing]]"
+  - "[[Security]]"
+topic@security:
+  - "[[Security General]]"
 topic@cloud:
   - "[[Cloud Computing General]]"
 tags:
 created: 2026-01-01T22:38:35+01:00
-modified: 2026-01-02T10:21:27+01:00
+modified: 2026-01-02T11:00:33+01:00
 ---
-<mark style="background: #FFB86CA6;"><strong>Cloud Access Security Broker</strong> (CASB) solutions insert <strong>inspection</strong>, <strong>threat-detection</strong>, and <strong>governance</strong> over the access</mark> <mark style="background: #ABF7F7A6;">to</mark> and <mark style="background: #BBFABBA6;">use</mark> <mark style="background: #FFB86CA6;">of software-as-a-service (SaaS) applications</mark>, such as Microsoft 365, Google Workspace, Dropbox, and Salesforce, just to name a few.
+<strong>Cloud Access Security Broker</strong> is a [[cloud computing glossary#### cloud computing | on premise]] or cloud based software that sits between cloud services users and cloud application, and it monitors all activity and enforces security policies.
+
+<mark style="background: #FFB8EBA6;"><strong>Cloud Access Security Broker</strong> (CASB) solutions insert <strong>inspection</strong>, <strong>threat-detection</strong>, and <strong>governance</strong> over the access</mark> <mark style="background: #ABF7F7A6;">to</mark> and <mark style="background: #BBFABBA6;">use</mark> of <mark style="background: #FFB8EBA6;">software-as-a-service (SaaS) applications</mark>, such as Microsoft 365, Google Workspace, Dropbox, and Salesforce, just to name a few.
 ![[CASB elements.png]]
 
  The graphic depicts how lack of visibility leaves valuable data at risk.

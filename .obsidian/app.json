@@ -2,9 +2,10 @@
   "attachmentFolderPath": "attachments",
   "newFileLocation": "folder",
   "newFileFolderPath": "Notes",
-  "promptDelete": false,
+  "promptDelete": true,
   "userIgnoreFilters": [
     "Templates/",
     "attachments/"
-  ]
+  ],
+  "uriCallbacks": false
 }
