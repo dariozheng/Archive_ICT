@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Templates/Notes/Codes/Link to Glossary.md",
+                "file": "Notes/Cloud Computing Glossary.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Link to Glossary"
+              "title": "Cloud Computing Glossary"
             }
           }
         ],
@@ -213,12 +213,12 @@
   },
   "active": "a6475b632f4cbb21",
   "lastOpenFiles": [
+    "Notes/Cloud Services.md",
+    "Templates/Notes/Codes/Link to Glossary.md",
     "Notes/Cloud Access Security Broker.md",
     "Notes/Cloud Computing Glossary.md",
     "Notes/Cloud Computing Glossary on premise ^on-premise on premise.md",
     "Notes/Cloud Computing Glossary^on-premise.md",
-    "Templates/Notes/Codes/Link to Glossary.md",
-    "Notes/Cloud Services.md",
     "Categories/Security.md",
     "Categories/Networking.md",
     "Notes/Buffer Overflow Attack.md",
