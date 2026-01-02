@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Categories/Topics/Networking/Networking General.md",
+                "file": "Notes/Cloud Services.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Networking General"
+              "title": "Cloud Services"
             }
           }
         ]
@@ -187,10 +187,10 @@
   },
   "active": "dccb1764f4d7d76f",
   "lastOpenFiles": [
+    "Categories/Topics/Networking/Networking General.md",
     "Categories/Topics/Security/Security General.md",
     "Categories/Topics/Security/Network-Based Attacks.md",
     "Categories/Topics/Cloud Computing/Cloud Computing General.md",
-    "Categories/Topics/Networking/Networking General.md",
     "Templates/Bases/Topic/Networking/Networking General.base",
     "Categories/Security.md",
     "Categories/Networking.md",

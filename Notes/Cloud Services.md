@@ -6,7 +6,7 @@ topic@cloud:
 created: 2026-01-01T23:07:21+01:00
 modified: 2026-01-02T08:09:53+01:00
 ---
-
+f
 
 Cloud services are resources not hosted within a corporate infrastructure but managed by a third-party service provider.
 
