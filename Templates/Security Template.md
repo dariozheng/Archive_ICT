@@ -2,7 +2,6 @@
 categories:
   - "[[Security]]"
 topic@security:
-created:
-  "{ date:YYYY-MM-DDTHH:mm:ssZ }":
+created: {{date:YYYY-MM-DDTHH:mm:ssZ}}
 modified:
 ---

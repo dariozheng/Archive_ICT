@@ -2,7 +2,6 @@
 categories:
   - "[[Hardware]]"
 topic@hardware:
-created:
-  "{ date:YYYY-MM-DDTHH:mm:ssZ }":
+created: {{date:YYYY-MM-DDTHH:mm:ssZ}}
 modified:
 ---
