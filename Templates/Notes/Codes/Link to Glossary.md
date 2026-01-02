@@ -6,5 +6,5 @@ if (!text) {
 
 const glossary = await tp.system.prompt("Glossary term:");
 
-tR += `[[${glossary} glossary#### ${glossary} | ${test}]]`;
+tR += `[[${glossary} glossary#### ${text} | ${text}]]`;
 %>

@@ -191,7 +191,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -214,12 +214,16 @@
   "active": "a6475b632f4cbb21",
   "lastOpenFiles": [
     "Notes/Cloud Access Security Broker.md",
-    "Templates/Notes/Codes/Link to Glossary.md",
     "Notes/Cloud Computing Glossary.md",
+    "Notes/Cloud Computing Glossary on premise ^on-premise on premise.md",
+    "Notes/Cloud Computing Glossary^on-premise.md",
+    "Templates/Notes/Codes/Link to Glossary.md",
+    "Notes/Cloud Services.md",
+    "Categories/Security.md",
+    "Categories/Networking.md",
     "Notes/Buffer Overflow Attack.md",
     "Categories/Cloud Computing.md",
     "Notes/test.md",
-    "Notes/Cloud Services.md",
     "Notes/Cyber Kill Chain.md",
     "Templates/Notes/Codes",
     "Notes/().md",
@@ -230,8 +234,6 @@
     "Templates/Notes/Hardware Template.md",
     "Templates/Notes/Networking Template.md",
     "Templates/Notes/Security Template.md",
-    "Categories/Security.md",
-    "Categories/Networking.md",
     "Categories/Hardware.md",
     "Notes/Bots and Botnets.md",
     "Notes/Man-in-the-Middle Attacks.md",
@@ -240,8 +242,6 @@
     "Notes/Security Measures.md",
     "Notes/Unauthorized Packet Sniffing.md",
     "Notes/IP Spoofing.md",
-    "Notes/Enterprise Network Segmentation.md",
-    "Notes/Distributed Denial-of-Service (DDoS).md",
     "Templates/Bases/Security.base",
     "Notes/Untitled.base",
     "Templates/Bases/Topic/Networking/Networking General.base",
