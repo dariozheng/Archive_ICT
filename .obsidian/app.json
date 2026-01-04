@@ -8,5 +8,6 @@
     "attachments/"
   ],
   "uriCallbacks": false,
-  "showLineNumber": true
+  "showLineNumber": true,
+  "alwaysUpdateLinks": true
 }

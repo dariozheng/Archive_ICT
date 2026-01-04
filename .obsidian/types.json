@@ -5,9 +5,9 @@
     "tags": "tags",
     "layer": "multitext",
     "categories": "multitext",
-    "created": "datetime",
+    "created": "date",
     "last": "date",
-    "modified": "datetime",
+    "modified": "date",
     "creation": "datetime",
     "section": "multitext"
   }
