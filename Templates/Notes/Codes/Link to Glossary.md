@@ -1,9 +1,9 @@
 <%*
 const glossary = [
-    { name: "Cloud Computing" },
-    { name: "Networking" },
-    { name: "Security" },
-    { name: "Hardware" }
+    { name: "cloud computing" },
+    { name: "networking" },
+    { name: "security" },
+    { name: "hardware" }
 ];
 
 // Get selected text or prompt for alias

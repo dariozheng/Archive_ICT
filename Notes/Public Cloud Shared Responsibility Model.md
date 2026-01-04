@@ -8,9 +8,9 @@ topic@cloud:
   - "[[Cloud Computing General]]"
 tags:
 created: 2025-12-31T16:46:31+01:00
-modified: 2026-01-02T10:22:11+01:00
+modified: 2026-01-04T20:25:43+01:00
 ---
-Cloud-based applications—and the data that go with them—are becoming increasingly distributed among varying environments to improve agility and reduce costs. 
+<mark style="background: #FFF3A3A6;">Cloud-based applications</mark>—and the data that go with them—are becoming increasingly <mark style="background: #FFF3A3A6;">distributed among <strong>varying</strong> environments</mark> to <mark style="background: #FFF3A3A6;">improve agility and reduce costs</mark>. 
 
 These environments include private clouds, public and hybrid clouds, software-as-a-service (SaaS) applications, infrastructure-as-a-service (IaaS) services, and platform-as-a-service (PaaS) environments.
 Each application brings its own unique benefits and security issues.
