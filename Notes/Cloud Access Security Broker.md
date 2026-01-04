@@ -7,8 +7,9 @@ topic@security:
 topic@cloud:
   - "[[Cloud Computing General]]"
 tags:
+  - palo_alto/casb
 created: 2026-01-01T22:38:35+01:00
-modified: 2026-01-02T16:46:55+01:00
+modified: 2026-01-04T21:01:20+01:00
 ---
 <strong>Cloud Access Security Broker</strong> is a [[cloud computing glossary#on premise| on premise]] or [[Cloud Computing glossary#### cloud-based | cloud-based]] software that sits between cloud services users and cloud application, and it monitors all activity and enforces security policies.
 
