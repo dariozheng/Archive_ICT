@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Panorama.md",
+                "file": "Notes/Panorama - to redo.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Panorama"
+              "title": "Panorama - to redo"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/Panorama.md",
+                "file": "Notes/Panorama - to redo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Panorama"
+              "title": "Backlinks for Panorama - to redo"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/Panorama.md",
+                "file": "Notes/Panorama - to redo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Panorama"
+              "title": "Outgoing links from Panorama - to redo"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Panorama.md",
+                "file": "Notes/Panorama - to redo.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Panorama"
+              "title": "Outline of Panorama - to redo"
             }
           },
           {
@@ -199,7 +199,7 @@
   "lastOpenFiles": [
     "Categories/Security.md",
     "Notes/Cloud Computing Glossary.md",
-    "Notes/Panorama.md",
+    "Notes/Panorama - to redo.md",
     "attachments/Panorama Overview.png",
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Notes/Cloud Access Security Broker.md",
