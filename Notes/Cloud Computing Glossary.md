@@ -6,7 +6,7 @@ topic@cloud:
 tags:
   - glossaries
 created: 2026-01-02T10:43:43+01:00
-modified: 2026-01-05T10:07:06+01:00
+modified: 2026-01-05T10:30:14+01:00
 ---
 #### cloud computing 
   paradigm for enabling <mark style="background: #FFF3A3A6;">network access</mark> <mark style="background: #BBFABBA6;">to a scalable and elastic pool</mark> <mark style="background: #FFB86CA6;">of shareable physical or virtual resources</mark> <mark style="background: #ABF7F7A6;">with self-service provisioning</mark> and administration on demand.
@@ -24,9 +24,6 @@ The PaaS provider hosts everything—including servers, networks, data storage, 
 #### SaaS
 <strong>Software as a service</strong> (SaaS) is cloud-hosted application software delivered over the internet to compatible computing devices. 
 SaaS providers <mark style="background: #ABF7F7A6;">operate, manage and maintain the software and the infrastructure on which it runs</mark>. Instead of buying application software and installing on a local device, SaaS users simply create an account, subscribe to the application and get to work.
-#### FWaaP
-<strong>Firewall as a platform</strong> (FWaaP) is a cloud-based firewall solution that provides network security capabilities through a subscription model.
-Unlike traditional firewalls, FWaaS operates in the cloud, offering features such as traffic inspection, threat prevention, and application control without the need for on-premises hardware.
 #### instance network interface 
 is a <strong>virtual network card </strong>attached to a compute instance (virtual machine), acting as its point of connection to a virtual network (VPC). 
 It holds essential network info (IP addresses, MAC address, security groups):
