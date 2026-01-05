@@ -4,9 +4,9 @@ categories:
 topic@security:
   - "[[Palo Alto Networks]]"
 tags:
-  - palo_alto
+  - palo_alto/cdss
 created: 2026-01-05T09:12:09+01:00
-modified: 2026-01-05T11:34:50+01:00
+modified: 2026-01-05T12:30:14+01:00
 ---
 <strong>Cloud-Delivered Security Services</strong> (CDSS) <mark style="background: #FFF3A3A6;">are integrated, subscription-based security solutions hosted in the cloud that protect users, devices, and data anywhere</mark>, moving security from physical appliances to a scalable, always-on platform with real-time threat intelligence, eliminating the need for complex on-premise hardware and manual updates. <mark style="background: #FFF3A3A6;">They provide consistent protection across headquarters, branches, remote workers, and multi-cloud environments by consolidating functions like firewall, secure web gateway, and data loss prevention into a single, unified service </mark>.
 ### Advanced Threat Prevention
