@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Glossaries/Networking Glossary.md",
+                "file": "Notes/Advanced URL Filtering.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Networking Glossary"
+              "title": "Advanced URL Filtering"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Glossaries/Networking Glossary.md",
+                "file": "Notes/Advanced URL Filtering.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Networking Glossary"
+              "title": "Outline of Advanced URL Filtering"
             }
           },
           {
@@ -198,17 +198,18 @@
   },
   "active": "8bb8080f1f07bc2b",
   "lastOpenFiles": [
-    "Notes/2026-01-05.md",
-    "Notes/Glossaries/Networking Glossary.md",
-    "Notes/Glossaries/Security Glossary.md",
-    "Notes/Glossaries/Cloud Computing Glossary.md",
-    "Notes/Glossaries",
+    "Notes/Cloud Access Security Broker.md",
     "Notes/Secure Access Service Edge.md",
+    "Notes/Security Groups.md",
+    "Notes/Glossaries/Cloud Computing Glossary.md",
+    "Notes/Glossaries/Networking Glossary.md",
+    "Notes/2026-01-05.md",
+    "Notes/Glossaries/Security Glossary.md",
+    "Notes/Glossaries",
     "Notes/Cloud-Delivered Security Services.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Templates/Notes/Codes/Link to Glossary.md",
     "Notes/Advanced URL Filtering.md",
-    "Notes/Cloud Access Security Broker.md",
     "attachments/Secure Access Service Edge.png",
     "Notes/Web crawler.md",
     "Untitled.canvas",
@@ -219,7 +220,6 @@
     "Untitled",
     "Notes/Traffic Flows.md",
     "Notes/Panorama.md",
-    "Notes/Security Groups.md",
     "Categories/Security.md",
     "attachments/Panorama Overview.png",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
