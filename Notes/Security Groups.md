@@ -9,7 +9,7 @@ modified: 2026-01-04T21:20:38+01:00
 ---
 Security groups <mark style="background: #BBFABBA6;">define the network traffic that should be <strong>explicitly</strong> <strong>permitted</strong></mark> and <mark style="background: #ABF7F7A6;">deny any traffic that is not explicitly permitted</mark>. 
 
-<mark style="background: #FFB8EBA6;">A security group is attached to an [[cloud computing glossary#instance network interface|instance network interface]] not to the VM itself</mark>, and <mark style="background: #FFB86CA6;">it has separate <strong>inbound</strong> and <strong>outbound</strong> policies</mark>.
+<mark style="background: #FFB8EBA6;">A security group is attached to an [[Cloud Computing Glossary#instance network interface|instance network interface]] not to the VM itself</mark>, and <mark style="background: #FFB86CA6;">it has separate <strong>inbound</strong> and <strong>outbound</strong> policies</mark>.
 
 Security groups are <strong>stateful</strong>, meaning that <mark style="background: #ABF7F7A6;">they also permit return traffic associated with permitted rules</mark>. 
 

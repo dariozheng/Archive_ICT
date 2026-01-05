@@ -1,17 +1,17 @@
 {
   "collapse-filter": false,
-  "search": "",
+  "search": "-path:Notes/Glossaries  ",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
   "showOrphans": true,
-  "collapse-color-groups": false,
+  "collapse-color-groups": true,
   "colorGroups": [
     {
       "query": "tag:#categories  ",
       "color": {
         "a": 1,
-        "rgb": 6058198
+        "rgb": 14048348
       }
     },
     {
@@ -32,6 +32,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 1,
-  "close": true
+  "scale": 1.977159653175526,
+  "close": false
 }

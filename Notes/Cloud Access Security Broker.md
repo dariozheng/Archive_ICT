@@ -11,7 +11,7 @@ tags:
 created: 2026-01-01T22:38:35+01:00
 modified: 2026-01-05T12:29:00+01:00
 ---
-<strong>Cloud Access Security Broker</strong> is a [[cloud computing glossary#on premise| on premise]] or [[Cloud Computing glossary#### cloud-based | cloud-based]] software that sits between cloud services users and cloud application, and it monitors all activity and enforces security policies.
+<strong>Cloud Access Security Broker</strong> is a [[Cloud Computing Glossary#on premise| on premise]] or [[Cloud Computing Glossary#### cloud-based| cloud-based]] software that sits between cloud services users and cloud application, and it monitors all activity and enforces security policies.
 
 <mark style="background: #FFB8EBA6;"><strong>Cloud Access Security Broker</strong> (CASB) solutions insert <strong>inspection</strong>, <strong>threat-detection</strong>, and <strong>governance</strong> over the access</mark> <mark style="background: #ABF7F7A6;">to</mark> and <mark style="background: #BBFABBA6;">use</mark> of <mark style="background: #FFB8EBA6;">software-as-a-service (SaaS) applications</mark>, such as Microsoft 365, Google Workspace, Dropbox, and Salesforce, just to name a few.
 ![[CASB elements.png]]

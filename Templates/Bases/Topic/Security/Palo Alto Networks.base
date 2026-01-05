@@ -15,3 +15,6 @@ views:
       - file.name
       - created
       - modified
+    sort:
+      - property: created
+        direction: DESC

@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "c92a45121848ba00",
+            "id": "8bb8080f1f07bc2b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Advanced URL Filtering.md",
+                "file": "Notes/Glossaries/Networking Glossary.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Advanced URL Filtering"
+              "title": "Networking Glossary"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Advanced URL Filtering.md",
+                "file": "Notes/Glossaries/Networking Glossary.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Advanced URL Filtering"
+              "title": "Outline of Networking Glossary"
             }
           },
           {
@@ -196,25 +196,32 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c92a45121848ba00",
+  "active": "8bb8080f1f07bc2b",
   "lastOpenFiles": [
-    "Notes/Networking Glossary.md",
-    "Notes/Web crawler.md",
-    "Notes/Untitled 1.md",
-    "Notes/Advanced URL Filtering.md",
+    "Notes/2026-01-05.md",
+    "Notes/Glossaries/Networking Glossary.md",
+    "Notes/Glossaries/Security Glossary.md",
+    "Notes/Glossaries/Cloud Computing Glossary.md",
+    "Notes/Glossaries",
+    "Notes/Secure Access Service Edge.md",
     "Notes/Cloud-Delivered Security Services.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
+    "Templates/Notes/Codes/Link to Glossary.md",
+    "Notes/Advanced URL Filtering.md",
     "Notes/Cloud Access Security Broker.md",
-    "Notes/Cloud Computing Glossary.md",
-    "Notes/Security Glossary.md",
+    "attachments/Secure Access Service Edge.png",
+    "Notes/Web crawler.md",
+    "Untitled.canvas",
+    "Categories/Topics/Security/Network-Based Attacks.md",
+    "Categories/Topics/Security/Security General.md",
+    "attachments/Palo Alto Networks CASB solution.png",
+    "Notes/Untitled 1.md",
     "Untitled",
     "Notes/Traffic Flows.md",
     "Notes/Panorama.md",
     "Notes/Security Groups.md",
     "Categories/Security.md",
     "attachments/Panorama Overview.png",
-    "Categories/Topics/Security/Network-Based Attacks.md",
-    "Categories/Topics/Security/Security General.md",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "Templates/Notes/Cloud Computing Template.md",
     "Categories/Networking.md",
@@ -224,9 +231,6 @@
     "Notes/Security Measures.md",
     "Notes/Network Scanning.md",
     "Notes/Man-in-the-Middle Attacks.md",
-    "Notes/Enterprise Network Segmentation.md",
-    "Notes/Distributed Denial-of-Service (DDoS).md",
-    "Notes/Cyber Kill Chain.md",
     "Templates/Notes/Codes",
     "Templates/Notes",
     "Templates/Bases/Untitled.base",
@@ -234,16 +238,12 @@
     "Notes/Untitled.base",
     "Templates/Bases/Topic/Networking/Networking General.base",
     "Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
-    "Templates/Bases/Topic/Networking/Untitled.base",
     "attachments/Advanced API-Based Protection for Sanctioned Apps.png",
     "attachments/CASB elements.png",
     "attachments/CASB solution.png",
     "attachments/Data Exposure Threat.png",
     "attachments/Inline Flow Governance for SaaS Applications.png",
-    "attachments/Palo Alto Networks CASB solution.png",
     "attachments/Segment Structure.png",
-    "attachments/East-West Versus North-South Protection.png",
-    "Untitled.canvas",
-    "Notes/attachments/East-West Versus North-South Protection.png"
+    "attachments/East-West Versus North-South Protection.png"
   ]
 }
