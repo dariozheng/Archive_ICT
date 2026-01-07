@@ -29,3 +29,5 @@ Vault options/Exclude folders: **Templates**
 
 # Templater:
 Teplate folder location: **Templates/Notes**
+**Templates/Notes/Codes/Link to Glossary**: This template add a link to the selected word to the corrispondent word in the chosen glossary, the glossaries can be found in the folder Notes/Glossaries
+
