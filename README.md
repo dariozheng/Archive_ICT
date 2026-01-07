@@ -19,7 +19,13 @@ In Hotkeys bind **Highlightr: Open Highlightr**
 
 # Wrap with shortcuts
 Add a new wrapper with a shortcut: 
-- Name = **bold** Start Tag = **\<strong>** End Tag = **\</strong>**  
+- Name = **bold** Start Tag = **\<strong>** End Tag = **\</strong>**
+
+# Update modified date
+Modified date property: **modified**
+Date format: **YYYY-MM-DDTHH:mm:ssZ**
+Date locale: **it**
+Vault options/Exclude folders: **Templates**
 
 # Templater:
 Teplate folder location: **Templates/Notes**
