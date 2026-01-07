@@ -11,8 +11,14 @@ Every category have the following propertie:
 
 # Categories
 This is the folder where is present the notes that are linked to the category field. 
-Each main category field note has the tag **categories** and it's linked to its corrispondent **.base** file.
+Each main category field note has the tag **categories** and it's linked to its corrispondent **.base** file. To link a base, use: ![[filename.base]]
+In this folder its also present the Topic folder where each catogory has its topic folder with their **.base** files.
 
+# Base
+The base file can be found in **Templates/Bases**. 
+Filter the base file in the following way:
+  where categories.contains(link("Networking")) and !file.name.contains("Template")
+  
 
 # Graph view:
 In Filters add:
