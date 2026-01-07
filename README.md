@@ -17,6 +17,7 @@ In this folder its also present the Topic folder where each catogory has its top
 # Base
 The base file can be found in **Templates/Bases**. 
 Filter the base file in the following way:
+
 ```where categories.contains(link("Networking")) and !file.name.contains("Template")```
   
 # Graph view:
