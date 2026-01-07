@@ -19,7 +19,7 @@ In Hotkeys bind **Highlightr: Open Highlightr**
 
 # Wrap with shortcuts
 Add a new wrapper with a shortcut: 
-- Name = **bold** Start Tag = **/<strong>** End Tag = **/</strong>**  
+- Name = **bold** Start Tag = **\<strong>** End Tag = **\</strong>**  
 
 # Templater:
 Teplate folder location: **Templates/Notes**
