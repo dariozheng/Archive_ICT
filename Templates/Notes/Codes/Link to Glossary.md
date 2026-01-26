@@ -23,5 +23,5 @@ if (!choice) return;
 
 // Correct link syntax: [[File#Header|Alias]]
 tR += `[[${choice} glossary#${text}|${text}]]`;
-%>
+-%>
 
