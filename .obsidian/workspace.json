@@ -199,6 +199,7 @@
   },
   "active": "0bb3830b9f8b372d",
   "lastOpenFiles": [
+    "README.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
     "Notes/Palo Alto SASE.md",
     "Templates/Notes/Codes/Link to Glossary.md",
@@ -224,7 +225,6 @@
     "Notes/Cloud-Delivered Security Services.md",
     "Notes/Bots and Botnets.md",
     "Notes/Cyber Kill Chain.md",
-    "Notes/Buffer Overflow Attack.md",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "Notes/Glossaries",
     "attachments/Secure Access Service Edge.png",
