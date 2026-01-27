@@ -13,12 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Palo Alto SASE.md",
+                "file": "Notes/VPN.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Palo Alto SASE"
+              "title": "VPN"
+            }
+          },
+          {
+            "id": "cfae5b57b57ff6c6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/Backhaul.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Backhaul"
             }
           },
           {
@@ -109,7 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/Panorama.md",
+                "file": "Notes/Backhaul.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +133,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Panorama"
+              "title": "Backlinks for Backhaul"
             }
           },
           {
@@ -128,12 +142,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/Panorama.md",
+                "file": "Notes/Backhaul.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Panorama"
+              "title": "Outgoing links from Backhaul"
             }
           },
           {
@@ -171,13 +185,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Advanced URL Filtering.md",
+                "file": "Notes/Backhaul.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Advanced URL Filtering"
+              "title": "Outline of Backhaul"
             }
           },
           {
@@ -200,12 +214,12 @@
               "title": "Source Control"
             }
           }
-        ],
-        "currentTab": 6
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -220,16 +234,18 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "73fe5098531633f8",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
-    "Notes/Palo Alto SASE.md",
+    "attachments/Backhaul.png",
     "Notes/VPN.md",
+    "Notes/Backhaul.md",
+    "Notes/Glossaries/Networking Glossary.md",
+    "Notes/Palo Alto SASE.md",
     "README.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
     "Templates/Notes/Codes/Link to Glossary.md",
     "Templates/Notes/Security Template.md",
     "Notes/cloud computingglossary.md",
-    "Notes/Glossaries/Networking Glossary.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Notes/Secure Access Service Edge.md",
     "Categories/Topics/Security/Security General.md",
@@ -246,8 +262,6 @@
     "Categories/Cloud Computing.md",
     "Categories/Hardware.md",
     "Notes/Advanced URL Filtering.md",
-    "Notes/Cloud-Delivered Security Services.md",
-    "Notes/Bots and Botnets.md",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "Notes/Glossaries",
     "attachments/Secure Access Service Edge.png",
