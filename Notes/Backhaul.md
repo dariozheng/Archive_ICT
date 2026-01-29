@@ -5,13 +5,13 @@ topic@networking:
   - "[[Networking General]]"
 tags:
 created: 2026-01-27T16:24:43+01:00
-modified: 2026-01-27T23:20:44+01:00
+modified: 2026-01-29T16:42:34+01:00
 aliases:
   - backhauling
   - network backhauling
   - network backhaul
 ---
-<mark style="background: #FF5582A6;"><strong>Backhaul</strong> in networking refers to the <strong>infrastructure</strong> that connects a local network, or subnetwork, to a backbone or core network</mark>. 
+<mark style="background: #FF5582A6;"><strong>Backhaul</strong> in networking refers to the <strong>infrastructure</strong> that connects a <strong>local network</strong>, or <strong>subnetwork</strong>, to a <strong>backbone</strong> or <strong>core network</strong></mark>. 
 
 <strong>Backhauling</strong> <mark style="background: #FF5582A6;">is routing all data from each location back to a <strong>central location</strong>, even if the ultimate destination for some traffic is another office or the internet</mark>. <mark style="background: #ABF7F7A6;">This allows security policy to be enforced and traffic inspected consistently from central hubs</mark>. 
 

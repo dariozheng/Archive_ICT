@@ -5,7 +5,7 @@ topic@networking:
   - "[[Networking General]]"
 tags:
 created: 2026-01-28T16:02:30+01:00
-modified: 2026-01-29T16:38:51+01:00
+modified: 2026-01-29T16:46:49+01:00
 aliases:
   - Software-Defined WAN
   - Software Defined Wan
@@ -13,12 +13,12 @@ aliases:
 ---
 <strong>SD-WAN</strong> (<strong>software-defined wide area network</strong>) is a type of networking technology that uses <strong>software-defined networking</strong> (<strong>SDN</strong>) principles to manage and optimize wide area network (WAN) performance.
 
-SD-WAN also simplifies WAN management by <mark style="background: #FFF3A3A6;">providing centralized control and visibility over the entire network</mark>.
+SD-WAN also simplifies WAN management by <mark style="background: #FFF3A3A6;">providing centralized control and visibility over the entire network</mark>. <mark style="background: #ADCCFFA6;">It separates control traffic from data traffic</mark>. 
 
-<mark style="background: #FF5582A6;">SD-WAN is a virtualized approach to managing wide area networks</mark>.
-<mark style="background: #FF5582A6;">It connects</mark> <mark style="background: #BBFABBA6;">users and branch sites</mark> to <mark style="background: #ABF7F7A6;">enterprise applications</mark> across <mark style="background: #FFB86CA6;">multiple transport types</mark>. <mark style="background: #FFB86CA6;">Like MPLS, broadband, wireless links, VPNs, and public internet</mark>.
+<mark style="background: #FF5582A6;">SD-WAN is a virtualized approach to managing wide area networks</mark>. 
+<mark style="background: #FF5582A6;">It connects</mark> <mark style="background: #BBFABBA6;">users and branch sites</mark> to <mark style="background: #ABF7F7A6;">enterprise applications</mark> across <mark style="background: #FFB86CA6;">multiple transport types</mark>. <mark style="background: #FFB86CA6;">Like MPLS, broadband, wireless links, VPNs, and public internet</mark>. 
 
-<mark style="background: #ADCCFFA6;">Each SD-WAN appliance connects to a <strong>centralized controller</strong></mark>. <mark style="background: #FFB8EBA6;">The controller monitors network conditions—latency, jitter, packet loss—and decides how traffic should flow</mark>. <mark style="background: #FFF3A3A6;">If a link degrades, SD-WAN automatically reroutes traffic to a better-performing path</mark>.
+<mark style="background: #ADCCFFA6;">Each SD-WAN appliance or edge connects to a <strong>centralized controller</strong></mark>. <mark style="background: #FFB8EBA6;">The controller monitors network conditions—latency, jitter, packet loss—and decides how traffic should flow</mark>. <mark style="background: #FFF3A3A6;">If a link degrades, SD-WAN automatically reroutes traffic to a better-performing path</mark>.
 ![[Dynamic path selection in SDWAN.png]]
 
 <mark style="background: #D2B3FFA6;">Policies are created centrally and pushed to all sites without manual configuration</mark>. 
