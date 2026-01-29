@@ -25,13 +25,14 @@
             "id": "b61166a4dd85b9e5",
             "type": "leaf",
             "state": {
-              "type": "bases",
+              "type": "markdown",
               "state": {
-                "file": "Notes/Untitled.base",
-                "viewName": "Table"
+                "file": "Notes/SD-WAN.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-table",
-              "title": "Untitled"
+              "icon": "lucide-file",
+              "title": "SD-WAN"
             }
           }
         ],
@@ -204,7 +205,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -221,13 +223,15 @@
   },
   "active": "b61166a4dd85b9e5",
   "lastOpenFiles": [
+    "attachments/SD-WAN components.png",
+    "attachments/Dynamic path selection in SDWAN.png",
     "Notes/SD-WAN.md",
+    "Notes/Virtual Private Network.md",
+    "attachments/Backhaul.png",
     "Notes/Untitled.base",
     "Notes/Backhaul.md",
-    "Notes/Virtual Private Network.md",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
-    "attachments/Backhaul.png",
     "Notes/Palo Alto SASE.md",
     "README.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
@@ -265,7 +269,6 @@
     "attachments/CASB elements.png",
     "attachments/CASB solution.png",
     "attachments/Data Exposure Threat.png",
-    "attachments/Inline Flow Governance for SaaS Applications.png",
-    "attachments/Segment Structure.png"
+    "attachments/Inline Flow Governance for SaaS Applications.png"
   ]
 }
