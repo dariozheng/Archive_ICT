@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/SD-WAN.md",
+                "file": "Notes/Glossaries/Cloud Computing Glossary.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "SD-WAN"
+              "title": "Cloud Computing Glossary"
             }
           }
         ]
@@ -208,25 +208,32 @@
   },
   "active": "b61166a4dd85b9e5",
   "lastOpenFiles": [
+    "attachments/SaaS.png",
+    "attachments/PaaS.png",
+    "attachments/IaaS.png",
+    "Notes/Glossaries/Cloud Computing Glossary.md",
+    "attachments/original.png",
+    "Notes/Glossaries/Security Glossary.md",
+    "Notes/Glossaries/Networking Glossary.md",
+    "Categories/Cloud Computing.md",
+    "Notes/Cloud Access Security Broker.md",
+    "Notes/Cloud Services.md",
     "Notes/Virtual Private Network.md",
+    "Notes/Signature-Based Anti-Malware.md",
     "Notes/Backhaul.md",
     "Notes/SD-WAN.md",
     "attachments/SD-WAN components.png",
     "attachments/Dynamic path selection in SDWAN.png",
     "attachments/Backhaul.png",
     "Notes/Untitled.base",
-    "Notes/Glossaries/Networking Glossary.md",
-    "Notes/Glossaries/Security Glossary.md",
     "Notes/Palo Alto SASE.md",
     "README.md",
-    "Notes/Glossaries/Cloud Computing Glossary.md",
     "Templates/Notes/Codes/Link to Glossary.md",
     "Templates/Notes/Security Template.md",
     "Notes/cloud computingglossary.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Notes/Secure Access Service Edge.md",
     "Categories/Topics/Security/Security General.md",
-    "Notes/Cloud Access Security Broker.md",
     "Notes/Security Groups.md",
     "Categories/Networking.md",
     "Categories/Topics/Security/Network-Based Attacks.md",
@@ -234,9 +241,6 @@
     "Notes/Web crawler.md",
     "Notes/Traffic Flows.md",
     "Notes/Enterprise Network Segmentation.md",
-    "Categories/Topics/Networking/Networking General.md",
-    "Categories/Cloud Computing.md",
-    "Categories/Hardware.md",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "Notes/Glossaries",
     "attachments/Secure Access Service Edge.png",
@@ -250,9 +254,6 @@
     "Templates/Bases/Security.base",
     "Templates/Bases/Topic/Networking/Networking General.base",
     "Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
-    "attachments/Advanced API-Based Protection for Sanctioned Apps.png",
-    "attachments/CASB elements.png",
-    "attachments/CASB solution.png",
-    "attachments/Data Exposure Threat.png"
+    "attachments/Advanced API-Based Protection for Sanctioned Apps.png"
   ]
 }
