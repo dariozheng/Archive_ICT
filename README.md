@@ -2,7 +2,7 @@ Archive_ICT Guide
 
 # Template
 There is a template for each category. 
-Every category have the following propertie:
+Every category have the following properties:
 - categories: In this field are the categories of the note, can be more than one. The field must be filled with links to the corrispondent notes in the folder **Categories**, and not plain text.
 - topic@category: the topic under each categories, if there are more than one category add topic@category for each of them
 - tags
