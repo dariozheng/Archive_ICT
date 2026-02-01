@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-01T21:48:32+01:00
+modified: 2026-02-01T22:16:45+01:00
 aliases:
   - applipedia
 ---
@@ -20,8 +20,10 @@ aliases:
 <mark style="background: #D2B3FFA6;">App-ID provides <strong>visibility</strong> and <strong>control</strong> over applications that can <strong>evade</strong> detection</mark> by masquerading as legitimate traffic, hopping ports or sneaking through the firewall using encryption (SSL and SSH).
 
 <mark style="background: #BBFABBA6;">App-ID can identify</mark> not only a particular application, but also <mark style="background: #BBFABBA6;">some of the specific operations of an application</mark>. <mark style="background: #ABF7F7A6;">For example, there are granular App-IDs for Dropbox that can be used to <strong>allow</strong> downloading of a file or the ability to edit a document but will <strong>block</strong> files from being uploaded</mark>.
-
+![[App-ID dropbox.png]]
 When used in conjunction with User-ID™, you can see exactly who is using the application based on their identity, not just an IP address. 
+
+![[App-ID application.png]]
 # App-ID Traffic Classification Technology
 
 ![[App-ID classification.png]]
@@ -73,19 +75,20 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 
 <mark style="background: #FFB86CA6;"><strong>The Applications and Threats</strong> section lists</mark> <mark style="background: #FF5582A6;">updates to applications, threats, and other content that includes <strong>decoders</strong>, <strong>signatures</strong>, and <strong>modified or new App-IDs</strong></mark>. New App-IDs are updated once a month (every third Tuesday), while other content can be updated more frequently. You can click the hyperlink next to **Schedule** to set timely (weekly) updates.
 
-# App-ID Tags
-<mark style="background: #D2B3FFA6;">App-ID tags is a mechanisms that helps to navigate among the <strong>numerous</strong> APP-IDs</mark>. 
+# App-ID Tags 
+<mark style="background: #FFF3A3A6;">App-ID tags is a mechanisms that helps to navigate among the <strong>numerous</strong> APP-IDs</mark>. 
 
-###  Dynamic Content Updates
-Palo Alto Networks takes on the task of researching applications with common attributes and delivers the results of this research through <strong>tags</strong> in dynamic content updates.
+<mark style="background: #BBFABBA6;">Tags allow you to easily choose all existent and future App-IDs related to <strong>one or more specific characteristics</strong></mark>.
 
-<mark style="background: #ADCCFFA6;">The firewall can use a <strong>tag-based application filter</strong> to dynamically enforce new and updated existing App-IDs</mark> <mark style="background: #FFB86CA6;">without requiring you to review or update policy rules whenever new applications are added</mark>.
+<mark style="background: #ADCCFFA6;">Palo Alto Networks takes on the task of researching <strong>applications with common attributes</strong></mark> and <mark style="background: #FFF3A3A6;">delivers the results of this research through <strong>tags</strong></mark> <mark style="background: #ABF7F7A6;">in dynamic content updates</mark>.
+![[App-ID tags.png]]
 
+<mark style="background: #ADCCFFA6;">The firewall can use a <strong>tag-based application filter</strong> to dynamically enforce new and updated existing App-IDs</mark> <mark style="background: #FFB86CA6;"><strong>without</strong> requiring you to review or update policy rules whenever new applications are added</mark>.
+
+> [!info] App-ID filter
+> An <strong>App-ID filter</strong> is a mechanism that allows you to create a dynamic list of applications that address the required needs. 
+
+![[Application Filter.png]]
 <mark style="background: #FFF3A3A6;">If you choose to exclude applications from a specific tag, new content updates will honor those exclusions</mark>.
 
 You can <mark style="background: #ABF7F7A6;">create custom tags</mark> <mark style="background: #BBFABBA6;">to define application types based on your policy requirements</mark>.
-
-# App-ID filter
-<mark style="background: #FFB8EBA6;">An App-ID filter is a mechanism that allows you to create a dynamic list of applications that address your needs</mark>. 
-One of the ways to use this feature is to use it along with the App-ID tags.
-
