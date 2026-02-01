@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-01T22:23:06+01:00
+modified: 2026-02-01T22:41:21+01:00
 aliases:
   - applipedia
 ---
@@ -97,6 +97,34 @@ You can <mark style="background: #ABF7F7A6;">create custom tags</mark> <mark sty
 # Policy Optimizer
 After monitoring the application usage for a while, you can use <mark style="background: #FFB8EBA6;">the Policy Optimizer to choose only applications that have been seen on the firewall and then keep only those applications in the Security policy rule</mark>. 
 
+<mark style="background: #FFF3A3A6;">By using the Policy Optimizer, you can convert a port-based rule to an application-based rule</mark>. 
+<mark style="background: #FFB86CA6;">This conversion enables you to include only the applications you want to allow in an allow list and deny access to all other applications</mark>, <mark style="background: #ABF7F7A6;">while restricting application traffic to its default port, preventing an evasive application from running on a nonstandard port</mark>.
 
+The Policy Optimizer provides a simple workflow to migrate your legacy or port-based security policy rulebase to an App-ID-based rulebase. 
+### Phase 1
+In Phase 1, you identify existing legacy port-based Security policy rules and determine which policy rules to convert and in which order. 
 
+A gradual conversion is safer than migration of a large rulebase at one time and allows you to more easily ensure that new application-based rules control the necessary applications. 
 
+The Policy Optimizer provides sorting options to help you prioritize which rules to convert or clean up.
+
+### Phase 2
+In Phase 2, you use the Security Policy’s Policy Optimizer tool to add application-based rules to the Security policy. 
+
+Add each new application-based rule above its corresponding port-based rule. 
+
+The goal is to ensure that traffic matches the application-based rule before it can match the legacy port-based rule. 
+
+Matching of traffic to a specific application reduces your attack surface.
+
+### Phase 3
+Phase 3 is the final cleanup of the Security policy. You can review rules and application usage from Policy Optimizer. 
+It will provide you app usage statistics, including last time a certain traffic matched this rule. 
+If no legitimate traffic has matched a legacy rule, then that legacy rule can be safely removed. 
+If traffic has matched a legacy rule, the corresponding application-based rule is updated to match the traffic. 
+At the end of Phase 3, you will have removed all or most of the legacy rules, and the attack surface will be minimized.
+
+# App-ID Based Policies
+Security policies can specify <mark style="background: #FFB86CA6;">dynamic application filters</mark> t<mark style="background: #FFF3A3A6;">hat apply enforcement to groups of applications</mark> <mark style="background: #BBFABBA6;">that meet a combination of criteria, such as blocking file-sharing peer-to-peer applications or high-risk encrypted-tunnel applications</mark>. 
+
+<mark style="background: #ADCCFFA6;">Dynamic application filters automatically keep your Security rules up to date with new applications that match the criteria</mark>.
