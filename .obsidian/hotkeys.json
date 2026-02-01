@@ -39,5 +39,14 @@
       ],
       "key": "\\"
     }
+  ],
+  "note-locker:switch-to-edit-mode-intercept": [],
+  "note-locker:toggle-note-lock": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "L"
+    }
   ]
 }

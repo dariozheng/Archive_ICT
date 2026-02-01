@@ -186,11 +186,12 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -205,10 +206,11 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "258fa89ebe2d0ff0",
   "lastOpenFiles": [
     "Notes/Backhaul.md",
     "Notes/App-ID™.md",
+    "Categories/Topics/Security/Palo Alto Networks.md",
     "attachments/PaloAlto Dynamic Updates.png",
     "attachments/App-ID dropbox.png",
     "attachments/Screenshot 2026-02-01 at 22.14.10.png",
@@ -230,7 +232,6 @@
     "Templates/Bases/Networking.base",
     "Templates/Bases/Topic/Security/Security General.base",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
-    "Categories/Topics/Security/Palo Alto Networks.md",
     "Categories/Topics/Security/Untitled.md",
     "Categories/Topics/Security/Network-Based Attacks.md",
     "Categories/Topics/Security/Security General.md",

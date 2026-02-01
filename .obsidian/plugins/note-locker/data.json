@@ -1,14 +1,14 @@
 {
-  "lockedNotes": [],
-  "lockedFolders": [],
-  "strictLockedNotes": [
+  "lockedNotes": [
     "Notes/Backhaul.md",
     "Notes/App-ID™.md"
   ],
+  "lockedFolders": [],
+  "strictLockedNotes": [],
   "mobileNotificationMaxLength": 18,
   "desktopNotificationMaxLength": 22,
   "showFileExplorerIcons": true,
   "showStatusBarButton": true,
   "showNotifications": true,
-  "preventEditInLockedNotes": false
+  "preventEditInLockedNotes": true
 }
