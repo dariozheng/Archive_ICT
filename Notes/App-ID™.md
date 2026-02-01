@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-01T21:38:03+01:00
+modified: 2026-02-01T21:48:32+01:00
 aliases:
   - applipedia
 ---
@@ -74,12 +74,18 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 <mark style="background: #FFB86CA6;"><strong>The Applications and Threats</strong> section lists</mark> <mark style="background: #FF5582A6;">updates to applications, threats, and other content that includes <strong>decoders</strong>, <strong>signatures</strong>, and <strong>modified or new App-IDs</strong></mark>. New App-IDs are updated once a month (every third Tuesday), while other content can be updated more frequently. You can click the hyperlink next to **Schedule** to set timely (weekly) updates.
 
 # App-ID Tags
-<mark style="background: #BBFABBA6;">App-ID tags is a mechanisms that helps to navigate among the <strong>numerous</strong> APP-IDs</mark>. 
+<mark style="background: #D2B3FFA6;">App-ID tags is a mechanisms that helps to navigate among the <strong>numerous</strong> APP-IDs</mark>. 
 
-Palo Alto Networks takes on the task of researching applications with common attributes and delivers the results of this research through tags in dynamic content updates.
+###  Dynamic Content Updates
+Palo Alto Networks takes on the task of researching applications with common attributes and delivers the results of this research through <strong>tags</strong> in dynamic content updates.
 
-Your firewall can then use a tag-based application filter to dynamically enforce new and updated existing App-IDs without requiring you to review or update policy rules whenever new applications are added.
+<mark style="background: #ADCCFFA6;">The firewall can use a <strong>tag-based application filter</strong> to dynamically enforce new and updated existing App-IDs</mark> <mark style="background: #FFB86CA6;">without requiring you to review or update policy rules whenever new applications are added</mark>.
 
-If you choose to exclude applications from a specific tag, new content updates will honor those exclusions.
+<mark style="background: #FFF3A3A6;">If you choose to exclude applications from a specific tag, new content updates will honor those exclusions</mark>.
 
-You can create custom tags to define application types based on your policy requirements.
+You can <mark style="background: #ABF7F7A6;">create custom tags</mark> <mark style="background: #BBFABBA6;">to define application types based on your policy requirements</mark>.
+
+# App-ID filter
+<mark style="background: #FFB8EBA6;">An App-ID filter is a mechanism that allows you to create a dynamic list of applications that address your needs</mark>. 
+One of the ways to use this feature is to use it along with the App-ID tags.
+
