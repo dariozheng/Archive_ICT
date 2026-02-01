@@ -186,7 +186,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -207,16 +207,16 @@
   },
   "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "Notes/Backhaul.md",
+    "Notes/App-ID™.md",
     "attachments/PaloAlto Dynamic Updates.png",
     "attachments/App-ID dropbox.png",
     "attachments/Screenshot 2026-02-01 at 22.14.10.png",
     "attachments/App-ID application.png",
     "attachments/App-ID tags.png",
     "attachments/Application Filter.png",
-    "Notes/App-ID™.md",
     "attachments/Screenshot 2026-02-01 at 22.00.47.png",
     "Notes/Zero Trust Security Model.md",
-    "Notes/Backhaul.md",
     "Notes/Traffic Flows.md",
     "Notes/Web crawler.md",
     "Notes/Advanced URL Filtering.md",
@@ -236,7 +236,6 @@
     "Categories/Topics/Security/Security General.md",
     "attachments/large.png",
     "attachments/SaaS.png",
-    "attachments/PaaS.png",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Glossaries/Networking Glossary.md",
     "Categories/Cloud Computing.md",

@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-01T22:43:14+01:00
+modified: 2026-02-01T22:55:46+01:00
 aliases:
   - applipedia
 ---
@@ -75,7 +75,10 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 <mark style="background: #FFB86CA6;"><strong>The Applications and Threats</strong> section lists</mark> <mark style="background: #FF5582A6;">updates to applications, threats, and other content that includes <strong>decoders</strong>, <strong>signatures</strong>, and <strong>modified or new App-IDs</strong></mark>. New App-IDs are updated once a month (every third Tuesday), while other content can be updated more frequently. You can click the hyperlink next to **Schedule** to set timely (weekly) updates.
 ![[PaloAlto Dynamic Updates.png]]
 # App-ID Tags 
-<mark style="background: #FFF3A3A6;">App-ID tags is a mechanisms that helps to navigate among the <strong>numerous</strong> APP-IDs</mark>. 
+<mark style="background: #FFF3A3A6;">App-ID tags is a mechanisms that helps to navigate among the <strong>numerous</strong> APP-IDs</mark>. <mark style="background: #D2B3FFA6;">They are used to organize and classify applications so that they can be referenced in security policy, QoS, decryption or logging</mark>.
+
+> [!info] App-ID tags
+> App-ID tags are <strong>labels</strong> used to group applications.
 
 <mark style="background: #BBFABBA6;">Tags allow you to easily choose all existent and future App-IDs related to <strong>one or more specific characteristics</strong></mark>.
 
