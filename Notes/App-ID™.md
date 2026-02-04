@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T22:28:00+01:00
+modified: 2026-02-04T22:31:45+01:00
 aliases:
   - applipedia
 ---
@@ -293,3 +293,14 @@ During the TLS handshake, <mark style="background: #FFB8EBA6;">browsers and appl
 In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a connection to www.app2.com and includes www.app2.com in the SNI field. The firewall uses the SNI information to identify the application</mark>.
 
 <mark style="background: #FFB8EBA6;">If the firewall cannot identify the traffic using either the CN field in the certificate or the SNI field in the TLS handshake, then the traffic is identified generically as SSL</mark>.
+# Application Block Page​
+<mark style="background: #FF5582A6;">If the <strong>Application Block Page</strong> is enabled</mark> and <mark style="background: #FFB86CA6;">a Security policy rule denies a web-based application</mark>, <mark style="background: #ADCCFFA6;">then a browser-based response page is displayed</mark>. 
+
+<mark style="background: #ABF7F7A6;">The default response page includes the prohibited application name and the user’s name if the User-ID feature has been configured</mark>.
+<mark style="background: #D2B3FFA6;">If User-ID has not been configured, then the user’s name appears as an IP address</mark>. 
+
+<mark style="background: #FFB8EBA6;">Application block response pages must be enabled using an <strong>Interface Management Profile</strong></mark>. 
+
+The generic response page might result in additional support calls if users do not correctly interpret the message. <mark style="background: #BBFABBA6;">You can create and upload a custom HTML response page</mark>.
+![[Application Block Page.gif]]
+# Application Group
