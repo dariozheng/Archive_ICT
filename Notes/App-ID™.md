@@ -7,10 +7,11 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T21:07:05+01:00
+modified: 2026-02-04T21:09:00+01:00
 aliases:
   - applipedia
 ---
+
 <mark style="background: #FF5582A6;">App-ID is a <strong>traffic classification system</strong> available only in Palo Alto Networks firewalls</mark>. 
 
 <mark style="background: #FFB8EBA6;">App-ID instantly applies multiple classification mechanisms to the network traffic stream,</mark> as soon as the device sees it, <mark style="background: #FFB8EBA6;">to</mark> accurately <mark style="background: #FFB8EBA6;"><strong>identify applications</strong></mark>. 
