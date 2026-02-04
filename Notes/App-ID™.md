@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T22:09:50+01:00
+modified: 2026-02-04T22:11:09+01:00
 aliases:
   - applipedia
 ---
@@ -264,10 +264,11 @@ For example, a Security policy designed to allow web-browsing on only the applic
 
 <mark style="background: #D2B3FFA6;">The <strong>application-default</strong> setting for both standard and secure ports is supported for the applications web-browsing, SMTP, FTP, LDAP, POP3, and IMAP</mark>. <mark style="background: #BBFABBA6;">For any of these applications, you can view the Standard Ports and Secure Ports that Palo Alto Networks has defined for the application by navigating to <strong>Objects > Applications</strong></mark>.
 ![[default ports for APP-ID.png]]
-## Control Applications on Non-Standard Ports
+## Control Applications Ports
 Malicious traffic often uses non-standard application ports to try to evade network security features. 
 <mark style="background: #FFB86CA6;">To block applications not running on standard ports, select the value <strong>application-default</strong> in the <strong>Service</strong> column in your<strong> Security policy</strong></mark>. <mark style="background: #FF5582A6;">Linking the application to their default ports defined in the Palo Alto Networks APP-ID database</mark>.
 ![[application-default.png]]
 <mark style="background: #BBFABBA6;">The <strong>any</strong> option will allow any ports to go through</mark>. 
-While the <strong>select</strong> option requires the creation of specific port on the <strong>Objects>Services</strong>, where it's possible to define the a number of ports which will be linked to the applications in the Policies rulebase.
+<mark style="background: #ADCCFFA6;">While the <strong>select</strong> option requires the creation of specific port on the <strong>Objects>Services</strong>, where it's possible to define the a number of ports which will be linked to the applications in the Policies rulebase</mark>.
 ![[Panorama Services.png]]
+# ​Identify Applications in SSL Traffic​
