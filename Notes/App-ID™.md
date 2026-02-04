@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T19:32:56+01:00
+modified: 2026-02-04T19:38:13+01:00
 aliases:
   - applipedia
 ---
@@ -198,7 +198,7 @@ App-ID labels the traffic as <strong>unknown-udp</strong> when <mark style="back
 App-ID labels the traffic as <strong>unknown-p2p</strong> when <mark style="background: #FFB86CA6;">App-ID cannot match the UDP traffic to a specific application, but the traffic exhibits generic peer-to-peer behavior</mark>.
 
 An unknown-udp or unknown-p2p label could be the result of an internally developed application, commercial application, or malware for which the firewall has no signature.
-# Known and Unknown Applications​
+# Applications​ Known and Unknown
 Applications can be divided into two main categories: <mark style="background: #FFB8EBA6;">applications <strong>known</strong> to App-ID</mark> and <mark style="background: #ADCCFFA6;">applications <strong>unknown</strong> to App-ID</mark>. 
 
 Applications known to App-ID are labeled in the Traffic log and reports.
@@ -214,3 +214,23 @@ If you have configured the firewall to decrypt the traffic, then <mark style="ba
 For example, web-browsing might be further identified as google-docs-base. 
 
 <mark style="background: #FF5582A6;">When App-ID cannot identify an application or label the traffic as generic web-browsing,</mark> then App-ID labels the traffic as <strong>unknown-tcp</strong>, <strong>unknown-udp</strong>, or <strong>unknown-p2p</strong>.
+## Unknown Applications​
+The firewall has at least three methods available for processing traffic identified only as unknown-tcp, unknown-udp, unknown-p2p, or web-browsing.
+
+![[flowchart control unknown app.png]]
+### Block Application 
+Control unknown applications by blocking unknown-tcp, unknown-udp, or unknown-p2p traffic in the Security policy.
+### Custom Application 
+Create a custom application rather than block unknown traffic. 
+
+First, <mark style="background: #FF5582A6;">use a network packet capture to identify unique bit patterns in the application</mark>. 
+
+Next, <mark style="background: #BBFABBA6;">create a custom application signature to match that bit pattern and then name the new custom application</mark>. 
+
+Last, <mark style="background: #ADCCFFA6;">use the custom application in a Security, QoS, or PBF policy rule just like you use the Palo Alto Networks predefined applications</mark>.
+### Application Override
+Create an Application Override policy rule. 
+
+For example, if you need to control a custom application, <mark style="background: #FFF3A3A6;">an Application Override policy rule can be used</mark> <mark style="background: #BBFABBA6;">to identify traffic for that application</mark> <mark style="background: #ABF7F7A6;">based on its source zone and IP address, its destination zone and IP address, and its port and protocol</mark>. 
+
+You must create a Security policy rule to allow the application to traverse between firewall security zones.
