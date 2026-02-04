@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T15:17:48+01:00
+modified: 2026-02-04T17:02:13+01:00
 aliases:
   - applipedia
 ---
@@ -103,6 +103,66 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 <mark style="background: #FFF3A3A6;">If you choose to exclude applications from a specific tag, new content updates will honor those exclusions</mark>.
 
 You can <mark style="background: #ABF7F7A6;">create custom tags</mark> <mark style="background: #BBFABBA6;">to define application types based on your policy requirements</mark>.
+# App-ID Operation 
+## App-ID and TCP
+<mark style="background: #FFB86CA6;">Applications that use Transmission Control Protocol (TCP) usually require multiple packet transfers to identify an application</mark>. 
+
+HTTP web request example:
+![[http connection request workflow.png]]
+ <mark style="background: #FFF3A3A6;">The first packet is a TCP SYN packet</mark>. Though <mark style="background: #FFB8EBA6;">the first packet does contain the source and destination addresses and ports</mark>, <mark style="background: #FF5582A6;">it contains no application data</mark>. In fact, <mark style="background: #ABF7F7A6;">the next two packets just complete the required TCP three-way handshake and do not contain any application data</mark>.
+ ![[TCP three-way handshake.png]]
+  ![[TCP packet summary.png]]
+
+<mark style="background: #FFF3A3A6;">The application data could reside in either the client’s HTTP GET request or in the server’s reply</mark>. 
+For this reason, <mark style="background: #BBFABBA6;">the firewall might have to examine the fifth packet, for example, before App-ID can detect either the application or the presence of encrypted traffic</mark>.
+
+If the traffic is encrypted, the firewall must evaluate the administrator-defined Decryption policy to determine what to do next. 
+
+Depending on the configured policy, the traffic could be allowed or blocked in either encrypted or decrypted form. 
+![[App data.png]]
+## App-ID and UDP
+A Palo Alto Networks firewall examining User Datagram Protocol (UDP) packets must often <mark style="background: #FF5582A6;">examine only a single UDP packet to identify the application</mark>. <mark style="background: #FFF3A3A6;">In most cases, all the information that the firewall needs is contained in the first packet</mark>: source and destination IP address, source and destination ports and the application data. 
+![[udp Src and Dst Address.png]]
+![[udp Src and Dst Port.png]]
+![[udp Application Data.png]]
+# Application Labels
+App-ID labels traffic observed by the firewall. The label is displayed in various logs and reports as an application name.
+## Labeling TCP Traffic 
+App-ID labels the TCP traffic seen by the firewall. 
+If enough packets are received for App-ID to identify the application, then App-ID assigns an application label such as gmail-base. 
+![[APP-ID labeling TCP.png]]
+If App-ID cannot identify the application, then it assigns labels such as not-applicable, incomplete, insufficient-data, unknown-tcp, or unknown-p2p.
+### not-applicable 
+App-ID labels traffic as not-applicable when <mark style="background: #FFB86CA6;">the firewall discards the traffic because the Security policy does not allow it</mark>. 
+
+For example, <mark style="background: #ABF7F7A6;">if a Security policy allows HTTP traffic on only TCP port 80 but the traffic arrives on a different port, then the firewall blocks the traffic and App-ID assigns the label not-applicable in logs and reports</mark>.
+### incomplete
+App-ID labels traffic as incomplete when either the <mark style="background: #BBFABBA6;">three-way TCP handshake does not complete</mark> or <mark style="background: #D2B3FFA6;">when the handshake completes but no data follows the handshake</mark>. <mark style="background: #ADCCFFA6;">Traffic labeled as incomplete by App-ID is not really an application</mark>.
+### insufficient-data
+App-ID labels the traffic as insufficient-data when <mark style="background: #FFB8EBA6;">not enough data is received in the payload to identify the application</mark>. In this case, the three-way TCP handshake completes, but not enough data follows the handshake to identify the traffic.
+### ‹application_name> or unknown-tcp or unknown-p2p
+App-ID labels the traffic as <strong>unknown-tcp</strong> when <mark style="background: #ABF7F7A6;">the three-way TCP handshake is complete and data is flowing, but App-ID cannot identify the application</mark>.
+
+App-ID labels the traffic as <strong>unknown-p2p</strong> when <mark style="background: #BBFABBA6;">App-ID cannot match the traffic to a specific application, but the traffic exhibits generic peer-to-peer behavior</mark>. 
+
+An unknown-tcp or unknown-p2p label <mark style="background: #ADCCFFA6;">could be the result of an internally developed application, commercial application, or malware for which the firewall has no signature</mark>.
+## Labeling UDP Traffic
+App-ID labels the UDP traffic seen by the firewall. 
+
+It assigns an application label such as dns or call-of-duty when the application is recognized. 
+
+In cases where App-ID cannot recognize the application, labels like unknown-udp or unknown-p2p are assigned.
+![[APP-ID labeling UDP.png]]
+### not-applicable 
+App-ID labels the traffic as not-applicable when <mark style="background: #FFF3A3A6;">the firewall discards the traffic because the Security policy does not allow it</mark>. 
+
+For example, if a Security policy does not allow Network Time Protocol (NTP) but traffic to port 123 is detected, then the firewall blocks the traffic, and App-ID assigns the label not-applicable in logs and reports.
+### <application_name> or unknown-udp or unknown-p2p
+App-ID labels the traffic as <strong>unknown-udp</strong> when <mark style="background: #ABF7F7A6;">App-ID cannot identify the application</mark>.
+
+App-ID labels the traffic as <strong>unknown-p2p</strong> when <mark style="background: #FFB86CA6;">App-ID cannot match the UDP traffic to a specific application, but the traffic exhibits generic peer-to-peer behavior</mark>.
+
+An unknown-udp or unknown-p2p label could be the result of an internally developed application, commercial application, or malware for which the firewall has no signature.
 # Policy Optimizer
 After monitoring the application usage for a while, you can use <mark style="background: #FFB8EBA6;">the Policy Optimizer to choose only applications that have been seen on the firewall and then keep only those applications in the Security policy rule</mark>. 
 
@@ -131,6 +191,7 @@ If no legitimate traffic has matched a legacy rule, then that legacy rule can be
 If traffic has matched a legacy rule, the corresponding application-based rule is updated to match the traffic. 
 At the end of Phase 3, you will have removed all or most of the legacy rules, and the attack surface will be minimized.
 # App-ID Based Policies
-Security policies can specify <mark style="background: #FFB86CA6;">dynamic application filters</mark> t<mark style="background: #FFF3A3A6;">hat apply enforcement to groups of applications</mark> <mark style="background: #BBFABBA6;">that meet a combination of criteria, such as blocking file-sharing peer-to-peer applications or high-risk encrypted-tunnel applications</mark>. 
+Security policies can specify <mark style="background: #FFB86CA6;">dynamic application filters</mark> <mark style="background: #FFF3A3A6;">that apply enforcement to groups of applications</mark> <mark style="background: #BBFABBA6;">that meet a combination of criteria, such as blocking file-sharing peer-to-peer applications or high-risk encrypted-tunnel applications</mark>. 
 
 <mark style="background: #ADCCFFA6;">Dynamic application filters automatically keep your Security rules up to date with new applications that match the criteria</mark>.
+
