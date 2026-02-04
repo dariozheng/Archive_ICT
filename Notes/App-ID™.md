@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T21:45:56+01:00
+modified: 2026-02-04T22:09:50+01:00
 aliases:
   - applipedia
 ---
@@ -252,8 +252,9 @@ This implicit support also applies to administrator-defined custom applications 
 ![[Implicit permission example.png]]
 In the example, <mark style="background: #FFF3A3A6;">the facebook-base application<strong> implicitly allows</strong> the required web-browsing application without the need for you to explicitly add a web-browsing rule to the Security policy</mark>. 
 <mark style="background: #CACFD9A6;">The facebook-chat and facebook-apps applications depend on facebook-base, so facebook-base <strong>explicitly must be added to the rules</strong> to enable users to chat or email using Facebook</mark>. 
-# Control Applications on SSL-Secure Ports​
-<mark style="background: #FFB8EBA6;">The <strong>application-default service</strong> setting in a policy rule enabled the applications <strong>only</strong> on their APP-ID-defined standard ports</mark> and, in some cases, for the <mark style="background: #ABF7F7A6;">SSL-encrypted applications, their <strong>default SSL secure ports</strong> in addition to the application's <strong>standard ports</strong></mark>. 
+# Application Ports
+## application-default
+<mark style="background: #FFB8EBA6;">The <strong>application-default</strong> service setting in a <strong>policy rule</strong> enabled the applications <strong>only</strong> on their APP-ID-defined standard ports</mark> and, in some cases, for the <mark style="background: #ABF7F7A6;">SSL-encrypted applications, their <strong>default SSL secure ports</strong> in addition to the application's <strong>standard ports</strong></mark>. 
 
 <mark style="background: #FFF3A3A6;">For a cleartext session, application-default matches against the Standard Ports for the application</mark>. 
 
@@ -261,6 +262,12 @@ In the example, <mark style="background: #FFF3A3A6;">the facebook-base applicati
 
 For example, a Security policy designed to allow web-browsing on only the application-default ports now will allow cleartext web-browsing traffic on the standard TCP port 80 and SSL-encrypted web-browsing traffic on the secure TCP port 443.
 
-<mark style="background: #D2B3FFA6;">The <strong>application-default setting</strong> for both standard and secure ports is supported for the applications web-browsing, SMTP, FTP, LDAP, POP3, and IMAP</mark>. <mark style="background: #BBFABBA6;">For any of these applications, you can view the Standard Ports and Secure Ports that Palo Alto Networks has defined for the application by navigating to <strong>Objects > Applications</strong></mark>.
+<mark style="background: #D2B3FFA6;">The <strong>application-default</strong> setting for both standard and secure ports is supported for the applications web-browsing, SMTP, FTP, LDAP, POP3, and IMAP</mark>. <mark style="background: #BBFABBA6;">For any of these applications, you can view the Standard Ports and Secure Ports that Palo Alto Networks has defined for the application by navigating to <strong>Objects > Applications</strong></mark>.
 ![[default ports for APP-ID.png]]
-# Control Applications on Non-Standard Ports
+## Control Applications on Non-Standard Ports
+Malicious traffic often uses non-standard application ports to try to evade network security features. 
+<mark style="background: #FFB86CA6;">To block applications not running on standard ports, select the value <strong>application-default</strong> in the <strong>Service</strong> column in your<strong> Security policy</strong></mark>. <mark style="background: #FF5582A6;">Linking the application to their default ports defined in the Palo Alto Networks APP-ID database</mark>.
+![[application-default.png]]
+<mark style="background: #BBFABBA6;">The <strong>any</strong> option will allow any ports to go through</mark>. 
+While the <strong>select</strong> option requires the creation of specific port on the <strong>Objects>Services</strong>, where it's possible to define the a number of ports which will be linked to the applications in the Policies rulebase.
+![[Panorama Services.png]]
