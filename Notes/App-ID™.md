@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T22:11:09+01:00
+modified: 2026-02-04T22:28:00+01:00
 aliases:
   - applipedia
 ---
@@ -272,3 +272,24 @@ Malicious traffic often uses non-standard application ports to try to evade netw
 <mark style="background: #ADCCFFA6;">While the <strong>select</strong> option requires the creation of specific port on the <strong>Objects>Services</strong>, where it's possible to define the a number of ports which will be linked to the applications in the Policies rulebase</mark>.
 ![[Panorama Services.png]]
 # ​Identify Applications in SSL Traffic​
+When an SSL/TLS client connects to a secure web server, the application layer data is encrypted. But, if configured, the firewall can decrypt the SSL/TLS traffic. 
+
+<mark style="background: #CACFD9A6;">App-ID cannot use <strong>signatures</strong> and <strong>decoders</strong> to identify applications in encrypted traffic</mark>. However, the firewall can attempt to identify the encrypted application using two other methods. 
+
+<mark style="background: #FFB8EBA6;">The first method relies on the Common Name field in a certificate, which typically contains either the FQDN of the server or its IP address</mark>. 
+
+<mark style="background: #ABF7F7A6;">The second method relies on a TLS protocol extension named <strong>Server Name Indication</strong> (<strong>SNI</strong>) that enables multiple hostnames to be served over HTTPS from the same IP address</mark>.
+## Encrypted SSL Traffic - Single Site
+![[ssl traffic decrypt 2.png]]
+<mark style="background: #ADCCFFA6;">If a web server hosts only a single website, then the Common Name (or CN) is used to identify the application</mark>. <mark style="background: #FFB86CA6;">The SSL client initiates an SSL/TLS connection to the web server and requests access to the website</mark>. <mark style="background: #D2B3FFA6;">The web server responds with its certificate</mark>. <mark style="background: #FF5582A6;">The firewall uses the FQDN in the CN field to attempt to identify the application</mark>. 
+
+In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a connection to www.twitter.com. The web server certificate, which includes the Common Name www.twitter.com, is used to identify the application as Twitter</mark>.
+## Encrypted SSL Traffic - Multiple Sites
+![[ssl traffic decrypt 3.png]]
+The requirement that every website have its own unique FQDN and IP address is not practical, so many web servers host multiple websites. The CN field of a certificate cannot be used to identify the application, because multiple web-based applications share a common FQDN and IP address. Instead, <mark style="background: #FF5582A6;">the firewall can use SNI to attempt to identify the application</mark>. 
+
+During the TLS handshake, <mark style="background: #FFB8EBA6;">browsers and applications use <strong>SNI</strong> to send the web server the FQDN of the website to which they want to connect</mark>. <mark style="background: #BBFABBA6;">The firewall reads the SNI field and attempts to use the FQDN in the SNI to identify the application</mark>. <mark style="background: #ABF7F7A6;">The web server reads the SNI field to determine which certificate to send back to the client to verify the identity of the website</mark>. 
+
+In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a connection to www.app2.com and includes www.app2.com in the SNI field. The firewall uses the SNI information to identify the application</mark>.
+
+<mark style="background: #FFB8EBA6;">If the firewall cannot identify the traffic using either the CN field in the certificate or the SNI field in the TLS handshake, then the traffic is identified generically as SSL</mark>.
