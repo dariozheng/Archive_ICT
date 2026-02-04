@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T22:31:45+01:00
+modified: 2026-02-04T22:33:14+01:00
 aliases:
   - applipedia
 ---
@@ -304,3 +304,6 @@ In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a 
 The generic response page might result in additional support calls if users do not correctly interpret the message. <mark style="background: #BBFABBA6;">You can create and upload a custom HTML response page</mark>.
 ![[Application Block Page.gif]]
 # Application Group
+<mark style="background: #FFF3A3A6;"><strong>Application group</strong> is a static, administrator-defined set of applications</mark>. 
+
+<mark style="background: #ABF7F7A6;">Application groups enable you to create a logical grouping of applications that can be applied to Security and QoS policy rules</mark>.
