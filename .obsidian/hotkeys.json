@@ -48,5 +48,13 @@
       ],
       "key": "L"
     }
+  ],
+  "editor:toggle-fold": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "F"
+    }
   ]
 }
