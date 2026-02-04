@@ -7,13 +7,16 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-01T22:55:46+01:00
+modified: 2026-02-04T15:17:48+01:00
 aliases:
   - applipedia
 ---
 <mark style="background: #FF5582A6;">App-ID is a <strong>traffic classification system</strong> available only in Palo Alto Networks firewalls</mark>. 
 
 <mark style="background: #FFB8EBA6;">App-ID instantly applies multiple classification mechanisms to the network traffic stream,</mark> as soon as the device sees it, <mark style="background: #FFB8EBA6;">to</mark> accurately <mark style="background: #FFB8EBA6;"><strong>identify applications</strong></mark>. 
+
+> [!info] Application
+> In Palo Alto Networks terms, an application is a specific program or feature whose communication can be labeled, monitored, and controlled. 
 
 <mark style="background: #FFB86CA6;">App-ID</mark> uses four identification techniques to <mark style="background: #FFB86CA6;">determine the exact identity of applications</mark> traversing the network, <mark style="background: #FFF3A3A6;"><strong>regardless</strong> of port, protocol, evasive tactic, or SSL encryption</mark>. 
 
@@ -33,20 +36,18 @@ When used in conjunction with User-ID™, you can see exactly who is using the a
 - Decoders for known protocols are then used to apply additional context-based signatures to detect other applications that may be tunneling inside of the protocol.
 - For applications that are particularly evasive and cannot be identified through advanced signature and protocol analysis, heuristics or behavioral analysis may be used to determine the identity of the application.
 ### Application Signatures
-Signatures are used first to l<mark style="background: #FFF3A3A6;">ook for unique application properties</mark> and <mark style="background: #FFF3A3A6;">related transaction characteristics</mark> to <mark style="background: #FFB8EBA6;">correctly identify the application regardless of the protocol and port being used</mark>. 
+Signatures are used first to <mark style="background: #FFF3A3A6;">look for unique application properties</mark> and <mark style="background: #FFF3A3A6;">related transaction characteristics</mark> to <mark style="background: #FFB8EBA6;">correctly identify the application regardless of the protocol and port being used</mark>. 
 
 <mark style="background: #BBFABBA6;">The signature also determines if the application is being used on its default port or it is using a non-standard port</mark>. 
 If the identified application is allowed by security policy, further analysis of the traffic is done to identify more granular applications as well as scan for threats,
 ### SSL and SSH Decryption
  <mark style="background: #ADCCFFA6;">If App-ID determines that SSL encryption is in use and a decryption policy is in place, the traffic is decrypted and then passed to other identification mechanisms as needed</mark>. <mark style="background: #FFB86CA6;">If no policy is in place, then SSL decryption is not employed</mark>. 
  
- Once the application is identified, and deemed acceptable by policy, threat prevention profiles are applied and the traffic is then delivered to its destination. 
- 
  A similar approach is used with SSH to determine if port forwarding is in use as a means to tunnel traffic over SSH. Such tunneled traffic is identified as ssh-tunnel and can be controlled via security policy.
 ### Application and Protocol Decoding
 <mark style="background: #ABF7F7A6;">Decoders for known protocols are used to apply additional context-based signatures to detect other applications that may be tunneling inside of the protocol</mark> (e.g., Yahoo! Instant Messenger used across HTTP). 
 
-Decoders validate the traffic conforms to the protocol specification and provide support for NAT traversal and opening dynamic pinholes for applications such as VoIP or FTP. <mark style="background: #FFF3A3A6;">Decoders for popular applications are used to identify the <strong>individual functions</strong> within the application as well</mark> (e.g., webex-file-sharing). 
+Decoders validate that the traffic conforms to the protocol specification and provide support for NAT traversal and opening dynamic pinholes for applications such as VoIP or FTP. <mark style="background: #FFF3A3A6;">Decoders for popular applications are used to identify the <strong>individual functions</strong> within the application as well</mark> (e.g., webex-file-sharing). 
 
 In addition to identifying applications, <mark style="background: #FFB8EBA6;">decoders also identify files and other content that should be scanned for threats or sensitive data</mark>.
 ### Heuristics
@@ -57,6 +58,14 @@ In those situations, <mark style="background: #BBFABBA6;">it is necessary to app
 <mark style="background: #CACFD9A6;">Heuristic analysis is used as needed, with the other App-ID techniques discussed here, to provide visibility into applications that might otherwise elude positive identification</mark>. 
 
 <mark style="background: #FFB8EBA6;">The actual heuristics used are specific to an application and include checks based on such things as the packet length, session rate, packet source, etc</mark>.
+### Application Shift
+<mark style="background: #ADCCFFA6;">Even after App-ID initially has identified an application</mark>, <mark style="background: #D2B3FFA6;">App-ID continues to use the protocol decoders to determine whether the original application has <strong>shifted</strong> to a new application</mark>. 
+
+<mark style="background: #FFB8EBA6;">Decoders for known protocols use additional context-based signatures to detect other applications that might be tunneling inside of the protocol</mark>. 
+
+For example, Yahoo! Instant Messenger can be carried in the HTTP protocol. 
+
+If an application shift is detected, the firewall checks the Security policy again to determine what to do with the traffic.
 # Applipedia 
 https://applipedia.paloaltonetworks.com
 
