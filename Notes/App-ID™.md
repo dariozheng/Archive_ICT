@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T21:01:36+01:00
+modified: 2026-02-04T21:07:05+01:00
 aliases:
   - applipedia
 ---
@@ -243,6 +243,8 @@ For many applications, <mark style="background: #FFB86CA6;">the App-ID database 
 <mark style="background: #FF5582A6;">App-ID defines implicit dependencies because <strong>the addition of parent applications</strong> to a rule in the Security policy <strong>could allow more traffic than intended</strong></mark>. 
 For example, enablement of web-browsing just to allow facebook-base would allow users to browse other websites.
 
+It's possible to check the implicit dependencies on the Application details or on the Applipedia. 
+![[Implicitly Uses.png]]
 ## Implicit Permissions
 <mark style="background: #ADCCFFA6;">Implicit permissions for a parent application are processed only if you have <strong>not</strong> added an explicit Security policy rule for the parent application</mark>. 
 This implicit support also applies to administrator-defined custom applications that are based on HTTP, SSL, MS-RPC, or RTSP.
