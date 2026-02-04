@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T22:59:09+01:00
+modified: 2026-02-04T23:05:59+01:00
 aliases:
   - applipedia
 ---
@@ -314,3 +314,5 @@ The generic response page might result in additional support calls if users do n
 <mark style="background: #ABF7F7A6;">Application groups enable you to create a logical grouping of applications that can be applied to Security and QoS policy rules</mark>.
 An Application group is used when you want to treat a set of applications similarly in a policy. 
 Instead of you adding the same list of applications to multiple rules, you can create an application group and add the group to multiple rules.
+
+<mark style="background: #FFB86CA6;">Application Groups can be manually configured to include applications, application filters, and other application groups</mark>.
