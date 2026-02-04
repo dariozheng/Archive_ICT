@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T19:38:13+01:00
+modified: 2026-02-04T19:44:01+01:00
 aliases:
   - applipedia
 ---
@@ -70,6 +70,9 @@ If an application shift is detected, the firewall checks the Security policy aga
 Also, <mark style="background: #ABF7F7A6;">network traffic can shift from one application to another during the lifetime of a session</mark>. 
 ![[Dependent Applications.png]]
 For these reasons, when you create a policy to allow applications, you also <mark style="background: #FFB8EBA6;">ensure that the firewall allows the other applications on which the application depends</mark>.
+
+<mark style="background: #BBFABBA6;">When a policy is created with unresolved dependencies they will be reported after a commit</mark>. Then it's possible to correct the policies, adding the missing dependencies in the policy rule. 
+![[Unresolved dependencies.png]]
 # Applipedia 
 https://applipedia.paloaltonetworks.com
 
