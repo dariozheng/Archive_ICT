@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T19:28:04+01:00
+modified: 2026-02-04T19:32:56+01:00
 aliases:
   - applipedia
 ---
@@ -198,4 +198,19 @@ App-ID labels the traffic as <strong>unknown-udp</strong> when <mark style="back
 App-ID labels the traffic as <strong>unknown-p2p</strong> when <mark style="background: #FFB86CA6;">App-ID cannot match the UDP traffic to a specific application, but the traffic exhibits generic peer-to-peer behavior</mark>.
 
 An unknown-udp or unknown-p2p label could be the result of an internally developed application, commercial application, or malware for which the firewall has no signature.
+# Known and Unknown Applications​
+Applications can be divided into two main categories: <mark style="background: #FFB8EBA6;">applications <strong>known</strong> to App-ID</mark> and <mark style="background: #ADCCFFA6;">applications <strong>unknown</strong> to App-ID</mark>. 
 
+Applications known to App-ID are labeled in the Traffic log and reports.
+
+![[flowchart unknown APP.png]]
+<mark style="background: #FFB8EBA6;">Applications unknown to App-ID initially might be identified as <strong>generic ssl</strong> if HTTPS is detected</mark>. 
+
+If you have configured the firewall to decrypt the traffic, then <mark style="background: #FFF3A3A6;">App-ID might be able to further identify the decrypted traffic as a specific application</mark>. 
+
+<mark style="background: #ABF7F7A6;">If HTTP is detected rather than HTTPS, then applications unknown to App-ID initially might be identified as generic web-browsing</mark>. 
+
+<mark style="background: #BBFABBA6;">As more packet data becomes available, then App-ID might be able to further identify the generic web-browsing application as something more specific</mark>. 
+For example, web-browsing might be further identified as google-docs-base. 
+
+<mark style="background: #FF5582A6;">When App-ID cannot identify an application or label the traffic as generic web-browsing,</mark> then App-ID labels the traffic as <strong>unknown-tcp</strong>, <strong>unknown-udp</strong>, or <strong>unknown-p2p</strong>.
