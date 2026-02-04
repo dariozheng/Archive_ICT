@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T22:39:50+01:00
+modified: 2026-02-04T22:57:46+01:00
 aliases:
   - applipedia
 ---
@@ -108,8 +108,12 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 
 ![[Application Filter.png]]
 <mark style="background: #FFF3A3A6;">If you choose to exclude applications from a specific tag, new content updates will honor those exclusions</mark>.
-
+## Custom tags
 You can <mark style="background: #ABF7F7A6;">create custom tags</mark> <mark style="background: #BBFABBA6;">to define application types based on your policy requirements</mark>.
+![[custom tag panorama.png]]
+![[custom tag panorama 2.png]]
+![[custom tag panorama 3.png]]
+<mark style="background: #FF5582A6;">Now all new application which will have the TAI tags will be automatically added to this Application Filter.</mark>
 # Policy Optimizer
 After monitoring the application usage for a while, you can use <mark style="background: #FFB8EBA6;">the Policy Optimizer to choose only applications that have been seen on the firewall and then keep only those applications in the Security policy rule</mark>. 
 
