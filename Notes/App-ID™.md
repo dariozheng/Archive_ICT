@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-04T22:57:46+01:00
+modified: 2026-02-04T22:59:09+01:00
 aliases:
   - applipedia
 ---
@@ -104,7 +104,8 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 <mark style="background: #ADCCFFA6;">The firewall can use a <strong>tag-based application filter</strong> to dynamically enforce new and updated existing App-IDs</mark> <mark style="background: #FFB86CA6;"><strong>without</strong> requiring you to review or update policy rules whenever new applications are added</mark>.
 
 > [!info] App-ID filter
-> An <strong>App-ID filter</strong> is a mechanism that allows you to create a dynamic list of applications that address the required needs. 
+> An <strong>App-ID filter</strong> is a mechanism that allows you to create a dynamic list of applications based on application attributes that you select from the App-ID database. 
+> The selectable attributes are <strong>Category</strong>, <strong>Subcategory</strong>, <strong>Risk</strong>, <strong>Tags</strong>, and <strong>Characteristic</strong>. 
 
 ![[Application Filter.png]]
 <mark style="background: #FFF3A3A6;">If you choose to exclude applications from a specific tag, new content updates will honor those exclusions</mark>.
