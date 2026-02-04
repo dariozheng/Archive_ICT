@@ -220,26 +220,27 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "7b1381a33d90f58b",
   "lastOpenFiles": [
+    "attachments/Dependent Applications.png",
+    "attachments/App shift.gif",
+    "attachments/Pasted image 20260204190936.png",
+    "Notes/App-ID™.md",
+    "attachments/original.gif.html",
     "attachments/APP-ID labeling UDP.png",
     "attachments/APP-ID labeling TCP.png",
     "attachments/udp Application Data.png",
     "attachments/udp Src and Dst Port.png",
-    "Notes/App-ID™.md",
     "attachments/large-5.png",
     "attachments/udp Src and Dst Address.png",
     "attachments/App data.png",
     "attachments/TCP packet summary.png",
-    "attachments/TCP three-way handshake.png",
-    "attachments/http connection request workflow.png",
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Notes/User-ID™.md",
     "Notes/Virtual Private Network.md",
     "Notes/SD-WAN.md",
     "Notes/Zero Trust Security Model.md",
     "Notes/Backhaul.md",
-    "attachments/PaloAlto Dynamic Updates.png",
     "Notes/Traffic Flows.md",
     "Notes/Web crawler.md",
     "Notes/Advanced URL Filtering.md",
@@ -267,7 +268,6 @@
     "Untitled",
     "Templates/Notes/Codes",
     "Templates/Notes",
-    "Templates/Bases/Untitled.base",
-    "Templates/Bases/Security.base"
+    "Templates/Bases/Untitled.base"
   ]
 }
