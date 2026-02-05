@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-05T10:52:53+01:00
+modified: 2026-02-05T10:53:32+01:00
 aliases:
   - applipedia
 ---
