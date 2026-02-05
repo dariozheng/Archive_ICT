@@ -5,7 +5,7 @@ topic@networking:
   - "[[Networking General]]"
 tags:
 created: 2026-02-04T22:34:35+01:00
-modified: 2026-02-05T10:30:45+01:00
+modified: 2026-02-05T10:33:04+01:00
 aliases:
   - SNI
 ---
@@ -19,8 +19,8 @@ The desired hostname is not encrypted in the original SNI extension, so an eaves
 
 The SNI extension was specified in 2003 in RFC 3546
 
-SNI addresses this issue by having the client send the name of the virtual domain as part of the TLS negotiation's ClientHello message.
+<mark style="background: #FFB86CA6;">SNI make the client send the name of the virtual domain as part of the TLS negotiation's ClientHello message</mark>.
 
-This enables the server to select the correct virtual domain early and present the browser with the certificate containing the correct name. 
+<mark style="background: #FFB8EBA6;">This enables the server to select the correct virtual domain early and present the browser with the certificate containing the correct name</mark>. 
 
-Therefore, with clients and servers that implement SNI, a server with a single IP address can serve a group of domain names for which it is impractical to get a common certificate.
+Therefore, <mark style="background: #ADCCFFA6;">with clients and servers that implement SNI</mark>, <mark style="background: #FF5582A6;">a server with a single IP address can serve a group of domain names</mark> <mark style="background: #FFF3A3A6;">for which it is impractical to get a common certificate</mark>.
