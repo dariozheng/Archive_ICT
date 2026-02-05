@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/App-ID™.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -186,7 +186,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -205,7 +205,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "d8f9e946df861d0b",
+  "active": "479baed5a072decf",
   "lastOpenFiles": [
     "Notes/Server Name Indication.md",
     "Notes/App-ID™.md",
