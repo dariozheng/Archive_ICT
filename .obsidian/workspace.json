@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/App-ID™.md",
-                "mode": "preview",
+                "file": "Notes/Server Name Indication.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "App-ID™"
+              "title": "Server Name Indication"
             }
           }
         ]
@@ -207,8 +207,8 @@
   },
   "active": "258fa89ebe2d0ff0",
   "lastOpenFiles": [
-    "attachments/Application Filter.png",
     "Notes/App-ID™.md",
+    "attachments/Application Filter.png",
     "attachments/custom tag panorama 3.png",
     "attachments/custom tag panorama 2.png",
     "attachments/custom tag panorama.png",
@@ -219,7 +219,6 @@
     "attachments/ssl traffic decrypt.png",
     "attachments/Panorama Services.png",
     "attachments/application-default.png",
-    "attachments/Non-std ports.png",
     "attachments/original.gif.html",
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Notes/User-ID™.md",

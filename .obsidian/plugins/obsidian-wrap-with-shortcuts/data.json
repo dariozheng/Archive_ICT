@@ -5,6 +5,12 @@
       "name": "bold",
       "startTag": "<strong>",
       "endTag": "</strong>"
+    },
+    {
+      "id": "w1770278345964",
+      "name": "undeline",
+      "startTag": "<u>",
+      "endTag": "</u>"
     }
   ]
 }
