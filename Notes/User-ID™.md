@@ -12,7 +12,7 @@ modified: 2026-02-06T12:10:58+01:00
 
 <mark style="background: #FFB8EBA6;">With User-ID, you can define application access policies based on <strong>users</strong> or <strong>groups</strong> of users</mark>. 
 
-User-ID enable enable the <strong>[[Multi-Factor Authentication|Multi-Factor Authentication]]</strong>, <strong>credential phishing prevention</strong> and <strong>dynamic user groups</strong> (<strong>DUGs</strong>).
+User-ID enable enable the [[Multi-Factor Authentication|Multi-Factor Authentication]], <strong>credential phishing prevention</strong> and <strong>dynamic user groups</strong> (<strong>DUGs</strong>).
 
 <mark style="background: #CACFD9A6;">With User-ID organization are able to enforce least privilege, where user are enabled only to network they need to</mark>. 
 # User-ID Implementation 
