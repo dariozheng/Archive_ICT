@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-05T10:53:32+01:00
+modified: 2026-02-06T09:58:03+01:00
 aliases:
   - applipedia
 ---
@@ -291,13 +291,13 @@ When an SSL/TLS client connects to a secure web server, the application layer da
 In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a connection to www.twitter.com. The web server certificate, which includes the Common Name www.twitter.com, is used to identify the application as Twitter</mark>.
 ## Encrypted SSL Traffic - Multiple Sites
 ![[ssl traffic decrypt 3.png]]
-The requirement that every website have its own unique FQDN and IP address is not practical, so many web servers host multiple websites. The CN field of a certificate cannot be used to identify the application, because multiple web-based applications share a common FQDN and IP address. Instead, <mark style="background: #FF5582A6;">the firewall can use</mark> [[Server Name Indication|SNI]] <mark style="background: #FF5582A6;">to attempt to identify the application</mark>. 
+The requirement that every website have its own unique FQDN and IP address is not practical, so many web servers host multiple websites. The CN field of a certificate cannot be used to identify the application, because multiple web-based applications share a common FQDN and IP address. Instead, <mark style="background: #FF5582A6;">the firewall can use</mark> <strong>[[Server Name Indication|SNI]]</strong> <mark style="background: #FF5582A6;">to attempt to identify the application</mark>. 
 
-During the TLS handshake, <mark style="background: #FFB8EBA6;">browsers and applications use</mark> [[Server Name Indication|SNI]] <mark style="background: #FFB8EBA6;">to send the web server the FQDN of the website to which they want to connect</mark>. <mark style="background: #BBFABBA6;">The firewall reads the SNI field and attempts to use the FQDN in the SNI to identify the application</mark>. <mark style="background: #ABF7F7A6;">The web server reads the SNI field to determine which certificate to send back to the client to verify the identity of the website</mark>. 
+During the TLS handshake, <mark style="background: #FFB8EBA6;">browsers and applications use</mark> <strong>[[Server Name Indication|SNI]]</strong> <mark style="background: #FFB8EBA6;">to send the web server the FQDN of the website to which they want to connect</mark>. <mark style="background: #BBFABBA6;">The firewall reads the <strong>[[Server Name Indication|SNI]]</strong> field and attempts to use the FQDN in the <strong>[[Server Name Indication|SNI]]</strong> to identify the application</mark>. <mark style="background: #ABF7F7A6;">The web server reads the SNI field to determine which certificate to send back to the client to verify the identity of the website</mark>. 
 
-In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a connection to www.app2.com and includes www.app2.com in the SNI field. The firewall uses the SNI information to identify the application</mark>.
+In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a connection to www.app2.com and includes www.app2.com in the <strong>[[Server Name Indication|SNI]]</strong> field. The firewall uses the <strong>[[Server Name Indication|SNI]]</strong> information to identify the application</mark>.
 
-<mark style="background: #FFB8EBA6;">If the firewall cannot identify the traffic using either the CN field in the certificate or the SNI field in the TLS handshake, then the traffic is identified generically as SSL</mark>.
+<mark style="background: #FFB8EBA6;">If the firewall cannot identify the traffic using either the CN field in the certificate or the <strong>[[Server Name Indication|SNI]]</strong> field in the TLS handshake, then the traffic is identified generically as SSL</mark>.
 # Application Block Page​
 <mark style="background: #FF5582A6;">If the <strong>Application Block Page</strong> is enabled</mark> and <mark style="background: #FFB86CA6;">a Security policy rule denies a web-based application</mark>, <mark style="background: #ADCCFFA6;">then a browser-based response page is displayed</mark>. 
 

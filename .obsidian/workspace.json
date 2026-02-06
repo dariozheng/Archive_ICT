@@ -14,8 +14,8 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/User-ID™.md",
-                "mode": "source",
-                "source": false
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
               "title": "User-ID™"
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883,
-    "collapsed": true
+    "width": 257.5004348754883
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -191,7 +190,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -206,13 +206,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "d8f9e946df861d0b",
   "lastOpenFiles": [
-    "Notes/User-ID™.md",
     "Notes/App-ID™.md",
-    "Notes/Web crawler.md",
-    "Notes/Server Name Indication.md",
     "Notes/Backhaul.md",
+    "Notes/Server Name Indication.md",
+    "Notes/User-ID™.md",
+    "Notes/Web crawler.md",
     "Notes/Virtual Private Network.md",
     "Notes/SD-WAN.md",
     "Notes/Cloud-Delivered Security Services.md",
