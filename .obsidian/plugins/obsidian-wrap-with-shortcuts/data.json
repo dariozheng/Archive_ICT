@@ -7,6 +7,12 @@
       "endTag": "</strong>"
     },
     {
+      "id": "w1770376144134",
+      "name": "Link to Note with alias",
+      "startTag": "[[|",
+      "endTag": "]]"
+    },
+    {
       "id": "w1770278345964",
       "name": "undeline",
       "startTag": "<u>",
