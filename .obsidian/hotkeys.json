@@ -49,20 +49,29 @@
       "key": "L"
     }
   ],
-  "editor:toggle-fold": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": "F"
-    }
-  ],
   "obsidian-wrap-with-shortcuts:wrap-with-shortcut-w1770278345964": [
     {
       "modifiers": [
         "Ctrl"
       ],
       "key": "U"
+    }
+  ],
+  "editor:unfold-all": [
+    {
+      "modifiers": [
+        "Alt",
+        "Ctrl"
+      ],
+      "key": "F"
+    }
+  ],
+  "editor:fold-all": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "F"
     }
   ]
 }
