@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-06T09:58:03+01:00
+modified: 2026-02-06T10:31:12+01:00
 aliases:
   - applipedia
 ---
@@ -26,15 +26,11 @@ aliases:
 ![[App-ID dropbox.png]]
 When used in conjunction with User-ID™, you can see exactly who is using the application based on their identity, not just an IP address. 
 
+Example of App-ID:
 ![[App-ID application.png]]
 # App-ID Traffic Classification Technology
 
 ![[App-ID classification.png]]
-- Traffic is first classified based on the IP address and port.
-- <strong>Signatures</strong> are then applied to allowed traffic to identify the application based on unique application properties and related transaction characteristics.
-- If App-ID determines that encryption (SSL or SSH) is in use, and a decryption policy is in place, the application is decrypted and application signatures are applied again on the decrypted flow.
-- Decoders for known protocols are then used to apply additional context-based signatures to detect other applications that may be tunneling inside of the protocol.
-- For applications that are particularly evasive and cannot be identified through advanced signature and protocol analysis, heuristics or behavioral analysis may be used to determine the identity of the application.
 ## Application Signatures
 Signatures are used first to <mark style="background: #FFF3A3A6;">look for unique application properties</mark> and <mark style="background: #FFF3A3A6;">related transaction characteristics</mark> to <mark style="background: #FFB8EBA6;">correctly identify the application regardless of the protocol and port being used</mark>. 
 
@@ -82,7 +78,7 @@ The application data listed in Applipedia can be used to help determine what app
 
 Other popular use cases for using applipedia is to search if a particular App-ID is supported or to investigate application characteristics, classification, and dependencies. 
 
-Application data includes the Application Name, Description, Additional Information, Standard Ports, Depends on Applications, and Implicitly Use Applications.
+<mark style="background: #BBFABBA6;">Application data includes the <strong>Application Name</strong>, <strong>Description</strong>, <strong>Additional Information</strong>, <strong>Standard Ports</strong>, <strong>Depends on Applications</strong>, and <strong>Implicitly Use Applications</strong></mark>.
 # Dynamic Updates
 Palo Alto Networks provides <strong>Applications and Threats</strong> <mark style="background: #FFF3A3A6;">content updates</mark> <mark style="background: #ADCCFFA6;">that contain new application and threat signatures developed by Palo Alto Networks</mark>.
 
