@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-06T12:08:26+01:00
+modified: 2026-02-06T12:10:58+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -28,5 +28,5 @@ Check:
 - Number of users 
 - The presence of existing identity providers in the environment that Palo Alto Networks can use for IP-to-user mapping like GlobalProtect, Active Directory Domain Controllers, Cisco ISE or else 
 - Which Directory Service is in use, Active Directory, Azure AD, Ping, Okta or else
-- The presence of critical assets where MFA should be implemented 
+- The presence of critical assets where [[Multi-Factor Authentication|MFA]] should be implemented 
 - The source of enforcement, like a single firewall or multiple firewalls. 
