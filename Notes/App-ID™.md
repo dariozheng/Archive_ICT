@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - complete
 created: 2026-01-30T15:07:03+01:00
-modified: 2026-02-06T10:31:12+01:00
+modified: 2026-02-06T10:43:52+01:00
 aliases:
   - applipedia
 ---
@@ -111,37 +111,6 @@ You can <mark style="background: #ABF7F7A6;">create custom tags</mark> <mark sty
 ![[custom tag panorama 2.png]]
 ![[custom tag panorama 3.png]]
 <mark style="background: #FF5582A6;">Now all new application which will have the TAI tags will be automatically added to this Application Filter.</mark>
-# Policy Optimizer
-After monitoring the application usage for a while, you can use <mark style="background: #FFB8EBA6;">the Policy Optimizer to choose only applications that have been seen on the firewall and then keep only those applications in the Security policy rule</mark>. 
-
-<mark style="background: #FFF3A3A6;">By using the Policy Optimizer, you can convert a port-based rule to an application-based rule</mark>. 
-<mark style="background: #FFB86CA6;">This conversion enables you to include only the applications you want to allow in an allow list and deny access to all other applications</mark>, <mark style="background: #ABF7F7A6;">while restricting application traffic to its default port, preventing an evasive application from running on a nonstandard port</mark>.
-
-The Policy Optimizer provides a simple workflow to migrate your legacy or port-based security policy rulebase to an App-ID-based rulebase. 
-### Phase 1
-In Phase 1, you <mark style="background: #FFF3A3A6;">identify existing legacy port-based Security policy rules and determine which policy rules to convert and in which order</mark>. 
-
-A gradual conversion is safer than migration of a large rulebase at one time and allows you to more easily ensure that new application-based rules control the necessary applications. 
-
-The Policy Optimizer provides sorting options to help you prioritize which rules to convert or clean up.
-### Phase 2
-In Phase 2, you <mark style="background: #FFF3A3A6;">use the Security Policy’s Policy Optimizer tool to add application-based rules to the Security policy</mark>. 
-
-<mark style="background: #FFF3A3A6;">Add each new application-based rule above its corresponding port-based rule</mark>. 
-
-<mark style="background: #FFF3A3A6;">The goal is to ensure that traffic matches the application-based rule before it can match the legacy port-based rule</mark>. 
-
-Matching of traffic to a specific application reduces your attack surface.
-### Phase 3
-Phase 3 is the final cleanup of the Security policy. You can <mark style="background: #FFF3A3A6;">review rules and application usage from Policy Optimizer</mark>. 
-<mark style="background: #FFF3A3A6;">It will provide you app usage statistics, including last time a certain traffic matched this rule</mark>. 
-<mark style="background: #FFF3A3A6;">If no legitimate traffic has matched a legacy rule, then that legacy rule can be safely removed</mark>. 
-<mark style="background: #FFF3A3A6;">If traffic has matched a legacy rule, the corresponding application-based rule is updated to match the traffic</mark>. 
-At the end of Phase 3, you will have removed all or most of the legacy rules, and the attack surface will be minimized.
-# App-ID Based Policies
-Security policies can specify <mark style="background: #FFB86CA6;">dynamic application filters</mark> <mark style="background: #FFF3A3A6;">that apply enforcement to groups of applications</mark> <mark style="background: #BBFABBA6;">that meet a combination of criteria, such as blocking file-sharing peer-to-peer applications or high-risk encrypted-tunnel applications</mark>. 
-
-<mark style="background: #ADCCFFA6;">Dynamic application filters automatically keep your Security rules up to date with new applications that match the criteria</mark>.
 # App-ID Identification Operation 
 ## App-ID and TCP
 <mark style="background: #FFB86CA6;">Applications that use Transmission Control Protocol (TCP) usually require multiple packet transfers to identify an application</mark>. 
@@ -312,3 +281,34 @@ An Application group is used when you want to treat a set of applications simila
 Instead of you adding the same list of applications to multiple rules, you can create an application group and add the group to multiple rules.
 
 <mark style="background: #FFB86CA6;">Application Groups can be manually configured to include applications, application filters, and other application groups</mark>.
+# Policy Optimizer
+After monitoring the application usage for a while, you can use <mark style="background: #FFB8EBA6;">the Policy Optimizer to choose only applications that have been seen on the firewall and then keep only those applications in the Security policy rule</mark>. 
+
+<mark style="background: #FFF3A3A6;">By using the Policy Optimizer, you can convert a port-based rule to an application-based rule</mark>. 
+<mark style="background: #FFB86CA6;">This conversion enables you to include only the applications you want to allow in an allow list and deny access to all other applications</mark>, <mark style="background: #ABF7F7A6;">while restricting application traffic to its default port, preventing an evasive application from running on a nonstandard port</mark>.
+
+The Policy Optimizer provides a simple workflow to migrate your legacy or port-based security policy rulebase to an App-ID-based rulebase. 
+### Phase 1
+In Phase 1, you <mark style="background: #FFF3A3A6;">identify existing legacy port-based Security policy rules and determine which policy rules to convert and in which order</mark>. 
+
+A gradual conversion is safer than migration of a large rulebase at one time and allows you to more easily ensure that new application-based rules control the necessary applications. 
+
+The Policy Optimizer provides sorting options to help you prioritize which rules to convert or clean up.
+### Phase 2
+In Phase 2, you <mark style="background: #FFF3A3A6;">use the Security Policy’s Policy Optimizer tool to add application-based rules to the Security policy</mark>. 
+
+<mark style="background: #FFF3A3A6;">Add each new application-based rule above its corresponding port-based rule</mark>. 
+
+<mark style="background: #FFF3A3A6;">The goal is to ensure that traffic matches the application-based rule before it can match the legacy port-based rule</mark>. 
+
+Matching of traffic to a specific application reduces your attack surface.
+### Phase 3
+Phase 3 is the final cleanup of the Security policy. You can <mark style="background: #FFF3A3A6;">review rules and application usage from Policy Optimizer</mark>. 
+<mark style="background: #FFF3A3A6;">It will provide you app usage statistics, including last time a certain traffic matched this rule</mark>. 
+<mark style="background: #FFF3A3A6;">If no legitimate traffic has matched a legacy rule, then that legacy rule can be safely removed</mark>. 
+<mark style="background: #FFF3A3A6;">If traffic has matched a legacy rule, the corresponding application-based rule is updated to match the traffic</mark>. 
+At the end of Phase 3, you will have removed all or most of the legacy rules, and the attack surface will be minimized.
+# App-ID Based Policies
+Security policies can specify <mark style="background: #FFB86CA6;">dynamic application filters</mark> <mark style="background: #FFF3A3A6;">that apply enforcement to groups of applications</mark> <mark style="background: #BBFABBA6;">that meet a combination of criteria, such as blocking file-sharing peer-to-peer applications or high-risk encrypted-tunnel applications</mark>. 
+
+<mark style="background: #ADCCFFA6;">Dynamic application filters automatically keep your Security rules up to date with new applications that match the criteria</mark>.
