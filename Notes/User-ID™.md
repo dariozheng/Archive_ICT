@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-06T12:25:01+01:00
+modified: 2026-02-06T14:40:02+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -30,3 +30,46 @@ Check:
 - Which Directory Service is in use, Active Directory, Azure AD, Ping, Okta or else
 - The presence of critical assets where [[Multi-Factor Authentication|MFA]] should be implemented 
 - The source of enforcement, like a single firewall or multiple firewalls. 
+## Identify IP-to-User Mapping Strategies for Visibility
+User-ID provides multiple methods to map IP addresses to users. <mark style="background: #ABF7F7A6;">Some methods require specific directory structures to be in place, while other methods may require software agents or clients to be installed</mark>. 
+If any of the methods map an IP address to a user successfully, that data can be used by the firewall for both reports and policies.
+### User-ID Mapping Methods 
+#### Server Monitoring 
+<mark style="background: #BBFABBA6;">The <strong><u>User-ID agent</u></strong> can monitors <strong>Exchange Servers</strong>, <strong>domain controllers</strong>, or <strong>Novell eDirectory</strong> servers</mark> for <mark style="background: #D2B3FFA6;">log in events</mark>. 
+
+<mark style="background: #ABF7F7A6;">The User-ID agent will then record the IP-to-user mapping</mark>.
+#### Client Probing
+Client Probing is a legacy method to create IP-to-user mappings and is not recommended as a best practice today. 
+
+In this method, <mark style="background: #D2B3FFA6;">the <u>User-ID agent</u> probes every Windows client using <strong>Windows Management Instrumentation</strong> (WMI)</mark>.
+#### Syslog Listenig 
+With this integration, the <mark style="background: #FF5582A6;">NGFWs are able to listen for auth syslog messages</mark> from <mark style="background: #BBFABBA6;"><strong>Network Access Control</strong> (NAC) systems, <strong>wireless controllers</strong>, 802.1x devices, Apple Open Directory servers, and proxy servers</mark>.
+#### Terminal Server Agent
+On shared desktop environments where many users will use a single machine, it can be challenging to map specific activity to individual users. 
+
+<mark style="background: #CACFD9A6;"><strong>The <u>Terminal Server Agent</u></strong> (TSA) monitors traffic to assign usernames to specific traffic in these circumstances</mark> <mark style="background: #FF5582A6;">giving administrators the same visibility and control as they have when users are on individual devices</mark>.
+#### Captive Portal 
+When Captive Portal is deployed, <mark style="background: #FFB86CA6;">web requests that match an Authentication Policy rule will be redirected to a login portal before being able to proceed</mark>. 
+
+This login portal could be for any traffic coming from an IP address that doesn't already have a user associated with it or as a way to increase security by having a user complete MFA before proceeding to sensitive parts of the network.
+#### GlobalProtect
+When a customer deploys GlobalProtect <mark style="background: #BBFABBA6;">users have to input their credentials to use the client VPN</mark>. 
+
+<mark style="background: #FF5582A6;">User-ID is able to store that information as an IP-to-user mapping</mark>. 
+
+<mark style="background: #FFB8EBA6;">GlobalProtect then keeps the mapping up to date by automatically re-authenticating the user every time there is a network status change on the endpoint</mark>.
+#### XML API 
+Some organizations have applications or devices that capture user information but cannot natively integrate with User-ID. 
+For example, they might have a custom, internally developed application or a device that is not supported by standard user mapping methods. 
+
+In such cases, you can <mark style="background: #ABF7F7A6;">use the <strong>PAN-OS XML API</strong> to create custom scripts that send the information to the PAN-OS integrated User-ID agent or directly to the firewall</mark>.
+#### XFF Headers 
+When a proxy server is deployed between the users on a network and the firewall, the firewall might see the proxy server IP address as the source IP address rather than the IP address of the client that requested the content. 
+
+In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <strong>X-Forwarded-For</strong> (XFF) header to traffic packets that includes the actual IP address of the client that requested the content</mark>. 
+
+In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
+### User Visibility 
+User Visibility require the deployment of <u>User-ID Agents</u>, <u>Terminal Server Agents</u>, and/or integrating third-party IP-to-user mapping sources.
+#### Data Redistribution Agent 
+
