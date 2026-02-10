@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-10T16:56:55+01:00
+modified: 2026-02-10T16:59:44+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -114,7 +114,7 @@ The integrated agent is designed for small and midsize deployments such as small
 
 Multiple Windows-based agents can be deployed to handle larger environments or multiforest domains.
 
-<mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>MS-RPC</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
+<mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
 ![[indows-Based User-ID Agent.png]]
 ### Palo Alto Networks Terminal Services Agent
 - Runs on Microsoft and Citrix terminal servers
