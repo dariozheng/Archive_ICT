@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-10T16:49:20+01:00
+modified: 2026-02-10T16:50:49+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -85,11 +85,18 @@ With identity-based security, it's possible to know who is accessing which appli
 
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches.
 #  User-ID Components
-User-ID technology has four main components. The following are the primary characteristics of each component.
+User-ID technology has three main components. The following are the primary characteristics of each component.
 ### Palo Alto Networks Firewall
 - Maps IP addresses to usernames
 - Maps usernames to group names
 ### User-ID Agent
+- PAN-OS Integrated User-ID Agent
+- Windows-Based User-ID Agent
+A firewall can communicate with both integrated and Windows-based agent types at the same time. 
+
+Both agent types monitor up to 100 domain controllers or Exchange servers. 
+
+Both agent types can monitor users and domain controllers only from a single Active Directory (or AD) domain.
 #### PAN-OS Integrated User-ID Agent
 - Runs on the firewall
 - Collects IP address-to-username information
