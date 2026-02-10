@@ -86,21 +86,17 @@ With identity-based security, it's possible to know who is accessing which appli
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches.
 #  User-ID Components
 User-ID technology has four main components. The following are the primary characteristics of each component.
-
-Palo Alto Networks Firewall
+#### Palo Alto Networks Firewall
 - Maps IP addresses to usernames
 - Maps usernames to group names
-
-PAN-OS Integrated User-ID Agent
+#### PAN-OS Integrated User-ID Agent
 - Runs on the firewall
 - Collects IP address-to-username information
-
-Windows-Based User-ID Agent
+#### Windows-Based User-ID Agent
 - Runs on a domain member
 - Collects IP address-to-username information
 - Sends information to the firewall
-
-Palo Alto Networks Terminal Services Agent
+#### Palo Alto Networks Terminal Services Agent
 - Runs on Microsoft and Citrix terminal servers
 - Collects IP and port number-to-username information
 - Sends information to firewall
