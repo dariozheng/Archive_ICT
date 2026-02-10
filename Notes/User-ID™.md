@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-10T16:44:39+01:00
+modified: 2026-02-10T16:48:47+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -86,17 +86,24 @@ With identity-based security, it's possible to know who is accessing which appli
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches.
 #  User-ID Components
 User-ID technology has four main components. The following are the primary characteristics of each component.
-#### Palo Alto Networks Firewall
+### Palo Alto Networks Firewall
 - Maps IP addresses to usernames
 - Maps usernames to group names
+### User-ID Agent
 #### PAN-OS Integrated User-ID Agent
 - Runs on the firewall
 - Collects IP address-to-username information
+<mark style="background: #ABF7F7A6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
+
+The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
 #### Windows-Based User-ID Agent
 - Runs on a domain member
 - Collects IP address-to-username information
 - Sends information to the firewall
-#### Palo Alto Networks Terminal Services Agent
+<mark style="background: #FFB86CA6;">The Windows-based agent is available for download from Palo Alto Networks and can be installed on one or more Windows systems</mark>. 
+
+Multiple Windows-based agents can be deployed to handle larger environments or multiforest domains.
+### Palo Alto Networks Terminal Services Agent
 - Runs on Microsoft and Citrix terminal servers
 - Collects IP and port number-to-username information
 - Sends information to firewall
