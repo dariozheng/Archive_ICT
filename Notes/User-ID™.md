@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-10T16:21:42+01:00
+modified: 2026-02-10T16:27:17+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -15,7 +15,7 @@ modified: 2026-02-10T16:21:42+01:00
 User-ID enable enable the [[Multi-Factor Authentication|Multi-Factor Authentication]], [[Phishing Protection|credential phishing prevention]] and [[Dynamic User Groups|dynamic user groups]] (<strong>DUGs</strong>).
 
 <mark style="background: #CACFD9A6;">With User-ID organization are able to enforce least privilege, where user are enabled only to network they need to</mark>. 
-# User-ID Implementation 
+# User-ID Implementation Overview
 Here are the steps needed to deploy a identity-aware policy:
 - Understand the environment 
 - Develop IP-to-User Mapping Strategies for Visibility
@@ -84,4 +84,4 @@ Administrators are also able to apply individual policy to specific users in the
 With identity-based security, it's possible to know who is accessing which applications regardless of location or device, and who is transferring files or introducing threats. 
 
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches.
-# H
+#  User-ID Components
