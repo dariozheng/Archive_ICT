@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-10T16:53:48+01:00
+modified: 2026-02-10T16:56:55+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -92,7 +92,8 @@ User-ID technology has three main components. The following are the primary char
 ### User-ID Agent
 - PAN-OS Integrated User-ID Agent
 - Windows-Based User-ID Agent
-A firewall can communicate with both integrated and Windows-based agent types at the same time. 
+
+A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time. 
 
 Both agent types monitor up to 100 domain controllers or Exchange servers. 
 
@@ -104,7 +105,7 @@ Both agent types can monitor users and domain controllers only from a single Act
 
 The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
 
-<mark style="background: #BBFABBA6;">The PAN-OS integrated agent uses either the <strong>Windows Management Instrumentation</strong> (<strong>WMI</strong>) or the <strong>Windows Remote Management Protocol</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FF5582A6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.
+<mark style="background: #BBFABBA6;">The PAN-OS integrated agent uses either the <strong>Windows Management Instrumentation</strong> (<strong>WMI</strong>) or the <strong>Windows Remote Management Protocol</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FF5582A6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.![[PAN-OS Integrated User-ID Agent.png]]
 #### Windows-Based User-ID Agent
 - Runs on a domain member
 - Collects IP address-to-username information

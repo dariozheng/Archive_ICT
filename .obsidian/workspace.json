@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/User-ID™.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -205,8 +205,9 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "f23697804c889204",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/PAN-OS Integrated User-ID Agent.png",
     "Notes/Data Redistribution Agent.md",
     "Notes/App-ID™.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
