@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T12:41:56+01:00
+modified: 2026-02-11T14:47:01+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -91,13 +91,40 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 
 <mark style="background: #ABF7F7A6;">The User-ID agent will then record the IP-to-user mapping</mark>.
 
-<mark style="background: #CACFD9A6;">User-ID also reads session tables to confirm known IP address-to-username mappings based on current Windows file and printer shares</mark>.
+User-ID also reads session tables to confirm known IP address-to-username mappings based on current Windows file and printer shares.
+### Active Directory Domain Controllers
+
+![[User-ID Domain Controller Monitoring.png]]
+1. When the User-ID agent first starts up, it will parse the security event logs and record all the user login events.
+2. Afterward, it will check the Security logs on a regular basis only for new login or logout events.
+3. User mappings are cached for an amount of time equal to the timeout value set in the User-ID agent interface.
+To ensure that security events are recorded in the Security logs, <mark style="background: #FFB86CA6;">the AD domain must be configured <strong>to log</strong> successful account login events</mark>. 
+
+Because users can authenticate to any domain controller in a domain and the Security logs are not replicated between domain controllers, you also <mark style="background: #FF5582A6;">must set up server monitoring for all domain controllers to capture all user login events</mark>. 
+
+<mark style="background: #FFB8EBA6;">Each User-ID agent can monitor multiple <strong>domain controllers per domain</strong>. However, each User-ID agent can monitor only a <strong>single domain</strong></mark>.
+
+<mark style="background: #FFF3A3A6;">Because server monitoring requires very little overhead and because the majority of users generally can be mapped using this method, Palo Alto Networks recommends it as the base user mapping method for most User-ID deployments</mark>.
+
 ## Client Probing
 Client Probing is a legacy method to create IP-to-user mappings and is not recommended as a best practice today. 
 
 In this method, <mark style="background: #D2B3FFA6;">the <u>User-ID agent</u> probes every Windows client using <strong>Windows Management Instrumentation</strong> (WMI)</mark>.
 ## Syslog Listenig 
-With this integration, the <mark style="background: #FF5582A6;">NGFWs are able to listen for auth syslog messages</mark> from <mark style="background: #BBFABBA6;"><strong>Network Access Control</strong> (NAC) systems, <strong>wireless controllers</strong>, 802.1x devices, Apple Open Directory servers, and proxy servers</mark>.
+With this integration, the <mark style="background: #FF5582A6;">NGFWs are able to listen for auth syslog messages</mark> from <mark style="background: #BBFABBA6;"><strong>Network Access Control</strong> (NAC) systems, <strong>wireless controllers</strong>, 802.1x devices, Apple Open Directory servers, and proxy servers</mark>. 
+It's possible <mark style="background: #FFB8EBA6;">to configure these services to send syslog messages that contain information about login and logout events</mark> and <mark style="background: #ABF7F7A6;">configure the User‐ID agent to parse those messages</mark>.
+### Receiving Syslog Messages
+Both the integrated and Windows-based agents <mark style="background: #D2B3FFA6;">can receive syslog messages</mark>. 
+
+The User‐ID agent can parse for login events to map IP addresses to usernames and parse for logout events so that the firewall deletes outdated mappings. 
+
+Deletion of outdated mappings is particularly useful in environments where IP address assignments change often.
+### Parsing Syslog Messages
+Both the PAN‐OS integrated User‐ID agent and the Windows‐based User‐ID agent <mark style="background: #ABF7F7A6;">use <strong>Syslog Parse Profiles</strong> to parse syslog messages</mark>. 
+
+In environments where services send the messages in different formats, you can create a custom profile for each format and associate multiple profiles with each sender. 
+
+If you use the PAN‐OS integrated User‐ID agent, you also can use predefined Syslog Parse Profiles that Palo Alto Networks provides through Applications content updates.
 ## Terminal Server Agent
 On shared desktop environments where many users will use a single machine, it can be challenging to map specific activity to individual users. 
 
@@ -126,3 +153,14 @@ When a proxy server is deployed between the users on a network and the firewall,
 In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <strong>X-Forwarded-For</strong> (XFF) header to traffic packets that includes the actual IP address of the client that requested the content</mark>. 
 
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
+# User-ID Operation 
+Before User-ID can operate, it must be enabled on the security zone. 
+
+If User-ID is enabled, then the firewall consults the administrator-defined User-ID configuration to determine which agents the firewall has available to gather IP address and username information. 
+
+Depending on the configuration, User-ID on the firewall could query either an integrated agent or a Windows-based agent. 
+The agent retrieves IP address and username information from the domain controller.
+
+After User-ID has retrieved the IP address and username information from an agent, it can use the firewall’s LDAP configuration to retrieve user-to-group mapping information from an LDAP server.
+
+At this point, User-ID will have an IP address associated with a username and possibly a username associated with one or more group names.
