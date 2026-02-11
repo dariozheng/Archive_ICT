@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T17:27:11+01:00
+modified: 2026-02-11T17:44:23+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -184,6 +184,12 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 ### Exclude List
 Use the Exclude List only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
 ## Define the Monitored Server(s)
+Each User-ID agent must be configured for the servers it needs to monitor.
+
+
+
+
+
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
 
