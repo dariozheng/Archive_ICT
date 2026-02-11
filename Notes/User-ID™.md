@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T17:17:52+01:00
+modified: 2026-02-11T17:27:11+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -114,7 +114,7 @@ An additional Windows-based method to resolve IP addresses to users is to consul
 ## Client Probing
 Client Probing is a legacy method to create IP-to-user mappings and is not recommended as a best practice today. 
 
-In this method, <mark style="background: #D2B3FFA6;">the <u>User-ID agent</u> probes every Windows client using <strong>Windows Management Instrumentation</strong> (WMI)</mark>.
+In this method, <mark style="background: #D2B3FFA6;">the <u>User-ID agent</u> probes every Windows client using [[Windows Management Instrumentation|WMI]]</mark>.
 ## Syslog Listenig 
 With this integration, the <mark style="background: #FF5582A6;">NGFWs are able to listen for auth syslog messages</mark> from <mark style="background: #BBFABBA6;"><strong>Network Access Control</strong> (NAC) systems, <strong>wireless controllers</strong>, 802.1x devices, Apple Open Directory servers, and proxy servers</mark>. 
 It's possible <mark style="background: #FFB8EBA6;">to configure these services to send syslog messages that contain information about login and logout events</mark> and <mark style="background: #ABF7F7A6;">configure the User‐ID agent to parse those messages</mark>.
@@ -159,6 +159,7 @@ In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <st
 
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
 # User-ID Configuration Steps 
+
 ![[User-ID Configuration Steps.png]]
 ## Enable User-ID
 Enable User-ID technology per zone on the firewall.
@@ -182,6 +183,7 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 <mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List
 Use the Exclude List only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
+## Define the Monitored Server(s)
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
 
