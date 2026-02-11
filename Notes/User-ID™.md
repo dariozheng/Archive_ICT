@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T17:44:23+01:00
+modified: 2026-02-11T17:52:40+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -159,11 +159,10 @@ In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <st
 
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
 # User-ID Configuration Steps 
-
-![[User-ID Configuration Steps.png]]
 ## Enable User-ID
+![[attachments/## Enable User-ID 0.png]]
 Enable User-ID technology per zone on the firewall.
-![[Enable User-ID.png]]
+![[Enable User-ID 1.png]]
 ### Enable User Identification 
 <mark style="background: #FFF3A3A6;">For each zone you must select the <strong>Enable User Identification</strong> check box to permit User-ID to probe for users on the zone</mark>. 
 
@@ -173,7 +172,7 @@ Enable User-ID technology per zone on the firewall.
 
 By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users from all subnetworks found within a User-ID-enabled zone</mark>.
 ### Include List
-<mark style="background: #FFB8EBA6;">Use the Include List to limit the subnetworks or specific addresses that the firewall will attempt to map to users</mark>.
+<mark style="background: #FFB8EBA6;">Use the <strong>Include List</strong> to limit the subnetworks or specific addresses that the firewall will attempt to map to users</mark>.
 
 >[!info] WMI probing
 ><strong>WMI probing</strong> is a Palo Alto Networks User-ID feature that queries Windows endpoints via [[Windows Management Instrumentation|Windows Management Instrumentation]] to map IP addresses to active users
@@ -182,11 +181,14 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 
 <mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List
-Use the Exclude List only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
+Use the <strong>Exclude List</strong> only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
 ## Define the Monitored Server(s)
 Each User-ID agent must be configured for the servers it needs to monitor.
 
+The agent includes an autodiscovery feature that, via DNS, automatically identifies available Microsoft Windows servers for event log monitoring. 
+The integrated agent supports [[Windows Management Instrumentation|WMI]] and [[Windows Remote Management Protocol|WinRM]] protocols to map IP addresses to usernames. 
 
+The firewall will discover domain controllers based on the domain name entered in the Domain field of the **Device > Setup > Management > General Settings** page.
 
 
 

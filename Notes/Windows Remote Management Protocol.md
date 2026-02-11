@@ -5,7 +5,9 @@ product:
   - "[[Microsoft Protocols]]"
 tags:
 created: 2026-02-11T15:40:43+01:00
-modified: 2026-02-11T17:25:00+01:00
+modified: 2026-02-11T17:50:55+01:00
+aliases:
+  - WinRM
 ---
 Windows Remote Management (WinRM) is the Microsoft implementation of the WS-Management protocol, which is a standard Simple Object Access Protocol (SOAP)-based, firewall-friendly protocol that allows interoperation between hardware and operating systems from different vendors.
 
