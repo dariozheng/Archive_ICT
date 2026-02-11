@@ -39,12 +39,14 @@
             "id": "2667f15c768ac804",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "attachments/WMI.png"
+                "file": "Notes/User-ID™.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "WMI"
+              "icon": "lucide-file",
+              "title": "User-ID™"
             }
           }
         ],
@@ -234,10 +236,10 @@
   },
   "active": "2667f15c768ac804",
   "lastOpenFiles": [
+    "attachments/WMI.png",
     "attachments/Enable User-ID 0.png",
     "attachments/Enable User-ID 1.png",
     "Notes/User-ID™.md",
-    "attachments/WMI.png",
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Microsoft Remote Procedure Call.md",

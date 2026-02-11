@@ -159,8 +159,8 @@ In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <st
 
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
 # User-ID Configuration Steps 
-## Enable User-ID
 ![[Enable User-ID 0.png]]
+## Enable User-ID
 Enable User-ID technology per zone on the firewall.
 ![[Enable User-ID 1.png]]
 ### Enable User Identification 
