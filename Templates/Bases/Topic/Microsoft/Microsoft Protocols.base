@@ -3,4 +3,4 @@ views:
     name: Table
     filters:
       and:
-        - product.contains(link("Windows"))
+        - product.contains(link("Microsoft Protocols"))

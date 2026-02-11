@@ -11,13 +11,14 @@
             "id": "0c1972ab0f00cc37",
             "type": "leaf",
             "state": {
-              "type": "bases",
+              "type": "markdown",
               "state": {
-                "file": "Templates/Bases/Topic/Microsoft/Windows.base",
-                "viewName": "Table"
+                "file": "Categories/Topics/Microsoft/Microsoft General.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-table",
-              "title": "Windows"
+              "icon": "lucide-file",
+              "title": "Microsoft General"
             }
           }
         ]
@@ -204,26 +205,29 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "0c1972ab0f00cc37",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "Categories/Topics/Microsoft/Windows.md",
-    "Categories/Topics/Microsoft/Microsoft General.md",
+    "Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "Templates/Bases/Topic/Microsoft/Microsoft General.base",
+    "Templates/Bases/Topic/Microsoft/Windows.base",
+    "Templates/Bases/Topic/Microsoft/Microsoft Protocols.base",
     "Templates/Bases/Microsoft.base",
+    "Templates/Notes/Microsoft Template.md",
+    "Templates/Notes/Networking Template.md",
+    "Categories/Topics/Microsoft/Microsoft General.md",
+    "Categories/Microsoft.md",
+    "Notes/Windows Management Instrumentation.md",
+    "Notes/Windows Remote Management Protocol.md",
+    "Notes/Microsoft Remote Procedure Call.md",
     "Categories/Topics/Microsoft/Untitled",
     "Templates/Notes/Security Template.md",
-    "Templates/Notes/Microsoft Template.md",
-    "Templates/Bases/Topic/Microsoft/Windows.base",
-    "Notes/Windows Management Instrumentation.md",
     "Templates/Bases/Topic/Microsoft/Untitled.md",
     "Notes/Phishing Protection.md",
-    "Notes/Microsoft Remote Procedure Call.md",
-    "Notes/Windows Remote Management Protocol.md",
-    "Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "Templates/Bases/Topic/Networking/Networking General.base",
     "Categories/Topics/Networking/Networking General.md",
     "Categories/Topics/Security/Security General.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
-    "Categories/Microsoft.md",
     "Categories/Topics/Microsoft",
     "Templates/Bases/Topic/Microsoft",
     "Templates/Bases/Networking.base",
@@ -247,10 +251,7 @@
     "Notes/Backhaul.md",
     "Notes/Web crawler.md",
     "Notes/Palo Alto SASE.md",
-    "Notes/SD-WAN.md",
-    "Notes/Virtual Private Network.md",
     "attachments/step to deploy identiy-aware policy.png",
-    "attachments/original.gif.html",
     "Untitled.canvas"
   ]
 }
