@@ -13,15 +13,44 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Categories/Topics/Microsoft/Microsoft General.md",
+                "file": "Notes/Windows Management Instrumentation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Microsoft General"
+              "title": "Windows Management Instrumentation"
+            }
+          },
+          {
+            "id": "9a92aa1d4041d97a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/Windows Management Instrumentation.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Windows Management Instrumentation"
+            }
+          },
+          {
+            "id": "2667f15c768ac804",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/Windows Management Instrumentation.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Windows Management Instrumentation"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -207,21 +236,29 @@
   },
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "Notes/Common Information Model.md",
+    "Notes/Web-Based Enterprise Management.md",
+    "Notes/Windows Management Instrumentation.md",
+    "Notes/Microsoft Remote Procedure Call.md",
+    "Notes/Windows Remote Management Protocol.md",
+    "Templates/Bases/Systems.base",
+    "Templates/Notes/Systems Template.md",
+    "Templates/Notes/Security Template.md",
+    "Categories/Systems.md",
+    "Categories/Microsoft.md",
+    "Templates/Notes/Cloud Computing Template.md",
+    "Templates/Notes/Networking Template.md",
+    "Templates/Notes/Microsoft Template.md",
+    "Notes/User-ID™.md",
+    "Notes/Data Redistribution Agent.md",
+    "Categories/Topics/Microsoft/Microsoft General.md",
     "Categories/Topics/Microsoft/Windows.md",
     "Categories/Topics/Microsoft/Microsoft Protocols.md",
     "Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "Templates/Bases/Topic/Microsoft/Windows.base",
     "Templates/Bases/Topic/Microsoft/Microsoft Protocols.base",
     "Templates/Bases/Microsoft.base",
-    "Templates/Notes/Microsoft Template.md",
-    "Templates/Notes/Networking Template.md",
-    "Categories/Topics/Microsoft/Microsoft General.md",
-    "Categories/Microsoft.md",
-    "Notes/Windows Management Instrumentation.md",
-    "Notes/Windows Remote Management Protocol.md",
-    "Notes/Microsoft Remote Procedure Call.md",
     "Categories/Topics/Microsoft/Untitled",
-    "Templates/Notes/Security Template.md",
     "Templates/Bases/Topic/Microsoft/Untitled.md",
     "Notes/Phishing Protection.md",
     "Templates/Bases/Topic/Networking/Networking General.base",
@@ -233,9 +270,6 @@
     "Templates/Bases/Networking.base",
     "Categories/Networking.md",
     "Categories/Security.md",
-    "Templates/Bases/Security.base",
-    "Templates/Notes/Cloud Computing Template.md",
-    "Notes/User-ID™.md",
     "attachments/Enable User-ID.png",
     "attachments/User-ID Configuration Steps.png",
     "attachments/User-ID Mapping Recommendati.png",
@@ -243,14 +277,10 @@
     "attachments/User-ID Domain Controller Monitoring.png",
     "attachments/original.png",
     "attachments/PAN-OS Integrated User-ID Agent.png",
-    "Notes/Data Redistribution Agent.md",
     "Notes/App-ID™.md",
     "attachments/indows-Based User-ID Agent.png",
     "attachments/group mapping.png",
     "Notes/Server Name Indication.md",
-    "Notes/Backhaul.md",
-    "Notes/Web crawler.md",
-    "Notes/Palo Alto SASE.md",
     "attachments/step to deploy identiy-aware policy.png",
     "Untitled.canvas"
   ]
