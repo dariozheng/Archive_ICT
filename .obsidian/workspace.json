@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Windows Management Instrumentation.md",
+                "file": "Notes/Web-Based Enterprise Management.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Windows Management Instrumentation"
+              "title": "Web-Based Enterprise Management"
             }
           }
         ],
@@ -234,13 +234,16 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "2667f15c768ac804",
   "lastOpenFiles": [
-    "Notes/Common Information Model.md",
-    "Notes/Web-Based Enterprise Management.md",
     "Notes/Windows Management Instrumentation.md",
+    "Categories/Topics/Security/Palo Alto Networks.md",
+    "Categories/Security.md",
+    "Notes/User-ID™.md",
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Remote Management Protocol.md",
+    "Notes/Common Information Model.md",
+    "Notes/Web-Based Enterprise Management.md",
     "Templates/Bases/Systems.base",
     "Templates/Notes/Systems Template.md",
     "Templates/Notes/Security Template.md",
@@ -249,7 +252,6 @@
     "Templates/Notes/Cloud Computing Template.md",
     "Templates/Notes/Networking Template.md",
     "Templates/Notes/Microsoft Template.md",
-    "Notes/User-ID™.md",
     "Notes/Data Redistribution Agent.md",
     "Categories/Topics/Microsoft/Microsoft General.md",
     "Categories/Topics/Microsoft/Windows.md",
@@ -264,12 +266,10 @@
     "Templates/Bases/Topic/Networking/Networking General.base",
     "Categories/Topics/Networking/Networking General.md",
     "Categories/Topics/Security/Security General.md",
-    "Categories/Topics/Security/Palo Alto Networks.md",
     "Categories/Topics/Microsoft",
     "Templates/Bases/Topic/Microsoft",
     "Templates/Bases/Networking.base",
     "Categories/Networking.md",
-    "Categories/Security.md",
     "attachments/Enable User-ID.png",
     "attachments/User-ID Configuration Steps.png",
     "attachments/User-ID Mapping Recommendati.png",
