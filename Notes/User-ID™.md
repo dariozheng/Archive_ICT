@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T15:05:22+01:00
+modified: 2026-02-11T15:29:25+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -158,6 +158,27 @@ When a proxy server is deployed between the users on a network and the firewall,
 In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <strong>X-Forwarded-For</strong> (XFF) header to traffic packets that includes the actual IP address of the client that requested the content</mark>. 
 
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
+# User-ID Configuration Steps 
+![[User-ID Configuration Steps.png]]
+## Enable User-ID
+Enable User-ID technology per zone on the firewall.
+![[Enable User-ID.png]]
+### Enable User Identification 
+<mark style="background: #FFF3A3A6;">For each zone you must select the <strong>Enable User Identification</strong> check box to permit User-ID to probe for users on the zone</mark>. 
+
+<mark style="background: #BBFABBA6;">User-ID tracks only users associated with the source zone of a session</mark>. 
+
+<mark style="background: #FF5582A6;"><strong>Never enable User-ID for a zone that contains the internet</strong>, or your firewall will attempt to identify every user from outside your network</mark>. 
+
+By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users from all subnetworks found within a User-ID-enabled zone</mark>.
+### Include List
+<mark style="background: #FFB8EBA6;">Use the Include List to limit the subnetworks or specific addresses that the firewall will attempt to map to users</mark>.
+
+<mark style="background: #D2B3FFA6;">If WMI probing is enabled, WMI will probe private IP addresses but not probe public IP addresses by default</mark>. 
+
+<mark style="background: #FFB86CA6;">To enable WMI probing to map public addresses, you must use the addresses or address ranges in the Include List</mark>.
+### Exclude List
+Use the Exclude List only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
 

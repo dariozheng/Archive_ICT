@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/User-ID™.md",
+                "file": "Templates/Notes/Microsoft Template.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "User-ID™"
+              "title": "Microsoft Template"
             }
           }
         ]
@@ -205,21 +205,31 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "2601f29f7603d6aa",
   "lastOpenFiles": [
-    "attachments/User-ID Mapping Recommendati.png",
+    "Categories/Microsoft.md",
+    "Categories/Networking.md",
+    "Templates/Bases/Microsoft.base",
+    "Templates/Bases/Networking.base",
+    "Templates/Notes/Microsoft Template.md",
+    "Categories/Security.md",
+    "Templates/Notes/Security Template.md",
+    "Templates/Bases/Security.base",
+    "Templates/Notes/Cloud Computing Template.md",
+    "Notes/Microsoft Remote Procedure Call.md",
+    "Notes/Windows Management Instrumentation.md",
     "Notes/User-ID™.md",
+    "attachments/Enable User-ID.png",
+    "attachments/User-ID Configuration Steps.png",
+    "attachments/User-ID Mapping Recommendati.png",
     "attachments/User-ID Windows Session Monitoring.png",
     "attachments/User-ID Domain Controller Monitoring.png",
     "attachments/original.png",
     "Notes/Windows Remote Management Protocol.md",
-    "Notes/Windows Management Instrumentation.md",
-    "Notes/Microsoft Remote Procedure Call.md",
     "attachments/PAN-OS Integrated User-ID Agent.png",
     "Notes/Data Redistribution Agent.md",
     "Notes/App-ID™.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
-    "Categories/Security.md",
     "attachments/indows-Based User-ID Agent.png",
     "attachments/group mapping.png",
     "Notes/Server Name Indication.md",
@@ -231,27 +241,17 @@
     "Notes/Zero Trust Security Model.md",
     "Categories/Cloud Computing.md",
     "Categories/Hardware.md",
-    "Categories/Networking.md",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
-    "Notes/Dynamic User Groups.md",
-    "Notes/Phishing Protection.md",
-    "Notes/Multi-Factor Authentication.md",
-    "Templates/Notes/Codes/Link to Glossary.md",
     "attachments/step to deploy identiy-aware policy.png",
-    "attachments/SNI.png",
-    "attachments/Application Filter.png",
     "attachments/original.gif.html",
     "Notes/Untitled.base",
-    "Templates/Bases/Networking.base",
     "Templates/Bases/Topic/Security/Security General.base",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "Notes/Glossaries",
     "Untitled.canvas",
     "Untitled",
-    "Templates/Notes/Codes",
-    "Templates/Notes",
-    "Templates/Bases/Untitled.base"
+    "Templates/Notes/Codes"
   ]
 }
