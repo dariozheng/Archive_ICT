@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T10:50:54+01:00
+modified: 2026-02-11T12:41:56+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -107,11 +107,14 @@ When Captive Portal is deployed, <mark style="background: #FFB86CA6;">web reques
 
 This login portal could be for any traffic coming from an IP address that doesn't already have a user associated with it or as a way to increase security by having a user complete MFA before proceeding to sensitive parts of the network.
 ## GlobalProtect
-When a customer deploys GlobalProtect <mark style="background: #BBFABBA6;">users have to input their credentials to use the client VPN</mark>. 
+<mark style="background: #BBFABBA6;">Every GlobalProtect user has an <strong>agent</strong> or <strong>app</strong> running on the client that requires the user to <u>enter login credentials</u> for VPN access to the firewall</mark>. 
+<mark style="background: #FF5582A6;">The firewall adds this GlobalProtect login information to the User-ID user mapping table for visibility and user-based policy rule enforcement</mark>.
 
-<mark style="background: #FF5582A6;">User-ID is able to store that information as an IP-to-user mapping</mark>. 
+<mark style="background: #FFF3A3A6;">User-ID information also can be provided from clients that are connected to an internal network via an internal GlobalProtect gateway without establishing a VPN tunnel to a firewall</mark>. <mark style="background: #ADCCFFA6;">Every <strong>internal</strong> GlobalProtect user has an agent or app running on the internal client that requires the user to enter <strong>login credentials</strong> that can be used by the firewall</mark>.
 
-<mark style="background: #FFB8EBA6;">GlobalProtect then keeps the mapping up to date by automatically re-authenticating the user every time there is a network status change on the endpoint</mark>.
+<mark style="background: #ABF7F7A6;">Because GlobalProtect users must authenticate to gain access to the network, the IP address-to-username mapping is explicitly known</mark>. 
+
+<mark style="background: #FFB8EBA6;">GlobalProtect keeps the mapping up to date by automatically re-authenticating the user every time there is a network status change on the endpoint</mark>.
 ## XML API 
 Some organizations have applications or devices that capture user information but cannot natively integrate with User-ID. 
 For example, they might have a custom, internally developed application or a device that is not supported by standard user mapping methods. 
