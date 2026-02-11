@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "90237572b5a9fcee",
+        "id": "cbc69df6f9db56f1",
         "type": "tabs",
         "children": [
           {
-            "id": "2601f29f7603d6aa",
+            "id": "0c1972ab0f00cc37",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Templates/Notes/Microsoft Template.md",
+                "file": "Categories/Microsoft.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Microsoft Template"
+              "title": "Microsoft"
             }
           }
         ]
@@ -205,13 +205,18 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "2601f29f7603d6aa",
+  "active": "0c1972ab0f00cc37",
   "lastOpenFiles": [
-    "Categories/Microsoft.md",
-    "Categories/Networking.md",
+    "Templates/Bases/Topic/Microsoft/Microsoft General.base",
+    "Categories/Topics/Microsoft",
+    "Templates/Bases/Topic/Networking/Networking General.base",
+    "Templates/Bases/Topic/Microsoft/Untitled.md",
     "Templates/Bases/Microsoft.base",
+    "Templates/Bases/Topic/Microsoft",
     "Templates/Bases/Networking.base",
     "Templates/Notes/Microsoft Template.md",
+    "Categories/Microsoft.md",
+    "Categories/Networking.md",
     "Categories/Security.md",
     "Templates/Notes/Security Template.md",
     "Templates/Bases/Security.base",
@@ -243,15 +248,11 @@
     "Categories/Hardware.md",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
-    "Notes/Glossaries/Cloud Computing Glossary.md",
     "attachments/step to deploy identiy-aware policy.png",
     "attachments/original.gif.html",
     "Notes/Untitled.base",
     "Templates/Bases/Topic/Security/Security General.base",
     "Templates/Bases/Topic/Security/Palo Alto Networks.base",
-    "Notes/Glossaries",
-    "Untitled.canvas",
-    "Untitled",
-    "Templates/Notes/Codes"
+    "Untitled.canvas"
   ]
 }
