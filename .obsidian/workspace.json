@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Web-Based Enterprise Management.md",
+                "file": "Notes/Windows Management Instrumentation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Web-Based Enterprise Management"
+              "title": "Windows Management Instrumentation"
             }
           }
         ],
@@ -236,14 +236,17 @@
   },
   "active": "2667f15c768ac804",
   "lastOpenFiles": [
+    "attachments/WMI.png",
     "Notes/Windows Management Instrumentation.md",
-    "Categories/Topics/Security/Palo Alto Networks.md",
-    "Categories/Security.md",
     "Notes/User-ID™.md",
+    "Notes/|Windows Management Instrumentation.md",
+    "Notes/Data Redistribution Agent.md",
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Common Information Model.md",
     "Notes/Web-Based Enterprise Management.md",
+    "Categories/Topics/Security/Palo Alto Networks.md",
+    "Categories/Security.md",
     "Templates/Bases/Systems.base",
     "Templates/Notes/Systems Template.md",
     "Templates/Notes/Security Template.md",
@@ -252,7 +255,6 @@
     "Templates/Notes/Cloud Computing Template.md",
     "Templates/Notes/Networking Template.md",
     "Templates/Notes/Microsoft Template.md",
-    "Notes/Data Redistribution Agent.md",
     "Categories/Topics/Microsoft/Microsoft General.md",
     "Categories/Topics/Microsoft/Windows.md",
     "Categories/Topics/Microsoft/Microsoft Protocols.md",
@@ -277,11 +279,8 @@
     "attachments/User-ID Domain Controller Monitoring.png",
     "attachments/original.png",
     "attachments/PAN-OS Integrated User-ID Agent.png",
-    "Notes/App-ID™.md",
     "attachments/indows-Based User-ID Agent.png",
     "attachments/group mapping.png",
-    "Notes/Server Name Indication.md",
-    "attachments/step to deploy identiy-aware policy.png",
     "Untitled.canvas"
   ]
 }

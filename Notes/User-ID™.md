@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T15:29:25+01:00
+modified: 2026-02-11T17:17:52+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -174,9 +174,12 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 ### Include List
 <mark style="background: #FFB8EBA6;">Use the Include List to limit the subnetworks or specific addresses that the firewall will attempt to map to users</mark>.
 
+>[!info] WMI probing
+><strong>WMI probing</strong> is a Palo Alto Networks User-ID feature that queries Windows endpoints via [[Windows Management Instrumentation|Windows Management Instrumentation]] to map IP addresses to active users
+
 <mark style="background: #D2B3FFA6;">If WMI probing is enabled, WMI will probe private IP addresses but not probe public IP addresses by default</mark>. 
 
-<mark style="background: #FFB86CA6;">To enable WMI probing to map public addresses, you must use the addresses or address ranges in the Include List</mark>.
+<mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List
 Use the Exclude List only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
 # User-ID Operation 
