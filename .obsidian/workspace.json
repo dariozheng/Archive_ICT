@@ -205,12 +205,14 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "2601f29f7603d6aa",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/User-ID Mapping Recommendati.png",
+    "Notes/User-ID™.md",
+    "attachments/User-ID Windows Session Monitoring.png",
     "attachments/User-ID Domain Controller Monitoring.png",
     "attachments/original.png",
     "Notes/Windows Remote Management Protocol.md",
-    "Notes/User-ID™.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Microsoft Remote Procedure Call.md",
     "attachments/PAN-OS Integrated User-ID Agent.png",
@@ -240,9 +242,6 @@
     "attachments/step to deploy identiy-aware policy.png",
     "attachments/SNI.png",
     "attachments/Application Filter.png",
-    "attachments/custom tag panorama 3.png",
-    "attachments/custom tag panorama 2.png",
-    "attachments/custom tag panorama.png",
     "attachments/original.gif.html",
     "Notes/Untitled.base",
     "Templates/Bases/Networking.base",

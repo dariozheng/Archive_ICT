@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T14:47:01+01:00
+modified: 2026-02-11T15:05:22+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -86,13 +86,14 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 - Collects IP and port number-to-username information
 - Sends information to firewall
 # IP-to-Username Mapping Methods
+![[User-ID Mapping Recommendati.png]]
 ## Server Monitoring 
 <mark style="background: #BBFABBA6;"><u>User-ID agents</u> monitors <strong>Microsoft AD domain controllers</strong>, <strong>Microsoft Exchange servers</strong>, or <strong>Novell eDirectory servers</strong></mark> for <mark style="background: #ADCCFFA6;"><strong>login</strong> or <strong>logout</strong> events recorded in Authentication logs</mark>.
 
 <mark style="background: #ABF7F7A6;">The User-ID agent will then record the IP-to-user mapping</mark>.
 
 User-ID also reads session tables to confirm known IP address-to-username mappings based on current Windows file and printer shares.
-### Active Directory Domain Controllers
+### Microsoft Active Directory Domain Controllers
 
 ![[User-ID Domain Controller Monitoring.png]]
 1. When the User-ID agent first starts up, it will parse the security event logs and record all the user login events.
@@ -105,7 +106,11 @@ Because users can authenticate to any domain controller in a domain and the Secu
 <mark style="background: #FFB8EBA6;">Each User-ID agent can monitor multiple <strong>domain controllers per domain</strong>. However, each User-ID agent can monitor only a <strong>single domain</strong></mark>.
 
 <mark style="background: #FFF3A3A6;">Because server monitoring requires very little overhead and because the majority of users generally can be mapped using this method, Palo Alto Networks recommends it as the base user mapping method for most User-ID deployments</mark>.
+#### Windows Session Monitoring
+Clients who have connected to a shared file or print resource will have their session information stored on the domain controller. 
 
+An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller.
+![[User-ID Windows Session Monitoring.png]]
 ## Client Probing
 Client Probing is a legacy method to create IP-to-user mappings and is not recommended as a best practice today. 
 
