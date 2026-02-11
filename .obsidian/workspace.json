@@ -190,8 +190,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -206,7 +205,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "2601f29f7603d6aa",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "Notes/Windows Remote Management Protocol.md",
     "Notes/User-ID™.md",
