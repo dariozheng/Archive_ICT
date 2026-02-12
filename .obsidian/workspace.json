@@ -74,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -217,7 +218,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "5a6c7b66867dfa5d",
   "lastOpenFiles": [
     "attachments/From the Firewall CLI.png",
     "attachments/From the Windows Agent.png",

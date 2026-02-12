@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T16:32:48+01:00
+modified: 2026-02-12T16:36:30+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -302,14 +302,14 @@ Communication between the firewall and a User-ID agent is secured using an encry
 ##### Non Configurable Timers
 The firewall has non-configurable timers for its communication to the agent.
 ###### 2 Seconds 
-Get the list of new IP address-to-username mappings from the agent. This list contains only new mappings since the last interval.
+<mark style="background: #FFF3A3A6;">Get the list of new IP address-to-username mappings from the agent</mark>. <mark style="background: #D2B3FFA6;">This list contains <strong>only</strong> new mappings since the last interval</mark>.
 ###### 2 Seconds 
-Send the list of unknown IP addresses that were encountered in traffic to the agent.
+<mark style="background: #FFB86CA6;">Send the list of unknown IP addresses that were encountered in traffic to the agent</mark>.
 ###### 5 Seconds
-Get the agent status
+Get the agent status.
 ###### 1 Hour
-Get the full list of IP address-to-username mappings from the agent.
-#### Confirm Connection to the User-ID Agent
+<mark style="background: #FF5582A6;">Get the full list of IP address-to-username mappings from the agent</mark>.
+#### Confirm Connection to the User-ID Agent #troubleshooting
 To confirm connection to the User-ID agent device, browse to <strong>Device > Data Redistribution > Agents</strong>.
 
 Use the firewall’s web interface and the Windows agent to confirm connectivity between the firewall and the Windows agent. 
