@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T12:44:48+01:00
+modified: 2026-02-12T14:55:01+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -237,6 +237,22 @@ To simplify finding the User-ID agent download links, use the Filter By menu to 
 ![[User-ID Agent Software.png]]
 The installation can be manual, installing each agent individually by manually launching the downloaded MSI file, or automated where it's possible to use endpoint management software such as Microsoft System Center Configuration Manager (or SCCM) to remotely install, configure, or upgrade multiple agents in a single operation.
 #### Agent Setup Process
+![[Agent Setup Process.png]]
+Click <strong>Setup</strong> to configure the User-ID agent, click the <strong>Edit</strong> button to open a separate tabbed window that enables you to change any of the settings shown in the Setup pane.
+Then, click <strong>Save</strong> to save your configuration changes but not activate them. Click <strong>Commit</strong> to save and activate your configuration changes. Click <strong>Exit</strong> to close the window without saving your changes.
+
+By default, <mark style="background: #ADCCFFA6;">the User-ID agent uses TCP port 5007 to communicate to the firewall</mark>. You can change to another port, if necessary, by clicking Edit and then clicking the <strong>Agent Service</strong> tab in the window that opens.
+#### Configure the User-ID Agent Account
+The agent should run with a Windows service account that has the necessary permissions to read the security event logs or to perform WMI probing.
+##### Authentication tab
+Use the Authentication tab to configure the agent to use a specific Windows service account. 
+The authentication information must be configured before you can configure access to monitored servers. 
+
+By default, the Windows agent runs as the user account used to install the .msi file. 
+
+Most of the necessary permissions are provided if the Windows-based agent runs as an account that belongs to the Domain Administrators group or to the Server Operators and Event Log Readers groups. 
+
+The user account running the agent also must have permissions to start a Windows service. However, membership in these groups provides the account with more permissions than just the capability to perform server monitoring or client probing. Therefore, you might want to run the agent using a restricted account with minimal permissions. The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have.
 
 
 

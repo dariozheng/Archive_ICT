@@ -184,6 +184,18 @@
               "icon": "git-pull-request",
               "title": "Source Control"
             }
+          },
+          {
+            "id": "16999ae442dfb53f",
+            "type": "leaf",
+            "state": {
+              "type": "file-properties",
+              "state": {
+                "file": "Notes/User-ID™.md"
+              },
+              "icon": "lucide-info",
+              "title": "File properties for User-ID™"
+            }
           }
         ],
         "currentTab": 6
@@ -207,6 +219,7 @@
   },
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/Agent Setup Process.png",
     "attachments/User-ID Agent Software.png",
     "attachments/Installation Location.png",
     "attachments/Windows-Based Agent Configuration.png",
@@ -220,7 +233,6 @@
     "Notes/Windows Management Instrumentation.md",
     "attachments/WMI.png",
     "attachments/Enable User-ID 0.png",
-    "attachments/Enable User-ID 1.png",
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Common Information Model.md",
     "Notes/Web-Based Enterprise Management.md",
