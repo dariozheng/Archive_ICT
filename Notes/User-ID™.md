@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T15:42:55+01:00
+modified: 2026-02-12T16:15:19+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -292,8 +292,23 @@ Communication between the firewall and a User-ID agent is secured using an encry
 ##### Agent Host Type
 You can add an agent using Serial Number or Host and Port. 
 ###### Serial Number
+If the firewall will connect to a <mark style="background: #FFF3A3A6;"><strong>Panorama management appliance</strong></mark> to collect User-ID information, then select **Serial Number** as the host type.
+###### Host and Port
+If the firewall will connect to a <mark style="background: #BBFABBA6;"><strong>Windows-based agent</strong> or an agent on another firewall</mark>, then select <strong>Host and Port</strong> as the host type. 
 
+If you select Host and Port, <mark style="background: #ABF7F7A6;">then you must specify each agent’s IP address and listening port</mark>. 
 
+Communication between the firewall and a User-ID agent is secured using an encrypted SSL connection.
+##### Non Configurable Timers
+The firewall has non-configurable timers for its communication to the agent.
+###### 2 Seconds 
+Get the list of new IP address-to-username mappings from the agent. This list contains only new mappings since the last interval.
+###### 2 Seconds 
+Send the list of unknown IP addresses that were encountered in traffic to the agent.
+###### 5 Seconds
+Get the agent status
+###### 1 Hour
+Get the full list of IP address-to-username mappings from the agent.
 
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
