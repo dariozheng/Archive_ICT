@@ -310,6 +310,10 @@ Get the agent status
 ###### 1 Hour
 Get the full list of IP address-to-username mappings from the agent.
 
+
+
+
+
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
 
