@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "9b58333fa27d6e48",
+        "id": "29ff6da9bad8f236",
         "type": "tabs",
         "children": [
           {
-            "id": "aba17c23ac996f16",
+            "id": "02ccd52372c1f24c",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "data redis",
                 "matchingCase": false,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -74,8 +74,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -218,8 +217,11 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "5a6c7b66867dfa5d",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "Notes/Data Redistribution Agent.md",
+    "Notes/User-ID™.md",
+    "Notes/Common Information Model.md",
     "attachments/From the Firewall CLI.png",
     "attachments/From the Windows Agent.png",
     "attachments/Confirm Connection to the User-ID Agent.png",
@@ -231,17 +233,13 @@
     "Notes/App-ID™.md",
     "Notes/Server Name Indication.md",
     "Notes/Backhaul.md",
-    "Notes/User-ID™.md",
     "attachments/Agent Setup Process.png",
     "attachments/User-ID Agent Software.png",
-    "attachments/Installation Location.png",
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Microsoft Remote Procedure Call.md",
-    "Notes/Common Information Model.md",
     "Notes/Web-Based Enterprise Management.md",
     "Notes/|Windows Management Instrumentation.md",
-    "Notes/Data Redistribution Agent.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Categories/Security.md",
     "Templates/Bases/Systems.base",

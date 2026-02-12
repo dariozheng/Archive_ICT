@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T16:36:30+01:00
+modified: 2026-02-12T16:38:27+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -36,7 +36,7 @@ If any of the methods map an IP address to a user successfully, that data can be
 ### [[#IP-to-Username Mapping Methods|User-ID Mapping Methods]]
 ### User Visibility 
 User Visibility require the deployment of <u>User-ID Agents</u>, <u>Terminal Server Agents</u>, and/or integrating <u>third-party IP-to-user mapping sources</u>.
-#### [[Data Redistribution Agent|Data Redistribution Agent]] 
+#### Data Redistribution Agent
 <mark style="background: #ADCCFFA6;">Data Redistribution is a mechanism that <strong>shares</strong> IP-to-user mapping, group memberships, and tags across multiple firewalls or Panorama</mark>, <mark style="background: #FFB86CA6;">ensuring consistent identity-based security policies in large-scale, distributed, or multi-site environments</mark>. 
 ## Plan User Groups and Access Rights 
 Once an IP address is mapped to a username, <mark style="background: #FFF3A3A6;">administrators need a way to determine which group the user belongs to</mark> so they can apply policy based on each group's business function(s). 
@@ -336,6 +336,7 @@ show user ip-user-mapping all
 show user ip-user-mapping <ip/netmask>
 ```
 ![[From the Firewall CLI.png]]
+
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
 
