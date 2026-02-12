@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T16:52:22+01:00
+modified: 2026-02-12T16:54:03+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -92,7 +92,7 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 
 <mark style="background: #ABF7F7A6;">The User-ID agent will then record the IP-to-user mapping</mark>.
 
-User-ID also reads session tables to confirm known IP address-to-username mappings based on current Windows file and printer shares.
+<mark style="background: #FFB86CA6;">User-ID also reads session tables to confirm known IP address-to-username mappings based on current Windows file and printer shares</mark>.
 ### Microsoft Active Directory Domain Controllers
 
 ![[User-ID Domain Controller Monitoring.png]]
@@ -106,10 +106,10 @@ Because users can authenticate to any domain controller in a domain and the Secu
 <mark style="background: #FFB8EBA6;">Each User-ID agent can monitor multiple <strong>domain controllers per domain</strong>. However, each User-ID agent can monitor only a <strong>single domain</strong></mark>.
 
 <mark style="background: #FFF3A3A6;">Because [[#Server Monitoring|server monitoring]] requires very little overhead and because the majority of users generally can be mapped using this method, Palo Alto Networks recommends it as the base user mapping method for most User-ID deployments</mark>.
-#### Windows Session Monitoring
-Clients who have connected to a shared file or print resource will have their session information stored on the domain controller. 
+### Windows Session Monitoring
+<mark style="background: #BBFABBA6;">Clients who have connected to a shared file or print resource will have their session information stored on the domain controller</mark>. 
 
-An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller.
+<mark style="background: #D2B3FFA6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
 ![[User-ID Windows Session Monitoring.png]]
 ## Client Probing
 Client Probing is a legacy method to create IP-to-user mappings and is not recommended as a best practice today. 
@@ -279,7 +279,7 @@ Unlike server monitoring, probing is an active method: 
 
 If you enable the optional NetBIOS client probing feature, <mark style="background: #D2B3FFA6;">then the agent requires access through the Windows firewall to port 139</mark>. <mark style="background: #D2B3FFA6;">Windows file and print services also must be enabled</mark>.
 ![[Client Probing Tab.png]]
-### Configure the Monitore Servers 
+### Configure the Monitored Servers 
 ![[Configure the Monitore Servers.png]]
 Select <strong>Discovery</strong> in the left pane to configure the monitored servers and networks.
 
