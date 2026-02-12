@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883,
-    "collapsed": true
+    "width": 257.5004348754883
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -218,8 +217,11 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "aba17c23ac996f16",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/From the Firewall CLI.png",
+    "attachments/From the Windows Agent.png",
+    "attachments/Confirm Connection to the User-ID Agent.png",
     "attachments/Configure the Firewall to Connect to the Agent.png",
     "attachments/Configure the Monitore Servers.png",
     "attachments/Client Probing Tab.png",
@@ -232,9 +234,6 @@
     "attachments/Agent Setup Process.png",
     "attachments/User-ID Agent Software.png",
     "attachments/Installation Location.png",
-    "attachments/Windows-Based Agent Configuration.png",
-    "attachments/WMI Client Probing.png",
-    "attachments/Session Monitoring.png",
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Microsoft Remote Procedure Call.md",

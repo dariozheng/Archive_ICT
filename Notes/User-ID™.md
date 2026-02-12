@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T16:15:19+01:00
+modified: 2026-02-12T16:32:48+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -309,11 +309,33 @@ Send the list of unknown IP addresses that were encountered in traffic to the ag
 Get the agent status
 ###### 1 Hour
 Get the full list of IP address-to-username mappings from the agent.
+#### Confirm Connection to the User-ID Agent
+To confirm connection to the User-ID agent device, browse to <strong>Device > Data Redistribution > Agents</strong>.
 
+Use the firewall’s web interface and the Windows agent to confirm connectivity between the firewall and the Windows agent. 
 
+Mappings can be displayed from the Windows agent or from the firewall CLI.
+![[Confirm Connection to the User-ID Agent.png]]
+##### From the Windows Agent
+Use the **Monitoring** tab in the Windows agent to display IP address-to-username mappings by the Windows agent.
+![[From the Windows Agent.png]]
+##### From the Firewall CLI
+You can display how users and IP addresses are being mapped on the firewall only by using the firewall’s CLI.
 
-
-
+Commonly used commands for checking User-ID mappings include the following:
+```
+show user user-id-agent statistics
+```
+```
+show user user-ids all
+```
+```
+show user ip-user-mapping all
+```
+```
+show user ip-user-mapping <ip/netmask>
+```
+![[From the Firewall CLI.png]]
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
 
