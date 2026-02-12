@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T15:32:25+01:00
+modified: 2026-02-12T15:42:55+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -277,6 +277,23 @@ Unlike server monitoring, probing is an active method: 
 
 If you enable the optional NetBIOS client probing feature, <mark style="background: #D2B3FFA6;">then the agent requires access through the Windows firewall to port 139</mark>. <mark style="background: #D2B3FFA6;">Windows file and print services also must be enabled</mark>.
 ![[Client Probing Tab.png]]
+#### Configure the Monitore Servers 
+![[Configure the Monitore Servers.png]]
+Select <strong>Discovery</strong> in the left pane to configure the monitored servers and networks.
+
+<mark style="background: #FF5582A6;">The Auto Discover button works only for domain controllers</mark>. 
+
+<mark style="background: #FFF3A3A6;">Use the <strong>Add</strong> button to add <strong>Exchange servers</strong>, <strong>Novell eDirectory servers</strong>, and <strong>syslog senders</strong>, or to manually add domain controllers</mark>. 
+<mark style="background: #CACFD9A6;">Click Add to open a separate window, where you are prompted for a server name, server address, and server type</mark>.
+#### Configure the Firewall to Connect to the Agent
+<mark style="background: #FFB86CA6;">The firewall must be configured with information for every User-ID agent to which it will connect</mark>. 
+Communication between the firewall and a User-ID agent is secured using an encrypted SSL connection.
+![[Configure the Firewall to Connect to the Agent.png]]
+##### Agent Host Type
+You can add an agent using Serial Number or Host and Port. 
+###### Serial Number
+
+
 
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 

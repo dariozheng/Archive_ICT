@@ -219,6 +219,8 @@
   },
   "active": "aba17c23ac996f16",
   "lastOpenFiles": [
+    "attachments/Configure the Firewall to Connect to the Agent.png",
+    "attachments/Configure the Monitore Servers.png",
     "attachments/Client Probing Tab.png",
     "attachments/Server Monitor Tab.png",
     "attachments/Authentication tab.png",
@@ -232,8 +234,6 @@
     "attachments/Windows-Based Agent Configuration.png",
     "attachments/WMI Client Probing.png",
     "attachments/Session Monitoring.png",
-    "attachments/Define the User-ID Agent Account.png",
-    "attachments/Define the Monitored Server(s) 1.png",
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Microsoft Remote Procedure Call.md",
