@@ -1,7 +1,7 @@
 {
   "collapse-filter": false,
-  "search": "-path:Notes/Glossaries  ",
-  "showTags": false,
+  "search": "-path:Notes/Glossaries tag:#palo_alto  ",
+  "showTags": true,
   "showAttachments": false,
   "hideUnresolved": false,
   "showOrphans": true,
@@ -32,6 +32,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 1.5259526937428602,
-  "close": true
+  "scale": 1.2641875495482233,
+  "close": false
 }

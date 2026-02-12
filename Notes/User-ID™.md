@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T14:55:01+01:00
+modified: 2026-02-12T15:32:25+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -245,18 +245,38 @@ By default, <mark style="background: #ADCCFFA6;">the User-ID agent uses TCP port
 #### Configure the User-ID Agent Account
 The agent should run with a Windows service account that has the necessary permissions to read the security event logs or to perform WMI probing.
 ##### Authentication tab
-Use the Authentication tab to configure the agent to use a specific Windows service account. 
-The authentication information must be configured before you can configure access to monitored servers. 
+Use the Authentication tab to <mark style="background: #FFF3A3A6;">configure the agent to use a specific <strong>Windows service account</strong></mark>. 
+<mark style="background: #BBFABBA6;">The authentication information must be configured before you can configure access to monitored servers</mark>. 
 
-By default, the Windows agent runs as the user account used to install the .msi file. 
+<mark style="background: #ADCCFFA6;">By default, the Windows agent runs as the user account used to install the <strong>.msi</strong> file</mark>. 
 
-Most of the necessary permissions are provided if the Windows-based agent runs as an account that belongs to the Domain Administrators group or to the Server Operators and Event Log Readers groups. 
+<mark style="background: #FFB8EBA6;">Most of the necessary permissions are provided if the <strong>Windows-based agent</strong> runs as <u>an account that belongs to the <strong>Domain Administrators</strong> group or to the <strong>Server Operators</strong> and <strong>Event Log Readers</strong> groups</u></mark>. 
 
-The user account running the agent also must have permissions to start a Windows service. However, membership in these groups provides the account with more permissions than just the capability to perform server monitoring or client probing. Therefore, you might want to run the agent using a restricted account with minimal permissions. The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have.
+<mark style="background: #FFB86CA6;">The user account running the agent also must have permissions to start a <strong>Windows service</strong></mark>. 
 
+However, membership in these groups provides the account with more permissions than just the capability to perform server monitoring or client probing. 
 
+<mark style="background: #FFF3A3A6;">Therefore, you might want to run the agent using a restricted account with minimal permissions</mark>. 
+<mark style="background: #ADCCFFA6;">The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have</mark>.
+![[Authentication tab.png]]
+##### Server Monitor Tab
+Use the Server Monitor tab to configure server monitoring or to enable the optional session monitoring.
+![[Server Monitor Tab.png]]
+##### Client Probing Tab
+<mark style="background: #FFB8EBA6;">You can use the Client Probing tab to configure the agent <u>to probe IP addresses</u> for username information</mark>. 
 
+Unlike server monitoring, probing is an active method: 
+- <mark style="background: #BBFABBA6;">The User-ID agent sends a probe</mark> at a configurable interval <mark style="background: #BBFABBA6;">to each learned IP address in its list to verify that the same user still is logged in</mark>. 
+- <mark style="background: #D2B3FFA6;">The results of the probes are used to update the records on the agent</mark>, <mark style="background: #CACFD9A6;">which are passed on to the firewall</mark>. 
+- <mark style="background: #FFB86CA6;">Each learned IP is probed once per interval period</mark>. 
+- <mark style="background: #FF5582A6;"><strong>WMI probing must be enabled on the Windows machines for the probe to succeed</strong></mark>.
 
+<mark style="background: #FFF3A3A6;">Ensure that large environments have a long enough interval for all IP addresses to be probed</mark>. <mark style="background: #ABF7F7A6;">For example, a network with 6,000 users and an interval of 10 minutes would require 10 WMI requests a second from each agent</mark>. These probes are queued and processed by the agent as needed.
+
+<mark style="background: #FF5582A6;">The <strong>NetBIOS probing</strong> is available primarily for backward compatibility with Windows XP and earlier and is not recommended</mark>.
+
+If you enable the optional NetBIOS client probing feature, <mark style="background: #D2B3FFA6;">then the agent requires access through the Windows firewall to port 139</mark>. <mark style="background: #D2B3FFA6;">Windows file and print services also must be enabled</mark>.
+![[Client Probing Tab.png]]
 
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
