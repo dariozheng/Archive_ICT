@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T16:54:03+01:00
+modified: 2026-02-12T17:26:30+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -158,10 +158,10 @@ When a proxy server is deployed between the users on a network and the firewall,
 In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <strong>X-Forwarded-For</strong> (XFF) header to traffic packets that includes the actual IP address of the client that requested the content</mark>. 
 
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
-# User-ID Configuration Steps 
+# User-ID Configuration Steps #configuration
 
 ![[Enable User-ID 0.png]]
-## Enable User-ID
+## Enable User-ID #configuration 
 Enable User-ID technology per zone on the firewall.
 ![[Enable User-ID 1.png]]
 ### Enable User Identification 
@@ -180,7 +180,7 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 <mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List
 Use the <strong>Exclude List</strong> only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
-## PAN-OS Integrated User-ID Agent Configuration
+## PAN-OS Integrated User-ID Agent Configuration #configuration 
 ![[Define the Monitored Server(s).png]]
 ### Define the Monitored Server(s)
 Each User-ID agent must be configured for the servers it needs to monitor.
@@ -219,7 +219,7 @@ You can enable the integrated agent to perform <mark style="background: #BBFABBA
 
 <mark style="background: #D2B3FFA6;">When a firewall encounters an IP address for which it has no user mapping, it sends the address to the integrated agent for an immediate probe</mark>.
 ![[WMI Client Probing.png]]
-## Windows-Based Agent Configuration
+## Windows-Based Agent Configuration #configuration 
 
 <img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
 ### Installation Location 
@@ -339,6 +339,25 @@ show user ip-user-mapping <ip/netmask>
 ```
 ![[From the Firewall CLI.png]]
 ### Data Redistribution 
+<mark style="background: #FFF3A3A6;">Every firewall that enforces user-based policies requires user mapping information</mark>. 
+In a large-scale network,<mark style="background: #FFB86CA6;"> each firewall would have to directly query all of the mapping information sources to map IP addresses to usernames</mark>. 
+<mark style="background: #ABF7F7A6;">With <strong>data redistribution</strong>, you can streamline resource usage by configuring <strong>one</strong> or <strong>more firewalls</strong> <strong>to collect mapping information through redistribution</strong></mark>.
+
+<mark style="background: #FF5582A6;">Redistribution enables you to enforce user-based policies</mark> <mark style="background: #ADCCFFA6;">when users rely on <strong>local sources</strong> for authentication</mark>, such as a regional directory services, <mark style="background: #ADCCFFA6;">but need access to <strong>remote services and applications</strong>, such as a data center application</mark>.
+
+![[Data Redistribution.png]]
+In the example, <mark style="background: #FFB86CA6;">the top-layer <strong>Windows-based User-ID agents</strong> are running on <strong>Windows servers</strong> that <u>map IP addresses to usernames</u></mark>. 
+<mark style="background: #ABF7F7A6;">A single firewall is connecting to each Windows server to obtain the User-ID mappings</mark>. 
+<mark style="background: #BBFABBA6;">Each lower-layer firewall receives the <strong>mapping information and authentication timestamps</strong> from the upper-layer firewall</mark>. 
+<mark style="background: #FF5582A6;">Each firewall can receive mapping information and authentication timestamps from up to 100 redistribution points</mark>.
+#### Configure the Firewall to Connect to the Redistribution Point #configuration 
+With data redistribution, <mark style="background: #FFB8EBA6;">you configure the <strong>source</strong> or <strong>redistribution point</strong> the firewall will connect to</mark> and <mark style="background: #ADCCFFA6;">then select the type of information you want it to redistribute</mark>.
+
+<mark style="background: #ABF7F7A6;">You can connect to the source device by using either the serial number or the host and port numbers</mark>. 
+<mark style="background: #D2B3FFA6;">The type of information you select can include IP address-to-username mappings, IP address-to-tag mappings, username-to-tag mappings, Host Information Profile HIP data, or quarantined devices</mark>.
+![[Redistribution Point.png]]
+Optionally, <mark style="background: #FFB8EBA6;">you can configure which networks you want the agent or agents to include in the data redistribution</mark> and <mark style="background: #FFF3A3A6;">which networks you want to exclude from data redistribution</mark>. <mark style="background: #ADCCFFA6;">You can include or exclude networks and subnetworks when redistributing either IP address-to-tag mappings or IP-address-to-username mappings</mark>.
+![[Redistribution Point 2.png]]
 
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
