@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-11T17:56:08+01:00
+modified: 2026-02-12T12:44:02+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -58,11 +58,11 @@ User-ID technology has three main components. The following are the primary char
 - PAN-OS Integrated User-ID Agent
 - Windows-Based User-ID Agent
 
-A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time. 
+<mark style="background: #BBFABBA6;">A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time</mark>. 
 
-Both agent types monitor up to 100 domain controllers or Exchange servers. 
+<mark style="background: #D2B3FFA6;">Both agent types monitor up to 100 domain controllers or Exchange servers</mark>. 
 
-Both agent types can monitor users and domain controllers only from a single Active Directory (or AD) domain.
+<mark style="background: #FFB8EBA6;">Both agent types can monitor users and domain controllers only from a single Active Directory (or AD) domain</mark>.
 #### PAN-OS Integrated User-ID Agent
 - Runs on the firewall
 - Collects IP address-to-username information
@@ -175,21 +175,70 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 ### Include List
 <mark style="background: #FFB8EBA6;">Use the <strong>Include List</strong> to limit the subnetworks or specific addresses that the firewall will attempt to map to users</mark>.
 
->[!info] WMI probing
-><strong>WMI probing</strong> is a Palo Alto Networks User-ID feature that queries Windows endpoints via [[Windows Management Instrumentation|Windows Management Instrumentation]] to map IP addresses to active users
-
-<mark style="background: #D2B3FFA6;">If WMI probing is enabled, WMI will probe private IP addresses but not probe public IP addresses by default</mark>. 
+<mark style="background: #D2B3FFA6;">If [[#WMI Client Probing|WMI Probing]] is enabled, WMI will probe private IP addresses but not probe public IP addresses by default</mark>. 
 
 <mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List
 Use the <strong>Exclude List</strong> only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
-## Define the Monitored Server(s)
+## PAN-OS Integrated User-ID Agent Configuration
+![[Define the Monitored Server(s).png]]
+### Define the Monitored Server(s)
 Each User-ID agent must be configured for the servers it needs to monitor.
 
 The agent includes an autodiscovery feature that, via DNS, automatically identifies available Microsoft Windows servers for event log monitoring. 
-The integrated agent supports [[Windows Management Instrumentation|WMI]] and [[Windows Remote Management Protocol|WinRM]] protocols to map IP addresses to usernames. 
+<mark style="background: #FFF3A3A6;">The integrated agent supports [[Windows Management Instrumentation|WMI]] and [[Windows Remote Management Protocol|WinRM]] protocols to map IP addresses to usernames</mark>. 
 
-The firewall will discover domain controllers based on the domain name entered in the Domain field of the **Device > Setup > Management > General Settings** page.
+<mark style="background: #BBFABBA6;">The firewall will discover domain controllers based on the domain name entered in the Domain field of the <strong>Device > Setup > Management > General Settings</strong> page</mark>.
+
+![[Define the Monitored Server(s) 1.png]]
+### Define the User-ID Agent Account
+![[Define the User-ID Agent Account.png]]
+<mark style="background: #ABF7F7A6;">Set the domain credentials for the account the firewall will use to access Windows resources</mark>. 
+
+<mark style="background: #ADCCFFA6;">This setting is required for monitoring domain controllers and Exchange servers. 
+The information in the Username field must be entered using the format <strong>domain\username</strong></mark>.
+#### Configuring Permissions 
+No special permissions configuration is necessary if <mark style="background: #FFB86CA6;">the integrated agent runs as an account that belongs to the Domain Administrators group or belongs to the Server Operators and Event Log Readers groups</mark>. 
+
+However, membership in these groups provides the account with more permissions than just the capability to perform server monitoring or client probing. 
+
+Therefore, <mark style="background: #D2B3FFA6;">you might want to run the agent using a restricted account with minimal permissions</mark>. 
+
+The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have.
+### Session Monitoring 
+To enable session monitoring, select the <strong>Enable Session</strong> check box
+
+This setting enables <mark style="background: #FFB8EBA6;">the integrated agent to use current file and print sharing information to verify current IP address-to-username mappings</mark>.
+![[attachments/Session Monitoring.png]]
+### WMI Client Probing
+<strong>WMI probing</strong> is a Palo Alto Networks User-ID feature that <mark style="background: #FFB8EBA6;">queries Windows endpoints via [[Windows Management Instrumentation|Windows Management Instrumentation]] to map IP addresses to active users</mark>.
+
+You can enable the integrated agent to perform <mark style="background: #BBFABBA6;">WMI probing for each client system that the user mapping process identifies</mark>. 
+
+<mark style="background: #FFF3A3A6;">The integrated agent periodically probes each learned IP address to verify that the same user still is logged in</mark>. 
+
+<mark style="background: #D2B3FFA6;">When a firewall encounters an IP address for which it has no user mapping, it sends the address to the integrated agent for an immediate probe</mark>.
+![[WMI Client Probing.png]]
+### Windows-Based Agent Configuration
+
+<img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
+#### Installation Location 
+The Windows-based agent can be installed on machines running Windows Server 2008 or later.  
+
+<mark style="background: #CACFD9A6;">You should install the agent in the same network site as the monitored server to optimize bandwidth use</mark>. 
+
+<mark style="background: #FFB86CA6;">You should install two agents on two member servers for redundancy in case one agent or one domain controller fails</mark>.
+![[Installation Location.png]]
+Although an agent could be installed directly on a domain controller, that is not a best practice.
+#### User-ID Agent Software
+Use your Palo Alto Networks support account to log in to the Support website. 
+After you are logged in, click the Updates > Software Updates link to open the page shown here. 
+To simplify finding the User-ID agent download links, use the Filter By menu to filter the list for User Identification Agent. Then find and download the User-ID agent version that matches your PAN-OS version.
+![[User-ID Agent Software.png]]
+The installation can be manual, installing each agent individually by manually launching the downloaded MSI file, or automated where it's possible to use endpoint management software such as Microsoft System Center Configuration Manager (or SCCM) to remotely install, configure, or upgrade multiple agents in a single operation.
+#### Agent Setup Process
+
+
 
 
 
