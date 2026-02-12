@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T17:26:30+01:00
+modified: 2026-02-12T17:28:31+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -356,8 +356,12 @@ With data redistribution, <mark style="background: #FFB8EBA6;">you configure the
 <mark style="background: #ABF7F7A6;">You can connect to the source device by using either the serial number or the host and port numbers</mark>. 
 <mark style="background: #D2B3FFA6;">The type of information you select can include IP address-to-username mappings, IP address-to-tag mappings, username-to-tag mappings, Host Information Profile HIP data, or quarantined devices</mark>.
 ![[Redistribution Point.png]]
-Optionally, <mark style="background: #FFB8EBA6;">you can configure which networks you want the agent or agents to include in the data redistribution</mark> and <mark style="background: #FFF3A3A6;">which networks you want to exclude from data redistribution</mark>. <mark style="background: #ADCCFFA6;">You can include or exclude networks and subnetworks when redistributing either IP address-to-tag mappings or IP-address-to-username mappings</mark>.
+Optionally, <mark style="background: #FFB8EBA6;">you can configure which networks you want the agent or agents to include in the data redistribution</mark> and <mark style="background: #FFF3A3A6;">which networks you want to exclude from data redistribution</mark>.
 ![[Redistribution Point 2.png]]
+## Configure Group Mapping #configuration 
+<mark style="background: #FFB8EBA6;">A <strong>Server Profile</strong> specifies which <strong>LDAP servers</strong> will be contacted, the <strong>order</strong> in which they are contacted, and <strong>how</strong> and <strong>where</strong> to search the <strong>LDAP directory tree</strong></mark>. 
+
+
 
 # User-ID Operation 
 Before User-ID can operate, it must be enabled on the security zone. 
