@@ -1,8 +1,52 @@
 body {
-  --h1-color: #0D47A1;
-  --h2-color: #D32F2F;
-  --h3-color: #f500c4;
-  --h4-color: #64B5F6;
-  --h5-color: #ac2dfb;
-  --h6-color: #2fae79;
+  /* Vibrant, varied color palette */
+  --h1-color: #1a237e; /* Deep indigo */
+  --h2-color: #c62828; /* Bold red */
+  --h3-color: #f57c00; /* Vibrant orange */
+  --h4-color: #00796b; /* Teal */
+  --h5-color: #7b1fa2; /* Purple */
+  --h6-color: #0288d1; /* Bright blue */
+}
+
+/* Font sizing with clear hierarchy */
+h1 {
+  font-size: 2.5rem; /* 40px */
+  color: var(--h1-color);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2rem; /* 32px */
+  color: var(--h2-color);
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.75rem; /* 28px */
+  color: var(--h3-color);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.5rem; /* 24px */
+  color: var(--h4-color);
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 1.25rem; /* 20px */
+  color: var(--h5-color);
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 1rem; /* 16px */
+  color: var(--h6-color);
+  line-height: 1.5;
+  font-weight: 600;
 }
