@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T16:45:05+01:00
+modified: 2026-02-13T16:51:50+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -84,7 +84,12 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 # IP-to-Username Mapping Methods
 ![[User-ID Mapping Recommendati.png]]
 ## Server Monitoring 
-<mark style="background: #BBFABBA6;"><u>User-ID agents</u> monitors <strong>Microsoft AD domain controllers</strong>, <strong>Microsoft Exchange servers</strong>, or <strong>Novell eDirectory servers</strong></mark> for <mark style="background: #ADCCFFA6;"><strong>login</strong> or <strong>logout</strong> events recorded in Authentication logs</mark>.
+<mark style="background: #FFF3A3A6;">With server monitoring a <strong>User-ID agent</strong></mark>—<mark style="background: #FF5582A6;">either a Windows-based agent <strong>running on a domain server in your network</strong></mark>, or <mark style="background: #BBFABBA6;">the PAN-OS integrated User-ID agent <strong>running on the firewall</strong></mark>—<mark style="background: #FFF3A3A6;">monitors the security event logs for specified <strong>Microsoft Exchange Servers</strong>, <strong>Domain Controllers</strong>, or <strong>Novell eDirectory servers</strong> for <strong>login</strong> events or <strong>logout</strong> events recorded in Authentication logs</mark> .
+
+For example, in an AD environment, you can configure the User-ID agent to monitor the security logs for Kerberos ticket grants or renewals, Exchange server access (if configured), and file and print service connections. 
+For these events to be recorded in the security log, the AD domain must be configured to log successful account login events. 
+In addition, because users can log in to any of the servers in the domain, you must set up server monitoring for all servers to capture all user login events. 
+
 
 <mark style="background: #ABF7F7A6;">The User-ID agent will then record the IP-to-user mapping</mark>.
 
