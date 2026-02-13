@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T11:27:30+01:00
+modified: 2026-02-13T11:55:29+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -376,20 +376,3 @@ The User and Group Attributes tab is how the firewall identifies the Users and G
 In this tab it's possible to narrow down the list of necessary groups from the LDAP tree.
 
 In the custom group tap it's possible to create custom group based on LDAP filter, it's used when there isn't a AD security group.
-## Configuration of Users and Groups for a Security Policy 
-Users and groups can be used in a policy rule only if they are known on the firewall. 
-
-
-
-
-# User-ID Operation 
-Before User-ID can operate, it must be enabled on the security zone. 
-
-If User-ID is enabled, then the firewall consults the administrator-defined User-ID configuration to determine which agents the firewall has available to gather IP address and username information. 
-
-Depending on the configuration, User-ID on the firewall could query either an integrated agent or a Windows-based agent. 
-The agent retrieves IP address and username information from the domain controller.
-
-After User-ID has retrieved the IP address and username information from an agent, it can use the firewall’s LDAP configuration to retrieve user-to-group mapping information from an LDAP server.
-
-At this point, User-ID will have an IP address associated with a username and possibly a username associated with one or more group names.
