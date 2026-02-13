@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/User-ID™.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -220,10 +220,10 @@
   "active": "02ccd52372c1f24c",
   "lastOpenFiles": [
     "attachments/Group Include List.png",
+    "Notes/User-ID™.md",
     "Notes/Dynamic User Groups.md",
     "attachments/Dynamic User Group Operation.png",
     "attachments/small-6.png",
-    "Notes/User-ID™.md",
     "attachments/User and Group Attributes.png",
     "attachments/Group Mapping Settings.png",
     "attachments/Configure Group Mapping.png",

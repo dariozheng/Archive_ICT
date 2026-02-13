@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T11:55:29+01:00
+modified: 2026-02-13T16:38:27+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -31,26 +31,21 @@ Check:
 - The presence of critical assets where [[Multi-Factor Authentication|MFA]] should be implemented 
 - The source of enforcement, like a single firewall or multiple firewalls. 
 ## Identify IP-to-User Mapping Strategies for Visibility
-User-ID provides multiple methods to map IP addresses to users. <mark style="background: #ABF7F7A6;">Some methods require specific directory structures to be in place, while other methods may require software agents or clients to be installed</mark>. 
+User-ID provides multiple [[#IP-to-Username Mapping Methods|methods]] to map IP addresses to users. <mark style="background: #ABF7F7A6;">Some methods require specific directory structures to be in place, while other methods may require software agents or clients to be installed</mark>. 
 If any of the methods map an IP address to a user successfully, that data can be used by the firewall for both reports and policies.
-### [[#IP-to-Username Mapping Methods|User-ID Mapping Methods]]
-### User Visibility 
-User Visibility require the deployment of <u>User-ID Agents</u>, <u>Terminal Server Agents</u>, and/or integrating <u>third-party IP-to-user mapping sources</u>.
-#### Data Redistribution Agent
-<mark style="background: #ADCCFFA6;">Data Redistribution is a mechanism that <strong>shares</strong> IP-to-user mapping, group memberships, and tags across multiple firewalls or Panorama</mark>, <mark style="background: #FFB86CA6;">ensuring consistent identity-based security policies in large-scale, distributed, or multi-site environments</mark>. 
 ## Plan User Groups and Access Rights 
 Once an IP address is mapped to a username, <mark style="background: #FFF3A3A6;">administrators need a way to determine which group the user belongs to</mark> so they can apply policy based on each group's business function(s). 
 
 This is called <strong>group mapping</strong>, and it <mark style="background: #FFB86CA6;">can be enabled by using LDAP and/or the XML API</mark> <mark style="background: #BBFABBA6;">to read group information directly from directory services</mark>. 
 
 Administrators are also able to apply individual policy to specific users in the case where they have individual needs.
+
 ![[group mapping.png]]
 ## Implement Identity-Based Policies
 With identity-based security, it's possible to know who is accessing which applications regardless of location or device, and who is transferring files or introducing threats. 
-
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches.
 #  User-ID Components
-User-ID technology has three main components. The following are the primary characteristics of each component.
+User-ID technology has three main components. 
 ### Palo Alto Networks Firewall
 - Maps IP addresses to usernames
 - Maps usernames to group names
@@ -66,6 +61,7 @@ User-ID technology has three main components. The following are the primary char
 #### PAN-OS Integrated User-ID Agent
 - Runs on the firewall
 - Collects IP address-to-username information
+
 <mark style="background: #ABF7F7A6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
 
 The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
