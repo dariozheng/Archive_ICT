@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/Dynamic User Groups.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -217,8 +217,10 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "02ccd52372c1f24c",
   "lastOpenFiles": [
+    "attachments/Dynamic User Group Operation.png",
+    "attachments/small-6.png",
     "Notes/User-ID™.md",
     "attachments/Group Include List.png",
     "attachments/User and Group Attributes.png",
@@ -231,7 +233,6 @@
     "Notes/Common Information Model.md",
     "attachments/From the Firewall CLI.png",
     "attachments/From the Windows Agent.png",
-    "attachments/Confirm Connection to the User-ID Agent.png",
     "Notes/App-ID™.md",
     "Notes/Server Name Indication.md",
     "Notes/Backhaul.md",
