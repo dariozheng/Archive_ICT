@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T11:26:25+01:00
+modified: 2026-02-13T11:27:30+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -377,6 +377,7 @@ In this tab it's possible to narrow down the list of necessary groups from the L
 
 In the custom group tap it's possible to create custom group based on LDAP filter, it's used when there isn't a AD security group.
 ## Configuration of Users and Groups for a Security Policy 
+Users and groups can be used in a policy rule only if they are known on the firewall. 
 
 
 
