@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T16:59:48+01:00
+modified: 2026-02-13T17:58:27+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -138,10 +138,60 @@ If you use the PAN‐OS integrated User‐ID agent, you also can use predefined 
 <mark style="background: #CACFD9A6;"><strong>The Terminal Server Agent</strong> (TSA) monitors traffic to assign usernames to specific traffic in these circumstances</mark> <mark style="background: #FF5582A6;">giving administrators the same visibility and control as they have when users are on individual devices</mark>.
 
 <mark style="background: #FFF3A3A6;">For terminal servers that do not support the Terminal Server agent, such as Linux terminal servers, you can use the <strong>XML API</strong> to send user mapping information from login and logout events to User-ID</mark>.
-## Captive Portal 
-When Captive Portal is deployed, <mark style="background: #FFB86CA6;">web requests that match an Authentication Policy rule will be redirected to a login portal before being able to proceed</mark>. 
+## Authentication Policy and Authentication Portal
+In some cases, the User-ID agent can’t map an IP address to a username using server monitoring or other methods—for example, if the user isn’t logged in or uses an operating system such as Linux that your domain servers don’t support. 
 
-This login portal could be for any traffic coming from an IP address that doesn't already have a user associated with it or as a way to increase security by having a user complete MFA before proceeding to sensitive parts of the network.
+In other cases, you might want users to authenticate when accessing sensitive applications regardless of which methods the User-ID agent uses to perform user mapping. 
+
+For all these cases, <mark style="background: #FFF3A3A6;">you can configure a <strong>Authentication policy</strong> and map IP addresses to username using a <strong>Authentication Portal</strong></mark>. 
+
+<mark style="background: #FFB8EBA6;">Any web traffic (<strong>HTTP</strong> or <strong>HTTPS</strong>) that matches an <strong>Authentication policy rule</strong> prompts the user to authenticate through <strong>Authentication Portal</strong></mark>. 
+This ensures that you know exactly who is accessing your most sensitive applications and data. 
+
+Based on user information collected during authentication, the firewall creates a new IP address-to-username mapping or updates the existing mapping for that user.
+### Authentication Portal
+#### Authentication Portal Authentication Methods
+Authentication Portal uses the following methods to authenticate users whose web requests match Authentication Policy rules:
+##### Kerberos SSO
+The firewall uses <strong>Kerberos single sign-on</strong> (<strong>SSO</strong>) to transparently obtain user credentials from the browser. 
+
+To use this method, your network requires a Kerberos infrastructure, including a key distribution center (<strong>KDC</strong>) with an authentication server and ticket granting service. 
+
+The firewall must have a Kerberos account.
+
+If Kerberos SSO authentication fails, the firewall falls back to web form or client certificate authentication, depending on your Authentication policy and Authentication Portal configuration.
+##### Web Form
+<mark style="background: #FFF3A3A6;">The firewall redirects web requests to a web form for authentication</mark>. 
+
+For this method, <mark style="background: #FFB86CA6;">you can configure Authentication policy to use [[Multi-Factor Authentication|MFA]], SAML, Kerberos, TACACS+, RADIUS, or LDAP authentication</mark>. 
+
+<mark style="background: #FFF3A3A6;">Although users have to manually enter their login credentials, this method works with all browsers and operating systems</mark>.
+##### Client Certificate Authentication
+<mark style="background: #BBFABBA6;">The firewall prompts the browser to present a valid client certificate to authenticate the user</mark>. 
+
+<mark style="background: #CACFD9A6;">To use this method, you must provision client certificates on each user system and install the trusted certificate authority (CA) certificate used to issue those certificates on the firewall</mark>.
+#### Authentication Portal Modes
+The Authentication Portal mode defines how the firewall captures web requests for authentication:
+##### Transparent
+<mark style="background: #FF5582A6;">The firewall intercepts the browser traffic per the Authentication policy rule</mark> and <mark style="background: #FFB86CA6;">impersonates the original destination URL</mark>, <mark style="background: #BBFABBA6;">issuing an HTTP 401 to invoke authentication</mark>. 
+
+<mark style="background: #ABF7F7A6;">However, because the firewall does not have the real certificate for the destination URL, the browser displays a certificate error to users attempting to access a secure site</mark>. 
+
+<mark style="background: #ADCCFFA6;">Therefore, use this mode only when absolutely necessary, such as in Layer 2 or virtual wire deployments</mark>.
+##### Redirect
+<mark style="background: #D2B3FFA6;">The firewall intercepts unknown HTTP or HTTPS sessions and redirects them to a Layer 3 interface on the firewall</mark> <mark style="background: #BBFABBA6;">using an HTTP 302 redirect to perform authentication</mark>. 
+
+This is the preferred mode because it provides a better end-user experience (no certificate errors). 
+
+However, it does require additional Layer 3 configuration. 
+
+Another benefit of the Redirect mode is that <mark style="background: #FF5582A6;">it provides for the use of session cookies</mark>, <mark style="background: #FFB8EBA6;">which enable the user to continue browsing to authenticated sites without requiring re-mapping each time the timeouts expire</mark>. 
+This is especially useful for users who roam from one IP address to another (for example, from the corporate LAN to the wireless network) because they won’t need to re-authenticate when the IP address changes as long as the session stays open.
+
+<mark style="background: #BBFABBA6;">If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the browser will provide credentials only to trusted sites</mark>. 
+
+<mark style="background: #D2B3FFA6;"><strong>Redirect</strong> mode is also required if you use <strong>Multi-Factor Authentication</strong> to authenticate Authentication Portal users</mark>.
+
 ## GlobalProtect
 <mark style="background: #BBFABBA6;">Every GlobalProtect user has an <strong>agent</strong> or <strong>app</strong> running on the client that requires the user to <u>enter login credentials</u> for VPN access to the firewall</mark>. 
 <mark style="background: #FF5582A6;">The firewall adds this GlobalProtect login information to the User-ID user mapping table for visibility and user-based policy rule enforcement</mark>.
@@ -157,11 +207,13 @@ For example, they might have a custom, internally developed application or a dev
 
 In such cases, you can <mark style="background: #ABF7F7A6;">use the <strong>PAN-OS XML API</strong> to create custom scripts that send the information to the PAN-OS integrated User-ID agent or directly to the firewall</mark>.
 ## XFF Headers 
-When a proxy server is deployed between the users on a network and the firewall, the firewall might see the proxy server IP address as the source IP address rather than the IP address of the client that requested the content. 
+<mark style="background: #FFF3A3A6;">When a proxy server is deployed between the users on a network and the firewall, the firewall might see the proxy server IP address as the source IP address</mark> <mark style="background: #FFB86CA6;">rather than the IP address of the client that requested the content</mark>. 
 
-In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <strong>X-Forwarded-For</strong> (XFF) header to traffic packets that includes the actual IP address of the client that requested the content</mark>. 
+In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <strong>X-Forwarded-For</strong> (XFF) header to traffic packets that includes the actual IP address of the client that requested the content or from whom the request originated</mark>. 
 
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
+
+<mark style="background: #FFF3A3A6;">This enables you to use <strong>XFF values</strong> for policies and logging source users</mark>, so that you can enforce user-based policy to safely enable access to web-based for your users behind a proxy server.
 # User-ID Configuration Steps #configuration
 
 ![[Enable User-ID 0.png]]
