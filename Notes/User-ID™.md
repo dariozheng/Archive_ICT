@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-12T17:28:31+01:00
+modified: 2026-02-13T10:53:02+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -360,6 +360,20 @@ Optionally, <mark style="background: #FFB8EBA6;">you can configure which network
 ![[Redistribution Point 2.png]]
 ## Configure Group Mapping #configuration 
 <mark style="background: #FFB8EBA6;">A <strong>Server Profile</strong> specifies which <strong>LDAP servers</strong> will be contacted, the <strong>order</strong> in which they are contacted, and <strong>how</strong> and <strong>where</strong> to search the <strong>LDAP directory tree</strong></mark>. 
+![[Configure Group Mapping.png]]
+- Base DN is the point in LDAP tree where the firewall will begin its search for users and groups.
+- <mark style="background: #D2B3FFA6;">Bind DN (<strong>cn=paloalto,ou=Users,ou=IT_Services,DC=publiacqua,DC=it</strong>) and password field contains the AD username and its attributes with its password</mark>. <mark style="background: #BBFABBA6;">It's an account that only the firewall will use</mark>. 
+- For SSL connection, in the <strong>Server List</strong> use the port <strong>636</strong> and check <strong>SSL secured connection</strong> in the <strong>Server Settings</strong>. 
+
+![[Group Mapping Settings.png]]
+Here is where it's possible to configure the Group Mapping settings. 
+<mark style="background: #FFB8EBA6;">The group and user objects lists are dynamically populated from the firewall LDAP server profile</mark>. <mark style="background: #BBFABBA6;">By modifying the options in these fields it's possible to search for groups or users in non standard LDAP tree</mark>.
+
+![[User and Group Attributes.png]]
+The User and Group Attributes tab is how the firewall identifies the Users and Groups. 
+
+![[Group Include List.png]]
+
 
 
 
