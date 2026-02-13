@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T16:38:27+01:00
+modified: 2026-02-13T16:45:05+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -334,7 +334,7 @@ show user ip-user-mapping all
 show user ip-user-mapping <ip/netmask>
 ```
 ![[From the Firewall CLI.png]]
-### Data Redistribution 
+## Data Redistribution 
 <mark style="background: #FFF3A3A6;">Every firewall that enforces user-based policies requires user mapping information</mark>. 
 In a large-scale network,<mark style="background: #FFB86CA6;"> each firewall would have to directly query all of the mapping information sources to map IP addresses to usernames</mark>. 
 <mark style="background: #ABF7F7A6;">With <strong>data redistribution</strong>, you can streamline resource usage by configuring <strong>one</strong> or <strong>more firewalls</strong> <strong>to collect mapping information through redistribution</strong></mark>.
@@ -346,7 +346,7 @@ In the example, <mark style="background: #FFB86CA6;">the top-layer <strong>Windo
 <mark style="background: #ABF7F7A6;">A single firewall is connecting to each Windows server to obtain the User-ID mappings</mark>. 
 <mark style="background: #BBFABBA6;">Each lower-layer firewall receives the <strong>mapping information and authentication timestamps</strong> from the upper-layer firewall</mark>. 
 <mark style="background: #FF5582A6;">Each firewall can receive mapping information and authentication timestamps from up to 100 redistribution points</mark>.
-#### Configure the Firewall to Connect to the Redistribution Point #configuration 
+### Configure the Firewall to Connect to the Redistribution Point #configuration 
 With data redistribution, <mark style="background: #FFB8EBA6;">you configure the <strong>source</strong> or <strong>redistribution point</strong> the firewall will connect to</mark> and <mark style="background: #ADCCFFA6;">then select the type of information you want it to redistribute</mark>.
 
 <mark style="background: #ABF7F7A6;">You can connect to the source device by using either the serial number or the host and port numbers</mark>. 
