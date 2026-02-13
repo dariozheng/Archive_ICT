@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T16:54:13+01:00
+modified: 2026-02-13T16:59:48+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -129,9 +129,15 @@ In environments where services send the messages in different formats, you can c
 
 If you use the PAN‐OS integrated User‐ID agent, you also can use predefined Syslog Parse Profiles that Palo Alto Networks provides through Applications content updates.
 ## Terminal Server Agent
-On shared desktop environments where many users will use a single machine, it can be challenging to map specific activity to individual users. 
+<mark style="background: #CACFD9A6;">In environments with multi-user systems—such as <strong>Microsoft Terminal Server</strong>, <strong>Citrix</strong> environments or other shared desktop environments</mark>—<mark style="background: #ABF7F7A6;">many users share the same IP address</mark>. 
 
-<mark style="background: #CACFD9A6;"><strong>The <u>Terminal Server Agent</u></strong> (TSA) monitors traffic to assign usernames to specific traffic in these circumstances</mark> <mark style="background: #FF5582A6;">giving administrators the same visibility and control as they have when users are on individual devices</mark>.
+<mark style="background: #BBFABBA6;">In this case, the user-to-IP address mapping process requires knowledge of the source port of each client</mark>. 
+
+<mark style="background: #ABF7F7A6;">To perform this type of mapping, you must install the <strong>Palo Alto Networks Terminal Server Agent</strong> on the <strong>Windows/Citrix terminal server</strong> itself</mark> <mark style="background: #FFB8EBA6;">to intermediate the assignment of <strong>source ports</strong> to the various user processes</mark>. 
+
+<mark style="background: #CACFD9A6;"><strong>The Terminal Server Agent</strong> (TSA) monitors traffic to assign usernames to specific traffic in these circumstances</mark> <mark style="background: #FF5582A6;">giving administrators the same visibility and control as they have when users are on individual devices</mark>.
+
+<mark style="background: #FFF3A3A6;">For terminal servers that do not support the Terminal Server agent, such as Linux terminal servers, you can use the <strong>XML API</strong> to send user mapping information from login and logout events to User-ID</mark>.
 ## Captive Portal 
 When Captive Portal is deployed, <mark style="background: #FFB86CA6;">web requests that match an Authentication Policy rule will be redirected to a login portal before being able to proceed</mark>. 
 
