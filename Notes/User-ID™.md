@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T21:32:27+01:00
+modified: 2026-02-15T21:45:38+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -193,7 +193,6 @@ This is especially useful for users who roam from one IP address to another (for
 <mark style="background: #D2B3FFA6;"><strong>Redirect</strong> mode is also required if you use <strong>Multi-Factor Authentication</strong> to authenticate Authentication Portal users</mark>.
 #### Configure Authentication Portal #configuration 
 Based on their sensitivity, the applications that users access through <strong>Authentication Portal</strong> require different authentication methods and settings. 
-
 To accommodate all authentication requirements, you can use <strong>default</strong> and <strong>custom</strong> authentication enforcement objects. 
 
 <mark style="background: #FFB86CA6;">Each object associates an <strong>Authentication rule</strong> with an <strong>authentication profile</strong> and an <strong>Authentication Portal</strong> authentication method</mark>. <mark style="background: #FFF3A3A6;"><strong>Authentication profiles</strong> are necessary only if users authenticate through a <strong>Authentication Portal Web Form</strong> or <strong>Kerberos SSO</strong></mark> not on <strong>Certificate Authentication</strong> method.
