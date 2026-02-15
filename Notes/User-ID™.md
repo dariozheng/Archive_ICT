@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T22:09:15+01:00
+modified: 2026-02-15T22:10:45+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -183,14 +183,12 @@ The Authentication Portal mode defines how the firewall captures web requests fo
 
 This is the preferred mode because it provides a better end-user experience (no certificate errors). 
 
-However, it does require additional Layer 3 configuration. 
-
 Another benefit of the Redirect mode is that <mark style="background: #FF5582A6;">it provides for the use of session cookies</mark>, <mark style="background: #FFB8EBA6;">which enable the user to continue browsing to authenticated sites without requiring re-mapping each time the timeouts expire</mark>. 
 This is especially useful for users who roam from one IP address to another (for example, from the corporate LAN to the wireless network) because they won’t need to re-authenticate when the IP address changes as long as the session stays open.
 
-<mark style="background: #BBFABBA6;">If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the browser will provide credentials only to trusted sites</mark>. 
+If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the browser will provide credentials only to trusted sites. 
 
-<mark style="background: #D2B3FFA6;"><strong>Redirect</strong> mode is also required if you use <strong>Multi-Factor Authentication</strong> to authenticate Authentication Portal users</mark>.
+<strong>Redirect</strong> mode is also required if you use <strong>Multi-Factor Authentication</strong> to authenticate Authentication Portal users.
 #### Configure Authentication Portal
 <mark style="background: #FFF3A3A6;">The following procedures shows all steps necessary on how to set up Authentication Portal authentication</mark>. 
 ##### Authentication Profile #configuration 
