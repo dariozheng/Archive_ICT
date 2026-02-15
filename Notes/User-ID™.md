@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T21:00:23+01:00
+modified: 2026-02-15T21:10:45+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -150,6 +150,7 @@ This ensures that you know exactly who is accessing your most sensitive applicat
 
 Based on user information collected during authentication, the firewall creates a new IP address-to-username mapping or updates the existing mapping for that user.
 ### Authentication Portal or Captive Portal
+<mark style="background: #ABF7F7A6;">Before configuring the <strong>Authentication Portal</strong> it's necessary to configure the <strong>Authentication Profile</strong></mark>. 
 #### Authentication Portal Authentication Methods
 Authentication Portal uses the following methods to authenticate users whose web requests match Authentication Policy rules:
 ##### Kerberos SSO
