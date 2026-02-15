@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T21:54:28+01:00
+modified: 2026-02-15T21:55:00+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -212,8 +212,8 @@ For <strong>Authentication rules</strong> that require <strong>Multi-Factor Auth
 <mark style="background: #FF5582A6;">Custom objects are mandatory for <strong>Authentication rules</strong> that require MFA</mark>. 
 
 To use custom objects, create <strong>authentication profiles</strong> and assign them to the objects after configuring <strong>Authentication Portal</strong>,when you configure the Authentication Policy.
-##### Authentication Policy
-![[Configure Authentication Policy.pdf]]
+##### Authentication Policy #configuration 
+![[Configure Authentication Policy.pdf]]#
 ## GlobalProtect
 <mark style="background: #BBFABBA6;">Every GlobalProtect user has an <strong>agent</strong> or <strong>app</strong> running on the client that requires the user to <u>enter login credentials</u> for VPN access to the firewall</mark>. 
 <mark style="background: #FF5582A6;">The firewall adds this GlobalProtect login information to the User-ID user mapping table for visibility and user-based policy rule enforcement</mark>.
