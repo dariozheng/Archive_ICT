@@ -74,8 +74,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -203,7 +202,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -220,10 +220,10 @@
   },
   "active": "02ccd52372c1f24c",
   "lastOpenFiles": [
-    "attachments/Configure Authentication Policy.pdf",
     "attachments/Configure an Authentication Profile and Sequence.pdf",
-    "attachments/Configure Authentication Portal.pdf",
+    "attachments/Configure Authentication Policy.pdf",
     "Notes/User-ID™.md",
+    "attachments/Configure Authentication Portal.pdf",
     "Notes/Untitled.md",
     "attachments/Group Include List.png",
     "Notes/Dynamic User Groups.md",
@@ -265,7 +265,6 @@
     "Templates/Bases/Microsoft.base",
     "Categories/Topics/Microsoft/Untitled",
     "Templates/Bases/Topic/Networking/Networking General.base",
-    "Categories/Topics/Microsoft",
     "Untitled.canvas"
   ]
 }

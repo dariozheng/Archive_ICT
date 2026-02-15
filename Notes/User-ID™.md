@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T21:55:00+01:00
+modified: 2026-02-15T22:09:15+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -192,26 +192,11 @@ This is especially useful for users who roam from one IP address to another (for
 
 <mark style="background: #D2B3FFA6;"><strong>Redirect</strong> mode is also required if you use <strong>Multi-Factor Authentication</strong> to authenticate Authentication Portal users</mark>.
 #### Configure Authentication Portal
-Based on their sensitivity, the applications that users access through <strong>Authentication Portal</strong> require different authentication methods and settings. 
-To accommodate all authentication requirements, you can use <strong>default</strong> and <strong>custom</strong> authentication enforcement objects. 
-
-<mark style="background: #FFB86CA6;">Each object associates an <strong>Authentication rule</strong> with an <strong>authentication profile</strong> and an <strong>Authentication Portal</strong> authentication method</mark>. <mark style="background: #FFF3A3A6;"><strong>Authentication profiles</strong> are necessary only if users authenticate through a <strong>Authentication Portal Web Form</strong> or <strong>Kerberos SSO</strong></mark> not on <strong>Certificate Authentication</strong> method.
+<mark style="background: #FFF3A3A6;">The following procedures shows all steps necessary on how to set up Authentication Portal authentication</mark>. 
 ##### Authentication Profile #configuration 
 ![[Configure an Authentication Profile and Sequence.pdf]]
 ##### Authentication Portal #configuration 
 ![[Configure Authentication Portal.pdf]]
-##### Default authentication enforcement objects
-<mark style="background: #FFB8EBA6;">Use the <strong>default objects</strong> if you want to associate multiple <strong>Authentication rules</strong> with the same <strong>global authentication profile</strong></mark>. 
-
-<mark style="background: #BBFABBA6;">You must configure an <strong>authentication profile</strong> before configuring <strong>Authentication Portal</strong>, and then assign it in the <strong>Authentication Portal Settings</strong></mark>. 
-
-For <strong>Authentication rules</strong> that require <strong>Multi-Factor Authentication</strong> (MFA), you cannot use default authentication enforcement objects.
-##### Custom authentication enforcement objects
-<mark style="background: #FFF3A3A6;">Use a custom object for each <strong>Authentication rule</strong> that requires an authentication profile that differs from the global profile</mark>. 
-
-<mark style="background: #FF5582A6;">Custom objects are mandatory for <strong>Authentication rules</strong> that require MFA</mark>. 
-
-To use custom objects, create <strong>authentication profiles</strong> and assign them to the objects after configuring <strong>Authentication Portal</strong>,when you configure the Authentication Policy.
 ##### Authentication Policy #configuration 
 ![[Configure Authentication Policy.pdf]]#
 ## GlobalProtect
