@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T22:11:35+01:00
+modified: 2026-02-15T22:14:27+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -138,7 +138,7 @@ If you use the PAN‐OS integrated User‐ID agent, you also can use predefined 
 <mark style="background: #CACFD9A6;"><strong>The Terminal Server Agent</strong> (TSA) monitors traffic to assign usernames to specific traffic in these circumstances</mark> <mark style="background: #FF5582A6;">giving administrators the same visibility and control as they have when users are on individual devices</mark>.
 
 <mark style="background: #FFF3A3A6;">For terminal servers that do not support the Terminal Server agent, such as Linux terminal servers, you can use the <strong>XML API</strong> to send user mapping information from login and logout events to User-ID</mark>.
-## Authentication Policy and Authentication Portal
+## Authentication Policy and Authentication Portal #complete 
 In some cases, the User-ID agent can’t map an IP address to a username using server monitoring or other methods—for example, if the user isn’t logged in or uses an operating system such as Linux that your domain servers don’t support. 
 
 In other cases, you might want users to authenticate when accessing sensitive applications regardless of which methods the User-ID agent uses to perform user mapping. 
@@ -196,7 +196,7 @@ If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the
 ##### Authentication Portal #configuration 
 ![[Configure Authentication Portal.pdf]]
 ##### Authentication Policy #configuration 
-![[Configure Authentication Policy.pdf]]#
+![[Configure Authentication Policy.pdf]]
 ## GlobalProtect
 <mark style="background: #BBFABBA6;">Every GlobalProtect user has an <strong>agent</strong> or <strong>app</strong> running on the client that requires the user to <u>enter login credentials</u> for VPN access to the firewall</mark>. 
 <mark style="background: #FF5582A6;">The firewall adds this GlobalProtect login information to the User-ID user mapping table for visibility and user-based policy rule enforcement</mark>.
