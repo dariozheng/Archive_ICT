@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-13T18:17:20+01:00
+modified: 2026-02-15T21:00:23+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -44,7 +44,7 @@ Administrators are also able to apply individual policy to specific users in the
 ## Implement Identity-Based Policies
 With identity-based security, it's possible to know who is accessing which applications regardless of location or device, and who is transferring files or introducing threats. 
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches.
-#  User-ID Components
+# User-ID Components
 User-ID technology has three main components. 
 ### Palo Alto Networks Firewall
 - Maps IP addresses to usernames
@@ -209,6 +209,7 @@ For <strong>Authentication rules</strong> that require <strong>Multi-Factor Auth
 <mark style="background: #FF5582A6;">Custom objects are mandatory for <strong>Authentication rules</strong> that require MFA</mark>. 
 
 To use custom objects, create <strong>authentication profiles</strong> and assign them to the objects after configuring <strong>Authentication Portal</strong>,when you configure the Authentication Policy.
+##### Certificate Authentication
 
 
 ## GlobalProtect

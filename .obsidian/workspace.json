@@ -74,8 +74,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -220,8 +219,9 @@
   },
   "active": "02ccd52372c1f24c",
   "lastOpenFiles": [
-    "attachments/Group Include List.png",
+    "Notes/Untitled.md",
     "Notes/User-ID™.md",
+    "attachments/Group Include List.png",
     "Notes/Dynamic User Groups.md",
     "attachments/Dynamic User Group Operation.png",
     "attachments/small-6.png",

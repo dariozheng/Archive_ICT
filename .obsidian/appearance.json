@@ -2,5 +2,6 @@
   "cssTheme": "Minimal",
   "enabledCssSnippets": [
     "text_color"
-  ]
+  ],
+  "baseFontSizeAction": true
 }
