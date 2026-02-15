@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T22:22:33+01:00
+modified: 2026-02-15T22:25:00+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -196,7 +196,7 @@ If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the
 ![[Configure Authentication Portal.pdf]]
 #### Authentication Policy #configuration 
 ![[Configure Authentication Policy.pdf]]
-## GlobalProtect
+## GlobalProtect #complete
 <mark style="background: #BBFABBA6;">Every GlobalProtect user has an <strong>agent</strong> or <strong>app</strong> running on the client that requires the user to <u>enter login credentials</u> for VPN access to the firewall</mark>. 
 <mark style="background: #FF5582A6;">The firewall adds this GlobalProtect login information to the User-ID user mapping table for visibility and user-based policy rule enforcement</mark>.
 
@@ -205,6 +205,9 @@ If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the
 <mark style="background: #ABF7F7A6;">Because GlobalProtect users must authenticate to gain access to the network, the IP address-to-username mapping is explicitly known</mark>. 
 
 <mark style="background: #FFB8EBA6;">GlobalProtect keeps the mapping up to date by automatically re-authenticating the user every time there is a network status change on the endpoint</mark>.
+### GlobalProtect Administrator's Guide
+![[GlobalProtect Administrator's Guide.pdf]]
+
 ## XML API 
 Some organizations have applications or devices that capture user information but cannot natively integrate with User-ID. 
 For example, they might have a custom, internally developed application or a device that is not supported by standard user mapping methods. 

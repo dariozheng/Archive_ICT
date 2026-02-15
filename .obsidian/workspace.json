@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#configuration",
+                "query": "tag:#complete",
                 "matchingCase": false,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -219,6 +219,7 @@
   },
   "active": "6a5148b40c277fb2",
   "lastOpenFiles": [
+    "attachments/GlobalProtect Administrator's Guide.pdf",
     "Notes/User-ID™.md",
     "attachments/Configure an Authentication Profile and Sequence.pdf",
     "attachments/Configure Authentication Policy.pdf",
