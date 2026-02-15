@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T22:10:45+01:00
+modified: 2026-02-15T22:11:35+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -153,13 +153,13 @@ Based on user information collected during authentication, the firewall creates 
 #### Authentication Portal Authentication Methods
 Authentication Portal uses the following methods to authenticate users whose web requests match Authentication Policy rules:
 ##### Kerberos SSO
-The firewall uses <strong>Kerberos single sign-on</strong> (<strong>SSO</strong>) to transparently obtain user credentials from the browser. 
+The firewall uses <strong>Kerberos single sign-on</strong> (<strong>SSO</strong>) <mark style="background: #ABF7F7A6;">to transparently obtain user credentials from the browser</mark>. 
 
-To use this method, your network requires a Kerberos infrastructure, including a key distribution center (<strong>KDC</strong>) with an authentication server and ticket granting service. 
+To use this method, <mark style="background: #FFB86CA6;">your network requires a Kerberos infrastructure, including a key distribution center (<strong>KDC</strong>) with an authentication server and ticket granting service</mark>. 
 
-The firewall must have a Kerberos account.
+<mark style="background: #BBFABBA6;">The firewall must have a Kerberos account</mark>.
 
-If Kerberos SSO authentication fails, the firewall falls back to web form or client certificate authentication, depending on your Authentication policy and Authentication Portal configuration.
+<mark style="background: #FFF3A3A6;">If Kerberos SSO authentication fails, the firewall falls back to web form or client certificate authentication, depending on your Authentication policy and Authentication Portal configuration</mark>.
 ##### Web Form
 <mark style="background: #FFF3A3A6;">The firewall redirects web requests to a web form for authentication</mark>. 
 
