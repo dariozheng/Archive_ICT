@@ -15,7 +15,7 @@
               "state": {
                 "file": "Notes/User-ID™.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
               "title": "User-ID™"
@@ -74,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -219,6 +220,8 @@
   },
   "active": "02ccd52372c1f24c",
   "lastOpenFiles": [
+    "attachments/Configure Authentication Policy.pdf",
+    "attachments/Configure an Authentication Profile and Sequence.pdf",
     "attachments/Configure Authentication Portal.pdf",
     "Notes/User-ID™.md",
     "Notes/Untitled.md",
@@ -263,7 +266,6 @@
     "Categories/Topics/Microsoft/Untitled",
     "Templates/Bases/Topic/Networking/Networking General.base",
     "Categories/Topics/Microsoft",
-    "Templates/Bases/Topic/Microsoft",
     "Untitled.canvas"
   ]
 }
