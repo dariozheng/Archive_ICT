@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T22:14:27+01:00
+modified: 2026-02-15T22:22:33+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -149,10 +149,9 @@ For all these cases, <mark style="background: #FFF3A3A6;">you can configure a <s
 This ensures that you know exactly who is accessing your most sensitive applications and data. 
 
 Based on user information collected during authentication, the firewall creates a new IP address-to-username mapping or updates the existing mapping for that user.
-### Authentication Portal or Captive Portal
-#### Authentication Portal Authentication Methods
+### Authentication Portal Authentication Methods
 Authentication Portal uses the following methods to authenticate users whose web requests match Authentication Policy rules:
-##### Kerberos SSO
+#### Kerberos SSO
 The firewall uses <strong>Kerberos single sign-on</strong> (<strong>SSO</strong>) <mark style="background: #ABF7F7A6;">to transparently obtain user credentials from the browser</mark>. 
 
 To use this method, <mark style="background: #FFB86CA6;">your network requires a Kerberos infrastructure, including a key distribution center (<strong>KDC</strong>) with an authentication server and ticket granting service</mark>. 
@@ -160,25 +159,25 @@ To use this method, <mark style="background: #FFB86CA6;">your network requires a
 <mark style="background: #BBFABBA6;">The firewall must have a Kerberos account</mark>.
 
 <mark style="background: #FFF3A3A6;">If Kerberos SSO authentication fails, the firewall falls back to web form or client certificate authentication, depending on your Authentication policy and Authentication Portal configuration</mark>.
-##### Web Form
+#### Web Form
 <mark style="background: #FFF3A3A6;">The firewall redirects web requests to a web form for authentication</mark>. 
 
 For this method, <mark style="background: #FFB86CA6;">you can configure Authentication policy to use [[Multi-Factor Authentication|MFA]], SAML, Kerberos, TACACS+, RADIUS, or LDAP authentication</mark>. 
 
 <mark style="background: #FFF3A3A6;">Although users have to manually enter their login credentials, this method works with all browsers and operating systems</mark>.
-##### Client Certificate Authentication
+#### Client Certificate Authentication
 <mark style="background: #BBFABBA6;">The firewall prompts the browser to present a valid client certificate to authenticate the user</mark>. 
 
 <mark style="background: #CACFD9A6;">To use this method, you must provision client certificates on each user system and install the trusted certificate authority (CA) certificate used to issue those certificates on the firewall</mark>.
-#### Authentication Portal Modes
+### Authentication Portal Modes
 The Authentication Portal mode defines how the firewall captures web requests for authentication:
-##### Transparent
+#### Transparent
 <mark style="background: #FF5582A6;">The firewall intercepts the browser traffic per the Authentication policy rule</mark> and <mark style="background: #FFB86CA6;">impersonates the original destination URL</mark>, <mark style="background: #BBFABBA6;">issuing an HTTP 401 to invoke authentication</mark>. 
 
 <mark style="background: #ABF7F7A6;">However, because the firewall does not have the real certificate for the destination URL, the browser displays a certificate error to users attempting to access a secure site</mark>. 
 
 <mark style="background: #ADCCFFA6;">Therefore, use this mode only when absolutely necessary, such as in Layer 2 or virtual wire deployments</mark>.
-##### Redirect
+#### Redirect
 <mark style="background: #D2B3FFA6;">The firewall intercepts unknown HTTP or HTTPS sessions and redirects them to a Layer 3 interface on the firewall</mark> <mark style="background: #BBFABBA6;">using an HTTP 302 redirect to perform authentication</mark>. 
 
 This is the preferred mode because it provides a better end-user experience (no certificate errors). 
@@ -189,13 +188,13 @@ This is especially useful for users who roam from one IP address to another (for
 If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the browser will provide credentials only to trusted sites. 
 
 <strong>Redirect</strong> mode is also required if you use <strong>Multi-Factor Authentication</strong> to authenticate Authentication Portal users.
-#### Configure Authentication Portal
+### Configure Authentication Portal
 <mark style="background: #FFF3A3A6;">The following procedures shows all steps necessary on how to set up Authentication Portal authentication</mark>. 
-##### Authentication Profile #configuration 
+#### Authentication Profile #configuration 
 ![[Configure an Authentication Profile and Sequence.pdf]]
-##### Authentication Portal #configuration 
+#### Authentication Portal #configuration 
 ![[Configure Authentication Portal.pdf]]
-##### Authentication Policy #configuration 
+#### Authentication Policy #configuration 
 ![[Configure Authentication Policy.pdf]]
 ## GlobalProtect
 <mark style="background: #BBFABBA6;">Every GlobalProtect user has an <strong>agent</strong> or <strong>app</strong> running on the client that requires the user to <u>enter login credentials</u> for VPN access to the firewall</mark>. 
