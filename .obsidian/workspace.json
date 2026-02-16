@@ -203,8 +203,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -219,7 +218,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "6a5148b40c277fb2",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
