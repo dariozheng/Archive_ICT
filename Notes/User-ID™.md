@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-16T11:59:26+01:00
+modified: 2026-02-16T14:15:36+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -45,43 +45,6 @@ Administrators are also able to apply individual policy to specific users in the
 With identity-based security, it's possible to know who is accessing which applications regardless of location or device, and who is transferring files or introducing threats. 
 
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches applying zero trust strategy.
-# User-ID Components
-User-ID technology has three main components. 
-### Palo Alto Networks Firewall
-- Maps IP addresses to usernames
-- Maps usernames to group names
-### User-ID Agent
-- PAN-OS Integrated User-ID Agent
-- Windows-Based User-ID Agent
-
-<mark style="background: #BBFABBA6;">A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time</mark>. 
-
-<mark style="background: #D2B3FFA6;">Both agent types monitor up to 100 domain controllers or Exchange servers</mark>. 
-
-<mark style="background: #FFB8EBA6;">Both agent types can monitor users and domain controllers only from a single Active Directory (or AD) domain</mark>.
-#### PAN-OS Integrated User-ID Agent
-- Runs on the firewall
-- Collects IP address-to-username information
-
-<mark style="background: #ABF7F7A6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
-
-The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
-
-<mark style="background: #BBFABBA6;">The PAN-OS integrated agent uses either the <strong>[[Windows Management Instrumentation]]</strong> (<strong>WMI</strong>) or the <strong>[[Windows Remote Management Protocol]]</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FF5582A6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.![[PAN-OS Integrated User-ID Agent.png]]
-#### Windows-Based User-ID Agent
-- Runs on a domain member
-- Collects IP address-to-username information
-- Sends information to the firewall
-<mark style="background: #FFB86CA6;">The Windows-based agent is available for download from Palo Alto Networks and can be installed on one or more Windows systems</mark>. 
-
-Multiple Windows-based agents can be deployed to handle larger environments or multiforest domains.
-
-<mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
-![[indows-Based User-ID Agent.png]]
-### Palo Alto Networks Terminal Services Agent
-- Runs on Microsoft and Citrix terminal servers
-- Collects IP and port number-to-username information
-- Sends information to firewall
 # IP-to-Username Mapping Methods
 ![[User-ID Mapping Recommendati.png]]
 ## Server Monitoring 
@@ -104,12 +67,35 @@ Because users can authenticate to any domain controller in a domain and the Secu
 
 <mark style="background: #FFB8EBA6;">Each User-ID agent can monitor multiple <strong>domain controllers per domain</strong>. However, each User-ID agent can monitor only a <strong>single domain</strong></mark>.
 
+<mark style="background: #BBFABBA6;">A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time</mark>. 
+
+<mark style="background: #D2B3FFA6;">Both agent types monitor up to 100 domain controllers or Exchange servers</mark>. 
+
 <mark style="background: #FFF3A3A6;">Because [[#Server Monitoring|server monitoring]] requires very little overhead and because the majority of users generally can be mapped using this method, Palo Alto Networks recommends it as the base user mapping method for most User-ID deployments</mark>.
+#### Windows User-ID Agent
+- Runs on a domain member
+- Collects IP address-to-username information
+- Sends information to the firewall
+<mark style="background: #FFB86CA6;">The Windows-based agent is available for download from Palo Alto Networks and can be installed on one or more Windows systems</mark>. 
+
+Multiple Windows-based agents can be deployed to handle larger environments or multiforest domains.
+
+<mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
+![[indows-Based User-ID Agent.png]]
 ### Windows Session Monitoring
 <mark style="background: #BBFABBA6;">Clients who have connected to a shared file or print resource will have their session information stored on the domain controller</mark>. 
 
 <mark style="background: #D2B3FFA6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
 ![[User-ID Windows Session Monitoring.png]]
+### PAN-OS Integrated User-ID Agent
+- Runs on the firewall
+- Collects IP address-to-username information
+
+<mark style="background: #ABF7F7A6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
+
+The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
+
+<mark style="background: #BBFABBA6;">The PAN-OS integrated agent uses either the <strong>[[Windows Management Instrumentation]]</strong> (<strong>WMI</strong>) or the <strong>[[Windows Remote Management Protocol]]</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FF5582A6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.![[PAN-OS Integrated User-ID Agent.png]]
 ## Client Probing #complete 
 Palo Alto Networks does not recommend using client probing due to the following potential risks:
 
