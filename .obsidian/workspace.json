@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/User-ID™.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883
+    "width": 257.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -217,14 +218,14 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "6a5148b40c277fb2",
   "lastOpenFiles": [
-    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
-    "attachments/User-ID Domain Controller Monitoring.png",
-    "attachments/User-ID Domain Controller Monitoring.png",
-    "Notes/User-ID™.md",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
+    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
+    "Notes/User-ID™.md",
+    "attachments/User-ID Domain Controller Monitoring.png",
+    "attachments/User-ID Domain Controller Monitoring.png",
     "attachments/GlobalProtect Administrator's Guide.pdf",
     "attachments/Configure an Authentication Profile and Sequence.pdf",
     "attachments/Configure Authentication Policy.pdf",
@@ -264,7 +265,6 @@
     "Categories/Topics/Microsoft/Microsoft Protocols.md",
     "Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "Templates/Bases/Topic/Microsoft/Windows.base",
-    "Templates/Bases/Topic/Microsoft/Microsoft Protocols.base",
     "Untitled.canvas"
   ]
 }
