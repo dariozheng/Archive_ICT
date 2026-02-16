@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-16T15:04:08+01:00
+modified: 2026-02-16T15:08:42+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -75,7 +75,11 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 
 <mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
 ![[indows-Based User-ID Agent.png]]
-### Windows Session Monitoring
+##### Install the Windows-Based User-ID Agent #configuration 
+![[Install the Windows-Based User-ID Agent.pdf]]
+##### Configure the Windows User-ID Agent for User Mapping #configuration 
+![[Configure the Windows User-ID Agent for User Mapping.pdf]]
+#### Windows Session Monitoring
 <mark style="background: #BBFABBA6;">Clients who have connected to a shared file or print resource will have their session information stored on the domain controller</mark>. 
 
 <mark style="background: #D2B3FFA6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
