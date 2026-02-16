@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-16T14:15:36+01:00
+modified: 2026-02-16T15:04:08+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -50,28 +50,21 @@ By allowing only the required users to access resources, you can successfully pr
 ## Server Monitoring 
 <mark style="background: #FFF3A3A6;">With server monitoring a <strong>User-ID agent</strong></mark>—<mark style="background: #FF5582A6;">either a Windows-based agent <strong>running on a domain server in your network</strong></mark>, or <mark style="background: #BBFABBA6;">the PAN-OS integrated User-ID agent <strong>running on the firewall</strong></mark>—<mark style="background: #FFF3A3A6;"><strong>monitors</strong> the security event logs for specified <strong>Microsoft Exchange Servers</strong>, <strong>Domain Controllers</strong>, or <strong>Novell eDirectory servers</strong> for <strong>login</strong> events or <strong>logout</strong> events recorded in Authentication logs</mark>.
 
-<mark style="background: #ABF7F7A6;">The User-ID agent will then <strong>record</strong> the IP-to-user mapping</mark>.
-
-For example, in an AD environment, you can configure the User-ID agent to monitor the security logs for Kerberos ticket grants or renewals, Exchange server access (if configured), and file and print service connections. 
-For these events to be recorded in the security log, the AD domain must be configured to log successful account login events. 
-In addition, <mark style="background: #D2B3FFA6;">because users can log in to any of the servers in the domain, you must set up server monitoring for all servers to capture all user login events</mark>. 
-### Microsoft Active Directory Domain Controllers
-
-![[User-ID Domain Controller Monitoring.png]]
-1. When the User-ID agent first starts up, it will parse the security event logs and record all the user login events.
-2. Afterward, it will check the Security logs on a regular basis only for new login or logout events.
-3. User mappings are cached for an amount of time equal to the timeout value set in the User-ID agent interface.
-To ensure that security events are recorded in the Security logs, <mark style="background: #FFB86CA6;">the AD domain must be configured <strong>to log</strong> successful account login events</mark>. 
-
-Because users can authenticate to any domain controller in a domain and the Security logs are not replicated between domain controllers, you also <mark style="background: #FF5582A6;">must set up [[#Server Monitoring|server monitoring]] for all domain controllers to capture all user login events</mark>. 
+<mark style="background: #D2B3FFA6;">Because users can authenticate to any domain controller in a domain and the Security logs are <strong>not</strong> replicated between domain controllers</mark>, you also <mark style="background: #FF5582A6;">must set up server monitoring for all domain controllers to capture all user login events</mark>. 
 
 <mark style="background: #FFB8EBA6;">Each User-ID agent can monitor multiple <strong>domain controllers per domain</strong>. However, each User-ID agent can monitor only a <strong>single domain</strong></mark>.
 
 <mark style="background: #BBFABBA6;">A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time</mark>. 
 
 <mark style="background: #D2B3FFA6;">Both agent types monitor up to 100 domain controllers or Exchange servers</mark>. 
+### Microsoft Active Directory Domain Controllers
 
-<mark style="background: #FFF3A3A6;">Because [[#Server Monitoring|server monitoring]] requires very little overhead and because the majority of users generally can be mapped using this method, Palo Alto Networks recommends it as the base user mapping method for most User-ID deployments</mark>.
+![[User-ID Domain Controller Monitoring.png]]
+1. When the User-ID agent first starts up, <mark style="background: #FFF3A3A6;">it will parse the security event logs and record all the user login events</mark>.
+2. Afterward, <mark style="background: #ADCCFFA6;">it will check the Security logs on a regular basis only for new login or logout events</mark>.
+3. <mark style="background: #BBFABBA6;">User mappings are <strong>cached</strong> for an amount of time equal to the timeout value set in the User-ID agent interface</mark>.
+
+<mark style="background: #FFF3A3A6;">Because server monitoring requires very little overhead and because the majority of users generally can be mapped using this method, Palo Alto Networks recommends it as the base user mapping method for most User-ID deployments</mark>.
 #### Windows User-ID Agent
 - Runs on a domain member
 - Collects IP address-to-username information
