@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-15T22:25:00+01:00
+modified: 2026-02-16T08:29:28+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -109,10 +109,24 @@ Because users can authenticate to any domain controller in a domain and the Secu
 
 <mark style="background: #D2B3FFA6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
 ![[User-ID Windows Session Monitoring.png]]
-## Client Probing
-Client Probing is a legacy method to create IP-to-user mappings and is not recommended as a best practice today. 
+## Client Probing #complete 
+Palo Alto Networks does not recommend using client probing due to the following potential risks:
 
-In this method, <mark style="background: #D2B3FFA6;">the <u>User-ID agent</u> probes every Windows client using [[Windows Management Instrumentation|WMI]]</mark>.
+- Because <mark style="background: #BBFABBA6;">client probing</mark> <mark style="background: #FFB86CA6;">trusts</mark> <mark style="background: #ABF7F7A6;">data reported back</mark> <mark style="background: #D2B3FFA6;">from the endpoint</mark>, it can expose you to security risks when misconfigured. <mark style="background: #ADCCFFA6;">If you enable it on external, untrusted interfaces</mark>, this would cause <mark style="background: #FFB86CA6;">the agent to send client probes containing sensitive information such as the username, domain name, and password hash of the User-ID agent service account</mark> <mark style="background: #FFB8EBA6;">outside of your network</mark>. If you do not configure the service account correctly, the credentials could potentially be exploited by an attacker to penetrate the network to gain further access.
+- <mark style="background: #FFF3A3A6;">Client probing was designed for legacy networks</mark> where <mark style="background: #FFB86CA6;">most users were on Windows workstations on the internal network</mark>, but is not ideal for today’s more modern networks that support a roaming and mobile user base on a variety of devices and operating systems.
+- <mark style="background: #D2B3FFA6;">Client probing can generate a large amount of network traffic</mark> (based on the total number of mapped IP addresses).
+
+Instead, Palo Alto Networks strongly recommends using the following alternate methods for user mapping:
+
+- Using more isolated and trusted sources, such as domain controllers and integrations with Syslog or the XML API, to safely capture user mapping information from any device type or operating system.
+
+- Configuring Authentication Policy and Authentication Portal to ensure that you only allow access to authorized users.
+
+<mark style="background: #FF5582A6;">The User-ID agent supports <strong>WMI probing</strong>, which uses either the PAN-OS integrated User-ID agent or the Windows User-ID agent</mark>.
+
+In a Microsoft Windows environment, you can configure the <mark style="background: #BBFABBA6;">User-ID agent to probe client systems using [[Windows Management Instrumentation|WMI]]</mark> <mark style="background: #ABF7F7A6;">probing at regular intervals</mark> <mark style="background: #FFB86CA6;">to verify that an existing user mapping is still valid</mark> or <mark style="background: #ADCCFFA6;">to obtain the username for an IP address that is not yet mapped</mark>.
+
+<mark style="background: #FF5582A6;">If you do choose to enable probing in your trusted zones</mark>, <mark style="background: #ABF7F7A6;">the agent will probe each learned IP address periodically (every 20 minutes by default, but this is configurable) to verify that the same user is still logged in</mark>. In addition, <mark style="background: #FFB8EBA6;">when the firewall encounters an IP address for which it has no user mapping, it will send the address to the agent for an immediate probe</mark>.
 ## Syslog Listenig 
 With this integration, the <mark style="background: #FF5582A6;">NGFWs are able to listen for auth syslog messages</mark> from <mark style="background: #BBFABBA6;"><strong>Network Access Control</strong> (NAC) systems, <strong>wireless controllers</strong>, 802.1x devices, Apple Open Directory servers, and proxy servers</mark>. 
 It's possible <mark style="background: #FFB8EBA6;">to configure these services to send syslog messages that contain information about login and logout events</mark> and <mark style="background: #ABF7F7A6;">configure the User‐ID agent to parse those messages</mark>.
