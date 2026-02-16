@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/User-ID™.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883
+    "width": 257.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -217,7 +218,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "6a5148b40c277fb2",
   "lastOpenFiles": [
     "attachments/GlobalProtect Administrator's Guide.pdf",
     "Notes/User-ID™.md",
