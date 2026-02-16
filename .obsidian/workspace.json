@@ -217,8 +217,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -233,10 +232,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "26c935ae16f70644",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
-    "Notes/User-ID™.md",
+    "attachments/Configure Service Routes.pdf",
+    "attachments/Set Up Network Access for External Services.pdf",
+    "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "Notes/Palo Alto Networks Next-Generation Firewall.md",
+    "Notes/User-ID™.md",
     "Notes/Server Name Indication.md",
     "Notes/App-ID™.md",
     "Notes/Dynamic User Groups.md",
@@ -278,8 +280,6 @@
     "Categories/Topics/Microsoft/Microsoft General.md",
     "Categories/Topics/Microsoft/Windows.md",
     "Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "Templates/Bases/Topic/Microsoft/Microsoft General.base",
-    "Templates/Bases/Topic/Microsoft/Windows.base",
     "Untitled.canvas"
   ]
 }
