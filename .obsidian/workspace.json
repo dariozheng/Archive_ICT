@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#complete",
+                "query": "User-ID Domain Controller Monitoring.png",
                 "matchingCase": false,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883,
-    "collapsed": true
+    "width": 257.5004348754883
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -220,10 +219,13 @@
   },
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
+    "attachments/User-ID Domain Controller Monitoring.png",
+    "attachments/User-ID Domain Controller Monitoring.png",
+    "Notes/User-ID™.md",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/GlobalProtect Administrator's Guide.pdf",
-    "Notes/User-ID™.md",
     "attachments/Configure an Authentication Profile and Sequence.pdf",
     "attachments/Configure Authentication Policy.pdf",
     "attachments/Configure Authentication Portal.pdf",
@@ -237,10 +239,8 @@
     "attachments/Configure Group Mapping.png",
     "attachments/Redistribution Point 2.png",
     "attachments/Redistribution Point.png",
-    "attachments/Data Redistribution.png",
     "Notes/Data Redistribution Agent.md",
     "Notes/Common Information Model.md",
-    "attachments/From the Firewall CLI.png",
     "Notes/App-ID™.md",
     "Notes/Server Name Indication.md",
     "Notes/Backhaul.md",
@@ -265,7 +265,6 @@
     "Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "Templates/Bases/Topic/Microsoft/Windows.base",
     "Templates/Bases/Topic/Microsoft/Microsoft Protocols.base",
-    "Templates/Bases/Microsoft.base",
     "Untitled.canvas"
   ]
 }

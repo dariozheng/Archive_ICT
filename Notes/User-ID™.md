@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-16T15:08:42+01:00
+modified: 2026-02-16T15:37:14+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -48,51 +48,43 @@ By allowing only the required users to access resources, you can successfully pr
 # IP-to-Username Mapping Methods
 ![[User-ID Mapping Recommendati.png]]
 ## Server Monitoring 
-<mark style="background: #FFF3A3A6;">With server monitoring a <strong>User-ID agent</strong></mark>—<mark style="background: #FF5582A6;">either a Windows-based agent <strong>running on a domain server in your network</strong></mark>, or <mark style="background: #BBFABBA6;">the PAN-OS integrated User-ID agent <strong>running on the firewall</strong></mark>—<mark style="background: #FFF3A3A6;"><strong>monitors</strong> the security event logs for specified <strong>Microsoft Exchange Servers</strong>, <strong>Domain Controllers</strong>, or <strong>Novell eDirectory servers</strong> for <strong>login</strong> events or <strong>logout</strong> events recorded in Authentication logs</mark>.
+<mark style="background: #FFF3A3A6;">With <strong>passive</strong> server monitoring a <strong>User-ID agent</strong></mark>, <mark style="background: #FF5582A6;">either a Windows-based agent <strong>running on a domain server in your network</strong></mark>, or <mark style="background: #BBFABBA6;">the PAN-OS integrated User-ID agent <strong>running on the firewall</strong></mark>, <mark style="background: #FFF3A3A6;"><strong>monitors</strong> the security event logs for specified <strong>Microsoft Exchange Servers</strong>, <strong>Domain Controllers</strong>, or <strong>Novell eDirectory servers</strong> for <strong>login</strong> events or <strong>logout</strong> events recorded in Authentication logs</mark>.
 
-<mark style="background: #D2B3FFA6;">Because users can authenticate to any domain controller in a domain and the Security logs are <strong>not</strong> replicated between domain controllers</mark>, you also <mark style="background: #FF5582A6;">must set up server monitoring for all domain controllers to capture all user login events</mark>. 
+<mark style="background: #D2B3FFA6;">Because users can authenticate to any <strong>domain controller</strong> in a domain and the Security logs are <strong>not</strong> replicated between domain controllers</mark>, you also <mark style="background: #FF5582A6;">must set up server monitoring for all <strong>domain controllers</strong> to capture all user login events</mark>. 
 
-<mark style="background: #FFB8EBA6;">Each User-ID agent can monitor multiple <strong>domain controllers per domain</strong>. However, each User-ID agent can monitor only a <strong>single domain</strong></mark>.
+<mark style="background: #FFB8EBA6;">Each User-ID agent can monitor up to 100 <strong>domain controllers per domain</strong>. However, each User-ID agent can monitor only a <strong>single Active Directory domain</strong></mark>.
 
 <mark style="background: #BBFABBA6;">A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time</mark>. 
-
-<mark style="background: #D2B3FFA6;">Both agent types monitor up to 100 domain controllers or Exchange servers</mark>. 
-### Microsoft Active Directory Domain Controllers
+### Windows User-ID Agent
 
 ![[User-ID Domain Controller Monitoring.png]]
-1. When the User-ID agent first starts up, <mark style="background: #FFF3A3A6;">it will parse the security event logs and record all the user login events</mark>.
-2. Afterward, <mark style="background: #ADCCFFA6;">it will check the Security logs on a regular basis only for new login or logout events</mark>.
-3. <mark style="background: #BBFABBA6;">User mappings are <strong>cached</strong> for an amount of time equal to the timeout value set in the User-ID agent interface</mark>.
+1) When the User-ID agent first starts up, <mark style="background: #FFB8EBA6;">it will parse the security event logs and record all the user login events</mark>.
+2) Afterward, <mark style="background: #ABF7F7A6;">it will check the Security logs on a regular basis only for new login or logout events</mark>.
+3) <mark style="background: #CACFD9A6;">User mappings are <strong>cached</strong> for an amount of time equal to the timeout value set in the User-ID agent interface</mark>.
 
-<mark style="background: #FFF3A3A6;">Because server monitoring requires very little overhead and because the majority of users generally can be mapped using this method, Palo Alto Networks recommends it as the base user mapping method for most User-ID deployments</mark>.
-#### Windows User-ID Agent
-- Runs on a domain member
-- Collects IP address-to-username information
-- Sends information to the firewall
-<mark style="background: #FFB86CA6;">The Windows-based agent is available for download from Palo Alto Networks and can be installed on one or more Windows systems</mark>. 
+<mark style="background: #BBFABBA6;">The Windows User-ID Agent runs on the domain member</mark>, it is available for download from Palo Alto Networks and can be installed on one or more Windows systems. 
 
-Multiple Windows-based agents can be deployed to handle larger environments or multiforest domains.
+Multiple Windows-based agents can be deployed to handle larger environments or multi forest domains.
 
 <mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
 ![[indows-Based User-ID Agent.png]]
-##### Install the Windows-Based User-ID Agent #configuration 
+#### Install the Windows-Based User-ID Agent #configuration 
 ![[Install the Windows-Based User-ID Agent.pdf]]
-##### Configure the Windows User-ID Agent for User Mapping #configuration 
+#### Configure the Windows User-ID Agent for User Mapping #configuration 
 ![[Configure the Windows User-ID Agent for User Mapping.pdf]]
 #### Windows Session Monitoring
 <mark style="background: #BBFABBA6;">Clients who have connected to a shared file or print resource will have their session information stored on the domain controller</mark>. 
 
-<mark style="background: #D2B3FFA6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
+<mark style="background: #CACFD9A6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
 ![[User-ID Windows Session Monitoring.png]]
 ### PAN-OS Integrated User-ID Agent
-- Runs on the firewall
-- Collects IP address-to-username information
-
 <mark style="background: #ABF7F7A6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
 
 The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
 
 <mark style="background: #BBFABBA6;">The PAN-OS integrated agent uses either the <strong>[[Windows Management Instrumentation]]</strong> (<strong>WMI</strong>) or the <strong>[[Windows Remote Management Protocol]]</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FF5582A6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.![[PAN-OS Integrated User-ID Agent.png]]
+#### Configure User Mapping Using the PAN-OS Integrated User-ID Agent #configuration 
+![[Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf]]
 ## Client Probing #complete 
 Palo Alto Networks does not recommend using client probing due to the following potential risks:
 
