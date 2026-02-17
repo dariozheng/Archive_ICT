@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/Next-Generation Firewall - Palo Alto Networks.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -232,13 +232,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "26c935ae16f70644",
   "lastOpenFiles": [
-    "attachments/Subscriptions You Can Use With the Firewall.pdf",
     "Notes/User-ID™.md",
+    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
+    "attachments/Subscriptions You Can Use With the Firewall.pdf",
     "Notes/App-ID™.md",
     "Notes/Dynamic User Groups.md",
-    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
     "attachments/Configure Service Routes.pdf",
     "attachments/Set Up Network Access for External Services.pdf",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
@@ -251,7 +251,6 @@
     "attachments/GlobalProtect Administrator's Guide.pdf",
     "attachments/Configure an Authentication Profile and Sequence.pdf",
     "attachments/Configure Authentication Policy.pdf",
-    "attachments/Configure Authentication Portal.pdf",
     "attachments/Group Include List.png",
     "attachments/Dynamic User Group Operation.png",
     "attachments/small-6.png",
