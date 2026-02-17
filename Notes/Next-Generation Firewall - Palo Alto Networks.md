@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-16T16:44:40+01:00
-modified: 2026-02-17T14:16:52+01:00
+modified: 2026-02-17T14:19:17+01:00
 ---
 Palo Alto Networks firewalls are built with a <mark style="background: #FFB8EBA6;">dedicated <strong>out-of-band Ethernet network management interface</strong></mark> labeled <mark style="background: #FFB8EBA6;"><strong>MGT</strong></mark>. 
 
@@ -44,7 +44,7 @@ If you do not know the admin account password, you must first boot the firewall 
 # Activation, Licensing and Software
 Before you can start using your firewall to secure the traffic on your network, you must <mark style="background: #D2B3FFA6;">register</mark> your firewall with Palo Alto Networks, <mark style="background: #D2B3FFA6;">activate your support license</mark>, and then <mark style="background: #D2B3FFA6;">activate the licenses for each subscription that you purchased</mark>.
 ## Activation Steps 
-<mark style="background: #FFB8EBA6;">To register a hardware firewall, click **Assets** on the Palo Alto Networks Customer Support Portal</mark>, <mark style="background: #FF5582A6;">enter your serial number</mark>, and click <mark style="background: #FFB8EBA6;"><strong>Register Device</strong></mark>. <mark style="background: #FFB86CA6;">The Customer Support Portal is located on the Palo Alto Networks website</mark>.
+<mark style="background: #FFB8EBA6;">To register a hardware firewall, click <strong>Assets</strong> on the Palo Alto Networks Customer Support Portal</mark>, <mark style="background: #FF5582A6;">enter your serial number</mark>, and click <mark style="background: #FFB8EBA6;"><strong>Register Device</strong></mark>. <mark style="background: #FFB86CA6;">The Customer Support Portal is located on the Palo Alto Networks website</mark>.
 
 <mark style="background: #FFF3A3A6;">When you purchase a VM-Series firewall, you receive a set of authorization codes activation code associated with each subscription by email</mark>. 
 
