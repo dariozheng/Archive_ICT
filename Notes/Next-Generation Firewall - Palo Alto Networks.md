@@ -5,8 +5,9 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
+  - ngfw
 created: 2026-02-16T16:44:40+01:00
-modified: 2026-02-17T14:19:17+01:00
+modified: 2026-02-17T14:20:01+01:00
 ---
 Palo Alto Networks firewalls are built with a <mark style="background: #FFB8EBA6;">dedicated <strong>out-of-band Ethernet network management interface</strong></mark> labeled <mark style="background: #FFB8EBA6;"><strong>MGT</strong></mark>. 
 
@@ -102,4 +103,3 @@ Suppose you upgrade the Panorama virtual appliance from PAN-OS 9.0 or earlier re
 In that case, Palo Alto Networks recommends reviewing the Setup Prerequisites for the Panorama Virtual Appliance documentation and changing the mode to either Panorama Mode or Management Only mode based on your needs. 
 
 If you want to keep the Panorama virtual appliance in Legacy mode, increase the number of CPUs to a minimum of 16vCPUs and the amount of memory allocated to a minimum of 32GB on the Panorama virtual appliance.
-#

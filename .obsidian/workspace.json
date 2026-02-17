@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Palo Alto Networks Next-Generation Firewall.md",
+                "file": "Notes/Next-Generation Firewall - Palo Alto Networks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Palo Alto Networks Next-Generation Firewall"
+              "title": "Next-Generation Firewall - Palo Alto Networks"
             }
           }
         ],
@@ -238,7 +238,7 @@
     "Notes/User-ID™.md",
     "Notes/App-ID™.md",
     "Notes/Dynamic User Groups.md",
-    "Notes/Palo Alto Networks Next-Generation Firewall.md",
+    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
     "attachments/Configure Service Routes.pdf",
     "attachments/Set Up Network Access for External Services.pdf",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
