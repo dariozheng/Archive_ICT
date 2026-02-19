@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/Multi-Factor Authentication - Palo Alto.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -221,9 +221,11 @@
   "lastOpenFiles": [
     "Notes/User-ID™.md",
     "Notes/Multi-Factor Authentication - Palo Alto.md",
-    "Notes/Phishing Protection.md",
-    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
+    "Notes/Phishing Protection - Palo Alto.md",
     "Notes/Next-Generation Firewall - Palo Alto Networks.md",
+    "Notes/Dynamic User Groups - Palo Alto.md",
+    "attachments/Multi-Factor Authentication - Palo Alto.png",
+    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
     "Notes/Zero Trust Security Model.md",
     "Notes/Server Name Indication.md",
     "Notes/Web crawler.md",
@@ -232,7 +234,6 @@
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Windows Remote Management Protocol.md",
-    "Notes/Dynamic User Groups.md",
     "attachments/Phishing Protection.png",
     "Notes/Secure Access Service Edge.md",
     "Notes/Web-Based Enterprise Management.md",
@@ -254,7 +255,6 @@
     "attachments/User and Group Attributes.png",
     "attachments/Group Mapping Settings.png",
     "attachments/Configure Group Mapping.png",
-    "attachments/Redistribution Point 2.png",
     "Notes/Backhaul.md",
     "Notes/|Windows Management Instrumentation.md",
     "Categories/Topics/Security/Palo Alto Networks.md",

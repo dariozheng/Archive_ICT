@@ -13,7 +13,7 @@ modified: 2026-02-16T16:37:49+01:00
 
 <mark style="background: #FFB8EBA6;">With User-ID, you can define application access policies based on <strong>users</strong> or <strong>groups</strong> of users</mark>. 
 
-User-ID enable enable the [[Multi-Factor Authentication - Palo Alto|Multi-Factor Authentication]], [[Phishing Protection|credential phishing prevention]] and [[Dynamic User Groups|dynamic user groups]] (<strong>DUGs</strong>).
+User-ID enable enable the [[Multi-Factor Authentication - Palo Alto|Multi-Factor Authentication]], [[Phishing Protection - Palo Alto|credential phishing prevention]] and [[Dynamic User Groups - Palo Alto|dynamic user groups]] (<strong>DUGs</strong>).
 
 <mark style="background: #CACFD9A6;">With User-ID organization are able to enforce least privilege, where user are enabled only to network they need to</mark>. 
 # User-ID Implementation Overview
