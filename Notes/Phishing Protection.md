@@ -16,7 +16,6 @@ modified: 2026-02-19T15:34:14+01:00
 5) In this case, Bob is attempting to enter his corporate credentials to a blocked website and the firewall blocks his credentials from being submitted.
 Block is not the only action that you can configure. You also can configure the firewall to allow credential submission or <mark style="background: #BBFABBA6;">to present a response page that warns users against submitting credentials to websites</mark>. You can customize your response page to educate users against re-using corporate credentials, even on legitimate, non-phishing sites.
 # Phishing Protection #configuration 
-
 1) Configuration of User-ID to detect user credential submission to websites.
 2) Configuration of a URL Filtering Profile to block access to known phishing sites by blocking access to the phishing URL category. This configuration prevents your users from even having the opportunity to submit their credentials to a phishing website.
 3) Configure a URL Filtering Profile to control user credential submission to allowed websites.
