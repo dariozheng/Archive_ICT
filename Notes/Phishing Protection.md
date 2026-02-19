@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-06T12:24:24+01:00
-modified: 2026-02-19T15:34:14+01:00
+modified: 2026-02-19T16:29:36+01:00
 ---
 ![[Phishing Protection.png]]
 1) Attacker sends phishing email that contains a link to the compromised web server.
@@ -20,3 +20,12 @@ Block is not the only action that you can configure. You also can configure the 
 2) Configuration of a URL Filtering Profile to block access to known phishing sites by blocking access to the phishing URL category. This configuration prevents your users from even having the opportunity to submit their credentials to a phishing website.
 3) Configure a URL Filtering Profile to control user credential submission to allowed websites.
 4) Add the URL Filtering Profiles to Security policy rules, where they can enforce anti-phishing and user credential submission protections.
+## User-ID
+### LDAP Server Profile and Group Mapping
+User-ID relies on user group membership information that resides in an LDAP directory service. 
+
+Before User-ID can access this information, you must configure the firewall with an LDAP Server Profile.
+
+[[User-ID™#Configure Group Mapping configuration|LDAP Server Profile and Group Mapping Configuration Link]]
+
+### Firewall-Integrated User-ID Agent
