@@ -5,6 +5,7 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
+  - tobecompleted
 created: 2026-02-06T12:24:24+01:00
 modified: 2026-02-19T16:29:36+01:00
 ---
