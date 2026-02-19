@@ -13,7 +13,7 @@ modified: 2026-02-16T16:37:49+01:00
 
 <mark style="background: #FFB8EBA6;">With User-ID, you can define application access policies based on <strong>users</strong> or <strong>groups</strong> of users</mark>. 
 
-User-ID enable enable the [[Multi-Factor Authentication|Multi-Factor Authentication]], [[Phishing Protection|credential phishing prevention]] and [[Dynamic User Groups|dynamic user groups]] (<strong>DUGs</strong>).
+User-ID enable enable the [[Multi-Factor Authentication - Palo Alto|Multi-Factor Authentication]], [[Phishing Protection|credential phishing prevention]] and [[Dynamic User Groups|dynamic user groups]] (<strong>DUGs</strong>).
 
 <mark style="background: #CACFD9A6;">With User-ID organization are able to enforce least privilege, where user are enabled only to network they need to</mark>. 
 # User-ID Implementation Overview
@@ -29,7 +29,7 @@ Check:
 - Number of users 
 - The presence of existing identity providers in the environment that Palo Alto Networks can use for IP-to-user mapping like GlobalProtect, Active Directory Domain Controllers, Cisco ISE or else 
 - Which Directory Service is in use, Active Directory, Azure AD, Ping, Okta or else
-- The presence of critical assets where [[Multi-Factor Authentication|MFA]] should be implemented 
+- The presence of critical assets where [[Multi-Factor Authentication - Palo Alto|MFA]] should be implemented 
 - The source of enforcement, like a single firewall or multiple firewalls. 
 ## Identify IP-to-User Mapping Strategies for Visibility
 User-ID provides multiple [[#IP-to-Username Mapping Methods|methods]] to map IP addresses to users. <mark style="background: #ABF7F7A6;">Some methods require specific directory structures to be in place, while other methods may require software agents or clients to be installed</mark>. 
@@ -153,7 +153,7 @@ To use this method, <mark style="background: #FFB86CA6;">your network requires a
 #### Web Form
 <mark style="background: #FFF3A3A6;">The firewall redirects web requests to a web form for authentication</mark>. 
 
-For this method, <mark style="background: #FFB86CA6;">you can configure Authentication policy to use [[Multi-Factor Authentication|MFA]], SAML, Kerberos, TACACS+, RADIUS, or LDAP authentication</mark>. 
+For this method, <mark style="background: #FFB86CA6;">you can configure Authentication policy to use [[Multi-Factor Authentication - Palo Alto|MFA]], SAML, Kerberos, TACACS+, RADIUS, or LDAP authentication</mark>. 
 
 <mark style="background: #FFF3A3A6;">Although users have to manually enter their login credentials, this method works with all browsers and operating systems</mark>.
 #### Client Certificate Authentication

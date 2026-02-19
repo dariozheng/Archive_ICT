@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - tobecompleted
 created: 2026-02-06T12:24:24+01:00
-modified: 2026-02-19T16:29:36+01:00
+modified: 2026-02-19T16:34:16+01:00
 ---
 ![[Phishing Protection.png]]
 1) Attacker sends phishing email that contains a link to the compromised web server.
@@ -29,4 +29,4 @@ Before User-ID can access this information, you must configure the firewall with
 
 [[User-ID™#Configure Group Mapping configuration|LDAP Server Profile and Group Mapping Configuration Link]]
 
-### Firewall-Integrated User-ID Agent
+

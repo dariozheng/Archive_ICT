@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Phishing Protection.md",
+                "file": "Notes/Multi-Factor Authentication - Palo Alto.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Phishing Protection"
+              "title": "Multi-Factor Authentication - Palo Alto"
             }
           }
         ]
@@ -220,14 +220,14 @@
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "Notes/User-ID™.md",
-    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
+    "Notes/Multi-Factor Authentication - Palo Alto.md",
     "Notes/Phishing Protection.md",
+    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
     "Notes/Next-Generation Firewall - Palo Alto Networks.md",
     "Notes/Zero Trust Security Model.md",
     "Notes/Server Name Indication.md",
     "Notes/Web crawler.md",
     "Notes/App-ID™.md",
-    "Notes/Multi-Factor Authentication.md",
     "Notes/Common Information Model.md",
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Management Instrumentation.md",
