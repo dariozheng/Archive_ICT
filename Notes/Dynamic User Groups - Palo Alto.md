@@ -5,8 +5,9 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
+  - tobecompleted
 created: 2026-02-06T12:22:51+01:00
-modified: 2026-02-13T11:53:54+01:00
+modified: 2026-02-20T14:25:54+01:00
 aliases:
   - DUGs
 ---
@@ -14,7 +15,7 @@ aliases:
 
 User membership in a DUG is dynamic. <mark style="background: #FF5582A6;">Only tagged usernames become members of the group</mark>. Changes to group membership do not require a commit. 
 
-<mark style="background: #FFF3A3A6;">When you create a policy rule, you add a DUG to the Source User field as a match criterion</mark>. 
+<mark style="background: #FFF3A3A6;">When you create a policy rule, you add a <strong>DUG</strong> to the <strong>Source User</strong> field as a match criterion</mark>. 
 <mark style="background: #FFB86CA6;">You must commit your firewall configuration after you configure a DUG name and add it to a policy rule</mark>. 
 <mark style="background: #ABF7F7A6;">However, you do not have to perform a commit when users are added or removed from the DUG</mark>. 
 <mark style="background: #FFB8EBA6;">User membership in a DUG is dynamic, and it is controlled by tagging and untagging usernames</mark>.
