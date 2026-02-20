@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T11:54:00+01:00
+modified: 2026-02-20T11:57:27+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -332,7 +332,7 @@ In many cases, <mark style="background: #FF5582A6;">the proxy server adds an <st
 In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewall to extract the end user IP address from the <strong>XFF</strong> so that User-ID can create an IP-to-user mapping</mark>.
 
 <mark style="background: #FFF3A3A6;">This enables you to use <strong>XFF values</strong> for policies and logging source users</mark>, so that you can enforce user-based policy to safely enable access to web-based for your users behind a proxy server.
-# User-ID Configuration Steps #configuration
+# User-ID Configuration Steps
 
 ![[Enable User-ID 0.png]]
 ## Enable User-ID #configuration 
