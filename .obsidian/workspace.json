@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Multi-Factor Authentication - Palo Alto.md",
+                "file": "Notes/User-ID™.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Multi-Factor Authentication - Palo Alto"
+              "title": "User-ID™"
             }
           }
         ]
@@ -219,13 +219,18 @@
   },
   "active": "26c935ae16f70644",
   "lastOpenFiles": [
-    "Notes/User-ID™.md",
-    "Notes/Multi-Factor Authentication - Palo Alto.md",
     "Notes/Phishing Protection - Palo Alto.md",
-    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
-    "Notes/Dynamic User Groups - Palo Alto.md",
-    "attachments/Multi-Factor Authentication - Palo Alto.png",
+    "Notes/Multi-Factor Authentication - Palo Alto.md",
+    "Notes/User-ID™.md",
+    "attachments/Define the Monitored Server(s).png",
+    "attachments/Define the Monitored Server(s) 1.png",
+    "attachments/Define the User-ID Agent Account.png",
+    "attachments/Session Monitoring.png",
+    "attachments/WMI Client Probing.png",
     "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
+    "Notes/Dynamic User Groups - Palo Alto.md",
+    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
+    "attachments/Multi-Factor Authentication - Palo Alto.png",
     "Notes/Zero Trust Security Model.md",
     "Notes/Server Name Indication.md",
     "Notes/Web crawler.md",
@@ -250,11 +255,6 @@
     "attachments/Configure an Authentication Profile and Sequence.pdf",
     "attachments/Configure Authentication Policy.pdf",
     "attachments/Group Include List.png",
-    "attachments/Dynamic User Group Operation.png",
-    "attachments/small-6.png",
-    "attachments/User and Group Attributes.png",
-    "attachments/Group Mapping Settings.png",
-    "attachments/Configure Group Mapping.png",
     "Notes/Backhaul.md",
     "Notes/|Windows Management Instrumentation.md",
     "Categories/Topics/Security/Palo Alto Networks.md",

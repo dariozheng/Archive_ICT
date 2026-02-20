@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - tobecompleted
 created: 2026-02-06T12:24:24+01:00
-modified: 2026-02-19T16:34:16+01:00
+modified: 2026-02-20T11:08:57+01:00
 ---
 ![[Phishing Protection.png]]
 1) Attacker sends phishing email that contains a link to the compromised web server.
@@ -27,6 +27,5 @@ User-ID relies on user group membership information that resides in an LDAP dire
 
 Before User-ID can access this information, you must configure the firewall with an LDAP Server Profile.
 
-[[User-ID™#Configure Group Mapping configuration|LDAP Server Profile and Group Mapping Configuration Link]]
 
 
