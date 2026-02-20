@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T11:57:27+01:00
+modified: 2026-02-20T12:02:43+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -354,7 +354,11 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 <mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List
 Use the <strong>Exclude List</strong> only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
-## 
+## User mapping methods
+
+[[#Windows-Based Agent Configuration configuration|Windows-Based Agent Configuration]]
+
+[[#Configure User Mapping Using the PAN-OS Integrated User-ID Agent configuration documentation|PAN-OS Integrated User-ID Agent Configuration]]
 
 ## Data Redistribution 
 <mark style="background: #FFF3A3A6;">Every firewall that enforces user-based policies requires user mapping information</mark>. 
