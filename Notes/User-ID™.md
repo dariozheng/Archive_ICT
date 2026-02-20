@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T11:47:32+01:00
+modified: 2026-02-20T11:51:47+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -48,7 +48,7 @@ With identity-based security, it's possible to know who is accessing which appli
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches applying zero trust strategy.
 # IP-to-Username Mapping Methods
 ![[User-ID Mapping Recommendati.png]]
-## Server Monitoring 
+## Server Monitoring #complete 
 <mark style="background: #FFF3A3A6;">With <strong>passive</strong> server monitoring a <strong>User-ID agent</strong></mark>, <mark style="background: #FF5582A6;">either a Windows-based agent <strong>running on a domain server in your network</strong></mark>, or <mark style="background: #BBFABBA6;">the PAN-OS integrated User-ID agent <strong>running on the firewall</strong></mark>, <mark style="background: #FFF3A3A6;"><strong>monitors</strong> the security event logs for specified <strong>Microsoft Exchange Servers</strong>, <strong>Domain Controllers</strong>, or <strong>Novell eDirectory servers</strong> for <strong>login</strong> events or <strong>logout</strong> events recorded in Authentication logs</mark>.
 
 <mark style="background: #D2B3FFA6;">Because users can authenticate to any <strong>domain controller</strong> in a domain and the Security logs are <strong>not</strong> replicated between domain controllers</mark>, you also <mark style="background: #FF5582A6;">must set up server monitoring for all <strong>domain controllers</strong> to capture all user login events</mark>. 
@@ -68,8 +68,12 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 
 <mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
 ![[indows-Based User-ID Agent.png]]
-#### Windows-Based Agent Configuration  #configuration 
+#### Windows Session Monitoring
+<mark style="background: #BBFABBA6;">Clients who have connected to a <strong>shared file or print resource</strong> will have their session information stored on the domain controller</mark>. 
 
+<mark style="background: #ABF7F7A6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
+![[User-ID Windows Session Monitoring.png]]
+#### Windows-Based Agent Configuration  #configuration 
 <img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
 ##### Installation Location 
 The Windows-based agent can be installed on machines running Windows Server 2008 or later.  
@@ -189,11 +193,6 @@ show user ip-user-mapping all
 show user ip-user-mapping <ip/netmask>
 ```
 ![[From the Firewall CLI.png]]
-#### Windows Session Monitoring
-<mark style="background: #BBFABBA6;">Clients who have connected to a <strong>shared file or print resource</strong> will have their session information stored on the domain controller</mark>. 
-
-<mark style="background: #ABF7F7A6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
-![[User-ID Windows Session Monitoring.png]]
 #### Install the Windows-Based User-ID Agent #documentation  
 ![[Install the Windows-Based User-ID Agent.pdf]]
 #### Configure the Windows User-ID Agent for User Mapping #documentation 
