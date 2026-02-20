@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-20T15:06:36+01:00
-modified: 2026-02-20T16:42:42+01:00
+modified: 2026-02-20T16:43:44+01:00
 ---
 <strong>Device-ID</strong> is a PAN-OS policy construct for enforcement and visibility. 
 It allows administrators <mark style="background: #FFB8EBA6;">to apply consistent <strong>policy control</strong> and <strong>threat prevention</strong> to a <strong>device</strong></mark> <mark style="background: #FF5582A6;">no matter where it <strong>moves</strong> within the network or what its <strong>IP address</strong> is at any given time</mark>. 
@@ -42,16 +42,17 @@ If you use PAN-OS version 8.1.0 through PAN-OS 9.1.x on a firewall, the <mark st
 
 <mark style="background: #ABF7F7A6;">Metadata also forms the basis of the expected behavior for the device profile to allow only trusted behavior, which formulates the policy rule recommendation</mark>.
 
-There are six levels of classification (also known as attributes) for devices:
+<mark style="background: #ADCCFFA6;">There are six levels of classification (also known as attributes) for devices</mark>:
 
 | ATTRIBUTE  | EXAMPLE           |
-| ---------- | ----------------- |
+| ---------- |:----------------- |
 | Category   | Printer           |
 | Profile    | Sharp Printer     |
 | Model      | MX-6070N          |
 | Os Version | ThreadX 5         |
 | Os Family  | ThreadX RTOS      |
 | Vendor     | SHARP Corporation |
+
 When a firewall imports <mark style="background: #ADCCFFA6;">Security policy rule recommendations</mark> and <mark style="background: #D2B3FFA6;">IP address-to-device mappings</mark> from <mark style="background: #CACFD9A6;">IoT Security</mark>, <mark style="background: #FFB8EBA6;">the firewall sends its device certificate to an edge server to authenticate itself</mark>. <mark style="background: #FF5582A6;">The edge server authenticates itself to the firewall by sending its own certificate</mark>. <mark style="background: #FFB86CA6;">The firewall uses Online Certificate Status Protocol (OCSP) to validate the server’s certificate by checking it against the following sites using HTTP on TCP port 80</mark>:
 - \*.o.lencr.org
 - x1.c.lencr.org
