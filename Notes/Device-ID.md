@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-20T15:06:36+01:00
-modified: 2026-02-20T16:10:58+01:00
+modified: 2026-02-20T16:13:17+01:00
 ---
 <strong>Device-ID</strong> is a PAN-OS policy construct for enforcement and visibility. 
 It allows administrators <mark style="background: #FFB8EBA6;">to apply consistent <strong>policy control</strong> and <strong>threat prevention</strong> to a <strong>device</strong></mark> <mark style="background: #FF5582A6;">no matter where it <strong>moves</strong> within the network or what its <strong>IP address</strong> is at any given time</mark>. 
@@ -35,11 +35,7 @@ With the second subscription, <mark style="background: #BBFABBA6;">firewalls sen
 <mark style="background: #FFF3A3A6;">A firewall also requires a <strong>device certificate</strong> to <strong>authenticate itself</strong> when connecting to <strong>IoT Security</strong> and the <strong>logging service</strong></mark>.
 
 If you use PAN-OS version 8.1.0 through PAN-OS 9.1.x on a firewall, the <mark style="background: #BBFABBA6;">IoT Security license provides device classification, behavior analysis, and threat analysis for your devices</mark>. If you use PAN-OS 10.0 or later, <mark style="background: #ABF7F7A6;">you can use Device-ID to obtain <strong>IP address-to-device mappings</strong></mark> <mark style="background: #ADCCFFA6;">to view <strong>device context</strong> for <strong>network events</strong></mark>, <mark style="background: #D2B3FFA6;">use IoT Security to obtain policy rule recommendations for these devices</mark>, and <mark style="background: #CACFD9A6;">gain visibility for devices in <strong>reports</strong> and the <strong>ACC</strong></mark>.
-
-
-
-
-
+## Device Classification 
 The visibility that the firewall or Panorama provides for traffic, apps, users, devices, and threats will help you identify millions of devices and obtain Security policy rule recommendations for securing those devices. 
 
 To identify and classify devices, the IoT Security app uses metadata from network protocols and sessions and sends the metadata to the cloud in Session logs and Enhanced Application logs (EALs). 
