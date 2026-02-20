@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T11:42:55+01:00
+modified: 2026-02-20T11:47:32+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -57,7 +57,6 @@ By allowing only the required users to access resources, you can successfully pr
 
 <mark style="background: #BBFABBA6;">A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time</mark>. 
 ### Windows User-ID Agent
-
 ![[User-ID Domain Controller Monitoring.png]]
 1) When the User-ID agent first starts up, <mark style="background: #FFB8EBA6;">it will parse the security event logs and record all the user login events</mark>.
 2) Afterward, <mark style="background: #ABF7F7A6;">it will check the Security logs on a regular basis only for new login or logout events</mark>.
@@ -69,10 +68,6 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 
 <mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
 ![[indows-Based User-ID Agent.png]]
-#### Install the Windows-Based User-ID Agent #configuration 
-![[Install the Windows-Based User-ID Agent.pdf]]
-#### Configure the Windows User-ID Agent for User Mapping #configuration 
-![[Configure the Windows User-ID Agent for User Mapping.pdf]]
 #### Windows-Based Agent Configuration  #configuration 
 
 <img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
@@ -199,6 +194,10 @@ show user ip-user-mapping <ip/netmask>
 
 <mark style="background: #ABF7F7A6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
 ![[User-ID Windows Session Monitoring.png]]
+#### Install the Windows-Based User-ID Agent #documentation  
+![[Install the Windows-Based User-ID Agent.pdf]]
+#### Configure the Windows User-ID Agent for User Mapping #documentation 
+![[Configure the Windows User-ID Agent for User Mapping.pdf]]
 ### PAN-OS Integrated User-ID Agent
 <mark style="background: #FFB8EBA6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
 
@@ -206,7 +205,7 @@ The integrated agent is designed for small and midsize deployments such as small
 
 <mark style="background: #FF5582A6;">The PAN-OS integrated agent uses either the <strong>[[Windows Management Instrumentation]]</strong> (<strong>WMI</strong>) or the <strong>[[Windows Remote Management Protocol]]</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FFB86CA6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.
 ![[PAN-OS Integrated User-ID Agent.png]]
-#### Configure User Mapping Using the PAN-OS Integrated User-ID Agent #configuration 
+#### Configure User Mapping Using the PAN-OS Integrated User-ID Agent #configuration #documentation 
 ![[Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf]]
 ## Client Probing #complete 
 Palo Alto Networks does not recommend using client probing due to the following potential risks:
