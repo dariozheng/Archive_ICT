@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T11:51:47+01:00
+modified: 2026-02-20T11:54:00+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -66,12 +66,12 @@ By allowing only the required users to access resources, you can successfully pr
 
 Multiple Windows-based agents can be deployed to handle larger environments or multi forest domains.
 
-<mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where they are filtered for the relevant User-ID information</mark>.
+<mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where <strong>they are filtered for the relevant User-ID information</strong></mark>.
 ![[indows-Based User-ID Agent.png]]
-#### Windows Session Monitoring
+-  <strong>Windows Session Monitoring</strong>
 <mark style="background: #BBFABBA6;">Clients who have connected to a <strong>shared file or print resource</strong> will have their session information stored on the domain controller</mark>. 
 
-<mark style="background: #ABF7F7A6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
+<mark style="background: #ABF7F7A6;">An additional <strong>Windows-based method</strong> to resolve IP addresses to users is to consult the <strong>shared resource session table</strong> recorded on the domain controller</mark>.
 ![[User-ID Windows Session Monitoring.png]]
 #### Windows-Based Agent Configuration  #configuration 
 <img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
