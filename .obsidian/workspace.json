@@ -20,8 +20,21 @@
               "icon": "lucide-file",
               "title": "User-ID™"
             }
+          },
+          {
+            "id": "ea8b9b831f577414",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "attachments/Install the Windows-Based User-ID Agent.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "Install the Windows-Based User-ID Agent"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -78,7 +91,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883
+    "width": 257.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -217,11 +231,11 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "26c935ae16f70644",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "Notes/User-ID™.md",
     "Notes/Phishing Protection - Palo Alto.md",
     "Notes/Multi-Factor Authentication - Palo Alto.md",
-    "Notes/User-ID™.md",
     "attachments/Define the Monitored Server(s).png",
     "attachments/Define the Monitored Server(s) 1.png",
     "attachments/Define the User-ID Agent Account.png",

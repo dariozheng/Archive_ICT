@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T11:08:26+01:00
+modified: 2026-02-20T11:19:05+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -74,16 +74,17 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 #### Configure the Windows User-ID Agent for User Mapping #configuration 
 ![[Configure the Windows User-ID Agent for User Mapping.pdf]]
 #### Windows Session Monitoring
-<mark style="background: #BBFABBA6;">Clients who have connected to a shared file or print resource will have their session information stored on the domain controller</mark>. 
+<mark style="background: #BBFABBA6;">Clients who have connected to a <strong>shared file or print resource</strong> will have their session information stored on the domain controller</mark>. 
 
-<mark style="background: #CACFD9A6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
+<mark style="background: #ABF7F7A6;">An additional Windows-based method to resolve IP addresses to users is to consult the shared resource session table recorded on the domain controller</mark>.
 ![[User-ID Windows Session Monitoring.png]]
 ### PAN-OS Integrated User-ID Agent
-<mark style="background: #ABF7F7A6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
+<mark style="background: #FFB8EBA6;">The PAN-OS integrated agent is included with PAN-OS software</mark>. 
 
 The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
 
-<mark style="background: #BBFABBA6;">The PAN-OS integrated agent uses either the <strong>[[Windows Management Instrumentation]]</strong> (<strong>WMI</strong>) or the <strong>[[Windows Remote Management Protocol]]</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FF5582A6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.![[PAN-OS Integrated User-ID Agent.png]]
+<mark style="background: #FF5582A6;">The PAN-OS integrated agent uses either the <strong>[[Windows Management Instrumentation]]</strong> (<strong>WMI</strong>) or the <strong>[[Windows Remote Management Protocol]]</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FFB86CA6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.
+![[PAN-OS Integrated User-ID Agent.png]]
 #### Configure User Mapping Using the PAN-OS Integrated User-ID Agent #configuration 
 ![[Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf]]
 ## Client Probing #complete 
