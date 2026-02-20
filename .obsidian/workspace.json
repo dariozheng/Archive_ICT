@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "f8d1708c9e0e01e5",
+        "id": "eabe8c44e2094486",
         "type": "tabs",
         "children": [
           {
-            "id": "26c935ae16f70644",
+            "id": "a89698cd63dc978f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Crawler.md",
+                "file": "Notes/Data Redistribution - Palo Alto.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Crawler"
+              "title": "Data Redistribution - Palo Alto"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Crawler.md",
+                "file": "Notes/Data Redistribution - Palo Alto.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Crawler"
+              "title": "Outline of Data Redistribution - Palo Alto"
             }
           },
           {
@@ -217,12 +217,15 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "26c935ae16f70644",
+  "active": "a89698cd63dc978f",
   "lastOpenFiles": [
+    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
+    "Notes/Data Redistribution - Palo Alto.md",
+    "Notes/Phishing Protection - Palo Alto.md",
+    "Notes/Crawler.md",
     "Notes/Backhaul.md",
     "Notes/Zero Trust Security Model.md",
     "Notes/Server Name Indication.md",
-    "Notes/Crawler.md",
     "Notes/App-ID™.md",
     "Notes/Common Information Model.md",
     "Notes/Windows Management Instrumentation.md",
@@ -230,8 +233,6 @@
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Dynamic User Groups - Palo Alto.md",
-    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
-    "Notes/Phishing Protection - Palo Alto.md",
     "Notes/User-ID™.md",
     "Notes/Multi-Factor Authentication - Palo Alto.md",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
