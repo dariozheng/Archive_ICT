@@ -11,13 +11,32 @@
             "id": "7dea27b5d22b1057",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Notes/Dynamic User Groups - Palo Alto.md",
+                "mode": "preview",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Dynamic User Groups - Palo Alto"
+            }
+          },
+          {
+            "id": "5ddd838cd0b92225",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/Device-ID.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Device-ID"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -152,12 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Notes/Device-ID.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of Device-ID"
             }
           },
           {
@@ -212,16 +232,17 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "5ddd838cd0b92225",
   "lastOpenFiles": [
+    "Notes/Untitled.md",
+    "Notes/Device-ID.md",
+    "Notes/Dynamic User Groups - Palo Alto.md",
     "Notes/Palo Alto SASE.md",
     "Notes/User-ID™.md",
-    "Notes/Dynamic User Groups - Palo Alto.md",
     "Notes/Data Redistribution - Palo Alto.md",
     "Notes/Advanced URL Filtering.md",
     "attachments/Advanced URL Filtering 2.png",
     "attachments/Advanced URL Filtering.png",
-    "Notes/Untitled.md",
     "attachments/Data Redistribution.png",
     "attachments/Data Redistribution.png",
     "Notes/Next-Generation Firewall - Palo Alto Networks.md",
@@ -259,7 +280,6 @@
     "Categories/Topics/Security/Palo Alto Networks.md",
     "Categories/Security.md",
     "Templates/Notes/Systems Template.md",
-    "Templates/Notes/Security Template.md",
     "Untitled.canvas"
   ]
 }
