@@ -22,7 +22,7 @@
             }
           },
           {
-            "id": "ea8b9b831f577414",
+            "id": "5ca97d432121f43d",
             "type": "leaf",
             "state": {
               "type": "pdf",
@@ -33,8 +33,7 @@
               "title": "Install the Windows-Based User-ID Agent"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -233,7 +232,9 @@
   },
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/Install the Windows-Based User-ID Agent.pdf",
     "Notes/User-ID™.md",
+    "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
     "Notes/Phishing Protection - Palo Alto.md",
     "Notes/Multi-Factor Authentication - Palo Alto.md",
     "attachments/Define the Monitored Server(s).png",
@@ -261,8 +262,6 @@
     "attachments/Configure Service Routes.pdf",
     "attachments/Set Up Network Access for External Services.pdf",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
-    "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
-    "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/User-ID Domain Controller Monitoring.png",
     "attachments/User-ID Domain Controller Monitoring.png",
     "attachments/GlobalProtect Administrator's Guide.pdf",

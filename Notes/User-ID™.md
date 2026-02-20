@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T11:19:05+01:00
+modified: 2026-02-20T11:42:55+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -73,6 +73,127 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 ![[Install the Windows-Based User-ID Agent.pdf]]
 #### Configure the Windows User-ID Agent for User Mapping #configuration 
 ![[Configure the Windows User-ID Agent for User Mapping.pdf]]
+#### Windows-Based Agent Configuration  #configuration 
+
+<img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
+##### Installation Location 
+The Windows-based agent can be installed on machines running Windows Server 2008 or later.  
+
+<mark style="background: #CACFD9A6;">You should install the agent in the same network site as the monitored server to optimize bandwidth use</mark>. 
+
+<mark style="background: #FFB86CA6;">You should install two agents on two member servers for redundancy in case one agent or one domain controller fails</mark>.
+![[Installation Location.png]]
+Although an agent could be installed directly on a domain controller, that is not a best practice.
+##### User-ID Agent Software
+Use your Palo Alto Networks support account to log in to the Support website. 
+
+After you are logged in, click the <strong>Updates > Software Updates</strong> link to open the page shown here. 
+
+To simplify finding the User-ID agent download links, use the <strong>Filter By menu</strong> to filter the list for <strong>User Identification Agent</strong>. Then find and download the User-ID agent version that matches your PAN-OS version.
+![[User-ID Agent Software.png]]
+The installation can be <strong>manual</strong>, <mark style="background: #ADCCFFA6;">installing each agent individually by manually launching the downloaded MSI file</mark>, or <strong>automated</strong> where it's possible <mark style="background: #BBFABBA6;">to use endpoint management software such as <strong>Microsoft System Center Configuration Manager</strong> (or SCCM) to remotely install, configure, or upgrade multiple agents in a single operation</mark>.
+##### Agent Setup Process
+![[Agent Setup Process.png]]
+<mark style="background: #FFF3A3A6;">Click <strong>Setup</strong> to configure the User-ID agent, click the <strong>Edit</strong> button to open a separate tabbed window that enables you to change any of the settings shown in the Setup pane.
+Then, click <strong>Save</strong> to save your configuration changes but not activate them. Click <strong>Commit</strong> to save and activate your configuration changes. Click <strong>Exit</strong> to close the window without saving your changes</mark>.
+
+By default, <mark style="background: #ADCCFFA6;">the User-ID agent uses TCP port 5007 to communicate to the firewall</mark>. You can change to another port, if necessary, by clicking Edit and then clicking the <strong>Agent Service</strong> tab in the window that opens.
+##### Configure the User-ID Agent Account
+The agent should run with a Windows service account that has the necessary permissions to read the security event logs or to perform WMI probing.
+###### Authentication tab
+Use the Authentication tab to <mark style="background: #FFF3A3A6;">configure the agent to use a specific <strong>Windows service account</strong></mark>. 
+<mark style="background: #BBFABBA6;">The authentication information must be configured before you can configure access to monitored servers</mark>. 
+
+<mark style="background: #ADCCFFA6;">By default, the Windows agent runs as the user account used to install the <strong>.msi</strong> file</mark>. 
+
+<mark style="background: #FFB8EBA6;">Most of the necessary permissions are provided if the <strong>Windows-based agent</strong> runs as <u>an account that belongs to the <strong>Domain Administrators</strong> group or to the <strong>Server Operators</strong> and <strong>Event Log Readers</strong> groups</u></mark>. 
+
+<mark style="background: #FFB86CA6;">The user account running the agent also must have permissions to start a <strong>Windows service</strong></mark>. 
+
+However, membership in these groups provides the account with more permissions than just the capability to perform [[#Server Monitoring|server monitoring]] or client probing. 
+
+<mark style="background: #FFF3A3A6;">Therefore, you might want to run the agent using a restricted account with minimal permissions</mark>. 
+<mark style="background: #ADCCFFA6;">The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have</mark>.
+![[Authentication tab.png]]
+###### Server Monitor Tab
+Use the Server Monitor tab to configure [[#Server Monitoring|server monitoring]] or to enable the optional [[#Windows Session Monitoring|session monitoring]].
+![[Server Monitor Tab.png]]
+###### Client Probing Tab
+<mark style="background: #FFB8EBA6;">You can use the Client Probing tab to configure the agent <u>to probe IP addresses</u> for username information</mark>. 
+
+This setting is not recommended.
+
+Unlike server monitoring, probing is an active method: 
+- <mark style="background: #BBFABBA6;">The User-ID agent sends a probe</mark> at a configurable interval <mark style="background: #BBFABBA6;">to each learned IP address in its list to verify that the same user still is logged in</mark>. 
+- <mark style="background: #D2B3FFA6;">The results of the probes are used to update the records on the agent</mark>, <mark style="background: #CACFD9A6;">which are passed on to the firewall</mark>. 
+- <mark style="background: #FFB86CA6;">Each learned IP is probed once per interval period</mark>. 
+- <mark style="background: #FF5582A6;"><strong>WMI probing must be enabled on the Windows machines for the probe to succeed</strong></mark>.
+
+<mark style="background: #FFF3A3A6;">Ensure that large environments have a long enough interval for all IP addresses to be probed</mark>. <mark style="background: #ABF7F7A6;">For example, a network with 6,000 users and an interval of 10 minutes would require 10 WMI requests a second from each agent</mark>. These probes are queued and processed by the agent as needed.
+
+<mark style="background: #FF5582A6;">The <strong>NetBIOS probing</strong> is available primarily for backward compatibility with Windows XP and earlier and is not recommended</mark>.
+
+If you enable the optional NetBIOS client probing feature, <mark style="background: #D2B3FFA6;">then the agent requires access through the Windows firewall to port 139</mark>. <mark style="background: #D2B3FFA6;">Windows file and print services also must be enabled</mark>.
+![[Client Probing Tab.png]]
+##### Configure the Monitored Servers 
+![[Configure the Monitore Servers.png]]
+Select <strong>Discovery</strong> in the left pane to configure the monitored servers and networks.
+
+<mark style="background: #FF5582A6;">The Auto Discover button works only for domain controllers</mark>. 
+
+<mark style="background: #FFF3A3A6;">Use the <strong>Add</strong> button to add <strong>Exchange servers</strong>, <strong>Novell eDirectory servers</strong>, and <strong>syslog senders</strong>, or to manually add domain controllers</mark>. 
+<mark style="background: #CACFD9A6;">Click Add to open a separate window, where you are prompted for a server name, server address, and server type</mark>.
+##### Configure the Firewall to Connect to the Agent
+<mark style="background: #FFB86CA6;">The firewall must be configured with information for every User-ID agent to which it will connect</mark>. 
+Communication between the firewall and a User-ID agent is secured using an encrypted SSL connection.
+![[Configure the Firewall to Connect to the Agent.png]]
+###### Agent Host Type
+You can add an agent using Serial Number or Host and Port. 
+-  <strong>Serial Number</strong>
+If the firewall will connect to a <mark style="background: #FFF3A3A6;"><strong>Panorama management appliance</strong></mark> to collect User-ID information, then select **Serial Number** as the host type.
+-  <strong>Host and Port</strong>
+If the firewall will connect to a <mark style="background: #BBFABBA6;"><strong>Windows-based agent</strong> or an agent on another firewall</mark>, then select <strong>Host and Port</strong> as the host type. 
+
+If you select Host and Port, <mark style="background: #ABF7F7A6;">then you must specify each agent’s IP address and listening port</mark>. 
+
+Communication between the firewall and a User-ID agent is secured using an encrypted SSL connection.
+###### Non Configurable Timers
+The firewall has non-configurable timers for its communication to the agent.
+- 2 Seconds 
+<mark style="background: #FFF3A3A6;">Get the list of new IP address-to-username mappings from the agent</mark>. <mark style="background: #D2B3FFA6;">This list contains <strong>only</strong> new mappings since the last interval</mark>.
+-  2 Seconds 
+<mark style="background: #FFB86CA6;">Send the list of unknown IP addresses that were encountered in traffic to the agent</mark>.
+-  5 Seconds
+<mark style="background: #ABF7F7A6;">Get the agent status</mark>.
+-  1 Hour
+<mark style="background: #FF5582A6;">Get the full list of IP address-to-username mappings from the agent</mark>.
+##### Confirm Connection to the User-ID Agent #troubleshooting
+To confirm connection to the User-ID agent device, browse to <strong>Device > Data Redistribution > Agents</strong>.
+
+Use the firewall’s web interface and the Windows agent to confirm connectivity between the firewall and the Windows agent. 
+
+Mappings can be displayed from the Windows agent or from the firewall CLI.
+![[Confirm Connection to the User-ID Agent.png]]
+###### From the Windows Agent
+Use the **Monitoring** tab in the Windows agent to display IP address-to-username mappings by the Windows agent.
+![[From the Windows Agent.png]]
+###### From the Firewall CLI
+You can display how users and IP addresses are being mapped on the firewall only by using the firewall’s CLI.
+
+Commonly used commands for checking User-ID mappings include the following:
+```
+show user user-id-agent statistics
+```
+```
+show user user-ids all
+```
+```
+show user ip-user-mapping all
+```
+```
+show user ip-user-mapping <ip/netmask>
+```
+![[From the Firewall CLI.png]]
 #### Windows Session Monitoring
 <mark style="background: #BBFABBA6;">Clients who have connected to a <strong>shared file or print resource</strong> will have their session information stored on the domain controller</mark>. 
 
@@ -235,126 +356,8 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 <mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List
 Use the <strong>Exclude List</strong> only to exclude user mapping information for a subset of the subnetworks you added to the Include List.
-## Windows-Based Agent Configuration #configuration 
+## 
 
-<img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
-
-### Installation Location 
-The Windows-based agent can be installed on machines running Windows Server 2008 or later.  
-
-<mark style="background: #CACFD9A6;">You should install the agent in the same network site as the monitored server to optimize bandwidth use</mark>. 
-
-<mark style="background: #FFB86CA6;">You should install two agents on two member servers for redundancy in case one agent or one domain controller fails</mark>.
-![[Installation Location.png]]
-Although an agent could be installed directly on a domain controller, that is not a best practice.
-### User-ID Agent Software
-Use your Palo Alto Networks support account to log in to the Support website. 
-
-After you are logged in, click the Updates > Software Updates link to open the page shown here. 
-
-To simplify finding the User-ID agent download links, use the <strong>Filter By menu</strong> to filter the list for <strong>User Identification Agent</strong>. Then find and download the User-ID agent version that matches your PAN-OS version.
-![[User-ID Agent Software.png]]
-The installation can be <strong>manual</strong>, <mark style="background: #ADCCFFA6;">installing each agent individually by manually launching the downloaded MSI file</mark>, or <strong>automated</strong> where it's possible <mark style="background: #BBFABBA6;">to use endpoint management software such as <strong>Microsoft System Center Configuration Manager</strong> (or SCCM) to remotely install, configure, or upgrade multiple agents in a single operation</mark>.
-### Agent Setup Process
-![[Agent Setup Process.png]]
-<mark style="background: #FFF3A3A6;">Click <strong>Setup</strong> to configure the User-ID agent, click the <strong>Edit</strong> button to open a separate tabbed window that enables you to change any of the settings shown in the Setup pane.
-Then, click <strong>Save</strong> to save your configuration changes but not activate them. Click <strong>Commit</strong> to save and activate your configuration changes. Click <strong>Exit</strong> to close the window without saving your changes</mark>.
-
-By default, <mark style="background: #ADCCFFA6;">the User-ID agent uses TCP port 5007 to communicate to the firewall</mark>. You can change to another port, if necessary, by clicking Edit and then clicking the <strong>Agent Service</strong> tab in the window that opens.
-### Configure the User-ID Agent Account
-The agent should run with a Windows service account that has the necessary permissions to read the security event logs or to perform WMI probing.
-##### Authentication tab
-Use the Authentication tab to <mark style="background: #FFF3A3A6;">configure the agent to use a specific <strong>Windows service account</strong></mark>. 
-<mark style="background: #BBFABBA6;">The authentication information must be configured before you can configure access to monitored servers</mark>. 
-
-<mark style="background: #ADCCFFA6;">By default, the Windows agent runs as the user account used to install the <strong>.msi</strong> file</mark>. 
-
-<mark style="background: #FFB8EBA6;">Most of the necessary permissions are provided if the <strong>Windows-based agent</strong> runs as <u>an account that belongs to the <strong>Domain Administrators</strong> group or to the <strong>Server Operators</strong> and <strong>Event Log Readers</strong> groups</u></mark>. 
-
-<mark style="background: #FFB86CA6;">The user account running the agent also must have permissions to start a <strong>Windows service</strong></mark>. 
-
-However, membership in these groups provides the account with more permissions than just the capability to perform [[#Server Monitoring|server monitoring]] or client probing. 
-
-<mark style="background: #FFF3A3A6;">Therefore, you might want to run the agent using a restricted account with minimal permissions</mark>. 
-<mark style="background: #ADCCFFA6;">The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have</mark>.
-![[Authentication tab.png]]
-##### Server Monitor Tab
-Use the Server Monitor tab to configure [[#Server Monitoring|server monitoring]] or to enable the optional [[#Windows Session Monitoring|session monitoring]].
-![[Server Monitor Tab.png]]
-##### Client Probing Tab
-<mark style="background: #FFB8EBA6;">You can use the Client Probing tab to configure the agent <u>to probe IP addresses</u> for username information</mark>. 
-
-Unlike server monitoring, probing is an active method: 
-- <mark style="background: #BBFABBA6;">The User-ID agent sends a probe</mark> at a configurable interval <mark style="background: #BBFABBA6;">to each learned IP address in its list to verify that the same user still is logged in</mark>. 
-- <mark style="background: #D2B3FFA6;">The results of the probes are used to update the records on the agent</mark>, <mark style="background: #CACFD9A6;">which are passed on to the firewall</mark>. 
-- <mark style="background: #FFB86CA6;">Each learned IP is probed once per interval period</mark>. 
-- <mark style="background: #FF5582A6;"><strong>WMI probing must be enabled on the Windows machines for the probe to succeed</strong></mark>.
-
-<mark style="background: #FFF3A3A6;">Ensure that large environments have a long enough interval for all IP addresses to be probed</mark>. <mark style="background: #ABF7F7A6;">For example, a network with 6,000 users and an interval of 10 minutes would require 10 WMI requests a second from each agent</mark>. These probes are queued and processed by the agent as needed.
-
-<mark style="background: #FF5582A6;">The <strong>NetBIOS probing</strong> is available primarily for backward compatibility with Windows XP and earlier and is not recommended</mark>.
-
-If you enable the optional NetBIOS client probing feature, <mark style="background: #D2B3FFA6;">then the agent requires access through the Windows firewall to port 139</mark>. <mark style="background: #D2B3FFA6;">Windows file and print services also must be enabled</mark>.
-![[Client Probing Tab.png]]
-### Configure the Monitored Servers 
-![[Configure the Monitore Servers.png]]
-Select <strong>Discovery</strong> in the left pane to configure the monitored servers and networks.
-
-<mark style="background: #FF5582A6;">The Auto Discover button works only for domain controllers</mark>. 
-
-<mark style="background: #FFF3A3A6;">Use the <strong>Add</strong> button to add <strong>Exchange servers</strong>, <strong>Novell eDirectory servers</strong>, and <strong>syslog senders</strong>, or to manually add domain controllers</mark>. 
-<mark style="background: #CACFD9A6;">Click Add to open a separate window, where you are prompted for a server name, server address, and server type</mark>.
-### Configure the Firewall to Connect to the Agent
-<mark style="background: #FFB86CA6;">The firewall must be configured with information for every User-ID agent to which it will connect</mark>. 
-Communication between the firewall and a User-ID agent is secured using an encrypted SSL connection.
-![[Configure the Firewall to Connect to the Agent.png]]
-##### Agent Host Type
-You can add an agent using Serial Number or Host and Port. 
-###### Serial Number
-If the firewall will connect to a <mark style="background: #FFF3A3A6;"><strong>Panorama management appliance</strong></mark> to collect User-ID information, then select **Serial Number** as the host type.
-###### Host and Port
-If the firewall will connect to a <mark style="background: #BBFABBA6;"><strong>Windows-based agent</strong> or an agent on another firewall</mark>, then select <strong>Host and Port</strong> as the host type. 
-
-If you select Host and Port, <mark style="background: #ABF7F7A6;">then you must specify each agent’s IP address and listening port</mark>. 
-
-Communication between the firewall and a User-ID agent is secured using an encrypted SSL connection.
-##### Non Configurable Timers
-The firewall has non-configurable timers for its communication to the agent.
-###### 2 Seconds 
-<mark style="background: #FFF3A3A6;">Get the list of new IP address-to-username mappings from the agent</mark>. <mark style="background: #D2B3FFA6;">This list contains <strong>only</strong> new mappings since the last interval</mark>.
-###### 2 Seconds 
-<mark style="background: #FFB86CA6;">Send the list of unknown IP addresses that were encountered in traffic to the agent</mark>.
-###### 5 Seconds
-Get the agent status.
-###### 1 Hour
-<mark style="background: #FF5582A6;">Get the full list of IP address-to-username mappings from the agent</mark>.
-### Confirm Connection to the User-ID Agent #troubleshooting
-To confirm connection to the User-ID agent device, browse to <strong>Device > Data Redistribution > Agents</strong>.
-
-Use the firewall’s web interface and the Windows agent to confirm connectivity between the firewall and the Windows agent. 
-
-Mappings can be displayed from the Windows agent or from the firewall CLI.
-![[Confirm Connection to the User-ID Agent.png]]
-##### From the Windows Agent
-Use the **Monitoring** tab in the Windows agent to display IP address-to-username mappings by the Windows agent.
-![[From the Windows Agent.png]]
-##### From the Firewall CLI
-You can display how users and IP addresses are being mapped on the firewall only by using the firewall’s CLI.
-
-Commonly used commands for checking User-ID mappings include the following:
-```
-show user user-id-agent statistics
-```
-```
-show user user-ids all
-```
-```
-show user ip-user-mapping all
-```
-```
-show user ip-user-mapping <ip/netmask>
-```
-![[From the Firewall CLI.png]]
 ## Data Redistribution 
 <mark style="background: #FFF3A3A6;">Every firewall that enforces user-based policies requires user mapping information</mark>. 
 In a large-scale network,<mark style="background: #FFB86CA6;"> each firewall would have to directly query all of the mapping information sources to map IP addresses to usernames</mark>. 
