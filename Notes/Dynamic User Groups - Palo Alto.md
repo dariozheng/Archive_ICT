@@ -7,21 +7,18 @@ tags:
   - palo_alto/ngfw
   - tobecompleted
 created: 2026-02-06T12:22:51+01:00
-modified: 2026-02-20T14:25:54+01:00
+modified: 2026-02-20T14:54:46+01:00
 aliases:
   - DUGs
 ---
-<strong>DUGs</strong> control access to resources managed by firewall policies, including the Security policy, Authentication policy, and the Decryption policy.
-
-User membership in a DUG is dynamic. <mark style="background: #FF5582A6;">Only tagged usernames become members of the group</mark>. Changes to group membership do not require a commit. 
+<mark style="background: #FFB8EBA6;"><strong>DUGs</strong> are groups where membership is based on tags</mark>.
 
 <mark style="background: #FFF3A3A6;">When you create a policy rule, you add a <strong>DUG</strong> to the <strong>Source User</strong> field as a match criterion</mark>. 
 <mark style="background: #FFB86CA6;">You must commit your firewall configuration after you configure a DUG name and add it to a policy rule</mark>. 
 <mark style="background: #ABF7F7A6;">However, you do not have to perform a commit when users are added or removed from the DUG</mark>. 
 <mark style="background: #FFB8EBA6;">User membership in a DUG is dynamic, and it is controlled by tagging and untagging usernames</mark>.
 <mark style="background: #BBFABBA6;">You can manually tag and untag usernames using the web interface</mark>. 
-<mark style="background: #ADCCFFA6;">Usernames can also be tagged and untagged by using the auto-tagging feature in a Log Forwarding profile or by programming another utility to invoke PAN-OS XML API commands</mark>.
-
+<mark style="background: #ADCCFFA6;">Usernames can also be tagged and untagged by using the auto-tagging feature in a <strong>Log Forwarding profile</strong> or by programming another utility to invoke PAN-OS XML API commands</mark>.
 # Dynamic User Group Operation
 DUGs enable you to create a Security policy that provides auto-remediation in response to user behavior and activity.
 
@@ -33,7 +30,7 @@ In the example here, <mark style="background: #FFF3A3A6;">a user’s traffic is 
 <mark style="background: #BBFABBA6;">If logs are being analyzed locally on the firewall</mark>, <mark style="background: #ABF7F7A6;">the log forwarding configuration can <u>invoke a new built-in action</u></mark> <mark style="background: #ADCCFFA6;">that will associate a <strong>tag</strong> with a username</mark> <mark style="background: #CACFD9A6;">based on one or more events in a log</mark>. 
 
 <mark style="background: #FFB8EBA6;">A third-party system also can associate a <strong>tag</strong> with a username using the PAN-OS XML API</mark>. 
-<mark style="background: #FF5582A6;"><strong>Username-tag registrations</strong> are recorded in and maintained by a User-ID agent</mark>. 
+<mark style="background: #FF5582A6;"><strong>Username-tag registrations</strong> are recorded in and maintained by a <strong>User-ID agent</strong></mark>. 
 
 <mark style="background: #D2B3FFA6;">The firewall uses these username-tag pairs to determine which users currently are members of a DUG</mark>. 
 

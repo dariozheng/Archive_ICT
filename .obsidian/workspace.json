@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "eabe8c44e2094486",
+        "id": "a52758bf7816629d",
         "type": "tabs",
         "children": [
           {
-            "id": "a89698cd63dc978f",
+            "id": "7dea27b5d22b1057",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Notes/Advanced URL Filtering.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Advanced URL Filtering"
+              "title": "New tab"
             }
           }
         ]
@@ -53,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "u",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -156,13 +152,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Advanced URL Filtering.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Advanced URL Filtering"
+              "title": "Outline"
             }
           },
           {
@@ -202,8 +197,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -218,16 +212,18 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "Notes/Palo Alto SASE.md",
+    "Notes/User-ID™.md",
+    "Notes/Dynamic User Groups - Palo Alto.md",
+    "Notes/Data Redistribution - Palo Alto.md",
+    "Notes/Advanced URL Filtering.md",
     "attachments/Advanced URL Filtering 2.png",
     "attachments/Advanced URL Filtering.png",
-    "Notes/Dynamic User Groups - Palo Alto.md",
     "Notes/Untitled.md",
-    "Notes/Data Redistribution - Palo Alto.md",
     "attachments/Data Redistribution.png",
     "attachments/Data Redistribution.png",
-    "Notes/User-ID™.md",
     "Notes/Next-Generation Firewall - Palo Alto Networks.md",
     "Notes/Phishing Protection - Palo Alto.md",
     "Notes/Crawler.md",
@@ -250,7 +246,6 @@
     "attachments/WMI Client Probing.png",
     "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
     "attachments/Multi-Factor Authentication - Palo Alto.png",
-    "attachments/Phishing Protection.png",
     "Notes/Secure Access Service Edge.md",
     "Notes/Data Redistribution Agent.md",
     "attachments/Subscriptions You Can Use With the Firewall.pdf",
@@ -265,7 +260,6 @@
     "Categories/Security.md",
     "Templates/Notes/Systems Template.md",
     "Templates/Notes/Security Template.md",
-    "Categories/Systems.md",
     "Untitled.canvas"
   ]
 }
