@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/User-ID™.md",
+                "file": "Notes/Device-ID.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from User-ID™"
+              "title": "Outgoing links from Device-ID"
             }
           },
           {
@@ -198,7 +198,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -217,7 +217,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "5ddd838cd0b92225",
   "lastOpenFiles": [
     "Notes/User-ID™.md",
     "Notes/Device-ID.md",
