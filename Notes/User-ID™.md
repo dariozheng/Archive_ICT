@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T12:02:43+01:00
+modified: 2026-02-20T12:50:07+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -361,25 +361,7 @@ Use the <strong>Exclude List</strong> only to exclude user mapping information f
 [[#Configure User Mapping Using the PAN-OS Integrated User-ID Agent configuration documentation|PAN-OS Integrated User-ID Agent Configuration]]
 
 ## Data Redistribution 
-<mark style="background: #FFF3A3A6;">Every firewall that enforces user-based policies requires user mapping information</mark>. 
-In a large-scale network,<mark style="background: #FFB86CA6;"> each firewall would have to directly query all of the mapping information sources to map IP addresses to usernames</mark>. 
-<mark style="background: #ABF7F7A6;">With <strong>data redistribution</strong>, you can streamline resource usage by configuring <strong>one</strong> or <strong>more firewalls</strong> <strong>to collect mapping information through redistribution</strong></mark>.
 
-<mark style="background: #FF5582A6;">Redistribution enables you to enforce user-based policies</mark> <mark style="background: #ADCCFFA6;">when users rely on <strong>local sources</strong> for authentication</mark>, such as a regional directory services, <mark style="background: #ADCCFFA6;">but need access to <strong>remote services and applications</strong>, such as a data center application</mark>.
-
-![[Data Redistribution.png]]
-In the example, <mark style="background: #FFB86CA6;">the top-layer <strong>Windows-based User-ID agents</strong> are running on <strong>Windows servers</strong> that <u>map IP addresses to usernames</u></mark>. 
-<mark style="background: #ABF7F7A6;">A single firewall is connecting to each Windows server to obtain the User-ID mappings</mark>. 
-<mark style="background: #BBFABBA6;">Each lower-layer firewall receives the <strong>mapping information and authentication timestamps</strong> from the upper-layer firewall</mark>. 
-<mark style="background: #FF5582A6;">Each firewall can receive mapping information and authentication timestamps from up to 100 redistribution points</mark>.
-### Configure the Firewall to Connect to the Redistribution Point #configuration 
-With data redistribution, <mark style="background: #FFB8EBA6;">you configure the <strong>source</strong> or <strong>redistribution point</strong> the firewall will connect to</mark> and <mark style="background: #ADCCFFA6;">then select the type of information you want it to redistribute</mark>.
-
-<mark style="background: #ABF7F7A6;">You can connect to the source device by using either the serial number or the host and port numbers</mark>. 
-<mark style="background: #D2B3FFA6;">The type of information you select can include IP address-to-username mappings, IP address-to-tag mappings, username-to-tag mappings, Host Information Profile HIP data, or quarantined devices</mark>.
-![[Redistribution Point.png]]
-Optionally, <mark style="background: #FFB8EBA6;">you can configure which networks you want the agent or agents to include in the data redistribution</mark> and <mark style="background: #FFF3A3A6;">which networks you want to exclude from data redistribution</mark>.
-![[Redistribution Point 2.png]]
 ## Configure Group Mapping #configuration 
 <mark style="background: #FFB8EBA6;">A <strong>Server Profile</strong> specifies which <strong>LDAP servers</strong> will be contacted, the <strong>order</strong> in which they are contacted, and <strong>how</strong> and <strong>where</strong> to search the <strong>LDAP directory tree</strong></mark>. 
 ![[Configure Group Mapping.png]]

@@ -217,10 +217,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a89698cd63dc978f",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
-    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
+    "attachments/Data Redistribution.png",
     "Notes/Data Redistribution - Palo Alto.md",
+    "Notes/User-ID™.md",
+    "Notes/Next-Generation Firewall - Palo Alto Networks.md",
     "Notes/Phishing Protection - Palo Alto.md",
     "Notes/Crawler.md",
     "Notes/Backhaul.md",
@@ -233,7 +235,6 @@
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Dynamic User Groups - Palo Alto.md",
-    "Notes/User-ID™.md",
     "Notes/Multi-Factor Authentication - Palo Alto.md",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
@@ -264,7 +265,6 @@
     "Templates/Notes/Security Template.md",
     "Categories/Systems.md",
     "Categories/Microsoft.md",
-    "Templates/Notes/Cloud Computing Template.md",
     "Untitled.canvas"
   ]
 }
