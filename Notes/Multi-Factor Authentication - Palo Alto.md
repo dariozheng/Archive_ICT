@@ -3,7 +3,6 @@ categories:
   - "[[Security]]"
 topic@security:
   - "[[Palo Alto Networks]]"
-  - "[[Security General]]"
 tags:
   - palo_alto/ngfw
   - tobecompleted
