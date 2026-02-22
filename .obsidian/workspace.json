@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Device-ID.md",
-                "mode": "source",
+                "file": "Notes/User-ID™.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Device-ID"
+              "title": "User-ID™"
             }
           }
         ]
@@ -202,8 +202,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -220,6 +219,7 @@
   },
   "active": "5ddd838cd0b92225",
   "lastOpenFiles": [
+    "Notes/App-ID™.md",
     "Notes/User-ID™.md",
     "Notes/Device-ID.md",
     "Notes/Untitled.md",
@@ -237,7 +237,6 @@
     "Notes/Backhaul.md",
     "Notes/Zero Trust Security Model.md",
     "Notes/Server Name Indication.md",
-    "Notes/App-ID™.md",
     "Notes/Common Information Model.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Web-Based Enterprise Management.md",

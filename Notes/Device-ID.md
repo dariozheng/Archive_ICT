@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
 created: 2026-02-20T15:06:36+01:00
-modified: 2026-02-20T16:45:04+01:00
+modified: 2026-02-20T16:55:00+01:00
 ---
 <strong>Device-ID</strong> is a PAN-OS policy construct for enforcement and visibility. 
 It allows administrators <mark style="background: #FFB8EBA6;">to apply consistent <strong>policy control</strong> and <strong>threat prevention</strong> to a <strong>device</strong></mark> <mark style="background: #FF5582A6;">no matter where it <strong>moves</strong> within the network or what its <strong>IP address</strong> is at any given time</mark>. 
@@ -56,7 +56,17 @@ If you use PAN-OS version 8.1.0 through PAN-OS 9.1.x on a firewall, the <mark st
 When a firewall imports <mark style="background: #ADCCFFA6;">Security policy rule recommendations</mark> and <mark style="background: #D2B3FFA6;">IP address-to-device mappings</mark> from <mark style="background: #CACFD9A6;">IoT Security</mark>, <mark style="background: #FFB8EBA6;">the firewall sends its device certificate to an edge server to authenticate itself</mark>. <mark style="background: #FF5582A6;">The edge server authenticates itself to the firewall by sending its own certificate</mark>. <mark style="background: #FFB86CA6;">The firewall uses Online Certificate Status Protocol (OCSP) to validate the server’s certificate by checking it against the following sites using HTTP on TCP port 80</mark>:
 - \*.o.lencr.org
 - x1.c.lencr.org
+
 Panorama performs the same check to validate the edge server’s certificate when Panorama imports policy rule recommendations from IoT Security.
 
 
+
+
+To identify devices with dynamically assigned network settings, the firewall must be able to observe DHCP broadcast and unicast traffic on your network. 
+
+IoT Security also supports static IP devices. 
+
+The more traffic the firewall can observe, the more accurate the policy rule recommendations are for the device and the more rapid and accurate the IP address-to-device mappings are for the device. 
+
+When a device sends DHCP traffic to obtain its network settings, the firewall observes this type of request and generates EALs to send to the logging service, where IoT Security accesses them for analysis.
 # 

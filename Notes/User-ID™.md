@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-20T12:50:07+01:00
+modified: 2026-02-22T22:24:11+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -75,6 +75,7 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 ![[User-ID Windows Session Monitoring.png]]
 #### Windows-Based Agent Configuration  #configuration 
 <img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
+
 ##### Installation Location 
 The Windows-based agent can be installed on machines running Windows Server 2008 or later.  
 
