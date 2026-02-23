@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - "#tobecompleted"
 created: 2026-02-04T14:45:11+01:00
-modified: 2026-02-22T22:24:11+01:00
+modified: 2026-02-23T14:17:59+01:00
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
@@ -146,6 +146,10 @@ Select <strong>Discovery</strong> in the left pane to configure the monitored se
 ##### Configure the Firewall to Connect to the Agent
 <mark style="background: #FFB86CA6;">The firewall must be configured with information for every User-ID agent to which it will connect</mark>. 
 Communication between the firewall and a User-ID agent is secured using an encrypted SSL connection.
+
+If the firewall does not act as collector for other firewalls, there is no need to input Collector Name and the Pre-Shared Key.
+
+On Windows host ensure the port 5007 is not blocked by firewalls.
 ![[Configure the Firewall to Connect to the Agent.png]]
 ###### Agent Host Type
 You can add an agent using Serial Number or Host and Port. 
