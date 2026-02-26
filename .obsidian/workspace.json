@@ -13,15 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/User-ID™.md",
+                "file": "Notes/Panorama.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "User-ID™"
+              "title": "Panorama"
+            }
+          },
+          {
+            "id": "fa002d0c9208188f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/Certificates - Palo Alto.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Certificates - Palo Alto"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -53,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "line:(groupi)",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -156,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/User-ID™.md",
+                "file": "Notes/Certificates - Palo Alto.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of User-ID™"
+              "title": "Outline of Certificates - Palo Alto"
             }
           },
           {
@@ -219,8 +234,11 @@
   },
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
-    "Notes/Device-ID.md",
+    "Notes/Panorama.md",
+    "Notes/Certificates - Palo Alto.md",
+    "Categories/Security.md",
     "Notes/User-ID™.md",
+    "Notes/Device-ID.md",
     "Notes/Next-Generation Firewall - Palo Alto Networks.md",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "Notes/Phishing Protection - Palo Alto.md",
@@ -231,7 +249,6 @@
     "Notes/Crawler.md",
     "Notes/Data Redistribution - Palo Alto.md",
     "Notes/Dynamic User Groups - Palo Alto.md",
-    "Notes/Untitled.md",
     "Notes/Palo Alto SASE.md",
     "attachments/Advanced URL Filtering 2.png",
     "attachments/Advanced URL Filtering.png",
@@ -263,7 +280,6 @@
     "attachments/Configure Authentication Policy.pdf",
     "Notes/|Windows Management Instrumentation.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
-    "Categories/Security.md",
     "Untitled.canvas"
   ]
 }
