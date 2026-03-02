@@ -1,14 +1,14 @@
 ---
 categories:
   - "[[Security]]"
-  - "[[Cloud Computing]]"
 topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/sase
 created: 2026-01-26T14:43:37+01:00
-modified: 2026-01-27T12:07:27+01:00
-topic@cloud:
+modified: 2026-03-02T11:33:14+01:00
+aliases:
+  - SASE
 ---
 The Palo Alto Networks [[Secure Access Service Edge|SASE]] solution is an public-cloud-delivered [[cloud computing glossary#IaaS|IaaS]] product that combines multiple components in a single converged platform. 
 The virtual infrastructure is owned, operated, and maintained by Palo Alto Networks in a single vendor product offering. With each customer with their own isolated data plane. 

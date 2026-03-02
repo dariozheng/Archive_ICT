@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Strata Cloud Manager.md",
+                "file": "Notes/Prisma SASE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Strata Cloud Manager"
+              "title": "Prisma SASE"
             }
           }
         ],
@@ -68,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "file: ",
+                "query": "sase",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -232,10 +232,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "65149f0f355211de",
   "lastOpenFiles": [
-    "Notes/Certificates - Palo Alto.md",
+    "Notes/SASE.md",
+    "Notes/Prisma SASE.md",
     "Notes/Strata Cloud Manager.md",
+    "Notes/Certificates - Palo Alto.md",
     "Notes/Panorama.md",
     "Notes/Device-ID.md",
     "Notes/User-ID™.md",
@@ -251,7 +253,6 @@
     "Notes/Multi-Factor Authentication - Palo Alto.md",
     "Notes/Crawler.md",
     "Notes/Data Redistribution - Palo Alto.md",
-    "Notes/Palo Alto SASE.md",
     "attachments/Advanced URL Filtering 2.png",
     "attachments/Advanced URL Filtering.png",
     "attachments/Data Redistribution.png",
@@ -279,7 +280,6 @@
     "attachments/GlobalProtect Administrator's Guide.pdf",
     "attachments/Configure an Authentication Profile and Sequence.pdf",
     "attachments/Configure Authentication Policy.pdf",
-    "Notes/|Windows Management Instrumentation.md",
     "Untitled.canvas"
   ]
 }
