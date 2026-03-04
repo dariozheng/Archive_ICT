@@ -4,8 +4,6 @@ categories:
 product:
   - "[[Microsoft Protocols]]"
 tags:
-created: 2026-02-10T16:58:05+01:00
-modified: 2026-02-11T17:26:57+01:00
 aliases:
   - Microsoft RPC
   - MSRPC

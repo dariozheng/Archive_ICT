@@ -5,8 +5,6 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/attack
-created: 2026-01-01T21:58:59+01:00
-modified: 2026-01-02T08:05:46+01:00
 ---
 Another type of DoS attack is the distributed denial-of-service (DDoS) attack that employs large numbers of attacking computers to overwhelm the target with bogus traffic.
 

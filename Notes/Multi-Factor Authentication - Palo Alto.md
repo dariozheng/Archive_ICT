@@ -6,8 +6,6 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - tobecompleted
-created: 2026-02-06T11:59:10+01:00
-modified: 2026-02-19T16:54:44+01:00
 aliases:
   - MFA
 ---

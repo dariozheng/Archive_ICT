@@ -4,8 +4,6 @@ categories:
 product:
   - "[[Microsoft Protocols]]"
 tags:
-created: 2026-02-11T15:40:43+01:00
-modified: 2026-02-11T17:50:55+01:00
 aliases:
   - WinRM
 ---

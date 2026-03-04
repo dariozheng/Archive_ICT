@@ -4,8 +4,6 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-created: 2026-01-28T16:02:30+01:00
-modified: 2026-01-29T16:46:49+01:00
 aliases:
   - Software-Defined WAN
   - Software Defined Wan

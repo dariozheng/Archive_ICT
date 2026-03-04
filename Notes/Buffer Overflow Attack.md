@@ -5,8 +5,7 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/attack
-created: 2026-01-01T21:58:31+01:00
-modified: 2026-01-02T08:05:26+01:00
+
 ---
 The goal of an attacker when using a <strong>buffer overflow attack</strong> is <mark style="background: #ABF7F7A6;">to find a <strong>system memory-related flaw</strong> on a server and exploit it</mark>. <mark style="background: #FF5582A6;">Exploiting the buffer memory by overwhelming it with unexpected values usually renders the system inoperable</mark>, creating a <strong>denial-of-service (DoS)</strong> attack.
 

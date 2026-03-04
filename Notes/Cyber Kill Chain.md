@@ -6,8 +6,6 @@ topic@security:
 tags:
 aliases:
   - Cyber Attack Lifecycle
-created: 2026-01-01T22:39:10+01:00
-modified: 2026-01-02T10:21:48+01:00
 ---
 # Phase 1: Reconnaissance
 

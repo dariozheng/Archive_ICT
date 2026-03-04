@@ -4,8 +4,6 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-created: 2026-01-01T21:53:41+01:00
-modified: 2026-01-02T10:22:18+01:00
 ---
 # Network Perimeters
 The network perimeter is the <strong>bolder</strong> between an org’s <strong>secured internal network</strong> and <strong>unsecured external network</strong>.

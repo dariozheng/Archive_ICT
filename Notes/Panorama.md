@@ -5,8 +5,6 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/panorama
-created: 2026-01-04T21:40:31+01:00
-modified: 2026-02-24T11:38:02+01:00
 ---
 # Palo Alto Networks Panorama Overview
 

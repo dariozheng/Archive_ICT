@@ -6,8 +6,6 @@ topic@security:
 tags:
   - palo_alto/cdss
   - tobecompleted
-created: 2026-01-05T12:30:32+01:00
-modified: 2026-02-20T14:40:17+01:00
 ---
 ![[Advanced URL Filtering.png]]
 Advanced URL Filtering combines <mark style="background: #FFB8EBA6;">Palo Alto Networks malicious URL database capabilities</mark> with the industry’s first <mark style="background: #FF5582A6;">real-time web protection engine powered by deep learning</mark>. Now, <mark style="background: #FFB86CA6;">organizations can automatically detect and prevent <strong>new</strong> malicious and <strong>targeted web-based threats</strong> instantly</mark>.

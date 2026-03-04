@@ -4,8 +4,6 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-created: 2026-01-05T12:46:55+01:00
-modified: 2026-02-20T12:32:52+01:00
 aliases:
   - web crawler
   - spider

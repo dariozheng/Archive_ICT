@@ -5,8 +5,6 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/attack
-created: 2026-01-01T21:59:30+01:00
-modified: 2026-01-02T08:06:02+01:00
 ---
 This attack's main purpose is to allow an attacker to intercept communications so that the attacker can actually see the traffic and steal or manipulate it.
 

@@ -3,8 +3,6 @@ categories:
   - "[[Security]]"
 topic@security:
 tags:
-created: 2026-02-26T15:04:22+01:00
-modified: 2026-02-27T12:21:31+01:00
 ---
 It is recommended that when you generate a trust certificate, it should be a <strong>Subordinate certificate authority</strong> (CA) of your PKI. 
 

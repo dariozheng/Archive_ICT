@@ -5,8 +5,6 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
-created: 2026-02-20T15:06:36+01:00
-modified: 2026-02-20T16:55:00+01:00
 ---
 <strong>Device-ID</strong> is a PAN-OS policy construct for enforcement and visibility. 
 It allows administrators <mark style="background: #FFB8EBA6;">to apply consistent <strong>policy control</strong> and <strong>threat prevention</strong> to a <strong>device</strong></mark> <mark style="background: #FF5582A6;">no matter where it <strong>moves</strong> within the network or what its <strong>IP address</strong> is at any given time</mark>. 

@@ -6,8 +6,6 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - tobecompleted
-created: 2026-02-06T12:22:51+01:00
-modified: 2026-02-20T14:54:46+01:00
 aliases:
   - DUGs
 ---

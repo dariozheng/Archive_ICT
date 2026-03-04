@@ -5,8 +5,6 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
-created: 2026-02-20T12:47:26+01:00
-modified: 2026-02-20T14:08:16+01:00
 ---
 <mark style="background: #FFB8EBA6;"><strong>Data redistribution</strong> allows <strong>IP-to-user mappings</strong> from one firewall to be shared with another firewall</mark>. 
 

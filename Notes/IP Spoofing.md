@@ -5,8 +5,6 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/exploit
-created: 2026-01-01T21:59:06+01:00
-modified: 2026-01-02T08:05:57+01:00
 ---
 IP Spoofing is an attack vector, a technique employed in various network-based attacks.
 

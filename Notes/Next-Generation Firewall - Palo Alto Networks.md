@@ -7,8 +7,6 @@ tags:
   - palo_alto/ngfw
   - ngfw
   - tobecompleted
-created: 2026-02-16T16:44:40+01:00
-modified: 2026-02-17T14:20:01+01:00
 ---
 Palo Alto Networks firewalls are built with a <mark style="background: #FFB8EBA6;">dedicated <strong>out-of-band Ethernet network management interface</strong></mark> labeled <mark style="background: #FFB8EBA6;"><strong>MGT</strong></mark>. 
 

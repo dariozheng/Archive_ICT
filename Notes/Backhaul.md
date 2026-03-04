@@ -5,8 +5,6 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - complete
-created: 2026-01-27T16:24:43+01:00
-modified: 2026-02-01T23:01:14+01:00
 aliases:
   - backhauling
   - network backhauling

@@ -6,8 +6,6 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - tobecompleted
-created: 2026-02-06T12:24:24+01:00
-modified: 2026-02-20T11:08:57+01:00
 ---
 ![[Phishing Protection.png]]
 1) Attacker sends phishing email that contains a link to the compromised web server.

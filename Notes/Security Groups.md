@@ -4,8 +4,6 @@ categories:
 topic@security:
   - "[[Security General]]"
 tags:
-created: 2025-12-31T16:46:31+01:00
-modified: 2026-01-04T21:20:38+01:00
 ---
 Security groups <mark style="background: #BBFABBA6;">define the network traffic that should be <strong>explicitly</strong> <strong>permitted</strong></mark> and <mark style="background: #ABF7F7A6;">deny any traffic that is not explicitly permitted</mark>. 
 
