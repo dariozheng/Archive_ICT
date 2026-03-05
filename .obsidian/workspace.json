@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Glossaries/Networking Glossary.md",
+                "file": "Notes/Prisma SD-WAN®.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Networking Glossary"
+              "title": "Prisma SD-WAN®"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Certificates - Palo Alto.md",
+                "file": "Notes/Prisma SD-WAN®.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Certificates - Palo Alto"
+              "title": "Outline of Prisma SD-WAN®"
             }
           },
           {
@@ -198,12 +198,11 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -220,19 +219,20 @@
   },
   "active": "53fd7d83e64b7d68",
   "lastOpenFiles": [
-    "Notes/Prisma SD-WAN®.md",
     "Notes/Glossaries/Networking Glossary.md",
-    "Notes/Glossaries/Cloud Computing Glossary.md",
+    "Notes/Prisma SD-WAN®.md",
+    "Notes/Traffic Flows.md",
+    "Notes/App-ID™.md",
+    "Notes/User-ID™.md",
     "Notes/Glossaries/Security Glossary.md",
+    "Notes/Glossaries/Cloud Computing Glossary.md",
     "Notes/Prisma SASE.md",
     "Notes/Strata Cloud Manager.md",
     "Notes/Certificates - Palo Alto.md",
-    "Notes/User-ID™.md",
     "Notes/Panorama.md",
     "Notes/Device-ID.md",
     "Notes/Backhaul.md",
     "Notes/Server Name Indication.md",
-    "Notes/App-ID™.md",
     "Notes/Cloud Access Security Broker.md",
     "Notes/Dynamic User Groups - Palo Alto.md",
     "Notes/Advanced URL Filtering.md",
@@ -245,7 +245,6 @@
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Management Instrumentation.md",
     "Notes/Web-Based Enterprise Management.md",
-    "Notes/Common Information Model.md",
     "attachments/Explicit Proxy.png",
     "attachments/Prisma Access.png",
     "attachments/Prisma SASE Overview.png",

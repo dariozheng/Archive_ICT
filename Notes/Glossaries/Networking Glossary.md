@@ -23,3 +23,6 @@ Latency refers to the time it takes for data packets to travel from a source to 
 Jitter refers to the inconsistency of data packet arrival intervals or the variation in latency over time.
 #### packet loss
 Packet Loss is when data packets fail to reach their destination.
+#### ethernet handoff
+An Ethernet handoff is the physical interface (typically RJ-45 for copper or SFP for fiber) where an Internet Service Provider (ISP) delivers connectivity to a customer's router or firewall. 
+It acts as the final termination point, allowing direct connection to a standard 10/100/1000 Mbps port without needing intermediate conversion devices
