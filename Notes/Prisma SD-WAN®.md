@@ -198,8 +198,9 @@ LQM is enabled by default on branch to data center paths.
 
 <mark style="background: #FFF3A3A6;">The system can utilize application health probes to determine L3 Reachability. These probes determine whether a circuit is available and usable</mark>.
 
-Probe Profiles, which are global objects containing probe configurations, are defined at the tenant level and linked to Circuit Categories and Circuits.
-
+<strong>Probe Profiles</strong>, which are global objects containing <strong>probe configurations</strong>, are defined at the tenant level and linked to Circuit Categories and Circuits.
 Probe Profiles consist of one or more Probe Configs. 
-
-Probe Configs specify parameters such as Protocol Type (ICMP, DNS, HTTP, HTTPS), EndPoints (IP/FQDN/URL), Frequency, Probe Cycle Duration, and Path Type (Direct, Standard VPNs, Prisma SD-WAN VPNs). 
+<strong>Probe Configs</strong> specify parameters such as Protocol Type (ICMP, DNS, HTTP, HTTPS), EndPoints (IP/FQDN/URL), Frequency, Probe Cycle Duration, and Path Type (Direct, Standard VPNs, Prisma SD-WAN VPNs). 
+##### Configure Probes #documentation #configuration 
+![[Configure Probes.pdf]]
+# 
