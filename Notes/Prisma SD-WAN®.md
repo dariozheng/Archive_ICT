@@ -59,13 +59,9 @@ At this point, the customer can claim the device via the controller. <mark style
 Once the device claim process is complete, and the device is bound to a site, <mark style="background: #ABF7F7A6;">the device will begin establishing IPSec VPN tunnels to authorized devices</mark>. <mark style="background: #ADCCFFA6;">The controller will send 3 encrypted shared secrets to the respective endpoints</mark>.
 Each shared secret has a validity period of one day using a standard wall clock model. 
 The ION endpoints will then exchange [[security glossary#nonces|nonces]] over an encrypted control channel and <mark style="background: #D2B3FFA6;">derive unique tunnel-specific session keys as per the diagram</mark>.
-
 The session keys are re-negotiated every hour by the VPN endpoints. 
-
 This re-negotiation does NOT require active participation by the controller, enabling both extremely high VPN re-key scale and the ability to re-key tunnels in the event that one or more endpoints loses connectivity to the controller. 
-
 In the case that connectivity to controller is lost, Prisma SD-WAN devices can continue to secure VPNs with hourly key rotation, for a period of three days (by default), using the pre-populated shared secrets from the controller. 
-
 Beyond that, the Prisma SD-WAN VPNs will be torn down and if allowed by policy, traffic forwarding can continue on Standard VPNs to third-party endpoints or on underlay paths.
 # Prisma SD-WAN Deployment
 The Prisma SD-WAN non-disruptive insertion model enables customers to easily transition existing sites to the Prisma SD-WAN. 
