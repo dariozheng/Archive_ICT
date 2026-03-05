@@ -251,3 +251,20 @@ These names can be changed,  so often, two or more circuit categories may be mo
 
 <mark style="background: #D2B3FFA6;">Each carrier will have its own WAN network assigned</mark>. <mark style="background: #CACFD9A6;">So, to make sure connectivity comes over the correct carrier circuit, the WAN network needs to match</mark>. <mark style="background: #FFB8EBA6;">Otherwise, the VPN tunnels won’t come up</mark>.
 # Prisma SD-WAN Interfaces 
+There are two categories of interfaces in Prisma SD-WAN: <strong>ports</strong> and <strong>logical interfaces</strong>.
+
+<strong>Ports</strong> <mark style="background: #FFB8EBA6;">are the <strong>physical interfaces</strong> on an ION device</mark>. <mark style="background: #FF5582A6;">All ION ports are ethernet and cellular</mark>:
+- Internet ports
+- WAN ports
+- LAN ports
+- Controller ports
+- Cellular ports
+
+<mark style="background: #FFB86CA6;">Logical interfaces are simply referred to as "interfaces" on an ION device</mark>:
+- Loopback interface
+- Bypass pair
+- Sub-interface
+- Standard VPN
+- Virtual Interface
+- PPPoE Interface
+- L3 LAN Interface
