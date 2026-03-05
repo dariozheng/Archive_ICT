@@ -8,63 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "9d06847ea93f89f4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Notes/Strata Cloud Manager.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Strata Cloud Manager"
-            }
-          },
-          {
             "id": "53fd7d83e64b7d68",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Prisma SD-WAN.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Prisma SD-WAN"
-            }
-          },
-          {
-            "id": "65149f0f355211de",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Notes/Secure Access Service Edge.md",
+                "file": "Notes/Prisma SD-WAN®.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Secure Access Service Edge"
-            }
-          },
-          {
-            "id": "f8f1478a96434180",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Notes/Prisma SASE.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Prisma SASE"
+              "title": "Prisma SD-WAN®"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -245,7 +202,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -260,15 +218,19 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "53fd7d83e64b7d68",
   "lastOpenFiles": [
     "Notes/Prisma SASE.md",
-    "Notes/Cloud Access Security Broker.md",
     "Notes/Strata Cloud Manager.md",
     "Notes/Certificates - Palo Alto.md",
-    "Notes/Panorama.md",
     "Notes/User-ID™.md",
+    "Notes/Panorama.md",
+    "Notes/Prisma SD-WAN®.md",
     "Notes/Device-ID.md",
+    "Notes/Backhaul.md",
+    "Notes/Server Name Indication.md",
+    "Notes/App-ID™.md",
+    "Notes/Cloud Access Security Broker.md",
     "Notes/Dynamic User Groups - Palo Alto.md",
     "Notes/Advanced URL Filtering.md",
     "Notes/Data Redistribution - Palo Alto.md",
@@ -281,13 +243,9 @@
     "Notes/Windows Management Instrumentation.md",
     "Notes/Web-Based Enterprise Management.md",
     "Notes/Common Information Model.md",
-    "Notes/App-ID™.md",
-    "Notes/Server Name Indication.md",
-    "Notes/Backhaul.md",
     "Notes/Zero Trust Security Model.md",
     "Notes/Virtual Private Network.md",
     "Notes/SD-WAN.md",
-    "Notes/Secure Access Service Edge.md",
     "attachments/Explicit Proxy.png",
     "attachments/Prisma Access.png",
     "attachments/Prisma SASE Overview.png",
