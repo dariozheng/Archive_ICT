@@ -23,7 +23,7 @@ Users evaluate their experience based on the performance of the applications the
 <mark style="background: #FF5582A6;"><strong>Prisma SD-WAN ION devices</strong> communicate with the <strong>controller</strong> over a <strong>bidirectionally authenticated Secure Sockets Layer (SSL) connection</strong></mark>. 
 <mark style="background: #FFB86CA6;"><strong>The Prisma SD-WAN branch IONs</strong> automatically establish secure <strong>virtual private network (VPN) connections</strong> with the <strong>Data Center IONs</strong> across the internet</mark>, <mark style="background: #FFF3A3A6;">and across Private WAN links utilizing the same carrier</mark>. By default, a hub-and-spoke design is used.
 
-# Palo Alto Prisma SD-WAN ION
+# Prisma SD-WAN ION
 <mark style="background: #BBFABBA6;"><strong>Palo Alto Networks Prisma SD-WAN Instant-On Network (ION)</strong> <strong>devices</strong> are available in both hardware and software form factors to meet the needs of any location and any deployment scenario</mark>. 
 
 <mark style="background: #D2B3FFA6;">All ION devices are built with <strong>FIPS 140-2</strong> as a security baseline</mark>. <mark style="background: #CACFD9A6;">Encryption keys are specific to each customer and device, with high-frequency key rotation</mark> <mark style="background: #FFB8EBA6;">occurring at a network level for large-scale, full-mesh, partial-mesh, or hub-and-spoke VPN networks</mark>. <mark style="background: #FF5582A6;">All IONs have an <strong>AUX (console) port</strong>, which you can connect at a baud rate of <strong>115200</strong> for out-of-band management</mark>.
@@ -35,9 +35,25 @@ Depending on where the ION device will be deployed, you must purchase a bandwidt
 - Data-center site: For ION devices being deployed at data-center sites, there is one data-center subscription option.
 ##### ION Hardware Models
 ![[ION Hardware Models.png]]
-#### ION Software Models
+##### ION Software Models
 Prisma SD-WAN ION software models can be deployed on ESXi, KVM, and Hyper-V. Additionally, the 7108V can be deployed on Azure, AWS, and GCP cloud platforms.
 ![[ION Software Models.png]]
+##### MIC
+When an ION device is purchased, and prior to shipping to an end customer, <mark style="background: #FFB8EBA6;">a device-specific <strong>manufacturer installed certificate</strong> (MIC) is installed on the device and registered to the customer</mark>. <mark style="background: #FF5582A6;">The uniqueness of the MIC is based on the serial number of the device</mark>. At this point, the device is both <strong>unclaimed</strong> and <strong>untrusted</strong> with no ability to join a customer network.
+
+Once the device is received at the customer location, installed, and powered ON, the device will reach out to controller over any available connection. 
+
+<mark style="background: #FFB86CA6;">The device and controller will mutually authenticate and establish a TLS 1.2 session using the installed MIC</mark>. 
+
+<mark style="background: #FFF3A3A6;">At this point the ION device is in an effective “quarantine” state in that it has no ability to receive policy information from the controller, communicate to other ION devices on the network, or make any policy decisions</mark>. <mark style="background: #BBFABBA6;">The device will show up in an “unclaimed inventory list” for the customer on the controller</mark>.
+
+At this point, the customer can claim the device via the controller. <mark style="background: #ABF7F7A6;">When claiming the device, the controller will generate a <strong>unique device ID</strong> for the device</mark>, <mark style="background: #ADCCFFA6;">generate a device-specific <strong>customer installed certificate (CIC)</strong></mark>, <mark style="background: #D2B3FFA6;">and register the unique <strong>device ID</strong> and <strong>CIC</strong> in the controller</mark>. 
+
+<mark style="background: #CACFD9A6;">The CIC is then transmitted to the device over the existing TLS 443 connection</mark>. <mark style="background: #FFB8EBA6;">The TLS 1.2 session is then <strong>re-established</strong> between the device and the controller using the newly installed CIC</mark>. At this point, the device is not yet participating in the network.
+
+<mark style="background: #FF5582A6;">In order to participate in the network, policies need to be attached to the device</mark> (via site binding) <mark style="background: #FFB86CA6;">and any relevant device specific configurations need to be configured on the device via the controller portal</mark>. 
+
+<mark style="background: #FFF3A3A6;">Once the device configuration and policy assignment is complete</mark>, <mark style="background: #BBFABBA6;">the device will establish VPN tunnels to other ION devices and can start data forwarding as per the defined policies</mark>.
 # Prisma SD-WAN Deployment
 The Prisma SD-WAN non-disruptive insertion model enables customers to easily transition existing sites to the Prisma SD-WAN. 
 
@@ -126,4 +142,4 @@ Below is the list of functions that a branch gateway site performs.
 - <mark style="background: #FFB86CA6;">Automatic establishment of zero-touch secure fabric links</mark> (Prisma SD-WAN VPN) to all branches (in the same domain) and all data-center sites (a hub-and-spoke design)
 - Support for full-mesh and partial-mesh topologies
 - Branch Gateway to Branch Gateway tunnels can be established for data center interconnect (DCI) purposes via an admin action in the UI
-#
+# 
