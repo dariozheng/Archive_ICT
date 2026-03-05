@@ -264,11 +264,9 @@ There are two categories of interfaces in Prisma SD-WAN: <strong>ports</strong> 
 <mark style="background: #ABF7F7A6;">An interface type of Port can be used for <strong>Internet</strong>, <strong>Private WAN</strong>, <strong>LAN</strong>, and <strong>Virtual interfaces</strong></mark>.
 ### Bypass Pair
 ![[Interface type Bypass Pair.png]]
-<mark style="background: #FFB8EBA6;">A bypass pair is a <strong>hardware relay circuit</strong> that is formed by a pair of interfaces for inline fail-to-wire</mark>.
+<mark style="background: #FFB8EBA6;">A bypass pair is a <strong>hardware relay circuit</strong> that is formed by a pair of interfaces for ∫</mark>.
 
-Bypass pairs are typically used for branch HA deployments to provide both device and WAN circuit redundancy. 
-
-If a device that physically terminates the WAN connection fails, the hardware bypass pair enables the ION to continue to bridge traffic even if it's physically powered off. 
+<mark style="background: #FF5582A6;">If a device that physically terminates the WAN connection fails</mark>, <mark style="background: #FFB86CA6;">the <strong>hardware bypass pair</strong> enables the ION <strong>to continue to bridge</strong> traffic even if <u>it's physically powered off</u></mark>. 
 
 As such, the other ION device can continue to forward traffic over that WAN circuit through the failed ION. 
 
