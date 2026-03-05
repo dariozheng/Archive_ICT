@@ -253,18 +253,12 @@ These names can be changed,  so often, two or more circuit categories may be mo
 # Prisma SD-WAN Interfaces 
 There are two categories of interfaces in Prisma SD-WAN: <strong>ports</strong> and <strong>logical interfaces</strong>.
 
-<strong>Ports</strong> <mark style="background: #FFB8EBA6;">are the <strong>physical interfaces</strong> on an ION device</mark>. <mark style="background: #FF5582A6;">All ION ports are ethernet and cellular</mark>:
-- Internet ports
-- WAN ports
-- LAN ports
-- Controller ports
-- Cellular ports
+<strong>Ports</strong> <mark style="background: #FFB8EBA6;">are the <strong>physical interfaces</strong> on an ION device</mark>. <mark style="background: #FF5582A6;">All ION ports are ethernet and cellular</mark>: <strong>Internet ports</strong>, <strong>WAN ports</strong>, <strong>LAN ports</strong>, <strong>Controller ports</strong>, and <strong>Cellular ports</strong>.
 
-<mark style="background: #FFB86CA6;">Logical interfaces are simply referred to as "interfaces" on an ION device</mark>:
-- Loopback interface
-- Bypass pair
-- Sub-interface
-- Standard VPN
-- Virtual Interface
-- PPPoE Interface
-- L3 LAN Interface
+<mark style="background: #FFB86CA6;">Logical interfaces are simply referred to as "interfaces" on an ION device</mark>: <strong>Loopback interface</strong>, <strong>Bypass pair</strong>, <strong>Sub-interface</strong>, <strong>Standard VPN</strong>, <strong>Virtual Interface</strong>, <strong>PPPoE Interface</strong>, and <strong>L3 LAN Interface</strong>.
+## Interface Types
+### Port
+![[Interface type port.png]]
+<mark style="background: #BBFABBA6;">A Port interface type is like an IP interface on a traditional L3 device</mark>.
+
+<mark style="background: #ABF7F7A6;">An interface type of Port can be used for <strong>Internet</strong>, <strong>Private WAN</strong>, <strong>LAN</strong>, and <strong>Virtual interfaces</strong></mark>.
