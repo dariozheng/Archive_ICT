@@ -38,7 +38,7 @@ Depending on where the ION device will be deployed, you must purchase a bandwidt
 ##### ION Software Models
 Prisma SD-WAN ION software models can be deployed on ESXi, KVM, and Hyper-V. Additionally, the 7108V can be deployed on Azure, AWS, and GCP cloud platforms.
 ![[ION Software Models.png]]
-##### MIC
+##### Manufacturer Installed Certificate
 When an ION device is purchased, and prior to shipping to an end customer, <mark style="background: #FFB8EBA6;">a device-specific <strong>manufacturer installed certificate</strong> (MIC) is installed on the device and registered to the customer</mark>. <mark style="background: #FF5582A6;">The uniqueness of the MIC is based on the serial number of the device</mark>. At this point, the device is both <strong>unclaimed</strong> and <strong>untrusted</strong> with no ability to join a customer network.
 
 Once the device is received at the customer location, installed, and powered ON, the device will reach out to controller over any available connection. 
