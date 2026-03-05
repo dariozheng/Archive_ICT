@@ -99,3 +99,21 @@ Below is the list of functions that a branch site performs.
 - Alarm generation via SNMP traps
 - Syslog export
 ## Branch Gateway Site
+<mark style="background: #FFB8EBA6;">A <strong>branch gateway site</strong> is a hybrid site capable of hosting both <strong>users</strong> and <strong>applications</strong> while supporting <strong>VPN termination</strong> from other branch sites</mark>. 
+
+<mark style="background: #FF5582A6;">A typical Prisma SD-WAN branch gateway looks like a standard branch site</mark>. <mark style="background: #FFB86CA6;"><strong>Branch sites</strong> automatically establish zero-touch Secure Fabric Links (Prisma SD-WAN virtual private network (VPN)) to <strong>branch gateway sites</strong> in the same domain</mark>, <mark style="background: #FFF3A3A6;">and the <strong>branch gateway site</strong> establish zero-touch Secure Fabric Links to to all <strong>DC sites</strong> enabling geographical/regional based deployments</mark>. 
+
+Below is the list of functions that a branch gateway site performs.
+- Automatic VPN creation to all Branches in the same domain 
+- LQM server to branches and LQM client to data center
+- Support for DIA access at the site
+- Distributed application analytics
+- Path selection
+- Measurement of link quality
+- Application service-level agreement (SLA) assurance
+- Firewall enforcement and compliance
+- Standard VPN service insertion
+- Analysis of traffic patterns from branch to data center, branch to branch, data center to branch, and branch to third-party service
+- Automatic establishment of zero-touch secure fabric links (Prisma SD-WAN VPN) to all branches (in the same domain) and all data-center sites (a hub-and-spoke design)
+- Support for full-mesh and partial-mesh topologies
+- Branch Gateway to Branch Gateway tunnels can be established for data center interconnect (DCI) purposes via an admin action in the UI
