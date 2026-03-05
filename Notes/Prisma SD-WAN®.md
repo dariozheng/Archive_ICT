@@ -151,4 +151,13 @@ Below is the list of functions that a branch gateway site performs.
 - <mark style="background: #FFB86CA6;">Automatic establishment of zero-touch secure fabric links</mark> (Prisma SD-WAN VPN) to all branches (in the same domain) and all data-center sites (a hub-and-spoke design)
 - Support for full-mesh and partial-mesh topologies
 - Branch Gateway to Branch Gateway tunnels can be established for data center interconnect (DCI) purposes via an admin action in the UI
-# 
+# Circuit Category
+<mark style="background: #FFB8EBA6;">Circuit categories are a logical grouping of various kinds of circuits and connectivity that may be present in the network</mark>. 
+
+<mark style="background: #FF5582A6;">This grouping allows for simplified and reusable network policy rules for the entire network</mark>. 
+
+Internet cable <strong>broadband</strong>, metered internet <strong>LTE</strong> links, <strong>satellite</strong> internet links, internet <strong>DSL</strong>, and private <strong>MPLS</strong> are examples of circuit groupings.
+
+<mark style="background: #FFB86CA6;">By default, there are a few pre-defined circuit categories in the system that you can use when configuring circuits</mark>. A total of 64 circuit categories are available. A maximum of 32 public circuits and 32 private circuits are allowed for each category.
+
+<mark style="background: #FFF3A3A6;">Each circuit category has a unique circuit Label</mark>. <mark style="background: #BBFABBA6;">The Label is used by path policies as a unique identifier</mark>. <mark style="background: #ABF7F7A6;">During the initial site setup, you must define circuits and circuit categories, but you can edit or change them at any time</mark>. <mark style="background: #ADCCFFA6;">Circuit category settings determine how the circuit will be used</mark>. 
