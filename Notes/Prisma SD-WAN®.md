@@ -268,6 +268,6 @@ There are two categories of interfaces in Prisma SD-WAN: <strong>ports</strong> 
 
 <mark style="background: #FF5582A6;">If a device that physically terminates the WAN connection fails</mark>, <mark style="background: #FFB86CA6;">the <strong>hardware bypass pair</strong> enables the ION <strong>to continue to bridge</strong> traffic even if <u>it's physically powered off</u></mark>. 
 
-As such, the other ION device can continue to forward traffic over that WAN circuit through the failed ION. 
+<mark style="background: #FFF3A3A6;">As such, the other ION device can continue to forward traffic over that WAN circuit through the failed ION</mark>. 
 
-Additionally, when the site is in Analytics mode or in Control mode, a bypass pair port type allow for the transparent insertion of an ION device between Layer 2 and Layer 3 devices at the branch. Thereby, making proof of concepts and migrations minimally disruptive, requiring little to know configuration changes in the surrounding branch infrastructure.
+Additionally, when the site is in Analytics mode or in Control mode, <mark style="background: #BBFABBA6;">a <strong>bypass pair port</strong> type allow for the transparent insertion of an ION device between Layer 2 and Layer 3 devices at the branch</mark>. Thereby, making proof of concepts and migrations minimally disruptive, requiring little to know configuration changes in the surrounding branch infrastructure.
