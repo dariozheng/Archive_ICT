@@ -287,4 +287,13 @@ Other uses for the controller port:
 - <mark style="background: #ABF7F7A6;">ION HA control interface</mark> (where applicable)
 - Also used in legacy Private L2 deployments for traffic from LQM, PCM and, BFD (such as deployments in which there are no L3 direct private forwarding interfaces). This mode is not generally implemented in favor of L3 deployments.
 ### AUX
+<mark style="background: #FFB8EBA6;">The AUX port is used for out-of-band management</mark>. 
 
+<mark style="background: #FF5582A6;">It is a <strong>serial port</strong>, allowing use of a one-time password for emergency access</mark>. <mark style="background: #FFB86CA6;">You can access interface information and configuration</mark>. <mark style="background: #FFF3A3A6;">The idea is to get a device online again, communicating with the controller</mark>. For example, the IP address could be changed from static to DHCP to get the device back online.
+
+The dedicated (fixed) integrated port can be used for:
+- Serial console access to the device (Device Toolkit). Baud rate is 115200.
+- Emergency offline access using a one-time password
+- Performing local diagnostics
+- Configuration scope intentionally limited to Interface/IP configuration
+## Standard VPNs
