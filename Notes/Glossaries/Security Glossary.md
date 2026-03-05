@@ -21,3 +21,5 @@ Metamorphism is a term to describe malware that is capable of changing its code 
 Polymorphism is a term to describe how malicious code can change in a variety of ways, including changing filenames or using encryption with variable keys, to avoid detection.
 #### end-to-end application performance
 <strong>End-to-end (E2E) application performance</strong> measures the entire journey of a user request from the browser/client, through network, servers, and databases, to the final result.
+#### LQM server
+Link Quality Metrics provides the capability to monitor Prisma Access circuit connectivity health through the Link Quality Monitoring (LQM) metrics on the web interface. 

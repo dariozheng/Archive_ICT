@@ -103,6 +103,8 @@ Below is the list of functions that a branch site performs.
 
 <mark style="background: #FF5582A6;">A typical Prisma SD-WAN branch gateway looks like a standard branch site</mark>. <mark style="background: #FFB86CA6;"><strong>Branch sites</strong> automatically establish zero-touch Secure Fabric Links (Prisma SD-WAN virtual private network (VPN)) to <strong>branch gateway sites</strong> in the same domain</mark>, <mark style="background: #FFF3A3A6;">and the <strong>branch gateway site</strong> establish zero-touch Secure Fabric Links to to all <strong>DC sites</strong> enabling geographical/regional based deployments</mark>. 
 
+<mark style="background: #BBFABBA6;">While standard branch sites only connect to hubs</mark>, <mark style="background: #ABF7F7A6;">branch gateway site act as <strong>regional hubs</strong></mark>, <mark style="background: #ADCCFFA6;">supporting automatic VPN meshes with other branches in their domain, superior throughput, and internet transit</mark>.
+
 Below is the list of functions that a branch gateway site performs.
 - <mark style="background: #BBFABBA6;">Automatic VPN creation to all Branches in the same domain</mark> 
 - LQM server to branches and LQM client to data center
