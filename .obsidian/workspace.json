@@ -11,14 +11,12 @@
             "id": "53fd7d83e64b7d68",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "Notes/Prisma SD-WAN®.md",
-                "mode": "source",
-                "source": false
+                "file": "attachments/large-6.png"
               },
-              "icon": "lucide-file",
-              "title": "Prisma SD-WAN®"
+              "icon": "lucide-image",
+              "title": "large-6"
             }
           }
         ]
@@ -156,13 +154,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Prisma SD-WAN®.md",
+                "file": "attachments/large-6.png",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Prisma SD-WAN®"
+              "title": "Outline of large-6"
             }
           },
           {
@@ -217,8 +215,10 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "53fd7d83e64b7d68",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "Notes/Prisma SD-WAN®.md",
+    "attachments/large-6.png",
     "attachments/Configure Probes.pdf",
     "attachments/L3 Reachability.png",
     "attachments/VPN Keep-Alive.png",
@@ -226,7 +226,6 @@
     "attachments/Application Reachability Probes and QoS.png",
     "attachments/Use For Controller Connections.png",
     "Notes/Glossaries/Networking Glossary.md",
-    "Notes/Prisma SD-WAN®.md",
     "Notes/Glossaries/Security Glossary.md",
     "attachments/ION Software Models.png",
     "attachments/ION Hardware Models.png",
@@ -254,7 +253,6 @@
     "Notes/Windows Management Instrumentation.md",
     "attachments/Explicit Proxy.png",
     "attachments/Prisma Access.png",
-    "attachments/Prisma SASE Overview.png",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
@@ -264,7 +262,6 @@
     "attachments/Set Up Network Access for External Services.pdf",
     "attachments/GlobalProtect Administrator's Guide.pdf",
     "attachments/Configure an Authentication Profile and Sequence.pdf",
-    "attachments/Configure Authentication Policy.pdf",
     "Untitled.canvas"
   ]
 }

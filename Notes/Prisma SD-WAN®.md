@@ -203,4 +203,5 @@ Probe Profiles consist of one or more Probe Configs.
 <strong>Probe Configs</strong> specify parameters such as Protocol Type (ICMP, DNS, HTTP, HTTPS), EndPoints (IP/FQDN/URL), Frequency, Probe Cycle Duration, and Path Type (Direct, Standard VPNs, Prisma SD-WAN VPNs). 
 ##### Configure Probes #documentation #configuration 
 ![[Configure Probes.pdf]]
-# 
+## Circuit Information 
+The Circuit Information page provides a site-level configuration that can be used for more granular control. This takes precedence over the circuit category setting.![[large-6.png]]
