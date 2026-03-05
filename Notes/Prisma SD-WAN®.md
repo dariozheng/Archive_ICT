@@ -161,3 +161,5 @@ Internet cable <strong>broadband</strong>, metered internet <strong>LTE</strong>
 <mark style="background: #FFB86CA6;">By default, there are a few pre-defined circuit categories in the system that you can use when configuring circuits</mark>. A total of 64 circuit categories are available. A maximum of 32 public circuits and 32 private circuits are allowed for each category.
 
 <mark style="background: #FFF3A3A6;">Each circuit category has a unique circuit Label</mark>. <mark style="background: #BBFABBA6;">The Label is used by path policies as a unique identifier</mark>. <mark style="background: #ABF7F7A6;">During the initial site setup, you must define circuits and circuit categories, but you can edit or change them at any time</mark>. <mark style="background: #ADCCFFA6;">Circuit category settings determine how the circuit will be used</mark>. 
+## Circuit Category #configuration 
+### Controller Connections 
