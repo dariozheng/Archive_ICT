@@ -23,3 +23,6 @@ Polymorphism is a term to describe how malicious code can change in a variety of
 <strong>End-to-end (E2E) application performance</strong> measures the entire journey of a user request from the browser/client, through network, servers, and databases, to the final result.
 #### LQM server
 Link Quality Metrics provides the capability to monitor Prisma Access circuit connectivity health through the Link Quality Monitoring (LQM) metrics on the web interface. 
+#### nonces
+In cryptography, a nonce is an arbitrary number that can be used just once in a cryptographic communication. 
+It is often a random or pseudo-random number issued in an authentication protocol to ensure that each communication session is unique, and therefore that old communications cannot be reused in replay attacks.

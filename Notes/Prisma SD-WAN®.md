@@ -25,7 +25,7 @@ Users evaluate their experience based on the performance of the applications the
 
 All policy rules (network connectivity, application definitions, etc.), network topology (what devices are allowed to communicate to which other devices), encrypted certificates, and encrypted shared secrets <mark style="background: #BBFABBA6;">are communicated to the endpoints via a secure Transport Layer Security (TLS) 1.2 session</mark>. <mark style="background: #ABF7F7A6;">The devices in turn send</mark> anonymized network and application statistics (e.g., bytes transferred, link capacity, voice MOS score, transaction error rate, transaction time) events, alerts, and alarms back to the controller <mark style="background: #ABF7F7A6;">via the secure TLS connection</mark>. <mark style="background: #ADCCFFA6;">No payload or data is ever decrypted by the endpoints or transmitted to the controller</mark>.
 # Prisma SD-WAN ION
-<mark style="background: #BBFABBA6;"><strong>Palo Alto Networks Prisma SD-WAN Instant-On Network (ION)</strong> <strong>devices</strong> are available in both hardware and software form factors to meet the needs of any location and any deployment scenario</mark>. 
+<mark style="background: #FFB8EBA6;"><strong>Palo Alto Networks Prisma SD-WAN Instant-On Network (ION)</strong> <strong>devices</strong> are available in both hardware and software form factors to meet the needs of any location and any deployment scenario</mark>. 
 
 <mark style="background: #D2B3FFA6;">All ION devices are built with <strong>FIPS 140-2</strong> as a security baseline</mark>. <mark style="background: #CACFD9A6;">Encryption keys are specific to each customer and device, with high-frequency key rotation</mark> <mark style="background: #FFB8EBA6;">occurring at a network level for large-scale, full-mesh, partial-mesh, or hub-and-spoke VPN networks</mark>. <mark style="background: #FF5582A6;">All IONs have an <strong>AUX (console) port</strong>, which you can connect at a baud rate of <strong>115200</strong> for out-of-band management</mark>.
 
@@ -55,6 +55,18 @@ At this point, the customer can claim the device via the controller. <mark style
 <mark style="background: #FF5582A6;">In order to participate in the network, policies need to be attached to the device</mark> (via site binding) <mark style="background: #FFB86CA6;">and any relevant device specific configurations need to be configured on the device via the controller portal</mark>. 
 
 <mark style="background: #FFF3A3A6;">Once the device configuration and policy assignment is complete</mark>, <mark style="background: #BBFABBA6;">the device will establish VPN tunnels to other ION devices and can start data forwarding as per the defined policies</mark>.
+
+Once the device claim process is complete, and the device is bound to a site, <mark style="background: #ABF7F7A6;">the device will begin establishing IPSec VPN tunnels to authorized devices</mark>. <mark style="background: #ADCCFFA6;">The controller will send 3 encrypted shared secrets to the respective endpoints</mark>.
+Each shared secret has a validity period of one day using a standard wall clock model. 
+The ION endpoints will then exchange [[security glossary#nonces|nonces]] over an encrypted control channel and <mark style="background: #D2B3FFA6;">derive unique tunnel-specific session keys as per the diagram</mark>.
+
+The session keys are re-negotiated every hour by the VPN endpoints. 
+
+This re-negotiation does NOT require active participation by the controller, enabling both extremely high VPN re-key scale and the ability to re-key tunnels in the event that one or more endpoints loses connectivity to the controller. 
+
+In the case that connectivity to controller is lost, Prisma SD-WAN devices can continue to secure VPNs with hourly key rotation, for a period of three days (by default), using the pre-populated shared secrets from the controller. 
+
+Beyond that, the Prisma SD-WAN VPNs will be torn down and if allowed by policy, traffic forwarding can continue on Standard VPNs to third-party endpoints or on underlay paths.
 # Prisma SD-WAN Deployment
 The Prisma SD-WAN non-disruptive insertion model enables customers to easily transition existing sites to the Prisma SD-WAN. 
 
