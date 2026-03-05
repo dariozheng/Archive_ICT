@@ -130,6 +130,7 @@ Below is the list of functions that a branch site performs.
 - Buffering of statistics
 - Alarm generation via SNMP traps
 - Syslog export
+## 
 ## Branch Gateway Site
 <mark style="background: #FFB8EBA6;">A <strong>branch gateway site</strong> is a hybrid site capable of hosting both <strong>users</strong> and <strong>applications</strong> while supporting <strong>VPN termination</strong> from other branch sites</mark>. 
 
@@ -151,7 +152,11 @@ Below is the list of functions that a branch gateway site performs.
 - <mark style="background: #FFB86CA6;">Automatic establishment of zero-touch secure fabric links</mark> (Prisma SD-WAN VPN) to all branches (in the same domain) and all data-center sites (a hub-and-spoke design)
 - Support for full-mesh and partial-mesh topologies
 - Branch Gateway to Branch Gateway tunnels can be established for data center interconnect (DCI) purposes via an admin action in the UI
-# Circuit Category
+# Circuit
+<strong>Circuits</strong> consist of <strong>circuit categories</strong> which are used in policy rules to identify paths allowed for an application. 
+
+By default, there are a few pre-defined circuit categories in the system that you can use when configuring circuits.
+## Circuit Category
 <mark style="background: #FFB8EBA6;">Circuit categories are a logical grouping of various kinds of circuits and connectivity that may be present in the network</mark>. 
 
 <mark style="background: #FF5582A6;">This grouping allows for simplified and reusable network policy rules for the entire network</mark>. 
@@ -160,6 +165,41 @@ Internet cable <strong>broadband</strong>, metered internet <strong>LTE</strong>
 
 <mark style="background: #FFB86CA6;">By default, there are a few pre-defined circuit categories in the system that you can use when configuring circuits</mark>. A total of 64 circuit categories are available. A maximum of 32 public circuits and 32 private circuits are allowed for each category.
 
-<mark style="background: #FFF3A3A6;">Each circuit category has a unique circuit Label</mark>. <mark style="background: #BBFABBA6;">The Label is used by path policies as a unique identifier</mark>. <mark style="background: #ABF7F7A6;">During the initial site setup, you must define circuits and circuit categories, but you can edit or change them at any time</mark>. <mark style="background: #ADCCFFA6;">Circuit category settings determine how the circuit will be used</mark>. 
-## Circuit Category #configuration 
-### Controller Connections 
+<mark style="background: #FFF3A3A6;">Each <strong>circuit category</strong> has a unique <strong>circuit Label</strong></mark>. <mark style="background: #BBFABBA6;">The <strong>Label</strong> is used by path policies as a unique identifier</mark>. <mark style="background: #ABF7F7A6;">During the initial site setup, you must define <strong>circuits</strong> and <strong>circuit categories</strong>, but you can edit or change them at any time</mark>. <mark style="background: #ADCCFFA6;">Circuit category settings determine how the circuit will be used</mark>. 
+### Circuit Category #configuration 
+#### Use For Controller Connections
+![[Use For Controller Connections.png]]
+<mark style="background: #FFB8EBA6;">This is a <strong>tenant-wide</strong> setting for the <strong>circuit</strong> to be used for <strong>controller connections</strong></mark>.
+
+<mark style="background: #FF5582A6;">Expensive <strong>circuits</strong> can be <strong>excluded</strong> to meet business intent</mark>. <mark style="background: #FFB86CA6;">Deselect this check box to <strong>exclude</strong> this circuit category from connecting to the controller for <strong>device related services</strong></mark>. For example, you can deselect for metered LTE circuits, which are more costly.
+
+<mark style="background: #FFF3A3A6;">If a circuit is excluded for controller connectivity, then in the absence of any viable link, the excluded circuit can be used for minimum controller connectivity</mark> - <strong>Message Routing Layer</strong> (MRL) and <strong>Remote Access</strong>. <mark style="background: #BBFABBA6;">Statistics and logs will be written to the disk and not exported to the controller</mark>.
+<mark style="background: #ABF7F7A6;">Once an allowed circuit comes up, statistics and logs will be exported to controller</mark>.
+#### Application Reachability Probes and QoS
+![[Application Reachability Probes and QoS.png]]
+- **Use For Application Reachability Probes:** This allows the circuit category to check the reachability of an application on a given path.
+- **QoS:** Select QoS to enable shaping and queuing of traffic as defined in your application policy rules.
+#### Link Quality Monitoring (LQM)
+![[Link Quality Monitoring (LQM).png]]
+<mark style="background: #ADCCFFA6;">Select <strong>LQ Monitoring</strong> to enable link quality measurements such as <strong>latency</strong>, <strong>loss</strong>, and <strong>jitter</strong></mark>.
+
+You can optionally check the box to use LQM for all paths.
+
+LQM is enabled by default on branch to data center paths.
+#### VPN Keep-Alive
+![[VPN Keep-Alive.png]]
+  
+<mark style="background: #FFB8EBA6;">The <strong>Keep-Alive Failure Count</strong> indicates the number of consecutive missed keep-alive packets before a link is declared as <strong>down</strong></mark>. The default value is 3.
+
+<mark style="background: #FF5582A6;">The <strong>Keep-Alive Interval</strong> indicates the time interval in milliseconds between two VPN Keep-Alive packets</mark>. The default value is 1000 ms.
+#### L3 Reachability
+![[L3 Reachability.png]]
+<mark style="background: #FFB86CA6;">Prisma SD-WAN supports <strong>always-on probing</strong>, enabling measurement of key metrics such as round trip latency, packet loss, jitter and other metrics to any ICMP/DNS/HTTP/HTTPS service across all transports (Direct, Fabric, Standard VPN)</mark>. 
+
+<mark style="background: #FFF3A3A6;">The system can utilize application health probes to determine L3 Reachability. These probes determine whether a circuit is available and usable</mark>.
+
+Probe Profiles, which are global objects containing probe configurations, are defined at the tenant level and linked to Circuit Categories and Circuits.
+
+Probe Profiles consist of one or more Probe Configs. 
+
+Probe Configs specify parameters such as Protocol Type (ICMP, DNS, HTTP, HTTPS), EndPoints (IP/FQDN/URL), Frequency, Probe Cycle Duration, and Path Type (Direct, Standard VPNs, Prisma SD-WAN VPNs). 
