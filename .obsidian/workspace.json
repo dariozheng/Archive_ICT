@@ -11,12 +11,14 @@
             "id": "53fd7d83e64b7d68",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "attachments/large-6.png"
+                "file": "Notes/Prisma SD-WAN®.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "large-6"
+              "icon": "lucide-file",
+              "title": "Prisma SD-WAN®"
             }
           }
         ]
@@ -154,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "attachments/large-6.png",
+                "file": "Notes/Prisma SD-WAN®.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of large-6"
+              "title": "Outline of Prisma SD-WAN®"
             }
           },
           {
@@ -217,18 +219,21 @@
   },
   "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/Private WAN Circuits.png",
+    "attachments/Internet Circuits.png",
+    "attachments/Minimize Cellular Usage.png",
+    "attachments/Circuit Information Speed.png",
+    "attachments/Circuit Information BFD Mode.png",
+    "attachments/Circuit Information Tags.png",
+    "attachments/Circuit Information Name.png",
+    "attachments/Circuit Information.png",
     "Notes/Prisma SD-WAN®.md",
-    "attachments/large-6.png",
     "attachments/Configure Probes.pdf",
     "attachments/L3 Reachability.png",
     "attachments/VPN Keep-Alive.png",
     "attachments/Link Quality Monitoring (LQM).png",
-    "attachments/Application Reachability Probes and QoS.png",
-    "attachments/Use For Controller Connections.png",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
-    "attachments/ION Software Models.png",
-    "attachments/ION Hardware Models.png",
     "Notes/Traffic Flows.md",
     "Notes/App-ID™.md",
     "Notes/User-ID™.md",
@@ -251,8 +256,6 @@
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Management Instrumentation.md",
-    "attachments/Explicit Proxy.png",
-    "attachments/Prisma Access.png",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",

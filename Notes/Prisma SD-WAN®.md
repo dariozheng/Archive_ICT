@@ -204,4 +204,50 @@ Probe Profiles consist of one or more Probe Configs.
 ##### Configure Probes #documentation #configuration 
 ![[Configure Probes.pdf]]
 ## Circuit Information 
-The Circuit Information page provides a site-level configuration that can be used for more granular control. This takes precedence over the circuit category setting.![[large-6.png]]
+The Circuit Information page provides a site-level configuration that can be used for more granular control. This takes precedence over the circuit category setting.
+### Circuit Information #configuration 
+#### Controller Connections
+![[Circuit Information.png]]
+- <strong>Use Circuit Category Setting</strong>: The circuit inherits the setting from the globally defined circuit category. This is the default.
+- <strong>Yes</strong>: The circuit is eligible for all controller communications.
+- <strong>No</strong>: The circuit will only be used for device configuration communication if no other methods are available.
+#### Name
+![[Circuit Information Name.png]]
+When configuring the site-level circuit details, it is recommended that you provide a meaningful circuit name, which will help troubleshoot path-related flow details.
+Use abbreviations that include Site Name, Circuit Type, and Circuit Provider.
+#### Tags
+![[Circuit Information Tags.png]]Users can add comments to configure a device, such as a site description, port labeling, and tags. 
+The tags and descriptions help identify what the port is used for, and <mark style="background: #FFF3A3A6;">tags can also be used for automation purposes</mark>.
+#### BFB Mode
+![[Circuit Information BFD Mode.png]]
+Aggressive mode is the default mode and is recommended by Prisma SD-WAN for fast failure detection of links.
+#### Speed
+![[Circuit Information Speed.png]]
+<mark style="background: #FFB8EBA6;">Circuit speed hardcoding is required for proper QoS operations on the ION</mark>. 
+
+The WAN circuit speeds must be matched with carrier-provided specifications and specifically configured. <mark style="background: #FF5582A6;">The default values should not be trusted</mark>.
+
+<mark style="background: #FFB86CA6;">It is recommended to use a slightly lower value (1-2 %) for the download and upload bandwidth on the circuit, from the values given by the provider</mark>. 
+
+<mark style="background: #FFF3A3A6;">This is to ensure that the ION QoS kicks in slightly before the circuit limit is reached, to ensure prioritization of the critical applications</mark>. For example, <mark style="background: #BBFABBA6;">if the circuit is rated for <strong>100Mbps</strong> down and <strong>50Mbps</strong> up</mark>, <mark style="background: #ABF7F7A6;">you can configure the circuit settings for <strong>99Mbps</strong> down, <strong>49Mbps</strong> up</mark>. This ensures that the ION QoS starts kicking in at 99Mbps down, and 49Mbps up, and starts prioritizing applications according to the configured QoS policies.
+#### Minimize Cellular Usage
+![[Minimize Cellular Usage.png]]
+<mark style="background: #FFB8EBA6;">Minimize the data usage of <strong>metered 5G/LTE backup links</strong> when other active paths are unavailable</mark>. With this best practice, <mark style="background: #FF5582A6;">you send data over metered links</mark> <mark style="background: #FFB86CA6;">for business continuity only when the primary connection is unavailable</mark>, ensuring flexibility and agility at a lower cost.
+
+<mark style="background: #FFF3A3A6;">Extending the <strong>VPN keep-alive timer</strong> will reduce the amount of data used on this cellular carrier</mark>, but by <mark style="background: #BBFABBA6;">extending this timer it can reduce the failover time if the ION moves from using one DC ION to another DC ION in the DC cluster</mark>.
+#### Internet Circuits
+![[Internet Circuits.png]]
+<mark style="background: #FFB8EBA6;">When creating a circuit, you must select a circuit category and a <strong>WAN (carrier)</strong></mark>. <mark style="background: #FF5582A6;">You cannot use the same <strong>category</strong> twice at a site</mark>.
+
+For example, you cannot designate two Internet Cable circuits at a site even if they are from different carriers. 
+<mark style="background: #FFB86CA6;">This is because the circuit category defines the Circuit Label and is used in path policy</mark>. <mark style="background: #FFF3A3A6;">Having two circuits at a site with Ethernet Internet as the circuit category would not allow you to differentiate between those circuits in a path policy</mark>. 
+
+There are 30 Internet categories and 30 public categories, including about 20 named public or private. 
+These names can be changed,  so often, two or more circuit categories may be modified to a naming convention, such as ACME-INTERNET-1 and ACME-INTERNET-2.
+#### Private WAN Circuits
+![[Private WAN Circuits.png]]
+<mark style="background: #BBFABBA6;">If a path policy requires the use of the overlay over a private path (e.g., MPLS)</mark>, <strong>make sure</strong> <mark style="background: #ABF7F7A6;">the WAN network matches at the branch site and data center</mark>. 
+
+<mark style="background: #ADCCFFA6;">On the data center side, there could be multiple MPLS circuits from different carriers</mark>. 
+
+<mark style="background: #D2B3FFA6;">Each carrier will have its own WAN network assigned</mark>. <mark style="background: #CACFD9A6;">So, to make sure connectivity comes over the correct carrier circuit, the WAN network needs to match</mark>. <mark style="background: #FFB8EBA6;">Otherwise, the VPN tunnels won’t come up</mark>.
