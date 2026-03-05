@@ -26,11 +26,18 @@ Users evaluate their experience based on the performance of the applications the
 # Palo Alto Prisma SD-WAN ION
 <mark style="background: #BBFABBA6;"><strong>Palo Alto Networks Prisma SD-WAN Instant-On Network (ION)</strong> <strong>devices</strong> are available in both hardware and software form factors to meet the needs of any location and any deployment scenario</mark>. 
 
+<mark style="background: #D2B3FFA6;">All ION devices are built with <strong>FIPS 140-2</strong> as a security baseline</mark>. <mark style="background: #CACFD9A6;">Encryption keys are specific to each customer and device, with high-frequency key rotation</mark> <mark style="background: #FFB8EBA6;">occurring at a network level for large-scale, full-mesh, partial-mesh, or hub-and-spoke VPN networks</mark>. <mark style="background: #FF5582A6;">All IONs have an <strong>AUX (console) port</strong>, which you can connect at a baud rate of <strong>115200</strong> for out-of-band management</mark>.
+
 <mark style="background: #ABF7F7A6;">Prisma SD-WAN virtual form factors can be deployed on ESXi, KVM, Hyper-V, and cloud platforms, such as Amazon Web Services (AWS), Microsoft Azure, and Google Cloud Platform (GCP)</mark>.
 ##### Licensing 
 Depending on where the ION device will be deployed, you must purchase a bandwidth-based subscription or data-center subscription.
 - Branch site: For ION devices being deployed at branch sites, the options for bandwidth-based subscriptions range from 25Mbps to 2.5Gbps.
 - Data-center site: For ION devices being deployed at data-center sites, there is one data-center subscription option.
+##### ION Hardware Models
+![[ION Hardware Models.png]]
+#### ION Software Models
+Prisma SD-WAN ION software models can be deployed on ESXi, KVM, and Hyper-V. Additionally, the 7108V can be deployed on Azure, AWS, and GCP cloud platforms.
+![[ION Software Models.png]]
 # Prisma SD-WAN Deployment
 The Prisma SD-WAN non-disruptive insertion model enables customers to easily transition existing sites to the Prisma SD-WAN. 
 
@@ -119,3 +126,4 @@ Below is the list of functions that a branch gateway site performs.
 - <mark style="background: #FFB86CA6;">Automatic establishment of zero-touch secure fabric links</mark> (Prisma SD-WAN VPN) to all branches (in the same domain) and all data-center sites (a hub-and-spoke design)
 - Support for full-mesh and partial-mesh topologies
 - Branch Gateway to Branch Gateway tunnels can be established for data center interconnect (DCI) purposes via an admin action in the UI
+#

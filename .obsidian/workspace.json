@@ -217,11 +217,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "53fd7d83e64b7d68",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/ION Software Models.png",
+    "attachments/ION Hardware Models.png",
+    "Notes/Prisma SD-WAN®.md",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Glossaries/Networking Glossary.md",
-    "Notes/Prisma SD-WAN®.md",
     "Notes/Traffic Flows.md",
     "Notes/App-ID™.md",
     "Notes/User-ID™.md",
@@ -244,7 +246,6 @@
     "Notes/Windows Remote Management Protocol.md",
     "Notes/Microsoft Remote Procedure Call.md",
     "Notes/Windows Management Instrumentation.md",
-    "Notes/Web-Based Enterprise Management.md",
     "attachments/Explicit Proxy.png",
     "attachments/Prisma Access.png",
     "attachments/Prisma SASE Overview.png",
@@ -257,7 +258,6 @@
     "attachments/Data Redistribution.png",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
-    "attachments/Define the Monitored Server(s).png",
     "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
     "attachments/Subscriptions You Can Use With the Firewall.pdf",
     "attachments/Configure Service Routes.pdf",
