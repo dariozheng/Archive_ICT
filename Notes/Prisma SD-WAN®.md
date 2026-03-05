@@ -271,3 +271,20 @@ There are two categories of interfaces in Prisma SD-WAN: <strong>ports</strong> 
 <mark style="background: #FFF3A3A6;">As such, the other ION device can continue to forward traffic over that WAN circuit through the failed ION</mark>. 
 
 Additionally, when the site is in Analytics mode or in Control mode, <mark style="background: #BBFABBA6;">a <strong>bypass pair port</strong> type allow for the transparent insertion of an ION device between Layer 2 and Layer 3 devices at the branch</mark>. Thereby, making proof of concepts and migrations minimally disruptive, requiring little to know configuration changes in the surrounding branch infrastructure.
+### Controller Port
+Current ION devices do not have dedicated controller ports as earlier models did. 
+
+<mark style="background: #FFB8EBA6;"><strong>Controller connectivity</strong> is automatically established by using any <strong>L3 port</strong> starting with <strong>port 1</strong></mark>. <mark style="background: #FF5582A6;">One main use of this port is for <strong>dynamic probe generation</strong>, for <strong>application reachability detection</strong></mark>. When an application-unreachable event occurs as a result of an initialization failure or a transaction failure, the ION device marks the path as unavailable for that application and prefix.
+The ION device then directs flows to the unavailable application and prefix to use an alternate path that is specified by a policy. The ION must determine when the original path can be used again. Therefore, <mark style="background: #FFB86CA6;">the ION device generates dynamic probes sourced from the controller port</mark>.
+
+Other uses for the controller port: 
+- <mark style="background: #FFF3A3A6;">Controller communication</mark>
+- <mark style="background: #BBFABBA6;">Administration traffic</mark>:
+	- SSH
+	- SNMP Agent 
+	- SNMP Trap Source
+	- NTP Source
+- <mark style="background: #ABF7F7A6;">ION HA control interface</mark> (where applicable)
+- Also used in legacy Private L2 deployments for traffic from LQM, PCM and, BFD (such as deployments in which there are no L3 direct private forwarding interfaces). This mode is not generally implemented in favor of L3 deployments.
+### AUX
+
