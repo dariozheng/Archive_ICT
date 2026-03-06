@@ -296,4 +296,17 @@ The dedicated (fixed) integrated port can be used for:
 - Emergency offline access using a one-time password
 - Performing local diagnostics
 - Configuration scope intentionally limited to Interface/IP configuration
-## Standard VPNs
+### Standard VPNs
+<mark style="background: #BBFABBA6;">Prisma SD-WAN seamlessly integrates <strong>third-party security solutions</strong> by using <strong>CloudBlades</strong> to establish <strong>VPNs</strong> to these endpoints in a fully automated fashion</mark>.
+
+<mark style="background: #ADCCFFA6;">Prisma SD-WAN enables you to have multiple <strong>active/active VPN paths</strong> to <strong>third-party security endpoints</strong></mark>. <mark style="background: #D2B3FFA6;">These <strong>VPN paths</strong> can be used in the path selection algorithm along with overlay and underlay paths</mark>. <mark style="background: #CACFD9A6;">Standard VPNs can be manually configured and brought up between a Prisma SD-WAN branch ION and a third-party device</mark>. 
+You can also automate these tunnel setups by using CloudBlades, or, in the case of Prisma Access, by using native SASE integration. 
+
+Standard VPN interfaces are used to communicate with systems that require traditional IKE and ESP secure tunnel negotiation.
+
+Commonly deployed standard VPN endpoints are:
+- Palo Alto Networks Prisma Access
+- Zscaler Internet Access
+- AWS
+- Azure
+- Google Cloud Platform
