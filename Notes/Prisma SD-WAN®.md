@@ -311,8 +311,8 @@ Commonly deployed standard VPN endpoints are:
 - Azure
 - Google Cloud Platform
 #### Standard VPN #configuration 
-![[attachments/Standard VPN configuration.png]]
-![[Standard VPN configuration2.png]]
+![[Interface typeStandard VPN configuration.png]]
+![[Interface typeStandard VPN configuration2.png]]
 The following are configuration parameters for standard VPNs:
 - Name and Description
 - <strong>Parent Interface</strong>: All standard VPN tunnels must be attached to a parent Interface (internet or private WAN).
@@ -337,3 +337,23 @@ The controller pre-loads multiple keying parameters to the ION devices.
 
 In the unlikely event that the ION device loses connectivity with the controller, the ION device still maintains the Prisma SD-WAN secure fabric VPNs and rotates the unique session keys for each VPN every hour for up to 72 hours.
 ### Loopback 
+Loopback Interfaces are not the traditional loopbacks that are used in customer networks.
+
+<mark style="background: #FFB8EBA6;">The loopback interfaces in a Prisma SD-WAN ION device</mark> <mark style="background: #FF5582A6;">combine the ports on a physical ION 2000 to form a <strong>bypass pair</strong></mark>. 
+<mark style="background: #FFB86CA6;">The primary use case for this interface is to conserve ports in an ION 2000 for <strong>private L2 interface use</strong></mark>.
+![[Interface type loopback.png]]
+### Layer 2 (L2) Switch Ports
+The ION 3200 and 1200-S series provide integrated L2 switch ports.
+![[Interface type Layer 2.png]]
+<strong>L2 LAN switch ports</strong> allow <mark style="background: #BBFABBA6;">per port configuration of <strong>access</strong> or <strong>trunk</strong> ports</mark> and <mark style="background: #ABF7F7A6;">Virtual LAN (<strong>VLAN</strong>)/Switch Virtual Interface (<strong>SVI</strong>) configuration</mark>. 
+These ports are supported on ION 3200, ION 1200-S, ION 1200-S-C-NA/ROW, and ION 1200-S-C5G-WW on ports 5 -10.
+L2 Switch ports require a minimum ION device version of 6.0.2 for the ION 1200-S series and 6.3.1 for the ION 3200.  
+### Sub-Interfaces 
+<mark style="background: #ADCCFFA6;">Sub-interfaces are used to <strong>divide</strong> one <strong>physical</strong> or <strong>virtual</strong> <strong>parent interface</strong> into multiple virtual interfaces, thereby implementing VLANs</mark>.
+
+![[Interface type Sub-Interface.png]]
+<mark style="background: #D2B3FFA6;">The parent interface can be an Ethernet port, a virtual port, or a bypass pair that does not contain any configuration</mark>. 
+<mark style="background: #CACFD9A6;">You cannot configure a sub-interface on the controller port or any interfaces or bypass pairs already configured with loopback as a member with PPPoE or standard VPNs</mark>.
+
+<mark style="background: #FFB8EBA6;">Multiple sub-interfaces may be configured on a physical or virtual interface or bypass pairs</mark>. <mark style="background: #FFB86CA6;">If multiple interfaces are configured</mark>, <mark style="background: #FFF3A3A6;">a VLAN ID is required to create and uniquely identify each sub-interface</mark>.
+### Internet
