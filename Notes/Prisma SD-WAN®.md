@@ -296,7 +296,7 @@ The dedicated (fixed) integrated port can be used for:
 - Emergency offline access using a one-time password
 - Performing local diagnostics
 - Configuration scope intentionally limited to Interface/IP configuration
-### Standard VPNs
+### Standard VPN
 <mark style="background: #BBFABBA6;">Prisma SD-WAN seamlessly integrates <strong>third-party security solutions</strong> by using <strong>CloudBlades</strong> to establish <strong>VPNs</strong> to these endpoints in a fully automated fashion</mark>.
 
 <mark style="background: #ADCCFFA6;">Prisma SD-WAN enables you to have multiple <strong>active/active VPN paths</strong> to <strong>third-party security endpoints</strong></mark>. <mark style="background: #D2B3FFA6;">These <strong>VPN paths</strong> can be used in the path selection algorithm along with overlay and underlay paths</mark>. <mark style="background: #CACFD9A6;">Standard VPNs can be manually configured and brought up between a Prisma SD-WAN branch ION and a third-party device</mark>. 
@@ -310,3 +310,30 @@ Commonly deployed standard VPN endpoints are:
 - AWS
 - Azure
 - Google Cloud Platform
+#### Standard VPN #configuration 
+![[attachments/Standard VPN configuration.png]]
+![[Standard VPN configuration2.png]]
+The following are configuration parameters for standard VPNs:
+- Name and Description
+- <strong>Parent Interface</strong>: All standard VPN tunnels must be attached to a parent Interface (internet or private WAN).
+- <strong>Scope</strong> (Local or Global): Determines whether the inner tunnel IP address is advertised through the fabric via routing protocols
+- <strong>Endpoint</strong>: Used in application policy for path selection and can contain a list of IP addresses and hostnames
+- <strong>Peer Hostname</strong>: Used to determine the IPSec tunnel remote system IP address
+- <strong>Peer IP</strong>: Used to determine the IPSec tunnel remote system IP address when no DNS name is available
+- <strong>IPSec Profile</strong>: Used for Basic IKE and ESP parameters
+- <strong>IPSec Authentication Override</strong>: Used for locally significant override of IPSec Profile AUTH information (to keep the number of required IPSec profiles to a minimum)
+- <strong>NAT Configuration</strong>: NAT Zone, NAT Pools
+- <strong>Advanced Options</strong>: MTU
+### Prisma SD-WAN VPN
+<mark style="background: #FF5582A6;">Prisma SD-WAN VPNs are the secure fabric links between <strong>Prisma SD-WAN ION devices</strong></mark>.
+
+Prisma SD-WAN VPNs are automatically created between a branch and data center ION device.
+
+By default, Prisma SD-WAN VPNs use a hub and spoke design. From the web interface or using the SDK/API, you can create a full or partial mesh.
+
+VPNs are secured by session keys that are rotated hourly.
+
+The controller pre-loads multiple keying parameters to the ION devices.
+
+In the unlikely event that the ION device loses connectivity with the controller, the ION device still maintains the Prisma SD-WAN secure fabric VPNs and rotates the unique session keys for each VPN every hour for up to 72 hours.
+### Loopback 
