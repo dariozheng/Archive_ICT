@@ -357,3 +357,44 @@ L2 Switch ports require a minimum ION device version of 6.0.2 for the ION 1200-
 
 <mark style="background: #FFB8EBA6;">Multiple sub-interfaces may be configured on a physical or virtual interface or bypass pairs</mark>. <mark style="background: #FFB86CA6;">If multiple interfaces are configured</mark>, <mark style="background: #FFF3A3A6;">a VLAN ID is required to create and uniquely identify each sub-interface</mark>.
 ### Internet
+<mark style="background: #D2B3FFA6;">The Internet port is used as an interface to an <strong>untrusted boundary</strong></mark>.
+
+<mark style="background: #CACFD9A6;">When a port is designated as an Internet port, firewall rules are automatically installed that allow only <strong>UDP port 500/4500</strong> and <strong>ESP/IP Protocol 50</strong></mark>. <mark style="background: #FFB8EBA6;">There is no configuration required from end user to block inbound traffic on the Internet port</mark>. <mark style="background: #FF5582A6;">An Internet port can be configured to allow additional inbound services</mark>. 
+
+<mark style="background: #FFB86CA6;">By default, an Internet port is an automatic network address translation (NAT) boundary for application traffic</mark> <mark style="background: #FFF3A3A6;">that is permitted by policy to go direct on the internet</mark>. 
+
+<mark style="background: #BBFABBA6;">NAT can be configured for advanced capabilities, including NoNAT, source network address translation (SNAT), and destination network address translation (DNAT)</mark>. 
+- <mark style="background: #ABF7F7A6;">Prisma SD-WAN VPN tunnels over the internet come up automatically between the branch and the data center</mark>.
+- <mark style="background: #ADCCFFA6;">The Internet port can be used to establish Border Gateway Protocol (BGP) adjacency with the service provider</mark>.
+- <mark style="background: #D2B3FFA6;">A sub-interface (NATIVE or with VLAN tag), a Point-to-Point Protocol over Ethernet (PPPoE) interface, or a virtual Interface can also be used as an Internet port</mark>.
+- <mark style="background: #CACFD9A6;">A port or a bypass pair can be assigned as an Internet port</mark>.
+### Private WAN
+The private WAN interface is used for the following purposes:
+- Communication with MPLS or across a point-to-point link
+- Establishment of BGP adjacency with a provider
+- Formation of zero-touch VPN tunnels to ION devices with the same WAN label defined on an interface
+- Forwarding of traffic directly to the Private WAN link un-encapsulated or via VPN
+- Support as a sub-interface with native or with a VLAN tag
+- Assignment to a port or a bypass pair
+### LAN
+A LAN interface can be used for the following purposes:
+- As an interface with the LAN (client side)
+- As a transit network for environments with L3 switches
+- As a sub-interface as NATIVE or with a VLAN tag
+- For static and BGP/OSPF LAN routing
+- Assigned to a port or a bypass pair
+- As a Dynamic Host Configuration Protocol (DHCP) relay or listener for a local DHCP server
+- For network context definition to denote the originating network for traffic and in path-selection policies to configure different paths and priorities for traffic coming from different networks: 
+    - For example, Gmail traffic from corporate Wi-Fi and guest Wi-Fi can have different policies and different network contexts.
+### High Availability (HA)
+<mark style="background: #FFB8EBA6;">The HA interface exchanges heartbeats between the two ION devices in an HA configuration</mark> and <mark style="background: #FF5582A6;">connects the standby device to the controller through the active ION device</mark>. You can use this interface to send management traffic like App Probe, NTP, SNMP, RADIUS, and IPFIX.
+
+<mark style="background: #FFB86CA6;">The HA ports between the IONs should not be directly connected, they should be connected to each other through a LAN switch</mark>.
+### Private L2
+<mark style="background: #FFF3A3A6;">A Private L2 interface enables the transparent insertion of a Prisma SD-WAN ION device between</mark><mark style="background: #BBFABBA6;"> a Layer 2 switch at the branch</mark> and <mark style="background: #ABF7F7A6;">a Layer 3 device at the WAN edge</mark>. 
+
+<mark style="background: #ADCCFFA6;">Private L2 interface configuration is supported only when the interface type is a bypass pair and not as a sub-interface</mark>.
+A Private L2 interface is used:
+- In topologies where transparent inline operation is required
+- As a bridge interface with ability to intercept traffic
+- For sites where router interoperability is required

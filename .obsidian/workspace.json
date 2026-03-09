@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "perimet",
+                "query": "w",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -217,11 +217,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "53fd7d83e64b7d68",
   "lastOpenFiles": [
+    "Notes/Glossaries/Networking Glossary.md",
+    "Notes/Prisma SD-WAN®.md",
     "attachments/Interface type Sub-Interface.png",
     "attachments/Interface type Layer 2.png",
-    "Notes/Prisma SD-WAN®.md",
     "attachments/Interface type port.png",
     "attachments/Interface type loopback.png",
     "attachments/Interface typeStandard VPN configuration.png",
@@ -230,9 +231,7 @@
     "attachments/Private WAN Circuits.png",
     "attachments/Internet Circuits.png",
     "attachments/Minimize Cellular Usage.png",
-    "attachments/Circuit Information Speed.png",
     "attachments/Configure Probes.pdf",
-    "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Traffic Flows.md",
     "Notes/App-ID™.md",

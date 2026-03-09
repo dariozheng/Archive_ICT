@@ -28,3 +28,5 @@ An Ethernet handoff is the physical interface (typically RJ-45 for copper or SFP
 It acts as the final termination point, allowing direct connection to a standard 10/100/1000 Mbps port without needing intermediate conversion devices
 #### tenant
 A tenant is a <strong>logical container</strong>, <strong>user group</strong>, or <strong>organization</strong> <mark style="background: #FFB86CA6;">that shares common access, policies, and resources within a shared infrastructure</mark> (like cloud, SD-WAN, or data centers) <mark style="background: #FFF3A3A6;">while remaining isolated from other tenants</mark>. It defines a security boundary or "perimeter" for managing network traffic, security rules, and user identities. 
+#### inbound service 
+Inbound customer service refers to <mark style="background: #ABF7F7A6;">the process of handling incoming requests, inquiries, or issues from customers</mark>. This can include answering phone calls, responding to emails, messages, or social media comments, and providing assistance or solutions to customers' concerns.
