@@ -85,7 +85,7 @@ An added benefit of control mode is that <mark style="background: #FFF3A3A6;">th
 Prisma SD-WAN can run in full-router-replacement mode, which eliminates the need for a router. 
 
 Existing MPLS and internet connections can be directed into the Prisma SD-WAN ION device. Additionally, Prisma SD-WAN has a built-in application zone-based firewall, which enables the consolidation of branch firewall appliances onto the ION device.
-# Prisma SD-WAN Site and Devices
+# Prisma SD-WAN Site
 Sites include brach offices and data centers. 
 
 <mark style="background: #FFB8EBA6;">Prisma SD-WAN uses <strong>site prefixes</strong> to advertise <strong>reachability</strong> from branch sites <strong>into</strong> the SD-WAN fabric</mark>. <mark style="background: #FFB86CA6;">Site prefixes allow Prisma SD-WAN <strong>data center sites</strong> to easily advertise <strong>routes</strong> and <strong>reachability</strong> to branch sites</mark>. You can configure site prefixes for branch sites, but <mark style="background: #FFF3A3A6;">the preferred method for advertising branch reachability is through the use of global scope interfaces and static routes</mark>. From release 6.2.1, both IPv4 and IPv6 prefixes are supported. From release 6.5.1, prefixes learned from global BGP/OSPF peers by the DC ION can be exported into the SD-WAN fabric.
