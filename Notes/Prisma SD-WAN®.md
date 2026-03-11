@@ -382,12 +382,12 @@ Loopback Interfaces are not the traditional loopbacks that are used in customer 
 ![[Interface type loopback.png]]
 ### Private WAN
 The private WAN interface is used for the following purposes:
-- Communication with MPLS or across a point-to-point link
+- <mark style="background: #FFB8EBA6;">Communication with MPLS or across a point-to-point link</mark>
 - Establishment of BGP adjacency with a provider
-- Formation of zero-touch VPN tunnels to ION devices with the same WAN label defined on an interface
-- Forwarding of traffic directly to the Private WAN link un-encapsulated or via VPN
-- Support as a sub-interface with native or with a VLAN tag
-- Assignment to a port or a bypass pair
+- <mark style="background: #FF5582A6;">Formation of zero-touch VPN tunnels to ION devices with the same WAN label defined on an interface</mark>
+- <mark style="background: #FFB86CA6;">Forwarding of traffic directly to the <strong>Private WAN link un-encapsulated</strong> or via <strong>VPN</strong></mark>
+- <mark style="background: #FFF3A3A6;">Support as a sub-interface with native or with a VLAN tag</mark>
+- <mark style="background: #BBFABBA6;">Assignment to a port or a bypass pair</mark>
 ### LAN
 A LAN interface can be used for the following purposes:
 - <mark style="background: #FFB8EBA6;">As an interface with the LAN (client side)</mark>
