@@ -256,21 +256,39 @@ There are two categories of interfaces in Prisma SD-WAN: <strong>ports</strong> 
 <strong>Ports</strong> <mark style="background: #FFB8EBA6;">are the <strong>physical interfaces</strong> on an ION device</mark>. <mark style="background: #FF5582A6;">All ION ports are ethernet and cellular</mark>: <strong>Internet ports</strong>, <strong>WAN ports</strong>, <strong>LAN ports</strong>, <strong>Controller ports</strong>, and <strong>Cellular ports</strong>.
 
 <mark style="background: #FFB86CA6;">Logical interfaces are simply referred to as "interfaces" on an ION device</mark>: <strong>Loopback interface</strong>, <strong>Bypass pair</strong>, <strong>Sub-interface</strong>, <strong>Standard VPN</strong>, <strong>Virtual Interface</strong>, <strong>PPPoE Interface</strong>, and <strong>L3 LAN Interface</strong>.
-## Interface Types
-### Port
+## Port
 ![[Interface type port.png]]
 <mark style="background: #BBFABBA6;">A Port interface type is like an IP interface on a traditional L3 device</mark>.
 
-<mark style="background: #ABF7F7A6;">An interface type of Port can be used for <strong>Internet</strong>, <strong>Private WAN</strong>, <strong>LAN</strong>, and <strong>Virtual interfaces</strong></mark>.
-### Bypass Pair
-![[Interface type Bypass Pair.png]]
-<mark style="background: #FFB8EBA6;">A bypass pair is a <strong>hardware relay circuit</strong> that is formed by a pair of interfaces for inline fail-to-wire</mark>.
+<mark style="background: #ABF7F7A6;">An interface type of <strong>Port</strong> can be used for <strong>Internet</strong>, <strong>Private WAN</strong>, <strong>LAN</strong>, and <strong>Virtual interfaces</strong></mark>.
+### LAN PORTS
+The ION 3200 and 1200-S series provide integrated L2 switch ports.
+![[Interface type Layer 2.png]]
+<strong>L2 LAN switch ports</strong> allow <mark style="background: #BBFABBA6;">per port configuration of <strong>access</strong> or <strong>trunk</strong> ports</mark> and <mark style="background: #ABF7F7A6;">Virtual LAN (<strong>VLAN</strong>)/Switch Virtual Interface (<strong>SVI</strong>) configuration</mark>. 
+These ports are supported on ION 3200, ION 1200-S, ION 1200-S-C-NA/ROW, and ION 1200-S-C5G-WW on ports 5 -10.
+L2 Switch ports require a minimum ION device version of 6.0.2 for the ION 1200-S series and 6.3.1 for the ION 3200. 
+### AUX
+<mark style="background: #FFB8EBA6;">The AUX port is used for out-of-band management</mark>. 
 
-<mark style="background: #FF5582A6;">If a device that physically terminates the WAN connection fails</mark>, <mark style="background: #FFB86CA6;">the <strong>hardware bypass pair</strong> enables the ION <strong>to continue to bridge</strong> traffic even if <u>it's physically powered off</u></mark>. 
+<mark style="background: #FF5582A6;">It is a <strong>serial port</strong>, allowing use of a one-time password for emergency access</mark>. <mark style="background: #FFB86CA6;">You can access interface information and configuration</mark>. <mark style="background: #FFF3A3A6;">The idea is to get a device online again, communicating with the controller</mark>. For example, the IP address could be changed from static to DHCP to get the device back online.
 
-<mark style="background: #FFF3A3A6;">As such, the other ION device can continue to forward traffic over that WAN circuit through the failed ION</mark>. 
+The dedicated (fixed) integrated port can be used for:
+- Serial console access to the device (Device Toolkit). Baud rate is 115200.
+- Emergency offline access using a one-time password
+- Performing local diagnostics
+- Configuration scope intentionally limited to Interface/IP configuration
+### CELLURAR
+Certain ION 1200-series models have 4G LTE and 5G connectivity that support cellular connectivity.
 
-Additionally, when the site is in Analytics mode or in Control mode, <mark style="background: #BBFABBA6;">a <strong>bypass pair port</strong> type allow for the transparent insertion of an ION device between Layer 2 and Layer 3 devices at the branch</mark>. Thereby, making proof of concepts and migrations minimally disruptive, requiring little to know configuration changes in the surrounding branch infrastructure.
+<mark style="background: #FFF3A3A6;">The cellular ION devices have integrated 4G or 5G cellular modem for primary or backup WAN connectivity</mark>. If there is no 4G or 5G coverage, these modems can fall back to a 3G network. <mark style="background: #BBFABBA6;">They are optionally installed with dual SIMs to provide backup connectivity when the primary SIM carrier connection is down</mark>. 
+
+You configure the cellular feature on ION devices by setting <strong>Subscriber Identity Module (SIM)</strong> specific configuration like the primary SIM slot, SIM PIN configuration, and cellular IP interface specific configuration. 
+
+Separate primary and backup interface configurations are supported to allow configuring different APNs and circuit labels for different SIMs.
+
+Upgrade to the recommended Cellular model firmware.
+
+<mark style="background: #ABF7F7A6;">On the Cellular interface (<strong>cwan</strong>), the Firmware page displays the current list of firmware versions available for the modem and the current recommended firmware and version</mark>. Upgrade the firmware when the recommended version is different from the current version for your specific carrier. The ION device downloads the new firmware from the controller inventory and then upgrades the carrier firmware on the modem.
 ### Controller Port
 Current ION devices do not have dedicated controller ports as earlier models did. 
 
@@ -286,16 +304,36 @@ Other uses for the controller port:
 	- NTP Source
 - <mark style="background: #ABF7F7A6;">ION HA control interface</mark> (where applicable)
 - Also used in legacy Private L2 deployments for traffic from LQM, PCM and, BFD (such as deployments in which there are no L3 direct private forwarding interfaces). This mode is not generally implemented in favor of L3 deployments.
-### AUX
-<mark style="background: #FFB8EBA6;">The AUX port is used for out-of-band management</mark>. 
+### Sub-Interfaces 
+<mark style="background: #ADCCFFA6;">Sub-interfaces are used to <strong>divide</strong> one <strong>physical</strong> or <strong>virtual</strong> <strong>parent interface</strong> into multiple virtual interfaces, thereby implementing VLANs</mark>.
 
-<mark style="background: #FF5582A6;">It is a <strong>serial port</strong>, allowing use of a one-time password for emergency access</mark>. <mark style="background: #FFB86CA6;">You can access interface information and configuration</mark>. <mark style="background: #FFF3A3A6;">The idea is to get a device online again, communicating with the controller</mark>. For example, the IP address could be changed from static to DHCP to get the device back online.
+![[Interface type Sub-Interface.png]]
+<mark style="background: #D2B3FFA6;">The parent interface can be an Ethernet port, a virtual port, or a bypass pair that does not contain any configuration</mark>. 
+<mark style="background: #CACFD9A6;">You cannot configure a sub-interface on the controller port or any interfaces or bypass pairs already configured with loopback as a member with PPPoE or standard VPNs</mark>.
 
-The dedicated (fixed) integrated port can be used for:
-- Serial console access to the device (Device Toolkit). Baud rate is 115200.
-- Emergency offline access using a one-time password
-- Performing local diagnostics
-- Configuration scope intentionally limited to Interface/IP configuration
+<mark style="background: #FFB8EBA6;">Multiple sub-interfaces may be configured on a physical or virtual interface or bypass pairs</mark>. <mark style="background: #FFB86CA6;">If multiple interfaces are configured</mark>, <mark style="background: #FFF3A3A6;">a VLAN ID is required to create and uniquely identify each sub-interface</mark>.
+### Internet
+<mark style="background: #D2B3FFA6;">The Internet port is used as an interface to an <strong>untrusted boundary</strong></mark>.
+
+<mark style="background: #CACFD9A6;">When a port is designated as an Internet port, firewall rules are automatically installed that allow only <strong>UDP port 500/4500</strong> and <strong>ESP/IP Protocol 50</strong></mark>. <mark style="background: #FFB8EBA6;">There is no configuration required from end user to block inbound traffic on the Internet port</mark>. <mark style="background: #FF5582A6;">An Internet port can be configured to allow additional inbound services</mark>. 
+
+<mark style="background: #FFB86CA6;">By default, an Internet port is an automatic network address translation (NAT) boundary for application traffic</mark> <mark style="background: #FFF3A3A6;">that is permitted by policy to go direct on the internet</mark>. 
+
+<mark style="background: #BBFABBA6;">NAT can be configured for advanced capabilities, including NoNAT, source network address translation (SNAT), and destination network address translation (DNAT)</mark>. 
+- <mark style="background: #ABF7F7A6;">Prisma SD-WAN VPN tunnels over the internet come up automatically between the branch and the data center</mark>.
+- <mark style="background: #ADCCFFA6;">The Internet port can be used to establish Border Gateway Protocol (BGP) adjacency with the service provider</mark>.
+- <mark style="background: #D2B3FFA6;">A sub-interface (NATIVE or with VLAN tag), a Point-to-Point Protocol over Ethernet (PPPoE) interface, or a virtual Interface can also be used as an Internet port</mark>.
+- <mark style="background: #CACFD9A6;">A port or a bypass pair can be assigned as an Internet port</mark>.
+## Interface
+### Bypass Pair
+![[Interface type Bypass Pair.png]]
+<mark style="background: #FFB8EBA6;">A bypass pair is a <strong>hardware relay circuit</strong> that is formed by a pair of interfaces for inline fail-to-wire</mark>.
+
+<mark style="background: #FF5582A6;">If a device that physically terminates the WAN connection fails</mark>, <mark style="background: #FFB86CA6;">the <strong>hardware bypass pair</strong> enables the ION <strong>to continue to bridge</strong> traffic even if <u>it's physically powered off</u></mark>. 
+
+<mark style="background: #FFF3A3A6;">As such, the other ION device can continue to forward traffic over that WAN circuit through the failed ION</mark>. 
+
+Additionally, when the site is in Analytics mode or in Control mode, <mark style="background: #BBFABBA6;">a <strong>bypass pair port</strong> type allow for the transparent insertion of an ION device between Layer 2 and Layer 3 devices at the branch</mark>. Thereby, making proof of concepts and migrations minimally disruptive, requiring little to know configuration changes in the surrounding branch infrastructure.
 ### Standard VPN
 <mark style="background: #BBFABBA6;">Prisma SD-WAN seamlessly integrates <strong>third-party security solutions</strong> by using <strong>CloudBlades</strong> to establish <strong>VPNs</strong> to these endpoints in a fully automated fashion</mark>.
 
@@ -342,32 +380,6 @@ Loopback Interfaces are not the traditional loopbacks that are used in customer 
 <mark style="background: #FFB8EBA6;">The loopback interfaces in a Prisma SD-WAN ION device</mark> <mark style="background: #FF5582A6;">combine the ports on a physical ION 2000 to form a <strong>bypass pair</strong></mark>. 
 <mark style="background: #FFB86CA6;">The primary use case for this interface is to conserve ports in an ION 2000 for <strong>private L2 interface use</strong></mark>.
 ![[Interface type loopback.png]]
-### Layer 2 (L2) Switch Ports
-The ION 3200 and 1200-S series provide integrated L2 switch ports.
-![[Interface type Layer 2.png]]
-<strong>L2 LAN switch ports</strong> allow <mark style="background: #BBFABBA6;">per port configuration of <strong>access</strong> or <strong>trunk</strong> ports</mark> and <mark style="background: #ABF7F7A6;">Virtual LAN (<strong>VLAN</strong>)/Switch Virtual Interface (<strong>SVI</strong>) configuration</mark>. 
-These ports are supported on ION 3200, ION 1200-S, ION 1200-S-C-NA/ROW, and ION 1200-S-C5G-WW on ports 5 -10.
-L2 Switch ports require a minimum ION device version of 6.0.2 for the ION 1200-S series and 6.3.1 for the ION 3200.  
-### Sub-Interfaces 
-<mark style="background: #ADCCFFA6;">Sub-interfaces are used to <strong>divide</strong> one <strong>physical</strong> or <strong>virtual</strong> <strong>parent interface</strong> into multiple virtual interfaces, thereby implementing VLANs</mark>.
-
-![[Interface type Sub-Interface.png]]
-<mark style="background: #D2B3FFA6;">The parent interface can be an Ethernet port, a virtual port, or a bypass pair that does not contain any configuration</mark>. 
-<mark style="background: #CACFD9A6;">You cannot configure a sub-interface on the controller port or any interfaces or bypass pairs already configured with loopback as a member with PPPoE or standard VPNs</mark>.
-
-<mark style="background: #FFB8EBA6;">Multiple sub-interfaces may be configured on a physical or virtual interface or bypass pairs</mark>. <mark style="background: #FFB86CA6;">If multiple interfaces are configured</mark>, <mark style="background: #FFF3A3A6;">a VLAN ID is required to create and uniquely identify each sub-interface</mark>.
-### Internet
-<mark style="background: #D2B3FFA6;">The Internet port is used as an interface to an <strong>untrusted boundary</strong></mark>.
-
-<mark style="background: #CACFD9A6;">When a port is designated as an Internet port, firewall rules are automatically installed that allow only <strong>UDP port 500/4500</strong> and <strong>ESP/IP Protocol 50</strong></mark>. <mark style="background: #FFB8EBA6;">There is no configuration required from end user to block inbound traffic on the Internet port</mark>. <mark style="background: #FF5582A6;">An Internet port can be configured to allow additional inbound services</mark>. 
-
-<mark style="background: #FFB86CA6;">By default, an Internet port is an automatic network address translation (NAT) boundary for application traffic</mark> <mark style="background: #FFF3A3A6;">that is permitted by policy to go direct on the internet</mark>. 
-
-<mark style="background: #BBFABBA6;">NAT can be configured for advanced capabilities, including NoNAT, source network address translation (SNAT), and destination network address translation (DNAT)</mark>. 
-- <mark style="background: #ABF7F7A6;">Prisma SD-WAN VPN tunnels over the internet come up automatically between the branch and the data center</mark>.
-- <mark style="background: #ADCCFFA6;">The Internet port can be used to establish Border Gateway Protocol (BGP) adjacency with the service provider</mark>.
-- <mark style="background: #D2B3FFA6;">A sub-interface (NATIVE or with VLAN tag), a Point-to-Point Protocol over Ethernet (PPPoE) interface, or a virtual Interface can also be used as an Internet port</mark>.
-- <mark style="background: #CACFD9A6;">A port or a bypass pair can be assigned as an Internet port</mark>.
 ### Private WAN
 The private WAN interface is used for the following purposes:
 - Communication with MPLS or across a point-to-point link
@@ -378,11 +390,11 @@ The private WAN interface is used for the following purposes:
 - Assignment to a port or a bypass pair
 ### LAN
 A LAN interface can be used for the following purposes:
-- As an interface with the LAN (client side)
-- As a transit network for environments with L3 switches
-- As a sub-interface as NATIVE or with a VLAN tag
+- <mark style="background: #FFB8EBA6;">As an interface with the LAN (client side)</mark>
+- <mark style="background: #FF5582A6;">As a transit network for environments with L3 switches</mark>
+- <mark style="background: #FFB86CA6;">As a sub-interface as NATIVE or with a VLAN tag</mark>
 - For static and BGP/OSPF LAN routing
-- Assigned to a port or a bypass pair
+- <mark style="background: #FFF3A3A6;"><strong>Assigned to a port or a bypass pair</strong></mark>
 - As a Dynamic Host Configuration Protocol (DHCP) relay or listener for a local DHCP server
 - For network context definition to denote the originating network for traffic and in path-selection policies to configure different paths and priorities for traffic coming from different networks: 
     - For example, Gmail traffic from corporate Wi-Fi and guest Wi-Fi can have different policies and different network contexts.
@@ -437,18 +449,6 @@ In this scenario, <mark style="background: #FF5582A6;">a virtual interface is us
 ##### Internet Circuits To Firewall
 In this scenario, <mark style="background: #FFB86CA6;">a virtual interface is used to provide redundant physical connections to a pair of Layer 2 switches that are connected to an internet-facing firewall pair</mark>. The ION device uses the firewall for the default gateway for the redundant internet-facing ports.
 ![[Internet Circuits To Firewall.png]]
-### Cellular
-Certain ION 1200-series models have 4G LTE and 5G connectivity that support cellular connectivity.
-
-<mark style="background: #FFF3A3A6;">The cellular ION devices have integrated 4G or 5G cellular modem for primary or backup WAN connectivity</mark>. If there is no 4G or 5G coverage, these modems can fall back to a 3G network. <mark style="background: #BBFABBA6;">They are optionally installed with dual SIMs to provide backup connectivity when the primary SIM carrier connection is down</mark>. 
-
-You configure the cellular feature on ION devices by setting <strong>Subscriber Identity Module (SIM)</strong> specific configuration like the primary SIM slot, SIM PIN configuration, and cellular IP interface specific configuration. 
-
-Separate primary and backup interface configurations are supported to allow configuring different APNs and circuit labels for different SIMs.
-
-Upgrade to the recommended Cellular model firmware.
-
-<mark style="background: #ABF7F7A6;">On the Cellular interface (<strong>cwan</strong>), the Firmware page displays the current list of firmware versions available for the modem and the current recommended firmware and version</mark>. Upgrade the firmware when the recommended version is different from the current version for your specific carrier. The ION device downloads the new firmware from the controller inventory and then upgrades the carrier firmware on the modem.
 # IP Directed Broadcast
 The IP Directed Broadcast feature was introduced in 5.4.1 to <mark style="background: #FFB8EBA6;">help with scenarios</mark> (such as WakeOnLAN) <mark style="background: #FFB8EBA6;">where traffic needs to be broadcast to all devices in a LAN subnet</mark>. This IP Directed Broadcast feature can be used in some branch scenarios instead of multicast. 
 
