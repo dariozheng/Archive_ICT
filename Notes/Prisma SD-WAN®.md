@@ -437,6 +437,18 @@ In this scenario, <mark style="background: #FF5582A6;">a virtual interface is us
 ##### Internet Circuits To Firewall
 In this scenario, <mark style="background: #FFB86CA6;">a virtual interface is used to provide redundant physical connections to a pair of Layer 2 switches that are connected to an internet-facing firewall pair</mark>. The ION device uses the firewall for the default gateway for the redundant internet-facing ports.
 ![[Internet Circuits To Firewall.png]]
+### Cellular
+Certain ION 1200-series models have 4G LTE and 5G connectivity that support cellular connectivity.
+
+<mark style="background: #FFF3A3A6;">The cellular ION devices have integrated 4G or 5G cellular modem for primary or backup WAN connectivity</mark>. If there is no 4G or 5G coverage, these modems can fall back to a 3G network. <mark style="background: #BBFABBA6;">They are optionally installed with dual SIMs to provide backup connectivity when the primary SIM carrier connection is down</mark>. 
+
+You configure the cellular feature on ION devices by setting <strong>Subscriber Identity Module (SIM)</strong> specific configuration like the primary SIM slot, SIM PIN configuration, and cellular IP interface specific configuration. 
+
+Separate primary and backup interface configurations are supported to allow configuring different APNs and circuit labels for different SIMs.
+
+Upgrade to the recommended Cellular model firmware.
+
+<mark style="background: #ABF7F7A6;">On the Cellular interface (<strong>cwan</strong>), the Firmware page displays the current list of firmware versions available for the modem and the current recommended firmware and version</mark>. Upgrade the firmware when the recommended version is different from the current version for your specific carrier. The ION device downloads the new firmware from the controller inventory and then upgrades the carrier firmware on the modem.
 # IP Directed Broadcast
 The IP Directed Broadcast feature was introduced in 5.4.1 to <mark style="background: #FFB8EBA6;">help with scenarios</mark> (such as WakeOnLAN) <mark style="background: #FFB8EBA6;">where traffic needs to be broadcast to all devices in a LAN subnet</mark>. This IP Directed Broadcast feature can be used in some branch scenarios instead of multicast. 
 
