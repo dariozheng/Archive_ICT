@@ -202,8 +202,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -218,8 +217,10 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/Internet Circuits To Firewall.png",
+    "attachments/Two Core Peers In The Same Subnet.png",
     "attachments/Controller Port Redundancy.png",
     "attachments/Private WAN Circuits.png",
     "Notes/Prisma SD-WAN®.md",
@@ -231,8 +232,6 @@
     "attachments/Interface type port.png",
     "attachments/Interface type loopback.png",
     "attachments/Interface typeStandard VPN configuration.png",
-    "attachments/Interface typeStandard VPN configuration2.png",
-    "attachments/Interface type Bypass Pair.png",
     "attachments/Configure Probes.pdf",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Traffic Flows.md",

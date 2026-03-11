@@ -431,6 +431,12 @@ In this scenario, <mark style="background: #ABF7F7A6;">the virtual interface pro
 <mark style="background: #D2B3FFA6;"><strong>Each controller port of the ION device is physically connected to a separate switch</strong></mark>. <mark style="background: #CACFD9A6;">A new virtual interface is configured with the two member interfaces</mark>, controller ports 1 and 2. 
 <mark style="background: #FFB8EBA6;">IP address information is configured on the virtual interface controller port</mark>. If a switch or controller port is lost, controller connectivity remains uninterrupted.
 ![[Controller Port Redundancy.png]]
+##### Two Core Peers In The Same Subnet
+In this scenario, <mark style="background: #FF5582A6;">a virtual interface is used to provide redundant physical connections to a pair of Layer 3 core switches</mark>. The ION device is peering via BGP with both switches in the same IP network.
+![[Two Core Peers In The Same Subnet.png]]
+##### Internet Circuits To Firewall
+In this scenario, <mark style="background: #FFB86CA6;">a virtual interface is used to provide redundant physical connections to a pair of Layer 2 switches that are connected to an internet-facing firewall pair</mark>. The ION device uses the firewall for the default gateway for the redundant internet-facing ports.
+![[Internet Circuits To Firewall.png]]
 # IP Directed Broadcast
 The IP Directed Broadcast feature was introduced in 5.4.1 to <mark style="background: #FFB8EBA6;">help with scenarios</mark> (such as WakeOnLAN) <mark style="background: #FFB8EBA6;">where traffic needs to be broadcast to all devices in a LAN subnet</mark>. This IP Directed Broadcast feature can be used in some branch scenarios instead of multicast. 
 
