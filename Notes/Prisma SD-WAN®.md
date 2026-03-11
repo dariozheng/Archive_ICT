@@ -406,6 +406,21 @@ A Private L2 interface is used:
 A virtual interface can be created, updated, or deleted. A virtual interface will be shown as down only if both the member interfaces are operationally down. If at least one member is operationally up, the virtual interface is shown as up.
 ![[Virtual Interface.png]]
 
+<mark style="background: #FFB86CA6;">A virtual interface can contain a maximum of two member interfaces</mark>. <mark style="background: #FFF3A3A6;">A virtual interface ensures redundant physical connectivity from a device to one or more switches, routers, or firewalls</mark>. For example, two controller ports can be connected to two L2 switches for physical redundancy of controller port connectivity.
+<mark style="background: #BBFABBA6;">The physical port of a virtual interface cannot be a bypass pair or a logical interface</mark>. 
+<mark style="background: #ABF7F7A6;">A controller port can only be added to a virtual interface with another controller port</mark>.
+<mark style="background: #ADCCFFA6;">The member interface cannot have any type of IP, sub-interface, used-for, circuit label, or PPPoE configuration</mark>.
+
+There are two types of virtual interfaces.
+<strong>Virtual Interface With Controller Ports</strong>
+<mark style="background: #D2B3FFA6;">The admin state cannot go down for virtual interfaces with controller ports. This type of virtual interface is not cleaned up automatically when the device is unassigned from a site</mark>.
+<strong>Virtual Interface With Non-Controller Ports</strong>
+This type of virtual interface is supported on all platforms and supports used_for (public | private | LAN) configuration and site WAN interface attachment. 
+
+<mark style="background: #CACFD9A6;">This type of virtual interface can be a parent of a sub-interface and service link. Virtual interfaces used for LAN will be cleaned up automatically when the device is unassigned from a site</mark>.
+
+
+
 # IP Directed Broadcast
 The IP Directed Broadcast feature was introduced in 5.4.1 to <mark style="background: #FFB8EBA6;">help with scenarios</mark> (such as WakeOnLAN) <mark style="background: #FFB8EBA6;">where traffic needs to be broadcast to all devices in a LAN subnet</mark>. This IP Directed Broadcast feature can be used in some branch scenarios instead of multicast. 
 
