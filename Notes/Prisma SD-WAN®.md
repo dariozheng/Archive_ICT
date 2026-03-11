@@ -419,8 +419,18 @@ This type of virtual interface is supported on all platforms and supports used_f
 
 <mark style="background: #CACFD9A6;">This type of virtual interface can be a parent of a sub-interface and service link. Virtual interfaces used for LAN will be cleaned up automatically when the device is unassigned from a site</mark>.
 
+<mark style="background: #FFB8EBA6;">If the device can only connect to the controller through the controller interfaces</mark>, <mark style="background: #FF5582A6;">a virtual interface with controller ports cannot be created in a single operation</mark>:
+- <mark style="background: #FFB86CA6;">Reset the configuration of one of the controller interfaces. Ensure that the element can connect through the other controller interface</mark>.
+- <mark style="background: #FFF3A3A6;">Create the virtual interface with one controller interface and configure the IP address</mark>. The element should be able to connect through the virtual interface.
+- <mark style="background: #BBFABBA6;">Reset the configuration of the second controller interface and add the second controller to the virtual interface</mark>.
+#### Virtual Interface Use Cases
+Virtual interfaces can be configured on both branch and data center ION devices.
+##### Controller Port Redundancy
+In this scenario, <mark style="background: #ABF7F7A6;">the virtual interface provides physical redundancy</mark> <mark style="background: #ADCCFFA6;">from a single Prisma SD-WAN ION device with dual controller ports to two L2 switches</mark> if a port failure occurs between the ION devices and one of the switches. 
 
-
+<mark style="background: #D2B3FFA6;"><strong>Each controller port of the ION device is physically connected to a separate switch</strong></mark>. <mark style="background: #CACFD9A6;">A new virtual interface is configured with the two member interfaces</mark>, controller ports 1 and 2. 
+<mark style="background: #FFB8EBA6;">IP address information is configured on the virtual interface controller port</mark>. If a switch or controller port is lost, controller connectivity remains uninterrupted.
+![[Controller Port Redundancy.png]]
 # IP Directed Broadcast
 The IP Directed Broadcast feature was introduced in 5.4.1 to <mark style="background: #FFB8EBA6;">help with scenarios</mark> (such as WakeOnLAN) <mark style="background: #FFB8EBA6;">where traffic needs to be broadcast to all devices in a LAN subnet</mark>. This IP Directed Broadcast feature can be used in some branch scenarios instead of multicast. 
 
