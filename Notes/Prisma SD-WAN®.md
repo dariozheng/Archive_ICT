@@ -491,6 +491,13 @@ Path Policy rules have several components:
     - Lower values have higher priority.
 - <strong>Network context</strong>
 - <strong>Source and destination prefix</strong>
+### Default Path Policy Set
+<strong>Default Rule</strong>:
+- By default allow all paths
+- Applied to traffic outside of the enterprise network (i.e., non-RFC 1918 or 4193 IP addressing)
+<strong>Enterprise-default rule</strong>:
+- By default allow all paths except direct on any public
+- Applied to traffic destined to any enterprise prefix (i.e., non-RFC 1918 or 4193 IP addressing)
 ## QoS Policy Rules
 Each <strong>QoS policy set</strong> has one or more <strong>rules</strong> that define the <strong>match criteria</strong>, <strong>priority</strong>, and (optionally) <strong>DSCP marking</strong>. QoS Policy rules also have several components:
 - <strong>Application(s)</strong>: Applications defined for this Path policy rule
