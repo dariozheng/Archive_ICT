@@ -508,6 +508,14 @@ Each <strong>QoS policy set</strong> has one or more <strong>rules</strong> that
 - <strong>Network context</strong>
 - <strong>Source and destination prefix</strong>
 - <strong>DSCP Markings</strong>: By default Prisma SD-WAN honors and passes any received DSCP values, but can be overridden in policy.
+### Default QoS Policy Set
+<strong>Default Rule </strong>
+- By default priority is Bronze 
+- Applied to traffic outside of the enterprise network (i.e., non-RFC 1918 or 4193 IP addressing)
+
+<strong>Enterprise-Default Rule </strong>
+- By default priority is Silver
+- Applied on traffic destined to an enterprise prefix (i.e., non-RFC 1918 or 4193 IP addressing)
 ## Stacked Policies
 <mark style="background: #BBFABBA6;">Prisma SD-WAN <strong>stacked policies</strong> are ordered from left to right</mark> and may comprise the following policy sets:  <strong>Path, NAT, Performance, Security, and QoS</strong>. There are two policy types for each set, a <strong>default rule policy</strong> and a <strong>policy set</strong>, with the default rule policy acting as a fallback. 
 
@@ -520,4 +528,9 @@ With explicit ordering, <mark style="background: #D2B3FFA6;">the Order Numbers a
 #### Implicit Ordering
 With implicit ordering, <mark style="background: #FF5582A6;">the Order Numbers are all the same</mark>. T<mark style="background: #FFB86CA6;">he policy that has the <strong>most specific match</strong> will be used</mark>, <mark style="background: #FFF3A3A6;">if all of the rules in the policy have the same Order (Priority) number</mark>.
 ![[Implicit Ordering.png]]
-###
+### Simple Stacked Policy
+<mark style="background: #D2B3FFA6;">A Simple Stack is a collection of <strong>policy rules</strong> in a <strong>single policy set</strong></mark>. <mark style="background: #CACFD9A6;">Organizations can create <strong>customized policy rules</strong>, which then will be merged with the <strong>default policy set</strong></mark>.
+At a minimum, a Simple Path or QoS Stack will consist of two policy rules:
+- Default rule
+- Enterprise default rule
+
