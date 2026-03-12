@@ -491,6 +491,15 @@ Path Policy rules have several components:
     - Lower values have higher priority.
 - <strong>Network context</strong>
 - <strong>Source and destination prefix</strong>
-
+## QoS Policy Rules
+Each <strong>QoS policy set</strong> has one or more <strong>rules</strong> that define the <strong>match criteria</strong>, <strong>priority</strong>, and (optionally) <strong>DSCP marking</strong>. QoS Policy rules also have several components:
+- <strong>Application(s)</strong>: Applications defined for this Path policy rule
+- <strong>QoS Priority</strong>: Priority to give an application from the four tiers
+- <strong>Order</strong>: Priority that a given rule is to have
+    - Default is 1024 for a value.
+    - Lower values have higher priority.
+- <strong>Network context</strong>
+- <strong>Source and destination prefix</strong>
+- <strong>DSCP Markings</strong>: By default Prisma SD-WAN honors and passes any received DSCP values, but can be overridden in policy.
 ## Stacked Policies
 <mark style="background: #BBFABBA6;">Prisma SD-WAN <strong>stacked policies</strong> are ordered from left to right</mark> and may comprise the following policy sets:  <strong>Path, NAT, Performance, Security, and QoS</strong>. This provides an administrator the ability <mark style="background: #CACFD9A6;">to define two policy types</mark> for each set, <mark style="background: #ABF7F7A6;">a default  policy set</mark> and <mark style="background: #ADCCFFA6;">a policy set</mark>.
