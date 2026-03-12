@@ -74,7 +74,7 @@ In this mode, <mark style="background: #FF5582A6;">Prisma SD-WAN simply collects
 
 Most deployments initially utilize this mode for a few days to allow Prisma SD-WAN to better understand the applications running on the network and their performance characteristics. The data collected during this period can then be used to design application policies.
 ## Control
-After a customer uses analytics-only mode, they can easily switch the device to control mode. 
+After a customer uses analytics-only mode, they can easily switch the device to <strong>control mode</strong>. 
 
 In this mode, <mark style="background: #FFB86CA6;">Prisma SD-WAN utilizes all the application and network data it has collected to take action in selecting a driven path</mark>. Here, the full functionality of Prisma SD-WAN is delivered without requiring the replacement of the pre-existing router.
 
@@ -464,4 +464,19 @@ To use the IP Directed Broadcast feature, the branch ION device needs to have <m
 <mark style="background: #FF5582A6;">The IP Directed Broadcast is disabled by default. Select <strong>Yes</strong> to enable it on any L3 LAN interface or sub-interface on the device</mark>.
 
 Once enabled, the IP broadcast traffic will be evaluated by Path, Security, QoS, NAT policies, and reported in the Flow Analytics like any other unicast traffic.
-# 
+# Prisma SD-WAN Policies
+The goal of the <mark style="background: #FFB8EBA6;">app-defined Prisma SD-WAN design</mark> is to provide a level <mark style="background: #FF5582A6;">of <strong>configuration abstraction</strong> that allows for a given <strong>configuration element</strong> to be created once and used at scale across the enterprise</mark>.
+
+The Prisma SD-WAN configuration is abstracted to a global or site-based level <mark style="background: #FFF3A3A6;">without requiring repeated configuration elements across multiple devices</mark>. 
+
+Examples of the <strong>abstracted configuration elements</strong> include <strong>multiple policy modules</strong>, <strong>application definitions</strong>, and <strong>prefix filters</strong>. 
+<mark style="background: #BBFABBA6;">These modules can be thought of as interchangeable building blocks that can be reused across policy sets throughout an enterprise</mark>, thus greatly simplifying configuration and operational burden as opposed to other methods seen in the industry.
+The following configurations are abstracted:
+- Path Policy 
+- Performance Policy
+- QoS Policy 
+- Security Policy 
+- NAT Policy
+<mark style="background: #ABF7F7A6;"><strong>Centralized policies</strong> are maintained within the Prisma SD-WAN controller and bound at a site level</mark>. <mark style="background: #ADCCFFA6;">Each branch or branch gateway site will have a default policy stack for <strong>path</strong>, <strong>performance</strong>, <strong>NAT</strong>, and <strong>QoS</strong>, and will be assigned intelligent defaults for each</mark>. <mark style="background: #D2B3FFA6;">Data center sites do not require path policies as they are the head end of the SD-WAN</mark>. Organizations can modify the default or create customized policies for their enterprise. The default or modified policies can be reused across multiple site types and definitions as needed.
+
+<strong><mark style="background: #FFB8EBA6;">Prisma SD-WAN first and foremost is an application routing system</mark></strong>. <mark style="background: #FF5582A6;">Policy is written based on <strong>applications</strong> within the environment and on policies for these applications and their business relevancy and criticality</mark>. <mark style="background: #FFB86CA6;">Policies and actions for business or non-business applications then are mapped</mark> <mark style="background: #FFF3A3A6;">to the paths these applications are allowed to take</mark>. Prisma SD-WAN supports multiple path types, which can be abstracted into terms such as "Any Public" and "Any Private" to simplify policy.
