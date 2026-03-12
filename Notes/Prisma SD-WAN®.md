@@ -480,7 +480,17 @@ The following policy modules are abstracted:
 
 <strong><mark style="background: #FFB8EBA6;">Prisma SD-WAN first and foremost is an application routing system</mark></strong>. <mark style="background: #FF5582A6;">Policy is written based on <strong>applications within the environment</strong></mark> and <mark style="background: #ADCCFFA6;">on <strong>policies</strong> for these applications</mark> and <mark style="background: #ABF7F7A6;">their business relevancy and criticality</mark>. <mark style="background: #FFB86CA6;">Policies and actions for business or non-business applications</mark> <mark style="background: #FFF3A3A6;">then are mapped to the paths these applications are allowed to take</mark>. Prisma SD-WAN supports multiple path types, which can be abstracted into terms such as "Any Public" and "Any Private" to simplify policy.
 ## Path Policy Rules
-Each path policy set has one or more rules that define match criteria, allowed paths, and services. Path Policy rules have several components.
+Each <strong>path policy set</strong> has one or more <strong>rules</strong> that define <strong>match criteria</strong>, <strong>allowed paths</strong>, and <strong>services</strong>. 
+
+Path Policy rules have several components:
+- <strong>Application(s)</strong>: <mark style="background: #FFB8EBA6;">Applications defined for this path policy rule</mark>
+- <strong>Paths allowed</strong>: <mark style="background: #FF5582A6;"><strong>Paths that the application(s) are allowed to take</strong> by policy for a given rule</mark>
+- <strong>Service</strong> or <strong>DC transit</strong>: Defines whether a <strong>transit point</strong> (data center, as an example) is required or <strong>third-party service</strong>, such as Prisma Access
+- <strong>Order</strong>: Priority that a given rule is to have
+    - Default is 1024 for a value.
+    - Lower values have higher priority.
+- <strong>Network context</strong>
+- <strong>Source and destination prefix</strong>
 
 ## Stacked Policies
 <mark style="background: #BBFABBA6;">Prisma SD-WAN <strong>stacked policies</strong> are ordered from left to right</mark> and may comprise the following policy sets:  <strong>Path, NAT, Performance, Security, and QoS</strong>. This provides an administrator the ability <mark style="background: #CACFD9A6;">to define two policy types</mark> for each set, <mark style="background: #ABF7F7A6;">a default  policy set</mark> and <mark style="background: #ADCCFFA6;">a policy set</mark>.
