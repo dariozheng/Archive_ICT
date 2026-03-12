@@ -509,4 +509,14 @@ Each <strong>QoS policy set</strong> has one or more <strong>rules</strong> that
 - <strong>Source and destination prefix</strong>
 - <strong>DSCP Markings</strong>: By default Prisma SD-WAN honors and passes any received DSCP values, but can be overridden in policy.
 ## Stacked Policies
-<mark style="background: #BBFABBA6;">Prisma SD-WAN <strong>stacked policies</strong> are ordered from left to right</mark> and may comprise the following policy sets:  <strong>Path, NAT, Performance, Security, and QoS</strong>. This provides an administrator the ability <mark style="background: #CACFD9A6;">to define two policy types</mark> for each set, <mark style="background: #ABF7F7A6;">a default  policy set</mark> and <mark style="background: #ADCCFFA6;">a policy set</mark>.
+<mark style="background: #BBFABBA6;">Prisma SD-WAN <strong>stacked policies</strong> are ordered from left to right</mark> and may comprise the following policy sets:  <strong>Path, NAT, Performance, Security, and QoS</strong>. There are two policy types for each set, a <strong>default rule policy</strong> and a <strong>policy set</strong>, with the default rule policy acting as a fallback. 
+
+<mark style="background: #ABF7F7A6;">Policy rules may be <strong>explicitly</strong> ordered by a user</mark> or <mark style="background: #ADCCFFA6;">will be subject to <strong>implicit</strong> ordering when no explicit rules exist</mark>.
+### Explicit Ordering
+With explicit ordering, <mark style="background: #D2B3FFA6;">the Order Numbers are evaluated for a match</mark>. 
+
+<mark style="background: #CACFD9A6;">The first match in the lowest numerical (highest priority) rule will be used</mark>, <mark style="background: #FFB8EBA6;">regardless of whether a more-specific match can be found further in the rulesets</mark>.
+![[Explicit Ordering.png]]
+### Implicit Ordering
+With implicit ordering, <mark style="background: #FF5582A6;">the Order Numbers are all the same</mark>. T<mark style="background: #FFB86CA6;">he policy that has the <strong>most specific match</strong> will be used</mark>, <mark style="background: #FFF3A3A6;">if all of the rules in the policy have the same Order (Priority) number</mark>.
+![[Implicit Ordering.png]]
