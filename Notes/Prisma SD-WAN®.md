@@ -535,7 +535,6 @@ At a minimum, a Simple Path or QoS Stack will consist of two policy rules:
 - Enterprise default rule
 #### Simple Stacked Policy #configuration 
 From the <strong>Controller</strong> web interface, a Simple Path Stack can be created manually, or an existing Simple Stack can be cloned and then modified to meet an organization’s requirements.
-
 ##### Add Path Stack
 Under <strong>Manage > Prisma SD-WAN > Policies > Path</strong>, then select <strong>Path Stacks</strong>. Click <strong>Simple</strong>, then click <strong>Add Stack</strong>.
 
@@ -546,3 +545,5 @@ Under <strong>Manage > Prisma SD-WAN > Policies > QoS</strong>, then select <str
 
 QoS prefixes can be configured and used in QoS policies. From release 6.2.1, both IPv4 and IPv6 QoS prefixes are supported.![[Add QoS Stack.png]]
 ##### Define Policy Rule
+###### Path Policy Rule
+Within a simple Path policy rule, applications and their desired path and policy behaviors are configured as shown. Prisma SD-WAN supports unified App-IDs to provide application detection services for Prisma SD-WAN and Palo Alto Network applications. Sites must have their ION devices updated to 6.0.1 to take advantage of the new applications. To filter applications based on the ION device version, use the options at the top of the page.
