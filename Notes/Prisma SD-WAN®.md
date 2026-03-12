@@ -533,4 +533,16 @@ With implicit ordering, <mark style="background: #FF5582A6;">the Order Numbers a
 At a minimum, a Simple Path or QoS Stack will consist of two policy rules:
 - Default rule
 - Enterprise default rule
+#### Simple Stacked Policy #configuration 
+From the <strong>Controller</strong> web interface, a Simple Path Stack can be created manually, or an existing Simple Stack can be cloned and then modified to meet an organization’s requirements.
 
+##### Add Path Stack
+Under <strong>Manage > Prisma SD-WAN > Policies > Path</strong>, then select <strong>Path Stacks</strong>. Click <strong>Simple</strong>, then click <strong>Add Stack</strong>.
+
+Path prefixes can be configured and used in path policies. From release 6.2.1, both IPv4 and IPv6 path prefixes are supported.![[Add Path Stack.png]]
+
+##### Add QoS Stack
+Under <strong>Manage > Prisma SD-WAN > Policies > QoS</strong>, then select <strong>QoS Stacks</strong>. Click <strong>Simple</strong>, then click <strong>Add Stack</strong>.
+
+QoS prefixes can be configured and used in QoS policies. From release 6.2.1, both IPv4 and IPv6 QoS prefixes are supported.![[Add QoS Stack.png]]
+##### Define Policy Rule

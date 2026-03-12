@@ -219,6 +219,8 @@
   },
   "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/Add QoS Stack.png",
+    "attachments/Add Path Stack.png",
     "attachments/Implicit Ordering.png",
     "attachments/Explicit Ordering.png",
     "Notes/Glossaries/Cloud Computing Glossary.md",
@@ -236,8 +238,6 @@
     "attachments/Enable Layer 3 LAN Interfaces.png",
     "Notes/Glossaries/Networking Glossary.md",
     "attachments/Interface type Sub-Interface.png",
-    "attachments/Interface type Layer 2.png",
-    "attachments/Interface type port.png",
     "attachments/Configure Probes.pdf",
     "Notes/Traffic Flows.md",
     "Notes/App-ID™.md",
