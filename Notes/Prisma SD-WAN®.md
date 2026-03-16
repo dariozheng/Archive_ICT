@@ -687,5 +687,4 @@ The probes for the MPLS underlay are sent from the <strong>branch ION controller
 ### Branch ION 3K in L3 mode
 ![[Branch ION 3K in L3 mode.png]]
 The following diagram shows an ION 3K in <mark style="background: #FF5582A6;">L3 mode configuration</mark>. <mark style="background: #FFB86CA6;">In this case, the <strong>WAN port</strong> on the ION 3K is being used as an <strong>individual port</strong></mark> (with L3 WAN Forwarding enabled),<mark style="background: #FFF3A3A6;"> and the LQM probes originate directly from the <strong>WAN interface</strong></mark>.
-
-The destination is the WAN port on the hub ION 9K.
+<mark style="background: #BBFABBA6;">The destination is the WAN port on the hub ION 9K</mark>.
