@@ -688,4 +688,27 @@ The probes for the MPLS underlay are sent from the <strong>branch ION controller
 ![[Branch ION 3K in L3 mode.png]]
 The following diagram shows an ION 3K in <mark style="background: #FF5582A6;">L3 mode configuration</mark>. <mark style="background: #FFB86CA6;">In this case, the <strong>WAN port</strong> on the ION 3K is being used as an <strong>individual port</strong></mark> (with L3 WAN Forwarding enabled),<mark style="background: #FFF3A3A6;"> and the LQM probes originate directly from the <strong>WAN interface</strong></mark>.
 <mark style="background: #BBFABBA6;">The destination is the WAN port on the hub ION 9K</mark>.
-# 
+# Application Performance Measurement
+Given that the IONs perform real time measurement and analysis from Layers 3 to 7, we can provide rich application performance metrics and react in real time to application performance anomalies.
+## Application Health Distribution
+<mark style="background: #FFB8EBA6;">Used to track the performance and health of applications</mark>. <mark style="background: #FF5582A6;">This information can be used to identify problems with applications</mark> and <mark style="background: #FFB86CA6;">to make changes to improve performance and reliability</mark>. Based on the latest health score, the graph displays the distribution of Good, Fair, and Poor Applications for a given tenant.
+- **Good** (70-100)
+- **Fair** (30-69)
+- **Poor** (0-29)
+![[Application Health Distribution.png]]
+## Application Initialization and Transaction Failures
+<mark style="background: #BBFABBA6;"><strong>Application initialization</strong> and <strong>transaction failures</strong> are tracked on a <strong>per-destination/application/path basis</strong></mark>, allowing for granular and specific path changes to be made based on each destination IP within a specific application.
+
+- **Init Failure:** <mark style="background: #ADCCFFA6;">Failure to complete the <strong>three-way handshake</strong></mark>. Reasons for failure may include a misconfigured firewall, an application server issue, a misconfigured network access control list, or a WAN network provider issue.
+- **TXNs Failure:** <mark style="background: #ABF7F7A6;">Unsuccessful transfer of data after the completion of the three-way handshake</mark>. Reasons for failure can include a misconfigured firewall, an application server issue, a misconfigured network access control list, or a WAN network provider issue.
+## Concurrent Flows
+<mark style="background: #D2B3FFA6;">The Concurrent Flow chart helps to understand how many connections are active on your network by application</mark>. 
+
+<mark style="background: #CACFD9A6;">The chart provides a granular view by transmission control protocol (TCP) and user datagram protocol (UDP) flows for an application, a specific set of applications, or all applications</mark>. 
+
+Concurrent flows are the currently active flows, including all new flows and mature flows in the system.
+
+The Concurrent Flows charts are used to:
+- <mark style="background: #FFB8EBA6;">Analyze a site in terms of connections per second</mark>.
+- <mark style="background: #FFB86CA6;">Monitor any unlikely increase in the number of flows for a particular application, such as DNS or any critical application, which could be a sign of malicious activity</mark>.
+![[Concurrent Flows.png]]
