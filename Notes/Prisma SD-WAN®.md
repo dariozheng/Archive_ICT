@@ -563,6 +563,10 @@ Select <strong>Stacked Policies</strong>, <strong>Path</strong> or <strong>QoS</
 
 The policies will be evaluated from left to right until a match is found. If no match is found in the defined policy sets 1 through 4, the default rule policy set then will be used.
 ![[Advanced Stacked Policy config.png]]
+## Performance Policy
+<mark style="background: #FFB8EBA6;">Measuring application and system health performance and delivering App SLAs is a core component of Prisma SD-WAN</mark>.
+
+<mark style="background: #FF5582A6;">Performance Policy builds upon the existing App SLA configuration to provide a policy framework for measuring, enforcing, and alerting for application SLAs</mark>.
 ## Policy Use Cases
 ### Active/Active Path Policy
 A common use case for organizations is to have <mark style="background: #FFB8EBA6;">both an <strong>internet path</strong> and <strong>a private WAN</strong> (MPLS) for a given branch</mark> making a Hybrid WAN.
@@ -712,3 +716,4 @@ The Concurrent Flows charts are used to:
 - <mark style="background: #FFB8EBA6;">Analyze a site in terms of connections per second</mark>.
 - <mark style="background: #FFB86CA6;">Monitor any unlikely increase in the number of flows for a particular application, such as DNS or any critical application, which could be a sign of malicious activity</mark>.
 ![[Concurrent Flows.png]]
+# 
