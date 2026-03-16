@@ -585,7 +585,7 @@ The Performance Sets tab contains policy rules and are a part of the policy set 
 - The <strong>Visibility</strong> action affects the <strong>secure fabric link</strong> time series while projecting the performance SLA indicators. The visibility action relies on <strong>Link Quality Metrics</strong>. 
 - The <strong>Packet Duplication</strong> and <strong>FEC</strong> (<strong>Forward Error Correction</strong>) actions <mark style="background: #FFF3A3A6;">are mutually exclusive and must be enabled along with the Move Flows action</mark>. <mark style="background: #BBFABBA6;"><strong>FEC</strong> only relies on the loss and latency Link Quality Metrics</mark> and does not use Application metrics. <mark style="background: #ABF7F7A6;">FEC takes effect only on Prisma SD-WAN VPNs</mark>.
 ![[Performance Policy Rule2.png]]
-### Match Criteria (Application SLA)
+#### Match Criteria (Application SLA)
 - <strong>App Filters</strong> : to select an Application(s) to apply the policy rule. You can select 256 applications for one policy rule. 
 - <strong>Application by Transfer Type</strong> : Bulk, Audio, Video, or Transactional. 
 - <strong>Path Filters</strong>:
