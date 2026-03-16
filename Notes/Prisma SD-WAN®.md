@@ -615,12 +615,14 @@ Prisma SD-WAN uses <strong>Dynamic Path Selection</strong> and uses the followin
 - Be able to support “single ended” direct Internet paths
 - <mark style="background: #FFB8EBA6;">Allow third-party service transit</mark> with performance monitoring
 - <mark style="background: #FF5582A6;">Allow explicit data center transit</mark>
+
 Before understanding how Dynamic Path Selection works, you must understand the logic of <mark style="background: #D2B3FFA6;">when a new path selection is made</mark>. <mark style="background: #FFB86CA6;">The <strong>new path</strong> selection criteria used within the system are as follows</mark>:
 - <mark style="background: #FFF3A3A6;">When a new flow is created</mark>
 - <mark style="background: #BBFABBA6;">When a path flaps</mark> (goes down or up)
 - <mark style="background: #ADCCFFA6;">When performance policy SLAs rules apply</mark> 
 - <mark style="background: #D2B3FFA6;">When asymmetry occurs in the network</mark> (<mark style="background: #CACFD9A6;">when the <strong>return path</strong> is different from the path chosen by the flow when exiting the branch</mark>)
 - <mark style="background: #FFB8EBA6;">Active and backup path selection</mark>
+
 <mark style="background: #FF5582A6;">Before a path can be chosen, it must be evaluated as to whether it can be used to carry the <strong>application(s)</strong></mark>. The evaluation criteria used are as follows:
 - Network and Security policy
 - Link status (up or down)
