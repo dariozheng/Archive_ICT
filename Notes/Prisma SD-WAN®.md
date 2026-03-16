@@ -577,11 +577,12 @@ For example, <mark style="background: #FFF3A3A6;">if a <strong>branch</strong> h
 ##### Service and Data-Center Groups #configuration 
 <mark style="background: #FFB8EBA6;">Service and data-center groups are created and mapped by an organization to meet its requirements</mark>. After sites are created, <mark style="background: #FF5582A6;">they then are mapped to their respective domain, service, or data-center groups</mark>. Within the policy, <mark style="background: #FFB86CA6;">the service or data-center group then is configured for the given application or traffic flow</mark>. <mark style="background: #FFF3A3A6;">If the service or data-center group is required to flow through a given instance for inspection, then the <strong>Required</strong> checkbox would be enabled</mark>.
 
-Define primary and backup Prisma SD-WAN data-centers groups per domain for simplified policy management.
+<mark style="background: #BBFABBA6;">Define primary and backup Prisma SD-WAN data-centers groups per domain for simplified policy management</mark>.
 ![[Service & DC Groups.png]]
 
-Reference the data-center group in policy rules; the branch site to which the domain is bound will determine the definition of the group. As an example, all internet-bound web traffic should transit through the primary DC over any transport, and if not available or meeting service-level agreements (SLAs), use the backup DC.
+<mark style="background: #ABF7F7A6;">Reference the data-center group in policy rules</mark>; <mark style="background: #ADCCFFA6;">the branch site to which the domain is bound will determine the definition of the group</mark>. As an example, <mark style="background: #D2B3FFA6;">all internet-bound web traffic should transit through the primary DC over any transport</mark>, <mark style="background: #CACFD9A6;">and if not available or meeting service-level agreements (SLAs), use the backup DC</mark>.
 ![[Service & DC Groups 2.png]]
 
-Setting the Required check box forces traffic to use the service or DC group referenced even if a direct path is available. If the box is left unchecked and there is a direct path allowed and available, the system will optionally use the transit path with preference given to the direct path if the SLA is met.
+Setting the <strong>Required</strong> check box <mark style="background: #FFB8EBA6;">forces traffic to use the <strong>service</strong> or <strong>DC group</strong> referenced even if a direct path is available</mark>. <mark style="background: #FFB86CA6;">If the box is left unchecked and there is a direct path allowed and available, the system will optionally use the transit path with preference given to the direct path if the SLA is met</mark>.
 ![[Service & DC Groups 3.png]]
+# 
