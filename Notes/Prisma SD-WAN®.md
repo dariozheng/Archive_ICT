@@ -593,7 +593,12 @@ Trusted SaaS applications will use <strong>Direct Internet Access (DIA) links</s
 <strong>Backup Policy</strong>
 The backup policy will be used when the application <mark style="background: #CACFD9A6;">needs to fail over the flows</mark> and <mark style="background: #FFB8EBA6;">this policy will transit to enterprise data centers and route to the internet via the data centers</mark>.
 #### Policy for Trusted SaaS Applications #configuration 
-
+##### Direct Internet Access
+Here we define <mark style="background: #FF5582A6;">the applications that are part of our Trusted SaaS</mark>, and <mark style="background: #FFB86CA6;">our Active Path is defined as Direct on “Any Public”</mark>. This will send<mark style="background: #FFF3A3A6;"> any of the identified Trusted SaaS applications across any public interface labeled as “To Internet”</mark>.
+![[Direct Internet Access.png]]
+##### General Web Browsing - Back to Data Center
+<mark style="background: #BBFABBA6;">With any other applications</mark>,<mark style="background: #ABF7F7A6;"> we want to send them to our data center for policy inspection/enforcement</mark>. In this example, <mark style="background: #ADCCFFA6;">SSL and HTTP are not trusted natively</mark>, <mark style="background: #D2B3FFA6;">so they will be sent via VPN</mark> (Prisma SD-WAN Secure Fabric) <mark style="background: #CACFD9A6;">to the Primary data center and/or Backup data center for inspection</mark>.
+![[General Web Browsing - Back to Data Center.png]]
 
 # Service and Data-Center Groups
 Service and data-center groups allow for very simple or very granular policies. 
