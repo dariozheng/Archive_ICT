@@ -554,3 +554,5 @@ Within a simple QoS policy rule, applications and their desired priority are con
 ##### User-ID in Path and QoS Policy Rules
 <mark style="background: #ADCCFFA6;">Users and/or groups can be specified in the Users tab's path and QoS policy rules</mark>. <mark style="background: #D2B3FFA6;">The Cloud Identity Engine (CIE) and the user agent must have been previously configured to enable the Users tab, allowing one or more users and/or groups to be specified in policy rules</mark>.
 ### Advanced Stacked Policy
+<mark style="background: #CACFD9A6;"><strong>Advanced Stacked Policy</strong> is a collection of <strong>Path</strong> or <strong>QoS</strong> <strong>policy sets</strong> that are stacked</mark>, <mark style="background: #FFB8EBA6;">stack maximum of <strong>four policy sets</strong> and <strong>one default rule policy set</strong></mark> and they are ordered from left to right, with the left-most as highest priority. 
+![[Advanced Stacked Policy.png]]
