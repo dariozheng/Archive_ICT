@@ -14,14 +14,29 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/Prisma SD-WAN®.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "Prisma SD-WAN®"
             }
+          },
+          {
+            "id": "ef49045e41662f61",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/Autonomous Digital Experience Management.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Autonomous Digital Experience Management"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -157,13 +172,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Prisma SD-WAN®.md",
+                "file": "Notes/Autonomous Digital Experience Management.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Prisma SD-WAN®"
+              "title": "Outline of Autonomous Digital Experience Management"
             }
           },
           {
@@ -203,7 +218,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -218,8 +234,10 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "ef49045e41662f61",
   "lastOpenFiles": [
+    "Notes/Prisma SD-WAN®.md",
+    "Notes/Autonomous Digital Experience Management.md",
     "attachments/Performance Policy Rule4.png",
     "attachments/Performance Policy Rule 3.png",
     "attachments/Performance Policy Rule2.png",
@@ -228,10 +246,8 @@
     "attachments/Performance Policy Set.png",
     "attachments/Performance Policy Stack.png",
     "attachments/Concurrent Flows.png",
-    "Notes/Prisma SD-WAN®.md",
     "attachments/Application Health Distribution.png",
     "attachments/Branch ION 3K in L3 mode.png",
-    "attachments/Branch ION 3K in L2 mode.png",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
