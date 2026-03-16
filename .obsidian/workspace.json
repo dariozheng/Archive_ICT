@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883,
-    "collapsed": true
+    "width": 257.5004348754883
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -218,8 +217,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "53fd7d83e64b7d68",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/Performance Policy Rule2.png",
+    "attachments/Performance Policy Rule1.png",
+    "attachments/Performance Policy Rule.png",
+    "attachments/Performance Policy Set.png",
+    "attachments/Performance Policy Stack.png",
     "attachments/Concurrent Flows.png",
     "Notes/Prisma SD-WAN®.md",
     "attachments/Application Health Distribution.png",
@@ -229,10 +233,6 @@
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
     "attachments/Dual Active--Single Backup Path Policy.png",
-    "attachments/Dual Active-Single Backup Path Policy.png",
-    "attachments/Policy Control Based on Network Context.png",
-    "attachments/General Web Browsing - Back to Data Center.png",
-    "attachments/Direct Internet Access.png",
     "Notes/Glossaries/Cloud Computing Glossary.md",
     "Notes/Cloud Access Security Broker.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
