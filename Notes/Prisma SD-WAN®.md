@@ -563,4 +563,14 @@ Select <strong>Stacked Policies</strong>, <strong>Path</strong> or <strong>QoS</
 
 The policies will be evaluated from left to right until a match is found. If no match is found in the defined policy sets 1 through 4, the default rule policy set then will be used.
 ![[Advanced Stacked Policy config.png]]
-# 
+# Service and Data-Center Groups
+Service and data-center groups allow for very simple or very granular policies. 
+
+<mark style="background: #FFB8EBA6;">Mapping of third-party services utilizing standard <strong>IPSec/GRE endpoints</strong> for <strong>service integration</strong></mark> and <mark style="background: #FF5582A6;"><strong>Prisma SD-WAN data centers</strong> allows for <strong>geolocation-based service</strong> and <strong>data-center choices</strong></mark>. <mark style="background: #FFB86CA6;">Service and data-center groups are used to map services or data centers as optional or mandatory <strong>transit points</strong> for traffic</mark>.
+
+For example, <mark style="background: #FFF3A3A6;">if a <strong>branch</strong> has internet-only connectivity</mark> and <mark style="background: #BBFABBA6;">needs to access traffic within a data center or internal resource</mark>, <mark style="background: #ABF7F7A6;">a <strong>data center (DC) group</strong> must be defined and listed as part of the optional transit path for that <strong>branch</strong> or <strong>traffic flow</strong></mark>.
+
+<strong>Service and DC groups</strong> can be used to create <mark style="background: #ADCCFFA6;">geographic groupings for resources</mark> to best suit an organization’s business needs. For example, <mark style="background: #D2B3FFA6;">European traffic would have a primary data center in EMEA</mark> and <mark style="background: #D2B3FFA6;">a backup location in New York</mark>.  
+
+<mark style="background: #CACFD9A6;">These transit locations can be made optional or mandatory. For mandatory transit, traffic must go to that service or DC group for policy inspection</mark>.
+![[Service and Data-Center Groups.png]]
