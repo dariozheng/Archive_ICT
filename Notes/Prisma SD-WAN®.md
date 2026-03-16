@@ -672,3 +672,8 @@ Prisma SD-WAN uses mapping of <strong>standard VPN services</strong> and <strong
 ![[Standard VPN Service Groups.png]]
 # Transport Quality Metrics
 <mark style="background: #FFB8EBA6;"><strong>Link quality metrics (LQM)</strong> probes are sent periodically between <strong>Instant-On Network (ION) devices</strong></mark> and measure the [[networking glossary#loss|loss]], [[networking glossary#latency|latency]], and [[networking glossary#jitter|jitter]] on that path. <mark style="background: #FF5582A6;">These probes are sent from branch  IONs to hub IONs</mark>. <mark style="background: #FFB86CA6;">The probes are sent on all the overlay <strong>virtual private network (VPN) tunnels</strong> (public and private) and on <strong>the private WAN underlay path</strong></mark>.
+
+LQM metrics for each path are measured in both directions, giving you both ingress and egress metrics from the branch perspective. For the overlay, the probes are between the tunnel endpoints, through the tunnel. The probes for the MPLS underlay are sent from the branch ION controller port or WAN (MPLS) port, depending on whether the ION is in L2 or L3 mode configuration.
+
+Bidirectional forwarding detection (BFD) probes are also sent between the IONs on the overlay (public and private) and the underlay (private) paths as heartbeats for detecting the liveliness of the paths. These BFD probes are sourced and sent in the same way as the LQM probes.
+![[Transport Quality Metrics.png]]

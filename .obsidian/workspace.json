@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883
+    "width": 257.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -219,6 +220,7 @@
   },
   "active": "53fd7d83e64b7d68",
   "lastOpenFiles": [
+    "attachments/Transport Quality Metrics.png",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Glossaries/Security Glossary.md",
