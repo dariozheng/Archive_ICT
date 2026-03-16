@@ -538,12 +538,14 @@ From the <strong>Controller</strong> web interface, a Simple Path Stack can be c
 ##### Add Path Stack
 Under <strong>Manage > Prisma SD-WAN > Policies > Path</strong>, then select <strong>Path Stacks</strong>. Click <strong>Simple</strong>, then click <strong>Add Stack</strong>.
 
-Path prefixes can be configured and used in path policies. From release 6.2.1, both IPv4 and IPv6 path prefixes are supported.![[Add Path Stack.png]]
+Path prefixes can be configured and used in path policies. From release 6.2.1, both IPv4 and IPv6 path prefixes are supported.
+![[Add Path Stack.png]]
 
 ##### Add QoS Stack
 Under <strong>Manage > Prisma SD-WAN > Policies > QoS</strong>, then select <strong>QoS Stacks</strong>. Click <strong>Simple</strong>, then click <strong>Add Stack</strong>.
 
-QoS prefixes can be configured and used in QoS policies. From release 6.2.1, both IPv4 and IPv6 QoS prefixes are supported.![[Add QoS Stack.png]]
+QoS prefixes can be configured and used in QoS policies. From release 6.2.1, both IPv4 and IPv6 QoS prefixes are supported.
+![[Add QoS Stack.png]]
 ##### Define Policy Rule
 ###### Path Policy Rule
 Within a simple Path policy rule, <mark style="background: #ABF7F7A6;">applications and their desired path and policy behaviors are configured as shown</mark>. Prisma SD-WAN supports unified App-IDs to provide application detection services for Prisma SD-WAN and Palo Alto Network applications. Sites must have their ION devices updated to 6.0.1 to take advantage of the new applications. To filter applications based on the ION device version, use the options at the top of the page.
@@ -556,3 +558,9 @@ Within a simple QoS policy rule, applications and their desired priority are con
 ### Advanced Stacked Policy
 <mark style="background: #CACFD9A6;"><strong>Advanced Stacked Policy</strong> is a collection of <strong>Path</strong> or <strong>QoS</strong> <strong>policy sets</strong> that are stacked</mark>, <mark style="background: #FFB8EBA6;">stack maximum of <strong>four policy sets</strong> and <strong>one default rule policy set</strong></mark> and they are ordered from left to right, with the left-most as highest priority. 
 ![[Advanced Stacked Policy.png]]
+#### Advanced Stacked Policy #configuration 
+Select <strong>Stacked Policies</strong>, <strong>Path</strong> or <strong>QoS</strong>. Depending on which stacked policy you selected, you can select <strong>Path Stacks</strong> or <strong>QoS Stacks</strong> and create a new policy set. Then add a Path or QoS Stack that references the new/modified policy set.
+
+The policies will be evaluated from left to right until a match is found. If no match is found in the defined policy sets 1 through 4, the default rule policy set then will be used.
+![[Advanced Stacked Policy config.png]]
+# 

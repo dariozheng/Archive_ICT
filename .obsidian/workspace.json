@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883
+    "width": 257.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -217,8 +218,9 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/Advanced Stacked Policy config.png",
     "attachments/Advanced Stacked Policy.png",
     "attachments/QoS Policy Rule.png",
     "attachments/Path Policy Rule.png",
@@ -236,7 +238,6 @@
     "attachments/Internet Circuits To Firewall.png",
     "attachments/Two Core Peers In The Same Subnet.png",
     "attachments/Controller Port Redundancy.png",
-    "attachments/Private WAN Circuits.png",
     "Notes/Glossaries/Networking Glossary.md",
     "attachments/Configure Probes.pdf",
     "Notes/Traffic Flows.md",
