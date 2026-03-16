@@ -76,7 +76,7 @@ Most deployments initially utilize this mode for a few days to allow Prisma SD-W
 ## Control
 After a customer uses analytics-only mode, they can easily switch the device to <strong>control mode</strong>. 
 
-In this mode, <mark style="background: #FFB86CA6;">Prisma SD-WAN utilizes all the application and network data it has collected to take action in selecting a driven path</mark>. Here, the full functionality of Prisma SD-WAN is delivered without requiring the replacement of the pre-existing router.
+In this mode, <mark style="background: #FFB86CA6;">Prisma SD-WAN utilizes all the application and network data it has collected to take action in selecting a driven path</mark>. Here, <mark style="background: #BBFABBA6;">the full functionality of Prisma SD-WAN is delivered without requiring the replacement of the pre-existing router</mark>.
 
 Many customers prefer to start their SD-WAN deployment in this mode, because they either own their existing routers and still have years left of depreciation on them or they have carrier-managed routers as part of their existing telecommunications contract.
 
