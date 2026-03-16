@@ -670,4 +670,5 @@ The process of configuring <strong>standard virtual private network (VPN) servic
 
 Prisma SD-WAN uses mapping of <strong>standard VPN services</strong> and <strong>Prisma SD-WAN data centers</strong> to allow flexibility when policy rules are created, while accounting for uniqueness across sites. <mark style="background: #FF5582A6;"><strong>Service</strong> and <strong>DC group</strong> labels can be used in Path policy rules</mark> <mark style="background: #FFB86CA6;">to express intent to allow or require traffic to transit through a <strong>Prisma SD-WAN data center</strong> or a <strong>cloud security service</strong> such as <strong>Palo Alto Networks Prisma Access</strong> for Networks</mark>.
 ![[Standard VPN Service Groups.png]]
-# 
+# Transport Quality Metrics
+Link quality metrics (LQM) probes are sent periodically between Instant-On Network (ION) devices and measure the loss, latency, and jitter on that path. These probes are sent from branch  IONs to hub IONs. The probes are sent on all the overlay virtual private network (VPN) tunnels (public and private) and on the private WAN underlay path.
