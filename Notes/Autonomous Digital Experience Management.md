@@ -35,3 +35,11 @@ With <strong>ADEM</strong>, IT teams have <mark style="background: #ADCCFFA6;">e
 
 <mark style="background: #FFB86CA6;">To access the ADEM widgets</mark>, <mark style="background: #FFB8EBA6;">log into Strata Cloud Manager from the Hub</mark> with your credentials and <mark style="background: #FFF3A3A6;">view the unified visibility data</mark> <mark style="background: #BBFABBA6;">which includes ADEM widgets in the various dashboards</mark>.
 ## ADEM Observability Features
+### Application Experience Dashboard
+<mark style="background: #BBFABBA6;">The ADEM Observability license unlocks</mark> the <mark style="background: #ABF7F7A6;">Application Experience dashboard</mark>, which <mark style="background: #ADCCFFA6;">displays the <strong>Mobile User Experience</strong> card</mark> and <mark style="background: #D2B3FFA6;">the <strong>Remote Site Experience card</strong></mark> <mark style="background: #BBFABBA6;">based on the license(s) you have purchased</mark>. 
+<mark style="background: #FFF3A3A6;">In addition to the Application Experience dashboard, you will also be able to view user-specific, branch-specific, and application-specific dashboards</mark>.
+![[Application Experience Dashborad.png]]
+### ADEM Zoom Integration
+Video call traffic is very sensitive to network conditions. Performance issues that might not impact web browsing can be felt by users on video calls. In order to help administrators debug, monitor, and proactively identify the performance issues impacting Zoom users in their organization, ADEM has partnered with Zoom to provide the first per-minute root-cause analysis on the market.
+
+This integration provides minute-by-minute analysis of all of the Zoom calls in your network. ADEM also rolls these insights up at the organization level so that customers can find the service delivery segment most impacting users. The Zoom performance monitoring is restricted to the participants within the organization only. If a Zoom call has participants attending from outside your organization (who do not belong to the tenant being monitored), their data will not be analyzed or stored by ADEM.
