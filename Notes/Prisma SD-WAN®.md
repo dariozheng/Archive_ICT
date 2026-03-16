@@ -546,4 +546,11 @@ Under <strong>Manage > Prisma SD-WAN > Policies > QoS</strong>, then select <str
 QoS prefixes can be configured and used in QoS policies. From release 6.2.1, both IPv4 and IPv6 QoS prefixes are supported.![[Add QoS Stack.png]]
 ##### Define Policy Rule
 ###### Path Policy Rule
-Within a simple Path policy rule, applications and their desired path and policy behaviors are configured as shown. Prisma SD-WAN supports unified App-IDs to provide application detection services for Prisma SD-WAN and Palo Alto Network applications. Sites must have their ION devices updated to 6.0.1 to take advantage of the new applications. To filter applications based on the ION device version, use the options at the top of the page.
+Within a simple Path policy rule, <mark style="background: #ABF7F7A6;">applications and their desired path and policy behaviors are configured as shown</mark>. Prisma SD-WAN supports unified App-IDs to provide application detection services for Prisma SD-WAN and Palo Alto Network applications. Sites must have their ION devices updated to 6.0.1 to take advantage of the new applications. To filter applications based on the ION device version, use the options at the top of the page.
+![[Path Policy Rule.png]]
+###### QoS Policy Rule
+Within a simple QoS policy rule, applications and their desired priority are configured. Optionally, the applications defined have their DSCP values re-marked.
+![[QoS Policy Rule.png]]
+##### User-ID in Path and QoS Policy Rules
+<mark style="background: #ADCCFFA6;">Users and/or groups can be specified in the Users tab's path and QoS policy rules</mark>. <mark style="background: #D2B3FFA6;">The Cloud Identity Engine (CIE) and the user agent must have been previously configured to enable the Users tab, allowing one or more users and/or groups to be specified in policy rules</mark>.
+### Advanced Stacked Policy
