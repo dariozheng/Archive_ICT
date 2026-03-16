@@ -40,6 +40,15 @@ With <strong>ADEM</strong>, IT teams have <mark style="background: #ADCCFFA6;">e
 <mark style="background: #FFF3A3A6;">In addition to the Application Experience dashboard, you will also be able to view user-specific, branch-specific, and application-specific dashboards</mark>.
 ![[Application Experience Dashborad.png]]
 ### ADEM Zoom Integration
-Video call traffic is very sensitive to network conditions. Performance issues that might not impact web browsing can be felt by users on video calls. In order to help administrators debug, monitor, and proactively identify the performance issues impacting Zoom users in their organization, ADEM has partnered with Zoom to provide the first per-minute root-cause analysis on the market.
+Video call traffic is very sensitive to network conditions. Performance issues that might not impact web browsing can be felt by users on video calls. 
 
-This integration provides minute-by-minute analysis of all of the Zoom calls in your network. ADEM also rolls these insights up at the organization level so that customers can find the service delivery segment most impacting users. The Zoom performance monitoring is restricted to the participants within the organization only. If a Zoom call has participants attending from outside your organization (who do not belong to the tenant being monitored), their data will not be analyzed or stored by ADEM.
+In order to help administrators debug, monitor, and proactively identify <mark style="background: #BBFABBA6;">the performance issues impacting Zoom users in their organization</mark>, <mark style="background: #ABF7F7A6;">ADEM has partnered with Zoom to provide the first per-minute root-cause analysis on the market</mark>.
+
+<mark style="background: #ADCCFFA6;">This integration provides minute-by-minute analysis of all of the Zoom calls in your network</mark>. ADEM also rolls these insights up at the organization level so that customers can find the service delivery segment most impacting users. <mark style="background: #D2B3FFA6;">The Zoom performance monitoring is restricted to the participants within the organization only</mark>. <mark style="background: #CACFD9A6;">If a Zoom call has participants attending from outside your organization</mark> (who do not belong to the tenant being monitored), <mark style="background: #CACFD9A6;">their data will not be analyzed or stored by ADEM</mark>.
+![[ADEM Zoom Integration.png]]
+### ADEM Self-Serve
+<strong>ADEM Self-Serve</strong> empowers end users <mark style="background: #FFB8EBA6;">to resolve the application experience issues that fall into their purview</mark> <mark style="background: #FF5582A6;">by displaying notifications on their endpoints with suggested remediations</mark>. It sends notifications to users’ devices for the following events:
+- <mark style="background: #FFB86CA6;">Poor Wi-Fi quality and disconnected Wi-Fi</mark>
+- <mark style="background: #FFF3A3A6;">High central processing unit (CPU) or memory consumption</mark>
+- <mark style="background: #BBFABBA6;">Internet outages</mark>
+![[ADEM Self-Serve.png]]
