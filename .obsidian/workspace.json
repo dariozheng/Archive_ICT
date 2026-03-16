@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "w",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -220,6 +220,9 @@
   },
   "active": "53fd7d83e64b7d68",
   "lastOpenFiles": [
+    "attachments/Service & DC Groups 3.png",
+    "attachments/Service & DC Groups 2.png",
+    "attachments/Service & DC Groups.png",
     "attachments/Service and Data-Center Groups.png",
     "attachments/Advanced Stacked Policy config.png",
     "attachments/Advanced Stacked Policy.png",
@@ -228,7 +231,6 @@
     "attachments/Add QoS Stack.png",
     "attachments/Add Path Stack.png",
     "attachments/Implicit Ordering.png",
-    "attachments/Explicit Ordering.png",
     "Notes/Glossaries/Cloud Computing Glossary.md",
     "Notes/Cloud Access Security Broker.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
@@ -236,8 +238,6 @@
     "Categories/Security.md",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Prisma SD-WAN®.md",
-    "attachments/Internet Circuits To Firewall.png",
-    "attachments/Two Core Peers In The Same Subnet.png",
     "Notes/Glossaries/Networking Glossary.md",
     "attachments/Configure Probes.pdf",
     "Notes/Traffic Flows.md",

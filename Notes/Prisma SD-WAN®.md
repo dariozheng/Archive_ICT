@@ -566,7 +566,7 @@ The policies will be evaluated from left to right until a match is found. If no 
 # Service and Data-Center Groups
 Service and data-center groups allow for very simple or very granular policies. 
 
-<mark style="background: #FFB8EBA6;">Mapping of third-party services utilizing standard <strong>IPSec/GRE endpoints</strong> for <strong>service integration</strong></mark> and <mark style="background: #FF5582A6;"><strong>Prisma SD-WAN data centers</strong> allows for <strong>geolocation-based service</strong> and <strong>data-center choices</strong></mark>. <mark style="background: #FFB86CA6;">Service and data-center groups are used to map services or data centers as optional or mandatory <strong>transit points</strong> for traffic</mark>.
+<mark style="background: #FFB8EBA6;">Mapping of third-party services utilizing standard <strong>IPSec/GRE endpoints</strong> for <strong>service integration</strong></mark> and <mark style="background: #FF5582A6;"><strong>Prisma SD-WAN data centers</strong> allows for <strong>geolocation-based service</strong> and <strong>data-center choices</strong></mark>. <mark style="background: #FFB86CA6;">Service and data-center groups are used to map services or data centers as <strong>optional</strong> or <strong>mandatory</strong> <strong>transit points</strong> for traffic</mark>.
 
 For example, <mark style="background: #FFF3A3A6;">if a <strong>branch</strong> has internet-only connectivity</mark> and <mark style="background: #BBFABBA6;">needs to access traffic within a data center or internal resource</mark>, <mark style="background: #ABF7F7A6;">a <strong>data center (DC) group</strong> must be defined and listed as part of the optional transit path for that <strong>branch</strong> or <strong>traffic flow</strong></mark>.
 
@@ -574,3 +574,14 @@ For example, <mark style="background: #FFF3A3A6;">if a <strong>branch</strong> h
 
 <mark style="background: #CACFD9A6;">These transit locations can be made optional or mandatory. For mandatory transit, traffic must go to that service or DC group for policy inspection</mark>.
 ![[Service and Data-Center Groups.png]]
+##### Service and Data-Center Groups #configuration 
+<mark style="background: #FFB8EBA6;">Service and data-center groups are created and mapped by an organization to meet its requirements</mark>. After sites are created, <mark style="background: #FF5582A6;">they then are mapped to their respective domain, service, or data-center groups</mark>. Within the policy, <mark style="background: #FFB86CA6;">the service or data-center group then is configured for the given application or traffic flow</mark>. <mark style="background: #FFF3A3A6;">If the service or data-center group is required to flow through a given instance for inspection, then the <strong>Required</strong> checkbox would be enabled</mark>.
+
+Define primary and backup Prisma SD-WAN data-centers groups per domain for simplified policy management.
+![[Service & DC Groups.png]]
+
+Reference the data-center group in policy rules; the branch site to which the domain is bound will determine the definition of the group. As an example, all internet-bound web traffic should transit through the primary DC over any transport, and if not available or meeting service-level agreements (SLAs), use the backup DC.
+![[Service & DC Groups 2.png]]
+
+Setting the Required check box forces traffic to use the service or DC group referenced even if a direct path is available. If the box is left unchecked and there is a direct path allowed and available, the system will optionally use the transit path with preference given to the direct path if the SLA is met.
+![[Service & DC Groups 3.png]]
