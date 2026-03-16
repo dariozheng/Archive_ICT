@@ -585,4 +585,8 @@ For example, <mark style="background: #FFF3A3A6;">if a <strong>branch</strong> h
 
 Setting the <strong>Required</strong> check box <mark style="background: #FFB8EBA6;">forces traffic to use the <strong>service</strong> or <strong>DC group</strong> referenced even if a direct path is available</mark>. <mark style="background: #FFB86CA6;">If the box is left unchecked and there is a direct path allowed and available, the system will optionally use the transit path with preference given to the direct path if the SLA is met</mark>.
 ![[Service & DC Groups 3.png]]
-# 
+## Standard VPN Service Groups
+The process of configuring <strong>standard virtual private network (VPN) service groups</strong> is identical to configuring <strong>data-center groups</strong>. <mark style="background: #FFB8EBA6;">The groups are added and used in the same way as a data-center group</mark>.
+
+Prisma SD-WAN uses mapping of <strong>standard VPN services</strong> and <strong>Prisma SD-WAN data centers</strong> to allow flexibility when policy rules are created, while accounting for uniqueness across sites. <mark style="background: #FF5582A6;"><strong>Service</strong> and <strong>DC group</strong> labels can be used in Path policy rules</mark> <mark style="background: #FFB86CA6;">to express intent to allow or require traffic to transit through a <strong>Prisma SD-WAN data center</strong> or a <strong>cloud security service</strong> such as <strong>Palo Alto Networks Prisma Access</strong> for Networks</mark>.
+![[Standard VPN Service Groups.png]]
