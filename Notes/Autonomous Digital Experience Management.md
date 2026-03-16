@@ -17,9 +17,8 @@ aliases:
 With the <strong>ADEM Observability license</strong>, you can gain <mark style="background: #ADCCFFA6;">end-user monitoring</mark> of <mark style="background: #D2B3FFA6;">user-to-application health and performance</mark> <mark style="background: #CACFD9A6;">with synthetic tests</mark>.
 
 - <mark style="background: #ADCCFFA6;"><strong>AIOps</strong></mark>
-The platform’s <mark style="background: #FFB8EBA6;">built-in artificial intelligence (AI)-based</mark> <mark style="background: #FFB86CA6;">incident detection, diagnostics, predictive analytics, and automated workflows</mark> empower IT teams to detect and resolve complex problems before they have a widespread impact. 
-As a result, enterprises can boost staff efficiency, reduce costly downtime, and drive proactive IT operations. 
-With the <strong>AI-Powered ADEM license</strong>, you can access comprehensive capabilities, including ADEM Observability and AIOps, to automate and streamline complex operations.
+The platform’s <mark style="background: #FFB8EBA6;">built-in artificial intelligence (AI)-based</mark> <mark style="background: #FFB86CA6;"><strong>incident detection</strong>, <strong>diagnostics</strong>, <strong>predictive analytics</strong>, and <strong>automated workflows</strong></mark> empower IT teams to detect and resolve complex problems before they have a widespread impact. 
+With the <strong>AI-Powered ADEM license</strong>, you can access comprehensive capabilities, including <strong>ADEM Observability</strong> and <strong>AIOps</strong>.
 
 <mark style="background: #FFF3A3A6;"><strong>ADEM</strong> functionality is natively integrated into</mark> the <mark style="background: #BBFABBA6;">GlobalProtect app</mark>, <mark style="background: #ABF7F7A6;">Prisma SD-WAN device</mark>, and <mark style="background: #ADCCFFA6;">Prisma Access</mark> and <mark style="background: #FFF3A3A6;">therefore does not require you to deploy any additional appliances or agents</mark>. 
 
