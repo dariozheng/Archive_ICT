@@ -599,6 +599,9 @@ Here we define <mark style="background: #FF5582A6;">the applications that are pa
 ##### General Web Browsing - Back to Data Center
 <mark style="background: #BBFABBA6;">With any other applications</mark>,<mark style="background: #ABF7F7A6;"> we want to send them to our data center for policy inspection/enforcement</mark>. In this example, <mark style="background: #ADCCFFA6;">SSL and HTTP are not trusted natively</mark>, <mark style="background: #D2B3FFA6;">so they will be sent via VPN</mark> (Prisma SD-WAN Secure Fabric) <mark style="background: #CACFD9A6;">to the Primary data center and/or Backup data center for inspection</mark>.
 ![[General Web Browsing - Back to Data Center.png]]
+### Policy Control Based on Network Context
+Network context such as Guest Traffic can be identified.
+For example, the Guest Traffic can be configured to be only allowed to go direct on any public interface.
 
 # Service and Data-Center Groups
 Service and data-center groups allow for very simple or very granular policies. 

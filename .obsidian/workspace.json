@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883
+    "width": 257.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -217,7 +218,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "attachments/General Web Browsing - Back to Data Center.png",
     "attachments/Direct Internet Access.png",
