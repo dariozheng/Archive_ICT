@@ -602,6 +602,37 @@ Here we define <mark style="background: #FF5582A6;">the applications that are pa
 ### Policy Control Based on Network Context
 Network context such as Guest Traffic can be identified.
 For example, the Guest Traffic can be configured to be only allowed to go direct on any public interface.
+![[Policy Control Based on Network Context.png]]
+## Dynamic Path Selection 
+The goal of the Prisma SD-WAN architecture is <mark style="background: #ABF7F7A6;">to intelligently make application path decisions</mark>. 
+
+Prisma SD-WAN uses <strong>Dynamic Path Selection</strong> and uses the following to account for application performance:
+- <mark style="background: #ADCCFFA6;">Measure transport performance </mark>
+- <mark style="background: #D2B3FFA6;">Address Layer 7 app reachability issues</mark>
+- <mark style="background: #CACFD9A6;">Account for Layer 3 reachability and availability</mark>
+- Support cloud, media, and enterprise encrypted and custom apps
+- Guarantee [[security glossary#flow symmetry|flow symmetry]]
+- Be able to support “single ended” direct Internet paths
+- <mark style="background: #FFB8EBA6;">Allow third-party service transit</mark> with performance monitoring
+- <mark style="background: #FF5582A6;">Allow explicit data center transit</mark>
+Before understanding how Dynamic Path Selection works, you must understand the logic of <mark style="background: #D2B3FFA6;">when a new path selection is made</mark>. <mark style="background: #FFB86CA6;">The <strong>new path</strong> selection criteria used within the system are as follows</mark>:
+- <mark style="background: #FFF3A3A6;">When a new flow is created</mark>
+- <mark style="background: #BBFABBA6;">When a path flaps</mark> (goes down or up)
+- <mark style="background: #ADCCFFA6;">When performance policy SLAs rules apply</mark> 
+- <mark style="background: #D2B3FFA6;">When asymmetry occurs in the network</mark> (<mark style="background: #CACFD9A6;">when the <strong>return path</strong> is different from the path chosen by the flow when exiting the branch</mark>)
+- <mark style="background: #FFB8EBA6;">Active and backup path selection</mark>
+<mark style="background: #FF5582A6;">Before a path can be chosen, it must be evaluated as to whether it can be used to carry the <strong>application(s)</strong></mark>. The evaluation criteria used are as follows:
+- Network and Security policy
+- Link status (up or down)
+- <mark style="background: #FFB86CA6;">Data center transit</mark>
+- <mark style="background: #FFF3A3A6;">Path preference</mark>
+- <mark style="background: #BBFABBA6;">Link or path performance per app thresholds</mark> (latency, loss, jitter)
+- <mark style="background: #ABF7F7A6;">Layer 3 reachability on both the direct and VPN paths</mark>
+- <mark style="background: #ADCCFFA6;">Application-specific reachability</mark> (TCP initiation failures and transaction failures)
+- <mark style="background: #D2B3FFA6;">Application-specific performance characteristics</mark> (round-trip time, network transit time, transaction failure percentage, initialization failure percentage, and media MOS score)
+- <mark style="background: #CACFD9A6;">Path affinity</mark>
+- <mark style="background: #FFB8EBA6;">Select a path with the most available bandwidth</mark>
+
 
 # Service and Data-Center Groups
 Service and data-center groups allow for very simple or very granular policies. 

@@ -26,3 +26,5 @@ Link Quality Metrics provides the capability to monitor Prisma Access circuit co
 #### nonces
 In cryptography, a nonce is an arbitrary number that can be used just once in a cryptographic communication. 
 It is often a random or pseudo-random number issued in an authentication protocol to ensure that each communication session is unique, and therefore that old communications cannot be reused in replay attacks.
+#### flow symmetry
+Flow symmetry is traffic returning via the same firewall it entered.
