@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883,
-    "collapsed": true
+    "width": 257.5004348754883
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -218,10 +217,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "53fd7d83e64b7d68",
   "lastOpenFiles": [
-    "Notes/Glossaries/Security Glossary.md",
+    "attachments/Dual Active--Single Backup Path Policy.png",
     "Notes/Prisma SD-WAN®.md",
+    "attachments/Dual Active-Single Backup Path Policy.png",
+    "Notes/Glossaries/Security Glossary.md",
     "attachments/Policy Control Based on Network Context.png",
     "attachments/General Web Browsing - Back to Data Center.png",
     "attachments/Direct Internet Access.png",
@@ -230,8 +231,6 @@
     "attachments/Standard VPN Service Groups.png",
     "attachments/Service & DC Groups 3.png",
     "attachments/Service & DC Groups 2.png",
-    "attachments/Service & DC Groups.png",
-    "attachments/Service and Data-Center Groups.png",
     "Notes/Glossaries/Cloud Computing Glossary.md",
     "Notes/Cloud Access Security Broker.md",
     "Categories/Topics/Security/Palo Alto Networks.md",

@@ -586,6 +586,15 @@ Under normal conditions with no application brownouts/congestion detected at the
 Any circuit labeled as “To internet” with a the Prisma SD-WAN secure environment established.
 <strong>Backup Path VPN on Any Private</strong>
 Any circuit labeled as “Private WAN” (MPLS), send directly on the path.
+### Dual Active/Single Backup Path Policy
+In addition to the <mark style="background: #BBFABBA6;">two active paths</mark>, <strong>Prisma SD-WAN VPN on Primary Internet</strong> and <strong>Prisma SD-WAN VPN on Any Private</strong>, the business now has added a backup path to its policy: <strong>Direct on Any Private</strong>. 
+"Primary Internet" should be used as the first active path circuit category opposed to "Any Public" as LTE circuits would be included in any public.
+
+The organization prefers to have encrypted traffic where possible, <mark style="background: #ABF7F7A6;">but as a backup path, it will forgo encryption and send directly on the MPLS/private WAN</mark>. <mark style="background: #ADCCFFA6;">Remember that Dynamic Path Selection will evaluate the two active paths for the viability of carrying an application session</mark>. If not, it will utilize the backup path for a new session.
+
+Lastly, <mark style="background: #D2B3FFA6;">the organization wants to have a policy path of last resort. This goal is accomplished through an <strong>L3 failure path</strong> in its policy</mark>. The organization has now added a backup path to its policy: <strong>Prisma SD-WAN VPN on Metered 3G/4G/LTE</strong>.
+![[Dual Active-Single Backup Path Policy.png]]
+![[Dual Active--Single Backup Path Policy.png]]
 ### Policy for Trusted SaaS Applications
 <mark style="background: #BBFABBA6;">Certain applications such as <strong>SaaS applications</strong> are encrypted</mark> and <mark style="background: #ABF7F7A6;">have their security controls applied through other mechanisms</mark>, if needed. Enterprise organizations can elect <mark style="background: #ADCCFFA6;">to trust theses applications</mark> and <mark style="background: #D2B3FFA6;">send them directly on an internet path</mark> without going through a data center or third-party service:
 <strong>Active Policy</strong>
@@ -616,7 +625,7 @@ Prisma SD-WAN uses <strong>Dynamic Path Selection</strong> and uses the followin
 - <mark style="background: #FFB8EBA6;">Allow third-party service transit</mark> with performance monitoring
 - <mark style="background: #FF5582A6;">Allow explicit data center transit</mark>
 
-Before understanding how Dynamic Path Selection works, you must understand the logic of <mark style="background: #D2B3FFA6;">when a new path selection is made</mark>. <mark style="background: #FFB86CA6;">The <strong>new path</strong> selection criteria used within the system are as follows</mark>:
+Before understanding how Dynamic Path Selection works, you must understand the logic of <mark style="background: #D2B3FFA6;"><strong>when a new path selection is made</strong></mark>. <mark style="background: #FFB86CA6;">The <strong>new path</strong> selection criteria used within the system are as follows</mark>:
 - <mark style="background: #FFF3A3A6;">When a new flow is created</mark>
 - <mark style="background: #BBFABBA6;">When a path flaps</mark> (goes down or up)
 - <mark style="background: #ADCCFFA6;">When performance policy SLAs rules apply</mark> 
@@ -634,7 +643,6 @@ Before understanding how Dynamic Path Selection works, you must understand the l
 - <mark style="background: #D2B3FFA6;">Application-specific performance characteristics</mark> (round-trip time, network transit time, transaction failure percentage, initialization failure percentage, and media MOS score)
 - <mark style="background: #CACFD9A6;">Path affinity</mark>
 - <mark style="background: #FFB8EBA6;">Select a path with the most available bandwidth</mark>
-
 
 # Service and Data-Center Groups
 Service and data-center groups allow for very simple or very granular policies. 
