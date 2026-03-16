@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "Notes/Prisma SD-WAN®.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -218,7 +218,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "53fd7d83e64b7d68",
   "lastOpenFiles": [
     "attachments/Performance Policy Rule4.png",
     "attachments/Performance Policy Rule 3.png",

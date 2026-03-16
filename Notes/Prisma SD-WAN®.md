@@ -747,4 +747,3 @@ The Concurrent Flows charts are used to:
 - <mark style="background: #FFB8EBA6;">Analyze a site in terms of connections per second</mark>.
 - <mark style="background: #FFB86CA6;">Monitor any unlikely increase in the number of flows for a particular application, such as DNS or any critical application, which could be a sign of malicious activity</mark>.
 ![[Concurrent Flows.png]]
-# 
