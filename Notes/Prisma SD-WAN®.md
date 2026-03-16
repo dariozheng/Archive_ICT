@@ -612,7 +612,7 @@ Here we define <mark style="background: #FF5582A6;">the applications that are pa
 Network context such as Guest Traffic can be identified.
 For example, the Guest Traffic can be configured to be only allowed to go direct on any public interface.
 ![[Policy Control Based on Network Context.png]]
-## Dynamic Path Selection 
+# Dynamic Path Selection 
 The goal of the Prisma SD-WAN architecture is <mark style="background: #ABF7F7A6;">to intelligently make application path decisions</mark>. 
 
 Prisma SD-WAN uses <strong>Dynamic Path Selection</strong> and uses the following to account for application performance:
@@ -643,7 +643,6 @@ Before understanding how Dynamic Path Selection works, you must understand the l
 - <mark style="background: #D2B3FFA6;">Application-specific performance characteristics</mark> (round-trip time, network transit time, transaction failure percentage, initialization failure percentage, and media MOS score)
 - <mark style="background: #CACFD9A6;">Path affinity</mark>
 - <mark style="background: #FFB8EBA6;">Select a path with the most available bandwidth</mark>
-
 # Service and Data-Center Groups
 Service and data-center groups allow for very simple or very granular policies. 
 
