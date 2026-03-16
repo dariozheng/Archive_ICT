@@ -34,3 +34,4 @@ With <strong>ADEM</strong>, IT teams have <mark style="background: #ADCCFFA6;">e
 <mark style="background: #FF5582A6;">ADEM data is available in the <strong>Strata Cloud Manager</strong></mark>. 
 
 <mark style="background: #FFB86CA6;">To access the ADEM widgets</mark>, <mark style="background: #FFB8EBA6;">log into Strata Cloud Manager from the Hub</mark> with your credentials and <mark style="background: #FFF3A3A6;">view the unified visibility data</mark> <mark style="background: #BBFABBA6;">which includes ADEM widgets in the various dashboards</mark>.
+## ADEM Observability Features
