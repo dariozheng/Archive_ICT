@@ -21,7 +21,7 @@ Service-level assurance involves guaranteeing specific <strong>performance stand
 Latency refers to the time it takes for data packets to travel from a source to a destination. (measured in ms).
 #### jitter
 Jitter refers to the inconsistency of data packet arrival intervals or the variation in latency over time.
-#### packet loss
+#### loss
 Packet Loss is when data packets fail to reach their destination.
 #### ethernet handoff
 An Ethernet handoff is the physical interface (typically RJ-45 for copper or SFP for fiber) where an Internet Service Provider (ISP) delivers connectivity to a customer's router or firewall. 
