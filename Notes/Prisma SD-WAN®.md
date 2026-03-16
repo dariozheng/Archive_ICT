@@ -675,7 +675,17 @@ Prisma SD-WAN uses mapping of <strong>standard VPN services</strong> and <strong
 
 <mark style="background: #FFF3A3A6;"><strong>LQM metrics</strong> for each path are measured in both directions</mark>, <mark style="background: #BBFABBA6;">giving you both ingress and egress metrics from the branch perspective</mark>. 
 
-<mark style="background: #ABF7F7A6;">For the overlay, the probes are between the tunnel endpoints, through the tunnel</mark>. <mark style="background: #ADCCFFA6;">The probes for the MPLS underlay are sent from the branch ION <strong>controller port</strong> or <strong>WAN (MPLS) port</strong>, depending on whether the ION is in L2 or L3 mode configuration</mark>.
+<mark style="background: #ABF7F7A6;">For the <strong>overlay</strong>, the probes are between the <strong>tunnel endpoints</strong>, through the tunnel</mark>. <mark style="background: #ADCCFFA6;">The probes for the <strong>MPLS underlay</strong> are sent from the branch ION <strong>controller port</strong> or <strong>WAN (MPLS) port</strong>, depending on whether the ION is in L2 or L3 mode configuration</mark>.
 
 <strong>Bidirectional forwarding detection (BFD)</strong> probes are also <mark style="background: #D2B3FFA6;">sent between the IONs on the overlay (public and private)</mark> and <mark style="background: #CACFD9A6;">the underlay (private) paths</mark> <mark style="background: #FFB8EBA6;">as heartbeats for detecting the liveliness of the paths</mark>. <mark style="background: #FF5582A6;">These <strong>BFD probes</strong> are sourced and sent in the same way as the LQM probes</mark>.
 ![[Transport Quality Metrics.png]]
+## LQM Measurement on Underlay
+The probes for the MPLS underlay are sent from the <strong>branch ION controller port</strong> or <strong>WAN (MPLS) port</strong>, depending on whether the ION is in <strong>L2</strong> or <strong>L3</strong> mode configuration.
+### Branch ION 3K in L2 mode
+![[Branch ION 3K in L2 mode.png]]The following diagram shows an ION 3K in <mark style="background: #FFB86CA6;">L2 mode configuration</mark>. <mark style="background: #FFF3A3A6;">The WAN/LAN ports are set up as an L2 bypass pair</mark>. In this case, <mark style="background: #BBFABBA6;">LQM probes originate from the ION 3K <strong>controller port</strong></mark>, <mark style="background: #ABF7F7A6;">pass through the LAN, and continue out to the WAN via the L2 private bypass port</mark>.
+<mark style="background: #ADCCFFA6;">The destination is the WAN port on the hub ION 9K</mark>.
+### Branch ION 3K in L3 mode
+![[Branch ION 3K in L3 mode.png]]
+The following diagram shows an ION 3K in <mark style="background: #FF5582A6;">L3 mode configuration</mark>. <mark style="background: #FFB86CA6;">In this case, the <strong>WAN port</strong> on the ION 3K is being used as an <strong>individual port</strong></mark> (with L3 WAN Forwarding enabled),<mark style="background: #FFF3A3A6;"> and the LQM probes originate directly from the <strong>WAN interface</strong></mark>.
+
+The destination is the WAN port on the hub ION 9K.
