@@ -27,7 +27,10 @@ With the <strong>AI-Powered ADEM license</strong>, you can access comprehensive 
 <mark style="background: #FFB8EBA6;">ADEM continuously monitors all the segments from the endpoint to the application</mark> for <mark style="background: #FFB8EBA6;">GlobalProtect mobile users</mark> and <mark style="background: #FF5582A6;">monitors all segments on all WAN paths</mark> (active and backup) <mark style="background: #FF5582A6;">for Prisma SD-WAN remote sites</mark> <mark style="background: #CACFD9A6;">and identifies baseline metrics for each monitored application</mark>.
 
 <mark style="background: #FFB86CA6;">ADEM provides <strong>visibility</strong> into any <strong>deviations</strong> or <strong>events</strong></mark> <mark style="background: #FFF3A3A6;">that degrade the user experience across each segment between the end user and the application</mark>, whether it’s the endpoint, Wi-Fi, local area network (LAN), internet service provider (ISP), Prisma Access, or the application. 
-
 <mark style="background: #BBFABBA6;">ADEM continuously monitors every segment in the service delivery path</mark> and <mark style="background: #ABF7F7A6;">provides insights that help you quickly isolate the segment, which is causing digital experience problems, and simplify remediation</mark>.
-
 # ADEM Data 
+With <strong>ADEM</strong>, IT teams have <mark style="background: #ADCCFFA6;">end-to-end observability insights all in one place</mark>. 
+
+<mark style="background: #FF5582A6;">ADEM data is available in the <strong>Strata Cloud Manager</strong></mark>. 
+
+<mark style="background: #FFB86CA6;">To access the ADEM widgets</mark>, <mark style="background: #FFB8EBA6;">log into Strata Cloud Manager from the Hub</mark> with your credentials and <mark style="background: #FFF3A3A6;">view the unified visibility data</mark> <mark style="background: #BBFABBA6;">which includes ADEM widgets in the various dashboards</mark>.
