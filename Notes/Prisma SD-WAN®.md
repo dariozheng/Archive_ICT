@@ -748,3 +748,9 @@ The Concurrent Flows charts are used to:
 - <mark style="background: #FFB8EBA6;">Analyze a site in terms of connections per second</mark>.
 - <mark style="background: #FFB86CA6;">Monitor any unlikely increase in the number of flows for a particular application, such as DNS or any critical application, which could be a sign of malicious activity</mark>.
 ![[Concurrent Flows.png]]
+# Monitoring and logging
+Monitor and generate reports of the application and link health status in your VPN clusters to identify and resolve issues. 
+
+In order for the <mark style="background: #FFB8EBA6;">Panorama® management server</mark> to display <mark style="background: #FF5582A6;">SD-WAN application and link health information</mark>, <mark style="background: #FFB86CA6;">you must enable the <strong>SD-WAN firewalls</strong> to push device monitoring data to Panorama</mark> and <mark style="background: #FFF3A3A6;">configure log forwarding to Panorama when you add your SD-WAN firewalls as managed devices</mark>. 
+
+If you have not configured your SD-WAN firewalls to forward logs to Panorama, the SD-WAN Monitoring displays no application or link health information.
