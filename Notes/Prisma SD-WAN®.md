@@ -563,6 +563,38 @@ Select <strong>Stacked Policies</strong>, <strong>Path</strong> or <strong>QoS</
 
 The policies will be evaluated from left to right until a match is found. If no match is found in the defined policy sets 1 through 4, the default rule policy set then will be used.
 ![[Advanced Stacked Policy config.png]]
+## Policy Use Cases
+### Active/Active Path Policy
+A common use case for organizations is to have <mark style="background: #FFB8EBA6;">both an <strong>internet path</strong> and <strong>a private WAN</strong> (MPLS) for a given branch</mark> making a Hybrid WAN.
+![[Active-Active Path Policy.png]]
+<strong>VPN on Any Public</strong>
+Any circuit labeled as “To internet” with a Secure Fabric established
+<strong>Direct on Any Private</strong>
+Any circuit labeled as “Private WAN” (MPLS), send directly on the path
+<strong>VPN on Any Private</strong>
+Any ”Private WAN” (MPLS) in which both sides are part of the same provider and a Secure Fabric is established
+### Active/Backup Path Policy
+Organizations tend to configure their policy this way because broadband/internet circuits very likely will have higher bandwidth than legacy MPLS/private WAN paths. With this in mind, Prisma SD-WAN will be implemented using the following logic.
+
+<strong>Active Path</strong>
+Under normal conditions with no application brownouts/congestion detected at the Prisma SD-WAN branch, this will be the preferred path.
+<strong>Backup Path</strong>
+<mark style="background: #FFB8EBA6;">If an application (such as voice) has a <strong>brownout</strong></mark> (e.g., <mark style="background: #FF5582A6;">the application is not sustainable over the active path</mark>), <mark style="background: #FFB86CA6;">the backup path then will be used for the session</mark>. <mark style="background: #FFF3A3A6;">A backup path chosen for an application such as voice does not preclude the next session or application from using the active path</mark> (e.g., FTP and web browsing).
+
+![[Active-Backup Path Policy.png]]
+<strong>Active Path VPN on Any Public</strong>
+Any circuit labeled as “To internet” with a the Prisma SD-WAN secure environment established.
+<strong>Backup Path VPN on Any Private</strong>
+Any circuit labeled as “Private WAN” (MPLS), send directly on the path.
+### Policy for Trusted SaaS Applications
+<mark style="background: #BBFABBA6;">Certain applications such as <strong>SaaS applications</strong> are encrypted</mark> and <mark style="background: #ABF7F7A6;">have their security controls applied through other mechanisms</mark>, if needed. Enterprise organizations can elect <mark style="background: #ADCCFFA6;">to trust theses applications</mark> and <mark style="background: #D2B3FFA6;">send them directly on an internet path</mark> without going through a data center or third-party service:
+<strong>Active Policy</strong>
+Trusted SaaS applications will use <strong>Direct Internet Access (DIA) links</strong> where no firewall inspection is done at the branch or ISP level.
+<strong>Backup Policy</strong>
+The backup policy will be used when the application <mark style="background: #CACFD9A6;">needs to fail over the flows</mark> and <mark style="background: #FFB8EBA6;">this policy will transit to enterprise data centers and route to the internet via the data centers</mark>.
+#### Policy for Trusted SaaS Applications #configuration 
+
+
 # Service and Data-Center Groups
 Service and data-center groups allow for very simple or very granular policies. 
 
