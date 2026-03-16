@@ -576,24 +576,28 @@ The Performance Sets tab contains policy rules and are a part of the policy set 
 ### Performance Policy Rule
 <mark style="background: #ABF7F7A6;">Performance Policy rules can be defined with <strong>Link Quality</strong> and <strong>Application metrics</strong> thresholds</mark>. <mark style="background: #ADCCFFA6;">Users can apply the rule at an <strong>application</strong> or <strong>transfer type</strong> level</mark>, select path types, path filters and path category, select Path Filters, Circuit labels, Path types, and Data center groups.
 ![[Performance Policy Rule.png]]
- 
+#### General
  - When creating a rule, <mark style="background: #D2B3FFA6;">the <strong>rule type</strong> specifies if the rule applies to the <strong>Application SLA</strong> or the <strong>System Health</strong></mark>.
  ![[Performance Policy Rule1.png]]
-
+#### Action
 - <mark style="background: #CACFD9A6;">The <strong>Create Incident</strong> action generates incidents for Applications and System Health events based on Performance SLA criteria</mark>.
 - <mark style="background: #FFB8EBA6;">The <strong>Move Flows</strong> action moves existing flows</mark> and <mark style="background: #FF5582A6;">excludes paths for new flows that violate a performance SLA</mark>. These include both <strong>Link Quality</strong> and <strong>Application Metrics</strong>. <mark style="background: #FFB86CA6;">When the <strong>Move Flows</strong> field is empty in a rule, the datapath won't consider LQM measurements during path selection</mark>. 
 - The <strong>Visibility</strong> action affects the <strong>secure fabric link</strong> time series while projecting the performance SLA indicators. The visibility action relies on <strong>Link Quality Metrics</strong>. 
 - The <strong>Packet Duplication</strong> and <strong>FEC</strong> (<strong>Forward Error Correction</strong>) actions <mark style="background: #FFF3A3A6;">are mutually exclusive and must be enabled along with the Move Flows action</mark>. <mark style="background: #BBFABBA6;"><strong>FEC</strong> only relies on the loss and latency Link Quality Metrics</mark> and does not use Application metrics. <mark style="background: #ABF7F7A6;">FEC takes effect only on Prisma SD-WAN VPNs</mark>.
 ![[Performance Policy Rule2.png]]
-
+### Match Criteria (Application SLA)
 - <strong>App Filters</strong> : to select an Application(s) to apply the policy rule. You can select 256 applications for one policy rule. 
-- Application by Transfer Type : Bulk, Audio, Video, or Transactional. 
-- Path Filters:
+- <strong>Application by Transfer Type</strong> : Bulk, Audio, Video, or Transactional. 
+- <strong>Path Filters</strong>:
     - Path Category - an overlay and a Circuit Category for a path. 
     - Path Type as Direct, Prisma SD-WAN VPN, or Standard VPN. 
 - (Optional) Select the DC Group value from the drop-down. By default, all DC Groups are included.
 ![[Performance Policy Rule 3.png]]
-
+#### Match Criteria (System Health)
+- System Health Metrics: CPU, Memory, or Disk utilization and the thresholds required for generating an incident. 
+- Flow Metrics: Concurrent flow utilization. 
+- Circuit Utilization: Circuit Utilization.
+![[Performance Policy Rule4.png]]
 ## Policy Use Cases
 ### Active/Active Path Policy
 A common use case for organizations is to have <mark style="background: #FFB8EBA6;">both an <strong>internet path</strong> and <strong>a private WAN</strong> (MPLS) for a given branch</mark> making a Hybrid WAN.
