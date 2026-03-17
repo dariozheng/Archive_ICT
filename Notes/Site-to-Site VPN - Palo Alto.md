@@ -37,7 +37,7 @@ The three most used protocols in the IPsec suite are <strong>IKE</strong>, <stro
 ## Internet Key Exchange (IKE)
 An IPsec tunnel is created in two phases.
 ### IKE Phase 1
-With IKE Phase 1,<mark style="background: #FFF3A3A6;"> each device is identified to the other by a <strong>peer ID</strong></mark>. In most cases, <mark style="background: #BBFABBA6;">this ID is just the <strong>public IP address</strong> of the device</mark>. <mark style="background: #ABF7F7A6;">In situations where the public ID is not static, this value can be replaced with a <strong>domain name</strong> or other text value</mark>. 
+With IKE Phase 1,<mark style="background: #FFF3A3A6;"> <u>each device is identified to the other by a <strong>peer ID</strong></u></mark>. In most cases, <mark style="background: #BBFABBA6;">this ID is just the <strong>public IP address</strong> of the device</mark>. <mark style="background: #ABF7F7A6;">In situations where the public ID is not static, this value can be replaced with a <strong>domain name</strong> or other text value</mark>. 
 
 <mark style="background: #ADCCFFA6;">IKE Phase 1 provides <strong>authentication</strong> of the endpoints of the tunnel</mark> and <mark style="background: #D2B3FFA6;">creates a <strong>secure channel</strong> for the next phase of the VPN</mark>. <mark style="background: #FFB86CA6;">The IKE protocol uses the <strong>IKE-Crypto profile</strong> for negotiation</mark>.
 
@@ -50,3 +50,17 @@ IKE Phase 1 is concerned with authenticating the endpoints. <mark style="backgro
 
 During IKE Phase 2, five pieces of information are passed between peers:
 ![[IKE Phase 2.png]]
+# Route-Based Site-to-Site VPN
+![[Route-Based Site-to-Site VPN.png]]
+When a client that is secured by <strong>VPN Peer A</strong> needs content from a server at the other site, <mark style="background: #FFB8EBA6;"><strong>VPN Peer A</strong> initiates a connection request to <strong>VPN Peer B</strong></mark>. <mark style="background: #FFF3A3A6;">If the security policy permits the connection</mark>, <mark style="background: #BBFABBA6;"><strong>VPN Peer A</strong> uses the <strong>IKE Crypto profile parameters (IKE Phase 1)</strong> to <u>establish a secure connection</u></mark> and <mark style="background: #ABF7F7A6;"><u>authenticate</u> <strong>VPN Peer B</strong></mark>. Then, <mark style="background: #ADCCFFA6;"><strong>VPN Peer A</strong> uses the <strong>IPsec Crypto profile</strong> to <u>establish the <strong>VPN tunnel</strong></u></mark>, <mark style="background: #D2B3FFA6;">which defines the IKE phase 2 parameters to allow the secure transfer of data between the two sites</mark>.
+
+## VPN Tunnel
+Before you can set up VPNs, you must understand your network topology and be able to determine the required number of tunnels:
+- One VPN tunnel might be enough to connect a single central site and a remote site.
+- To connect a central site to multiple remote sites, you must create a VPN tunnel for each central site and remote site pair.
+
+<mark style="background: #FFB8EBA6;">Each <strong>tunnel</strong> is bound to a <strong>tunnel interface</strong></mark>. <mark style="background: #FF5582A6;">The <strong>tunnel</strong> moves <strong>VPN traffic</strong> across the <strong>tunnel interface</strong></mark> <mark style="background: #FFB86CA6;">to the same <strong>virtual router</strong> as the incoming (cleartext) traffic</mark>. When a packet comes to the firewall, the route lookup function can identify the appropriate tunnel to use.
+
+<mark style="background: #BBFABBA6;">The <strong>tunnel interface</strong> <u>appears to the system as a normal interface</u></mark>. <mark style="background: #ABF7F7A6;">The existing routing infrastructure can be applied</mark>.
+
+<mark style="background: #ADCCFFA6;">Each <strong>tunnel interface</strong> can have a maximum of 10 <strong>IPsec tunnels</strong></mark>. <mark style="background: #D2B3FFA6;">Those <strong>IPsec tunnels</strong> can be used for <mark style="background: #FFF3A3A6;">multiple networks</mark> that are all associated with the <mark style="background: #FFF3A3A6;">same tunnel interface</mark> on the firewall</mark>.
