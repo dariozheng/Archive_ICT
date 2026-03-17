@@ -5,6 +5,7 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/sase
+  - tobecompleted
 aliases:
   - ADEM
 ---
