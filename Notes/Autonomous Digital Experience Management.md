@@ -90,4 +90,6 @@ Select <strong>Monitor > Applications</strong> to see the applications in your o
 The Applications dashboard gives you visibility into all of the applications that are running across your organization as observed in real-user traffic going through Prisma Access. 
 
 For each application, you can see the total traffic usage during the selected time range.![[Monitor Dashboard Applications.png]]
-
+### Applications Dashboard Widgets
+Use this widget to <mark style="background: #CACFD9A6;">see which applications are being monitored with synthetics tests running on them</mark>. The table also displays their experience scores which gives you the health of each application. Click the Manage Tests button to view all the synthetic tests that have been set up for all your applications in the Application Tests table.
+![[Applications Dashboard Widgets.png]]
