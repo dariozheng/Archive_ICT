@@ -24,7 +24,11 @@ After successful authentication, the <mark style="background: #ABF7F7A6;">peers 
 # IPsec
 IPsec is a suite of protocols for <mark style="background: #FFF3A3A6;">authenticating and encrypting the traffic</mark> between two peers.
 
-IPsec authenticates or encrypts packets or both:
+IPsec <strong>authenticates</strong> or <strong>encrypts</strong> packets or <strong>both</strong>:
 - Internet Key Exchange (IKE)
 - Encapsulating Security Payload (ESP): provides both data integrity and encryption
 - Authentication Header (AH): only provides data integrity, no encryption
+
+<mark style="background: #BBFABBA6;">The <strong>IP Security (IPsec)</strong> set of protocols</mark> sets up <mark style="background: #ABF7F7A6;">a secure tunnel for VPN traffic</mark>. 
+
+<mark style="background: #ADCCFFA6;">If the tunnel type</mark> is <strong>Encapsulating Security Payload (ESP)</strong>, <mark style="background: #ADCCFFA6;">the information in the TCP/IP packet is secured and encrypted</mark>. <mark style="background: #D2B3FFA6;">The IP packet (header and payload) is embedded in another IP payload</mark>, <mark style="background: #CACFD9A6;">and a new header is applied and then sent through the IPsec tunnel</mark>. <mark style="background: #BBFABBA6;">The <strong>source IP address</strong> in the new header is that of the <mark style="background: #FF5582A6;">local VPN peer</mark></mark> and <mark style="background: #BBFABBA6;">the <strong>destination IP address</strong> is that of the <mark style="background: #FF5582A6;">VPN peer at the far end of the tunnel</mark></mark>. <mark style="background: #ABF7F7A6;">When the packet reaches the remote VPN peer (the firewall at the far end of the tunnel), <mark style="background: #FF5582A6;">the outer header is removed</mark> and the original packet is sent to its destination</mark>.
