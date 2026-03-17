@@ -72,13 +72,15 @@ Create the tunnel interface or <mark style="background: #FF5582A6;">Phase 1 obje
 - The new <mark style="background: #FFB86CA6;">logical interface</mark> must be <mark style="background: #FFF3A3A6;">added to a Layer 3 zone</mark> <mark style="background: #BBFABBA6;">and to a virtual router</mark>, just as any other logical Layer 3 interface is handled.
 
 Configure the IPsec tunnel or <mark style="background: #FF5582A6;">Phase 2 objects</mark>:
-- You can use the basic interface when you create a tunnel between PAN-OS devices with known IP addresses. 
-- The only values that are required are the tunnel interface to use, the local peer ID, the remote peer ID, and the pre-shared key (PSK).
-- If the configuration is site-to-site with another Palo Alto Networks firewall, use the default Crypto profiles.
-- If the configuration is site-to-site with a different vendor’s firewall, configure the advanced settings in the Crypto profiles to match.
+- You can use <mark style="background: #ABF7F7A6;">the basic interface when you create a tunnel between PAN-OS devices with known IP addresses</mark>. 
+- The only values that are required are the <mark style="background: #ADCCFFA6;">tunnel interface to use</mark>, <mark style="background: #D2B3FFA6;">the local peer ID</mark>, <mark style="background: #CACFD9A6;">the remote peer ID</mark>, and <mark style="background: #FFB8EBA6;">the pre-shared key (PSK)</mark>.
+- <mark style="background: #FFF3A3A6;">If the configuration is site-to-site with another Palo Alto Networks firewall, use the default Crypto profiles</mark>.
+- <mark style="background: #BBFABBA6;">If the configuration is site-to-site with a different vendor’s firewall, configure the advanced settings in the Crypto profiles to match</mark>.
 
-Add a static route to the virtual router or enable a dynamic routing protocol such as BGP, OSPF, or RIP. Then create a <mark style="background: #FF5582A6;">Security policy rule</mark> to allow the tunnel traffic:
-- Add a route table entry for the remote network that points to the tunnel interface that is used in step 1 and step 2. 
-- Create a route for the remote network that uses the tunnel interface.
+<mark style="background: #ABF7F7A6;">Add a static route to the virtual router or enable a dynamic routing protocol such as BGP, OSPF, or RIP</mark>. 
+
+Then create a <mark style="background: #FF5582A6;">Security policy rule</mark> to allow the tunnel traffic:
+- <mark style="background: #FFB86CA6;">Add a route table entry</mark> <mark style="background: #BBFABBA6;">for the remote network that points to the tunnel interface</mark> that is used in step 1 and step 2. 
+- <mark style="background: #ADCCFFA6;">Create a route for the remote network that uses the tunnel interface</mark>.
 - No next-hop IP address is required when tunnel interfaces are used.
 - You must create a Security policy rule to allow tunneled traffic.
