@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883
+    "width": 257.5004348754883,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -217,7 +218,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "ef49045e41662f61",
   "lastOpenFiles": [
     "attachments/Applications Dashboard Widgets.png",
     "attachments/Monitor Dashboard Applications.png",
