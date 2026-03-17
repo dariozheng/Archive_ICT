@@ -22,13 +22,14 @@ After successful authentication, the <mark style="background: #ABF7F7A6;">peers 
 <mark style="background: #BBFABBA6;">The <strong>SAs</strong> specify all of the parameters that are required for secure transmission, <mark style="background: #ABF7F7A6;">including the <strong>security parameter index (SPI)</strong></mark>, <strong>security protocol</strong>, <mark style="background: #ADCCFFA6;">cryptographic keys</mark>, <mark style="background: #D2B3FFA6;">destination IP address</mark>, <mark style="background: #CACFD9A6;">encryption</mark>, <mark style="background: #FFB8EBA6;">data authentication</mark>, <mark style="background: #FF5582A6;">data integrity</mark>, and <mark style="background: #FFB86CA6;">endpoint authentication</mark></mark>.
 
 # IPsec
-IPsec is a suite of protocols for <mark style="background: #FFF3A3A6;">authenticating and encrypting the traffic</mark> between two peers.
+<mark style="background: #FFB8EBA6;"><strong>IPsec</strong> is a suite of protocols</mark> for <mark style="background: #FFF3A3A6;"><strong>authenticating</strong> and <strong>encrypting</strong> the traffic</mark> between two peers.
 
-IPsec <strong>authenticates</strong> or <strong>encrypts</strong> packets or <strong>both</strong>:
-- Internet Key Exchange (IKE)
-- Encapsulating Security Payload (ESP): provides both data integrity and encryption
-- Authentication Header (AH): only provides data integrity, no encryption
+The three most used protocols in the IPsec suite are <strong>IKE</strong>, <strong>ESP</strong>, and <strong>AH</strong>.
 
+<strong>Internet Key Exchange (IKE)</strong> is used to negotiate the <mark style="background: #FFB8EBA6;">AH and ESP password algorithm</mark> and put the necessary key of the algorithm to the right place.
+
+<strong>Encapsulating Security Payload</strong>
 <mark style="background: #BBFABBA6;">The <strong>IP Security (IPsec)</strong> set of protocols</mark> sets up <mark style="background: #ABF7F7A6;">a secure tunnel for VPN traffic</mark>. 
-
 <mark style="background: #ADCCFFA6;">If the tunnel type</mark> is <strong>Encapsulating Security Payload (ESP)</strong>, <mark style="background: #ADCCFFA6;">the information in the TCP/IP packet is secured and encrypted</mark>. <mark style="background: #D2B3FFA6;">The IP packet (header and payload) is embedded in another IP payload</mark>, <mark style="background: #CACFD9A6;">and a new header is applied and then sent through the IPsec tunnel</mark>. <mark style="background: #BBFABBA6;">The <strong>source IP address</strong> in the new header is that of the <mark style="background: #FF5582A6;">local VPN peer</mark></mark> and <mark style="background: #BBFABBA6;">the <strong>destination IP address</strong> is that of the <mark style="background: #FF5582A6;">VPN peer at the far end of the tunnel</mark></mark>. <mark style="background: #ABF7F7A6;">When the packet reaches the remote VPN peer (the firewall at the far end of the tunnel), <mark style="background: #FF5582A6;">the outer header is removed</mark> and the original packet is sent to its destination</mark>.
+
+<strong>Authentication Header (AH)</strong> is a security protocol for <mark style="background: #FFB86CA6;">authenticating the source of an IP packet</mark> and <mark style="background: #FFF3A3A6;">verifying the integrity of the IP packet content</mark>. The <strong>AH protocol</strong> <mark style="background: #ABF7F7A6;">verifies the authenticity and integrity of the content and the origin of a packet</mark>.
