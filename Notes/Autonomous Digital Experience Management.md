@@ -36,8 +36,8 @@ With <strong>ADEM</strong>, IT teams have <mark style="background: #ADCCFFA6;">e
 <mark style="background: #FFB86CA6;">To access the ADEM widgets</mark>, <mark style="background: #FFB8EBA6;">log into Strata Cloud Manager from the Hub</mark> with your credentials and <mark style="background: #FFF3A3A6;">view the unified visibility data</mark> <mark style="background: #BBFABBA6;">which includes ADEM widgets in the various dashboards</mark>.
 ## ADEM Observability Features
 ### Application Experience Dashboard
-<mark style="background: #BBFABBA6;">The ADEM Observability license unlocks</mark> the <mark style="background: #ABF7F7A6;">Application Experience dashboard</mark>, which <mark style="background: #ADCCFFA6;">displays the <strong>Mobile User Experience</strong> card</mark> and <mark style="background: #D2B3FFA6;">the <strong>Remote Site Experience card</strong></mark> <mark style="background: #BBFABBA6;">based on the license(s) you have purchased</mark>. 
-<mark style="background: #FFF3A3A6;">In addition to the Application Experience dashboard, you will also be able to view user-specific, branch-specific, and application-specific dashboards</mark>.
+<mark style="background: #BBFABBA6;">The ADEM Observability license unlocks</mark> the <mark style="background: #ABF7F7A6;"><strong>Application Experience</strong> dashboard</mark>, which <mark style="background: #ADCCFFA6;">displays the <strong>Mobile User Experience</strong> card</mark> and <mark style="background: #D2B3FFA6;">the <strong>Remote Site Experience card</strong></mark> <mark style="background: #BBFABBA6;">based on the license(s) you have purchased</mark>. 
+<mark style="background: #FFF3A3A6;">In addition to the <strong>Application Experience </strong>dashboard, you will also be able to view user-specific, branch-specific, and application-specific dashboards</mark>.
 ![[Application Experience Dashborad.png]]
 ### ADEM Zoom Integration
 Video call traffic is very sensitive to network conditions. Performance issues that might not impact web browsing can be felt by users on video calls. 
@@ -47,9 +47,29 @@ In order to help administrators debug, monitor, and proactively identify <mark s
 <mark style="background: #ADCCFFA6;">This integration provides minute-by-minute analysis of all of the Zoom calls in your network</mark>. ADEM also rolls these insights up at the organization level so that customers can find the service delivery segment most impacting users. <mark style="background: #D2B3FFA6;">The Zoom performance monitoring is restricted to the participants within the organization only</mark>. <mark style="background: #CACFD9A6;">If a Zoom call has participants attending from outside your organization</mark> (who do not belong to the tenant being monitored), <mark style="background: #CACFD9A6;">their data will not be analyzed or stored by ADEM</mark>.
 ![[ADEM Zoom Integration.png]]
 ### ADEM Self-Serve
-<strong>ADEM Self-Serve</strong> empowers end users <mark style="background: #FFB8EBA6;">to resolve the application experience issues that fall into their purview</mark> <mark style="background: #FF5582A6;">by displaying notifications on their endpoints with suggested remediations</mark>. It sends notifications to users’ devices for the following events:
+<strong>ADEM Self-Serve</strong> empowers end users <mark style="background: #FFB8EBA6;">to resolve the application experience issues that fall into their purview</mark> <mark style="background: #FF5582A6;"><u>by displaying notifications on their endpoints with suggested remediations</u></mark>. It sends notifications to users’ devices for the following events:
 - <mark style="background: #FFB86CA6;">Poor Wi-Fi quality and disconnected Wi-Fi</mark>
 - <mark style="background: #FFF3A3A6;">High central processing unit (CPU) or memory consumption</mark>
 - <mark style="background: #BBFABBA6;">Internet outages</mark>
 ![[ADEM Self-Serve.png]]
-# 
+# ADEM Monitoring
+<strong>Endpoint telemetry</strong> and <strong>synthetic monitoring</strong> within ADEM enable you to identify and resolve your users’ digital experience issues.
+
+The <strong>ADEM agent</strong>, natively integrated with the GlobalProtect agent, can collect device and Wi-Fi telemetry of the client. <mark style="background: #ABF7F7A6;">ADEM also performs cURL and ping tests to determine network and application health</mark>.
+
+<strong>Endpoint Telemetry</strong>
+Gathering information about the endpoint device (i.e. Mac or Windows device) and Wi-Fi performance
+- You need to know if it's CPU, memory, etc.
+- Many things go wrong with Wi-Fi
+<strong>Synthetic Monitoring</strong>
+Running tests of network connectivity and application sessions regularly and timing the results. You can get the user's information about LAN, ISP, Prisma Access, and app performance.
+# Experience Score
+<mark style="background: #ADCCFFA6;">The experience score is the average of end-to-end application performance metrics for all monitored applications across all users or remote sites</mark>. A fair or poor experience score lets you know that there may be performance issues impacting a large number of your users or remote sites.
+
+The experience score will also give you an indication of the overall digital experience for the user. 
+
+<mark style="background: #D2B3FFA6;">For each application that is monitored per mobile user</mark>, <mark style="background: #CACFD9A6;">ADEM calculates a score based on the five critical metrics</mark> - <mark style="background: #FFB8EBA6;">application availability</mark>, <mark style="background: #FF5582A6;">DNS resolution time</mark>, <mark style="background: #FFB86CA6;">TCP connect time</mark>, <mark style="background: #FFF3A3A6;">SSL connect time</mark>, and the <mark style="background: #BBFABBA6;">HTTP latency</mark>. 
+<mark style="background: #ABF7F7A6;">If the application fails the availability test (application is unavailable), then the experience score is 0</mark>. 
+<mark style="background: #ADCCFFA6;">If the application is reachable, only then the remaining four metrics will be calculated</mark>. Each of the metrics (other than application reachability) <mark style="background: #D2B3FFA6;">have a different weightage and baselined lower and upper thresholds, and their combined weightage equals 100</mark>. 
+The sum of these individual metric scores determines the application experience score for a user. 
+An average of all the test sample results for each application determines the experience score of a user.![[Experience Score.png]]
