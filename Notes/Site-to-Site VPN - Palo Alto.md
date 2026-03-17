@@ -33,3 +33,20 @@ The three most used protocols in the IPsec suite are <strong>IKE</strong>, <stro
 <mark style="background: #ADCCFFA6;">If the tunnel type</mark> is <strong>Encapsulating Security Payload (ESP)</strong>, <mark style="background: #ADCCFFA6;">the information in the TCP/IP packet is secured and encrypted</mark>. <mark style="background: #D2B3FFA6;">The IP packet (header and payload) is embedded in another IP payload</mark>, <mark style="background: #CACFD9A6;">and a new header is applied and then sent through the IPsec tunnel</mark>. <mark style="background: #BBFABBA6;">The <strong>source IP address</strong> in the new header is that of the <mark style="background: #FF5582A6;">local VPN peer</mark></mark> and <mark style="background: #BBFABBA6;">the <strong>destination IP address</strong> is that of the <mark style="background: #FF5582A6;">VPN peer at the far end of the tunnel</mark></mark>. <mark style="background: #ABF7F7A6;">When the packet reaches the remote VPN peer (the firewall at the far end of the tunnel), <mark style="background: #FF5582A6;">the outer header is removed</mark> and the original packet is sent to its destination</mark>.
 
 <strong>Authentication Header (AH)</strong> is a security protocol for <mark style="background: #FFB86CA6;">authenticating the source of an IP packet</mark> and <mark style="background: #FFF3A3A6;">verifying the integrity of the IP packet content</mark>. The <strong>AH protocol</strong> <mark style="background: #ABF7F7A6;">verifies the authenticity and integrity of the content and the origin of a packet</mark>.
+
+## Internet Key Exchange (IKE)
+An IPsec tunnel is created in two phases.
+### IKE Phase 1
+With IKE Phase 1,<mark style="background: #FFF3A3A6;"> each device is identified to the other by a <strong>peer ID</strong></mark>. In most cases, <mark style="background: #BBFABBA6;">this ID is just the <strong>public IP address</strong> of the device</mark>. <mark style="background: #ABF7F7A6;">In situations where the public ID is not static, this value can be replaced with a <strong>domain name</strong> or other text value</mark>. 
+
+<mark style="background: #ADCCFFA6;">IKE Phase 1 provides <strong>authentication</strong> of the endpoints of the tunnel</mark> and <mark style="background: #D2B3FFA6;">creates a <strong>secure channel</strong> for the next phase of the VPN</mark>. <mark style="background: #FFB86CA6;">The IKE protocol uses the <strong>IKE-Crypto profile</strong> for negotiation</mark>.
+
+During IKE Phase 1, five pieces of information are passed between peers:
+![[IKE Phase 1.png]]
+### IKE Phase 2
+IKE Phase 2 creates the tunnel that will encapsulate data traffic.
+
+IKE Phase 1 is concerned with authenticating the endpoints. <mark style="background: #FFF3A3A6;">IKE Phase 2 is concerned with data traffic that crosses the tunnel</mark>. <mark style="background: #BBFABBA6;">Each side of the tunnel has a <strong>proxy ID</strong> to identify the traffic that it will send</mark> <mark style="background: #ABF7F7A6;">and what it expects to receive</mark>. <mark style="background: #ADCCFFA6;">The IDs either can be a specific network range</mark> or <mark style="background: #D2B3FFA6;">a generic network of <strong>0.0.0.0/0</strong></mark>. <mark style="background: #CACFD9A6;">In either case, both sides need to know what the other side will send for the tunnel to work</mark>.
+
+During IKE Phase 2, five pieces of information are passed between peers:
+![[IKE Phase 2.png]]
