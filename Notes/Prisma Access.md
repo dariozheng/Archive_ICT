@@ -70,3 +70,9 @@ IKE phase 1 provides <strong>authentication</strong> <mark style="background: #F
 
 Templates for the following vendors are available: <mark style="background: #FFB8EBA6;">Cisco Integrated Services Routers (ISRs)</mark>, <mark style="background: #FF5582A6;">Cisco Adaptive Security Appliances (ASAs)</mark>, <mark style="background: #FFB86CA6;">Citrix</mark>, <mark style="background: #FFF3A3A6;">Prisma SD-WAN</mark>, <mark style="background: #BBFABBA6;">Riverbed</mark>, and <mark style="background: #ADCCFFA6;">Silver Peak</mark>. Modify predefined template settings to match your security requirements.
 ![[IPSec Templates palo alto.png]]
+### Predefined IPSec and IKE Crypto Profiles
+To help simplify the onboarding of IPSec tunnels, common third-party crypto profiles are provided. 
+
+The configurations in these profiles are common settings. You must replace some of the placeholder values with the settings to match your security requirements. Remove any unneeded configurations and add settings to match the on-premises crypto settings.
+![[Predefined IPSec and IKE Crypto Profiles.png]]
+### IKE Gateway Configuration
