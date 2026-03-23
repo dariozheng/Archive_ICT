@@ -82,3 +82,4 @@ CASB addresses the issues of <strong>securing</strong> <mark style="background: 
 - Apply a variety of analytics when monitoring the behavior of users, third-party applications, and data.
 - Identify and respond to malicious and unwanted <mark style="background: #D2B3FFA6;">sessions</mark> using multiple methods.
 - <mark style="background: #FFB8EBA6;">Distinguish between corporate and personal instances of cloud services</mark> and <mark style="background: #FFF3A3A6;">provide the ability to limit or block the exchange of data between them</mark>.
+# 
