@@ -6,3 +6,5 @@ topic@security:
 tags:
   - palo_alto/sase
 ---
+
+# Licensing
