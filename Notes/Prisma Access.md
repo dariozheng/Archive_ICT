@@ -33,3 +33,6 @@ Obtain the <mark style="background: #FFB8EBA6;">IP address information</mark> ne
 - <mark style="background: #FFF3A3A6;">The IP address of a device that is highly available on the corporate network to which Prisma Access can send Internet Control Message Protocol (ICMP) ping requests for IPSec tunnel monitoring</mark>. Make sure that this address is reachable by ICMP from the entire Prisma Access infrastructure subnet.
 - <mark style="background: #ADCCFFA6;">Network reachability settings for the service infrastructure subnet</mark>. Make the entire service infrastructure subnet reachable from the HQ or data center. Prisma Access uses IP addresses for all control-plan traffic from the subnet.
 ## IPsec Tunnels 
+<mark style="background: #FFB86CA6;">Before a new service connection can be onboarded for Prisma Access</mark>, <mark style="background: #FFB8EBA6;">IPSec tunnels must be configured</mark>. 
+
+All traffic flowing in and out of the <mark style="background: #BBFABBA6;">service connection</mark> <mark style="background: #BBFABBA6;">will traverse the IPSec tunnel</mark>. The remote networks will require an IPSec VPN tunnel, which will need to be configured prior to onboarding the remote network.
