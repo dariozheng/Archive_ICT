@@ -50,20 +50,18 @@ These include <strong>multi-factor authentication</strong> (MFA), <strong>least 
 
 With ZTNA, there is no trust whatsoever. All users and devices are thoroughly examined without any exceptions.
 ### Least Privilege Access
-Palo Alto Networks [[App-ID™|App-ID]], [[User-ID™|User-ID]], and [[Device-ID|Device-ID]] deliver rich context and a more granular approach to allowing access to applications. 
+Palo Alto Networks [[App-ID™|App-ID]], [[User-ID™|User-ID]], and [[Device-ID|Device-ID]] deliver rich <strong>context</strong> and a more granular approach to <mark style="background: #FFF3A3A6;">allowing access to applications</mark>. 
 
 The App-ID capabilities of Prisma Access are stateful and continuously gather information about the Transmission Control Protocol (TCP) session, the application handshakes, the application behavior, the stateful protocols, and more. 
 Simultaneously, User-ID and Device-ID controls also persistently collect information about users and their devices.
 
 This integration offers insights into users' access to specific applications they request while continuously gathering additional context, such as user or app behavior or device ID changes. As a result, it allows for real-time responses to these changes. 
 ### Continuous Protection
-Prisma SASE protection starts once access is granted to an app. 
-
-It will continually assess both the user behavior and the app behavior to verify no changes have taken place. 
-
+<mark style="background: #FFB8EBA6;">Prisma SASE protection starts once access is granted to an app</mark>. 
+It will <mark style="background: #FF5582A6;">continually assess</mark> both <mark style="background: #FFB86CA6;">the user behavior</mark> and the <mark style="background: #FFF3A3A6;">app behavior</mark> <mark style="background: #BBFABBA6;">to verify no changes have taken place</mark>. 
 If there are any changes, Prisma SASE will respond appropriately. 
 
-However, Prisma SASE does not stop there. It provides continuous ongoing deep inspection of all traffic, even for allowed connections to prevent all threats, including zero-day threats. It will also provide continuous protection across all apps used in the enterprise, including private apps and SaaS, with a single DLP policy.
+It provides continuous ongoing <mark style="background: #ABF7F7A6;">deep inspection of all traffic</mark>, even for allowed connections to prevent all threats, including zero-day threats. It will also provide continuous protection across all apps used in the enterprise, including private apps and SaaS, with a single DLP policy.
 ## Firewall as a Service
 Next-generation firewalls (NGFWs) provide deep packet inspections that are beyond legacy port and protocol inspections and blocking to add an application inspection.
 ## Cloud Access Security Brokers
