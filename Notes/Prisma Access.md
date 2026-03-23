@@ -169,4 +169,4 @@ To use Dynamic Routing to advertise HQ/DC subnets, navigate to **Panorama > Clo
 - **Local IP Address:** Enter the IP address that Prisma Access uses as its Local IP Address for BGP.
 - **Secret and Confirm Secret:** Enter a secret password to authenticate BGP peer communications and enter it again to confirm. 
 ![[Dynamic Routing Configuration Settings.png]]
-# 
+# Remote Networks
