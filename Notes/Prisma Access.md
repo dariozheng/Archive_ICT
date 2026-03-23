@@ -158,4 +158,6 @@ To use Dynamic Routing to advertise HQ/DC subnets, navigate to **Panorama > Clo
 - **Peer AS:** Enter the Peer AS, which is the autonomous system (AS) for your network.
 - **Peer Address:** Enter the IP address assigned as the Router ID of the eBGP router on the data center/HQ network for which you're configuring this service connection. 
 - **Local IP Address:** Enter the IP address that Prisma Access uses as its Local IP Address for BGP.
-- **Secret and Confirm Secret:** Enter a secret password to authenticate BGP peer communications and enter it again to confirm.![[Dynamic Routing Configuration Settings.png]]
+- **Secret and Confirm Secret:** Enter a secret password to authenticate BGP peer communications and enter it again to confirm. 
+![[Dynamic Routing Configuration Settings.png]]
+# 
