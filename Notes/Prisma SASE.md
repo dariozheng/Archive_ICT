@@ -63,9 +63,14 @@ If there are any changes, Prisma SASE will respond appropriately.
 
 It provides continuous ongoing <mark style="background: #ABF7F7A6;">deep inspection of all traffic</mark>, even for allowed connections to prevent all threats, including zero-day threats. It will also provide continuous protection across all apps used in the enterprise, including private apps and SaaS, with a single DLP policy.
 ## Firewall as a Service
-Next-generation firewalls (NGFWs) provide deep packet inspections that are beyond legacy port and protocol inspections and blocking to add an application inspection.
+<strong>NGFWs</strong> provide <mark style="background: #FF5582A6;">deep packet inspections</mark> that are beyond legacy port and protocol inspections and blocking to add an application inspection.
+- Traditional stateful firewall features
+- Application-aware, deep packet content inspection
+- Unified threat management (UTM), including intrusion detection and prevention systems (IDPSs)
+- Advanced visibility across the entire attack surface
+- Flexibility to address the evolving threat landscape
 ## Cloud Access Security Brokers
-CASBs can be on-premises or cloud-based services that provide security policy enforcement points between those who use or consume the cloud service and those who provide it.
+<strong>CASBs</strong> can be on-premises or cloud-based <mark style="background: #FFB8EBA6;"> <strong>services</strong>that provide <strong>security policy enforcement points</strong></mark> between <mark style="background: #FFB86CA6;">those who use or consume the cloud service</mark> and <mark style="background: #FFF3A3A6;">those who provide it</mark>.
 
 A CASB offers products and services that will address any security deficiencies within an enterprise's use of cloud services. 
 
