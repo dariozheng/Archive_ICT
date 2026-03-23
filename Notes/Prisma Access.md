@@ -6,7 +6,7 @@ topic@security:
 tags:
   - palo_alto/sase
 ---
-
+Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust network access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">web security</mark>, and <mark style="background: #BBFABBA6;">data protection</mark> for remote users, branches, and applications. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management (ADEM). 
 # Licensing
 # Service Connection 
 <strong>Prisma Access</strong> leverages a combination of <mark style="background: #FFB8EBA6;"><strong>service connections</strong> (<strong>SCs</strong>)</mark> and <mark style="background: #FF5582A6;">Corporate Access Nodes (SC-CANs)</mark> <mark style="background: #FFF3A3A6;">to connect mobile users, and users at remote locations</mark>, <mark style="background: #FFB86CA6;">with headquarters (HQ) and data centers (DC)</mark>. 
@@ -32,8 +32,16 @@ Obtain the <mark style="background: #FFB8EBA6;">IP address information</mark> ne
 - <mark style="background: #BBFABBA6;">List of internal domains that Prisma Access must be able to resolve</mark>
 - <mark style="background: #FFF3A3A6;">The IP address of a device that is highly available on the corporate network to which Prisma Access can send Internet Control Message Protocol (ICMP) ping requests for IPSec tunnel monitoring</mark>. Make sure that this address is reachable by ICMP from the entire Prisma Access infrastructure subnet.
 - <mark style="background: #ADCCFFA6;">Network reachability settings for the service infrastructure subnet</mark>. Make the entire service infrastructure subnet reachable from the HQ or data center. Prisma Access uses IP addresses for all control-plan traffic from the subnet.
-## IPsec Tunnels 
+## IPsec Tunnels
+IPSec is a secure <mark style="background: #BBFABBA6;">network protocol suite</mark> that <strong>authenticates</strong> and <strong>encrypts</strong> <mark style="background: #D2B3FFA6;">the packets of data that are sent over an IP network</mark>. IPSec is used by VPNs.
+IPSec VPN tunnels are built between <mark style="background: #FF5582A6;">Prisma Access</mark> and <mark style="background: #ABF7F7A6;">locations</mark>, such as <mark style="background: #ABF7F7A6;">data centers</mark> and <mark style="background: #ABF7F7A6;">remote sites</mark>.
+Prisma Access uses a <mark style="background: #FFB8EBA6;">route-based VPN</mark> to <mark style="background: #FF5582A6;">direct traffic to the appropriate network</mark>.
+
 <mark style="background: #FFB86CA6;">Before a new service connection can be onboarded for Prisma Access</mark>, <mark style="background: #FFB8EBA6;">IPSec tunnels must be configured</mark>. 
 
 All traffic flowing in and out of the <mark style="background: #BBFABBA6;">service connection</mark> <mark style="background: #BBFABBA6;">will traverse the IPSec tunnel</mark>. The remote networks will require an IPSec VPN tunnel, which will need to be configured prior to onboarding the remote network.
 ![[IPsec Tunnels Service Connection.png]]
+
+A VPN connection that enables you to <mark style="background: #FFB8EBA6;">connect two local area networks (LANs)</mark> is called a [[Site-to-Site VPN - Palo Alto|site-to-site VPN]]. 
+
+You can configure <strong>Prisma Access</strong> to connect the IPSec VPN tunnel to a <mark style="background: #FF5582A6;">Palo Alto Networks firewall</mark>, or to a <mark style="background: #FFB86CA6;">third-party security device</mark>, that is located at the remote site. <mark style="background: #FFF3A3A6;">Prisma Access implements a route-based VPN</mark>, but it also can interoperate with third-party, policy-based VPN devices.
