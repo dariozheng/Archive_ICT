@@ -26,7 +26,7 @@ This requires at least a minimally-configured service connection along with the 
 - <mark style="background: #FFB86CA6;">IPSec settings for terminating the primary VPN tunnel</mark> from Prisma Access to the IPSec-capable device on the corporate network
 - <mark style="background: #FFF3A3A6;">IPSec settings for terminating the secondary VPN tunnel</mark> from Prisma Access to the IPSec-capable device on the corporate network
 	Obtain the <mark style="background: #FFB8EBA6;">IP address information</mark> needed to set up the service connections:
-- List of IP subnetworks at the site. The infrastructure subnet must not overlap with any existing subnet on the corporate network.
-- List of internal domains that Prisma Access must be able to resolve
-- The IP address of a device that is highly available on the corporate network to which Prisma Access can send Internet Control Message Protocol (ICMP) ping requests for IPSec tunnel monitoring. Make sure that this address is reachable by ICMP from the entire Prisma Access infrastructure subnet.
-- Network reachability settings for the service infrastructure subnet. Make the entire service infrastructure subnet reachable from the HQ or data center. Prisma Access uses IP addresses for all control-plan traffic from the subnet.
+- <mark style="background: #ABF7F7A6;">List of IP subnetworks at the site</mark>. The infrastructure subnet must not overlap with any existing subnet on the corporate network.
+- <mark style="background: #BBFABBA6;">List of internal domains that Prisma Access must be able to resolve</mark>
+- <mark style="background: #FFF3A3A6;">The IP address of a device that is highly available on the corporate network to which Prisma Access can send Internet Control Message Protocol (ICMP) ping requests for IPSec tunnel monitoring</mark>. Make sure that this address is reachable by ICMP from the entire Prisma Access infrastructure subnet.
+- <mark style="background: #ADCCFFA6;">Network reachability settings for the service infrastructure subnet</mark>. Make the entire service infrastructure subnet reachable from the HQ or data center. Prisma Access uses IP addresses for all control-plan traffic from the subnet.
