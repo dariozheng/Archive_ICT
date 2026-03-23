@@ -70,17 +70,15 @@ It provides continuous ongoing <mark style="background: #ABF7F7A6;">deep inspect
 - Advanced visibility across the entire attack surface
 - Flexibility to address the evolving threat landscape
 ## Cloud Access Security Brokers
-<strong>CASBs</strong> can be on-premises or cloud-based <mark style="background: #FFB8EBA6;"><strong>services</strong>that provide <strong>security policy enforcement points</strong></mark> between <mark style="background: #FFB86CA6;">those who use or consume the cloud service</mark> and <mark style="background: #FFF3A3A6;">those who provide it</mark>.
+<strong>CASBs</strong> can be on-premises or cloud-based <mark style="background: #FFB8EBA6;"><strong>services</strong> that provide <strong>security policy enforcement points</strong></mark> between <mark style="background: #FFB86CA6;">those who use or consume the cloud service</mark> and <mark style="background: #FFF3A3A6;">those who provide it</mark>.
 
-A CASB offers products and services that will address any security deficiencies within an enterprise's use of cloud services. 
+CASB addresses the issues of <strong>securing</strong> <mark style="background: #BBFABBA6;">the cloud services being adopted both inside and outside the traditional fixed perimeter of the network</mark>, along with the increased implementation of direct cloud-to-cloud access. 
 
-CASB addresses the issues of securing the cloud services being adopted both inside and outside the traditional fixed perimeter of the network, along with the increased implementation of direct cloud-to-cloud access. 
-
-The CASB sits between the two and allows cloud service providers to implement security policies for cloud-based data and applications. Prisma SASE delivers CASB services, which include the following capabilities:
-- Inspect data, application, and user behavior in cloud services via provider application programming interfaces (APIs).
-- Operate inline between users and cloud services or optionally offer Remote Browser Isolation (RBI) as an alternative.
-- Support the ability to provide visibility and perform access control of any user, device, or location.
-- Integrate with an enterprise’s existing identity provider, security information and event management (SIEM) tool, and unified endpoint management (UEM) product.
--  Apply a variety of analytics when monitoring the behavior of users, third-party applications, and data.
-- Identify and respond to malicious and unwanted sessions using multiple methods.
-- Distinguish between corporate and personal instances of cloud services and provide the ability to limit or block the exchange of data between them.
+<mark style="background: #ABF7F7A6;">The <strong>CASB</strong> sits between the two</mark> and allows cloud service providers to implement security policies for cloud-based data and applications. Prisma SASE delivers CASB services, which include the following capabilities:
+- <strong>Inspect</strong> <mark style="background: #FF5582A6;">data</mark>, <mark style="background: #FFB8EBA6;">application</mark>, and <mark style="background: #FFB86CA6;">user</mark> behavior in cloud services <mark style="background: #FFF3A3A6;">via provider application programming interfaces (APIs)</mark>.
+- Operate <strong>inline</strong> between <mark style="background: #BBFABBA6;">users and cloud services</mark> or optionally offer Remote Browser Isolation (RBI) as an alternative.
+- Support the ability to provide <strong>visibility</strong> and <mark style="background: #ADCCFFA6;">perform access control of any user, device, or location</mark>.
+- <strong>Integrate</strong> with an enterprise’s existing <mark style="background: #D2B3FFA6;">identity provider</mark>, <mark style="background: #CACFD9A6;">security information and event management (SIEM) tool</mark>, and <mark style="background: #FFF3A3A6;">unified endpoint management (UEM) product</mark>.
+- Apply a variety of analytics when monitoring the behavior of users, third-party applications, and data.
+- Identify and respond to malicious and unwanted <mark style="background: #D2B3FFA6;">sessions</mark> using multiple methods.
+- <mark style="background: #FFB8EBA6;">Distinguish between corporate and personal instances of cloud services</mark> and <mark style="background: #FFF3A3A6;">provide the ability to limit or block the exchange of data between them</mark>.
