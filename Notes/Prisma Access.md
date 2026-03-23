@@ -19,3 +19,14 @@ A service connection allows <mark style="background: #FFB8EBA6;">mobile users an
 
 In addition to providing access to resources at the data centers or headquarters locations, <mark style="background: #FFF3A3A6;">service connections can also be leveraged to facilitate communication amongst mobile users and users or resources on remote networks</mark>.  
 This requires at least a minimally-configured service connection along with the appropriate licensing (Prisma Access Enterprise Edition and the Net Interconnect add-on).
+
+<mark style="background: #FFB86CA6;">The number of service connections available to you depends on your license</mark>. The following HQ, or data center, information needs to be gathered in order to set up service connections.
+Obtain the <mark style="background: #FFB8EBA6;">IPSec network information</mark> needed to set up the service connections:
+- Configuration of IP addresses for the IPSec-capable firewall, router, or SD-WAN device connection at the corporate site
+- IPSec settings for terminating the primary VPN tunnel from Prisma Access to the IPSec-capable device on the corporate network
+- IPSec settings for terminating the secondary VPN tunnel from Prisma Access to the IPSec-capable device on the corporate network
+Obtain the <mark style="background: #FFB8EBA6;">IP address information</mark> needed to set up the service connections:
+- List of IP subnetworks at the site. The infrastructure subnet must not overlap with any existing subnet on the corporate network.
+- List of internal domains that Prisma Access must be able to resolve
+- The IP address of a device that is highly available on the corporate network to which Prisma Access can send Internet Control Message Protocol (ICMP) ping requests for IPSec tunnel monitoring. Make sure that this address is reachable by ICMP from the entire Prisma Access infrastructure subnet.
+- Network reachability settings for the service infrastructure subnet. Make the entire service infrastructure subnet reachable from the HQ or data center. Prisma Access uses IP addresses for all control-plan traffic from the subnet.
