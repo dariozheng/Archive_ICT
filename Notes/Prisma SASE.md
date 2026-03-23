@@ -23,13 +23,13 @@ aliases:
 Prisma Access is the primary security component of the Prisma SASE platform, utilizing a cloud-native virtual infrastructure to protect the hybrid workforce.
 ![[Prisma Access.png]]
 ## Secure Web Gateway
-The <strong>secure web gateway</strong> functions of Prisma Access help protect the hybrid workforce against <strong>internet-sourced threats</strong> by securing <strong>end-user internet use</strong>.
+The <strong>secure web gateway</strong> functions of Prisma Access help protect the hybrid workforce against <strong>internet-sourced threats</strong> by <strong>securing end-user internet use</strong>.
 
-The SWG provides the following services:
-- Detection and prevention of threats using URL filtering, anti-malware, anti-spyware, and antivirus protection
-- SaaS application discovery and control
-- Data loss prevention (DLP) capabilities
-- Enforcement of corporate and regulatory policy compliance
+The <strong>SWG</strong> provides the following services:
+- <mark style="background: #FFB8EBA6;">Detection and prevention of threats</mark> using <strong>URL filtering</strong>, <mark style="background: #FF5582A6;">anti-malware</mark>, <mark style="background: #FFB86CA6;">anti-spyware</mark>, and <mark style="background: #FFF3A3A6;">antivirus protection</mark>.
+- SaaS <mark style="background: #BBFABBA6;">application discovery and control</mark>
+- <strong>Data loss prevention</strong> (<strong>DLP</strong>) capabilities
+- <mark style="background: #ABF7F7A6;">Enforcement</mark> of corporate and regulatory <mark style="background: #ABF7F7A6;">policy</mark> compliance
 ## Explicit Proxy
 ![[Explicit Proxy.png]]
 <strong>Explicit Proxy</strong> uses a <strong>proxy auto-configuration</strong> (<strong>PAC</strong>) file that <mark style="background: #FFB8EBA6;">instructs a web browser to forward traffic to the web proxy server</mark> <mark style="background: #FF5582A6;">instead of the destination server</mark>, effectively <mark style="background: #FFB86CA6;">protecting your web-based internet (HTTP and HTTPS) traffic</mark>.
