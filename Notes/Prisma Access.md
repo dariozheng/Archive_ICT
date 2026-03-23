@@ -118,6 +118,16 @@ The configurations in these profiles are common settings. You must replace some 
 ![[Predefined IPSec and IKE Crypto Profiles.png]]
 ## Service Connection #Configuration
 To begin the process of creating a new service connection, navigate to <strong>Panorama > Cloud Services > Configuration > Service Connection</strong>.
+### Private App NAT Support
+Starting in Prisma Access Innovation v3.2, <mark style="background: #FFB8EBA6;">a subnet can be specified at one or more service connections that are used to perform network address translation (NAT)</mark> on traffic between Prisma Access, GlobalProtect mobile users, and private applications/resources at a data center. Options for this feature include the following:
+##### Enable Data Traffic Source NAT
+<mark style="background: #FFB86CA6;">Performs NAT on Mobile User IP Address pool addresses</mark> so t<mark style="background: #FFF3A3A6;">hat they are not advertised to the data center</mark>, and <mark style="background: #BBFABBA6;">only the subnets you specify at the service connections are advertised and routed in the data cente</mark>r.
+##### Enable Infrastructure Traffic Source NAT
+<mark style="background: #ABF7F7A6;">Performs NAT on addresses from the Infrastructure Subnet</mark> so that they are not advertised to the data center, and only those subnets you specify at the service connections are advertised and routed in the data center.
+##### IP Pool 
+<mark style="background: #ADCCFFA6;">Specify the IP address pool used to perform NAT on the mobile user IP address pool, Infrastructure Subnet, or both</mark>. Use a private IP (RFC 1918) subnet or a suitable subnet that is routable in your routing domain and does not overlap with the Mobile Users GlobalProtect IP address pool or the Infrastructure Subnet.
+Enter a subnet between /25 and /32.
+
 ## Routing and QoS
 In order for Prisma Access <mark style="background: #FFB8EBA6;">to route traffic to the HQ and data centers</mark>, <mark style="background: #FF5582A6;"><strong>routing information</strong> for the subnetworks that you want users to access must be provided</mark>. This can be done in three ways: <mark style="background: #FFB86CA6;">configuring static routing</mark>, <mark style="background: #FFF3A3A6;">creating a QoS Profile to prioritize business-critical traffic</mark>, or <mark style="background: #BBFABBA6;">configuring dynamic routing and Border Gateway Protocol (BGP)</mark>.
 ### Configuring Static Routing #configuration 
