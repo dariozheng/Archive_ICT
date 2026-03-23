@@ -121,8 +121,12 @@ To begin the process of creating a new service connection, navigate to <strong>P
 ## Routing and QoS
 In order for Prisma Access <mark style="background: #FFB8EBA6;">to route traffic to the HQ and data centers</mark>, <mark style="background: #FF5582A6;"><strong>routing information</strong> for the subnetworks that you want users to access must be provided</mark>. This can be done in three ways: <mark style="background: #FFB86CA6;">configuring static routing</mark>, <mark style="background: #FFF3A3A6;">creating a QoS Profile to prioritize business-critical traffic</mark>, or <mark style="background: #BBFABBA6;">configuring dynamic routing and Border Gateway Protocol (BGP)</mark>.
 ### Configuring Static Routing #configuration 
-The first method is <mark style="background: #ABF7F7A6;">using static routing</mark> <mark style="background: #ADCCFFA6;">to identify the subnetworks, or individual IP addresses, at the data center or HQ</mark> that you want mobile users or remote sites to access.
+The first method is <mark style="background: #ABF7F7A6;">using static routing</mark> <mark style="background: #ADCCFFA6;">to identify the subnetworks, or individual IP addresses, at the data center or HQ</mark> <mark style="background: #FFF3A3A6;">that you want mobile users or remote sites to access</mark>.
 
-The subnetworks at HQ, data centers, and remote network sites must not overlap with each other, with the IP pools that you designated for Prisma Access for users, or with the infrastructure subnet. If you are using static routes to route traffic to and from your HQ/DC, add the IP subnets or IP addresses that you want to secure at the branch. 
+The subnetworks at HQ, data centers, and remote network sites <mark style="background: #BBFABBA6;">must not overlap with each other</mark>, <mark style="background: #ADCCFFA6;">with the IP pools that you designated for Prisma Access for users</mark>, or <mark style="background: #D2B3FFA6;">with the infrastructure subnet</mark>. <mark style="background: #CACFD9A6;">If you are using static routes to route traffic to and from your HQ/DC</mark>, <mark style="background: #FFB8EBA6;">add the IP subnets or IP addresses that you want to secure at the branch</mark>. 
 
 Note: If you make any changes to the IP subnets on your HQ/DC network, you must manually update the static routes. Additionally, if you configure both static routes and BGP routing, the static routes take precedence.
+
+To configure static routing, navigate to <strong>Panorama > Cloud Services > Configuration > Service Connection > Onboarding > Add</strong>. On the <strong>Static Routes</strong> tab, click <strong>Add</strong>.![[Configuring Static Routing.png]]
+### Creating a QoS Profile to Prioritize Business Critical Traffic #configuration 
+
