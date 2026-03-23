@@ -96,7 +96,7 @@ Provide a name for the IPSec tunnel.
 ##### 2. IKE Gateway
 From drop-down list, select the **IKE Gateway** that you previously configured.
 ##### 3. IPSec Crypto Profile
-Choose either a default <strong>IPSec crypto profile</strong> or a customized one that you have created.
+Choose either a default [[Prisma Access#Predefined IPSec and IKE Crypto Profiles|IPSec crypto profile]] or a customized one that you have created.
 ##### 4. Enable Replay Protection
 This option is enabled by default. To provide protection against replay attacks, leave the <strong>Enable Replay Protection</strong> checkbox selected.
 ##### 5. Add GRE Encapsulation
@@ -104,7 +104,8 @@ If you require <strong>type-of-service headers</strong> or <mark style="backgrou
 ##### 6. Tunnel Monitor
 Enable <strong>Tunnel Monitor</strong> to alert the administrator about tunnel failures and to provide automatic failover.
 
-If you are setting up Prisma Access to work with a peer that supports policy-based VPN, you must define proxy IDs. Devices that support policy-based VPN use specific security rules and policies or access lists for permitting interesting traffic through an IPSec tunnel. These rules are referenced during quick mode negotiation and are exchanged as proxy IDs in the first or the second message of the process.
+If you are setting up Prisma Access <mark style="background: #FFB8EBA6;">to work with a peer that supports <strong>policy-based VPN</strong></mark>, you must define <strong>proxy IDs</strong>. 
+Devices that support policy-based VPN <mark style="background: #FFB86CA6;">use specific security rules and policies or access lists for permitting interesting traffic through an IPSec tunnel</mark>. <mark style="background: #FFF3A3A6;">These rules are referenced during quick mode negotiation</mark> and <mark style="background: #BBFABBA6;">are exchanged as proxy IDs in the first or the second message of the process</mark>.
 ###  IPSec Templates
 <strong>Prisma Access</strong> includes predefined <strong>IPSec templates</strong> for <mark style="background: #BBFABBA6;">common third-party IPSec</mark> and <mark style="background: #ADCCFFA6;">SD-WAN devices</mark>. These templates simplify the onboarding of service connections and remote network connections.
 
