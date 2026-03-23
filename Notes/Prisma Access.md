@@ -45,3 +45,23 @@ All traffic flowing in and out of the <mark style="background: #BBFABBA6;">servi
 A VPN connection that enables you to <mark style="background: #FFB8EBA6;">connect two local area networks (LANs)</mark> is called a [[Site-to-Site VPN - Palo Alto|site-to-site VPN]]. 
 
 You can configure <strong>Prisma Access</strong> to connect the IPSec VPN tunnel to a <mark style="background: #FF5582A6;">Palo Alto Networks firewall</mark>, or to a <mark style="background: #FFB86CA6;">third-party security device</mark>, that is located at the remote site. <mark style="background: #FFF3A3A6;">Prisma Access implements a route-based VPN</mark>, but it also can interoperate with third-party, policy-based VPN devices.
+### IKE Phases
+The creation of the IPSec tunnel has two phases. 
+
+In the first phase, the <strong>Internet Key Exchange</strong> (IKE) protocol <mark style="background: #FFB8EBA6;">authenticates the firewalls to each other and sets up a secure control channel</mark>. The first phase uses the <mark style="background: #FF5582A6;">IKE Crypto Profile</mark> for IKE negotiation. 
+
+IKE phase 2 creates the tunnel that will encapsulate data traffic.
+#### IKE Phase 1
+![[IKE Phase 1 rewiew.png]]
+In IKE phase 1, <mark style="background: #FFB86CA6;">each device is identified to the other by a peer ID</mark>. 
+
+<mark style="background: #FFF3A3A6;">The ID usually is just the public IP address of the device</mark>. In situations where the public ID is not static, <mark style="background: #FFB86CA6;">this value can be replaced with a domain name or other text value</mark>. 
+
+IKE phase 1 provides <strong>authentication</strong> <mark style="background: #FF5582A6;">of the endpoints of the tunnel</mark> and <mark style="background: #BBFABBA6;">creates a secure channel for the next phase of the VPN</mark>.
+
+<mark style="background: #ABF7F7A6;">The five pieces of information passed during <strong>IKE phase 1</strong> are</mark> <mark style="background: #ADCCFFA6;">authentication method</mark>, <mark style="background: #D2B3FFA6;">Diffie-Hellman key</mark>, <mark style="background: #CACFD9A6;">symmetric key algorithm – bulk data encryption</mark>, <mark style="background: #FFB8EBA6;">hashing algorithm</mark>, and <mark style="background: #FF5582A6;">key lifetime</mark>.
+#### IKE Phase 2
+![[IKE Phase 2 rewiew.png]]
+<strong>IKE phase 2</strong> concerns <mark style="background: #FFB8EBA6;">data traversing the tunnel</mark>. <mark style="background: #FF5582A6;">Each side of the tunnel</mark> <mark style="background: #FFB86CA6;">has a proxy ID</mark> <mark style="background: #BBFABBA6;">to identify the traffic that it sends</mark> and <mark style="background: #FFF3A3A6;">what it expects to receive</mark>. <mark style="background: #ABF7F7A6;">These IDs either can be a specific network range or a generic network of <strong>0.0.0.0/0</strong></mark>. In either case, <mark style="background: #ADCCFFA6;">for the tunnel to work, both sides need to know what the other side will be sending</mark>.
+
+<mark style="background: #D2B3FFA6;">The five pieces of information passed during IKE phase 2 are</mark> <mark style="background: #CACFD9A6;">IPsec type or mode</mark>, <mark style="background: #FFB8EBA6;">Diffie-Hellman: PFS</mark>, <mark style="background: #FFB86CA6;">symmetric key algorithm – bulk data encryption</mark>, <mark style="background: #FFF3A3A6;">hashing algorithm</mark>, and <mark style="background: #CACFD9A6;">lifetime (before rekey)</mark>.
