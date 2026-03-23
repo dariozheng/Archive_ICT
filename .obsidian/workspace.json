@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "cd8b1d07f4039a69",
+        "id": "0c9bca5a62f5a598",
         "type": "tabs",
         "children": [
           {
-            "id": "ef49045e41662f61",
+            "id": "c22b2f0577f91555",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -22,17 +22,17 @@
             }
           },
           {
-            "id": "49e8cf9ecf339880",
+            "id": "a5a31c72a7e651e4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Site-to-Site VPN - Palo Alto.md",
+                "file": "Notes/Sessions - Palo Alto.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Site-to-Site VPN - Palo Alto"
+              "title": "Sessions - Palo Alto"
             }
           }
         ],
@@ -68,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "[\"aliases\":ADEM]",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -93,8 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883,
-    "collapsed": true
+    "width": 257.5004348754883
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -172,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Autonomous Digital Experience Management.md",
+                "file": "Notes/Sessions - Palo Alto.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Autonomous Digital Experience Management"
+              "title": "Outline of Sessions - Palo Alto"
             }
           },
           {
@@ -214,7 +213,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -233,13 +232,15 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "49e8cf9ecf339880",
+  "active": "a5a31c72a7e651e4",
   "lastOpenFiles": [
+    "Notes/Autonomous Digital Experience Management.md",
+    "Notes/Sessions - Palo Alto.md",
+    "Notes/Site-to-Site VPN - Palo Alto.md",
+    "Notes/App-ID™.md",
     "attachments/Route-Based Site-to-Site VPN.png",
     "attachments/IKE Phase 2.png",
     "attachments/IKE Phase 1.png",
-    "Notes/Autonomous Digital Experience Management.md",
-    "Notes/Site-to-Site VPN - Palo Alto.md",
     "attachments/Applications Dashboard Widgets.png",
     "attachments/Monitor Dashboard Applications.png",
     "attachments/Experience Score.png",
@@ -249,7 +250,6 @@
     "attachments/Application Experience Dashborad.png",
     "Notes/Prisma SD-WAN®.md",
     "attachments/Performance Policy Rule4.png",
-    "attachments/Performance Policy Rule 3.png",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
     "Notes/Cloud Access Security Broker.md",
@@ -258,7 +258,6 @@
     "Categories/Security.md",
     "attachments/Configure Probes.pdf",
     "Notes/Traffic Flows.md",
-    "Notes/App-ID™.md",
     "Notes/User-ID™.md",
     "Notes/Prisma SASE.md",
     "Notes/Strata Cloud Manager.md",
