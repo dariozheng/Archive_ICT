@@ -232,12 +232,13 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "16c67d7145bb995e",
   "lastOpenFiles": [
+    "attachments/Configured Service Connection Topology.png",
+    "Notes/Prisma Access.md",
     "attachments/Modify the IPSec Tunnel Predefined Template.png",
     "attachments/Configure Using Predefined Templates.png",
     "attachments/IKE Gateway Advanced Options.png",
-    "Notes/Prisma Access.md",
     "attachments/Modify the IKE Gateway Predefined Template.png",
     "attachments/Configuration Using Predefined Templates.png",
     "attachments/Predefined IPSec and IKE Crypto Profiles.png",
@@ -245,7 +246,6 @@
     "attachments/IKE Phase 2 rewiew.png",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "attachments/IKE Phase 1 rewiew.png",
-    "attachments/IPsec Tunnels Service Connection.png",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Service Connection - Palo Alto.md",
     "Notes/Prisma SASE.md",
@@ -254,7 +254,6 @@
     "Notes/Certificates - Palo Alto.md",
     "Notes/Sessions - Palo Alto.md",
     "Notes/App-ID™.md",
-    "attachments/Route-Based Site-to-Site VPN.png",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
