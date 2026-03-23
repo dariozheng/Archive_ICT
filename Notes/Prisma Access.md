@@ -65,16 +65,6 @@ IKE phase 1 provides <strong>authentication</strong> <mark style="background: #F
 <strong>IKE phase 2</strong> concerns <mark style="background: #FFB8EBA6;">data traversing the tunnel</mark>. <mark style="background: #FF5582A6;">Each side of the tunnel</mark> <mark style="background: #FFB86CA6;">has a proxy ID</mark> <mark style="background: #BBFABBA6;">to identify the traffic that it sends</mark> and <mark style="background: #FFF3A3A6;">what it expects to receive</mark>. <mark style="background: #ABF7F7A6;">These IDs either can be a specific network range or a generic network of <strong>0.0.0.0/0</strong></mark>. In either case, <mark style="background: #ADCCFFA6;">for the tunnel to work, both sides need to know what the other side will be sending</mark>.
 
 <mark style="background: #D2B3FFA6;">The five pieces of information passed during IKE phase 2 are</mark> <mark style="background: #CACFD9A6;">IPsec type or mode</mark>, <mark style="background: #FFB8EBA6;">Diffie-Hellman: PFS</mark>, <mark style="background: #FFB86CA6;">symmetric key algorithm – bulk data encryption</mark>, <mark style="background: #FFF3A3A6;">hashing algorithm</mark>, and <mark style="background: #CACFD9A6;">lifetime (before rekey)</mark>.
-###  IPSec Templates
-<strong>Prisma Access</strong> includes predefined <strong>IPSec templates</strong> for <mark style="background: #BBFABBA6;">common third-party IPSec</mark> and <mark style="background: #ADCCFFA6;">SD-WAN devices</mark>. These templates simplify the onboarding of service connections and remote network connections.
-
-Templates for the following vendors are available: <mark style="background: #FFB8EBA6;">Cisco Integrated Services Routers (ISRs)</mark>, <mark style="background: #FF5582A6;">Cisco Adaptive Security Appliances (ASAs)</mark>, <mark style="background: #FFB86CA6;">Citrix</mark>, <mark style="background: #FFF3A3A6;">Prisma SD-WAN</mark>, <mark style="background: #BBFABBA6;">Riverbed</mark>, and <mark style="background: #ADCCFFA6;">Silver Peak</mark>. Modify predefined template settings to match your security requirements.
-![[IPSec Templates palo alto.png]]
-### Predefined IPSec and IKE Crypto Profiles
-To help simplify the onboarding of IPSec tunnels, common third-party crypto profiles are provided. 
-
-The configurations in these profiles are common settings. You must replace some of the placeholder values with the settings to match your security requirements. Remove any unneeded configurations and add settings to match the on-premises crypto settings.
-![[Predefined IPSec and IKE Crypto Profiles.png]]
 ### IKE Gateway
 Prisma Access uses <strong>IKE gateways</strong> <mark style="background: #FFB8EBA6;">to connect to an on-premises device</mark> <mark style="background: #FF5582A6;">that initiates and terminates VPN connections</mark>. <mark style="background: #FFF3A3A6;">The IKE gateways negotiate the phase 1 portion of the IKE and IPSec VPN</mark>.
 #### IKE Gateway Configuration #configuration 
@@ -94,4 +84,35 @@ Enabling passive mode <mark style="background: #ABF7F7A6;">prevents the IPSec tu
 The peers also must negotiate <mark style="background: #D2B3FFA6;">the mode for setting up the VPN tunnel</mark> and <mark style="background: #FF5582A6;">the SA lifetime</mark> in IKE phase 1. 
 <mark style="background: #FFB86CA6;">Main mode protects the identity of the peers</mark> and <mark style="background: #FFF3A3A6;">is more secure because more packets are exchanged when the tunnel is set up</mark>. <mark style="background: #BBFABBA6;">Main mode is the recommended mode for IKE negotiation if both peers support it</mark>. <mark style="background: #ABF7F7A6;">Aggressive mode uses fewer packets to set up the VPN tunnel, so it is a faster but a less secure option</mark>.
 ### IPSec Tunnel #configuration 
-In addition to configuring a gateway, you must configure an <strong>IPSec tunnel</strong>. IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and the on-premises VPN device. This is the phase 2 portion of the IKE/IPSec VPN setup.
+In addition to configuring a gateway, you must configure an <strong>IPSec tunnel</strong>. <mark style="background: #FFF3A3A6;">IPSec tunnels establish and manage IPSec VPN tunnels</mark> between Prisma Access and the on-premises VPN device. <mark style="background: #BBFABBA6;">This is the phase 2 portion of the IKE/IPSec VPN setup</mark>.
+
+Panorama provides several IPSec tunnel templates for common third-party vendors to help simplify IPSec tunnel configuration.
+![[Configure Using Predefined Templates.png]]
+
+The IPSec tunnel configuration allows you to <strong>authenticate</strong> and/or <strong>encrypt</strong> <mark style="background: #ABF7F7A6;">the data (IP packet) as it traverses the tunnel</mark>.
+![[Modify the IPSec Tunnel Predefined Template.png]]
+##### 1. Name
+Provide a name for the IPSec tunnel.
+##### 2. IKE Gateway
+From drop-down list, select the **IKE Gateway** that you previously configured.
+##### 3. IPSec Crypto Profile
+Choose either a default <strong>IPSec crypto profile</strong> or a customized one that you have created.
+##### 4. Enable Replay Protection
+This option is enabled by default. To provide protection against replay attacks, leave the <strong>Enable Replay Protection</strong> checkbox selected.
+##### 5. Add GRE Encapsulation
+If you require <strong>type-of-service headers</strong> or <mark style="background: #FF5582A6;">GRE header encapsulation</mark>, select the <strong>Add GRE Encapsulation</strong> checkbox.
+##### 6. Tunnel Monitor
+Enable <strong>Tunnel Monitor</strong> to alert the administrator about tunnel failures and to provide automatic failover.
+
+If you are setting up Prisma Access to work with a peer that supports policy-based VPN, you must define proxy IDs. Devices that support policy-based VPN use specific security rules and policies or access lists for permitting interesting traffic through an IPSec tunnel. These rules are referenced during quick mode negotiation and are exchanged as proxy IDs in the first or the second message of the process.
+###  IPSec Templates
+<strong>Prisma Access</strong> includes predefined <strong>IPSec templates</strong> for <mark style="background: #BBFABBA6;">common third-party IPSec</mark> and <mark style="background: #ADCCFFA6;">SD-WAN devices</mark>. These templates simplify the onboarding of service connections and remote network connections.
+
+Templates for the following vendors are available: <mark style="background: #FFB8EBA6;">Cisco Integrated Services Routers (ISRs)</mark>, <mark style="background: #FF5582A6;">Cisco Adaptive Security Appliances (ASAs)</mark>, <mark style="background: #FFB86CA6;">Citrix</mark>, <mark style="background: #FFF3A3A6;">Prisma SD-WAN</mark>, <mark style="background: #BBFABBA6;">Riverbed</mark>, and <mark style="background: #ADCCFFA6;">Silver Peak</mark>. Modify predefined template settings to match your security requirements.
+![[IPSec Templates palo alto.png]]
+### Predefined IPSec and IKE Crypto Profiles
+To help simplify the onboarding of IPSec tunnels, common third-party crypto profiles are provided. 
+
+The configurations in these profiles are common settings. You must replace some of the placeholder values with the settings to match your security requirements. Remove any unneeded configurations and add settings to match the on-premises crypto settings.
+![[Predefined IPSec and IKE Crypto Profiles.png]]
+# 
