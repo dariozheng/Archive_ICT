@@ -3,6 +3,8 @@ categories:
   - "[[Security]]"
 topic@security:
 tags:
+aliases:
+  - pki
 ---
 It is recommended that when you generate a trust certificate, it should be a <strong>Subordinate certificate authority</strong> (CA) of your PKI. 
 
