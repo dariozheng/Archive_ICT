@@ -129,4 +129,19 @@ Note: If you make any changes to the IP subnets on your HQ/DC network, you must 
 
 To configure static routing, navigate to <strong>Panorama > Cloud Services > Configuration > Service Connection > Onboarding > Add</strong>. On the <strong>Static Routes</strong> tab, click <strong>Add</strong>.![[Configuring Static Routing.png]]
 ### Creating a QoS Profile to Prioritize Business Critical Traffic #configuration 
+The second approach to controlling throughput for service connections involves enabling QoS and creating a QoS Profile.
+
+To configure Quality of Service (QoS) for the service connection, you will need to enable QoS  and then specify a QoS Profile. To enable QoS, navigate to **Panorama > Cloud Services > Configuration > Service Connection** and on the **QoS** tab, select **Enable** .
+![[Creating a QoS Profile to Prioritize Business Critical Traffic.png]]
+
+If you plan to configure Prisma Access security policy rules <mark style="background: #FFB8EBA6;">to apply QoS markings to ingress traffic</mark>, or <mark style="background: #FFB86CA6;">you have a device at the HQ/DC that marks ingress traffic</mark>, <mark style="background: #BBFABBA6;">you can shape the traffic egressing the site by defining a QoS Profile</mark>:
+##### Add QoS Profile
+Set bandwidth limits for the profile. Set the maximum throughput (in Mbps) for traffic leaving the HQ/DC service connection as the egress max. You can specify a value up to the maximum licensed bandwidth of your HQ/DC service connection. Set the guaranteed bandwidth as the Egress Guaranteed (in Mbps). Any traffic that exceeds the egress guaranteed value is the best effort but not guaranteed.
+##### Define the QoS Classes for the Profile
+There are up to eight definable QoS classes in a single QoS profile. Unless otherwise configured, traffic that does not match a QoS class is assigned a class of four. A QoS class determines the priority and bandwidth for traffic matching a QoS policy rule. You can use a profile to define each QoS class and then attach this profile to a policy rule.
+##### Define Egress Max Value
+The egress max value for a QoS class, or the combined egress max values for multiple QoS classes, must not exceed the egress max value for the QoS profile.
+##### Define Egress Guaranteed Value
+The guaranteed bandwidth assigned to the QoS class is not reserved for that class; unused bandwidth remains available to all traffic. Any class traffic that exceeds the egress guaranteed value is the best effort but not guaranteed.
+## 
 
