@@ -234,6 +234,7 @@
   },
   "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/Dynamic Routing Configuration Settings.png",
     "attachments/Creating a QoS Profile to Prioritize Business Critical Traffic.png",
     "attachments/Configuring Static Routing.png",
     "Notes/Prisma Access.md",
@@ -245,7 +246,6 @@
     "attachments/Configuration Using Predefined Templates.png",
     "attachments/Predefined IPSec and IKE Crypto Profiles.png",
     "attachments/IPSec Templates palo alto.png",
-    "attachments/IKE Phase 2 rewiew.png",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Service Connection - Palo Alto.md",

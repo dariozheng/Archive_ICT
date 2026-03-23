@@ -143,5 +143,19 @@ There are up to eight definable QoS classes in a single QoS profile. Unless othe
 The egress max value for a QoS class, or the combined egress max values for multiple QoS classes, must not exceed the egress max value for the QoS profile.
 ##### Define Egress Guaranteed Value
 The guaranteed bandwidth assigned to the QoS class is not reserved for that class; unused bandwidth remains available to all traffic. Any class traffic that exceeds the egress guaranteed value is the best effort but not guaranteed.
-## 
+### Configure the Dynamic Routing and BGP
+The third method is using Border Gateway Protocol (BGP). 
 
+If you want to enable BGP to dynamically route traffic to and from your HQ and data centers, you will need to provide the following BGP information for the eBGP router at the HQ/DC:
+##### Branch Router AS Number
+The autonomous system (AS) to which the eBGP router at the HQ/DC belongs. This is called the Peer AS.
+##### Router ID
+The IP address is assigned as the Router ID of the eBGP router on the HQ/DC network. This is called the Peer Address.
+#### Dynamic Routing Configuration Settings
+To use Dynamic Routing to advertise HQ/DC subnets, navigate to **Panorama > Cloud Services > Configuration > Service Connection**. In the Onboarding section, click **Add** and select the **BGP** tab. Click **Enable** and configure the following settings:
+- **Add no-export community:** To add a no-export community for SC-CANs to the outbound prefixes from the eBGP peers at the customer premises equipment (CPE), set Add no-export community to Enabled Out. This capability is Disabled by default. 
+- **Don’t Advertise Prisma Access Routes**: Select this option to prevent the Prisma Access BGP peer from forwarding routes into your organization’s network. 
+- **Peer AS:** Enter the Peer AS, which is the autonomous system (AS) for your network.
+- **Peer Address:** Enter the IP address assigned as the Router ID of the eBGP router on the data center/HQ network for which you're configuring this service connection. 
+- **Local IP Address:** Enter the IP address that Prisma Access uses as its Local IP Address for BGP.
+- **Secret and Confirm Secret:** Enter a secret password to authenticate BGP peer communications and enter it again to confirm.![[Dynamic Routing Configuration Settings.png]]
