@@ -22,7 +22,7 @@
             }
           },
           {
-            "id": "d6d8276dcdbfebf2",
+            "id": "16c67d7145bb995e",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -35,7 +35,8 @@
               "title": "Prisma Access"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -170,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Prisma SASE.md",
+                "file": "Notes/Prisma Access.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Prisma SASE"
+              "title": "Outline of Prisma Access"
             }
           },
           {
@@ -231,8 +232,9 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "16c67d7145bb995e",
   "lastOpenFiles": [
+    "Notes/Service Connection - Palo Alto.md",
     "Notes/Prisma Access.md",
     "Notes/Prisma SASE.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
@@ -269,7 +271,6 @@
     "Notes/Dynamic User Groups - Palo Alto.md",
     "Notes/Data Redistribution - Palo Alto.md",
     "Notes/Crawler.md",
-    "Notes/Multi-Factor Authentication - Palo Alto.md",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
