@@ -70,7 +70,7 @@ It provides continuous ongoing <mark style="background: #ABF7F7A6;">deep inspect
 - Advanced visibility across the entire attack surface
 - Flexibility to address the evolving threat landscape
 ## Cloud Access Security Brokers
-<strong>CASBs</strong> can be on-premises or cloud-based <mark style="background: #FFB8EBA6;"> <strong>services</strong>that provide <strong>security policy enforcement points</strong></mark> between <mark style="background: #FFB86CA6;">those who use or consume the cloud service</mark> and <mark style="background: #FFF3A3A6;">those who provide it</mark>.
+<strong>CASBs</strong> can be on-premises or cloud-based <mark style="background: #FFB8EBA6;"><strong>services</strong>that provide <strong>security policy enforcement points</strong></mark> between <mark style="background: #FFB86CA6;">those who use or consume the cloud service</mark> and <mark style="background: #FFF3A3A6;">those who provide it</mark>.
 
 A CASB offers products and services that will address any security deficiencies within an enterprise's use of cloud services. 
 
