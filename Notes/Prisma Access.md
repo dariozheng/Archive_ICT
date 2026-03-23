@@ -116,4 +116,4 @@ To help simplify the onboarding of IPSec tunnels, common third-party crypto prof
 
 The configurations in these profiles are common settings. You must replace some of the placeholder values with the settings to match your security requirements. Remove any unneeded configurations and add settings to match the on-premises crypto settings.
 ![[Predefined IPSec and IKE Crypto Profiles.png]]
-# 
+## Service Connection #Configuration
