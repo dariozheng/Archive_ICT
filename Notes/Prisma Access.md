@@ -75,7 +75,7 @@ To help simplify the onboarding of IPSec tunnels, common third-party crypto prof
 
 The configurations in these profiles are common settings. You must replace some of the placeholder values with the settings to match your security requirements. Remove any unneeded configurations and add settings to match the on-premises crypto settings.
 ![[Predefined IPSec and IKE Crypto Profiles.png]]
-### IKE Gateway Configuration
+### IKE Gateway
 Prisma Access uses <strong>IKE gateways</strong> <mark style="background: #FFB8EBA6;">to connect to an on-premises device</mark> <mark style="background: #FF5582A6;">that initiates and terminates VPN connections</mark>. <mark style="background: #FFF3A3A6;">The IKE gateways negotiate the phase 1 portion of the IKE and IPSec VPN</mark>.
 #### IKE Gateway Configuration #configuration 
 Panorama provides several <mark style="background: #BBFABBA6;">IKE gateways templates</mark> for common third-party vendors, as well as a generic gateway to help simplify gateway configuration.
@@ -93,3 +93,5 @@ Enabling passive mode <mark style="background: #ABF7F7A6;">prevents the IPSec tu
 
 The peers also must negotiate <mark style="background: #D2B3FFA6;">the mode for setting up the VPN tunnel</mark> and <mark style="background: #FF5582A6;">the SA lifetime</mark> in IKE phase 1. 
 <mark style="background: #FFB86CA6;">Main mode protects the identity of the peers</mark> and <mark style="background: #FFF3A3A6;">is more secure because more packets are exchanged when the tunnel is set up</mark>. <mark style="background: #BBFABBA6;">Main mode is the recommended mode for IKE negotiation if both peers support it</mark>. <mark style="background: #ABF7F7A6;">Aggressive mode uses fewer packets to set up the VPN tunnel, so it is a faster but a less secure option</mark>.
+### IPSec Tunnel #configuration 
+In addition to configuring a gateway, you must configure an <strong>IPSec tunnel</strong>. IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and the on-premises VPN device. This is the phase 2 portion of the IKE/IPSec VPN setup.
