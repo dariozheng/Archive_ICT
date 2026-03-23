@@ -76,3 +76,20 @@ To help simplify the onboarding of IPSec tunnels, common third-party crypto prof
 The configurations in these profiles are common settings. You must replace some of the placeholder values with the settings to match your security requirements. Remove any unneeded configurations and add settings to match the on-premises crypto settings.
 ![[Predefined IPSec and IKE Crypto Profiles.png]]
 ### IKE Gateway Configuration
+Prisma Access uses <strong>IKE gateways</strong> <mark style="background: #FFB8EBA6;">to connect to an on-premises device</mark> <mark style="background: #FF5582A6;">that initiates and terminates VPN connections</mark>. <mark style="background: #FFF3A3A6;">The IKE gateways negotiate the phase 1 portion of the IKE and IPSec VPN</mark>.
+#### IKE Gateway Configuration #configuration 
+Panorama provides several <mark style="background: #BBFABBA6;">IKE gateways templates</mark> for common third-party vendors, as well as a generic gateway to help simplify gateway configuration.
+
+Predefined gateway templates provide a generic configuration for each vendor. To avoid potential connectivity issues, you must replace placeholder values in the preconfigured gateway templates with values that match your security requirements.
+![[Configuration Using Predefined Templates.png]]
+
+Before you can set up the VPN tunnel and send traffic between the IKE gateways, <mark style="background: #FFB8EBA6;">each peer must have a static or dynamic IP address or fully qualified domain name (FQDN)</mark>. <mark style="background: #FF5582A6;">The VPN peers use pre-shared keys or certificates to mutually authenticate each other</mark>.
+![[Modify the IKE Gateway Predefined Template.png]]
+The configuration shown above is for the <mark style="background: #FFB86CA6;">Prisma Access side of the IPSec VPN tunnel</mark>. A dynamic peer IP address type has been selected. <mark style="background: #FFF3A3A6;">When using dynamic IP addresses, you must configure the Peer Identification using a hostname, IP address, KEYID, or a user FQDN</mark>. 
+<mark style="background: #BBFABBA6;">To complete the service connection configuration, you must also configure the other side of the IPSec VPN tunnel on the on-premises VPN device</mark>.
+
+![[IKE Gateway Advanced Options.png]]
+Enabling passive mode <mark style="background: #ABF7F7A6;">prevents the IPSec tunnel from initiating the connection request</mark>. Palo Alto Networks recommends that you <mark style="background: #ADCCFFA6;">let the <strong>on-premises VPN device</strong> initiate the connection</mark>.
+
+The peers also must negotiate <mark style="background: #D2B3FFA6;">the mode for setting up the VPN tunnel</mark> and <mark style="background: #FF5582A6;">the SA lifetime</mark> in IKE phase 1. 
+<mark style="background: #FFB86CA6;">Main mode protects the identity of the peers</mark> and <mark style="background: #FFF3A3A6;">is more secure because more packets are exchanged when the tunnel is set up</mark>. <mark style="background: #BBFABBA6;">Main mode is the recommended mode for IKE negotiation if both peers support it</mark>. <mark style="background: #ABF7F7A6;">Aggressive mode uses fewer packets to set up the VPN tunnel, so it is a faster but a less secure option</mark>.
