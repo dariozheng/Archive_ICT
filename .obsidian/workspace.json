@@ -218,8 +218,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -236,6 +235,8 @@
   },
   "active": "16c67d7145bb995e",
   "lastOpenFiles": [
+    "attachments/Guidelines for Secure Inbound Access.png",
+    "attachments/Remote Network Onboarding.png",
     "attachments/Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png",
     "attachments/Configuring the Remote Networks.png",
     "attachments/Planning Considerations for Remote Networks.png",
@@ -246,8 +247,6 @@
     "attachments/Configured Service Connection Topology.png",
     "attachments/Modify the IPSec Tunnel Predefined Template.png",
     "attachments/Configure Using Predefined Templates.png",
-    "attachments/IKE Gateway Advanced Options.png",
-    "attachments/Modify the IKE Gateway Predefined Template.png",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Service Connection - Palo Alto.md",

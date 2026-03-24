@@ -229,3 +229,19 @@ IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and y
 To add a new remote network site to Prisma Access, start by specifying the location and defining the amount of bandwidth to allocate to the connection.
 
 Navigate to **Panorama > Cloud Services > Configuration > Remote Networks > Onboarding** to onboard a remote network.
+![[Remote Network Onboarding.png]]
+### Secure Inbound Access 
+If your organization hosts <mark style="background: #FF5582A6;">internet-accessible applications</mark> at a remote network site, <mark style="background: #FFF3A3A6;">providing access to those applications exposes your network to all the threats the open internet poses</mark>. Use Secure Inbound Access to secure the network. 
+
+Secure inbound access features:
+- You <strong>cannot</strong> modify an existing remote network to provide secure inbound access. 
+- The inbound access feature <mark style="background: #FFB86CA6;">is not available on remote networks that use ECMP load balancing</mark>. 
+- <mark style="background: #BBFABBA6;">Application port translation is not supported</mark>. 
+- <mark style="background: #ADCCFFA6;">Do not use remote network inbound access with traffic forwarding rules that have service connections</mark>. 
+- <mark style="background: #D2B3FFA6;">User-ID and application authentication are not supported</mark>.
+
+Remote networks that are configured for <strong>secure inbound access</strong> <mark style="background: #FF5582A6;">can only be used for that purpose</mark>. <mark style="background: #BBFABBA6;">For <strong>inbound</strong> and <strong>outbound</strong> access at a remote network site, create two <strong>remote network</strong> sites in the same location</mark>—<mark style="background: #ADCCFFA6;">one for inbound access</mark> and <mark style="background: #ABF7F7A6;">one for outbound access</mark>. Customer routing at the branch needs <mark style="background: #D2B3FFA6;">to ensure symmetrical flows if both inbound and outbound access is required</mark>. 
+
+<mark style="background: #FFB8EBA6;">In this example, User 1 uses Remote Network 1 for inbound access to www.example.com, while User 2 uses Remote Network 2 for outbound internet access from the remote network location</mark>. 
+![[Guidelines for Secure Inbound Access.png]]
+
