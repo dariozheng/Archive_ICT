@@ -358,6 +358,8 @@ Every endpoint that participates in the GlobalProtect network <mark style="backg
 
 In addition, <mark style="background: #D2B3FFA6;">the portal controls the behavior and distribution of the GlobalProtect app software to both macOS and Windows endpoints</mark>. (On mobile endpoints, the GlobalProtect app is distributed through the Apple App Store for iOS endpoints, Google Play for Android endpoints and Chromebooks, and the Microsoft Store for Windows 10 UWP endpoints.)
 <mark style="background: #CACFD9A6;">If you are using the <strong>Host Information Profile (HIP)</strong> feature</mark>, <mark style="background: #FFB8EBA6;">the portal also defines what information to collect from the host</mark>, including any custom information you require. Y<mark style="background: #FF5582A6;">ou can set up access to the <strong>GlobalProtect Portal</strong> on an interface on any Palo Alto Networks next-generation firewall</mark>.
+
+Although <mark style="background: #FFB86CA6;">there can be only one portal</mark>, <mark style="background: #FFF3A3A6;">the portal is not a single point of failure</mark>: <mark style="background: #FF5582A6;">even if the portal is not reachable, clients will use their cached configuration to connect to the gateways</mark>. <mark style="background: #D2B3FFA6;">When the portal is unreachable, you cannot install a new client or distribute configuration changes to existing clients</mark>. To resolve this issue, <mark style="background: #ADCCFFA6;">re-establish the connection to the portal or redirect clients to a standby portal</mark>. <mark style="background: #CACFD9A6;">This redirection can be executed by changing the portal's DNS record</mark>.
 ##### GlobalProtect Gateway
 The <strong>gateway</strong> provides <mark style="background: #FFB86CA6;">security enforcement </mark>for <mark style="background: #FFF3A3A6;">traffic from GlobalProtect apps</mark>. 
 
@@ -371,4 +373,25 @@ The <strong>GlobalProtect app software</strong> <mark style="background: #FF5582
 The GlobalProtect app for Windows and macOS endpoints is deployed from the GlobalProtect portal. With the release of GlobalProtect 6.0, GlobalProtect extends native support for ARM64-based Windows devices. This support enables you to secure your remote workforce using ARM64-based Windows devices to access all features that are available on the GlobalProtect app; it also allows uniform endpoint Security policy and enforcement similar to Intel-based Windows devices.
 
 The GlobalProtect app for mobile endpoints (iOS, Android, and Windows UWP) is available through the official store for the endpoint—the Apple App Store for iOS, Google Play for Android, and the Microsoft Store for Windows UWP.
+## GlobalProtect VPNs
+The GlobalProtect app provides a simple way to extend enterprise Security policies to mobile endpoints. As with other remote endpoints running the GlobalProtect app,<mark style="background: #FFB8EBA6;"> the mobile app provides secure access to your corporate network over an IPSec or SSL tunnel</mark>.
+### Types of VPN Configuration
+The app connects <mark style="background: #FFB86CA6;">to the gateway that is closest to the end user’s current location</mark>. In addition, <mark style="background: #BBFABBA6;">traffic to and from the mobile endpoint is automatically subject to the same Security-policy enforcement as other endpoints in your corporate network</mark>. The app also collects information about the host configuration and can use this information for enhanced HIP-based Security-policy enforcement. 
+
+There are two types of VPN configurations: <strong>on-demand</strong> and <strong>always-on</strong>.
+
+  
+In a <mark style="background: #FF5582A6;">remote access (On-Demand) VPN configuration</mark>, <mark style="background: #FFF3A3A6;">users must manually launch the GlobalProtect app to establish a secure GlobalProtect connection</mark>. The GlobalProtect app connects to the GlobalProtect portal (upon user login) to submit user and host information and retrieve the agent configuration. After the app receives the agent configuration from the portal, it connects and establishes a VPN tunnel to the GlobalProtect gateway that was specified in the agent configuration.
+
+In an <mark style="background: #FF5582A6;">Always-On VPN configuration</mark>, <mark style="background: #FFB8EBA6;">the secure GlobalProtect connection is always on</mark>. The GlobalProtect app connects to the GlobalProtect portal (upon user login) to submit user and host information and retrieve the agent configuration. After the app receives the agent configuration from the portal, it automatically connects and establishes a VPN tunnel to the GlobalProtect gateway that was specified in the agent configuration.
+### GlobalProtect User Connection Sequence
+First, the <mark style="background: #BBFABBA6;"><strong>GlobalProtect client</strong> on the local system connects to the GlobalProtect portal for authentication</mark>. After authorization is confirmed, <mark style="background: #ABF7F7A6;">the portal sends the client configuration and a list of GlobalProtect gateways</mark>. Lastly, <mark style="background: #ADCCFFA6;">the client connects to the best gateway (based on SSL response time and local priority) to respond to its connection request</mark>. 
+
+<mark style="background: #D2B3FFA6;">The client communicates with portals and gateways</mark>. <mark style="background: #FFB86CA6;">There is no direct communication among gateways or between gateways and portals</mark>. <mark style="background: #ADCCFFA6;">After the client is installed and enabled, the client contacts the portal when setting up a connection</mark>. Any time the client contacts the portal, the portal authenticates the connections. 
+![[GlobalProtect User Connection Sequence.png]]
+## GlobalProtect Topology
+For larger environments, GlobalProtect can be configured with multiple gateways.
+
+<mark style="background: #FFF3A3A6;">Additional gateways can be used to provide access to multiple protected networks</mark>. <mark style="background: #FFB86CA6;">They can also be used to improve user redundancy and performance</mark>. <mark style="background: #BBFABBA6;">GlobalProtect clients connect directly to a gateway from a list provided by the portal</mark>. By default, <mark style="background: #ABF7F7A6;">the chosen gateway is the one that responds fastest to the connection request</mark>. To ensure consistent access, <strong>multiple gateways often require the networks to be connected to each other by VPN</strong> <mark style="background: #D2B3FFA6;">so that the user has access to the same data, regardless of which gateway they connect to</mark>.
+![[GlobalProtect Topology.png]]
 # 
