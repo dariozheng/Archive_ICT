@@ -9,7 +9,7 @@ tags:
 Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <strong><mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark></strong> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust Network Access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">SWG</mark>, <strong>CASB</strong>, and <mark style="background: #BBFABBA6;">DLP</mark> for <mark style="background: #ABF7F7A6;">remote users, branches, and applications</mark>. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management (ADEM). 
 
 Core Topology Components:
-- <mark style="background: #FFB86CA6;">Mobile Users</mark> (<strong>MU-SPN</strong>): <mark style="background: #FFB8EBA6;">Individual users connecting via the GlobalProtect app</mark> to nearby <mark style="background: #FFF3A3A6;">cloud gateways</mark>. <mark style="background: #ABF7F7A6;">These gateways act as the security enforcement point for remote employees</mark>.
+- <mark style="background: #FFB86CA6;">Mobile Users</mark> (<strong>MU-SPN</strong>): <mark style="background: #FFB8EBA6;">Individual users connecting via the <strong>GlobalProtect</strong> app</mark> to nearby <mark style="background: #FFF3A3A6;">cloud gateways</mark>. <mark style="background: #ABF7F7A6;">These gateways act as the security enforcement point for remote employees</mark>.
 - <mark style="background: #FFB8EBA6;">Remote Networks</mark> (<strong>RN-SPN</strong>): <mark style="background: #FFF3A3A6;">Branch offices</mark> or <mark style="background: #FFF3A3A6;">retail sites</mark> <mark style="background: #BBFABBA6;">that connect to Prisma Access via IPsec VPN tunnels</mark> <mark style="background: #ADCCFFA6;">from local routers or SD-WAN devices</mark>. <mark style="background: #ABF7F7A6;">Prisma Access provides the security stack for these sites</mark>.
 - <mark style="background: #FF5582A6;">Service Connections</mark> (<strong>SC-CAN</strong>): <mark style="background: #D2B3FFA6;">Dedicated tunnels that link Prisma Access to your Private Data Centers or HQ where internal apps are hosted</mark>. Unlike other nodes, SC-CANs typically do not enforce security, assuming the data center already has its own firewall. 
 
@@ -338,4 +338,37 @@ To check the status of the remote networks, navigate to **Panorama > Cloud Serv
 
 If there are errors or warnings, review the system log and local logs on the remote network device. Resolve issues before proceeding with the configuration and then continue adding remote networks as needed.
 ![[Verify the Status of Remote Networks.png]]
-# Mobile Users 
+# Mobile Users and GlobalProtect
+<strong>GlobalProtect</strong> <mark style="background: #FFB8EBA6;">provides an infrastructure to secure</mark> <strong>mobile workforce networking</strong>. 
+GlobalProtect enables secure access for all users, regardless of what endpoints they are using or where they are located.
+
+GlobalProtect builds on familiar mobile security technology: <mark style="background: #CACFD9A6;">the remote-access virtual private network (VPN)</mark>. <mark style="background: #FF5582A6;">You can use <strong>GlobalProtect</strong> as a replacement for a traditional VPN gateway</mark>. This eliminates the complexity and headaches of administering a standalone, third-party VPN gateway.
+
+<mark style="background: #FFB86CA6;">The GlobalProtect agent ensures remote connectivity</mark>, and from this base, GlobalProtect builds more advanced features that help transform mobile security. 
+<mark style="background: #FFF3A3A6;">GlobalProtect expands the boundaries of the physical network </mark>while effectively <mark style="background: #BBFABBA6;">establishing a logical perimeter that encompasses your remote laptop and mobile device users, regardless of their location</mark>.
+## GlobalProtect Components
+A GlobalProtect deployment consists of three major components: 
+- <mark style="background: #FFB8EBA6;">GlobalProtect Portal</mark> 
+- <mark style="background: #FF5582A6;">GlobalProtect gateway(s)</mark>
+- <mark style="background: #FFB86CA6;">GlobalProtect app software</mark> (also called a <mark style="background: #FFB86CA6;">GlobalProtect agent</mark>) for both macOS and Windows endpoints.
+##### GlobalProtect Portal
+The portal provides <mark style="background: #FFF3A3A6;">management functions for your GlobalProtect infrastructure</mark>. 
+
+Every endpoint that participates in the GlobalProtect network <mark style="background: #BBFABBA6;">receives configuration information from the portal</mark>, <mark style="background: #ABF7F7A6;">including information about available gateways</mark> as well as <mark style="background: #ADCCFFA6;">any client certificates that may be required to connect to the GlobalProtect gateway(s)</mark>. 
+
+In addition, <mark style="background: #D2B3FFA6;">the portal controls the behavior and distribution of the GlobalProtect app software to both macOS and Windows endpoints</mark>. (On mobile endpoints, the GlobalProtect app is distributed through the Apple App Store for iOS endpoints, Google Play for Android endpoints and Chromebooks, and the Microsoft Store for Windows 10 UWP endpoints.)
+<mark style="background: #CACFD9A6;">If you are using the <strong>Host Information Profile (HIP)</strong> feature</mark>, <mark style="background: #FFB8EBA6;">the portal also defines what information to collect from the host</mark>, including any custom information you require. Y<mark style="background: #FF5582A6;">ou can set up access to the <strong>GlobalProtect Portal</strong> on an interface on any Palo Alto Networks next-generation firewall</mark>.
+##### GlobalProtect Gateway
+The <strong>gateway</strong> provides <mark style="background: #FFB86CA6;">security enforcement </mark>for <mark style="background: #FFF3A3A6;">traffic from GlobalProtect apps</mark>. 
+
+Additionally, if the <strong>HIP</strong> feature is enabled, <mark style="background: #BBFABBA6;">the gateway generates a HIP report from the raw host data the apps submit</mark>, and this information can be used in policy enforcement. 
+
+<mark style="background: #ABF7F7A6;">You can configure different types of gateways</mark> to provide <mark style="background: #ADCCFFA6;">secure access for your remote users</mark>, as well <mark style="background: #D2B3FFA6;">as apply Security policy enforcement for access to internal resources</mark>.
+<mark style="background: #CACFD9A6;">You can configure a <strong>GlobalProtect gateway</strong> on an interface on any Palo Alto Networks Next-Generation Firewall</mark>. <mark style="background: #FFB8EBA6;">You can run both a gateway and a portal on the same firewall</mark>, or you can have multiple distributed gateways throughout your enterprise.
+##### GlobalProtect App
+The <strong>GlobalProtect app software</strong> <mark style="background: #FF5582A6;">runs on endpoints</mark> and <mark style="background: #FFB86CA6;">enables access to your network resources through the GlobalProtect portals and gateways that you have deployed</mark>.
+
+The GlobalProtect app for Windows and macOS endpoints is deployed from the GlobalProtect portal. With the release of GlobalProtect 6.0, GlobalProtect extends native support for ARM64-based Windows devices. This support enables you to secure your remote workforce using ARM64-based Windows devices to access all features that are available on the GlobalProtect app; it also allows uniform endpoint Security policy and enforcement similar to Intel-based Windows devices.
+
+The GlobalProtect app for mobile endpoints (iOS, Android, and Windows UWP) is available through the official store for the endpoint—the Apple App Store for iOS, Google Play for Android, and the Microsoft Store for Windows UWP.
+# 
