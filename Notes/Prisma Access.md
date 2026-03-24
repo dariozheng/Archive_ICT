@@ -231,7 +231,7 @@ To add a new remote network site to Prisma Access, start by specifying the locat
 Navigate to **Panorama > Cloud Services > Configuration > Remote Networks > Onboarding** to onboard a remote network.
 ![[Remote Network Onboarding.png]]
 ### Secure Inbound Access 
-If your organization hosts <mark style="background: #FF5582A6;">internet-accessible applications</mark> at a remote network site, <mark style="background: #FFF3A3A6;">providing access to those applications exposes your network to all the threats the open internet poses</mark>. Use Secure Inbound Access to secure the network. 
+If your organization hosts <mark style="background: #FF5582A6;">internet-accessible applications</mark> at a remote network site, <mark style="background: #FFF3A3A6;">providing access to those applications exposes your network to all the threats the open internet poses</mark>. Apply a <strong>Secure Inbound Access</strong> configiration to secure the network. 
 
 Secure inbound access features:
 - You <strong>cannot</strong> modify an existing remote network to provide secure inbound access. 
@@ -245,3 +245,40 @@ Remote networks that are configured for <strong>secure inbound access</strong> <
 <mark style="background: #FFB8EBA6;">In this example, User 1 uses Remote Network 1 for inbound access to www.example.com, while User 2 uses Remote Network 2 for outbound internet access from the remote network location</mark>. 
 ![[Guidelines for Secure Inbound Access.png]]
 
+<strong>Prisma Access</strong> for remote networks allows <strong>outbound access</strong> to <mark style="background: #ABF7F7A6;">internet-connected applications</mark>. In some cases, your organization might need to provide <mark style="background: #BBFABBA6;">inbound access</mark> <mark style="background: #FFB86CA6;">to an application or website at a remote site</mark> and <mark style="background: #ADCCFFA6;"><strong>secure access</strong> to that application for any internet-connected user</mark>—not just users who are protected by Prisma Access.
+#### Secure Inbound Access #configuration 
+Follow these steps to make an application accessible from a remote network site to all internet-connected users.
+
+Go to **Panorama > Cloud Services > Configuration > Remote Networks**, and select **Inbound Access Remote Networks**. Then, click **Add**.
+![[Secure Inbound Access.png]]
+
+Specify the following settings for the inbound access remote network connection:
+- Provide a **Name** for your inbound access
+- Specify the **Location** for your Prisma Access
+- Set a **Bandwidth**
+- Select the **Number of Public IPs** you want to use for the applications, either five or ten
+- Select the **IPSec Tunnel** to use with the inbound access connection.
+![[Secure Inbound Access2.png]]
+
+Select the **Inbound Access** tab and click **Add** to add the inbound access applications for which you want to secure access. This option displays additional fields in a table.
+![[Secure Inbound Access3.png]]
+
+In the table, provide a suitable name for your inbound access application. Enter the **Private IP** address where your Prisma Access environment is running. Set the **Protocol** to **TCP** and provide a **Port**. 
+Click **OK** to save your changes.![[Secure Inbound Access4.png]]
+#### Secure Inbound Access Deployments
+Here are inbound access examples, along with the IP addresses that Prisma Access assigns in various deployments.
+
+In this configuration example, you <mark style="background: #FFF3A3A6;">enable inbound access for an application (www.example.com) at a remote network site</mark>. <mark style="background: #FFF3A3A6;">Then assign an IP address of 10.10.10.2, a port of 443, and a protocol of TCP to the application</mark>. <mark style="background: #FFB86CA6;">You then enter these values in Prisma Access when you configure inbound access</mark>. After you save and commit your changes, <mark style="background: #FFF3A3A6;">Prisma Access assigns a public IP address to the application you defined—in this case, 52.1.1.1</mark>.
+##### Source Network Address Translation (NAT) Enabled
+The following figure shows the traffic flow from users to applications. <mark style="background: #BBFABBA6;">Since source NAT is enabled, the source IP address in the routing table changes from the IP of the user’s device (34.1.1.1) to the remote network’s EBGP routing address. (172.1.1.1)</mark>.
+![[Secure Inbound Access Deployments 1.png]]
+##### Source NAT Enabled: Return Traffic
+With source NAT enabled, you can clearly see the return path of the traffic.
+![[Secure Inbound Access Deployments 2.png]]
+##### Source NAT Disabled
+If you disable source NAT, Prisma Access still performs destination NAT, but the source IP address of the request is unchanged.
+![[Secure Inbound Access Deployments 3.png]]
+##### Source NAT Disabled: Return Traffic
+In this example, you can clearly see that the return address and the destination address for all of the routing tables is the user's IP address (34.1.1.1).
+![[Secure Inbound Access Deployments 4.png]]
+## 

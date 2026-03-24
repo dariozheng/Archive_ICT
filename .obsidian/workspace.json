@@ -68,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "line:(cert)",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -93,8 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 257.5004348754883,
-    "collapsed": true
+    "width": 224.50260543823242
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -218,7 +217,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -233,20 +233,21 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "16c67d7145bb995e",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/Secure Inbound Access Deployments 4.png",
+    "attachments/Secure Inbound Access Deployments 3.png",
+    "attachments/Secure Inbound Access Deployments 2.png",
+    "attachments/Secure Inbound Access Deployments 1.png",
+    "attachments/Secure Inbound Access4.png",
+    "attachments/Secure Inbound Access3.png",
+    "attachments/Secure Inbound Access.png",
+    "attachments/Secure Inbound Access2.png",
+    "Notes/Prisma Access.md",
+    "Notes/Data Redistribution - Palo Alto.md",
     "attachments/Guidelines for Secure Inbound Access.png",
     "attachments/Remote Network Onboarding.png",
     "attachments/Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png",
-    "attachments/Configuring the Remote Networks.png",
-    "attachments/Planning Considerations for Remote Networks.png",
-    "Notes/Prisma Access.md",
-    "attachments/Dynamic Routing Configuration Settings.png",
-    "attachments/Creating a QoS Profile to Prioritize Business Critical Traffic.png",
-    "attachments/Configuring Static Routing.png",
-    "attachments/Configured Service Connection Topology.png",
-    "attachments/Modify the IPSec Tunnel Predefined Template.png",
-    "attachments/Configure Using Predefined Templates.png",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Service Connection - Palo Alto.md",
@@ -271,7 +272,6 @@
     "Notes/Backhaul.md",
     "Notes/Server Name Indication.md",
     "Notes/Dynamic User Groups - Palo Alto.md",
-    "Notes/Data Redistribution - Palo Alto.md",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
