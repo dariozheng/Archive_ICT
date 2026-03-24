@@ -504,7 +504,16 @@ If you do not require your mobile users to connect to Prisma Access when they ar
 ##### Gateways  
 By default, all the gateways in your Prisma Access locations are available to users. If you have additional GlobalProtect gateways that you’d like your users to be able to connect to, you can add those gateways here.![[Customize App Settings4.png]]
 ##### HIP Data Collection  
-Define custom host information profile (HIP) data that you want the app to collect or exclude from collection. When this option is enabled, the app collects data from devices running Windows, macOS, or Linux operating systems. Go to **Objects > HIP Objects / HIP Profiles**. It is important to remember that adding and requiring a sync with too many items can restrict a user from logging on and can cause a denial.![[Customize App Settings5.png]]
+Define custom host information profile (HIP) data that you want the app to collect or exclude from collection. When this option is enabled, the app collects data from devices running Windows, macOS, or Linux operating systems. Go to **Objects > HIP Objects / HIP Profiles**. It is important to remember that adding and requiring a sync with too many items can restrict a user from logging on and can cause a denial.
+![[Customize App Settings5.png]]
+#### Setting Up Mobile User Authentication
+You can authenticate mobile users to Prisma Access using any of the supported authentication types.
+##### Step 1
+Go to **Workflows > Prisma Access Setup > GlobalProtect > Infrastructure > User Authentication** and click the **Add Authentication**.
+#### Step 2
+Select the **Authentication Method** from the supported authentication types.
+#### Step 3
+Specify the **Certificate Authentication** settings.
 ## Split Tunneling
 <strong>Split Tunneling</strong> allows you to <mark style="background: #FFB8EBA6;">customize traffic routing</mark> through <mark style="background: #FF5582A6;">the VPN tunnel to Prisma Access</mark> <mark style="background: #FFB86CA6;">via the GlobalProtect app</mark>. This functionality not only <mark style="background: #FFF3A3A6;">conserves bandwidth by excluding non-business-critical or non-productive traffic</mark> but also <mark style="background: #BBFABBA6;">provides flexibility in defining which users, devices, or systems should receive specific tunnel settings</mark>.
 
@@ -525,4 +534,14 @@ Navigate to **Workflows > Prisma Access Setup > GlobalProtect** and click the�
 Toggle the **Enable Clientless VPN** option and click **Add Rule** to specify the users and applications that can use Clientless VPN.![[Clientless VPN1.png]]
 #### Step 3
 Configure the Timeout Settings and the advanced settings (if required). Then, click **Save**.![[Clientless VPN3.png]]
+## Certificate Authentication
+For enhanced security, use a <strong>certificate</strong> (in addition to your authentication service) <mark style="background: #FFB8EBA6;">to obtain usernames and authenticate users to Prisma Access</mark>. 
+
+To authenticate users based on a client certificate, <mark style="background: #FFB86CA6;">one of the certificate fields, such as the Subject Name field, must identify the username</mark>. 
+
+Mobile users who successfully authenticate through client certificate authentication <mark style="background: #FF5582A6;">do not have the option to sign out of the GlobalProtect app</mark>. 
+
+With Prisma Access, you can choose to require mobile users to pass both certificate authentication and authentication based on the authentication type or to grant access to mobile users as long as they have successfully passed only one of those checks.
+## Certificate Profile
+The <strong>Certificate Profile</strong> <mark style="background: #FFB8EBA6;">specifies the contents of the username and user domain fields</mark>, <mark style="background: #FF5582A6;">lists CA certificates</mark>, <mark style="background: #FFB86CA6;">sets criteria for blocking a session</mark>, and <mark style="background: #FFF3A3A6;">offers ways to determine the revocation status of CA certificates</mark>. <mark style="background: #BBFABBA6;">Because the certificate is part of the authentication for the mobile user, you must predeploy certificates used in Certificate Profiles to your users before their initial login</mark>. <mark style="background: #ADCCFFA6;">The Certificate Profile specifies which certificate field contains the username (Subject or Subject Alt)</mark>.
 ## 
