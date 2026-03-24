@@ -226,12 +226,14 @@ To establish secure connections between your remote network sites and Prisma Acc
 IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and your on-premises VPN device. Panorama provides several preconfigured third-party IPSec tunnels to simplify configuration, or you can click **Add** to begin adding a new one.
 ![[Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png]]
 ### Remote Network Onboarding 
-To add a new remote network site to Prisma Access, start by specifying the location and defining the amount of bandwidth to allocate to the connection.
+<mark style="background: #D2B3FFA6;">To add a new remote network site to Prisma Access</mark>, start by specifying the location and defining the amount of bandwidth to allocate to the connection.
 
 Navigate to **Panorama > Cloud Services > Configuration > Remote Networks > Onboarding** to onboard a remote network.
 ![[Remote Network Onboarding.png]]
 ### Secure Inbound Access 
-If your organization hosts <mark style="background: #FF5582A6;">internet-accessible applications</mark> at a remote network site, <mark style="background: #FFF3A3A6;">providing access to those applications exposes your network to all the threats the open internet poses</mark>. Apply a <strong>Secure Inbound Access</strong> configiration to secure the network. 
+If your organization hosts <mark style="background: #FF5582A6;">internet-accessible applications</mark> at a remote network site, <mark style="background: #FFF3A3A6;">providing access to those applications exposes your network to all the threats the open internet poses</mark>. 
+
+<strong>Secure Inbound Access</strong> is a specific feature within Prisma Access designed <mark style="background: #FFB86CA6;">to protect traffic initiated from the internet or external sources</mark> <mark style="background: #BBFABBA6;">to applications hosted at a branch or remote site</mark>.
 
 Secure inbound access features:
 - You <strong>cannot</strong> modify an existing remote network to provide secure inbound access. 
@@ -281,4 +283,49 @@ If you disable source NAT, Prisma Access still performs destination NAT, but the
 ##### Source NAT Disabled: Return Traffic
 In this example, you can clearly see that the return address and the destination address for all of the routing tables is the user's IP address (34.1.1.1).
 ![[Secure Inbound Access Deployments 4.png]]
-## 
+### Connect a Remote Network to Prisma Access #configuration 
+Each remote network connection requires an IPSec VPN tunnel to Prisma Access. You must select an IPSec VPN tunnel when you onboard a remote network, so configure the tunnel before you configure the remote network.
+
+A <mark style="background: #FF5582A6;">remote network security processing node</mark> (<strong>RN-SPN</strong>) <mark style="background: #FFB86CA6;">can accommodate up to 1,000 Mbps aggregated bandwidth before spawning an additional RN-SPN in a single compute location</mark>. <mark style="background: #ABF7F7A6;">More than one remote network going to the same location may share the same RN-SPN, but their total aggregated bandwidth is limited to 1,000 Mbps on the shared RN-SPN</mark>.
+#### IKE Options
+Based on the <mark style="background: #FF5582A6;">IPSec device type</mark> you selected, Prisma Access provides a recommended set of ciphers and a key lifetime for the IKE Phase 1 key exchange process.
+
+You can use the recommended settings or customize the settings as needed for your environment. The following are recommended settings:
+- Select an IKE Protocol Version for your branch device to use for IKE negotiation.
+- Add an IKEv1 Crypto Profile to customize the IKE crypto settings.
+- Enable IKE Passive Mode.
+- IKE NAT Traversal is turned on by default.
+##### IKE Crypto Settings
+###### Encryption
+Specify the encryption algorithm used in the IKE security association (SA) negotiation. Prisma Access supports the following encryption algorithms:
+- 3des (168 bits)
+- aes-128-cbc (128 bits)
+- aes-192-cbc (192 bits)
+- aes-256-cbc (256 bits)
+- des (56 bits)
+You can also select null (no encryption).
+###### Authentication
+Specify the authentication algorithm used in the IKE SA negotiation. Prisma Access supports the following authentication algorithms:
+- sha1 (160 bits)
+- sha256 (256 bits) 
+- sha384 (384 bits) 
+- sha512 (512 bits)
+- md5 (128 bits)x
+You can also select null (no authentication).
+###### DH Group
+Specify the Diffie-Hellman (DH) groups used to generate symmetrical keys for IKE in the IKE SA negotiation. The Diffie-Hellman algorithm uses the private key of one party and the public key of the other to create a shared secret, which is an encrypted key that both VPN tunnel peers share. Prisma Access supports the following DH groups:
+- Group 1 (768 bits)
+- Group 2 (1024 bits-default)
+- Group 5 (1536 bits)
+- Group 14 (2048 bits)
+- Group 19 (256-bit elliptic curve group)
+- Group 20 (384-bit elliptic curve group)
+For the strongest security, select the group with the highest number.
+###### Lifetime 
+<mark style="background: #FFF3A3A6;">Specify the unit and amount of time for which the IKE Phase 1 key is valid</mark> (default is 8 hours). For IKEv1, the security association (SA) is not actively re-keyed before the key lifetime expires. 
+
+<mark style="background: #BBFABBA6;">The IKEv1 Phase 1 re-key triggers only when the SA expires</mark>. <mark style="background: #ADCCFFA6;">For IKEv2, the SA must be re-keyed before the key lifetime expires</mark>. If the SA is not re-keyed upon expiration, the SA must begin a new Phase 1 key.
+###### IKEv2 Authentication Multiple
+Define the multiplier value (range: 0 to 50; default: 0) for the key lifetime to calculate the authentication count. The authentication count represents the number of times the security processing node can execute the IKEv2 IKE SA re-key before needing to initiate IKEv2 re-authentication. By default, the re-authentication feature is disabled with a value of 0.
+#### IPSec Options 
+
