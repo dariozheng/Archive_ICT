@@ -170,3 +170,30 @@ To use Dynamic Routing to advertise HQ/DC subnets, navigate to **Panorama > Clo
 - **Secret and Confirm Secret:** Enter a secret password to authenticate BGP peer communications and enter it again to confirm. 
 ![[Dynamic Routing Configuration Settings.png]]
 # Remote Networks
+<strong>Remote networks</strong> are designed <mark style="background: #FFB8EBA6;">to secure users and devices</mark> <mark style="background: #FFB86CA6;">in remote network locations, such as branch offices or remote sites</mark>. 
+To establish a secure connection to Prisma Access, the remote site requires either <mark style="background: #FFF3A3A6;">a Palo Alto Networks Next-Generation Firewall or a third-party IPSec-compliant device</mark>, <mark style="background: #FFF3A3A6;">such as a software-defined wide area network (SD-WAN), that is capable of creating an IPSec tunnel</mark>.
+
+<mark style="background: #BBFABBA6;">Remote networks are <strong>metered</strong>, which means that a specific amount of bandwidth is allocated to the compute locations</mark>, and there is a cost associated with this allocated bandwidth.
+
+<strong>Remote networks</strong> connect <mark style="background: #ABF7F7A6;">offices that require connections to and from the Internet and Prisma Access</mark>. They create a <strong>remote network security processing node</strong> (<strong>RN-SPN</strong>), <mark style="background: #FF5582A6;">which provides functionality similar to a Palo Alto Networks Next-Generation Platform</mark>.
+
+When planning to connect remote networks to Prisma Access, you will need to <strong>know</strong> <mark style="background: #FFB86CA6;">how many sites will be onboarded</mark> and <mark style="background: #FFF3A3A6;">the bandwidth requirements for each of those sites</mark>.
+This information will help you determine connectivity requirements, such as <mark style="background: #BBFABBA6;">how to route traffic through Prisma Access</mark>. 
+You should also consider <mark style="background: #ABF7F7A6;">what type of applications that will pass through Prisma Access</mark> to help you determine <mark style="background: #ADCCFFA6;">what Security policy rules will be needed</mark>. When <strong>determining Security policy rules</strong>, consider your <mark style="background: #D2B3FFA6;">threat profile configuration</mark> and <mark style="background: #CACFD9A6;">plan to apply the same threat, URL, and WildFire scanning to all rules for a consistent threat-mitigation strategy across all traffic</mark>.
+![[Planning Considerations for Remote Networks.png]]
+##### deployment planning phase
+During this deployment planning phase, consider the following and gather as much information as you can to prepare for onboarding
+###### Establish Service Connections to Corporate Resource
+If your remote network <mark style="background: #FFB8EBA6;">requires access to infrastructure or resources in your headquarters (HQ) or a data center</mark>, <mark style="background: #FFB86CA6;">create a Prisma Access service connection to the corporate site</mark>. If the remote network location is autonomous and doesn’t need to access the infrastructure at other locations, you don’t need to do this.
+###### Choose the Right Prisma Access Locations
+When users at your branch office connect to Prisma Access, the Prisma Access location you choose determines the language in which content from the internet is served. To ensure the optimal experience for your users, <mark style="background: #FFF3A3A6;">select the region (country and, if applicable, state) and location as your branch office</mark>. If a location is not available in the same region as your branch office, choose a location that uses the same language as the majority of the users at the site.
+###### Identify Subnets to Secure
+For Prisma Access to route traffic to your remote networks, you’ll need to <mark style="background: #BBFABBA6;">provide routing information for the subnetworks</mark> that you want Prisma Access to secure.
+###### Allocate Bandwidth for Remote Networks
+To form a compute location, you would need at least two (often more) geographically near Prisma Access locations. <mark style="background: #ABF7F7A6;">This is the level at which you allocate bandwidth instead of allocating bandwidth for individual Prisma Access locations or specific remote network sites</mark>.
+###### Define IPSec Termination Nodes for Compute Location
+IPSec termination nodes allow you to associate remote networks with compute locations. When you onboard a remote network, <mark style="background: #ADCCFFA6;">select an IPSec termination node for the remote network that correlates to the compute location</mark>.
+###### Avoid Overlapping Subnets
+As a general rule, <mark style="background: #D2B3FFA6;">you cannot have any overlapping subnets within a Prisma Access instance</mark>. This means that the subnets for all remote network locations, service connections, and Prisma Access for mobile users' IP address pools must be unique and non-overlapping.
+## Remote Network #configuration 
+
