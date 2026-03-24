@@ -196,4 +196,7 @@ IPSec termination nodes allow you to associate remote networks with compute loca
 ###### Avoid Overlapping Subnets
 As a general rule, <mark style="background: #D2B3FFA6;">you cannot have any overlapping subnets within a Prisma Access instance</mark>. This means that the subnets for all remote network locations, service connections, and Prisma Access for mobile users' IP address pools must be unique and non-overlapping.
 ## Remote Network #configuration 
+Once you have planned for your remote networks, you can begin the configuration process. This involves <mark style="background: #FFB8EBA6;">onboarding the remote network</mark>, <mark style="background: #FF5582A6;">connecting the remote network site to Prisma Access</mark>, and <mark style="background: #FFB86CA6;">enabling routing and quality of service (QoS)</mark> for the remote network.
 
+To onboard a remote network, navigate to <strong>Panorama > Cloud Services > Configuration > Remote Networks</strong> and edit the settings by clicking the gear icon in the <strong>Settings</strong> area.  In the <strong>Templates</strong> section, add any templates that contain configuration you want to push to Prisma Access for networks and select the <strong>Device Group</strong> to which you wish to apply the configurations. 
+![[Configuring the Remote Networks.png]]
