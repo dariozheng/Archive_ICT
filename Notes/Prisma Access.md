@@ -6,10 +6,20 @@ topic@security:
 tags:
   - palo_alto/sase
 ---
-Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust network access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">web security</mark>, and <mark style="background: #BBFABBA6;">data protection</mark> for remote users, branches, and applications. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management (ADEM). 
+Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <strong><mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark></strong> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust Network Access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">SWG</mark>, <strong>CASB</strong>, and <mark style="background: #BBFABBA6;">DLP</mark> for <mark style="background: #ABF7F7A6;">remote users, branches, and applications</mark>. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management (ADEM). 
+
+Core Topology Components:
+- <mark style="background: #FFB86CA6;">Mobile Users</mark> (<strong>MU-SPN</strong>): <mark style="background: #FFB8EBA6;">Individual users connecting via the GlobalProtect app</mark> to nearby <mark style="background: #FFF3A3A6;">cloud gateways</mark>. <mark style="background: #ABF7F7A6;">These gateways act as the security enforcement point for remote employees</mark>.
+- <mark style="background: #FFB8EBA6;">Remote Networks</mark> (<strong>RN-SPN</strong>): <mark style="background: #FFF3A3A6;">Branch offices</mark> or <mark style="background: #FFF3A3A6;">retail sites</mark> <mark style="background: #BBFABBA6;">that connect to Prisma Access via IPsec VPN tunnels</mark> <mark style="background: #ADCCFFA6;">from local routers or SD-WAN devices</mark>. <mark style="background: #ABF7F7A6;">Prisma Access provides the security stack for these sites</mark>.
+- <mark style="background: #FF5582A6;">Service Connections</mark> (<strong>SC-CAN</strong>): <mark style="background: #D2B3FFA6;">Dedicated tunnels that link Prisma Access to your Private Data Centers or HQ where internal apps are hosted</mark>. Unlike other nodes, SC-CANs typically do not enforce security, assuming the data center already has its own firewall. 
+
+The topology is designed so that all traffic—whether destined for the internet, a SaaS app, or another internal site—passes through the <strong>Prisma Access</strong> cloud for inspection. 
+
+<mark style="background: #BBFABBA6;">Prisma Access can be managed with <strong>Strata Cloud Manager</strong> or <strong>Panorama</strong></mark>.
 # Licensing
 # Service Connection 
-<strong>Prisma Access</strong> leverages a combination of <mark style="background: #FFB8EBA6;"><strong>service connections</strong> (<strong>SCs</strong>)</mark> and <mark style="background: #FF5582A6;">Corporate Access Nodes (SC-CANs)</mark> <mark style="background: #FFF3A3A6;">to connect mobile users, and users at remote locations</mark>, <mark style="background: #FFB86CA6;">with headquarters (HQ) and data centers (DC)</mark>. 
+<strong>Prisma Access</strong> leverages a combination of <mark style="background: #FFB8EBA6;"><strong>service connections</strong> (<strong>SCs</strong>)</mark> and <mark style="background: #FF5582A6;">Corporate Access Nodes (SC-CANs)</mark> <strong><mark style="background: #FFF3A3A6;">to connect mobile users, and users at remote locations</mark>, <mark style="background: #FFB86CA6;">with headquarters (HQ) and data centers (DC)</mark></strong>. 
+
 <mark style="background: #BBFABBA6;">The service connection does not provide any security enforcement</mark> and <mark style="background: #ABF7F7A6;">does not support internet use from the data center location</mark>.
 ![[Configured Service Connection Topology.png]]
 
@@ -171,11 +181,11 @@ To use Dynamic Routing to advertise HQ/DC subnets, navigate to **Panorama > Clo
 ![[Dynamic Routing Configuration Settings.png]]
 # Remote Networks
 <strong>Remote networks</strong> are designed <mark style="background: #FFB8EBA6;">to secure users and devices</mark> <mark style="background: #FFB86CA6;">in remote network locations, such as branch offices or remote sites</mark>. 
-To establish a secure connection to Prisma Access, the remote site requires either <mark style="background: #FFF3A3A6;">a Palo Alto Networks Next-Generation Firewall or a third-party IPSec-compliant device</mark>, <mark style="background: #FFF3A3A6;">such as a software-defined wide area network (SD-WAN), that is capable of creating an IPSec tunnel</mark>.
+To establish a secure connection to Prisma Access, the remote site requires either <mark style="background: #FFF3A3A6;">a <strong>Palo Alto Networks Next-Generation Firewall</strong> or a <strong>third-party IPSec-compliant device</strong></mark>, <mark style="background: #FFF3A3A6;">such as a software-defined wide area network (SD-WAN), that is capable of creating an IPSec tunnel</mark>.
 
 <mark style="background: #BBFABBA6;">Remote networks are <strong>metered</strong>, which means that a specific amount of bandwidth is allocated to the compute locations</mark>, and there is a cost associated with this allocated bandwidth.
 
-<strong>Remote networks</strong> connect <mark style="background: #ABF7F7A6;">offices that require connections to and from the Internet and Prisma Access</mark>. They create a <strong>remote network security processing node</strong> (<strong>RN-SPN</strong>), <mark style="background: #FF5582A6;">which provides functionality similar to a Palo Alto Networks Next-Generation Platform</mark>.
+<strong>Remote networks</strong> connect <mark style="background: #ABF7F7A6;"><strong>offices</strong> that require connections to and from the <strong>Internet</strong> and <strong>Prisma Access</strong></mark>. They create a <strong>remote network security processing node</strong> (<strong>RN-SPN</strong>), <mark style="background: #FF5582A6;">which provides functionality similar to a Palo Alto Networks Next-Generation Platform</mark>.
 
 When planning to connect remote networks to Prisma Access, you will need to <strong>know</strong> <mark style="background: #FFB86CA6;">how many sites will be onboarded</mark> and <mark style="background: #FFF3A3A6;">the bandwidth requirements for each of those sites</mark>.
 This information will help you determine connectivity requirements, such as <mark style="background: #BBFABBA6;">how to route traffic through Prisma Access</mark>. 
@@ -206,7 +216,7 @@ If you plan to use Border Gateway Protocol (<strong>BGP</strong>) for dynamic ro
 <mark style="background: #ADCCFFA6;">BGP is required for ECMP load balancing</mark>; additionally, <mark style="background: #FFB86CA6;">QoS and static routes are not supported</mark>. 
 
 With <strong>remote networks</strong>, each <strong>compute location</strong> must <mark style="background: #BBFABBA6;">have a minimum bandwidth of 50Mbps</mark>. <mark style="background: #ABF7F7A6;">Therefore, when using ECMP load balancing, specify a minimum bandwidth of 50 Mbps</mark>. <mark style="background: #ADCCFFA6;">Prisma Access divides the bandwidth you select by the number of tunnels</mark>; for example, <mark style="background: #D2B3FFA6;">if you specify 300 Mbps and add four tunnels, each tunnel carries 75 Mbps</mark>. If one of the tunnels goes down, your network connection will now carry 225 Mbps instead of 300 Mbps. 
-### Primary Tunnel 
+### Primary Tunnel
 <mark style="background: #CACFD9A6;">The first tunnel you create is the <strong>primary tunnel</strong> for the remote network site</mark>. 
 
 You can then repeat this workflow to optionally set up a secondary tunnel. When both tunnels are up, the primary tunnel takes priority over the secondary tunnel. If the primary tunnel for a remote network site goes down, the remote network falls back to the secondary tunnel until the primary tunnel comes back up. 
@@ -215,3 +225,7 @@ To establish secure connections between your remote network sites and Prisma Acc
 #### Add a Primary IPSec Virtual Private Network (VPN) Tunnel
 IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and your on-premises VPN device. Panorama provides several preconfigured third-party IPSec tunnels to simplify configuration, or you can click **Add** to begin adding a new one.
 ![[Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png]]
+### Remote Network Onboarding 
+To add a new remote network site to Prisma Access, start by specifying the location and defining the amount of bandwidth to allocate to the connection.
+
+Navigate to **Panorama > Cloud Services > Configuration > Remote Networks > Onboarding** to onboard a remote network.
