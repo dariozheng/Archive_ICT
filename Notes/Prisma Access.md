@@ -18,7 +18,7 @@ The topology is designed so that all traffic—whether destined for the internet
 <mark style="background: #BBFABBA6;">Prisma Access can be managed with <strong>Strata Cloud Manager</strong> or <strong>Panorama</strong></mark>.
 # Licensing
 # Service Connection 
-<strong>Prisma Access</strong> leverages a combination of <mark style="background: #FFB8EBA6;"><strong>service connections</strong> (<strong>SCs</strong>)</mark> and <mark style="background: #FF5582A6;">Corporate Access Nodes (SC-CANs)</mark> <strong><mark style="background: #FFF3A3A6;">to connect mobile users, and users at remote locations</mark>, <mark style="background: #FFB86CA6;">with headquarters (HQ) and data centers (DC)</mark></strong>. 
+<strong>Prisma Access</strong> leverages a combination of <mark style="background: #FFB8EBA6;"><strong>service connections</strong> (<strong>SCs</strong>)</mark> and <mark style="background: #FF5582A6;"><strong>Corporate Access Nodes (SC-CANs)</strong></mark> <strong><mark style="background: #FFF3A3A6;">to connect mobile users, and users at remote locations</mark>, <mark style="background: #FFB86CA6;">with headquarters (HQ) and data centers (DC)</mark></strong>. 
 
 <mark style="background: #BBFABBA6;">The service connection does not provide any security enforcement</mark> and <mark style="background: #ABF7F7A6;">does not support internet use from the data center location</mark>.
 ![[Configured Service Connection Topology.png]]
@@ -185,7 +185,8 @@ To establish a secure connection to Prisma Access, the remote site requires eith
 
 <mark style="background: #BBFABBA6;">Remote networks are <strong>metered</strong>, which means that a specific amount of bandwidth is allocated to the compute locations</mark>, and there is a cost associated with this allocated bandwidth.
 
-<strong>Remote networks</strong> connect <mark style="background: #ABF7F7A6;"><strong>offices</strong> that require connections to and from the <strong>Internet</strong> and <strong>Prisma Access</strong></mark>. They create a <strong>remote network security processing node</strong> (<strong>RN-SPN</strong>), <mark style="background: #FF5582A6;">which provides functionality similar to a Palo Alto Networks Next-Generation Platform</mark>.
+<strong>Remote networks</strong> connect <mark style="background: #ABF7F7A6;"><strong>offices</strong> that require connections to and from the <strong>Internet</strong> and <strong>Prisma Access</strong></mark>. 
+<mark style="background: #FFB8EBA6;">They create a <strong>Remote Network Security Processing Node</strong> (<strong>RN-SPN</strong>)</mark>, <mark style="background: #FF5582A6;">which provides functionality similar to a Palo Alto Networks Next-Generation Platform</mark>.
 
 When planning to connect remote networks to Prisma Access, you will need to <strong>know</strong> <mark style="background: #FFB86CA6;">how many sites will be onboarded</mark> and <mark style="background: #FFF3A3A6;">the bandwidth requirements for each of those sites</mark>.
 This information will help you determine connectivity requirements, such as <mark style="background: #BBFABBA6;">how to route traffic through Prisma Access</mark>. 
@@ -343,21 +344,15 @@ If there are errors or warnings, review the system log and local logs on the rem
 GlobalProtect enables secure access for all users, regardless of what endpoints they are using or where they are located.
 
 GlobalProtect builds on familiar mobile security technology: <mark style="background: #CACFD9A6;">the remote-access virtual private network (VPN)</mark>. <mark style="background: #FF5582A6;">You can use <strong>GlobalProtect</strong> as a replacement for a traditional VPN gateway</mark>. This eliminates the complexity and headaches of administering a standalone, third-party VPN gateway.
-
-<mark style="background: #FFB86CA6;">The GlobalProtect agent ensures remote connectivity</mark>, and from this base, GlobalProtect builds more advanced features that help transform mobile security. 
-<mark style="background: #FFF3A3A6;">GlobalProtect expands the boundaries of the physical network </mark>while effectively <mark style="background: #BBFABBA6;">establishing a logical perimeter that encompasses your remote laptop and mobile device users, regardless of their location</mark>.
 ## GlobalProtect Components
 A GlobalProtect deployment consists of three major components: 
-- <mark style="background: #FFB8EBA6;">GlobalProtect Portal</mark> 
-- <mark style="background: #FF5582A6;">GlobalProtect gateway(s)</mark>
-- <mark style="background: #FFB86CA6;">GlobalProtect app software</mark> (also called a <mark style="background: #FFB86CA6;">GlobalProtect agent</mark>) for both macOS and Windows endpoints.
 ##### GlobalProtect Portal
 The portal provides <mark style="background: #FFF3A3A6;">management functions for your GlobalProtect infrastructure</mark>. 
 
 Every endpoint that participates in the GlobalProtect network <mark style="background: #BBFABBA6;">receives configuration information from the portal</mark>, <mark style="background: #ABF7F7A6;">including information about available gateways</mark> as well as <mark style="background: #ADCCFFA6;">any client certificates that may be required to connect to the GlobalProtect gateway(s)</mark>. 
 
 In addition, <mark style="background: #D2B3FFA6;">the portal controls the behavior and distribution of the GlobalProtect app software to both macOS and Windows endpoints</mark>. (On mobile endpoints, the GlobalProtect app is distributed through the Apple App Store for iOS endpoints, Google Play for Android endpoints and Chromebooks, and the Microsoft Store for Windows 10 UWP endpoints.)
-<mark style="background: #CACFD9A6;">If you are using the <strong>Host Information Profile (HIP)</strong> feature</mark>, <mark style="background: #FFB8EBA6;">the portal also defines what information to collect from the host</mark>, including any custom information you require. Y<mark style="background: #FF5582A6;">ou can set up access to the <strong>GlobalProtect Portal</strong> on an interface on any Palo Alto Networks next-generation firewall</mark>.
+<mark style="background: #CACFD9A6;">If you are using the <strong>Host Information Profile (HIP)</strong> feature</mark>, <mark style="background: #FFB8EBA6;">the portal also defines what information to collect from the host</mark>, including any custom information you require. <mark style="background: #FF5582A6;">You can set up access to the <strong>GlobalProtect Portal</strong> on an interface on any Palo Alto Networks next-generation firewall</mark>.
 
 Although <mark style="background: #FFB86CA6;">there can be only one portal</mark>, <mark style="background: #FFF3A3A6;">the portal is not a single point of failure</mark>: <mark style="background: #FF5582A6;">even if the portal is not reachable, clients will use their cached configuration to connect to the gateways</mark>. <mark style="background: #D2B3FFA6;">When the portal is unreachable, you cannot install a new client or distribute configuration changes to existing clients</mark>. To resolve this issue, <mark style="background: #ADCCFFA6;">re-establish the connection to the portal or redirect clients to a standby portal</mark>. <mark style="background: #CACFD9A6;">This redirection can be executed by changing the portal's DNS record</mark>.
 ##### GlobalProtect Gateway
@@ -370,7 +365,7 @@ Additionally, if the <strong>HIP</strong> feature is enabled, <mark style="backg
 ##### GlobalProtect App
 The <strong>GlobalProtect app software</strong> <mark style="background: #FF5582A6;">runs on endpoints</mark> and <mark style="background: #FFB86CA6;">enables access to your network resources through the GlobalProtect portals and gateways that you have deployed</mark>.
 
-The GlobalProtect app for Windows and macOS endpoints is deployed from the GlobalProtect portal. With the release of GlobalProtect 6.0, GlobalProtect extends native support for ARM64-based Windows devices. This support enables you to secure your remote workforce using ARM64-based Windows devices to access all features that are available on the GlobalProtect app; it also allows uniform endpoint Security policy and enforcement similar to Intel-based Windows devices.
+The GlobalProtect app for Windows and macOS endpoints is deployed from the GlobalProtect portal.
 
 The GlobalProtect app for mobile endpoints (iOS, Android, and Windows UWP) is available through the official store for the endpoint—the Apple App Store for iOS, Google Play for Android, and the Microsoft Store for Windows UWP.
 ## GlobalProtect VPNs
@@ -380,7 +375,6 @@ The app connects <mark style="background: #FFB86CA6;">to the gateway that is clo
 
 There are two types of VPN configurations: <strong>on-demand</strong> and <strong>always-on</strong>.
 
-  
 In a <mark style="background: #FF5582A6;">remote access (On-Demand) VPN configuration</mark>, <mark style="background: #FFF3A3A6;">users must manually launch the GlobalProtect app to establish a secure GlobalProtect connection</mark>. The GlobalProtect app connects to the GlobalProtect portal (upon user login) to submit user and host information and retrieve the agent configuration. After the app receives the agent configuration from the portal, it connects and establishes a VPN tunnel to the GlobalProtect gateway that was specified in the agent configuration.
 
 In an <mark style="background: #FF5582A6;">Always-On VPN configuration</mark>, <mark style="background: #FFB8EBA6;">the secure GlobalProtect connection is always on</mark>. The GlobalProtect app connects to the GlobalProtect portal (upon user login) to submit user and host information and retrieve the agent configuration. After the app receives the agent configuration from the portal, it automatically connects and establishes a VPN tunnel to the GlobalProtect gateway that was specified in the agent configuration.
@@ -394,4 +388,63 @@ For larger environments, GlobalProtect can be configured with multiple gateways.
 
 <mark style="background: #FFF3A3A6;">Additional gateways can be used to provide access to multiple protected networks</mark>. <mark style="background: #FFB86CA6;">They can also be used to improve user redundancy and performance</mark>. <mark style="background: #BBFABBA6;">GlobalProtect clients connect directly to a gateway from a list provided by the portal</mark>. By default, <mark style="background: #ABF7F7A6;">the chosen gateway is the one that responds fastest to the connection request</mark>. To ensure consistent access, <strong>multiple gateways often require the networks to be connected to each other by VPN</strong> <mark style="background: #D2B3FFA6;">so that the user has access to the same data, regardless of which gateway they connect to</mark>.
 ![[GlobalProtect Topology.png]]
-# 
+## GlobalProtect Gateway
+An <strong>internal gateway</strong> <mark style="background: #FFB8EBA6;">is an interface on the internal network that is configured as a GlobalProtect gateway</mark>. When used in conjunction with <strong>User-ID</strong> and <strong>HIP checks</strong>, <mark style="background: #FFB86CA6;">an internal gateway can be used to provide a secure, accurate method of identifying and controlling traffic based on user or device state</mark>. Internal gateways are useful in sensitive environments where authenticated access to critical resources is required.
+![[GlobalProtect Gateway.gif]]
+In the example shown, <strong>internal gateways</strong> are used to enforce <mark style="background: #FF5582A6;">group-based policies</mark> that allow users <mark style="background: #FFB86CA6;">in the Engineering group</mark> <mark style="background: #FFF3A3A6;">access to internal source control</mark> and <mark style="background: #FFF3A3A6;">bug-tracking databases</mark> and allow users <mark style="background: #FFB86CA6;">in the Finance group</mark> <mark style="background: #FFF3A3A6;">to access the customer relationship management (CRM) applications</mark>. <mark style="background: #FFB8EBA6;">All authenticated users have access to internal web resources</mark>. <mark style="background: #BBFABBA6;">HIP profiles configured on the gateway also check each host to ensure compliance with internal maintenance requirements</mark>, such as whether the latest security patches and antivirus definitions are installed, whether disk encryption is enabled, or whether the required software is installed.
+
+The <strong>GlobalProtect portal</strong> can <mark style="background: #FF5582A6;">provide an IP address and DNS hostname as part of the information passed to the client</mark>, which <mark style="background: #FFB8EBA6;">the client can use to determine whether it is <strong>inside</strong> or <strong>outside</strong> the corporate network</mark>. The DNS hostname and IP address must correspond to a <mark style="background: #FFB86CA6;">device whose name can be resolved only by an internal name server</mark>.
+- <strong>Internal Network</strong>: <mark style="background: #FFB8EBA6;">The agent performs a <strong>reverse lookup</strong> on the IP address</mark>. <mark style="background: #FFF3A3A6;">If it receives the expected hostname as a response</mark>, <mark style="background: #BBFABBA6;">the agent assumes it is on an internal network and connects to the <strong>gateways in the internal list</strong></mark>.
+- <strong>External Network</strong>: <mark style="background: #FFB86CA6;">If no response is received for the lookup</mark>, <mark style="background: #ABF7F7A6;">the client connects to the <strong>gateways in the external</strong> list</mark>. If an internal host detection hostname and address pair are not provided, <mark style="background: #ADCCFFA6;">the client connection attempts to connect to the internal gateways first, then to the external gateways</mark>.
+![[Internal and External Gateways.png]]
+### Internal Gateway
+<strong>Prisma Access cloud-native internal gateway solution</strong> reduces the need to implement GlobalProtect in conjunction with an on-premises internal gateway <mark style="background: #FFF3A3A6;">to learn User-ID for users on an internal network</mark>. <mark style="background: #BBFABBA6;">Prisma Access deployments can enable a native-internal gateway natively</mark> within the Prisma Access architecture.
+
+Prior to Prisma Access 5.1, an on-premises NGFW had to be deployed as an internal gateway to generate IP user mappings and HIP for hosts running the GlobalProtect client software in Prisma Access remote networks. 
+With Prisma Access cloud-native internal gateway, you can avoid using on-premises internal gateways; <mark style="background: #FFB86CA6;">the Prisma Access internal gateway generates the IP user mappings and HIPs locally in remote networks</mark>. <mark style="background: #FF5582A6;">Remote networks consume IP user mappings and HIPs from the local database</mark> for posture checks, instead of learning them from other firewalls.
+![[nternal Gateway GlobalProtect.png]]
+
+To enable the Prisma Access internal gateway, navigate to **Workflows > Prisma Access Setup > Remote Networks > Advanced Settings**. Select the **Enable Internal Gateway** checkbox, and then click **Save**. 
+If you do not want to use your own DNS server, you can select the **Enable Internal Host Detection** checkbox for IPv4. 
+
+When you enable the internal gateway, <mark style="background: #D2B3FFA6;">the remote network instances act as internal gateways</mark>. When you enable the internal host detection, <mark style="background: #CACFD9A6;">Prisma Access creates PTR records on the remote network DNS proxy servers for the internal host detection process</mark>. If you enable Internal Host Detection, <mark style="background: #FFF3A3A6;">verify that the DNS resolution is working, perform a reverse DNS lookup from your internal network to the DNS proxy server IP, and ensure it returns an FQDN starting with <strong>any-igw</strong></mark>.
+## GlobalProtect #configuration 
+Before doing the initial GlobalProtect (GP) configuration, there are several considerations and decisions to be made, such as <mark style="background: #BBFABBA6;">egress addresses</mark> and <mark style="background: #ADCCFFA6;">pre-allocated addresses</mark> for mobile users.
+- <strong>Egress IP Addresses</strong>
+<strong>Prisma Access</strong> uses <strong>GP gateway</strong> and <strong>GP portal</strong> IP addresses in mobile user deployments. <mark style="background: #FFB8EBA6;">These IP addresses are known collectively as egress IP addresses</mark>. <mark style="background: #FFB86CA6;">If you require these egress IP addresses before onboarding the location</mark>, <mark style="background: #BBFABBA6;">you can run an application programming interface (API) script to have Prisma Access pre-allocate these IP addresses for a location in advance</mark>. <mark style="background: #ABF7F7A6;">You can then add the location's egress IP addresses to your organization's allow lists before onboarding the location</mark>.
+- <strong>Static IP Address Allocation</strong>
+The <strong>Static IP Address Allocation</strong> feature allows <mark style="background: #ADCCFFA6;">you to assign a fixed IP address to Prisma Access mobile users</mark>. This is useful if your legacy network deployments utilize IP addresses to restrict user access to corporate resources as part of your network and application design. <mark style="background: #D2B3FFA6;">Prisma Access enables you to allocate a static IP address to the mobile user</mark>, <mark style="background: #CACFD9A6;">which can then be used to configure access to private applications or data center resources</mark>.
+
+To enable secure access for your mobile workforce no matter where they are located, you can strategically <mark style="background: #FFB8EBA6;">deploy additional Palo Alto Networks Next-Generation Firewalls (NGFWs)</mark> and <mark style="background: #FF5582A6;">configure them as GlobalProtect gateways</mark>.
+
+To configure GlobalProtect on Prisma Access, navigate to **Workflow > Prisma Access Setup > GlobalProtect**.
+#### Steps for Configuring GlobalProtect
+Follow these steps to configure GlobalProtect in Prisma Access:
+##### Step 1: Determine the Connection Methods
+Determine how mobile users in the location you’re setting up should connect to Prisma Access. You can divide your mobile user license <mark style="background: #FFB86CA6;">between GlobalProtect</mark> and <mark style="background: #FFF3A3A6;">Explicit Proxy Connections</mark>; <mark style="background: #ABF7F7A6;">some users can connect through GlobalProtect and others through Explicit Proxy</mark>. The GlobalProtect app installed on mobile user devices sends traffic to Prisma Access.![[Determine the Connection Methods.png]]
+##### Step 2: Set Up the Infrastructure
+Set up basic infrastructure settings and then configure the infrastructure settings that are specific to your connection type (GlobalProtect or Explicit Proxy). 
+
+A proxy auto-config (PAC) file on mobile user devices redirects browser traffic to Prisma Access. 
+
+Out-of-the-box settings include the Infrastructure Subnet. You can customize infrastructure settings as needed, such as adding a portal hostname, Prisma Access locations, and setting up user authentication.![[Set Up the Infrastructure.png]]
+##### Step 3: Choose the Prisma Access Locations
+The map displays the global regions where you can deploy Prisma Access for Users: North America, South America, Europe, Africa, Middle East, Asia, Japan, and ANZ (Australia and New Zealand). In addition, Prisma Access provides multiple locations within each region to ensure that your users can connect to a location that provides a user experience tailored to the users’ locale. For the best performance, Select All. 
+
+Alternatively, select the specific locations within each selected region where your users will need access. By limiting your deployment to a single region, you can have more granular control over your deployed regions and exclude regions required by your policy or industry regulations.
+##### Step 4: Set Up User Authentication
+Set up User Authentication so that only legitimate users have access to your services and applications. To test your setup, you can add users that Prisma Access authenticates locally, or you can go straight to setting up enterprise-level authentication.
+![[Set Up User Authentication.png]]
+##### Step 5: Push the Settings to Prisma Access
+Once the user authentication is completed, the settings need to be pushed to Prisma Access to complete the GlobalProtect configuration.
+![[Push the Settings to Prisma Access.png]]
+#### Enable Portal Only for Proxy Mode on GP Agent
+When GlobalProtect is set to proxy mode, <mark style="background: #FFB8EBA6;">GlobalProtect portals can be onboarded without gateways when the Agent Proxy feature is enabled</mark>. Complete the following steps to enable explicit proxy and the <strong>Enable Portal Only for Proxy Mode</strong> on <strong>GP Agent</strong> feature for GlobalProtect.
+##### Step 1: Enable Explicit Proxy and Agent-Based Proxy 
+Navigate to **Workflows > Prisma Access Setup > Mobile Users > Explicit Proxy** and click **Enable**. Once enabled, click **Explicit Proxy Setup**. Under **Explicit Proxy Setup > Infrastructure Settings**, click **Set Up Proxy Settings**. Under Proxy URL Settings, provide an **Explicit Proxy URL** and a local proxy port that mobile users will use to connect to Prisma Access. Select **Enable Agent Proxy** and click **Save**.![[Enable Explicit Proxy and Agent-Based Proxy.png]]
+##### Step 2: Configure GlobalProtect 
+After enabling explicit proxy, navigate to **Workflows > Prisma Access Setup > GlobalProtect**. Under **Infrastructure Settings**, click the **Enable Portal only for Proxy Mode on GP Agent** checkbox.
+![[Configure GlobalProtect.png]]
+##### Step 3: Review Prisma Access Locations
+Once the **Enable Portal only for Proxy Mode on GP Agent** feature has been enabled, you will not have the option to add Prisma Access locations.
+![[Review Prisma Access Locations.png]]
