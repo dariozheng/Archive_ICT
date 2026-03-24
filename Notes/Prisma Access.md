@@ -448,3 +448,20 @@ After enabling explicit proxy, navigate to **Workflows > Prisma Access Setup > 
 ##### Step 3: Review Prisma Access Locations
 Once the **Enable Portal only for Proxy Mode on GP Agent** feature has been enabled, you will not have the option to add Prisma Access locations.
 ![[Review Prisma Access Locations.png]]
+#### Mobile Users 
+Before configuring mobile users, <mark style="background: #FFB8EBA6;">ensure that you have the required licenses</mark> (<mark style="background: #FF5582A6;">a Prisma Access license for mobile users</mark> and <mark style="background: #FFB86CA6;">a Strata Logging Service license with proper PAN-OS storage space</mark>). If mobile users will be connecting to other connected networks, you will need either the <mark style="background: #FFF3A3A6;">Zero Trust Network Access (ZTNA)</mark> or <mark style="background: #FFF3A3A6;">Enterprise Edition Prisma Access license</mark> that will provide the <strong>corporate access node</strong> (CAN) necessary to connect.
+##### Step 1: Choose GlobalProtect Connection  
+Determine how mobile users in the location you’re setting up should connect to Prisma Access. You can divide your mobile user license between GlobalProtect and explicit proxy connections; some users can connect through GlobalProtect and others through explicit proxy.
+
+These steps are for GlobalProtect. From the GlobalProtect Connection panel, click **Enable > GlobalProtect Setup > Setup Infrastructure Settings.**
+![[Choose GlobalProtect Connection.png]]
+##### Step 2: Portal Hostname  
+Add a fully qualified domain name as the Portal Hostname, and add a DNS region. In the image, Worldwide has been selected as the DNS region. Then, click **Save**.![[Portal Hostname.png]]
+##### Step 3: Choose Prisma Access Locations  
+Once you have configured the Portal Hostname and DNS Region, you can select a location. Click **Add Locations** and the location map will appear. The map displays the global regions where you can deploy Prisma Access for users: North America, South America, Europe, Africa, Middle East, Asia, Japan, and ANZ (Australia and New Zealand). In addition, Prisma Access provides multiple locations within each region to ensure that your users can connect to a location that provides a user experience tailored to the users’ locale. For the best performance, select **All**. 
+
+Choose regions and locations, and then click **Save**.
+![[Choose Prisma Access Locations.png]]
+##### Step 4: Authenticate Mobile Users  
+Set up User Authentication so that only legitimate users have access to your services and applications. To test your setup, you can add users that Prisma Access authenticates locally, or you can go straight to setting up enterprise-level authentication.
+![[Authenticate Mobile Users.png]]

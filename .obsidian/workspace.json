@@ -217,8 +217,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -233,8 +232,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "16c67d7145bb995e",
   "lastOpenFiles": [
+    "attachments/Authenticate Mobile Users.png",
+    "attachments/Choose Prisma Access Locations.png",
+    "attachments/Portal Hostname.png",
+    "attachments/Choose GlobalProtect Connection.png",
     "attachments/Review Prisma Access Locations.png",
     "attachments/Configure GlobalProtect.png",
     "attachments/Enable Explicit Proxy and Agent-Based Proxy.png",
@@ -243,10 +246,6 @@
     "attachments/Set Up User Authentication.png",
     "attachments/Set Up the Infrastructure.png",
     "attachments/Determine the Connection Methods.png",
-    "attachments/nternal Gateway GlobalProtect.png",
-    "attachments/Internal and External Gateways.png",
-    "attachments/GlobalProtect Gateway.gif",
-    "attachments/GlobalProtect Topology.png",
     "Notes/Data Redistribution - Palo Alto.md",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Prisma SD-WAN®.md",
