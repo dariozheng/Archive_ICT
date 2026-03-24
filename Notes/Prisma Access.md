@@ -517,3 +517,12 @@ Allows Windows and macOS users <mark style="background: #FFB8EBA6;">access to lo
 By default, <mark style="background: #BBFABBA6;">the <strong>GlobalProtect</strong> app routes all traffic to Prisma Access except for the traffic specified on the exclusions list</mark>. <mark style="background: #D2B3FFA6;">Specify traffic that the GlobalProtect app should always route to Prisma Access, even when it meets exclude list criteria</mark>.
 ![[Split Tunneling.png]]
 ## Clientless VPN
+The <strong>Clientless VPN</strong> <mark style="background: #FF5582A6;">allows users without the GlobalProtect app</mark> (for example, partners or contractors) <mark style="background: #FFB86CA6;">to securely access enterprise applications by enabling them to authenticate to GlobalProtect in a browser</mark>.
+### Clientless VPN #configuration 
+#### Step 1
+Navigate to **Workflows > Prisma Access Setup > GlobalProtect** and click the **Clientless VPN** tab. Then, click **Add Applications**.![[Clientless VPN.png]]
+#### Step 2
+Toggle the **Enable Clientless VPN** option and click **Add Rule** to specify the users and applications that can use Clientless VPN.![[Clientless VPN1.png]]
+#### Step 3
+Configure the Timeout Settings and the advanced settings (if required). Then, click **Save**.![[Clientless VPN3.png]]
+## 
