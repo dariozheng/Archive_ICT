@@ -465,3 +465,44 @@ Choose regions and locations, and then click **Save**.
 ##### Step 4: Authenticate Mobile Users  
 Set up User Authentication so that only legitimate users have access to your services and applications. To test your setup, you can add users that Prisma Access authenticates locally, or you can go straight to setting up enterprise-level authentication.
 ![[Authenticate Mobile Users.png]]
+#### Customize the Portal Address
+You can configure your company domain in the portal address that your mobile users connect to for secure access to the internet, data centers, and headquarters. By default, Prisma Access uses the gpcloudservice.com domain.
+##### Step 1
+Navigate to **Workflows > Prisma Access Setup > GlobalProtect** and click the gear icon to edit the **Infrastructure Settings.** First, select **Custom Domain** on Portal Name Type, and enter the **Portal Hostname** you want to use. Next, add the **Portal DNS CNAME** to which to map your DNS server entries. Lastly, click **Import** to import the certificate you provisioned for your custom domain portal address.![[Customize the Portal Address.png]]
+##### Step 2
+On the Import Certificate panel, enter a name for the certificate and click **Choose File** to upload the certificate file. Next, select a certificate format for the certificate you are importing from the **Format** drop-down menu. You have two options, select either:
+- **Encrypted Private Key and Certificate (PKCS12):** The key and certificate are in a single container (Certificate File).
+- **Base64 Encoded Certificate (PEM):** If you select this option, click **Choose File** to upload the Key File separately from the certificate.
+Lastly, enter a passphrase to encrypt the key into the **Passphrase** and **Confirm Passphrase** fields, then click **Save.**![[Customize the Portal Address2.png]]
+##### Step 3
+If you have not already done so, configure your DNS servers to point to the Prisma Access DNS CNAME you defined. Click **Save** and **Push Config** to Prisma Access.![[Customize the Portal Address3.png]]
+#### Customize App Settings
+Customize how your end users interact with the GlobalProtect app. You can explore all GlobalProtect settings on the GlobalProtect App page. The following are some of the options available to you.
+##### Authentication Override
+Enable Prisma Access to generate and accept secure, encrypted cookies for user authentication. Turning this feature on allows the user to provide login credentials only once during the specified period of time.
+- Generate cookie for authentication override: Enables the Prisma Access to generate encrypted, endpoint-specific cookies and issue authentication cookies to the endpoint.
+- Accept cookie for authentication override: Enables Prisma Access to authenticate users with a valid, encrypted cookie.
+- Cookie Lifetime: Specifies the hours, days, or weeks for which the cookie is valid (default is 24 hours). The range for hours is 1 to 72; for weeks is 1 to 52; and for days is 1 to 365.
+- Certificate to Encrypt/Decrypt Cookie: Selects the RSA certificate used to encrypt and decrypt the cookie.
+![[Customize App Settings.png]]
+##### Connect
+Specify the method that the GlobalProtect app uses to connect to Prisma Access:
+- User-Logon (Always On): The GlobalProtect app automatically connects to Prisma Access as soon as the user logs in.
+- Pre-Logon (Always On): The GlobalProtect app authenticates the user and establishes a VPN tunnel to Prisma Access before the user logs in.
+- On-Demand: Users must manually launch the app to connect to GlobalProtect.
+- Pre-Logon Then On-Demand: Enables the GlobalProtect app to authenticate the user and establish a VPN tunnel to Prisma Access before the user logs in to the endpoint.
+![[Customize App Settings2.png]]
+##### GlobalProtect  
+Decide what GlobalProtect app settings the user can adjust:  
+- **Disable GlobalProtect:** Decide whether or not users can disable the GlobalProtect app.
+- **Uninstall GlobalProtect:** Allow users to uninstall the GlobalProtect app, prevent them from uninstalling the GlobalProtect app, or allow them to uninstall if they enter a password you create.
+- **Upgrade GlobalProtect:** Specify how app upgrades should work, including whether users can initiate updates.
+- **Allow User to Change Portal:** Let users change the portal the GlobalProtect app uses to connect to Prisma Access.
+![[Customize App Settings3.png]]
+##### Internal Host Detection  
+If you do not require your mobile users to connect to Prisma Access when they are on the internal network, enable internal host detection to enable the GlobalProtect app to determine whether the network is internal or external.
+##### Gateways  
+By default, all the gateways in your Prisma Access locations are available to users. If you have additional GlobalProtect gateways that you’d like your users to be able to connect to, you can add those gateways here.![[Customize App Settings4.png]]
+##### HIP Data Collection  
+Define custom host information profile (HIP) data that you want the app to collect or exclude from collection. When this option is enabled, the app collects data from devices running Windows, macOS, or Linux operating systems. Go to **Objects > HIP Objects / HIP Profiles**. It is important to remember that adding and requiring a sync with too many items can restrict a user from logging on and can cause a denial.![[Customize App Settings5.png]]
+###
