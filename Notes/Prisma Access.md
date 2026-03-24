@@ -200,3 +200,18 @@ Once you have planned for your remote networks, you can begin the configuration 
 
 To onboard a remote network, navigate to <strong>Panorama > Cloud Services > Configuration > Remote Networks</strong> and edit the settings by clicking the gear icon in the <strong>Settings</strong> area.  In the <strong>Templates</strong> section, add any templates that contain configuration you want to push to Prisma Access for networks and select the <strong>Device Group</strong> to which you wish to apply the configurations. 
 ![[Configuring the Remote Networks.png]]
+##### Enable ECMP Load Balancing for BGP
+If you plan to use Border Gateway Protocol (<strong>BGP</strong>) for dynamic routing, enable <strong>ECMP Load Balancing</strong> so that <mark style="background: #FF5582A6;">the remote network site can use up to four IPSec tunnels to connect to the compute location</mark>.
+
+<mark style="background: #ADCCFFA6;">BGP is required for ECMP load balancing</mark>; additionally, <mark style="background: #FFB86CA6;">QoS and static routes are not supported</mark>. 
+
+With <strong>remote networks</strong>, each <strong>compute location</strong> must <mark style="background: #BBFABBA6;">have a minimum bandwidth of 50Mbps</mark>. <mark style="background: #ABF7F7A6;">Therefore, when using ECMP load balancing, specify a minimum bandwidth of 50 Mbps</mark>. <mark style="background: #ADCCFFA6;">Prisma Access divides the bandwidth you select by the number of tunnels</mark>; for example, <mark style="background: #D2B3FFA6;">if you specify 300 Mbps and add four tunnels, each tunnel carries 75 Mbps</mark>. If one of the tunnels goes down, your network connection will now carry 225 Mbps instead of 300 Mbps. 
+### Primary Tunnel 
+<mark style="background: #CACFD9A6;">The first tunnel you create is the <strong>primary tunnel</strong> for the remote network site</mark>. 
+
+You can then repeat this workflow to optionally set up a secondary tunnel. When both tunnels are up, the primary tunnel takes priority over the secondary tunnel. If the primary tunnel for a remote network site goes down, the remote network falls back to the secondary tunnel until the primary tunnel comes back up. 
+
+To establish secure connections between your remote network sites and Prisma Access, <mark style="background: #FFB8EBA6;">you must create an IPSec tunnel from your branch IPSec device to Prisma Access</mark>.
+#### Add a Primary IPSec Virtual Private Network (VPN) Tunnel
+IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and your on-premises VPN device. Panorama provides several preconfigured third-party IPSec tunnels to simplify configuration, or you can click **Add** to begin adding a new one.
+![[Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png]]

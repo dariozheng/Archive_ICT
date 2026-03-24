@@ -233,8 +233,9 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "16c67d7145bb995e",
   "lastOpenFiles": [
+    "attachments/Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png",
     "attachments/Configuring the Remote Networks.png",
     "attachments/Planning Considerations for Remote Networks.png",
     "Notes/Prisma Access.md",
@@ -246,7 +247,6 @@
     "attachments/Configure Using Predefined Templates.png",
     "attachments/IKE Gateway Advanced Options.png",
     "attachments/Modify the IKE Gateway Predefined Template.png",
-    "attachments/Configuration Using Predefined Templates.png",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Service Connection - Palo Alto.md",
