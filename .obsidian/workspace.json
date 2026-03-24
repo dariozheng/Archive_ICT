@@ -217,8 +217,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -233,7 +232,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "attachments/Verify the Status of Remote Networks.png",
     "attachments/Secure Inbound Access Deployments 4.png",
