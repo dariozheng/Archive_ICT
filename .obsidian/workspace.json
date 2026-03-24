@@ -233,8 +233,9 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "16c67d7145bb995e",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "attachments/Verify the Status of Remote Networks.png",
     "attachments/Secure Inbound Access Deployments 4.png",
     "attachments/Secure Inbound Access Deployments 3.png",
     "attachments/Secure Inbound Access Deployments 2.png",
@@ -247,7 +248,6 @@
     "Notes/Data Redistribution - Palo Alto.md",
     "attachments/Guidelines for Secure Inbound Access.png",
     "attachments/Remote Network Onboarding.png",
-    "attachments/Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Service Connection - Palo Alto.md",

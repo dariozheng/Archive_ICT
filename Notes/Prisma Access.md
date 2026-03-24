@@ -328,4 +328,14 @@ For the strongest security, select the group with the highest number.
 ###### IKEv2 Authentication Multiple
 Define the multiplier value (range: 0 to 50; default: 0) for the key lifetime to calculate the authentication count. The authentication count represents the number of times the security processing node can execute the IKEv2 IKE SA re-key before needing to initiate IKEv2 re-authentication. By default, the re-authentication feature is disabled with a value of 0.
 #### IPSec Options 
+Based on the IPSec device type you selected, Prisma Access provides a recommended set of IPSec protocol and key lifetime settings. You can customize the IPsec Crypto Profile to define how data is secured within the tunnel.
 
+Secure the data that traverses the VPN tunnel. The Encapsulating Security Payload (ESP) protocol encrypts the data, authenticates the source, and verifies the data integrity. The Authentication Header (AH) protocol authenticates the source and verifies the data integrity.
+#### Verify the Status of Remote Networks
+After you have configured the IPSec VPN device on the remote network, verify the tunnel status.
+
+To check the status of the remote networks, navigate to **Panorama > Cloud Services > Status > Status** to verify that the remote network connections have been successfully deployed. The **Deployment Status** allows you to view the progress of onboarding and deployment jobs before they complete, as well as see more information about the status of completed jobs.
+
+If there are errors or warnings, review the system log and local logs on the remote network device. Resolve issues before proceeding with the configuration and then continue adding remote networks as needed.
+![[Verify the Status of Remote Networks.png]]
+# 
