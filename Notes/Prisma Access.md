@@ -510,10 +510,19 @@ Define custom host information profile (HIP) data that you want the app to colle
 You can authenticate mobile users to Prisma Access using any of the supported authentication types.
 ##### Step 1
 Go to **Workflows > Prisma Access Setup > GlobalProtect > Infrastructure > User Authentication** and click the **Add Authentication**.
-#### Step 2
+##### Step 2
 Select the **Authentication Method** from the supported authentication types.
-#### Step 3
+##### Step 3
 Specify the **Certificate Authentication** settings.
+#### Steps to Enable Mobile Users to Access Corporate Resources
+To allow mobile users to access resources on your HQ, data center networks, or other branch locations, you must configure the Prisma Access Infrastructure Settings to enable the network backbone after you complete the steps below. To complete the necessary configurations, go to **Workflows** **> Prisma Access Setup > Service Connections > Service Connections Setup**.
+##### Step 1
+Navigate to **Workflows > Prisma Access Setup > GlobalProtect > Infrastructure** tab and click **Set Up Infrastructure Settings**.  
+Under Client IP Pool, click **Add IP Pool** and then define the IP address pools Prisma Access uses to assign IP addresses to your mobile users.
+##### Step 2
+In the Create new IP Pool screen, select your region and add the IP address range for that pool.
+Review or adjust the client IP Pool that Prisma Access uses to assign IP addresses to mobile users. You can customize per region to set up IP pools dedicated to regions or locations. For regions or locations for which you do not specify an IP pool, Prisma Access uses the Worldwide IP pool.
+**Note:** Make sure to Push Config to Prisma Access to save the new mobile user settings.
 ## Split Tunneling
 <strong>Split Tunneling</strong> allows you to <mark style="background: #FFB8EBA6;">customize traffic routing</mark> through <mark style="background: #FF5582A6;">the VPN tunnel to Prisma Access</mark> <mark style="background: #FFB86CA6;">via the GlobalProtect app</mark>. This functionality not only <mark style="background: #FFF3A3A6;">conserves bandwidth by excluding non-business-critical or non-productive traffic</mark> but also <mark style="background: #BBFABBA6;">provides flexibility in defining which users, devices, or systems should receive specific tunnel settings</mark>.
 
@@ -544,4 +553,4 @@ Mobile users who successfully authenticate through client certificate authentica
 With Prisma Access, you can choose to require mobile users to pass both certificate authentication and authentication based on the authentication type or to grant access to mobile users as long as they have successfully passed only one of those checks.
 ## Certificate Profile
 The <strong>Certificate Profile</strong> <mark style="background: #FFB8EBA6;">specifies the contents of the username and user domain fields</mark>, <mark style="background: #FF5582A6;">lists CA certificates</mark>, <mark style="background: #FFB86CA6;">sets criteria for blocking a session</mark>, and <mark style="background: #FFF3A3A6;">offers ways to determine the revocation status of CA certificates</mark>. <mark style="background: #BBFABBA6;">Because the certificate is part of the authentication for the mobile user, you must predeploy certificates used in Certificate Profiles to your users before their initial login</mark>. <mark style="background: #ADCCFFA6;">The Certificate Profile specifies which certificate field contains the username (Subject or Subject Alt)</mark>.
-## 
+#
