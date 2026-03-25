@@ -192,7 +192,7 @@ When planning to connect remote networks to Prisma Access, you will need to <str
 This information will help you determine connectivity requirements, such as <mark style="background: #BBFABBA6;">how to route traffic through Prisma Access</mark>. 
 You should also consider <mark style="background: #ABF7F7A6;">what type of applications that will pass through Prisma Access</mark> to help you determine <mark style="background: #ADCCFFA6;">what Security policy rules will be needed</mark>. When <strong>determining Security policy rules</strong>, consider your <mark style="background: #D2B3FFA6;">threat profile configuration</mark> and <mark style="background: #CACFD9A6;">plan to apply the same threat, URL, and WildFire scanning to all rules for a consistent threat-mitigation strategy across all traffic</mark>.
 ![[Planning Considerations for Remote Networks.png]]
-##### deployment planning phase
+##### Deployment Planning Phase
 During this deployment planning phase, consider the following and gather as much information as you can to prepare for onboarding
 ###### Establish Service Connections to Corporate Resource
 If your remote network <mark style="background: #FFB8EBA6;">requires access to infrastructure or resources in your headquarters (HQ) or a data center</mark>, <mark style="background: #FFB86CA6;">create a Prisma Access service connection to the corporate site</mark>. If the remote network location is autonomous and doesn’t need to access the infrastructure at other locations, you don’t need to do this.
@@ -553,4 +553,4 @@ Mobile users who successfully authenticate through client certificate authentica
 With Prisma Access, you can choose to require mobile users to pass both certificate authentication and authentication based on the authentication type or to grant access to mobile users as long as they have successfully passed only one of those checks.
 ## Certificate Profile
 The <strong>Certificate Profile</strong> <mark style="background: #FFB8EBA6;">specifies the contents of the username and user domain fields</mark>, <mark style="background: #FF5582A6;">lists CA certificates</mark>, <mark style="background: #FFB86CA6;">sets criteria for blocking a session</mark>, and <mark style="background: #FFF3A3A6;">offers ways to determine the revocation status of CA certificates</mark>. <mark style="background: #BBFABBA6;">Because the certificate is part of the authentication for the mobile user, you must predeploy certificates used in Certificate Profiles to your users before their initial login</mark>. <mark style="background: #ADCCFFA6;">The Certificate Profile specifies which certificate field contains the username (Subject or Subject Alt)</mark>.
-#
+# Security Policy and Security Profiles
