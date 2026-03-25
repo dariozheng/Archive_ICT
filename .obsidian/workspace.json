@@ -199,7 +199,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -218,7 +218,7 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "e60c34dc0dcc384e",
   "lastOpenFiles": [
     "Notes/Prisma SASE.md",
     "Notes/Glossaries/Security Glossary.md",
