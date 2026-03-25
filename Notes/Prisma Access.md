@@ -554,3 +554,26 @@ With Prisma Access, you can choose to require mobile users to pass both certific
 ## Certificate Profile
 The <strong>Certificate Profile</strong> <mark style="background: #FFB8EBA6;">specifies the contents of the username and user domain fields</mark>, <mark style="background: #FF5582A6;">lists CA certificates</mark>, <mark style="background: #FFB86CA6;">sets criteria for blocking a session</mark>, and <mark style="background: #FFF3A3A6;">offers ways to determine the revocation status of CA certificates</mark>. <mark style="background: #BBFABBA6;">Because the certificate is part of the authentication for the mobile user, you must predeploy certificates used in Certificate Profiles to your users before their initial login</mark>. <mark style="background: #ADCCFFA6;">The Certificate Profile specifies which certificate field contains the username (Subject or Subject Alt)</mark>.
 # Security Policy and Security Profiles
+### Policy Types
+Prisma Access supports the following policy types:
+#### Security 
+Security policy rules determine whether <mark style="background: #FFB8EBA6;">to block or allow sessions</mark> <mark style="background: #FF5582A6;">based on traffic attributes</mark> such as <mark style="background: #FFF3A3A6;">source and destination zones</mark>, <mark style="background: #FFB86CA6;">source and destination IP addresses, applications, or users</mark>.
+#### Decryption
+Decryption policy rules <mark style="background: #BBFABBA6;">allow you to define the traffic to decrypt</mark> and <mark style="background: #ABF7F7A6;">the type of decryption you wish to perform on the specified traffic</mark>. To start decrypting traffic, simply set up the certificates required by Prisma Access to act as a trusted third party in a session.
+#### Application Override
+You can create an application override policy rule when <mark style="background: #D2B3FFA6;">you do not want traffic inspection for custom applications between known IP addresses</mark>.
+#### QoS
+QoS rules allow you to dependably <mark style="background: #CACFD9A6;">run high-priority applications and traffic under limited network capacity</mark>. You can use Quality of Service (QoS) policy rules <mark style="background: #FFB8EBA6;">to identify traffic that requires preferential treatment or bandwidth limiting</mark>.
+##### QoS Codepoints
+###### Expedited Forwarding (EF)
+Used to request low loss, low latency, and guaranteed bandwidth for traffic. Packets with EF codepoint values are typically guaranteed the highest priority delivery.
+###### Assured Forwarding (AF)
+Used to provide reliable delivery for applications. Packets with AF codepoints indicate a request for traffic to receive higher priority treatment than best-effort service provides. Packet with EF codepoint take precedence over packets with AF codepoint.
+###### Class Selector (CS)
+Used to provide backward compatibility with network IP addresses that use the IP precedence field to mark priority traffic.
+###### IP Precedence (Type of Service or ToS)
+Used by legacy network IP addresses to mark priority traffic. The IP ToS specifies the type of service the packet is supposed to receive. It may also be known as the ToS byte, which is related to the Differentiated Service Codepoint (DSCP).
+###### IP Precedence (Type of Service or ToS)
+Used by legacy network IP addresses to mark priority traffic. The IP ToS specifies the type of service the packet is supposed to receive. It may also be known as the ToS byte, which is related to the Differentiated Service Codepoint (DSCP).
+### Policy Action
+For traffic that matches the attributes defined in a Security policy, you can apply the following actions.
