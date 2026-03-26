@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 224.50260543823242,
-    "collapsed": true
+    "width": 224.50260543823242
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -95,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/User-ID™.md",
+                "file": "Notes/Prisma Access.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for User-ID™"
+              "title": "Backlinks for Prisma Access"
             }
           },
           {
@@ -218,26 +217,27 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e60c34dc0dcc384e",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/Data Loss Prevention.png",
+    "attachments/HTTP Header Insertion.png",
+    "attachments/File Blocking.png",
+    "attachments/URL Access Control.png",
+    "attachments/DNS Security.png",
+    "attachments/WildFire and Antivirus.png",
+    "attachments/Vulnerability Protection.png",
+    "attachments/Anti-Spyware.png",
+    "attachments/Security Profiles and Profile Groups.png",
     "Notes/Prisma SASE.md",
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Prisma Access.md",
     "Categories/Systems.md",
     "attachments/Clientless VPN.png",
     "attachments/Clientless VPN1.png",
-    "attachments/Clientless VPN3.png",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Autonomous Digital Experience Management.md",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Certificates - Palo Alto.md",
-    "attachments/Split Tunneling.png",
-    "attachments/Customize App Settings5.png",
-    "attachments/Customize App Settings4.png",
-    "attachments/Customize App Settings3.png",
-    "attachments/Customize App Settings2.png",
-    "attachments/Customize App Settings.png",
-    "attachments/Customize the Portal Address3.png",
     "Notes/Data Redistribution - Palo Alto.md",
     "Notes/Service Connection - Palo Alto.md",
     "Categories/Topics/Security/Palo Alto Networks.md",
@@ -256,7 +256,6 @@
     "Notes/Device-ID.md",
     "Notes/Backhaul.md",
     "Notes/Server Name Indication.md",
-    "Notes/Dynamic User Groups - Palo Alto.md",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",

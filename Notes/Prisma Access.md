@@ -589,3 +589,75 @@ For traffic that matches the attributes defined in a Security policy, you can ap
 <mark style="background: #BBFABBA6;">A reset is sent only after a session is formed</mark>. <mark style="background: #ABF7F7A6;">If the session is blocked before a three-way handshake is completed</mark>, the security processing node (SPN) <mark style="background: #ADCCFFA6;">will not send the reset</mark>.
 For a TCP session with a reset action, the SPN does not send an Internet Control Message Protocol (ICMP) Unreachable response.
 For a UDP session with a drop or reset action, if the ICMP Unreachable checkbox is selected, the SPN sends an ICMP message to the client.
+### Policy Objects
+A <strong>policy object</strong> is a <mark style="background: #FFB8EBA6;">single object or a collective unit</mark> <mark style="background: #FFB86CA6;">that groups discrete identities such as IP addresses, URLs, applications, or users</mark>. With policy objects that are a collective unit, you can reference the object in a security policy instead of manually selecting multiple objects one at a time.
+#### Address-Related Objects
+The following are address-related objects available within Prisma Access.
+##### Addresses, Address Groups, and Regions
+Allows you to <strong>group</strong> <mark style="background: #ADCCFFA6;">specific source</mark> or <mark style="background: #BBFABBA6;">destination addresses</mark> that require the same policy enforcement. <mark style="background: #FFB8EBA6;">Address objects can include IPv4 and IPv6 addresses</mark> (single IP, range, or subnet) or <mark style="background: #FFB8EBA6;">FQDN</mark>. Alternatively, you may define a <mark style="background: #FFB86CA6;">region by the latitude and longitude coordinates</mark>, or <mark style="background: #FFF3A3A6;">you can <mark style="background: #ADCCFFA6;">select a country</mark> and <mark style="background: #D2B3FFA6;">define an IP address or range</mark></mark>. You can then group a collection of address objects to create an address group object.
+##### Dynamic User Groups (DUGs) 
+<strong>Dynamic user groups</strong> are groups <mark style="background: #FFB8EBA6;">where membership is based on tags</mark>. 
+
+The group membership <mark style="background: #FF5582A6;">is based on an attribute or activity that the tag identifies</mark>, and <mark style="background: #FFB86CA6;">members are included in the group only when they meet that criterion</mark>. 
+
+A dynamic user group that is based on an auto-tag includes <mark style="background: #ADCCFFA6;">users or IP addresses that are associated with a certain type of log activity</mark>. You do not need to manually update policy or groups to respond to a threat.
+##### Tags
+<mark style="background: #FFF3A3A6;">Tag policies and objects to group related items and add colors to visually distinguish them from other configured policies for easy review</mark>. You can tag all <mark style="background: #FF5582A6;">Prisma Access policies</mark>, as well as <mark style="background: #FF5582A6;">addresses</mark>, <mark style="background: #FF5582A6;">objects</mark>, <mark style="background: #FF5582A6;">address groups</mark>, <mark style="background: #FF5582A6;">service objects</mark>, and <mark style="background: #FF5582A6;">service groups</mark>. You can apply one or more tags to any policy rule or object, up to a maximum of 64 tags. Prisma Access supports up to 10,000 tags.
+##### Auto Tags
+Prisma Access can <mark style="background: #ABF7F7A6;">automatically tag the users or IP addresses associated with a log entry</mark>. <mark style="background: #BBFABBA6;">When you use auto-tags to build policy, you can automatically enforce users and IP addresses</mark> <mark style="background: #ADCCFFA6;">based on behavior and activity</mark>. You do not need to manually and retroactively adjust policy or groups. 
+
+To get started, set up an auto-tag and then use it to populate a dynamic address group or a dynamic user group. Then, add the dynamic address or user group to a policy rule.
+##### External Dynamic Lists (EDLs)
+Allows you to <mark style="background: #D2B3FFA6;">define an imported list of IP addresses, URLs, or domain names</mark> that you can use in policy rules to block or allow traffic.
+#### Policy and Enforcement-Related Objects
+##### Profile Groups
+<strong>Security profiles</strong> scan traffic for threats, and a <strong>profile group</strong> <mark style="background: #FFB8EBA6;">is a collection of each type of profile</mark>. To enable <mark style="background: #FFB86CA6;">Security profile scanning</mark>, <mark style="background: #BBFABBA6;">you must build a profile group and attach the group to a Security rule</mark>. Prisma Access provides predefined Security profiles that you can use to build a profile group.
+##### Service and Service Groups
+<mark style="background: #FF5582A6;">Allows you to specify the</mark> <mark style="background: #ADCCFFA6;">source and destination ports</mark> and <mark style="background: #ADCCFFA6;">protocols</mark> that <mark style="background: #FF5582A6;">a service can use</mark>. You also create a <mark style="background: #FFB86CA6;">custom service on any TCP/UDP port of your choice to restrict application usage to specific ports on your network</mark>. 
+
+<mark style="background: #FFF3A3A6;">After you have created your service objects, you can then group a collection of services that require the same policy enforcement to create a service group</mark>.
+##### HIP Objects and HIP Profiles
+Allows you to define objects for the <strong>Host Information Profile (HIP)</strong> <mark style="background: #FFB86CA6;">to provide matching criteria</mark> <mark style="background: #BBFABBA6;">for filtering the raw data</mark>. 
+<mark style="background: #FFF3A3A6;">Doing this gives information about how the device is maintained</mark>, such as whether data is encrypted, whether antivirus signatures are up to date, whether the device is jailbroken, and more. 
+
+<mark style="background: #BBFABBA6;">You can use the device state information to enforce the policy</mark>. After you have created your HIP objects, <mark style="background: #FFF3A3A6;">you can then group a collection of <strong>HIP objects</strong> to create a <strong>HIP Profile</strong> to be evaluated together for monitoring or policy enforcement</mark>.
+##### Schedules
+By default, <mark style="background: #FFB8EBA6;">Security policy rules are always in effect (on all dates and times)</mark>. <mark style="background: #FFB86CA6;">To limit a Security policy rule to specific times</mark>, <mark style="background: #ABF7F7A6;">you can define schedules and then apply them to the appropriate rules</mark>. For each schedule, <mark style="background: #D2B3FFA6;">you can specify a fixed date and time range or a recurring daily or weekly schedule</mark>. Add or edit a Security policy rule to get started.
+##### Quarantine Device Lists
+Prisma Access allows you to identify and quarantine compromised devices with the GlobalProtect app. <mark style="background: #CACFD9A6;">You can either manually or automatically (based on auto-tags) add devices to a quarantine list</mark>. <mark style="background: #FFF3A3A6;">You can block quarantined devices from accessing the network or restrict the device traffic based on a security rule</mark>. To get started, go to **Configuration** > **Objects** and set up a Quarantined Device List. Then, use the list as part of identity redistribution.
+##### Certificates
+<mark style="background: #FFB8EBA6;">Centrally manage the certificates you use to secure communication across your network</mark>. In one place, <mark style="background: #FF5582A6;">set up your certificates</mark>, <mark style="background: #FFB86CA6;">add a certificate</mark>, <mark style="background: #FFF3A3A6;">add OCSP responders</mark>, and <mark style="background: #BBFABBA6;">deﬁne certificate checks you want to require</mark>. The certificates and settings you set up here can be used throughout your Prisma Access deployment to secure features like decryption, your authentication portal, and the GlobalProtect app.
+##### URL Category
+Allows you to create<mark style="background: #ABF7F7A6;"> a custom URL category object to use in a URL Filtering profile</mark> <mark style="background: #FFB86CA6;">to specify exceptions to URL category enforcement</mark>. It also allows you to create a custom URL category based on multiple URL categories.
+### Security Profiles
+<strong>Security profiles</strong> <mark style="background: #FF5582A6;">are fundamental components for enabling security services</mark> such as Threat Prevention, WildFire, and URL Filtering on your network traffic. <mark style="background: #FFF3A3A6;">These profiles perform <mark style="background: #FF5582A6;">advanced inspection</mark> on traffic that a Security rule allows</mark>; <mark style="background: #FFB86CA6;">they scan for and prevent threats, attacks, misuse, and abuse</mark>.
+
+For customization, management, and visibility into each Security profile type, you can access the Security profiles via **Manage > Configuration > NGFW and Prisma Access > Security Services**. 
+
+<strong>Security profiles</strong> <mark style="background: #BBFABBA6;">consolidate profile configuration</mark>, <mark style="background: #FFB86CA6;">centralizing everything you need to set up and manage profiles is in one place</mark>. The interfaces also give you access to all the features a profile offers and resources you can use to update profiles, such as content release updates, the Threat Vault, and PAN-DB site classifications.
+
+When working with Security profiles, it's especially important to know about profile groups. <mark style="background: #FFB8EBA6;">Security rules reference profile groups</mark>, not individual profiles. <mark style="background: #FF5582A6;">Therefore, for a profile to be active</mark>, <mark style="background: #FFB8EBA6;">it must be part of a profile group that a Security rule is using</mark>.![[Security Profiles and Profile Groups.png]]
+For each profile, best-practice settings are built in and enabled by default. You can use these out-of-the-box profiles as a starting point to customize and build upon the predefined settings.
+#### Anti-Spyware
+This type of protection zeros in on <strong>threats</strong> <mark style="background: #FFB8EBA6;">that affect users' outbound activity</mark>, <mark style="background: #FF5582A6;">especially command-and-control (C2) activity</mark>, where an infected client is being leveraged as part of a remotely conducted cyberattack. It is a part of the Threat Prevention subscription.![[Anti-Spyware.png]]
+#### Vulnerability Protection
+Vulnerability Protection <mark style="background: #FFB86CA6;">stops the attacker’s attempts to exploit the system flaws</mark> and gain unauthorized access to your network. It is one part of the Threat Prevention subscription. This type of protection zeros in on <mark style="background: #FF5582A6;">inbound threats</mark>, <mark style="background: #BBFABBA6;">where an attacker is attempting to exploit a system flaw to breach your network</mark>.
+![[Vulnerability Protection.png]]
+#### WildFire and Antivirus
+WildFire analyzes files and email links to detect threats and create protections to block malware. It protects against malware concealed in files, executables, and email links.
+![[WildFire and Antivirus.png]]
+#### DNS Security
+By leveraging advanced machine learning and predictive analytics, the service provides real-time DNS request analysis and rapidly produces and distributes DNS signatures that are specifically designed to defend against malware using DNS for C2 and data theft. Combined with an extensible cloud architecture, it provides access to a scalable threat intelligence system to keep your network protections up to date. Threat protection service is designed to protect and defend your networks from advanced threats.
+![[DNS Security.png]]
+#### URL Access Control
+PAN-DB—the URL Filtering cloud—classifies sites based on content, features, and safety, and you can enforce your Security policy based on these URL categories. You can also prevent credential phishing by tightly controlling the types of sites to which users can enter their corporate credentials. It gives you control of web access and how users interact with online content.
+![[URL Access Control.png]]
+#### File Blocking
+File blocking allows you to identify specific file types that you want to block or monitor. For most traffic (including traffic on your internal network), block files that are known to carry threats or that have no real use case for upload/download.
+![[File Blocking.png]]
+#### HTTP Header Insertion
+There are predefined settings built in that you can use to manage access to popular SaaS applications, such as Google and YouTube, and create a custom rule to do HTTP header insertion for any other applications.
+![[HTTP Header Insertion.png]]
+#### Data Loss Prevention
+Data Loss Prevention (DLP) on Prisma Access enables you to enforce your organization’s data security standards and prevent the loss of sensitive data across mobile users and remote networks. DLP protects sensitive information against unauthorized access, misuse, extraction, and sharing.
+![[Data Loss Prevention.png]]
