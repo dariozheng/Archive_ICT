@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 224.50260543823242
+    "width": 224.50260543823242,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -219,6 +220,8 @@
   },
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/A Security Rule Is Referencing a Profile Group.png",
+    "attachments/The Security Profile Is in a Profile Group.png",
     "attachments/Data Loss Prevention.png",
     "attachments/HTTP Header Insertion.png",
     "attachments/File Blocking.png",
@@ -232,8 +235,6 @@
     "Notes/Glossaries/Security Glossary.md",
     "Notes/Prisma Access.md",
     "Categories/Systems.md",
-    "attachments/Clientless VPN.png",
-    "attachments/Clientless VPN1.png",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Autonomous Digital Experience Management.md",
     "Notes/Site-to-Site VPN - Palo Alto.md",

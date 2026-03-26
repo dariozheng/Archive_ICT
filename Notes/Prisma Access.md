@@ -637,27 +637,62 @@ For customization, management, and visibility into each Security profile type, y
 <strong>Security profiles</strong> <mark style="background: #BBFABBA6;">consolidate profile configuration</mark>, <mark style="background: #FFB86CA6;">centralizing everything you need to set up and manage profiles is in one place</mark>. The interfaces also give you access to all the features a profile offers and resources you can use to update profiles, such as content release updates, the Threat Vault, and PAN-DB site classifications.
 
 When working with Security profiles, it's especially important to know about profile groups. <mark style="background: #FFB8EBA6;">Security rules reference profile groups</mark>, not individual profiles. <mark style="background: #FF5582A6;">Therefore, for a profile to be active</mark>, <mark style="background: #FFB8EBA6;">it must be part of a profile group that a Security rule is using</mark>.![[Security Profiles and Profile Groups.png]]
-For each profile, best-practice settings are built in and enabled by default. You can use these out-of-the-box profiles as a starting point to customize and build upon the predefined settings.
-#### Anti-Spyware
-This type of protection zeros in on <strong>threats</strong> <mark style="background: #FFB8EBA6;">that affect users' outbound activity</mark>, <mark style="background: #FF5582A6;">especially command-and-control (C2) activity</mark>, where an infected client is being leveraged as part of a remotely conducted cyberattack. It is a part of the Threat Prevention subscription.![[Anti-Spyware.png]]
-#### Vulnerability Protection
+You can create, manage, and enable your Security Services profiles via **Manage > Configuration > NGFW and Prisma Access > Security Services** and select the available profile types. The profile dashboards allow you to review the best practice profiles, add a new profile, update existing profiles, and create and manage overrides.
+
+In <strong>Strata Cloud Manager</strong>, a Security profile is only active when the following two conditions are met:
+##### 1. The Security Profile Is in a Profile Group
+You can add a Security profile to a Profile Group by navigating to **Manage >** **Configuration > NGFW and Prisma Access > Security Services > Profile Groups**. 
+
+A <strong>profile group</strong> <mark style="background: #FFB8EBA6;">is a collection of profiles</mark>, and <mark style="background: #FF5582A6;">it can include <strong>one</strong> profile from each type</mark>.
+For each profile, <mark style="background: #FFF3A3A6;">best-practice settings are built in and enabled by default</mark>. You can use these out-of-the-box profiles as a starting point to customize and build upon the predefined settings.
+![[The Security Profile Is in a Profile Group.png]]
+##### 2. A Security Rule Is Referencing a Profile Group
+A <strong>Security profile</strong> <mark style="background: #FFB8EBA6;">is active only when it is in a profile group that is attached to a Security rule</mark>. When a Security rule is referencing a profile group, <mark style="background: #FFB86CA6;">you can make updates to the individual profiles</mark> and <mark style="background: #FFF3A3A6;">add the group without editing the Security rule</mark>. The Security rule automatically enforces your changes, without requiring you to make a policy commit.
+![[A Security Rule Is Referencing a Profile Group.png]]
+#### Best Practices Settings
+For each profile, <mark style="background: #D2B3FFA6;">best-practice settings are built in and enabled by default</mark>. You can use these out-of-the-box profiles as a starting point to customize and build upon the predefined settings.
+
+Best-practice profiles use the strictest security settings recommended by Palo Alto Networks.
+##### Anti-Spyware
+This type of protection zeros in on <strong>threats</strong> <mark style="background: #FFB8EBA6;">that affect users' outbound activity</mark>, <mark style="background: #FF5582A6;">especially command-and-control (C2) activity</mark>, where an infected client is being leveraged as part of a remotely conducted cyberattack. It is a part of the Threat Prevention subscription.
+![[Anti-Spyware.png]]
+<mark style="background: #FFB86CA6;">Anti-spyware detects <strong>command-and-control (C2)</strong> activity</mark>, where spyware on an infected client is <mark style="background: #FFF3A3A6;">collecting data without the user's consent</mark> and/or <mark style="background: #ABF7F7A6;">communicating with a remote attacker</mark>. Prisma Access enforces a strict best-practice Anti-Spyware profile by default, but it also provides an alternate best-practice profile. The best-practice profiles enforce one of two actions on matching traffic:
+- **Default** - The default action Palo Alto Networks sets for a specific signature. Typically, the default action is an alert or a reset-both.
+- **Reset Both** - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
+##### Vulnerability Protection
 Vulnerability Protection <mark style="background: #FFB86CA6;">stops the attacker’s attempts to exploit the system flaws</mark> and gain unauthorized access to your network. It is one part of the Threat Prevention subscription. This type of protection zeros in on <mark style="background: #FF5582A6;">inbound threats</mark>, <mark style="background: #BBFABBA6;">where an attacker is attempting to exploit a system flaw to breach your network</mark>.
 ![[Vulnerability Protection.png]]
-#### WildFire and Antivirus
-WildFire analyzes files and email links to detect threats and create protections to block malware. It protects against malware concealed in files, executables, and email links.
+Vulnerability Protection detects system flaws that an attacker might otherwise attempt to exploit. Whereas Anti-Spyware identifies infected hosts as traffic leaves the network, Vulnerability Protection <mark style="background: #D2B3FFA6;">protects against threats entering the network</mark>.
+- **Default** - The default action Palo Alto Networks specifies for a specific signature. Typically, the default action is an alert or a reset-both.
+- **Reset Both** - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
+##### WildFire and Antivirus
 ![[WildFire and Antivirus.png]]
-#### DNS Security
-By leveraging advanced machine learning and predictive analytics, the service provides real-time DNS request analysis and rapidly produces and distributes DNS signatures that are specifically designed to defend against malware using DNS for C2 and data theft. Combined with an extensible cloud architecture, it provides access to a scalable threat intelligence system to keep your network protections up to date. Threat protection service is designed to protect and defend your networks from advanced threats.
+Antivirus detects <mark style="background: #ADCCFFA6;">viruses and malware found in executables and file types</mark>. These profiles scan inside compressed files and data-encoding schemes, and if you have enabled decryption, they also scan decrypted content. 
+
+The best-practice Antivirus profile takes one of the following two actions on traffic:
+- **Alert** - Generates an alert for each application traffic flow. The alert is saved in the threat log.
+- **Reset Both** - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
+##### DNS Security
+By leveraging <mark style="background: #FFB8EBA6;">advanced machine learning and predictive analytics</mark>, the <mark style="background: #FFB86CA6;">service provides real-time DNS request analysis</mark> and <mark style="background: #FFF3A3A6;">rapidly produces and distributes DNS signatures that are specifically designed to defend against malware using DNS for C2 and data theft</mark>. Combined with an extensible cloud architecture, it provides access to a scalable threat intelligence system to keep your network protections up to date. Threat protection service is designed to protect and defend your networks from advanced threats.
 ![[DNS Security.png]]
-#### URL Access Control
-PAN-DB—the URL Filtering cloud—classifies sites based on content, features, and safety, and you can enforce your Security policy based on these URL categories. You can also prevent credential phishing by tightly controlling the types of sites to which users can enter their corporate credentials. It gives you control of web access and how users interact with online content.
+##### URL Access Control
+PAN-DB—the URL Filtering cloud—<mark style="background: #FFF3A3A6;">classifies sites based on content, features, and safety</mark>, and you can enforce your Security policy based on these URL categories. 
+
+You can also prevent credential phishing by tightly controlling the types of sites to which users can enter their corporate credentials. It gives you control of web access and how users interact with online content.
 ![[URL Access Control.png]]
-#### File Blocking
-File blocking allows you to identify specific file types that you want to block or monitor. For most traffic (including traffic on your internal network), block files that are known to carry threats or that have no real use case for upload/download.
+URL Filtering enables you to control how users interact with web content. The URL Filtering best-practice profile gives you visibility into your users’ web usage and blocks access to URL categories that identify malicious and exploitive web content.
+- The best-practice URL Filtering profile includes credential threat prevention checks. Credential threat prevention works by scanning username and password submissions to websites and comparing those submissions against valid corporate credentials.
+##### File Blocking
+<mark style="background: #ADCCFFA6;">File blocking allows you to identify specific file types that you want to block or monitor</mark>. For most traffic (including traffic on your internal network), block files that are known to carry threats or that have no real use case for upload/download.
 ![[File Blocking.png]]
-#### HTTP Header Insertion
+File blocking gives you a way to monitor file types in use and limit or stop access to risky file types. The strict best-practice File Blocking profile blocks risky file types and logs the rest (there are over 150 file types that File Blocking detects):
+- **Alert** - When the specified file type is detected, a log is generated in the Data Filtering log.
+- **Block** - When the risky file type is detected, the file is blocked and a customizable block page is presented to the user. A log is also generated in the Data Filtering log.
+- **Continue** - When the specified file type is detected, a response page is displayed to the user. The user can click through the page to download the file, and Data Filtering logs record this event.
+##### HTTP Header Insertion
 There are predefined settings built in that you can use to manage access to popular SaaS applications, such as Google and YouTube, and create a custom rule to do HTTP header insertion for any other applications.
 ![[HTTP Header Insertion.png]]
-#### Data Loss Prevention
+##### Data Loss Prevention
 Data Loss Prevention (DLP) on Prisma Access enables you to enforce your organization’s data security standards and prevent the loss of sensitive data across mobile users and remote networks. DLP protects sensitive information against unauthorized access, misuse, extraction, and sharing.
 ![[Data Loss Prevention.png]]
+#### 
