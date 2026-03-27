@@ -695,5 +695,4 @@ There are predefined settings built in that you can use to manage access to popu
 ##### Data Loss Prevention
 Data Loss Prevention (DLP) on Prisma Access enables you to enforce your organization’s data security standards and prevent the loss of sensitive data across mobile users and remote networks. DLP protects sensitive information against unauthorized access, misuse, extraction, and sharing.
 ![[Data Loss Prevention.png]]
-### Global and Local Policy
-Prisma Access configuration can apply globally across your entire environment, or you can create a configuration that is specific to a deployment type. Palo Alto Networks recommends that you work in the global configuration as often as possible, which applies across the Prisma Access service. Only create other configurations to address use cases that are unique to that part of your organization.
+# 
