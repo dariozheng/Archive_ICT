@@ -1,3 +1,11 @@
+formulas:
+  Untitled: ""
 views:
   - type: table
     name: Table
+    filters:
+      and:
+        - product.contains(link("Microsoft General"))
+    order:
+      - file.name
+      - formula.Untitled

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Prisma Access.md",
-                "mode": "source",
+                "file": "Categories/Topics/Microsoft/Microsoft General.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Prisma Access"
+              "title": "Microsoft General"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "line:(left)",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Prisma Access.md",
+                "file": "Categories/Topics/Microsoft/Microsoft General.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Prisma Access"
+              "title": "Outline of Microsoft General"
             }
           },
           {
@@ -219,9 +219,24 @@
   },
   "active": "e60c34dc0dcc384e",
   "lastOpenFiles": [
-    "Notes/Certificates - Palo Alto.md",
+    "Categories/Topics/Microsoft/Windows.md",
+    "Categories/Topics/Microsoft/Microsoft General.md",
+    "Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "Categories/Topics/Networking/Networking General.md",
+    "Categories/Topics/Security/Network-Based Attacks.md",
+    "Categories/Systems.md",
+    "Categories/Topics/Security/Security General.md",
+    "Categories/Topics/Security/Palo Alto Networks.md",
+    "Notes/Glossaries/Security Glossary.md",
+    "Notes/User-ID™.md",
+    "Notes/Prisma SD-WAN®.md",
+    "Notes/Panorama.md",
+    "Notes/Cloud Access Security Broker.md",
+    "Notes/Strata Cloud Manager.md",
     "Notes/Prisma Access.md",
     "Notes/Prisma SASE.md",
+    "Notes/Cyber Kill Chain.md",
+    "Notes/Certificates - Palo Alto.md",
     "Notes/Site-to-Site VPN - Palo Alto.md",
     "Notes/Autonomous Digital Experience Management.md",
     "Notes/Sessions - Palo Alto.md",
@@ -235,26 +250,12 @@
     "attachments/WildFire and Antivirus.png",
     "attachments/Vulnerability Protection.png",
     "attachments/Anti-Spyware.png",
-    "Notes/Glossaries/Security Glossary.md",
-    "Categories/Systems.md",
-    "Notes/Prisma SD-WAN®.md",
     "Notes/Data Redistribution - Palo Alto.md",
     "Notes/Service Connection - Palo Alto.md",
-    "Categories/Topics/Security/Palo Alto Networks.md",
     "Notes/App-ID™.md",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Cloud Computing Glossary.md",
-    "Notes/Cloud Access Security Broker.md",
-    "Notes/Advanced URL Filtering.md",
-    "Categories/Security.md",
     "attachments/Configure Probes.pdf",
-    "Notes/Traffic Flows.md",
-    "Notes/User-ID™.md",
-    "Notes/Strata Cloud Manager.md",
-    "Notes/Panorama.md",
-    "Notes/Device-ID.md",
-    "Notes/Backhaul.md",
-    "Notes/Server Name Indication.md",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
     "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
