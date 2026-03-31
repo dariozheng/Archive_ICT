@@ -13,8 +13,6 @@ views:
         - note["topic@security"].contains(link("Security General"))
     order:
       - file.name
-      - created
-      - modified
     sort:
       - property: created
         direction: ASC

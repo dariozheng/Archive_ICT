@@ -5,8 +5,6 @@ topic@security:
   - "[[Security General]]"
 tags:
   - glossaries
-created: 2026-01-05T10:14:13+01:00
-modified: 2026-01-30T09:44:50+01:00
 ---
 #### FWaaP
 <strong>Firewall as a platform</strong> (FWaaP) is a cloud-based firewall solution that provides network security capabilities through a subscription model.

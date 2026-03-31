@@ -5,8 +5,6 @@ topic@cloud:
   - "[[Cloud Computing General]]"
 tags:
   - glossaries
-created: 2026-01-02T10:43:43+01:00
-modified: 2026-01-30T12:49:58+01:00
 ---
 #### cloud computing 
   paradigm for enabling <mark style="background: #FFF3A3A6;">network access</mark> <mark style="background: #BBFABBA6;">to a scalable and elastic pool</mark> <mark style="background: #FFB86CA6;">of shareable physical or virtual resources</mark> <mark style="background: #ABF7F7A6;">with self-service provisioning</mark> and administration on demand.
