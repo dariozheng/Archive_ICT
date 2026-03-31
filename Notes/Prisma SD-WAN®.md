@@ -74,14 +74,6 @@ In the first insertion mode (or phase), <mark style="background: #FFB8EBA6;">the
 In this mode, <mark style="background: #FF5582A6;">Prisma SD-WAN simply collects rich, detailed network and application analytics data. No VPN tunnels are created and Prisma SD-WAN does not select any paths</mark>.
 
 Most deployments initially utilize this mode for a few days to allow Prisma SD-WAN to better understand the applications running on the network and their performance characteristics. The data collected during this period can then be used to design application policies.
-## Control
-After a customer uses analytics-only mode, they can easily switch the device to <strong>control mode</strong>. 
-
-In this mode, <mark style="background: #FFB86CA6;">Prisma SD-WAN utilizes all the application and network data it has collected to take action in selecting a driven path</mark>. Here, <mark style="background: #BBFABBA6;">the full functionality of Prisma SD-WAN is delivered without requiring the replacement of the pre-existing router</mark>.
-
-Many customers prefer to start their SD-WAN deployment in this mode, because they either own their existing routers and still have years left of depreciation on them or they have carrier-managed routers as part of their existing telecommunications contract.
-
-An added benefit of control mode is that <mark style="background: #FFF3A3A6;">the <strong>Prisma SD-WAN ION device</strong> has integrated fail-to-wire interfaces, which enable an added level of high availability. If either the ION device or the router fails, the surviving device can take over without disrupting connectivity</mark>.
 ## Router Replacement 
 Prisma SD-WAN can run in full-router-replacement mode, which eliminates the need for a router. 
 
@@ -90,6 +82,16 @@ Existing MPLS and internet connections can be directed into the Prisma SD-WAN IO
 Sites include brach offices and data centers. 
 
 <mark style="background: #FFB8EBA6;">Prisma SD-WAN uses <strong>site prefixes</strong> to advertise <strong>reachability</strong> from branch sites <strong>into</strong> the SD-WAN fabric</mark>. <mark style="background: #FFB86CA6;">Site prefixes allow Prisma SD-WAN <strong>data center sites</strong> to easily advertise <strong>routes</strong> and <strong>reachability</strong> to branch sites</mark>. You can configure site prefixes for branch sites, but <mark style="background: #FFF3A3A6;">the preferred method for advertising branch reachability is through the use of global scope interfaces and static routes</mark>. From release 6.2.1, both IPv4 and IPv6 prefixes are supported. From release 6.5.1, prefixes learned from global BGP/OSPF peers by the DC ION can be exported into the SD-WAN fabric.
+
+## Control
+After a customer uses analytics-only mode, they can easily switch the device to <strong>control mode</strong>. 
+
+In this mode, <mark style="background: #FFB86CA6;">Prisma SD-WAN utilizes all the application and network data it has collected to take action in selecting a driven path</mark>. Here, <mark style="background: #BBFABBA6;">the full functionality of Prisma SD-WAN is delivered without requiring the replacement of the pre-existing router</mark>.
+
+Many customers prefer to start their SD-WAN deployment in this mode, because they either own their existing routers and still have years left of depreciation on them or they have carrier-managed routers as part of their existing telecommunications contract.
+
+An added benefit of control mode is that <mark style="background: #FFF3A3A6;">the <strong>Prisma SD-WAN ION device</strong> has integrated fail-to-wire interfaces, which enable an added level of high availability. If either the ION device or the router fails, the surviving device can take over without disrupting connectivity</mark>.
+
 ## Data Center Site
 A data center (Hub/Transit) is where the enterprise applications and services are hosted.
 
@@ -578,7 +580,7 @@ The Performance Sets tab contains policy rules and are a part of the policy set 
 <mark style="background: #ABF7F7A6;">Performance Policy rules can be defined with <strong>Link Quality</strong> and <strong>Application metrics</strong> thresholds</mark>. <mark style="background: #ADCCFFA6;">Users can apply the rule at an <strong>application</strong> or <strong>transfer type</strong> level</mark>, select path types, path filters and path category, select Path Filters, Circuit labels, Path types, and Data center groups.
 ![[Performance Policy Rule.png]]
 #### General
- - When creating a rule, <mark style="background: #D2B3FFA6;">the <strong>rule type</strong> specifies if the rule applies to the <strong>Application SLA</strong> or the <strong>System Health</strong></mark>.
+When creating a rule, <mark style="background: #D2B3FFA6;">the <strong>rule type</strong> specifies if the rule applies to the <strong>Application SLA</strong> or the <strong>System Health</strong></mark>.
  ![[Performance Policy Rule1.png]]
 #### Action
 - <mark style="background: #CACFD9A6;">The <strong>Create Incident</strong> action generates incidents for Applications and System Health events based on Performance SLA criteria</mark>.
