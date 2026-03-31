@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Prisma SASE.md",
-                "mode": "preview",
+                "file": "README.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Prisma SASE"
+              "title": "README"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Prisma SASE.md",
+                "file": "README.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Prisma SASE"
+              "title": "Outline of README"
             }
           },
           {
@@ -198,7 +198,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
@@ -219,32 +219,39 @@
   },
   "active": "e60c34dc0dcc384e",
   "lastOpenFiles": [
+    "Templates/Notes/Codes/Link to Glossary.md",
+    "Templates/Notes/Hardware Template.md",
+    "Templates/Notes/Cloud Computing Template.md",
+    "Templates/Notes/Security Template.md",
+    "Templates/Notes/Systems Template.md",
+    "Templates/Notes/Microsoft Template.md",
+    "Templates/Notes/Networking Template.md",
+    "Templates/Bases/Cloud Computing.base",
+    "Templates/Bases/Hardware.base",
+    "Templates/Bases/Security.base",
+    "Templates/Bases/Networking.base",
+    "Templates/Bases/Microsoft.base",
+    "Templates/Bases/Systems.base",
+    "Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
+    "Categories/Hardware.md",
+    "Categories/Networking.md",
+    "Categories/Security.md",
+    "Categories/Microsoft.md",
+    "Categories/Systems.md",
+    "Categories/Topics/Security/Palo Alto Networks.md",
+    "Categories/Topics/Cloud Computing/Cloud Computing General.md",
+    "Categories/Topics/Microsoft/Microsoft General.md",
+    "Categories/Topics/Microsoft/Windows.md",
+    "Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "Categories/Topics/Networking/Networking General.md",
+    "Categories/Topics/Security/Network-Based Attacks.md",
+    "Categories/Topics/Security/Security General.md",
+    "Notes/Prisma SASE.md",
     "Notes/Certificates - Palo Alto.md",
     "Notes/NGFW - Palo Alto Networks.md",
     "Notes/Prisma SD-WAN®.md",
     "Notes/Prisma Access.md",
-    "Notes/Prisma SASE.md",
     "Notes/Sessions - Palo Alto.md",
-    "Notes/Site-to-Site VPN - Palo Alto.md",
-    "Notes/Autonomous Digital Experience Management.md",
-    "Notes/Strata Cloud Manager.md",
-    "Notes/Cloud Access Security Broker.md",
-    "Notes/Panorama.md",
-    "Notes/Phishing Protection - Palo Alto.md",
-    "Notes/Windows Remote Management Protocol.md",
-    "Notes/Microsoft Remote Procedure Call.md",
-    "Notes/Windows Management Instrumentation.md",
-    "Notes/Common Information Model.md",
-    "Notes/Web-Based Enterprise Management.md",
-    "Notes/Virtual Private Network.md",
-    "Notes/Zero Trust Security Model.md",
-    "Notes/Backhaul.md",
-    "Notes/App-ID™.md",
-    "Notes/Server Name Indication.md",
-    "Notes/SD-WAN.md",
-    "Notes/Traffic Flows.md",
-    "Notes/Secure Access Service Edge.md",
-    "Notes/Security Groups.md",
     "attachments/A Security Rule Is Referencing a Profile Group.png",
     "attachments/The Security Profile Is in a Profile Group.png",
     "attachments/Data Loss Prevention.png",
@@ -258,13 +265,6 @@
     "attachments/Configure Probes.pdf",
     "attachments/Perform the Initial Setup and Configuration for NGFWs.pdf",
     "attachments/Install the Windows-Based User-ID Agent.pdf",
-    "attachments/Configure the Windows User-ID Agent for User Mapping.pdf",
-    "attachments/Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf",
-    "attachments/Subscriptions You Can Use With the Firewall.pdf",
-    "attachments/Configure Service Routes.pdf",
-    "attachments/Set Up Network Access for External Services.pdf",
-    "attachments/GlobalProtect Administrator's Guide.pdf",
-    "attachments/Configure an Authentication Profile and Sequence.pdf",
     "Untitled.canvas"
   ]
 }
