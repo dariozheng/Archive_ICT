@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Glossaries/Cloud Computing Glossary.md",
-                "mode": "source",
+                "file": "Notes/Prisma Access.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cloud Computing Glossary"
+              "title": "Prisma Access"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Glossaries/Cloud Computing Glossary.md",
+                "file": "Notes/Prisma Access.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Cloud Computing Glossary"
+              "title": "Outline of Prisma Access"
             }
           },
           {
@@ -219,6 +219,7 @@
   },
   "active": "e60c34dc0dcc384e",
   "lastOpenFiles": [
+    "Notes/Glossaries/Cloud Computing Glossary.md",
     "Notes/Glossaries/Networking Glossary.md",
     "Notes/Glossaries/Security Glossary.md",
     "Templates/Bases/Topic/Security/Security General.base",
@@ -253,7 +254,6 @@
     "Categories/Topics/Security/Security General.md",
     "Notes/Prisma SASE.md",
     "Notes/Certificates - Palo Alto.md",
-    "Notes/NGFW - Palo Alto Networks.md",
     "attachments/A Security Rule Is Referencing a Profile Group.png",
     "attachments/The Security Profile Is in a Profile Group.png",
     "attachments/Data Loss Prevention.png",
