@@ -5,3 +5,8 @@ views:
       and:
         - categories.contains(link("Networking"))
         - '!file.name.contains("Template")'
+    order:
+      - file.name
+      - topic@networking
+    columnSize:
+      file.name: 232
