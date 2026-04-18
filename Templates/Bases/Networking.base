@@ -1,3 +1,6 @@
+properties:
+  note.topic@networking:
+    displayName: Topic
 views:
   - type: table
     name: Table
