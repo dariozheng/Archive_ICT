@@ -11,17 +11,31 @@
             "id": "e60c34dc0dcc384e",
             "type": "leaf",
             "state": {
+              "type": "bases",
+              "state": {
+                "file": "Templates/Bases/Topic/Security/Palo Alto Networks.base",
+                "viewName": "Table"
+              },
+              "icon": "lucide-table",
+              "title": "Palo Alto Networks"
+            }
+          },
+          {
+            "id": "596257e6778764e2",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
-                "file": "Categories/Networking.md",
-                "mode": "source",
+                "file": "Notes/Prisma Access.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Networking"
+              "title": "Prisma Access"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -217,42 +231,43 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e60c34dc0dcc384e",
+  "active": "596257e6778764e2",
   "lastOpenFiles": [
-    "Categories/Cloud Computing.md",
-    "Categories/Hardware.md",
-    "Categories/Networking.md",
-    "Categories/Security.md",
-    "Categories/Systems.md",
-    "Categories/Microsoft.md",
-    "Notes/SD-WAN.md",
-    "Notes/Backhaul.md",
-    "Notes/Crawler.md",
-    "Notes/Glossaries/Networking Glossary.md",
-    "Notes/Server Name Indication.md",
-    "Notes/Traffic Flows.md",
-    "Categories/Topics/Networking/Networking General.md",
-    "Categories/Topics/Security/Palo Alto Networks.md",
-    "Templates/Notes/Systems Template.md",
-    "Templates/Notes/Microsoft Template.md",
-    "Templates/Notes/Security Template.md",
-    "Templates/Notes/Cloud Computing Template.md",
-    "Templates/Notes/Hardware Template.md",
-    "Templates/Notes/Networking Template.md",
-    "Templates/Bases/Networking.base",
+    "Notes/NGFW - Palo Alto Networks.md",
+    "Notes/Prisma SD-WAN®.md",
+    "Notes/Certificates - Palo Alto.md",
+    "Notes/Prisma SASE.md",
+    "Notes/Sessions - Palo Alto.md",
+    "Notes/Site-to-Site VPN - Palo Alto.md",
+    "Notes/Autonomous Digital Experience Management.md",
     "Notes/Cloud Access Security Broker.md",
     "Notes/User-ID™.md",
-    "Notes/Autonomous Digital Experience Management.md",
-    "Notes/Prisma SASE.md",
-    "Notes/Prisma SD-WAN®.md",
-    "Notes/NGFW - Palo Alto Networks.md",
-    "Templates/Bases/Topic/Security/Security General.base",
+    "Notes/Device-ID.md",
+    "Notes/Dynamic User Groups - Palo Alto.md",
+    "Notes/Data Redistribution - Palo Alto.md",
+    "Notes/Crawler.md",
+    "Notes/Advanced URL Filtering.md",
+    "Notes/Multi-Factor Authentication - Palo Alto.md",
+    "Notes/Windows Remote Management Protocol.md",
+    "Notes/Microsoft Remote Procedure Call.md",
+    "Notes/Windows Management Instrumentation.md",
+    "Notes/Web-Based Enterprise Management.md",
+    "Notes/Common Information Model.md",
+    "Notes/App-ID™.md",
+    "Notes/Server Name Indication.md",
+    "Notes/Backhaul.md",
+    "Notes/Virtual Private Network.md",
+    "Notes/Unauthorized Packet Sniffing.md",
+    "Notes/Network Scanning.md",
+    "Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "Templates/Bases/Topic/Security/Network-Based Attacks.base",
-    "Templates/Bases/Systems.base",
-    "Templates/Bases/Microsoft.base",
+    "Templates/Bases/Topic/Security/Security General.base",
     "Templates/Bases/Security.base",
-    "Templates/Bases/Hardware.base",
+    "Templates/Bases/Microsoft.base",
+    "Templates/Bases/Systems.base",
+    "Templates/Bases/Networking.base",
     "Templates/Bases/Cloud Computing.base",
+    "Templates/Bases/Hardware.base",
     "Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
     "attachments/A Security Rule Is Referencing a Profile Group.png",
     "attachments/The Security Profile Is in a Profile Group.png",
@@ -264,7 +279,6 @@
     "attachments/WildFire and Antivirus.png",
     "attachments/Vulnerability Protection.png",
     "attachments/Anti-Spyware.png",
-    "attachments/Configure Probes.pdf",
     "Untitled.canvas"
   ]
 }
