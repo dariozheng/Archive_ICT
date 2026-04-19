@@ -6,10 +6,10 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "LiExcalidrawIcon",
-      "SiExcalidraw",
-      "LiBookA",
-      "FasUserSecret"
+      "LiNotebookTabs",
+      "LiImages",
+      "LiLayoutTemplate",
+      "FasLayerGroup"
     ],
     "recentlyUsedIconsSize": 4,
     "rules": [],
@@ -147,5 +147,9 @@
     "iconColor": "#000000"
   },
   "0 - Notes/Glossaries": "LiBookA",
-  "1 - Excalidraw": "SiExcalidraw"
+  "1 - Excalidraw": "SiExcalidraw",
+  "2 - Categories": "FasLayerGroup",
+  "3 - Templates": "LiLayoutTemplate",
+  "attachments": "LiImages",
+  "0 - Notes": "LiNotebookTabs"
 }
