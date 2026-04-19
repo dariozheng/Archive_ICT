@@ -19,10 +19,10 @@
       "bottom": 0,
       "left": 0
     },
-    "iconInTabsEnabled": true,
+    "iconInTabsEnabled": false,
     "iconInTitleEnabled": false,
     "iconInTitlePosition": "above",
-    "iconInFrontmatterEnabled": true,
+    "iconInFrontmatterEnabled": false,
     "iconInFrontmatterFieldName": "icon",
     "iconColorInFrontmatterFieldName": "iconColor",
     "iconsBackgroundCheckEnabled": false,
@@ -41,9 +41,7 @@
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
   },
-  "Homepage.md": {
-    "iconName": "LiHome"
-  },
+  "Homepage.md": "LiHome",
   "0 - Notes/Prisma Access.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
