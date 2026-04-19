@@ -5,8 +5,13 @@
     "fontSize": 16,
     "emojiStyle": "native",
     "iconColor": null,
-    "recentlyUsedIcons": [],
-    "recentlyUsedIconsSize": 5,
+    "recentlyUsedIcons": [
+      "LiHome",
+      "SiPaloaltonetworks",
+      "SiPaloAltoNetworks",
+      "SiCisco"
+    ],
+    "recentlyUsedIconsSize": 4,
     "rules": [],
     "extraMargin": {
       "top": 0,
@@ -14,10 +19,10 @@
       "bottom": 0,
       "left": 0
     },
-    "iconInTabsEnabled": false,
-    "iconInTitleEnabled": false,
-    "iconInTitlePosition": "above",
-    "iconInFrontmatterEnabled": false,
+    "iconInTabsEnabled": true,
+    "iconInTitleEnabled": true,
+    "iconInTitlePosition": "inline",
+    "iconInFrontmatterEnabled": true,
     "iconInFrontmatterFieldName": "icon",
     "iconColorInFrontmatterFieldName": "iconColor",
     "iconsBackgroundCheckEnabled": false,
@@ -27,5 +32,13 @@
     "lucideIconPackType": "native",
     "debugMode": false,
     "useInternalPlugins": false
+  },
+  "0 - Notes/OSI Model.md": "SiCisco",
+  "0 - Notes/Prisma SD-WAN®.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "Orange"
+  },
+  "Homepage.md": {
+    "iconName": "LiHome"
   }
 }
