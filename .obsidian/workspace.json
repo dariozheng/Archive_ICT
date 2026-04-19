@@ -43,12 +43,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 - Templates/Notes/Networking Template.md",
+                "file": "0 - Notes/OSI Model.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Networking Template"
+              "title": "OSI Model"
             }
           }
         ],
@@ -252,6 +252,8 @@
   },
   "active": "9aef9a31ce97a6f0",
   "lastOpenFiles": [
+    "0 - Notes/Windows Management Instrumentation.md",
+    "3 - Templates/Notes/Networking Template.md",
     "3 - Templates/Notes/Security Template.md",
     "3 - Templates/Notes/Hardware Template.md",
     "3 - Templates/Notes/Codes/Link to Glossary.md",
@@ -281,8 +283,6 @@
     "0 - Notes/Network Scanning.md",
     "0 - Notes/Unauthorized Packet Sniffing.md",
     "0 - Notes/Bots and Botnets.md",
-    "0 - Notes/IP Spoofing.md",
-    "0 - Notes/Distributed Denial-of-Service (DDoS).md",
     "1 - Excalidraw",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",

@@ -176,19 +176,64 @@
     "iconName": "LiNotebookText",
     "iconColor": "#d54894"
   },
-  "2 - Categories/Topics/Microsoft": "SiWindows",
-  "2 - Categories/Topics/Networking": "FasNetworkWired",
-  "2 - Categories/Topics/Hardware": "FasComputer",
-  "2 - Categories/Topics/Cloud Computing": "FasCloud",
-  "2 - Categories/Topics/Security": "LiLock",
-  "2 - Categories/Topics": "FasObjectUngroup",
-  "3 - Templates/Bases": "LiDatabase",
-  "3 - Templates/Bases/Topic": "FasObjectUngroup",
-  "3 - Templates/Bases/Topic/Cloud Computing": "FasCloud",
-  "3 - Templates/Bases/Topic/Hardware": "FasComputer",
-  "3 - Templates/Bases/Topic/Microsoft": "SiMicrosoft",
-  "3 - Templates/Bases/Topic/Networking": "FasNetworkWired",
-  "3 - Templates/Bases/Topic/Security": "LiLock",
-  "3 - Templates/Notes": "LiNotepadText",
-  "3 - Templates/Notes/Codes": "FasCode"
+  "2 - Categories/Topics/Microsoft": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078d4"
+  },
+  "2 - Categories/Topics/Networking": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Hardware": {
+    "iconName": "FasComputer",
+    "iconColor": "#5541e6"
+  },
+  "2 - Categories/Topics/Cloud Computing": {
+    "iconName": "FasCloud",
+    "iconColor": "#68adee"
+  },
+  "2 - Categories/Topics/Security": {
+    "iconName": "LiLock",
+    "iconColor": "#e95a2b"
+  },
+  "2 - Categories/Topics": {
+    "iconName": "FasObjectUngroup",
+    "iconColor": "#8b2d2d"
+  },
+  "3 - Templates/Bases": {
+    "iconName": "LiDatabase",
+    "iconColor": "#1f1bee"
+  },
+  "3 - Templates/Bases/Topic": {
+    "iconName": "FasObjectUngroup",
+    "iconColor": "#8b2d2d"
+  },
+  "3 - Templates/Bases/Topic/Cloud Computing": {
+    "iconName": "FasCloud",
+    "iconColor": "#68adee"
+  },
+  "3 - Templates/Bases/Topic/Hardware": {
+    "iconName": "FasComputer",
+    "iconColor": "#5541e6"
+  },
+  "3 - Templates/Bases/Topic/Microsoft": {
+    "iconName": "SiMicrosoft",
+    "iconColor": "#0078d4"
+  },
+  "3 - Templates/Bases/Topic/Networking": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "3 - Templates/Bases/Topic/Security": {
+    "iconName": "LiLock",
+    "iconColor": "#e95a2b"
+  },
+  "3 - Templates/Notes": {
+    "iconName": "LiNotepadText",
+    "iconColor": "#d54894"
+  },
+  "3 - Templates/Notes/Codes": {
+    "iconName": "FasCode",
+    "iconColor": "#3aaddf"
+  }
 }
