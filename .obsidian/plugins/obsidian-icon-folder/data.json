@@ -6,10 +6,10 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "FasUserSecret",
-      "SiWindows",
-      "FasNetworkWired",
-      "LiHome"
+      "LiExcalidrawIcon",
+      "SiExcalidraw",
+      "LiBookA",
+      "FasUserSecret"
     ],
     "recentlyUsedIconsSize": 4,
     "rules": [],
@@ -145,5 +145,7 @@
   "0 - Notes/Network Scanning.md": {
     "iconName": "FasUserSecret",
     "iconColor": "#000000"
-  }
+  },
+  "0 - Notes/Glossaries": "LiBookA",
+  "1 - Excalidraw": "SiExcalidraw"
 }
