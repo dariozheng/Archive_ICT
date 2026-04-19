@@ -29,16 +29,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Network Scanning.md",
+                "file": "0 - Notes/Man-in-the-Middle Attacks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Network Scanning"
+              "title": "Man-in-the-Middle Attacks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -236,17 +235,17 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "0303821ce9779b17",
   "lastOpenFiles": [
     "0 - Notes/Man-in-the-Middle Attacks.md",
-    "Homepage.md",
-    "0 - Notes/Unauthorized Packet Sniffing.md",
     "0 - Notes/Network Scanning.md",
+    "0 - Notes/Unauthorized Packet Sniffing.md",
+    "0 - Notes/Bots and Botnets.md",
+    "Homepage.md",
     "0 - Notes/IP Spoofing.md",
     "0 - Notes/Distributed Denial-of-Service (DDoS).md",
     "0 - Notes/Buffer Overflow Attack.md",
     "0 - Notes/Denial-of-Service (DoS).md",
-    "0 - Notes/Bots and Botnets.md",
     "0 - Notes/Common Information Model.md",
     "0 - Notes/Web-Based Enterprise Management.md",
     "0 - Notes/OSI Model.md",
