@@ -23,19 +23,35 @@
           {
             "id": "596257e6778764e2",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/OSI Model.md",
+                "file": "Homepage.md",
+                "mode": "source",
+                "source": false
+              },
+              "pinned": true,
+              "icon": "lucide-file",
+              "title": "Homepage"
+            }
+          },
+          {
+            "id": "15a80a392c05e635",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Homepage.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "OSI Model"
+              "title": "Homepage"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -229,19 +245,21 @@
       "obsidian-git:Open Git source control": false,
       "templater-obsidian:Templater": false,
       "table-editor-obsidian:Advanced Tables Toolbar": false,
-      "obsidian-excalidraw-plugin:New drawing": false
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "homepage:Open homepage": false
     }
   },
-  "active": "596257e6778764e2",
+  "active": "15a80a392c05e635",
   "lastOpenFiles": [
-    "0 - Notes/Prisma SD-WAN®.md",
+    "README.md",
+    "0 - Notes/Prisma Access.md",
+    "Homepage.md",
     "0 - Notes/OSI Model.md",
+    "0 - Notes/Prisma SD-WAN®.md",
     "0 - Notes/Glossaries/Cloud Computing Glossary.md",
     "0 - Notes/Glossaries/Networking Glossary.md",
     "0 - Notes/Glossaries/Security Glossary.md",
-    "README.md",
     "Excalidraw/Drawing 2026-04-19 20.38.11.excalidraw.md",
-    "0 - Notes/Prisma Access.md",
     "0 - Notes/Prisma SASE.md",
     "1 - Excalidraw",
     "2 - Categories/Networking.md",
@@ -260,7 +278,6 @@
     "0 - Notes/Certificates - Palo Alto.md",
     "Notes/Sessions - Palo Alto.md",
     "0 - Notes/Site-to-Site VPN - Palo Alto.md",
-    "0 - Notes/Autonomous Digital Experience Management.md",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
     "3 - Templates/Bases/Topic/Security/Security General.base",
