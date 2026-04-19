@@ -6,10 +6,10 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiHome",
+      "LiNotebookText",
       "LiNotebookTabs",
-      "LiImages",
-      "LiLayoutTemplate",
-      "FasLayerGroup"
+      "LiImages"
     ],
     "recentlyUsedIconsSize": 4,
     "rules": [],
@@ -41,7 +41,10 @@
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
   },
-  "Homepage.md": "LiHome",
+  "Homepage.md": {
+    "iconName": "LiHome",
+    "iconColor": "#FFA500"
+  },
   "0 - Notes/Prisma Access.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
@@ -147,9 +150,24 @@
     "iconColor": "#000000"
   },
   "0 - Notes/Glossaries": "LiBookA",
-  "1 - Excalidraw": "SiExcalidraw",
-  "2 - Categories": "FasLayerGroup",
-  "3 - Templates": "LiLayoutTemplate",
-  "attachments": "LiImages",
-  "0 - Notes": "LiNotebookTabs"
+  "1 - Excalidraw": {
+    "iconName": "SiExcalidraw",
+    "iconColor": "#6965db"
+  },
+  "2 - Categories": {
+    "iconName": "FasLayerGroup",
+    "iconColor": "#1475db"
+  },
+  "3 - Templates": {
+    "iconName": "LiLayoutTemplate",
+    "iconColor": "#3cd7bd"
+  },
+  "attachments": {
+    "iconName": "LiImages",
+    "iconColor": "#f2c936"
+  },
+  "0 - Notes": {
+    "iconName": "LiNotebookText",
+    "iconColor": "#d54894"
+  }
 }

@@ -1,5 +1,6 @@
 ---
 icon: LiHome
+iconColor: "#FFA500"
 ---
 
 | Icons                | Representation     |
