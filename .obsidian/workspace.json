@@ -37,7 +37,8 @@
               "title": "Prisma SD-WAN®"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -172,13 +173,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md",
+                "file": "0 - Notes/Prisma SD-WAN®.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of README"
+              "title": "Outline of Prisma SD-WAN®"
             }
           },
           {
@@ -237,8 +238,8 @@
   },
   "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
-    "0 - Notes/Prisma SD-WAN®.md",
     "Homepage.md",
+    "0 - Notes/Prisma SD-WAN®.md",
     "0 - Notes/OSI Model.md",
     "0 - Notes/NGFW - Palo Alto Networks.md",
     "0 - Notes/Prisma Access.md",
