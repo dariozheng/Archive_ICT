@@ -11,7 +11,7 @@ tags:
 
 <strong>Prisma SD-WAN</strong> controls <strong>network application performance</strong> based on <strong>application-performance service-level agreements</strong> (<strong>SLAs</strong>) and business priorities.
 
-Prisma SD-WAN is a <strong>Generation 2</strong> (<strong>GEN2</strong>) <strong>SD-WAN solution</strong> that provides [[security glossary#end-to-end application performance|end-to-end application performance]] through application identification, visibility, and [[networking glossary#service-level assurance|service-level assurance]]. 
+Prisma SD-WAN is a <strong>Generation 2</strong> (<strong>GEN2</strong>) <strong>SD-WAN solution</strong> that provides [[Security Glossary#end-to-end application performance|end-to-end application performance]] through application identification, visibility, and [[Networking Glossary#service-level assurance|service-level assurance]]. 
 
 <mark style="background: #FFF3A3A6;">In addition to monitoring packet-based metrics, Prisma SD-WAN also gathers data on the performance of individual <strong>applications</strong></mark>.
 <mark style="background: #CACFD9A6;">Prisma SD-WAN collects data on metrics such as <strong>app response time</strong>, <strong>app transaction time</strong>, and <strong>app reachability</strong>, as well as <strong>mean opinion score</strong> (<strong>MOS</strong>) for voice</mark>. 
@@ -59,7 +59,7 @@ At this point, the customer can claim the device via the controller. <mark style
 
 Once the device claim process is complete, and the device is bound to a site, <mark style="background: #ABF7F7A6;">the device will begin establishing IPSec VPN tunnels to authorized devices</mark>. <mark style="background: #ADCCFFA6;">The controller will send 3 encrypted shared secrets to the respective endpoints</mark>.
 Each shared secret has a validity period of one day using a standard wall clock model. 
-The ION endpoints will then exchange [[security glossary#nonces|nonces]] over an encrypted control channel and <mark style="background: #D2B3FFA6;">derive unique tunnel-specific session keys as per the diagram</mark>.
+The ION endpoints will then exchange [[Security Glossary#nonces|nonces]] over an encrypted control channel and <mark style="background: #D2B3FFA6;">derive unique tunnel-specific session keys as per the diagram</mark>.
 The session keys are re-negotiated every hour by the VPN endpoints. 
 This re-negotiation does NOT require active participation by the controller, enabling both extremely high VPN re-key scale and the ability to re-key tunnels in the event that one or more endpoints loses connectivity to the controller. 
 In the case that connectivity to controller is lost, Prisma SD-WAN devices can continue to secure VPNs with hourly key rotation, for a period of three days (by default), using the pre-populated shared secrets from the controller. 
@@ -109,7 +109,7 @@ Below is the list of functions that a data center site performs.
 - <mark style="background: #FFF3A3A6;">Supports BGP and OSPF to peer with DC infrastructure</mark>
 - Preserves Flow symmetry
 ## Branch Site
-<mark style="background: #FFB8EBA6;">A typical Prisma SD-WAN branch site has at least two transports</mark>, <mark style="background: #FF5582A6;">both of which terminate on the ION device</mark>, assuming an [[networking glossary#ethernet handoff|ethernet handoff]] from the provider. 
+<mark style="background: #FFB8EBA6;">A typical Prisma SD-WAN branch site has at least two transports</mark>, <mark style="background: #FF5582A6;">both of which terminate on the ION device</mark>, assuming an [[Networking Glossary#ethernet handoff|ethernet handoff]] from the provider. 
 
 <mark style="background: #FFB86CA6;"><strong>The Prisma SD-WAN branch ION device</strong> is typically the <strong>gateway</strong> for the branch</mark> and <mark style="background: #FFF3A3A6;">can be connected to an L2 or L3 switch for local access network (LAN) connectivity</mark>. <mark style="background: #BBFABBA6;"><strong>Branch sites</strong> automatically establish zero-touch Secure Fabric Links (Prisma SD-WAN virtual private network (VPN)) to all <strong>DC sites</strong> (a hub-and-spoke design) and to all <strong>Branch Gateway sites</strong> in the same Domain</mark>. Full or partial static mesh topologies are also supported (not dynamic mesh). 
 
@@ -658,7 +658,7 @@ Prisma SD-WAN uses <strong>Dynamic Path Selection</strong> and uses the followin
 - <mark style="background: #D2B3FFA6;">Address Layer 7 app reachability issues</mark>
 - <mark style="background: #CACFD9A6;">Account for Layer 3 reachability and availability</mark>
 - Support cloud, media, and enterprise encrypted and custom apps
-- Guarantee [[security glossary#flow symmetry|flow symmetry]]
+- Guarantee [[Security Glossary#flow symmetry|flow symmetry]]
 - Be able to support “single ended” direct Internet paths
 - <mark style="background: #FFB8EBA6;">Allow third-party service transit</mark> with performance monitoring
 - <mark style="background: #FF5582A6;">Allow explicit data center transit</mark>
@@ -709,7 +709,7 @@ The process of configuring <strong>standard virtual private network (VPN) servic
 Prisma SD-WAN uses mapping of <strong>standard VPN services</strong> and <strong>Prisma SD-WAN data centers</strong> to allow flexibility when policy rules are created, while accounting for uniqueness across sites. <mark style="background: #FF5582A6;"><strong>Service</strong> and <strong>DC group</strong> labels can be used in Path policy rules</mark> <mark style="background: #FFB86CA6;">to express intent to allow or require traffic to transit through a <strong>Prisma SD-WAN data center</strong> or a <strong>cloud security service</strong> such as <strong>Palo Alto Networks Prisma Access</strong> for Networks</mark>.
 ![[Standard VPN Service Groups.png]]
 # Transport Quality Metrics
-<mark style="background: #FFB8EBA6;"><strong>Link quality metrics (LQM)</strong> probes are sent periodically between <strong>Instant-On Network (ION) devices</strong></mark> and measure the [[networking glossary#loss|loss]], [[networking glossary#latency|latency]], and [[networking glossary#jitter|jitter]] on that path. <mark style="background: #FF5582A6;">These probes are sent from branch  IONs to hub IONs</mark>. <mark style="background: #FFB86CA6;">The probes are sent on all the overlay <strong>virtual private network (VPN) tunnels</strong> (public and private) and on <strong>the private WAN underlay path</strong></mark>.
+<mark style="background: #FFB8EBA6;"><strong>Link quality metrics (LQM)</strong> probes are sent periodically between <strong>Instant-On Network (ION) devices</strong></mark> and measure the [[Networking Glossary#loss|loss]], [[Networking Glossary#latency|latency]], and [[Networking Glossary#jitter|jitter]] on that path. <mark style="background: #FF5582A6;">These probes are sent from branch  IONs to hub IONs</mark>. <mark style="background: #FFB86CA6;">The probes are sent on all the overlay <strong>virtual private network (VPN) tunnels</strong> (public and private) and on <strong>the private WAN underlay path</strong></mark>.
 
 <mark style="background: #FFF3A3A6;"><strong>LQM metrics</strong> for each path are measured in both directions</mark>, <mark style="background: #BBFABBA6;">giving you both ingress and egress metrics from the branch perspective</mark>. 
 
