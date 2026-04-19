@@ -8,6 +8,8 @@ tags:
 aliases:
   - SNI
   - Server Name Indication
+icon: FasNetworkWired
+iconColor: "#003791"
 ---
 <mark style="background: #FFB86CA6;"><strong>Server Name Indication</strong> (<strong>SNI</strong>) is an extension</mark> to the <strong>Transport Layer Security</strong> (<strong>TLS</strong>) computer networking protocol <mark style="background: #FFB86CA6;">by which a</mark> <mark style="background: #FF5582A6;">client</mark> <mark style="background: #ADCCFFA6;">indicates</mark> <mark style="background: #D2B3FFA6;">which hostname</mark> <mark style="background: #FF5582A6;">it</mark> <mark style="background: #ADCCFFA6;">is attempting to connect to</mark> <mark style="background: #CACFD9A6;">at the start of the handshaking process</mark>.
 

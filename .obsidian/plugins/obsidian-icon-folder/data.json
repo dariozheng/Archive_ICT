@@ -6,10 +6,10 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWindows",
       "FasNetworkWired",
       "LiHome",
-      "SiPaloaltonetworks",
-      "SiPaloAltoNetworks"
+      "SiPaloaltonetworks"
     ],
     "recentlyUsedIconsSize": 4,
     "rules": [],
@@ -20,8 +20,8 @@
       "left": 0
     },
     "iconInTabsEnabled": true,
-    "iconInTitleEnabled": true,
-    "iconInTitlePosition": "inline",
+    "iconInTitleEnabled": false,
+    "iconInTitlePosition": "above",
     "iconInFrontmatterEnabled": true,
     "iconInFrontmatterFieldName": "icon",
     "iconColorInFrontmatterFieldName": "iconColor",
@@ -43,5 +43,77 @@
   },
   "Homepage.md": {
     "iconName": "LiHome"
+  },
+  "0 - Notes/Prisma Access.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/NGFW - Palo Alto Networks.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Certificates - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Prisma SASE.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Site-to-Site VPN - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Autonomous Digital Experience Management.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Cloud Access Security Broker.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/User-ID™.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Device-ID.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Dynamic User Groups - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Data Redistribution - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/App-ID™.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Crawler.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Windows Remote Management Protocol.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
+  },
+  "0 - Notes/Microsoft Remote Procedure Call.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
+  },
+  "0 - Notes/Windows Management Instrumentation.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
+  },
+  "0 - Notes/Backhaul.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Server Name Indication.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
   }
 }

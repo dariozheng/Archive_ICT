@@ -5,6 +5,8 @@ topic@security:
 tags:
 aliases:
   - pki
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 It is recommended that when you generate a trust certificate, it should be a <strong>Subordinate certificate authority</strong> (CA) of your PKI. 
 

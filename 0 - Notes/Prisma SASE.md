@@ -7,6 +7,8 @@ tags:
   - palo_alto/sase
 aliases:
   - SASE
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 ![[Prisma SASE Overview.png]]
 <mark style="background: #FFB8EBA6;"><strong>Prisma SASE</strong> is a cloud-native architecture</mark> <mark style="background: #FF5582A6;">that unifies <strong>networking</strong> and <strong>security</strong> as a <strong>service</strong> (SaaS) functions into a single <strong>platform</strong></mark>.

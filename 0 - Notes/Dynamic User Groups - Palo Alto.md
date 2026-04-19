@@ -8,6 +8,8 @@ tags:
   - tobecompleted
 aliases:
   - DUGs
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 <mark style="background: #FFB8EBA6;"><strong>DUGs</strong> are groups where membership is based on tags</mark>.
 

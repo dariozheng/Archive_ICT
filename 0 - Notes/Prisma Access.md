@@ -6,6 +6,8 @@ topic@security:
 tags:
   - palo_alto/sase
   - tobecompleted
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <strong><mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark></strong> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust Network Access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">SWG</mark>, <strong>CASB</strong>, and <mark style="background: #BBFABBA6;">DLP</mark> for <mark style="background: #ABF7F7A6;">remote users, branches, and applications</mark>. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management (ADEM). 
 

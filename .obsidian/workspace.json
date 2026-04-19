@@ -24,17 +24,17 @@
             }
           },
           {
-            "id": "9c16cedbe1e3bf49",
+            "id": "c34aaf29d7148286",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/OSI Model.md",
+                "file": "0 - Notes/Unauthorized Packet Sniffing.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "OSI Model"
+              "title": "Unauthorized Packet Sniffing"
             }
           }
         ],
@@ -236,35 +236,35 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "9c16cedbe1e3bf49",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
-    "0 - Notes/Prisma SD-WAN®.md",
+    "0 - Notes/Common Information Model.md",
+    "0 - Notes/Server Name Indication.md",
+    "0 - Notes/Web-Based Enterprise Management.md",
+    "0 - Notes/Backhaul.md",
     "0 - Notes/OSI Model.md",
-    "Homepage.md",
+    "0 - Notes/Windows Management Instrumentation.md",
+    "0 - Notes/Microsoft Remote Procedure Call.md",
+    "0 - Notes/Windows Remote Management Protocol.md",
+    "0 - Notes/Prisma SASE.md",
+    "0 - Notes/Cloud Access Security Broker.md",
+    "0 - Notes/Data Redistribution - Palo Alto.md",
+    "0 - Notes/Crawler.md",
+    "0 - Notes/App-ID™.md",
+    "0 - Notes/Dynamic User Groups - Palo Alto.md",
+    "0 - Notes/Device-ID.md",
+    "0 - Notes/User-ID™.md",
+    "0 - Notes/Autonomous Digital Experience Management.md",
+    "0 - Notes/Site-to-Site VPN - Palo Alto.md",
+    "0 - Notes/Certificates - Palo Alto.md",
     "0 - Notes/NGFW - Palo Alto Networks.md",
     "0 - Notes/Prisma Access.md",
+    "0 - Notes/Prisma SD-WAN®.md",
+    "Homepage.md",
     "2 - Categories/Microsoft.md",
     "README.md",
     "0 - Notes/Glossaries/Cloud Computing Glossary.md",
-    "0 - Notes/Glossaries/Networking Glossary.md",
-    "0 - Notes/Glossaries/Security Glossary.md",
-    "Excalidraw/Drawing 2026-04-19 20.38.11.excalidraw.md",
-    "0 - Notes/Prisma SASE.md",
     "1 - Excalidraw",
-    "2 - Categories/Networking.md",
-    "2 - Categories/Security.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
-    "2 - Categories/Systems.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
-    "2 - Categories/Topics/Security/Security General.md",
-    "2 - Categories/Topics/Security/Network-Based Attacks.md",
-    "2 - Categories/Topics/Security/Palo Alto Networks.md",
-    "0 - Notes/Server Name Indication.md",
-    "0 - Notes/Crawler.md",
-    "0 - Notes/Certificates - Palo Alto.md",
-    "Notes/Sessions - Palo Alto.md",
-    "0 - Notes/Site-to-Site VPN - Palo Alto.md",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
     "3 - Templates/Bases/Topic/Security/Security General.base",

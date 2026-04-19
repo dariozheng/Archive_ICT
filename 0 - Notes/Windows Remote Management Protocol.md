@@ -6,6 +6,8 @@ product:
 tags:
 aliases:
   - WinRM
+icon: SiWindows
+iconColor: "#0078D4"
 ---
 Windows Remote Management (WinRM) is the Microsoft implementation of the WS-Management protocol, which is a standard Simple Object Access Protocol (SOAP)-based, firewall-friendly protocol that allows interoperation between hardware and operating systems from different vendors.
 

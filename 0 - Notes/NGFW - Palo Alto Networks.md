@@ -9,6 +9,8 @@ tags:
   - tobecompleted
 aliases:
   - Next-Generation Firewall
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 Palo Alto Networks firewalls are built with a <mark style="background: #FFB8EBA6;">dedicated <strong>out-of-band Ethernet network management interface</strong></mark> labeled <mark style="background: #FFB8EBA6;"><strong>MGT</strong></mark>. 
 

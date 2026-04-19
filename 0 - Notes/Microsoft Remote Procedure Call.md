@@ -8,6 +8,8 @@ aliases:
   - Microsoft RPC
   - MSRPC
   - MS-RPC
+icon: SiWindows
+iconColor: "#0078D4"
 ---
 Microsoft Remote Procedure Call (RPC) defines a powerful technology for creating distributed client/server programs. 
 

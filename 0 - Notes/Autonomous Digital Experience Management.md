@@ -8,6 +8,8 @@ tags:
   - tobecompleted
 aliases:
   - ADEM
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 <strong>Autonomous Digital Experience Management (ADEM)</strong> is a <strong>service</strong> that provides <strong>native end-to-end visibility</strong> and <strong>performance metrics</strong> for real application traffic in your <strong>secure access service edge (SASE) environment</strong>. 
 

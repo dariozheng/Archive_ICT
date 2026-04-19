@@ -5,6 +5,8 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 <mark style="background: #FFB8EBA6;"><strong>Data redistribution</strong> allows <strong>IP-to-user mappings</strong> from one firewall to be shared with another firewall</mark>. 
 

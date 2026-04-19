@@ -6,6 +6,8 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - "#tobecompleted"
+icon: SiPaloaltonetworks
+iconColor: "#F04E23"
 ---
 <strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
