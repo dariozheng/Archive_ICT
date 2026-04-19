@@ -29,12 +29,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Prisma SD-WAN®.md",
+                "file": "0 - Notes/OSI Model.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Prisma SD-WAN®"
+              "title": "OSI Model"
             }
           }
         ],
@@ -173,13 +173,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Prisma SD-WAN®.md",
+                "file": "0 - Notes/OSI Model.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Prisma SD-WAN®"
+              "title": "Outline of OSI Model"
             }
           },
           {
@@ -236,11 +236,11 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "9c16cedbe1e3bf49",
   "lastOpenFiles": [
-    "Homepage.md",
     "0 - Notes/Prisma SD-WAN®.md",
     "0 - Notes/OSI Model.md",
+    "Homepage.md",
     "0 - Notes/NGFW - Palo Alto Networks.md",
     "0 - Notes/Prisma Access.md",
     "2 - Categories/Microsoft.md",

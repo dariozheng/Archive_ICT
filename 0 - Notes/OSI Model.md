@@ -5,6 +5,6 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - ccnp/encor
-icon: SiCisco
+icon: FasNetworkWired
+iconColor: "#1BA0D7"
 ---
-:SiPaloaltonetworks:

@@ -6,10 +6,10 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "FasNetworkWired",
       "LiHome",
       "SiPaloaltonetworks",
-      "SiPaloAltoNetworks",
-      "SiCisco"
+      "SiPaloAltoNetworks"
     ],
     "recentlyUsedIconsSize": 4,
     "rules": [],
@@ -33,10 +33,13 @@
     "debugMode": false,
     "useInternalPlugins": false
   },
-  "0 - Notes/OSI Model.md": "SiCisco",
+  "0 - Notes/OSI Model.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#1BA0D7"
+  },
   "0 - Notes/Prisma SD-WAN®.md": {
     "iconName": "SiPaloaltonetworks",
-    "iconColor": "Orange"
+    "iconColor": "#F04E23"
   },
   "Homepage.md": {
     "iconName": "LiHome"
