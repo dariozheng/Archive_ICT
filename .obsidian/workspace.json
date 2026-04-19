@@ -41,14 +41,13 @@
             "id": "9aef9a31ce97a6f0",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "bases",
               "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": false
+                "file": "3 - Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
+                "viewName": "Table"
               },
-              "icon": "lucide-file",
-              "title": "README"
+              "icon": "lucide-table",
+              "title": "Cloud Computing General"
             }
           }
         ],
@@ -250,11 +249,19 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "9aef9a31ce97a6f0",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "3 - Templates/Bases/Networking.base",
+    "3 - Templates/Bases/Systems.base",
+    "3 - Templates/Bases/Microsoft.base",
+    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "2 - Categories/Topics/Microsoft/Windows.md",
+    "2 - Categories/Microsoft.md",
+    "2 - Categories/Security.md",
     "Homepage.md",
-    "0 - Notes/Buffer Overflow Attack.md",
     "README.md",
+    "0 - Notes/Buffer Overflow Attack.md",
     "0 - Notes/Man-in-the-Middle Attacks.md",
     "0 - Notes/Network Scanning.md",
     "0 - Notes/Unauthorized Packet Sniffing.md",
@@ -272,20 +279,11 @@
     "0 - Notes/Cloud Access Security Broker.md",
     "0 - Notes/Dynamic User Groups - Palo Alto.md",
     "0 - Notes/Backhaul.md",
-    "0 - Notes/Microsoft Remote Procedure Call.md",
-    "0 - Notes/Crawler.md",
-    "0 - Notes/Windows Remote Management Protocol.md",
-    "0 - Notes/Data Redistribution - Palo Alto.md",
-    "0 - Notes/Prisma SASE.md",
-    "0 - Notes/Prisma SD-WAN®.md",
     "1 - Excalidraw",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
     "3 - Templates/Bases/Topic/Security/Security General.base",
     "3 - Templates/Bases/Security.base",
-    "3 - Templates/Bases/Microsoft.base",
-    "3 - Templates/Bases/Systems.base",
-    "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Cloud Computing.base",
     "3 - Templates/Bases/Hardware.base",
     "attachments/A Security Rule Is Referencing a Profile Group.png",

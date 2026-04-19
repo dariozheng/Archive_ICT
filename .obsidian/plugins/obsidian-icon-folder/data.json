@@ -6,12 +6,17 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "LiHome",
-      "LiNotebookText",
-      "LiNotebookTabs",
-      "LiImages"
+      "LiNotepadText",
+      "LiLock",
+      "FasNetworkWired",
+      "SiMicrosoft",
+      "FasComputer",
+      "FasCloud",
+      "LiDatabase",
+      "FasObjectUngroup",
+      "FarObjectGroup"
     ],
-    "recentlyUsedIconsSize": 4,
+    "recentlyUsedIconsSize": 10,
     "rules": [],
     "extraMargin": {
       "top": 0,
@@ -169,5 +174,19 @@
   "0 - Notes": {
     "iconName": "LiNotebookText",
     "iconColor": "#d54894"
-  }
+  },
+  "2 - Categories/Topics/Microsoft": "SiWindows",
+  "2 - Categories/Topics/Networking": "FasNetworkWired",
+  "2 - Categories/Topics/Hardware": "FasComputer",
+  "2 - Categories/Topics/Cloud Computing": "FasCloud",
+  "2 - Categories/Topics/Security": "LiLock",
+  "2 - Categories/Topics": "FasObjectUngroup",
+  "3 - Templates/Bases": "LiDatabase",
+  "3 - Templates/Bases/Topic": "FasObjectUngroup",
+  "3 - Templates/Bases/Topic/Cloud Computing": "FasCloud",
+  "3 - Templates/Bases/Topic/Hardware": "FasComputer",
+  "3 - Templates/Bases/Topic/Microsoft": "SiMicrosoft",
+  "3 - Templates/Bases/Topic/Networking": "FasNetworkWired",
+  "3 - Templates/Bases/Topic/Security": "LiLock",
+  "3 - Templates/Notes": "LiNotepadText"
 }
