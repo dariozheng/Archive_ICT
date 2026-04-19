@@ -6,6 +6,5 @@ topic@networking:
 tags:
   - ccnp/encor
 icon: FasNetworkWired
-iconColor: "#1BA0D7"
+iconColor: "#003791"
 ---
-:fas
