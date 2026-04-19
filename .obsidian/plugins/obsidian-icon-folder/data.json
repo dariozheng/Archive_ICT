@@ -6,10 +6,10 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "FasUserSecret",
       "SiWindows",
       "FasNetworkWired",
-      "LiHome",
-      "SiPaloaltonetworks"
+      "LiHome"
     ],
     "recentlyUsedIconsSize": 4,
     "rules": [],
@@ -19,10 +19,10 @@
       "bottom": 0,
       "left": 0
     },
-    "iconInTabsEnabled": false,
+    "iconInTabsEnabled": true,
     "iconInTitleEnabled": false,
     "iconInTitlePosition": "above",
-    "iconInFrontmatterEnabled": false,
+    "iconInFrontmatterEnabled": true,
     "iconInFrontmatterFieldName": "icon",
     "iconColorInFrontmatterFieldName": "iconColor",
     "iconsBackgroundCheckEnabled": false,
@@ -113,5 +113,37 @@
   "0 - Notes/Server Name Indication.md": {
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
+  },
+  "0 - Notes/Unauthorized Packet Sniffing.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Bots and Botnets.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Denial-of-Service (DoS).md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Buffer Overflow Attack.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Distributed Denial-of-Service (DDoS).md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/IP Spoofing.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Man-in-the-Middle Attacks.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Network Scanning.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
   }
 }

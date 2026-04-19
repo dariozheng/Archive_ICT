@@ -5,6 +5,8 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/exploit
+icon: FasUserSecret
+iconColor: "#000000"
 ---
 IP Spoofing is an attack vector, a technique employed in various network-based attacks.
 

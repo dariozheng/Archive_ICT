@@ -5,6 +5,8 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/c2
+icon: FasUserSecret
+iconColor: "#000000"
 ---
 <mark style="background: #FFB8EBA6;">Bots (or zombies) are individual endpoints infected with advanced malware</mark> <mark style="background: #FF5582A6;">that enables an attacker <strong>to control compromised endpoints</strong></mark>. 
 

@@ -5,6 +5,8 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/reconnaissance
+icon: FasUserSecret
+iconColor: "#000000"
 ---
 Malicious packet sniffing, or eavesdropping, is a reconnaissance technique where an attacker captures the packets across a wired or wireless connection.
 

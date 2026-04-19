@@ -5,6 +5,8 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/attack
+icon: FasUserSecret
+iconColor: "#000000"
 ---
 This attack's main purpose is to allow an attacker to intercept communications so that the attacker can actually see the traffic and steal or manipulate it.
 

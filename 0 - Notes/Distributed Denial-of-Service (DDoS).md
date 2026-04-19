@@ -5,6 +5,8 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/attack
+icon: FasUserSecret
+iconColor: "#000000"
 ---
 Another type of DoS attack is the distributed denial-of-service (DDoS) attack that employs large numbers of attacking computers to overwhelm the target with bogus traffic.
 

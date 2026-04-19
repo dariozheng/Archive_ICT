@@ -5,6 +5,8 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/reconnaissance
+icon: FasUserSecret
+iconColor: "#000000"
 ---
 Network scanning is part of the reconnaissance phase of a cyber attack. With the help of <strong>network scanning tools</strong>, attackers can easily scan networks to find vulnerabilities inside them.
 

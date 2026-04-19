@@ -5,6 +5,8 @@ topic@security:
   - "[[Network-Based Attacks]]"
 tags:
   - security/attack
+icon: FasUserSecret
+iconColor: "#000000"
 ---
 A <strong>denial-of-service (DoS)</strong> attack <mark style="background: #ABF7F7A6;">targets a system to prevent network communication</mark> or <mark style="background: #FFF3A3A6;">it targets an entire organization to prevent or shut down outgoing or incoming traffic to a machine or to certain network services</mark>, such as an organization’s website access or email services.
 
