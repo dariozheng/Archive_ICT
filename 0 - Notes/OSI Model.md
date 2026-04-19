@@ -8,3 +8,4 @@ tags:
 icon: FasNetworkWired
 iconColor: "#1BA0D7"
 ---
+:fas
