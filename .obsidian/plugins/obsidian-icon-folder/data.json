@@ -155,7 +155,10 @@
     "iconName": "FasUserSecret",
     "iconColor": "#000000"
   },
-  "0 - Notes/Glossaries": "LiBookA",
+  "0 - Notes/Glossaries": {
+    "iconName": "LiBookA",
+    "iconColor": "#e51010"
+  },
   "1 - Excalidraw": {
     "iconName": "SiExcalidraw",
     "iconColor": "#6965db"
