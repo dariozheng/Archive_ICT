@@ -16,10 +16,12 @@ views:
         - '!file.name.contains("Template")'
     order:
       - file.name
-      - modified
       - topic@security
     sort:
+      - property: icon
+        direction: DESC
       - property: section
         direction: ASC
     columnSize:
-      note.modified: 117
+      file.name: 503
+      note.topic@security: 177

@@ -6,6 +6,7 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "FasCode",
       "LiNotepadText",
       "LiLock",
       "FasNetworkWired",
@@ -188,5 +189,6 @@
   "3 - Templates/Bases/Topic/Microsoft": "SiMicrosoft",
   "3 - Templates/Bases/Topic/Networking": "FasNetworkWired",
   "3 - Templates/Bases/Topic/Security": "LiLock",
-  "3 - Templates/Notes": "LiNotepadText"
+  "3 - Templates/Notes": "LiNotepadText",
+  "3 - Templates/Notes/Codes": "FasCode"
 }
