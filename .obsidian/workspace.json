@@ -24,63 +24,21 @@
             }
           },
           {
-            "id": "165a307da398f0dc",
+            "id": "447ac3f4091d8386",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Buffer Overflow Attack.md",
+                "file": "Untitled.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Buffer Overflow Attack"
-            }
-          },
-          {
-            "id": "9aef9a31ce97a6f0",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/OSI Model.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OSI Model"
-            }
-          },
-          {
-            "id": "b68afcd7cca749e7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/OSI Model.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OSI Model"
-            }
-          },
-          {
-            "id": "83e926a6420c14f6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "README"
+              "title": "Untitled"
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -278,10 +236,13 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "83e926a6420c14f6",
+  "active": "447ac3f4091d8386",
   "lastOpenFiles": [
-    "Homepage.md",
     "0 - Notes/OSI Model.md",
+    "Untitled.md",
+    "Untitled",
+    "Homepage.md",
+    "README.md",
     "0 - Notes/Windows Management Instrumentation.md",
     "3 - Templates/Notes/Networking Template.md",
     "3 - Templates/Notes/Security Template.md",
@@ -306,16 +267,13 @@
     "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Systems.base",
     "3 - Templates/Bases/Microsoft.base",
-    "README.md",
     "0 - Notes/Buffer Overflow Attack.md",
     "0 - Notes/Man-in-the-Middle Attacks.md",
     "0 - Notes/Network Scanning.md",
-    "0 - Notes/Unauthorized Packet Sniffing.md",
     "1 - Excalidraw",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
     "3 - Templates/Bases/Topic/Security/Security General.base",
-    "3 - Templates/Bases/Security.base",
     "attachments/A Security Rule Is Referencing a Profile Group.png",
     "attachments/The Security Profile Is in a Profile Group.png",
     "attachments/Data Loss Prevention.png",

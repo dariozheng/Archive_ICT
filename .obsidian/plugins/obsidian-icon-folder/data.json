@@ -6,16 +6,16 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiHome",
+      "SiWindows",
+      "SiPaloaltonetworks",
+      "FasUserSecret",
       "FasCode",
       "LiNotepadText",
       "LiLock",
       "FasNetworkWired",
       "SiMicrosoft",
-      "FasComputer",
-      "FasCloud",
-      "LiDatabase",
-      "FasObjectUngroup",
-      "FarObjectGroup"
+      "FasComputer"
     ],
     "recentlyUsedIconsSize": 10,
     "rules": [],
