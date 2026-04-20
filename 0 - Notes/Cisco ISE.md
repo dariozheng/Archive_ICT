@@ -24,4 +24,5 @@ Cisco <strong>Identity Service Engine</strong> (ISE) is a <strong>Network Access
 
 An ISE-based network access control solution has four components: <mark style="background: #FFB86CA6;"><strong>endpoints</strong></mark>, <mark style="background: #FFB8EBA6;"><strong>network devices</strong></mark>, <mark style="background: #ABF7F7A6;"><strong>Cisco ISE</strong></mark>, and <mark style="background: #FFF3A3A6;"><strong>external services</strong></mark>.
 <strong>Endpoints</strong> need <mark style="background: #BBFABBA6;">network access</mark> and the <strong>network devices</strong> provide network access to endpoints, based on instructions from <strong>ISE</strong>. 
-ISE can optionally leverage <strong>external services</strong> to understand more about the corresponding endpoints for policy decisions.
+ISE can leverage <strong>external services</strong> to understand more about the corresponding endpoints for policy decisions.
+

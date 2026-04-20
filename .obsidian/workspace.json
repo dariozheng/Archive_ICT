@@ -95,8 +95,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 224.50260543823242,
-    "collapsed": true
+    "width": 224.50260543823242
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -237,7 +236,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "798889739c72f4c0",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "Homepage.md",
     "2 - Categories/Topics/Security/Security General.md",
