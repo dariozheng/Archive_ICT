@@ -216,7 +216,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
@@ -239,9 +239,10 @@
   },
   "active": "798889739c72f4c0",
   "lastOpenFiles": [
-    "3 - Templates/Bases/Topic/Security/Security General.base",
     "2 - Categories/Topics/Security/Security General.md",
     "0 - Notes/Cisco ISE.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
+    "3 - Templates/Bases/Topic/Security/Security General.base",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
     "3 - Templates/Bases/Security.base",

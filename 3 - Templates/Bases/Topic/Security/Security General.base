@@ -5,6 +5,10 @@ properties:
     displayName: Created
   note.modified:
     displayName: Modified
+  file.ctime:
+    displayName: Created
+  file.mtime:
+    displayName: Modified
 views:
   - type: table
     name: Table
@@ -13,10 +17,11 @@ views:
         - note["topic@security"].contains(link("Security General"))
     order:
       - file.name
+      - file.mtime
     sort:
       - property: file.name
         direction: ASC
       - property: created
         direction: ASC
     columnSize:
-      note.created: 116
+      file.name: 301
