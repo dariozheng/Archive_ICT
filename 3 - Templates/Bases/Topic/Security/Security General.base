@@ -14,9 +14,9 @@ views:
     order:
       - file.name
     sort:
+      - property: file.name
+        direction: ASC
       - property: created
         direction: ASC
-      - property: file.name
-        direction: DESC
     columnSize:
       note.created: 116

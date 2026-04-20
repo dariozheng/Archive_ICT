@@ -4,7 +4,7 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-  - ccnp/encor
+  - ccnp
 icon: FasNetworkWired
 iconColor: "#003791"
 ---

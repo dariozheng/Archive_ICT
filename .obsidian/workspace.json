@@ -95,7 +95,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 224.50260543823242
+    "width": 224.50260543823242,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -173,13 +174,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/OSI Model.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of OSI Model"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -215,7 +216,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -238,16 +239,23 @@
   },
   "active": "798889739c72f4c0",
   "lastOpenFiles": [
-    "Untitled.md",
+    "3 - Templates/Bases/Topic/Security/Security General.base",
+    "2 - Categories/Topics/Security/Security General.md",
     "0 - Notes/Cisco ISE.md",
-    "Homepage.md",
-    "0 - Notes/OSI Model.md",
-    "3 - Templates/Notes/Systems Template.md",
+    "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
+    "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
+    "3 - Templates/Bases/Security.base",
+    "3 - Templates/Notes/Networking Template.md",
+    "3 - Templates/Notes/Cloud Computing Template.md",
     "3 - Templates/Notes/Microsoft Template.md",
+    "3 - Templates/Notes/Systems Template.md",
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
+    "2 - Categories/Topics/Security/Palo Alto Networks.md",
+    "0 - Notes/OSI Model.md",
+    "Untitled.md",
+    "Homepage.md",
     "3 - Templates/Notes/Security Template.md",
     "3 - Templates/Notes/Hardware Template.md",
-    "3 - Templates/Notes/Cloud Computing Template.md",
-    "3 - Templates/Notes/Networking Template.md",
     "Untitled",
     "README.md",
     "0 - Notes/Windows Management Instrumentation.md",
@@ -258,22 +266,14 @@
     "2 - Categories/Systems.md",
     "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
     "2 - Categories/Hardware.md",
-    "2 - Categories/Topics/Security/Network-Based Attacks.md",
-    "2 - Categories/Topics/Security/Security General.md",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
     "2 - Categories/Cloud Computing.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "2 - Categories/Topics/Microsoft/Windows.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
     "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Systems.base",
     "3 - Templates/Bases/Microsoft.base",
-    "1 - Excalidraw",
-    "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
-    "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
-    "3 - Templates/Bases/Topic/Security/Security General.base",
     "attachments/A Security Rule Is Referencing a Profile Group.png",
     "attachments/The Security Profile Is in a Profile Group.png",
     "attachments/Data Loss Prevention.png",
