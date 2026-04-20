@@ -26,5 +26,8 @@ An ISE-based network access control solution has four components: <mark style="b
 <strong>Endpoints</strong> need <mark style="background: #BBFABBA6;">network access</mark> and the <strong>network access devices (NAD)</strong> provide network access to endpoints, based on instructions from <strong>ISE</strong>. 
 ISE can leverage <strong>external services</strong> to understand more about the corresponding endpoints for policy decisions.
 
-The server ISE acts as the core, it's where the policies are defined. The network devices acts as the authenticator and enforce the policies from the server ISE. The endpoint receives the response given by the server ISE from the network access device. Most of the high level host endpoint have supplicants that allow them to communicate with the authenticator or NAD.  The server ISE can use external services, such as the Microsoft Active Directory, to get knowledge about the users. 
+<mark style="background: #FFB8EBA6;">The server ISE acts as the core, it's where the policies are defined</mark>. <mark style="background: #FF5582A6;">The network devices acts as the authenticator</mark> and <strong>enforce</strong> the policies from the server ISE. <mark style="background: #FFF3A3A6;">The endpoint receives the response</mark> <mark style="background: #FFB86CA6;">given by the server ISE</mark> <mark style="background: #BBFABBA6;">from the network access device</mark>. Most of the high level host endpoint have <mark style="background: #ABF7F7A6;">supplicants that allow them to communicate with the authenticator or NAD</mark>.  <mark style="background: #D2B3FFA6;">The server ISE can use external services</mark>, such as the <strong>Microsoft Active Directory</strong>, <mark style="background: #D2B3FFA6;">to get knowledge about the users</mark>. 
 
+# ISE Server 
+# External Services
+# Network Devices
