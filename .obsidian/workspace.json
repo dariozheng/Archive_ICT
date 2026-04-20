@@ -29,12 +29,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Untitled.md",
+                "file": "3 - Templates/Notes/Systems Template.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "Untitled"
+              "title": "Systems Template"
             }
           }
         ],
@@ -238,15 +238,17 @@
   },
   "active": "447ac3f4091d8386",
   "lastOpenFiles": [
+    "3 - Templates/Notes/Microsoft Template.md",
+    "3 - Templates/Notes/Security Template.md",
+    "3 - Templates/Notes/Hardware Template.md",
+    "3 - Templates/Notes/Cloud Computing Template.md",
+    "3 - Templates/Notes/Networking Template.md",
     "0 - Notes/OSI Model.md",
-    "Untitled.md",
+    "Cisco ISE.md",
     "Untitled",
     "Homepage.md",
     "README.md",
     "0 - Notes/Windows Management Instrumentation.md",
-    "3 - Templates/Notes/Networking Template.md",
-    "3 - Templates/Notes/Security Template.md",
-    "3 - Templates/Notes/Hardware Template.md",
     "3 - Templates/Notes/Codes/Link to Glossary.md",
     "2 - Categories/Networking.md",
     "2 - Categories/Security.md",
@@ -268,8 +270,6 @@
     "3 - Templates/Bases/Systems.base",
     "3 - Templates/Bases/Microsoft.base",
     "0 - Notes/Buffer Overflow Attack.md",
-    "0 - Notes/Man-in-the-Middle Attacks.md",
-    "0 - Notes/Network Scanning.md",
     "1 - Excalidraw",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
