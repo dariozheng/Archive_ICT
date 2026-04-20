@@ -22,3 +22,4 @@ aliases:
 ---
 Cisco Identity Service Engine (ISE) is a Network Access Control solution that manages access to network ensuring only authenticated, authorized, and compliant users and devices can connect. 
 
+An ISE-based network access control solution has four components: endpoints, network devices, Cisco ISE, and external services.
