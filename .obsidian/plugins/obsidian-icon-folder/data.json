@@ -6,6 +6,7 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiCisco",
       "LiHome",
       "SiWindows",
       "SiPaloaltonetworks",
@@ -14,8 +15,7 @@
       "LiNotepadText",
       "LiLock",
       "FasNetworkWired",
-      "SiMicrosoft",
-      "FasComputer"
+      "SiMicrosoft"
     ],
     "recentlyUsedIconsSize": 10,
     "rules": [],
@@ -238,5 +238,9 @@
   "3 - Templates/Notes/Codes": {
     "iconName": "FasCode",
     "iconColor": "#3aaddf"
+  },
+  "0 - Notes/Cisco ISE.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
   }
 }
