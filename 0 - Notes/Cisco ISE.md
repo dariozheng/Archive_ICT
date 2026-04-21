@@ -57,7 +57,9 @@ On this section it is also possible to retrieve groups from the AD to create pol
 ![[Pasted image 20260421125524.png]]
 ### Certificate Authority
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication. 
-
+#### Server Certificates
+There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication.
+Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant).
 ![[Pasted image 20260421153234.png]]
 ### Group Policy Management
 
