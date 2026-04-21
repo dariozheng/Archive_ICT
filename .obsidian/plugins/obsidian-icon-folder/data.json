@@ -6,6 +6,7 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "FasServer",
       "SiCisco",
       "LiHome",
       "SiWindows",
@@ -14,8 +15,7 @@
       "FasCode",
       "LiNotepadText",
       "LiLock",
-      "FasNetworkWired",
-      "SiMicrosoft"
+      "FasNetworkWired"
     ],
     "recentlyUsedIconsSize": 10,
     "rules": [],
@@ -242,5 +242,21 @@
   "0 - Notes/Cisco ISE.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/Common Information Model.md": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7aff"
+  },
+  "0 - Notes/Web-Based Enterprise Management.md": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7aff"
+  },
+  "2 - Categories/Topics/Systems": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7a"
+  },
+  "3 - Templates/Bases/Topic/Systems": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7a"
   }
 }

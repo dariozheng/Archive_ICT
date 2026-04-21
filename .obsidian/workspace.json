@@ -30,7 +30,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -214,7 +214,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -235,18 +236,28 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "479baed5a072decf",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260421124345.png",
+    "attachments/Pasted image 20260421124607.png",
+    "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Man-in-the-Middle Attacks.md",
+    "0 - Notes/OSI Model.md",
+    "0 - Notes/Web-Based Enterprise Management.md",
+    "0 - Notes/Common Information Model.md",
+    "3 - Templates/Notes/Systems Template.md",
+    "3 - Templates/Bases/Topic/Systems",
+    "2 - Categories/Topics/Systems",
+    "2 - Categories/Systems.md",
+    "0 - Notes/Crawler.md",
     "0 - Notes/App-ID™.md",
     "0 - Notes/Data Redistribution - Palo Alto.md",
     "0 - Notes/Windows Management Instrumentation.md",
     "0 - Notes/Buffer Overflow Attack.md",
     "0 - Notes/Unauthorized Packet Sniffing.md",
-    "0 - Notes/Cisco ISE.md",
     "Homepage.md",
     "0 - Notes/Network Scanning.md",
     "0 - Notes/Prisma Access.md",
-    "0 - Notes/OSI Model.md",
     "2 - Categories/Topics/Security/Security General.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Bases/Topic/Security/Security General.base",
@@ -256,23 +267,14 @@
     "3 - Templates/Notes/Networking Template.md",
     "3 - Templates/Notes/Cloud Computing Template.md",
     "3 - Templates/Notes/Microsoft Template.md",
-    "3 - Templates/Notes/Systems Template.md",
     "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "2 - Categories/Topics/Security/Palo Alto Networks.md",
     "Untitled.md",
     "3 - Templates/Notes/Security Template.md",
-    "3 - Templates/Notes/Hardware Template.md",
     "Untitled",
-    "README.md",
-    "3 - Templates/Notes/Codes/Link to Glossary.md",
-    "2 - Categories/Networking.md",
-    "2 - Categories/Security.md",
-    "2 - Categories/Microsoft.md",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
     "3 - Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
     "3 - Templates/Bases/Networking.base",
-    "3 - Templates/Bases/Systems.base",
-    "3 - Templates/Bases/Microsoft.base",
     "attachments/A Security Rule Is Referencing a Profile Group.png",
     "attachments/The Security Profile Is in a Profile Group.png",
     "attachments/Data Loss Prevention.png",
@@ -281,8 +283,6 @@
     "attachments/URL Access Control.png",
     "attachments/DNS Security.png",
     "attachments/WildFire and Antivirus.png",
-    "attachments/Vulnerability Protection.png",
-    "attachments/Anti-Spyware.png",
     "Untitled.canvas"
   ]
 }
