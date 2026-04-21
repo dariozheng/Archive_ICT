@@ -8,4 +8,4 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 ---
-The OSI Modeld
+The OSI Model
