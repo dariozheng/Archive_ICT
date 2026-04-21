@@ -56,8 +56,11 @@ For the server ISE to be able to join the domain, it has to have a machine accou
 On this section it is also possible to retrieve groups from the AD to create policies around the user group identity. 
 ![[Pasted image 20260421125524.png]]
 ### Certificate Authority
-The Certificate Authority is 
+The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication. 
+
+![[Pasted image 20260421153234.png]]
 ### Group Policy Management
 
 
 # Network Devices
+# Tutorial
