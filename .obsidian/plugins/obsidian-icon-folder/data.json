@@ -6,16 +6,16 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiLock",
+      "FasCloud",
+      "FasNetworkWired",
       "SiMicrosoft",
       "FasServer",
       "SiCisco",
       "LiHome",
       "SiWindows",
       "SiPaloaltonetworks",
-      "FasUserSecret",
-      "FasCode",
-      "LiNotepadText",
-      "LiLock"
+      "FasUserSecret"
     ],
     "recentlyUsedIconsSize": 10,
     "rules": [],
@@ -278,5 +278,17 @@
   "2 - Categories/Topics/Security/Network-Based Attacks.md": {
     "iconName": "FasUserSecret",
     "iconColor": "#000000"
+  },
+  "2 - Categories/Topics/Networking/Networking General.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md": {
+    "iconName": "FasCloud",
+    "iconColor": "#68adee"
+  },
+  "2 - Categories/Topics/Security/Security General.md": {
+    "iconName": "LiLock",
+    "iconColor": "#e95a2b"
   }
 }
