@@ -70,7 +70,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "[\"modified\"]",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -95,7 +95,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 224.50260543823242
+    "width": 200
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -106,36 +106,38 @@
         "type": "tabs",
         "children": [
           {
-            "id": "3e0648aaf734282b",
+            "id": "479baed5a072decf",
             "type": "leaf",
             "state": {
-              "type": "backlink",
+              "type": "outline",
               "state": {
-                "file": "Notes/Prisma Access.md",
-                "collapseAll": false,
-                "extraContext": false,
-                "sortOrder": "alphabetical",
+                "file": "0 - Notes/Cisco ISE.md",
+                "followCursor": true,
                 "showSearch": false,
-                "searchQuery": "",
-                "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
+                "searchQuery": ""
               },
-              "icon": "links-coming-in",
-              "title": "Backlinks for Prisma Access"
+              "icon": "lucide-list",
+              "title": "Outline of Cisco ISE"
             }
           },
           {
-            "id": "274cf9036b1db3d9",
+            "id": "a627c530cd5eaf30",
             "type": "leaf",
             "state": {
-              "type": "outgoing-link",
-              "state": {
-                "file": "Notes/Device-ID.md",
-                "linksCollapsed": false,
-                "unlinkedCollapsed": true
-              },
-              "icon": "links-going-out",
-              "title": "Outgoing links from Device-ID"
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          },
+          {
+            "id": "4358fb8c6f77a4fb",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {},
+              "icon": "spreadsheet",
+              "title": "Advanced Tables"
             }
           },
           {
@@ -154,6 +156,51 @@
             }
           },
           {
+            "id": "16999ae442dfb53f",
+            "type": "leaf",
+            "state": {
+              "type": "file-properties",
+              "state": {
+                "file": "0 - Notes/Cisco ISE.md"
+              },
+              "icon": "lucide-info",
+              "title": "File properties for Cisco ISE"
+            }
+          },
+          {
+            "id": "3e0648aaf734282b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "0 - Notes/Cisco ISE.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Cisco ISE"
+            }
+          },
+          {
+            "id": "274cf9036b1db3d9",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "0 - Notes/Cisco ISE.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Cisco ISE"
+            }
+          },
+          {
             "id": "54acdcda3e3e0338",
             "type": "leaf",
             "state": {
@@ -166,60 +213,12 @@
               "icon": "lucide-archive",
               "title": "All properties"
             }
-          },
-          {
-            "id": "479baed5a072decf",
-            "type": "leaf",
-            "state": {
-              "type": "outline",
-              "state": {
-                "file": "0 - Notes/Cisco ISE.md",
-                "followCursor": true,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-list",
-              "title": "Outline of Cisco ISE"
-            }
-          },
-          {
-            "id": "4358fb8c6f77a4fb",
-            "type": "leaf",
-            "state": {
-              "type": "advanced-tables-toolbar",
-              "state": {},
-              "icon": "spreadsheet",
-              "title": "Advanced Tables"
-            }
-          },
-          {
-            "id": "a627c530cd5eaf30",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "git-pull-request",
-              "title": "Source Control"
-            }
-          },
-          {
-            "id": "16999ae442dfb53f",
-            "type": "leaf",
-            "state": {
-              "type": "file-properties",
-              "state": {
-                "file": "Notes/User-ID™.md"
-              },
-              "icon": "lucide-info",
-              "title": "File properties for User-ID™"
-            }
           }
-        ],
-        "currentTab": 6
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -236,15 +235,18 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c5546d9cfd69328c",
+  "active": "479baed5a072decf",
   "lastOpenFiles": [
-    "0 - Notes/Network Scanning.md",
-    "0 - Notes/Cisco ISE.md",
-    "0 - Notes/Prisma Access.md",
     "0 - Notes/App-ID™.md",
+    "0 - Notes/Data Redistribution - Palo Alto.md",
     "0 - Notes/Windows Management Instrumentation.md",
-    "0 - Notes/OSI Model.md",
+    "0 - Notes/Buffer Overflow Attack.md",
+    "0 - Notes/Unauthorized Packet Sniffing.md",
+    "0 - Notes/Cisco ISE.md",
     "Homepage.md",
+    "0 - Notes/Network Scanning.md",
+    "0 - Notes/Prisma Access.md",
+    "0 - Notes/OSI Model.md",
     "2 - Categories/Topics/Security/Security General.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Bases/Topic/Security/Security General.base",
@@ -266,9 +268,6 @@
     "2 - Categories/Networking.md",
     "2 - Categories/Security.md",
     "2 - Categories/Microsoft.md",
-    "2 - Categories/Systems.md",
-    "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
-    "2 - Categories/Hardware.md",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
     "3 - Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
     "3 - Templates/Bases/Networking.base",
