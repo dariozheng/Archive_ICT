@@ -155,7 +155,8 @@
               "title": "Tags"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -178,6 +179,7 @@
   },
   "active": "81fbebfbb36710cc",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260421152119.png",
     "Homepage.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Notes/Systems Template.md",
@@ -203,7 +205,6 @@
     "0 - Notes/Windows Management Instrumentation.md",
     "0 - Notes/Windows Remote Management Protocol.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
-    "0 - Notes/Prisma SASE.md",
     "attachments/Pasted image 20260421125524.png",
     "attachments/Pasted image 20260421124345.png",
     "attachments/Pasted image 20260421124607.png",
