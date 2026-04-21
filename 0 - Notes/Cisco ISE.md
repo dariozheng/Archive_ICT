@@ -42,7 +42,9 @@ Cisco Identity Services Engine (ISE) is an <strong>identity-based network access
 
 # External Services
 ISE can leverage existing infrastructures to manage user network access. 
-## Microsoft Active Directory
+
+## Microsoft Servers
+### Active Directory
 ![[Pasted image 20260421124607.png]]
 Cisco ISE can join Microsoft Active Directory as an External Identity Source under the item Active Directory. 
 
@@ -53,8 +55,9 @@ For the server ISE to be able to join the domain, it has to have a machine accou
 
 On this section it is also possible to retrieve groups from the AD to create policies around the user group identity. 
 ![[Pasted image 20260421125524.png]]
-## Microsoft Certificate Authority
-## Microsoft Group Policy Management
+### Certificate Authority
+The Certificate Authority is 
+### Group Policy Management
 
 
 # Network Devices
