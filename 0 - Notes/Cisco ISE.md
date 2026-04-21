@@ -63,8 +63,8 @@ Certificates are also used to secure EAP communications, to form a Transport Lay
 - <strong>Admin</strong>: for ISE Admin Portal. If this is chosen the ISE node needs to restart all services to use the newly applied certificate.
 - <strong>EAP Authentication</strong>: ISE will use this certificate for <mark style="background: #FFB86CA6;">EAP protocols that use SSL/TLS tunneling</mark>.
 - <strong>RADIUS DTLS</strong>: RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
-- <strong>Portal</strong>: 
-- <strong>pxGrid</strong>: 
+- <strong>Portal</strong>: Certificates used for ISE user portals. 
+- <strong>pxGrid</strong>: This certificate will be used to establish trust and build a secure connection between ISE and third-party pxGrid clients to share contextual information. 
 ![[Pasted image 20260421153234.png]]
 ### Group Policy Management
 
