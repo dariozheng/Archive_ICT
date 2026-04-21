@@ -15,7 +15,7 @@
               "type": "markdown",
               "state": {
                 "file": "Homepage.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "pinned": true,
@@ -24,17 +24,17 @@
             }
           },
           {
-            "id": "c5546d9cfd69328c",
+            "id": "81fbebfbb36710cc",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2 - Categories/Topics/Security/Security General.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Security General"
+              "title": "Cisco ISE"
             }
           }
         ],
@@ -111,13 +111,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2 - Categories/Topics/Security/Security General.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Security General"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -155,8 +155,7 @@
               "title": "Tags"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -177,16 +176,23 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c5546d9cfd69328c",
+  "active": "81fbebfbb36710cc",
   "lastOpenFiles": [
+    "Homepage.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
+    "3 - Templates/Notes/Systems Template.md",
+    "3 - Templates/Notes/Microsoft Template.md",
+    "3 - Templates/Notes/Networking Template.md",
+    "3 - Templates/Notes/Hardware Template.md",
+    "3 - Templates/Notes/Security Template.md",
+    "0 - Notes/Prisma Access.md",
     "2 - Categories/Topics/Security/Palo Alto Networks.md",
-    "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "2 - Categories/Topics/Security/Security General.md",
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
     "2 - Categories/Topics/Microsoft/Windows.md",
     "0 - Notes/Glossaries/Cloud Computing Glossary.md",
     "0 - Notes/Cloud Access Security Broker.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/OSI Model.md",
     "0 - Notes/Server Name Indication.md",
     "0 - Notes/Cisco ISE.md",
@@ -197,19 +203,12 @@
     "0 - Notes/Windows Management Instrumentation.md",
     "0 - Notes/Windows Remote Management Protocol.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
-    "Homepage.md",
     "0 - Notes/Prisma SASE.md",
-    "0 - Notes/Prisma Access.md",
     "attachments/Pasted image 20260421125524.png",
     "attachments/Pasted image 20260421124345.png",
     "attachments/Pasted image 20260421124607.png",
-    "0 - Notes/Man-in-the-Middle Attacks.md",
-    "0 - Notes/Web-Based Enterprise Management.md",
-    "0 - Notes/Common Information Model.md",
-    "3 - Templates/Notes/Systems Template.md",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",
-    "2 - Categories/Systems.md",
     "3 - Templates/Bases/Topic/Security/Security General.base",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",

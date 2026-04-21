@@ -48,7 +48,9 @@ Cisco ISE can join Microsoft Active Directory as an External Identity Source und
 
 The AD is used to identify the users when they do an authentication. They can be checked with their domain password or with the domain certificates they provide ISE.
 
-On this item it is also possible to retrieve groups from the AD to create policies around the user group identity. 
+For the server ISE to be able to join the domain, it has to have a machine account in the domain, and the domain admin must have the permissions to join ISE to AD. 
+
+On this section it is also possible to retrieve groups from the AD to create policies around the user group identity. 
 ![[Pasted image 20260421125524.png]]
 ## Microsoft Certificate Authority
 
