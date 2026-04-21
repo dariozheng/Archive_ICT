@@ -4,5 +4,7 @@
     "text_color"
   ],
   "baseFontSizeAction": false,
-  "baseFontSize": 18
+  "baseFontSize": 18,
+  "theme": "moonstone",
+  "accentColor": ""
 }
