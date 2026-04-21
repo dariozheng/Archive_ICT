@@ -6,6 +6,7 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiMicrosoft",
       "FasServer",
       "SiCisco",
       "LiHome",
@@ -14,8 +15,7 @@
       "FasUserSecret",
       "FasCode",
       "LiNotepadText",
-      "LiLock",
-      "FasNetworkWired"
+      "LiLock"
     ],
     "recentlyUsedIconsSize": 10,
     "rules": [],
@@ -180,7 +180,7 @@
     "iconColor": "#d54894"
   },
   "2 - Categories/Topics/Microsoft": {
-    "iconName": "SiWindows",
+    "iconName": "SiMicrosoft",
     "iconColor": "#0078d4"
   },
   "2 - Categories/Topics/Networking": {
@@ -258,5 +258,21 @@
   "3 - Templates/Bases/Topic/Systems": {
     "iconName": "FasServer",
     "iconColor": "#103f7a"
+  },
+  "2 - Categories/Topics/Security/Palo Alto Networks.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "2 - Categories/Topics/Microsoft/Microsoft Protocols.md": {
+    "iconName": "SiMicrosoft",
+    "iconColor": "#0078D4"
+  },
+  "2 - Categories/Topics/Microsoft/Microsoft General.md": {
+    "iconName": "SiMicrosoft",
+    "iconColor": "#0078D4"
+  },
+  "2 - Categories/Topics/Microsoft/Windows.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
   }
 }
