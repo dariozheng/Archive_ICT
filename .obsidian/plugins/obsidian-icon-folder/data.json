@@ -274,5 +274,9 @@
   "2 - Categories/Topics/Microsoft/Windows.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
+  },
+  "2 - Categories/Topics/Security/Network-Based Attacks.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
   }
 }

@@ -29,12 +29,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2 - Categories/Topics/Microsoft/Windows.md",
+                "file": "2 - Categories/Topics/Security/Network-Based Attacks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Windows"
+              "title": "Network-Based Attacks"
             }
           }
         ],
@@ -111,13 +111,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2 - Categories/Topics/Microsoft/Windows.md",
+                "file": "2 - Categories/Topics/Security/Network-Based Attacks.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Windows"
+              "title": "Outline of Network-Based Attacks"
             }
           },
           {
@@ -179,17 +179,19 @@
   },
   "active": "c5546d9cfd69328c",
   "lastOpenFiles": [
-    "0 - Notes/Windows Management Instrumentation.md",
+    "0 - Notes/Bots and Botnets.md",
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
+    "2 - Categories/Topics/Security/Security General.md",
+    "0 - Notes/Backhaul.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
     "2 - Categories/Topics/Microsoft/Windows.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "0 - Notes/Windows Management Instrumentation.md",
     "0 - Notes/Windows Remote Management Protocol.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "Homepage.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
     "2 - Categories/Topics/Security/Palo Alto Networks.md",
-    "2 - Categories/Topics/Security/Network-Based Attacks.md",
-    "2 - Categories/Topics/Security/Security General.md",
     "0 - Notes/Prisma SASE.md",
     "0 - Notes/Prisma Access.md",
     "0 - Notes/Cisco ISE.md",
@@ -208,8 +210,6 @@
     "0 - Notes/App-ID™.md",
     "0 - Notes/Data Redistribution - Palo Alto.md",
     "0 - Notes/Buffer Overflow Attack.md",
-    "0 - Notes/Unauthorized Packet Sniffing.md",
-    "0 - Notes/Network Scanning.md",
     "3 - Templates/Bases/Topic/Security/Security General.base",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
