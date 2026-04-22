@@ -49,8 +49,7 @@
               "title": "Cisco ISE"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -236,11 +235,11 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "4c88075befb30afa",
+  "active": "23590580a7ebfd07",
   "lastOpenFiles": [
+    "0 - Notes/OSI Model.md",
     "0 - Notes/Cisco ISE.md",
     "Homepage.md",
-    "0 - Notes/OSI Model.md",
     "0 - Notes/Web-Based Enterprise Management.md",
     "0 - Notes/IP Spoofing.md",
     "2 - Categories/Topics/Networking/Networking General.md",
