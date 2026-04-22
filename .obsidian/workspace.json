@@ -38,19 +38,33 @@
             }
           },
           {
-            "id": "b8a9f91d9f1dad0f",
+            "id": "ce0a38e403ee7572",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/Cisco ISE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Cisco ISE"
+            }
+          },
+          {
+            "id": "edffdaa6b05400d1",
             "type": "leaf",
             "state": {
               "type": "excalidraw",
               "state": {
-                "file": "1 - Excalidraw/ENCOR.md"
+                "file": "1 - Excalidraw/Homepage.md"
               },
               "icon": "excalidraw-icon",
-              "title": "ENCOR"
+              "title": "Homepage"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -166,6 +180,53 @@
               "icon": "lucide-tags",
               "title": "Tags"
             }
+          },
+          {
+            "id": "a0e865582ea4d6a7",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "1 - Excalidraw/Homepage.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Homepage"
+            }
+          },
+          {
+            "id": "aa604082f1d67d52",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "1 - Excalidraw/Homepage.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Homepage"
+            }
+          },
+          {
+            "id": "447f86290a92df48",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
           }
         ],
         "currentTab": 1
@@ -189,18 +250,21 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "b8a9f91d9f1dad0f",
+  "active": "edffdaa6b05400d1",
   "lastOpenFiles": [
-    "0 - Notes/OSI Model.md",
+    "2 - Categories/Security.md",
     "Homepage.md",
-    "1 - Excalidraw/ENCOR.md",
+    "0 - Notes/App-ID™.md",
+    "1 - Excalidraw/Homepage.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/Cisco ISE.md",
+    "0 - Notes/OSI Model.md",
+    "1 - Excalidraw/ENCOR.md",
     "1 - Excalidraw/Drawing 2026-04-21 19.30.20.excalidraw.md",
     "1 - Excalidraw/Drawing 2026-04-21 19.28.32.excalidraw.md",
     "Excalidraw",
     "attachments/Pasted image 20260421153234.png",
     "attachments/Pasted image 20260421152119.png",
-    "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Notes/Systems Template.md",
     "3 - Templates/Notes/Microsoft Template.md",
     "3 - Templates/Notes/Networking Template.md",
@@ -217,9 +281,6 @@
     "0 - Notes/Server Name Indication.md",
     "0 - Notes/Backhaul.md",
     "0 - Notes/Bots and Botnets.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "0 - Notes/Windows Management Instrumentation.md",
     "attachments/Pasted image 20260421125524.png",
     "attachments/Pasted image 20260421124345.png",
     "attachments/Pasted image 20260421124607.png",
