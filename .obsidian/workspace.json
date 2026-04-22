@@ -20,21 +20,8 @@
               "icon": "excalidraw-icon",
               "title": "Homepage"
             }
-          },
-          {
-            "id": "9b580d6659036c69",
-            "type": "leaf",
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "Homepage.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Homepage"
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -220,15 +207,18 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "9b580d6659036c69",
+  "active": "23590580a7ebfd07",
   "lastOpenFiles": [
-    "2 - Categories/Topics/Networking/Networking General.md",
+    "0 - Notes/Denial-of-Service (DoS).md",
     "Homepage.md",
+    "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Autonomous Digital Experience Management.md",
+    "0 - Notes/Bots and Botnets.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
     "2 - Categories/Topics/Security/Security General.md",
     "2 - Categories/Networking.md",
     "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "2 - Categories/Topics/Security/Palo Alto Networks.md",
-    "0 - Notes/Cisco ISE.md",
     "0 - Notes/OSI Model.md",
     "README.md",
     "1 - Excalidraw/ENCOR.md",
@@ -248,9 +238,6 @@
     "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
     "2 - Categories/Topics/Microsoft/Windows.md",
     "0 - Notes/Glossaries/Cloud Computing Glossary.md",
-    "0 - Notes/Cloud Access Security Broker.md",
-    "0 - Notes/Server Name Indication.md",
-    "0 - Notes/Backhaul.md",
     "attachments/Pasted image 20260421125524.png",
     "attachments/Pasted image 20260421124345.png",
     "attachments/Pasted image 20260421124607.png",
