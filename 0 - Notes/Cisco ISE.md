@@ -86,6 +86,9 @@ For Users Certificates, duplicate from the default user certificate template:
 For the <strong>Domain Admin Certificate</strong> template copy the <strong>Domain User Certificate</strong> template and <mark style="background: #FFF3A3A6;">change Security tab <strong>Group or user names</strong> section</mark>, <mark style="background: #FFB86CA6;">remove Domain Users</mark> and in <mark style="background: #ABF7F7A6;">Domain Admin permissions, allow Read, Write, and Enroll</mark>. The Write permission is used to modify the certificate template. 
 
 As the Domain Admin Certificate is made for admins that have a domain user account but not a domain computer, the enrollment is done manually. 
+###### Enrollment - Manual
+1. In user computer in <strong>Control panel</strong> or under search go to <strong>Manage user certificates</strong>
+###### Enrollment - Script
 
 ### Group Policy Management
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
