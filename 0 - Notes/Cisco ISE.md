@@ -67,7 +67,7 @@ Certificates are also used to secure EAP communications, to form a Transport Lay
 - <strong>RADIUS DTLS</strong>: RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
 - <strong>Portal</strong>: Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices. 
 - <strong>pxGrid</strong>: This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information. 
-![[Pasted image 20260421153234.png|717]]
+![[Pasted image 20260421153234.png]]
 #### Client Certificates 
 Client Certificates are used by users, machine or both to authenticate to ISE. 
 In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 
@@ -88,8 +88,9 @@ For the <strong>Domain Admin Certificate</strong> template copy the <strong>Doma
 As the Domain Admin Certificate is made for admins that have a domain user account but not a domain computer, the enrollment is done manually. 
 ###### Enrollment - Manual
 1. In user computer in <strong>Control panel</strong> or under search go to <strong>Manage user certificates</strong>
+2. 
 ###### Enrollment - Script
-
+##### Domain Computer Certificate
 ### Group Policy Management
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
 
