@@ -201,7 +201,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -224,9 +224,19 @@
   },
   "active": "257289239635978e",
   "lastOpenFiles": [
-    "attachments/Screenshot 2026-04-22 at 14.23.17.png",
+    "attachments/Extensions tab.png",
     "0 - Notes/Cisco ISE.md",
+    "attachments/Request Handling tab.png",
+    "attachments/General tab.png",
+    "attachments/Pasted image 20260421153234.png",
+    "attachments/Subject Name tab.png",
+    "attachments/Security tab.png",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "Homepage.md",
+    "attachments/Link Quality Monitoring (LQM).png",
+    "attachments/Pasted image 20260422142659.png",
+    "attachments/Pasted image 20260422142617.png",
+    "attachments/Screenshot 2026-04-22 at 14.23.17.png",
     "0 - Notes/OSI Model.md",
     "2 - Categories/Topics/Microsoft/Windows.md",
     "2 - Categories/Topics/Networking/Networking General.md",
@@ -234,7 +244,6 @@
     "0 - Notes/IP Spoofing.md",
     "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
     "2 - Categories/Cloud Computing.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
     "2 - Categories/Topics/Security/Security General.md",
     "2 - Categories/Hardware.md",
@@ -251,11 +260,6 @@
     "1 - Excalidraw/ENCOR.md",
     "0 - Notes/App-ID™.md",
     "Excalidraw",
-    "attachments/Pasted image 20260421153234.png",
-    "attachments/Pasted image 20260421152119.png",
-    "attachments/Pasted image 20260421125524.png",
-    "attachments/Pasted image 20260421124345.png",
-    "attachments/Pasted image 20260421124607.png",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",
     "3 - Templates/Bases/Topic/Security/Security General.base",
@@ -265,10 +269,6 @@
     "Untitled",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
     "3 - Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
-    "attachments/A Security Rule Is Referencing a Profile Group.png",
-    "attachments/The Security Profile Is in a Profile Group.png",
-    "attachments/Data Loss Prevention.png",
-    "attachments/HTTP Header Insertion.png",
     "Untitled.canvas"
   ]
 }

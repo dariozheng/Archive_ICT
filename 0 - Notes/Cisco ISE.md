@@ -19,6 +19,8 @@ aliases:
   - Identity Service Engine
   - Cisco Identity Service Engine
   - ISE
+cssclasses:
+  - img-grid
 ---
 Cisco <strong>Identity Service Engine</strong> (ISE) is a <strong>Network Access Control</strong> solution that manages access to network ensuring only authenticated, authorized, and compliant users and devices can connect. 
 
@@ -65,7 +67,7 @@ Certificates are also used to secure EAP communications, to form a Transport Lay
 - <strong>RADIUS DTLS</strong>: RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
 - <strong>Portal</strong>: Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices. 
 - <strong>pxGrid</strong>: This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information. 
-![[Pasted image 20260421153234.png]]
+![[Pasted image 20260421153234.png|717]]
 #### Client Certificates 
 Client Certificates are used by users, machine or both to authenticate to ISE. 
 In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 
@@ -77,6 +79,10 @@ For Users Certificates, duplicate from the default user certificate template:
 - On the <u>Security tab</u>, highlight <strong>Domain Users</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> users with a user certificate</mark> for EAP authentication when they log into their computers. 
 - On the <u>Subject Name tab</u>. If this is a lab environment, <mark style="background: #ADCCFFA6;">you may want to exclude email addresses from the Certificate template</mark> as your environment may not have an Exchange server or SMTP server integrated with Active Directory to pre-populate that information in the AD. <mark style="background: #ADCCFFA6;">If that information is not in the Active Directory record and this box is checked in the template, your certificate will not be issued to the user</mark>.
 
+| General tab          | Request Handling tab          | Extensions tab          | Security tab          | Subject Name tab                     |
+| -------------------- | ----------------------------- | ----------------------- | --------------------- | ------------------------------------ |
+| ![[General tab.png]] | ![[Request Handling tab.png]] | ![[Extensions tab.png]] | ![[Security tab.png]] | ![[Subject Name tab.png]] |
+|                      |                               |                         |                       |                                      |
 
 
 
