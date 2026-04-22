@@ -290,5 +290,9 @@
   "1 - Excalidraw/ENCOR.md": {
     "iconName": "SiCisco",
     "iconColor": "#1ba0d7"
+  },
+  "Homepage.md": {
+    "iconName": "LiHome",
+    "iconColor": "#d31d1d"
   }
 }
