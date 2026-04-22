@@ -19,8 +19,6 @@ aliases:
   - Identity Service Engine
   - Cisco Identity Service Engine
   - ISE
-cssclasses:
-  - img-grid
 ---
 Cisco <strong>Identity Service Engine</strong> (ISE) is a <strong>Network Access Control</strong> solution that manages access to network ensuring only authenticated, authorized, and compliant users and devices can connect. 
 
@@ -79,10 +77,10 @@ For Users Certificates, duplicate from the default user certificate template:
 - On the <u>Security tab</u>, highlight <strong>Domain Users</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> users with a user certificate</mark> for EAP authentication when they log into their computers. 
 - On the <u>Subject Name tab</u>. If this is a lab environment, <mark style="background: #ADCCFFA6;">you may want to exclude email addresses from the Certificate template</mark> as your environment may not have an Exchange server or SMTP server integrated with Active Directory to pre-populate that information in the AD. <mark style="background: #ADCCFFA6;">If that information is not in the Active Directory record and this box is checked in the template, your certificate will not be issued to the user</mark>.
 
-| General tab          | Request Handling tab          | Extensions tab          | Security tab          | Subject Name tab                     |
-| -------------------- | ----------------------------- | ----------------------- | --------------------- | ------------------------------------ |
+| General tab          | Request Handling tab          | Extensions tab          | Security tab          | Subject Name tab          |
+| -------------------- | ----------------------------- | ----------------------- | --------------------- | ------------------------- |
 | ![[General tab.png]] | ![[Request Handling tab.png]] | ![[Extensions tab.png]] | ![[Security tab.png]] | ![[Subject Name tab.png]] |
-|                      |                               |                         |                       |                                      |
+|                      |                               |                         |                       |                           |
 
 
 
