@@ -47,10 +47,6 @@
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
   },
-  "Homepage.md": {
-    "iconName": "LiHome",
-    "iconColor": "#FFA500"
-  },
   "0 - Notes/Prisma Access.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
@@ -294,5 +290,9 @@
   "1 - Excalidraw/ENCOR.md": {
     "iconName": "SiCisco",
     "iconColor": "#1ba0d7"
+  },
+  "Homepage.md": {
+    "iconName": "LiHome",
+    "iconColor": "#ffa500"
   }
 }

@@ -14,7 +14,7 @@
             "state": {
               "type": "excalidraw",
               "state": {
-                "file": "1 - Excalidraw/Homepage.md"
+                "file": "Homepage.md"
               },
               "pinned": true,
               "icon": "excalidraw-icon",
@@ -48,37 +48,9 @@
               "icon": "lucide-file",
               "title": "Cisco ISE"
             }
-          },
-          {
-            "id": "35c2879fe95de58f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2 - Categories/Topics/Security/Network-Based Attacks.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Network-Based Attacks"
-            }
-          },
-          {
-            "id": "df41ac05285f52da",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Homepage.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Homepage"
-            }
           }
         ],
-        "currentTab": 4
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -264,15 +236,15 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "df41ac05285f52da",
+  "active": "ce0a38e403ee7572",
   "lastOpenFiles": [
-    "1 - Excalidraw/Homepage.md",
-    "2 - Categories/Topics/Security/Security General.md",
-    "2 - Categories/Topics/Security/Palo Alto Networks.md",
-    "Homepage.md",
-    "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "0 - Notes/OSI Model.md",
     "0 - Notes/Cisco ISE.md",
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
+    "Homepage.md",
+    "2 - Categories/Topics/Security/Palo Alto Networks.md",
+    "README.md",
+    "2 - Categories/Topics/Security/Security General.md",
     "1 - Excalidraw/ENCOR.md",
     "2 - Categories/Security.md",
     "0 - Notes/App-ID™.md",
@@ -294,7 +266,6 @@
     "0 - Notes/Cloud Access Security Broker.md",
     "0 - Notes/Server Name Indication.md",
     "0 - Notes/Backhaul.md",
-    "0 - Notes/Bots and Botnets.md",
     "attachments/Pasted image 20260421125524.png",
     "attachments/Pasted image 20260421124345.png",
     "attachments/Pasted image 20260421124607.png",
