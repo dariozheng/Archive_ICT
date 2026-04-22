@@ -91,8 +91,15 @@ As the Domain Admin Certificate is made for admins that have a domain user accou
 2. 
 ###### Enrollment - Script
 ##### Domain Computer Certificate
+
 ### Group Policy Management
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
 
 # Network Devices
 # Tutorial
+# Reference 
+| Topic                 | Link                                                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| Certificate Templates | https://sendthepayload.com/configuring-certificate-templates-with-active-directory-certificate-services/# |
+|                       |                                                                                                           |
+|                       |                                                                                                           |
