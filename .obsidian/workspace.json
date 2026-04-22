@@ -229,7 +229,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -250,16 +250,18 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "edffdaa6b05400d1",
+  "active": "7a424c81c28dbae2",
   "lastOpenFiles": [
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
+    "2 - Categories/Topics/Security/Palo Alto Networks.md",
+    "1 - Excalidraw/Homepage.md",
+    "1 - Excalidraw/ENCOR.md",
+    "0 - Notes/OSI Model.md",
     "2 - Categories/Security.md",
     "Homepage.md",
     "0 - Notes/App-ID™.md",
-    "1 - Excalidraw/Homepage.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/Cisco ISE.md",
-    "0 - Notes/OSI Model.md",
-    "1 - Excalidraw/ENCOR.md",
     "1 - Excalidraw/Drawing 2026-04-21 19.30.20.excalidraw.md",
     "1 - Excalidraw/Drawing 2026-04-21 19.28.32.excalidraw.md",
     "Excalidraw",
@@ -271,9 +273,7 @@
     "3 - Templates/Notes/Hardware Template.md",
     "3 - Templates/Notes/Security Template.md",
     "0 - Notes/Prisma Access.md",
-    "2 - Categories/Topics/Security/Palo Alto Networks.md",
     "2 - Categories/Topics/Security/Security General.md",
-    "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
     "2 - Categories/Topics/Microsoft/Windows.md",
     "0 - Notes/Glossaries/Cloud Computing Glossary.md",
