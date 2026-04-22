@@ -9,5 +9,6 @@
   ],
   "uriCallbacks": false,
   "showLineNumber": true,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "propertiesInDocument": "visible"
 }
