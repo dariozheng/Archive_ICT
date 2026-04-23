@@ -87,9 +87,9 @@ For the <strong>Domain Admin Certificate</strong> template copy the <strong>Doma
 
 As the Domain Admin Certificate is made for admins that have a domain user account but not a domain computer, the enrollment is done manually. 
 ###### Enrollment - Manual
-1. In user computer in <strong>Control panel</strong> or under search go to <strong>Manage user certificates</strong>
-2. 
+![[Manual Enrollment of Admin Certificate.mp4]]
 ###### Enrollment - Script
+
 ##### Domain Computer Certificate
 
 ### Group Policy Management

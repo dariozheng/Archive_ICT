@@ -93,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 217.50260543823242
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -224,8 +224,10 @@
   },
   "active": "257289239635978e",
   "lastOpenFiles": [
-    "attachments/Pasted image 20260422151022.png",
+    "attachments/Manual Enrollment of Admin Certificate.mp4",
     "0 - Notes/Cisco ISE.md",
+    "Homepage.md",
+    "attachments/Pasted image 20260422151022.png",
     "attachments/Security tab.png",
     "attachments/Extensions tab.png",
     "attachments/Subject Name tab.png",
@@ -233,7 +235,6 @@
     "attachments/General tab.png",
     "attachments/Pasted image 20260421153234.png",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
-    "Homepage.md",
     "attachments/Link Quality Monitoring (LQM).png",
     "attachments/Pasted image 20260422142659.png",
     "attachments/Pasted image 20260422142617.png",
@@ -268,7 +269,6 @@
     "3 - Templates/Bases/Security.base",
     "Untitled",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
-    "3 - Templates/Bases/Topic/Cloud Computing/Cloud Computing General.base",
     "Untitled.canvas"
   ]
 }
