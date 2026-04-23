@@ -98,8 +98,8 @@ The Group Policy Management service is used to deploy the configuration of Windo
 # Network Devices
 # Tutorial
 # Reference 
-| Topic                 | Link                                                                                                      |
-| --------------------- | --------------------------------------------------------------------------------------------------------- |
-| Certificate Templates | https://sendthepayload.com/configuring-certificate-templates-with-active-directory-certificate-services/# |
-|                       |                                                                                                           |
-|                       |                                                                                                           |
+| Voce                  | Topic        | Link                                                                                                      |
+| --------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
+| Certificate Templates | Certificates | https://sendthepayload.com/configuring-certificate-templates-with-active-directory-certificate-services/# |
+| Windows Certificates  | Certificates | https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certreq_1                |
+|                       |              |                                                                                                           |
