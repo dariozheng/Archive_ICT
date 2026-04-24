@@ -201,7 +201,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -222,10 +222,17 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "cac24a06bf433f02",
+  "active": "7a424c81c28dbae2",
   "lastOpenFiles": [
-    "Homepage.md",
+    "attachments/Pasted image 20260424141851.png",
+    "attachments/Pasted image 20260424141809.png",
+    "attachments/Pasted image 20260424141754.png",
+    "attachments/Pasted image 20260424141629.png",
+    "attachments/Pasted image 20260424141558.png",
+    "attachments/Subject Name tab.png",
     "0 - Notes/Cisco ISE.md",
+    "attachments/Pasted image 20260424135651.png",
+    "Homepage.md",
     "0 - Notes/Windows Management Instrumentation.md",
     "0 - Notes/Active Directory Certificate Services.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
@@ -239,13 +246,7 @@
     "attachments/Pasted image 20260422151022.png",
     "attachments/Security tab.png",
     "attachments/Extensions tab.png",
-    "attachments/Subject Name tab.png",
     "attachments/Request Handling tab.png",
-    "attachments/General tab.png",
-    "attachments/Pasted image 20260421153234.png",
-    "attachments/Link Quality Monitoring (LQM).png",
-    "attachments/Pasted image 20260422142659.png",
-    "attachments/Pasted image 20260422142617.png",
     "0 - Notes/OSI Model.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/Web-Based Enterprise Management.md",

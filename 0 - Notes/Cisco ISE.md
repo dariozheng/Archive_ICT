@@ -79,16 +79,19 @@ To add a certificate
 Client Certificates are used by users, machine or both to authenticate to ISE. 
 In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 
 ##### Domain Users Certificate
-For Users Certificates, duplicate from the default user certificate template:
-- On the <u>General tab</u> create a logical template name
+For Users Certificates, duplicate from the default <strong>User</strong> certificate template:
+- On the <u>General tab</u> create a logical template name.
 - On the <u>Request Handling tab</u>, uncheck the <strong>Allow private key to be exported</strong> box. 
 - On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong>. The <strong>Edit Application Policies Extension</strong> window will pop up. Click the <strong>Add</strong> button. Then, add the <strong>Server Authentication</strong> policy to the <strong>Application Policies</strong>. Then click <strong>OK</strong> to close the <strong>Edit Application Policies Extension</strong> window.
 - On the <u>Security tab</u>, highlight <strong>Domain Users</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> users with a user certificate</mark> for EAP authentication when they log into their computers. 
-- On the <u>Subject Name tab</u>. If this is a lab environment, <mark style="background: #ADCCFFA6;">you may want to exclude email addresses from the Certificate template</mark> as your environment may not have an Exchange server or SMTP server integrated with Active Directory to pre-populate that information in the AD. <mark style="background: #ADCCFFA6;">If that information is not in the Active Directory record and this box is checked in the template, your certificate will not be issued to the user</mark>.
+- On the <u>Subject Name tab</u>. If this is a lab environment, <mark style="background: #ADCCFFA6;">you may want to exclude email addresses from the Certificate template</mark> as your environment may not have an Exchange server or SMTP server integrated with Active Directory to pre-populate that information in the AD. <mark style="background: #ADCCFFA6;">If that information is not in the Active Directory record and this box is checked in the template, your certificate will not be issued to the user</mark>. 
 
 | General tab               | Request Handling tab               | Extensions tab               | Security tab               | Subject Name tab               |
 | ------------------------- | ---------------------------------- | ---------------------------- | -------------------------- | ------------------------------ |
 | ![[General tab.png\|200]] | ![[Request Handling tab.png\|200]] | ![[Extensions tab.png\|200]] | ![[Security tab.png\|200]] | ![[Subject Name tab.png\|200]] |
+Once the Domain Users Certificate Template is created, <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA server</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. 
+In this case the <strong>User Certificate</strong> is issued on the <strong>SubordinateCA01</strong>.
+![[Pasted image 20260424135651.png]]
 ##### Domain Admin Certificate
 For the <strong>Domain Admin Certificate</strong> template copy the <strong>Domain User Certificate</strong> template and <mark style="background: #FFF3A3A6;">change Security tab <strong>Group or user names</strong> section</mark>, <mark style="background: #FFB86CA6;">remove Domain Users</mark> and in <mark style="background: #ABF7F7A6;">Domain Admin permissions, allow Read, Write, and Enroll</mark>. The Write permission is used to modify the certificate template. 
 
@@ -268,7 +271,18 @@ end moveToTrash
 ```
 
 ##### Domain Computer Certificate
+For Computer Certificates, duplicate from the default <strong>Workstation Authentication</strong> certificate template:
+- On the <u>General tab</u> create a logical template name.
+- On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong>. The <strong>Edit Application Policies Extension</strong> window will pop up. Click the <strong>Add</strong> button. Then, add the <strong>Server Authentication</strong> policy to the <strong>Application Policies</strong>. Then click <strong>OK</strong> to close the <strong>Edit Application Policies Extension</strong> window.
+- On the <u>Security tab</u>, highlight <strong>Domain Computers</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> computers with a machine certificate</mark> for EAP authentication when they log into their computers. 
+- On the <u>Subject Name tab</u> under Subject Name Format, change it to <strong>Fully distinguished name</strong>.
 
+| General tab                          | Extensions tab                       | Security tab                         | Subject Name tab                     |
+| ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------ |
+| ![[Pasted image 20260424141558.png]] | ![[Pasted image 20260424141629.png]] | ![[Pasted image 20260424141754.png]] | ![[Pasted image 20260424141809.png]] |
+Like the User certificate templates <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA server</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. 
+In this case the <strong>Machine Certificate</strong> is issued on the <strong>SubordinateCA02</strong>.
+![[Pasted image 20260424141851.png]]
 ### Group Policy Management
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
 
