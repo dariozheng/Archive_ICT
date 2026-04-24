@@ -298,5 +298,6 @@
   "0 - Notes/Active Directory Certificate Services.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
-  }
+  },
+  "1 - Excalidraw/Cisco ISE.md": "SiCisco"
 }
