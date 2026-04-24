@@ -89,7 +89,6 @@ As the Domain Admin Certificate is made for admins that have a domain user accou
 ###### Enrollment - Windows Manual
 ![[Manual Enrollment of Admin Certificate.mp4]]
 ###### Enrollment - Windows Script
-
 ```powershell
 param(
     [ValidateSet("All", "Step1", "Step2")]
@@ -193,7 +192,6 @@ elseif ($Step -eq "All") {
 ```
 
 ###### Enrollment - Apple Script
-
 ```applescript
 -- Define paths
 set userName to short user name of (system info)
