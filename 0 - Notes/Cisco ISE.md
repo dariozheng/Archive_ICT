@@ -86,9 +86,9 @@ For Users Certificates, duplicate from the default user certificate template:
 For the <strong>Domain Admin Certificate</strong> template copy the <strong>Domain User Certificate</strong> template and <mark style="background: #FFF3A3A6;">change Security tab <strong>Group or user names</strong> section</mark>, <mark style="background: #FFB86CA6;">remove Domain Users</mark> and in <mark style="background: #ABF7F7A6;">Domain Admin permissions, allow Read, Write, and Enroll</mark>. The Write permission is used to modify the certificate template. 
 
 As the Domain Admin Certificate is made for admins that have a domain user account but not a domain computer, the enrollment is done manually. 
-###### Enrollment - Manual
+###### Enrollment - Windows Manual
 ![[Manual Enrollment of Admin Certificate.mp4]]
-###### Enrollment - Script
+###### Enrollment - Windows Script
 
 ```powershell
 param(
@@ -190,6 +190,76 @@ elseif ($Step -eq "All") {
         exit 1
     }
 }
+```
+
+###### Enrollment - Apple Script
+
+```applescript
+-- Define paths
+set userName to short user name of (system info)
+set desktopPath to (path to desktop)
+set downloadsPath to (path to downloads folder)
+set csrPath to (desktopPath as string) & "request.csr"
+set keyPath to (desktopPath as string) & "private.key"
+set p12Path to (desktopPath as string) & "identity.p12"
+set certName to "certnew.cer"
+set subCaUrl to "https://subordinateca01.publiacqua.it/certsrv/certrqxt.asp"
+set tempPass to "1234"
+
+set certInDownloads to (downloadsPath as string) & certName
+
+-- Files to move to Trash at the end
+set filesToTrash to {csrPath, keyPath, p12Path, certInDownloads}
+set caughtError to ""
+
+try
+	-- 1. Generate Private Key and CSR
+	do shell script "openssl req -new -newkey rsa:2048 -nodes -keyout " & quoted form of POSIX path of keyPath & " -out " & quoted form of POSIX path of csrPath & " -subj '/CN=" & userName & "'"
+	
+	-- 2. Copy CSR and open portal
+	set csrText to do shell script "cat " & quoted form of POSIX path of csrPath
+	set the clipboard to csrText
+	open location subCaUrl
+	
+	-- 3. Wait for user
+	display dialog "CSR COPIED! 
+
+1. Paste into portal and select Template: EAP-Admin-User.
+2. Download the 'Base 64 encoded' certificate.
+3. Click 'Finalize' to link the key, install into Keychain, and clean up temporary files" with icon note buttons {"Finalize"} default button 1
+	
+	-- 4. Ensure downloaded certificate exists in Downloads
+	set certDownloadsPosix to quoted form of POSIX path of certInDownloads
+	do shell script "test -f " & certDownloadsPosix
+	
+	-- 5. Create PKCS#12 bundle from key + cert
+	do shell script "openssl pkcs12 -export -out " & quoted form of POSIX path of p12Path & " -inkey " & quoted form of POSIX path of keyPath & " -in " & quoted form of POSIX path of certInDownloads & " -passout pass:" & quoted form of tempPass
+	
+	-- Import into the login keychain
+	-- -P provides the password for the P12; -T allows the codesign tool access
+	do shell script "security import " & quoted form of POSIX path of p12Path & " -k ~/Library/Keychains/login.keychain-db -P " & quoted form of tempPass & " -T /usr/bin/codesign"
+	
+	display notification "Certificate and key installed in Keychain!" with title "Success"
+	
+on error anyError
+	set caughtError to anyError
+end try
+
+my moveToTrash(filesToTrash)
+if caughtError is not "" and caughtError does not contain "User canceled" then
+	display dialog "Error: " & caughtError buttons {"OK"} default button 1
+end if
+
+-- TRASH HANDLER
+on moveToTrash(fileList)
+	tell application "Finder"
+		repeat with filePath in fileList
+			if exists file filePath then
+				delete file filePath
+			end if
+		end repeat
+	end tell
+end moveToTrash
 ```
 
 ##### Domain Computer Certificate
