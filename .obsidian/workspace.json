@@ -22,7 +22,7 @@
             }
           },
           {
-            "id": "257289239635978e",
+            "id": "cac24a06bf433f02",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -35,7 +35,8 @@
               "title": "Cisco ISE"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -108,13 +109,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Homepage.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Homepage"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -221,9 +222,12 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "23590580a7ebfd07",
+  "active": "cac24a06bf433f02",
   "lastOpenFiles": [
+    "Homepage.md",
     "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Windows Management Instrumentation.md",
+    "0 - Notes/Active Directory Certificate Services.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
@@ -231,10 +235,7 @@
     "2 - Categories/Microsoft.md",
     "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
-    "0 - Notes/Windows Management Instrumentation.md",
-    "0 - Notes/Active Directory Certificate Services.md",
     "attachments/Manual Enrollment of Admin Certificate.mp4",
-    "Homepage.md",
     "attachments/Pasted image 20260422151022.png",
     "attachments/Security tab.png",
     "attachments/Extensions tab.png",

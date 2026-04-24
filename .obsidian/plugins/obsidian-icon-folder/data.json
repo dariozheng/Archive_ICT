@@ -294,5 +294,9 @@
   "2 - Categories/Topics/Microsoft/Windows Server.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
+  },
+  "0 - Notes/Active Directory Certificate Services.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
   }
 }
