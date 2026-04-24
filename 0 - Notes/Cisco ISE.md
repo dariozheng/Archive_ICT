@@ -57,7 +57,7 @@ For the server ISE to be able to join the domain, it has to have a machine accou
 
 On this section it is also possible to retrieve groups from the AD to create policies around the user group identity. 
 ![[Pasted image 20260421125524.png]]
-### Certificate Authority
+### Certificate Authority #certificates
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication. 
 #### Server Certificates
 There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication.
@@ -68,6 +68,13 @@ Certificates are also used to secure EAP communications, to form a Transport Lay
 - <strong>Portal</strong>: Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices. 
 - <strong>pxGrid</strong>: This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information. 
 ![[Pasted image 20260421153234.png]]
+
+To add a certificate
+##### Trusted Certificates
+
+###### CRL Revocation List
+
+
 #### Client Certificates 
 Client Certificates are used by users, machine or both to authenticate to ISE. 
 In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 

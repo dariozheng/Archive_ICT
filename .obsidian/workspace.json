@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -68,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "[\"modified\"]",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -89,7 +89,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -222,7 +223,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "257289239635978e",
+  "active": "5a6c7b66867dfa5d",
   "lastOpenFiles": [
     "attachments/Manual Enrollment of Admin Certificate.mp4",
     "0 - Notes/Cisco ISE.md",
