@@ -5,4 +5,4 @@ tags:
 icon: SiWindows
 iconColor: "#0078D4"
 ---
-![[Windows.base]]
+![[Windows Server.base]]

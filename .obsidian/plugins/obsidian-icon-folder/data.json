@@ -267,10 +267,6 @@
     "iconName": "SiMicrosoft",
     "iconColor": "#0078D4"
   },
-  "2 - Categories/Topics/Microsoft/Windows.md": {
-    "iconName": "SiWindows",
-    "iconColor": "#0078D4"
-  },
   "2 - Categories/Topics/Security/Network-Based Attacks.md": {
     "iconName": "FasUserSecret",
     "iconColor": "#000000"
@@ -294,5 +290,9 @@
   "Homepage.md": {
     "iconName": "LiHome",
     "iconColor": "#b72424"
+  },
+  "2 - Categories/Topics/Microsoft/Windows Server.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
   }
 }

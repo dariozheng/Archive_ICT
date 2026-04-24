@@ -2,7 +2,7 @@
 categories:
   - "[[Microsoft]]"
 product:
-  - "[[Windows]]"
+  - "[[Windows Server]]"
 tags:
 aliases:
   - WMI
