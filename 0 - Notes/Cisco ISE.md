@@ -90,6 +90,108 @@ As the Domain Admin Certificate is made for admins that have a domain user accou
 ![[Manual Enrollment of Admin Certificate.mp4]]
 ###### Enrollment - Script
 
+```powershell
+param(
+    [ValidateSet("All", "Step1", "Step2")]
+    [string]$Step = "All",
+    [string]$CertPath = "$env:USERPROFILE\Downloads\certnew.cer"
+)
+# Paths
+$infPath = Join-Path $env:TEMP "cert_request.inf"
+$csrPath = Join-Path $env:USERPROFILE "Desktop\request.csr"
+$subcaUrl = "https://subordinateca01.publiacqua.it/certsrv/certrqxt.asp"
+
+$infContent = @"
+[NewRequest]
+Subject = "CN=$env:USERNAME"
+KeyLength = 2048
+Exportable = TRUE
+MachineKeySet = FALSE
+RequestType = PKCS10
+ProviderName = "Microsoft Software Key Storage Provider"
+[EnhancedKeyUsageExtension]
+OID = 1.3.6.1.5.5.7.3.2 ; Client Authentication
+"@
+
+function Move-UsedFilesToRecycleBin {
+    $filesToMove = @($infPath, $csrPath, $CertPath)
+    foreach ($file in $filesToMove) {
+        if (Test-Path $file) {
+            [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile(
+                $file,
+                [Microsoft.VisualBasic.FileIO.UIOption]::OnlyErrorDialogs,
+                [Microsoft.VisualBasic.FileIO.RecycleOption]::SendToRecycleBin
+            )
+        }
+    }
+}
+
+function Invoke-Step1 {
+    Set-Content -Path $infPath -Value $infContent
+    certreq -new $infPath $csrPath
+
+    if (Test-Path $csrPath) {
+        $csrText = Get-Content $csrPath -Raw
+        $csrText | Set-Clipboard
+        Write-Host "`n CSR saved and copied to clipboard." -ForegroundColor Green
+        Write-Host "`n Use Publiacqua domain credentials." -ForegroundColor Green
+        Write-Host "`n Paste the CSR to $subcaUrl" -ForegroundColor Green
+        Write-Host "`n Certificate Template must be EAP-Admin-User." -ForegroundColor Green
+        Write-Host "`n Download the Base64 certificate as certnew.cer in the Download folder." -ForegroundColor Green
+        Start-Process $subcaUrl
+    }
+    else {
+        Write-Error "Failed to generate CSR."
+        return $false
+    }
+    return $true
+}
+
+function Invoke-Step2 {
+    if (-not (Test-Path $CertPath)) {
+        Write-Error "`n Certificate file not found: $CertPath"
+        Write-Host "`n If needed, specify it explicitly:" -ForegroundColor Yellow
+        Write-Host "`n .\EAP-Admin-User_Cert_Enroll.ps1 -Step Step2 -CertPath 'C:\path\certnew.cer'" -ForegroundColor Yellow
+        return $false
+    }
+    if (Import-Certificate -FilePath $CertPath -CertStoreLocation "Cert:\CurrentUser\My") {
+        Write-Host "`n certnew.cer installed to CurrentUser\Personal store." -ForegroundColor Green
+        Add-Type -AssemblyName Microsoft.VisualBasic
+        Move-UsedFilesToRecycleBin
+        Write-Host "`n Used files sent to user Recycle Bin." -ForegroundColor Green
+        return $true
+    }
+    else {
+        Write-Error "`n Certificate import failed."
+        return $false
+    }
+}
+
+if ($Step -eq "Step1") {
+    [void](Invoke-Step1)
+}
+elseif ($Step -eq "Step2") {
+    if (-not (Invoke-Step2)) {
+        exit 1
+    }
+}
+elseif ($Step -eq "All") {
+    $okStep1 = Invoke-Step1
+    if (-not $okStep1) {
+        exit 1
+    }
+    Write-Host "`n Once the certnew.cer is downloaded, press ENTER to continue " -ForegroundColor Yellow
+    $userInput = Read-Host "`n Press ENTER to continue or Q to quit"
+    if ($userInput -match '^[Qq]$') {
+        Write-Host "`n Stopped after Step 1. You can later run: .\EAP-Admin-User_Cert_Enroll.ps1 -Step Step2" -ForegroundColor Yellow
+        exit 0
+    }
+    if (-not (Invoke-Step2)) {
+        exit 1
+    }
+}
+```
+
 ##### Domain Computer Certificate
 
 ### Group Policy Management
