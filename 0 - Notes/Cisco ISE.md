@@ -290,7 +290,7 @@ For Computer Certificates, duplicate from the default <strong>Workstation Authen
 
 | General tab                          | Extensions tab                       | Security tab                         | Subject Name tab                     |
 | ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------ |
-| ![[Pasted image 20260424141558.png]] | ![[Pasted image 20260424141629.png]] | ![[Pasted image 20260424141754.png]] | ![[Pasted image 20260424141809.png]] |
+| ![[Pasted image 20260424150448.png]] | ![[Pasted image 20260424141629.png]] | ![[Pasted image 20260424141754.png]] | ![[Pasted image 20260424141809.png]] |
 Like the User certificate templates <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA server</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. 
 In this case the <strong>Machine Certificate</strong> is issued on the <strong>SubordinateCA02</strong>.
 ![[Pasted image 20260424141851.png]]
