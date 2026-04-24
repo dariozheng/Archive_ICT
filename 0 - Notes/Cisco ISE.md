@@ -73,8 +73,19 @@ To add a certificate
 ##### Trusted Certificates
 
 ###### CRL Revocation List
+##### Certificate Authentication Profile
+![[Pasted image 20260424144802.png]]
+<strong>Certificate Authentication Profile</strong>(CAP) section is used to decide which <mark style="background: #FF5582A6;">attribute of the certificate</mark> the server ISE will use to check identity of the client. 
 
+Here it is set to Subject Alternate Name (SAN) as the CAP will be used for both Machine and User EAP authentication protocols. The Users in the SAN will use the UPN while the Machines will use the DNS Name.
 
+| User Certificate                     | Machine Certificate                  |
+| ------------------------------------ | ------------------------------------ |
+| ![[Pasted image 20260424145144.png]] | ![[Pasted image 20260424145227.png]] |
+The selection <strong>Match Client Certificate Against Certificate In Identity Store</strong>:
+- <strong>Only to resolve identity ambiguity</strong>: This is the standard setting. It tells ISE to use the certificate information to identify the user in AD, but it doesn't require a byte-for-byte match of the certificate itself against an AD attribute.
+- <strong>Always perform binary comparison</strong>: <mark style="background: #FF5582A6;">Use this only if you have physically uploaded or published the user/machine certificates into the <strong>userCertificate</strong> attribute in Active Directory</mark>. <mark style="background: #FFB86CA6;">ISE will then perform a byte-for-byte comparison between the certificate the client presents and the one stored in AD</mark>. If they don't match exactly, authentication will fail.
+- **Never:** Choose this if you are not using an identity store at all for this profile. This would be common for Guest or BYOD setups where you just want to verify that the certificate is valid and signed by a trusted CA without checking it against an AD account.
 #### Client Certificates 
 Client Certificates are used by users, machine or both to authenticate to ISE. 
 In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 

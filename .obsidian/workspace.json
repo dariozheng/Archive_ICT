@@ -201,7 +201,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -222,8 +222,11 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "4358fb8c6f77a4fb",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260424145227.png",
+    "attachments/Pasted image 20260424145144.png",
+    "attachments/Pasted image 20260424144802.png",
     "attachments/Pasted image 20260424141851.png",
     "attachments/Pasted image 20260424141809.png",
     "attachments/Pasted image 20260424141754.png",
@@ -244,9 +247,6 @@
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "attachments/Manual Enrollment of Admin Certificate.mp4",
     "attachments/Pasted image 20260422151022.png",
-    "attachments/Security tab.png",
-    "attachments/Extensions tab.png",
-    "attachments/Request Handling tab.png",
     "0 - Notes/OSI Model.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/Web-Based Enterprise Management.md",
