@@ -297,7 +297,9 @@ Like the User certificate templates <mark style="background: #FF5582A6;">issue t
 In this case the <strong>Machine Certificate</strong> is issued on the <strong>SubordinateCA02</strong>.
 ![[Pasted image 20260424141851.png]]
 ##### Script To Remove Expired userCertificate
-The expired certificates in the userCertificate attribute cannot be removed automatically, so we should remove them with help of a script.
+The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script.
+
+
 ```powershell
 <#
 .SYNOPSIS
@@ -903,7 +905,6 @@ Write-Host ""
 
 #endregion
 ```
-
 ### Group Policy Management
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
 

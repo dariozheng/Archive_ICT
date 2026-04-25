@@ -200,8 +200,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -222,8 +221,10 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "6f78ba7ec3b5902e",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "Script_Clean-Expired-userCertificate.ps1",
+    "attachments/Script_Clean-Expired-userCertificate.ps1",
     "1 - Excalidraw/Cisco ISE.md",
     "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260424150748.png",
@@ -262,14 +263,12 @@
     "README.md",
     "0 - Notes/Denial-of-Service (DoS).md",
     "0 - Notes/Autonomous Digital Experience Management.md",
-    "0 - Notes/Bots and Botnets.md",
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",
     "3 - Templates/Bases/Topic/Security/Security General.base",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
-    "3 - Templates/Bases/Security.base",
     "Untitled.canvas"
   ]
 }
