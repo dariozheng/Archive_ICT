@@ -299,104 +299,241 @@ In this case the <strong>Machine Certificate</strong> is issued on the <strong>S
 ##### Script To Remove Expired userCertificate
 The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script.
 
-
 ```powershell
 <#
 .SYNOPSIS
-    Scans Active Directory for users with expired or corrupt certificates
-    in the userCertificate attribute and optionally removes them.
+    Cleans up expired/corrupt certificates from the AD `userCertificate`
+    attribute on user and/or computer objects. Designed to be run alongside
+    Cisco ISE deployments that use Certificate Binary Comparison as part of
+    EAP-TLS authorization. 
+    
+    The script should be run in UTF-8 BOM mode.
 
 .DESCRIPTION
-    - Queries only users who actually carry certificates (LDAP pre-filter).
-    - Distinguishes expired certs, corrupt/unreadable blobs, and valid certs.
-    - Corrupt blobs are tracked separately and can be optionally removed.
-    - Dry-run mode ($DryRun) is the default; no changes are written unless
-      explicitly set to $false.
-    - Supports WhatIf/Confirm via ShouldProcess for native PowerShell safety.
-    - Uses retry logic for Set-ADUser updates to tolerate transient AD errors.
-    - Streams CSV output in batches for large environments to reduce memory use.
-    - Produces a timestamped CSV audit log and a console summary.
-    - Out-GridView is used only when available and when not in streaming mode.
+    Why this exists
+    ---------------
+    When ISE is configured to perform Certificate Binary Comparison, every
+    EAP-TLS authentication causes ISE to fetch the userCertificate values
+    from the matching AD object (via the configured Join Point) and compare
+    them, byte-for-byte, against the certificate the supplicant just
+    presented. Any value in the attribute is a candidate match.
+
+    Over time userCertificate accumulates stale blobs:
+      - Old certs from auto-enrollment renewals (publish, never prune).
+      - Replaced devices/users that re-enrolled.
+      - Truly corrupt entries (truncated writes, schema mishaps, third-party
+        injectors).
+
+    Stale blobs do NOT cause ISE binary comparison to fail (the supplicant
+    can only present its current cert), but they:
+      * Inflate every ISE LDAP fetch.
+      * Make troubleshooting harder.
+      * Risk an accidental match if a cert is reissued for a different entity
+        with a colliding identity (rare, but a real audit finding).
+
+    What this script does
+    ---------------------
+    - Pre-filters AD via LDAP to only fetch objects that actually carry certs.
+    - Supports user objects, computer objects, or both via -Target.
+    - Optional -RequiredIssuer scoping (regex or exact) so the script only
+      ever touches certs from the CA that issues your ISE EAP-TLS certs.
+      Out-of-scope certs are counted but never removed.
+    - Per-cert classification: Valid / Expired / Corrupt / OutOfScope.
+    - Atomic per-value -Remove against userCertificate (no read-modify-write
+      race; AD matches blobs by exact byte value).
+    - Deduplicates blobs queued for removal.
+    - Refuses to empty the attribute unless -AllowFullRemoval:$true (clearing
+      it kills ISE binary comparison for that object until the next
+      autoenrollment cycle + AD replication).
+    - Dry-run by default; supports -WhatIf / -Confirm via ShouldProcess.
+    - Streaming CSV audit log with normalized Action/Type columns plus
+      issuer, NotBefore/NotAfter, and per-object active-cert counts.
+    - Safety kill-switches for runaway queries or absurd per-object cert counts.
+    - Domain-wide cert population totals in the summary (total blobs seen,
+      valid in-scope, out-of-scope, expired, corrupt).
+    - Optional -IncludeActiveCerts mode emits one audit row per healthy
+      (parseable, non-expired) certificate, both in-scope and out-of-scope.
+      Type='Active' on every row; the Issuer column tells you which CA
+      each cert came from. Gives a full inventory of every live cert in
+      userCertificate across the scanned objects.
+
+    Safety guarantee for active certificates
+    ----------------------------------------
+    Active certificates (parseable + NotAfter >= now) are NEVER removed
+    by this script, under any parameter combination. They are:
+      - Counted (always, for the summary).
+      - Listed in the audit CSV ONLY when -IncludeActiveCerts is set
+        explicitly. The default is $false — no listing without opt-in.
+    The removal pipeline only ever consumes expired in-scope blobs
+    (always eligible) and corrupt blobs (eligible only when
+    -RemoveCorruptBlobs is set). There is no code path in which an
+    active cert reaches the AD write call. -IncludeActiveCerts is a
+    read-only inventory switch; it adds rows to the CSV and nothing
+    else.
+
+    What this script does NOT do
+    ----------------------------
+    - It does not validate the cert chain, revocation, or NTAuth membership.
+    - It does not know which cert ISE last matched — it only knows expiry.
+    - It does not wait for AD replication. Plan a quiet window or pin both
+      writes (-Server) and the ISE Join Point to the same DC for predictable
+      behaviour.
+
+    Audit CSV schema
+    ----------------
+        Timestamp        : when the row was written
+        ObjectClass      : 'user' or 'computer'
+        Name             : SamAccountName (users) or Name (computers)
+        ObjectDN         : full DN
+        Thumbprint       : cert thumbprint (or 'N/A' for corrupt/object-level)
+        Issuer           : Issuer DN
+        NotBefore        : cert validity start
+        NotAfter         : cert validity end
+        Action           : Removed | Identified | Skipped | Failed
+        Type             : Expired | Corrupt | OutOfScopeOnly | Protection |
+                           KillSwitch | Active
+        ValidInScope     : count of in-scope, non-expired certs the object
+                           has (== "active certificates for ISE binary
+                           comparison"). 'N/A' when unclassified.
+        RemainingAfter   : total userCertificate values the object will
+                           hold after the run. 'N/A' when unclassified.
+        Detail           : free-form context (reason, error message, etc.)
+
+.PARAMETER Target
+    Which AD object class to scan. User | Computer | Both. Default: User.
 
 .PARAMETER DryRun
-    When $true (default), AD writes are not attempted and removals are reported.
+    When $true (default), no AD writes are attempted.
 
 .PARAMETER SearchBase
-    Optional OU distinguished name to limit the query scope.
+    Optional OU distinguished name to limit query scope.
+
+.PARAMETER RequiredIssuer
+    Optional pattern matched against the certificate Issuer DN.
+    When set, only certs whose Issuer matches are eligible for removal.
+    Certs that do not match are tracked as 'OutOfScope' and left alone.
+    Strongly recommended for ISE deployments.
+
+.PARAMETER IssuerMatchMode
+    How -RequiredIssuer is interpreted.
+      Regex  : .NET regex (default, preserves prior behaviour). Note that
+               DNs commonly contain regex metacharacters: '(', ')', '+',
+               '.'. Escape them, or use Exact mode.
+      Exact  : case-insensitive full-DN string equality against $Cert.Issuer.
 
 .PARAMETER RemoveCorruptBlobs
     When $true, unreadable/corrupt certificate blobs are removed in addition
-    to expired certificates.
-
-.PARAMETER ProtectLastValidCert
-    Legacy safety switch retained for compatibility. Full-removal control is
-    primarily enforced by AllowFullRemoval.
+    to expired certificates. Default $false.
 
 .PARAMETER AllowFullRemoval
-    When $false (default), users are skipped if cleanup would remove all certs.
-    Set to $true only when full removal is explicitly intended.
+    When $false (default), the script refuses to leave the userCertificate
+    attribute empty.
 
 .PARAMETER Server
-    Optional domain controller to use for reads/writes.
-    Specifying one DC helps reduce multi-DC consistency surprises.
+    Optional DC for reads/writes. Pin to the DC ISE's Join Point queries.
 
 .PARAMETER Credential
-    Optional PSCredential for cross-domain or service-account execution.
+    Optional PSCredential.
 
 .PARAMETER LogPath
     Directory where the CSV audit log will be written.
 
 .PARAMETER ShowProgress
-    When $true, shows a progress bar while scanning AD users.
+    Show progress while scanning (every 500 objects).
+
+.PARAMETER MaxObjectsKillSwitch
+    Abort if more than this many AD objects are returned. Default 50000.
+    Compared against scanned-object count (broad guard, not just cert-bearing).
+
+.PARAMETER MaxCertsPerObjectKillSwitch
+    Abort processing a single object if its userCertificate has more values
+    than this. Default 500.
+
+.PARAMETER IncludeActiveCerts
+    READ-ONLY inventory switch. Default $false.
+
+    When $true, emits one CSV row per active certificate (parseable,
+    NotAfter >= now) found on the scanned objects: in-scope and out-of-
+    scope alike. Rows have Action='Skipped' and Type='Active'. The
+    Issuer column distinguishes in-scope from out-of-scope, and Detail
+    labels each row accordingly.
+
+    SAFETY: this parameter NEVER causes an active certificate to be
+    removed or modified. It only adds rows to the audit CSV. There is
+    no combination of parameters that can cause active certs to be
+    deleted by this script — the removal pipeline does not consume
+    active certs at all.
+
+    OPT-IN: active certificates are not listed unless this parameter
+    is explicitly set to $true. The default is $false (no inventory).
+
+    In large environments this can significantly increase audit-log
+    size — every healthy cert produces a row.
 
 .EXAMPLE
-    # Default safety run (dry-run) across the current domain
-    .\user.ps1
+    # Default: dry-run on users in the current domain
+    .\Invoke-ExpiredCertCleanup.ps1
 
 .EXAMPLE
-    # Commit removals in a specific OU and prompt for confirmation
-    .\user.ps1 -DryRun:$false -SearchBase "OU=Users,DC=corp,DC=local" -Confirm
+    # ISE-scoped dry-run on computers, exact issuer match
+    .\Invoke-ExpiredCertCleanup.ps1 `
+        -Target Computer `
+        -RequiredIssuer 'CN=Publiacqua Issuing CA, DC=publiacqua, DC=local' `
+        -IssuerMatchMode Exact `
+        -Server dc01.publiacqua.local
 
 .EXAMPLE
-    # Include corrupt blob removal and allow full removal if needed
-    .\user.ps1 -DryRun:$false -RemoveCorruptBlobs:$true -AllowFullRemoval:$true
-
-.EXAMPLE
-    # Target a specific DC with progress output
-    .\user.ps1 -Server "dc01.corp.local" -ShowProgress:$true
+    # Commit removals on computers, exact issuer match, prompt per object
+    .\Invoke-ExpiredCertCleanup.ps1 `
+        -Target Computer `
+        -RequiredIssuer 'CN=Publiacqua Issuing CA, DC=publiacqua, DC=local' `
+        -IssuerMatchMode Exact `
+        -DryRun:$false -Confirm `
+        -Server dc01.publiacqua.local
 
 .NOTES
-    Requires: ActiveDirectory module, appropriate AD write permissions.
+    Requires the ActiveDirectory module and write permissions for live runs.
+    Uses Get-ADObject / Set-ADObject so user and computer classes share one
+    code path.
+
+    NOTE on large environments: Get-ADObject materializes the full result
+    set before iteration begins, so the kill-switch is a *post-fetch* guard,
+    not a query-time abort. For very large domains, scope tightly with
+    -SearchBase. The userCertificate=* filter is matched against an
+    unindexed attribute in many schemas, so OU scoping is doubly important.
 #>
 
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
 param (
-    # Set to $false to commit changes. Defaults to dry-run.
+    [ValidateSet('User','Computer','Both')]
+    [string]$Target = 'User',
+
     [bool]$DryRun = $true,
 
-    # Limit scope to a specific OU. Leave empty to scan the whole directory.
     [string]$SearchBase = "",
 
-    # Remove corrupt/unreadable blobs in addition to expired certs.
+    [string]$RequiredIssuer = "",
+
+    [ValidateSet('Regex','Exact')]
+    [string]$IssuerMatchMode = 'Regex',
+
     [bool]$RemoveCorruptBlobs = $false,
 
-    # Prevent cleanup from removing all certificates for a user.
-    [bool]$ProtectLastValidCert = $true,
-
-    # Allow removing all certificates from a user when no valid cert would remain.
     [bool]$AllowFullRemoval = $false,
 
-    # Target DC. Leave empty to use the default logon DC.
     [string]$Server = "",
 
-    # Optional credential for cross-domain or service-account execution.
     [System.Management.Automation.PSCredential]$Credential = $null,
 
-    # Directory where the CSV audit log will be written.
-    [string]$LogPath = "C:\Temp",
+    [string]$LogPath = "$env:USERPROFILE\Documents",
 
-    # Show progress bar while scanning users.
-    [bool]$ShowProgress = $false
+    [bool]$ShowProgress = $false,
+
+    [int]$MaxObjectsKillSwitch = 50000,
+
+    [int]$MaxCertsPerObjectKillSwitch = 500,
+
+    [bool]$IncludeActiveCerts = $false
 )
 
 Set-StrictMode -Version Latest
@@ -407,78 +544,116 @@ $ErrorActionPreference = "Stop"
 function Write-Section {
     param([string]$Message, [ConsoleColor]$Color = "Cyan")
     Write-Host ""
-    Write-Host ("─" * 60) -ForegroundColor DarkGray
+    Write-Host ("─" * 72) -ForegroundColor DarkGray
     Write-Host "  $Message" -ForegroundColor $Color
-    Write-Host ("─" * 60) -ForegroundColor DarkGray
+    Write-Host ("─" * 72) -ForegroundColor DarkGray
 }
 
 function New-ResultRecord {
+    <#
+        Audit-record factory. Action/Type are normalized for aggregation;
+        Detail is free text. ValidInScope and RemainingAfter give per-record
+        context for the parent object so the CSV can be filtered by ISE
+        impact (e.g., rows where ValidInScope=0 are objects that will fail
+        binary comparison until autoenrollment runs).
+
+        IssuerCN is derived from $Issuer via Get-DnCN — callers do NOT
+        pass it explicitly.
+    #>
     param(
-        [string]$SamAccountName,
-        [string]$UserDN,
-        [string]$Thumbprint,
-        [string]$ExpiryDate,
-        [string]$Status,
-        [string]$Details
+        [string]$ObjectClass,
+        [string]$ObjectName,
+        [string]$ObjectDN,
+        [string]$Thumbprint   = "N/A",
+        [string]$Issuer       = "N/A",
+        [string]$NotBefore    = "N/A",
+        [string]$NotAfter     = "N/A",
+        [ValidateSet('Removed','Identified','Skipped','Failed')]
+        [string]$Action,
+        [ValidateSet('Expired','Corrupt','OutOfScopeOnly','Protection','KillSwitch','Active')]
+        [string]$Type,
+        [string]$ValidInScope   = "N/A",
+        [string]$RemainingAfter = "N/A",
+        [string]$Detail         = ""
     )
     [PSCustomObject]@{
-        Timestamp  = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-        User       = $SamAccountName
-        UserDN     = $UserDN
-        Thumbprint = $Thumbprint
-        ExpiryDate = $ExpiryDate
-        Status     = $Status
-        Details    = $Details
+        Timestamp      = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+        ObjectClass    = $ObjectClass
+        Name           = $ObjectName
+        ObjectDN       = $ObjectDN
+        Thumbprint     = $Thumbprint
+        Issuer         = $Issuer
+        IssuerCN       = (Get-DnCN -Dn $Issuer)
+        NotBefore      = $NotBefore
+        NotAfter       = $NotAfter
+        Action         = $Action
+        Type           = $Type
+        ValidInScope   = $ValidInScope
+        RemainingAfter = $RemainingAfter
+        Detail         = $Detail
     }
 }
 
-function Get-BlobHash {
-    param([byte[]]$Blob)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create()
-    try {
-        $hashBytes = $sha256.ComputeHash($Blob)
-        return [System.BitConverter]::ToString($hashBytes)
-    } finally {
-        $sha256.Dispose()
-    }
-}
-
-function Get-BlobHashCached {
+function Invoke-SetADObjectWithRetry {
+    <#
+        Wraps Set-ADObject with exponential-backoff retry.
+          -RemoveBlobs : atomic per-value -Remove (preferred, race-safe)
+          -ClearAttr   : full attribute clear via -Clear userCertificate
+    #>
     param(
-        [byte[]]$Blob,
-        [hashtable]$HashCache
-    )
-
-    $cacheKey = [Convert]::ToBase64String($Blob)
-    if ($HashCache.ContainsKey($cacheKey)) {
-        return $HashCache[$cacheKey]
-    }
-
-    $hash = Get-BlobHash -Blob $Blob
-    $HashCache[$cacheKey] = $hash
-    return $hash
-}
-
-function Invoke-SetADUserWithRetry {
-    param(
-        [hashtable]$SetADUserParams,
-        [switch]$ClearUserCertificate,
+        [hashtable]$SetADObjectParams,
+        [byte[][]]$RemoveBlobs = $null,
+        [switch]$ClearAttr,
         [int]$MaxRetries = 3
     )
 
     for ($attempt = 1; $attempt -le $MaxRetries; $attempt++) {
         try {
-            if ($ClearUserCertificate) {
-                Set-ADUser @SetADUserParams -Clear userCertificate
+            if ($ClearAttr) {
+                Set-ADObject @SetADObjectParams -Clear userCertificate
+            } elseif ($null -ne $RemoveBlobs -and $RemoveBlobs.Count -gt 0) {
+                # Wrap each blob in a single-element array so PowerShell does
+                # not unroll byte[] into individual integers when building the
+                # hashtable passed to -Remove.
+                $RemoveHash = @{ userCertificate = @($RemoveBlobs | ForEach-Object { ,$_ }) }
+                Set-ADObject @SetADObjectParams -Remove $RemoveHash
             } else {
-                Set-ADUser @SetADUserParams
+                Set-ADObject @SetADObjectParams
             }
             return
         } catch {
             if ($attempt -eq $MaxRetries) {
-                throw "Set-ADUser failed after $MaxRetries attempts: $($_.Exception.Message)"
+                throw "Set-ADObject failed after $MaxRetries attempts: $($_.Exception.Message)"
             }
+            Write-Warning ("  Set-ADObject attempt {0}/{1} failed: {2}. Retrying in {3}s..." -f `
+                $attempt, $MaxRetries, $_.Exception.Message, (2 * $attempt))
             Start-Sleep -Seconds (2 * $attempt)
+        }
+    }
+}
+
+function Update-RecordCounters {
+    <#
+        Increments two parallel hashtables: one keyed by Action, one by Type.
+        Called during streaming flush and at end-of-run aggregation.
+    #>
+    param(
+        [PSObject]$Record,
+        [hashtable]$ActionCounts,
+        [hashtable]$TypeCounts
+    )
+    if ($Record.Action) {
+        if ($ActionCounts.ContainsKey($Record.Action)) {
+            $ActionCounts[$Record.Action]++
+        } else {
+            $ActionCounts[$Record.Action] = 1
+        }
+    }
+    if ($Record.Type) {
+        if ($TypeCounts.ContainsKey($Record.Type)) {
+            $TypeCounts[$Record.Type]++
+        } else {
+            $TypeCounts[$Record.Type] = 1
         }
     }
 }
@@ -488,18 +663,15 @@ function Flush-ResultsBuffer {
         [System.Collections.Generic.List[PSObject]]$Buffer,
         [string]$LogPath,
         [string]$LogFile,
-        [hashtable]$AggregatedStatusCounts,
+        [hashtable]$ActionCounts,
+        [hashtable]$TypeCounts,
         [ref]$CsvInitialized
     )
 
     if ($Buffer.Count -eq 0) { return }
 
     foreach ($r in $Buffer) {
-        if ($AggregatedStatusCounts.ContainsKey($r.Status)) {
-            $AggregatedStatusCounts[$r.Status]++
-        } else {
-            $AggregatedStatusCounts[$r.Status] = 1
-        }
+        Update-RecordCounters -Record $r -ActionCounts $ActionCounts -TypeCounts $TypeCounts
     }
 
     if (!(Test-Path $LogPath)) {
@@ -516,6 +688,91 @@ function Flush-ResultsBuffer {
     $Buffer.Clear()
 }
 
+function Get-FriendlyName {
+    <#
+        Returns a short display name. Computers prefer Name (no trailing $);
+        users prefer SamAccountName but fall back to Name if missing.
+    #>
+    param($AdObject)
+    if ($AdObject.objectClass -contains 'computer') {
+        return $AdObject.Name
+    }
+    if ($AdObject.SamAccountName) {
+        return $AdObject.SamAccountName
+    }
+    return $AdObject.Name
+}
+
+function Get-DedupedBlobList {
+    <#
+        Deduplicates a list of byte[] blobs by exact byte-value.
+
+        We can't use Sort-Object -Unique here: PowerShell compares byte[]
+        values by reference, so two distinct array instances holding the
+        same bytes always sort as unique. We key on Base64 of the bytes
+        instead, using a HashSet for O(1) lookup.
+    #>
+    param([System.Collections.Generic.List[byte[]]]$Blobs)
+
+    $seen   = [System.Collections.Generic.HashSet[string]]::new()
+    $result = [System.Collections.Generic.List[byte[]]]::new()
+    foreach ($b in $Blobs) {
+        $key = [Convert]::ToBase64String($b)
+        if ($seen.Add($key)) {
+            $result.Add($b)
+        }
+    }
+    return ,$result   # comma-prefix prevents PS from unrolling the List
+}
+
+function Test-IssuerInScope {
+    <#
+        Applies -RequiredIssuer / -IssuerMatchMode policy.
+        Empty $RequiredIssuer means "no scope filter" -> always in-scope.
+    #>
+    param(
+        [string]$IssuerDn,
+        [string]$RequiredIssuer,
+        [string]$IssuerMatchMode
+    )
+    if (-not $RequiredIssuer) { return $true }
+
+    if ($IssuerMatchMode -eq 'Exact') {
+        return [string]::Equals($IssuerDn, $RequiredIssuer, [StringComparison]::OrdinalIgnoreCase)
+    }
+    # Regex (default) — case-insensitive by default in PowerShell, matching
+    # DN comparison semantics (RFC 4514). Use [regex]::Escape() in your
+    # input if you want literal matching of '(', ')', '+', '.' etc.
+    return $IssuerDn -match $RequiredIssuer
+}
+
+function Get-DnCN {
+    <#
+        Extract the CN= component from an X.500 distinguished name.
+
+        Splits on unescaped commas (commas not preceded by '\') so DNs like
+        "CN=Smith\, John,DC=example,DC=com" parse correctly. Returns the
+        first CN found, with escaped commas un-escaped. Falls back to the
+        full DN if no CN is present, and to "N/A" for placeholder values.
+
+        Used to populate the IssuerCN column from the Issuer DN — gives
+        a short, filterable value in Excel (e.g. "Publiacqua Issuing CA")
+        without needing to parse the full DN every time.
+    #>
+    param([string]$Dn)
+    if (-not $Dn -or $Dn -eq "N/A" -or $Dn -like "N/A*") { return "N/A" }
+
+    # (?<!\\), = comma not preceded by backslash. Splits on unescaped commas.
+    $parts = $Dn -split '(?<!\\),'
+    foreach ($part in $parts) {
+        $trimmed = $part.Trim()
+        if ($trimmed -match '^(?i)CN=(.+)$') {
+            return $matches[1].Trim() -replace '\\,', ','
+        }
+    }
+    return $Dn   # No CN found — fall back to full DN rather than losing data
+}
+
 #endregion
 
 #region ── Initialisation ─────────────────────────────────────────────────────
@@ -523,17 +780,38 @@ function Flush-ResultsBuffer {
 $Now     = Get-Date
 $LogFile = Join-Path $LogPath "ExpiredCertCleanup_$(Get-Date -Format 'yyyyMMdd_HHmmss').csv"
 $Results = [System.Collections.Generic.List[PSObject]]::new()
-$AggregatedStatusCounts = @{}
-$CsvInitialized = $false
+$ActionCounts    = @{}
+$TypeCounts      = @{}
+$CsvInitialized  = $false
 $IsStreamingMode = $false
 
-Write-Section "Expired Certificate Cleanup  |  DryRun = $DryRun"
+# ── Domain-wide cert population counters ───────────────────────────────────
+# Cheap integer accumulators incremented per object after classification.
+# Only counts blobs from objects that passed the per-object kill-switch
+# (i.e., the population the script actually inspected).
+$TotalCertsSeen     = 0   # every userCertificate value classified
+$TotalValidInScope  = 0   # parseable, in-scope per -RequiredIssuer, not expired
+$TotalOutOfScope    = 0   # parseable but issuer didn't match policy
+$TotalExpiredSeen   = 0   # parseable, in-scope, NotAfter < now
+$TotalCorruptSeen   = 0   # blob failed X509 parse
+
+Write-Section "Expired Certificate Cleanup  |  Target=$Target  |  DryRun=$DryRun"
 if ($DryRun) {
-    Write-Host "  !! Running in DRY-RUN mode. No changes will be written to AD. !!" `
-        -ForegroundColor Yellow
+    Write-Host "  !! DRY-RUN — no changes will be written to AD. !!" -ForegroundColor Yellow
+}
+if ($RequiredIssuer) {
+    Write-Host "  Issuer scope ($IssuerMatchMode): '$RequiredIssuer'" -ForegroundColor Cyan
+} else {
+    Write-Warning "No -RequiredIssuer supplied. The script will treat certs from any CA as in-scope. For ISE deployments you almost always want to restrict this."
 }
 if (-not $Server) {
-    Write-Warning "No DC specified. Results may be inconsistent in multi-DC environments."
+    Write-Warning "No -Server specified. ISE binary comparison reads from the DC pinned in the AD Join Point — replication delay between the DC you write to and the DC ISE reads from can cause transient mismatches. Pin -Server to ISE's chosen DC if possible."
+}
+if ($IncludeActiveCerts) {
+    Write-Host "  -IncludeActiveCerts: active certs will be LISTED in the CSV (read-only)." -ForegroundColor Cyan
+    Write-Host "                       No active cert is ever removed by this script." -ForegroundColor Cyan
+} else {
+    Write-Host "  -IncludeActiveCerts: OFF (default). Active certs will not appear in the CSV." -ForegroundColor DarkGray
 }
 
 #endregion
@@ -542,265 +820,452 @@ if (-not $Server) {
 
 Write-Section "Querying Active Directory"
 
-$GetADUserParams = @{
-    LDAPFilter  = "(userCertificate=*)"
-    Properties  = "userCertificate", "DistinguishedName", "SamAccountName"
-    ResultSetSize = $null
+$ClassFilter = switch ($Target) {
+    'User'     { "(&(objectCategory=person)(objectClass=user))" }
+    'Computer' { "(objectCategory=computer)" }
+    'Both'     { "(|(objectCategory=computer)(&(objectCategory=person)(objectClass=user)))" }
 }
-if ($SearchBase) { $GetADUserParams.SearchBase = $SearchBase }
-if ($Server)     { $GetADUserParams.Server     = $Server     }
-if ($Credential) { $GetADUserParams.Credential = $Credential }
+$LdapFilter = "(&$ClassFilter(userCertificate=*))"
+
+$GetADObjectParams = @{
+    LDAPFilter     = $LdapFilter
+    Properties     = @("userCertificate","DistinguishedName","SamAccountName","Name","objectClass")
+    ResultSetSize  = $null
+    ResultPageSize = 1000
+}
+if ($SearchBase) { $GetADObjectParams.SearchBase = $SearchBase }
+if ($Server)     { $GetADObjectParams.Server     = $Server     }
+if ($Credential) { $GetADObjectParams.Credential = $Credential }
 
 try {
-    $UserStream = Get-ADUser @GetADUserParams
-    Write-Host "  Streaming users that match the certificate filter..." -ForegroundColor Cyan
+    $ObjectStream = Get-ADObject @GetADObjectParams
+    Write-Host "  LDAP filter: $LdapFilter" -ForegroundColor DarkGray
+    Write-Host "  Streaming objects with at least one userCertificate value..." -ForegroundColor Cyan
 } catch {
     throw "AD query failed: $($_.Exception.Message)"
 }
 
 #endregion
 
-#region ── Certificate Processing ────────────────────────────────────────────
+#region ── Certificate Processing ─────────────────────────────────────────────
 
 Write-Section "Processing Certificates"
 
-$UsersScanned = 0
-$UsersWithCerts = 0
+# Object-level counters (independent of per-record action/type aggregation)
+$ObjectsScanned         = 0
+$ObjectsWithCerts       = 0
+$ObjectsModified        = 0  # writes attempted (incl. dry-run "would write")
+$ObjectsBroken          = 0  # ValidInScope == 0 after run (ISE binary comp will fail)
+$ObjectsProtected       = 0  # empty-attr protection tripped (object-level)
+$ObjectsKillSwitched    = 0  # per-object too-many-certs guard tripped
+$ObjectsOutOfScopeOnly  = 0  # no in-scope certs, nothing to do (but logged)
 
-foreach ($User in $UserStream) {
-    $UsersScanned++
-    if ($UsersScanned % 100 -eq 0) {
-        Write-Host "  Processed $UsersScanned users..." -ForegroundColor DarkGray
+foreach ($AdObject in $ObjectStream) {
+    $ObjectsScanned++
+
+    # Broad query-size guard. Compared against scanned (not just cert-bearing)
+    # so a misconfigured filter that returns far too much data trips early.
+    if ($ObjectsScanned -gt $MaxObjectsKillSwitch) {
+        throw ("Safety kill-switch: more than $MaxObjectsKillSwitch objects " +
+               "scanned. Verify SearchBase/filter or raise -MaxObjectsKillSwitch.")
     }
-    if ($ShowProgress) {
-        Write-Progress -Activity "Processing AD users" -Status "$UsersScanned users processed" -PercentComplete -1
+
+    if ($ShowProgress -and $ObjectsScanned % 500 -eq 0) {
+        Write-Host "  Processed $ObjectsScanned objects..." -ForegroundColor DarkGray
+        Write-Progress -Activity "Processing AD objects" -Status "$ObjectsScanned objects processed" -PercentComplete -1
     }
-    if (-not $User.userCertificate) { continue }
-    $UsersWithCerts++
 
-    $ExpiredBlobs     = [System.Collections.Generic.List[byte[]]]::new()
-    $CorruptBlobs     = [System.Collections.Generic.List[byte[]]]::new()
-    $ExpiredRecords   = [System.Collections.Generic.List[PSObject]]::new()
-    $CorruptRecords   = [System.Collections.Generic.List[PSObject]]::new()
-    $ValidCount       = 0
-    $HashCache        = @{}
+    if (-not $AdObject.userCertificate) { continue }
+    $ObjectsWithCerts++
 
-    foreach ($CertData in $User.userCertificate) {
+    $FriendlyName = Get-FriendlyName -AdObject $AdObject
+    $ObjClass     = if ($AdObject.objectClass -contains 'computer') { 'computer' } else { 'user' }
+
+    # Per-object kill-switch (bloated userCertificate)
+    if ($AdObject.userCertificate.Count -gt $MaxCertsPerObjectKillSwitch) {
+        Write-Warning ("  [$FriendlyName] Skipped: $($AdObject.userCertificate.Count) cert blobs " +
+                       "exceeds per-object safety limit ($MaxCertsPerObjectKillSwitch).")
+        $ObjectsKillSwitched++
+        $Results.Add((New-ResultRecord `
+            -ObjectClass $ObjClass `
+            -ObjectName  $FriendlyName `
+            -ObjectDN    $AdObject.DistinguishedName `
+            -Action      "Skipped" `
+            -Type        "KillSwitch" `
+            -Detail      "Cert count $($AdObject.userCertificate.Count) exceeds MaxCertsPerObjectKillSwitch=$MaxCertsPerObjectKillSwitch"
+        ))
+        continue
+    }
+
+    # ── Classify each blob ────────────────────────────────────────────────
+    $ExpiredBlobs    = [System.Collections.Generic.List[byte[]]]::new()
+    $CorruptBlobs    = [System.Collections.Generic.List[byte[]]]::new()
+    $ExpiredRecords  = [System.Collections.Generic.List[PSObject]]::new()
+    $CorruptRecords  = [System.Collections.Generic.List[PSObject]]::new()
+    $ActiveRecords   = [System.Collections.Generic.List[PSObject]]::new()  # READ-ONLY inventory; only populated when -IncludeActiveCerts. Never feeds removal.
+    $ValidCount      = 0   # in-scope, parseable, not expired
+    $OutOfScopeCount = 0   # parseable but issuer didn't match policy
+
+    foreach ($CertData in $AdObject.userCertificate) {
         $Cert = $null
         try {
-            $Cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
-            $Cert.Import($CertData)
+            $Cert = [System.Security.Cryptography.X509Certificates.X509Certificate2]::new($CertData)
 
-            if ($Cert.NotAfter -le $Now) {
+            $InScope = Test-IssuerInScope `
+                -IssuerDn        $Cert.Issuer `
+                -RequiredIssuer  $RequiredIssuer `
+                -IssuerMatchMode $IssuerMatchMode
+
+            if (-not $InScope) {
+                $OutOfScopeCount++
+                # Out-of-scope active certs (parseable + not expired) are
+                # also part of the live inventory; capture them when the
+                # caller asked for the active-cert listing.
+                if ($IncludeActiveCerts -and $Cert.NotAfter -ge $Now) {
+                    $ActiveRecords.Add([PSCustomObject]@{
+                        Thumbprint = $Cert.Thumbprint
+                        Issuer     = $Cert.Issuer
+                        NotBefore  = $Cert.NotBefore.ToString("yyyy-MM-dd HH:mm:ss")
+                        NotAfter   = $Cert.NotAfter.ToString("yyyy-MM-dd HH:mm:ss")
+                        InScope    = $false
+                    })
+                }
+            }
+            elseif ($Cert.NotAfter -lt $Now) {
                 $ExpiredBlobs.Add($CertData)
                 $ExpiredRecords.Add([PSCustomObject]@{
                     Thumbprint = $Cert.Thumbprint
-                    ExpiryDate = $Cert.NotAfter.ToString("yyyy-MM-dd HH:mm:ss")
+                    Issuer     = $Cert.Issuer
+                    NotBefore  = $Cert.NotBefore.ToString("yyyy-MM-dd HH:mm:ss")
+                    NotAfter   = $Cert.NotAfter.ToString("yyyy-MM-dd HH:mm:ss")
                 })
-            } else {
+            }
+            else {
                 $ValidCount++
+                if ($IncludeActiveCerts) {
+                    $ActiveRecords.Add([PSCustomObject]@{
+                        Thumbprint = $Cert.Thumbprint
+                        Issuer     = $Cert.Issuer
+                        NotBefore  = $Cert.NotBefore.ToString("yyyy-MM-dd HH:mm:ss")
+                        NotAfter   = $Cert.NotAfter.ToString("yyyy-MM-dd HH:mm:ss")
+                        InScope    = $true
+                    })
+                }
             }
         } catch {
-            # Blob cannot be parsed as a valid X.509 certificate
             $CorruptBlobs.Add($CertData)
-            $CorruptHash = Get-BlobHashCached -Blob $CertData -HashCache $HashCache
+            $BlobSha256 = [System.Security.Cryptography.SHA256]::Create()
+            try {
+                $HashHex = [System.BitConverter]::ToString($BlobSha256.ComputeHash($CertData))
+            } finally {
+                $BlobSha256.Dispose()
+            }
             $CorruptRecords.Add([PSCustomObject]@{
                 Thumbprint = "N/A (corrupt)"
-                ExpiryDate = "N/A"
-                BlobHash   = $CorruptHash
+                Issuer     = "N/A (corrupt)"
+                NotBefore  = "N/A"
+                NotAfter   = "N/A"
+                BlobHash   = $HashHex
                 BlobLength = $CertData.Length
             })
-            Write-Warning "  [$($User.SamAccountName)] Unreadable cert blob detected."
+            Write-Warning "  [$FriendlyName] Unreadable cert blob (length=$($CertData.Length))."
         } finally {
             if ($null -ne $Cert) { $Cert.Dispose() }
         }
     }
 
-    # ── Build the final removal list ──────────────────────────────────────
-    $BlobsToRemove = [System.Collections.Generic.List[byte[]]]::new()
-    foreach ($b in $ExpiredBlobs) { $BlobsToRemove.Add($b) }
+    # ── Domain-wide totals (post-classification, pre-action) ─────────────
+    # Five integer adds; no allocations. Invariant:
+    #   TotalCertsSeen == TotalValidInScope + TotalOutOfScope
+    #                   + TotalExpiredSeen + TotalCorruptSeen
+    # Counts are taken *before* any removal so they reflect the population
+    # found in AD at scan time, not the post-cleanup state.
+    $TotalCertsSeen    += $AdObject.userCertificate.Count
+    $TotalValidInScope += $ValidCount
+    $TotalOutOfScope   += $OutOfScopeCount
+    $TotalExpiredSeen  += $ExpiredBlobs.Count
+    $TotalCorruptSeen  += $CorruptBlobs.Count
+
+    # ── Build (and dedupe) the removal list ──────────────────────────────
+    # SAFETY: the removal list is built ONLY from $ExpiredBlobs (in-scope,
+    # parseable, NotAfter < $Now) and optionally $CorruptBlobs. Active
+    # certs (live in $ActiveRecords) are never sourced here — there is
+    # no code path by which an active cert can reach the AD write call.
+    $BlobsToRemoveRaw = [System.Collections.Generic.List[byte[]]]::new()
+    foreach ($b in $ExpiredBlobs)  { $BlobsToRemoveRaw.Add($b) }
     if ($RemoveCorruptBlobs) {
-        foreach ($b in $CorruptBlobs) { $BlobsToRemove.Add($b) }
+        foreach ($b in $CorruptBlobs) { $BlobsToRemoveRaw.Add($b) }
     }
-    if ($BlobsToRemove.Count -gt 0 -and $ValidCount -eq 0 -and -not $AllowFullRemoval) {
-        Write-Warning "  [$($User.SamAccountName)] Skipping cleanup because no valid certificates would remain."
+    $BlobsToRemove = Get-DedupedBlobList -Blobs $BlobsToRemoveRaw
+
+    # OutOfScope-only objects (RequiredIssuer set, nothing in scope at all):
+    # log a single audit row so the auditor can see the script saw this object.
+    if ($RequiredIssuer -and `
+        $ExpiredBlobs.Count -eq 0 -and `
+        $ValidCount -eq 0 -and `
+        $CorruptRecords.Count -eq 0 -and `
+        $OutOfScopeCount -gt 0) {
+
+        $ObjectsOutOfScopeOnly++
+
+        # When -IncludeActiveCerts is on, also emit one row per active OOS
+        # cert. ValidCount==0 here by construction, so all ActiveRecords
+        # entries on this object are InScope=false (no need to branch on it).
+        if ($IncludeActiveCerts -and $ActiveRecords.Count -gt 0) {
+            foreach ($Record in $ActiveRecords) {
+                $Results.Add((New-ResultRecord `
+                    -ObjectClass     $ObjClass `
+                    -ObjectName      $FriendlyName `
+                    -ObjectDN        $AdObject.DistinguishedName `
+                    -Thumbprint      $Record.Thumbprint `
+                    -Issuer          $Record.Issuer `
+                    -NotBefore       $Record.NotBefore `
+                    -NotAfter        $Record.NotAfter `
+                    -Action          "Skipped" `
+                    -Type            "Active" `
+                    -ValidInScope    "0" `
+                    -RemainingAfter  "$OutOfScopeCount" `
+                    -Detail          "Active out-of-scope certificate (issuer outside RequiredIssuer policy; no action)"
+                ))
+            }
+        }
+
+        $Results.Add((New-ResultRecord `
+            -ObjectClass     $ObjClass `
+            -ObjectName      $FriendlyName `
+            -ObjectDN        $AdObject.DistinguishedName `
+            -Action          "Skipped" `
+            -Type            "OutOfScopeOnly" `
+            -ValidInScope    "0" `
+            -RemainingAfter  "$OutOfScopeCount" `
+            -Detail          "Only out-of-scope certs present ($OutOfScopeCount). Issuer policy: $IssuerMatchMode='$RequiredIssuer'."
+        ))
+        continue
+    }
+
+    # ── How many cert values will remain after the operation? ─────────────
+    # OutOfScope blobs are NEVER removed, so they survive.
+    # Corrupt blobs survive when -RemoveCorruptBlobs is $false.
+    $CorruptSurvivors = if ($RemoveCorruptBlobs) { 0 } else { $CorruptRecords.Count }
+    $RemainingAfter   = $ValidCount + $OutOfScopeCount + $CorruptSurvivors
+    $ValidInScopeStr  = "$ValidCount"
+    $RemainingStr     = "$RemainingAfter"
+
+    # ── Empty-attribute protection ────────────────────────────────────────
+    # Refuses to leave userCertificate empty unless explicitly authorized.
+    if ($BlobsToRemove.Count -gt 0 -and $RemainingAfter -eq 0 -and -not $AllowFullRemoval) {
+        $ObjectsProtected++
+        Write-Warning "  [$FriendlyName] Skipping: would empty userCertificate (would break ISE binary comparison until next enrollment + replication)."
         foreach ($Record in $ExpiredRecords) {
             $Results.Add((New-ResultRecord `
-                -SamAccountName $User.SamAccountName `
-                -UserDN         $User.DistinguishedName `
-                -Thumbprint     $Record.Thumbprint `
-                -ExpiryDate     $Record.ExpiryDate `
-                -Status         "Skipped - Last Valid Cert Protection" `
-                -Details        "AllowFullRemoval=$AllowFullRemoval"
+                -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                -Action "Skipped" -Type "Protection" `
+                -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                -Detail "Empty-attr protection. AllowFullRemoval=$AllowFullRemoval. Would break ISE binary comparison."
             ))
         }
+        # Corrupt rows: keep Type=Corrupt so corrupt-blob tallies stay accurate
         foreach ($Record in $CorruptRecords) {
             $Results.Add((New-ResultRecord `
-                -SamAccountName $User.SamAccountName `
-                -UserDN         $User.DistinguishedName `
-                -Thumbprint     $Record.Thumbprint `
-                -ExpiryDate     $Record.ExpiryDate `
-                -Status         $(if ($RemoveCorruptBlobs) { "Skipped - Last Valid Cert Protection" } else { "Skipped - Corrupt" }) `
-                -Details        $(if ($RemoveCorruptBlobs) {
-                    "AllowFullRemoval=$AllowFullRemoval"
-                } else {
-                    "Unreadable/corrupt blob. RemoveCorruptBlobs=$RemoveCorruptBlobs; BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
-                })
+                -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                -Action "Skipped" -Type "Corrupt" `
+                -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                -Detail "Empty-attr protection (RemoveCorruptBlobs=$RemoveCorruptBlobs); BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
             ))
         }
         continue
-    } elseif ($BlobsToRemove.Count -gt 0 -and $ValidCount -eq 0) {
-        Write-Warning "  [$($User.SamAccountName)] Cleanup leaves no valid certificates."
     }
 
-    # ── Log expired certs ─────────────────────────────────────────────────
+    # ── ISE-impact: no in-scope, non-expired cert remains ─────────────────
+    # Tracked separately because the object isn't *protected* (e.g., it has
+    # surviving out-of-scope certs), but ISE — restricted to the issuing CA
+    # — won't have a usable match after the run.
+    if ($BlobsToRemove.Count -gt 0 -and $ValidCount -eq 0) {
+        $ObjectsBroken++
+        $verb = if ($DryRun) { "would fail" } else { "will fail" }
+        if ($RequiredIssuer) {
+            Write-Warning "  [$FriendlyName] After cleanup, no certs from issuer matching '$RequiredIssuer' remain. ISE binary comparison $verb for this object until autoenrollment runs."
+        } else {
+            Write-Warning "  [$FriendlyName] Cleanup $verb leave no non-expired certificates."
+        }
+    }
+
+    # ── Console log of what's being acted on ──────────────────────────────
     foreach ($Record in $ExpiredRecords) {
-        Write-Host ("  [{0}] Expired cert: {1}  (expired {2})" -f `
-            $User.SamAccountName, $Record.Thumbprint, $Record.ExpiryDate) `
+        Write-Host ("  [{0}] ({1}) Expired: {2}  issuer={3}  notAfter={4}" -f `
+            $FriendlyName, $ObjClass, $Record.Thumbprint, $Record.Issuer, $Record.NotAfter) `
             -ForegroundColor Yellow
     }
+    if ($OutOfScopeCount -gt 0 -and $RequiredIssuer) {
+        Write-Host ("  [{0}] ({1}) {2} out-of-scope cert(s) ignored." -f `
+            $FriendlyName, $ObjClass, $OutOfScopeCount) -ForegroundColor DarkGray
+    }
 
-    # ── Commit or simulate removal ────────────────────────────────────────
+    # ── Commit or simulate ────────────────────────────────────────────────
     if ($BlobsToRemove.Count -gt 0) {
+        $ObjectsModified++
 
-        $SetADUserParams = @{
-            Identity = $User.DistinguishedName
-        }
-        if ($Server)     { $SetADUserParams.Server     = $Server     }
-        if ($Credential) { $SetADUserParams.Credential = $Credential }
-        $RemovalApplied = $false
+        $SetADObjectParams = @{ Identity = $AdObject.DistinguishedName }
+        if ($Server)     { $SetADObjectParams.Server     = $Server     }
+        if ($Credential) { $SetADObjectParams.Credential = $Credential }
+
+        $RemovalApplied         = $false
         $SkippedByShouldProcess = $false
 
         try {
             if ($DryRun) {
-                # Simulate without touching AD
-                Write-Host ("  [DryRun] Would remove {0} blob(s) for {1}." -f `
-                    $BlobsToRemove.Count, $User.SamAccountName) -ForegroundColor DarkYellow
-            } elseif ($PSCmdlet.ShouldProcess($User.DistinguishedName, "Remove $($BlobsToRemove.Count) certificate blob(s) from userCertificate")) {
-                # Build the remaining blob set and write it back explicitly.
-                # This is more reliable than -Remove for multi-value byte[] attributes.
-                # Use hashes to avoid nested byte-by-byte comparisons at scale.
-                $BlobHashesToRemove = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
-                foreach ($RemoveBlob in $BlobsToRemove) {
-                    [void]$BlobHashesToRemove.Add((Get-BlobHashCached -Blob $RemoveBlob -HashCache $HashCache))
-                }
+                Write-Host ("  [DryRun] Would remove {0} blob(s) from {1} ({2}). Active in-scope after: {3} (oos={4}, corrupt-kept={5})" -f `
+                    $BlobsToRemove.Count, $FriendlyName, $ObjClass, $ValidCount, $OutOfScopeCount, $CorruptSurvivors) `
+                    -ForegroundColor DarkYellow
+            } elseif ($PSCmdlet.ShouldProcess(
+                $AdObject.DistinguishedName,
+                "Remove $($BlobsToRemove.Count) certificate blob(s) from userCertificate")) {
 
-                $RemainingBlobs = [System.Collections.Generic.List[byte[]]]::new()
-                foreach ($ExistingBlob in $User.userCertificate) {
-                    $ExistingBlobHash = Get-BlobHashCached -Blob $ExistingBlob -HashCache $HashCache
-                    if (-not $BlobHashesToRemove.Contains($ExistingBlobHash)) {
-                        $RemainingBlobs.Add($ExistingBlob)
-                    }
-                }
-
-                if ($RemainingBlobs.Count -gt 0) {
-                    $SetADUserParams.Replace = @{ userCertificate = $RemainingBlobs.ToArray() }
-                    Invoke-SetADUserWithRetry -SetADUserParams $SetADUserParams
+                # Atomic per-value removal. -Clear is only used when nothing
+                # would remain (which already passed the AllowFullRemoval gate).
+                if ($RemainingAfter -gt 0) {
+                    Invoke-SetADObjectWithRetry `
+                        -SetADObjectParams $SetADObjectParams `
+                        -RemoveBlobs $BlobsToRemove.ToArray()
                 } else {
-                    Invoke-SetADUserWithRetry -SetADUserParams $SetADUserParams -ClearUserCertificate
+                    Invoke-SetADObjectWithRetry `
+                        -SetADObjectParams $SetADObjectParams `
+                        -ClearAttr
                 }
+
                 $RemovalApplied = $true
-                Write-Host ("  [REMOVED] {0} blob(s) removed for {1}." -f `
-                    $BlobsToRemove.Count, $User.SamAccountName) -ForegroundColor Green
+                Write-Host ("  [REMOVED] {0} blob(s) from {1} ({2}). Active in-scope: {3}" -f `
+                    $BlobsToRemove.Count, $FriendlyName, $ObjClass, $ValidCount) -ForegroundColor Green
             } else {
                 $SkippedByShouldProcess = $true
-                Write-Host ("  [WhatIf/Confirm] Skipped removal for {0}." -f `
-                    $User.SamAccountName) -ForegroundColor DarkYellow
+                Write-Host ("  [WhatIf/Confirm] Skipped {0}." -f $FriendlyName) -ForegroundColor DarkYellow
             }
+
+            $ResultAction = if ($DryRun) {
+                "Identified"
+            } elseif ($SkippedByShouldProcess -or $WhatIfPreference) {
+                "Skipped"
+            } elseif ($RemovalApplied) {
+                "Removed"
+            } else {
+                "Skipped"
+            }
+            $WhatIfDetail = if ($SkippedByShouldProcess -or $WhatIfPreference) { " (WhatIf/Confirm)" } else { "" }
 
             foreach ($Record in $ExpiredRecords) {
                 $Results.Add((New-ResultRecord `
-                    -SamAccountName $User.SamAccountName `
-                    -UserDN         $User.DistinguishedName `
-                    -Thumbprint     $Record.Thumbprint `
-                    -ExpiryDate     $Record.ExpiryDate `
-                    -Status         $(if ($DryRun) {
-                        "Identified (DryRun)"
-                    } elseif ($SkippedByShouldProcess) {
-                        "Skipped (WhatIf/Confirm)"
-                    } elseif ($WhatIfPreference) {
-                        "Identified (WhatIf)"
-                    } elseif ($RemovalApplied) {
-                        "Removed"
-                    } else {
-                        "Skipped (WhatIf/Confirm)"
-                    }) `
-                    -Details        "Certificate expired"
+                    -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                    -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                    -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                    -Action $ResultAction -Type "Expired" `
+                    -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                    -Detail "Certificate expired$WhatIfDetail"
                 ))
             }
-
             foreach ($Record in $CorruptRecords) {
-                $Results.Add((New-ResultRecord `
-                    -SamAccountName $User.SamAccountName `
-                    -UserDN         $User.DistinguishedName `
-                    -Thumbprint     $Record.Thumbprint `
-                    -ExpiryDate     $Record.ExpiryDate `
-                    -Status         $(if ($RemoveCorruptBlobs) {
-                        if ($DryRun) {
-                            "Identified Corrupt (DryRun)"
-                        } elseif ($SkippedByShouldProcess) {
-                            "Skipped Corrupt (WhatIf/Confirm)"
-                        } elseif ($WhatIfPreference) {
-                            "Identified Corrupt (WhatIf)"
-                        } elseif ($RemovalApplied) {
-                            "Removed Corrupt"
-                        } else {
-                            "Skipped Corrupt (WhatIf/Confirm)"
-                        }
-                    } else { "Skipped - Corrupt" }) `
-                    -Details        "Unreadable/corrupt blob. RemoveCorruptBlobs=$RemoveCorruptBlobs; BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
-                ))
+                if ($RemoveCorruptBlobs) {
+                    $Results.Add((New-ResultRecord `
+                        -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                        -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                        -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                        -Action $ResultAction -Type "Corrupt" `
+                        -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                        -Detail "Unreadable/corrupt blob$WhatIfDetail; BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
+                    ))
+                } else {
+                    $Results.Add((New-ResultRecord `
+                        -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                        -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                        -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                        -Action "Skipped" -Type "Corrupt" `
+                        -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                        -Detail "Unreadable/corrupt blob (RemoveCorruptBlobs=$RemoveCorruptBlobs); BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
+                    ))
+                }
             }
 
         } catch {
-            Write-Warning "  Failed to update [$($User.SamAccountName)]: $($_.Exception.Message)"
+            Write-Warning "  Failed to update [$FriendlyName]: $($_.Exception.Message)"
 
             foreach ($Record in $ExpiredRecords) {
                 $Results.Add((New-ResultRecord `
-                    -SamAccountName $User.SamAccountName `
-                    -UserDN         $User.DistinguishedName `
-                    -Thumbprint     $Record.Thumbprint `
-                    -ExpiryDate     $Record.ExpiryDate `
-                    -Status         "Update Failed" `
-                    -Details        $_.Exception.Message
+                    -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                    -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                    -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                    -Action "Failed" -Type "Expired" `
+                    -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                    -Detail $_.Exception.Message
                 ))
             }
-
             foreach ($Record in $CorruptRecords) {
                 $Results.Add((New-ResultRecord `
-                    -SamAccountName $User.SamAccountName `
-                    -UserDN         $User.DistinguishedName `
-                    -Thumbprint     $Record.Thumbprint `
-                    -ExpiryDate     $Record.ExpiryDate `
-                    -Status         $(if ($RemoveCorruptBlobs) { "Corrupt Update Failed" } else { "Skipped - Corrupt" }) `
-                    -Details        $(if ($RemoveCorruptBlobs) {
+                    -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                    -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                    -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                    -Action $(if ($RemoveCorruptBlobs) { "Failed" } else { "Skipped" }) -Type "Corrupt" `
+                    -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                    -Detail $(if ($RemoveCorruptBlobs) {
                         $_.Exception.Message
                     } else {
-                        "Unreadable/corrupt blob. RemoveCorruptBlobs=$RemoveCorruptBlobs; BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
+                        "Unreadable/corrupt blob (RemoveCorruptBlobs=$RemoveCorruptBlobs); BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
                     })
                 ))
             }
         }
+
     } elseif ($CorruptRecords.Count -gt 0) {
+        # No expired blobs, only corrupt ones, RemoveCorruptBlobs=$false
         foreach ($Record in $CorruptRecords) {
             $Results.Add((New-ResultRecord `
-                -SamAccountName $User.SamAccountName `
-                -UserDN         $User.DistinguishedName `
-                -Thumbprint     $Record.Thumbprint `
-                -ExpiryDate     $Record.ExpiryDate `
-                -Status         "Skipped - Corrupt" `
-                -Details        "Unreadable/corrupt blob. RemoveCorruptBlobs=$RemoveCorruptBlobs; BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
+                -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                -Action "Skipped" -Type "Corrupt" `
+                -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                -Detail "Unreadable/corrupt blob (RemoveCorruptBlobs=$RemoveCorruptBlobs); BlobHash=$($Record.BlobHash); BlobLength=$($Record.BlobLength)"
             ))
         }
     }
 
+    # ── Emit Active rows (inventory mode) ─────────────────────────────────
+    # Healthy certs that survived the run, regardless of issuer scope.
+    # Logged with Action='Skipped' (no AD write was made for them) and
+    # Type='Active'. Detail differentiates in-scope (matches RequiredIssuer)
+    # from out-of-scope. Reachable on the normal commit/dry-run path, the
+    # corrupt-only path, and the all-active path. The OutOfScopeOnly
+    # 'continue' has its own active emission (those objects can only have
+    # InScope=false records, never InScope=true).
+    if ($IncludeActiveCerts -and $ActiveRecords.Count -gt 0) {
+        foreach ($Record in $ActiveRecords) {
+            $ActiveDetail = if ($Record.InScope) {
+                "Active in-scope certificate (no action required)"
+            } else {
+                "Active out-of-scope certificate (issuer outside RequiredIssuer policy; no action)"
+            }
+            $Results.Add((New-ResultRecord `
+                -ObjectClass $ObjClass -ObjectName $FriendlyName -ObjectDN $AdObject.DistinguishedName `
+                -Thumbprint $Record.Thumbprint -Issuer $Record.Issuer `
+                -NotBefore $Record.NotBefore -NotAfter $Record.NotAfter `
+                -Action "Skipped" -Type "Active" `
+                -ValidInScope $ValidInScopeStr -RemainingAfter $RemainingStr `
+                -Detail $ActiveDetail
+            ))
+        }
+    }
+
+    # ── Streaming flush every 1000 result rows ────────────────────────────
     if ($Results.Count -ge 1000) {
         Flush-ResultsBuffer `
-            -Buffer $Results `
-            -LogPath $LogPath `
-            -LogFile $LogFile `
-            -AggregatedStatusCounts $AggregatedStatusCounts `
-            -CsvInitialized ([ref]$CsvInitialized)
+            -Buffer          $Results `
+            -LogPath         $LogPath `
+            -LogFile         $LogFile `
+            -ActionCounts    $ActionCounts `
+            -TypeCounts      $TypeCounts `
+            -CsvInitialized  ([ref]$CsvInitialized)
         $IsStreamingMode = $true
     }
 }
@@ -811,72 +1276,87 @@ foreach ($User in $UserStream) {
 
 if ($IsStreamingMode -and $Results.Count -gt 0) {
     Flush-ResultsBuffer `
-        -Buffer $Results `
-        -LogPath $LogPath `
-        -LogFile $LogFile `
-        -AggregatedStatusCounts $AggregatedStatusCounts `
-        -CsvInitialized ([ref]$CsvInitialized)
+        -Buffer          $Results `
+        -LogPath         $LogPath `
+        -LogFile         $LogFile `
+        -ActionCounts    $ActionCounts `
+        -TypeCounts      $TypeCounts `
+        -CsvInitialized  ([ref]$CsvInitialized)
 } elseif (-not $IsStreamingMode -and $Results.Count -gt 0) {
     foreach ($r in $Results) {
-        if ($AggregatedStatusCounts.ContainsKey($r.Status)) {
-            $AggregatedStatusCounts[$r.Status]++
-        } else {
-            $AggregatedStatusCounts[$r.Status] = 1
-        }
+        Update-RecordCounters -Record $r -ActionCounts $ActionCounts -TypeCounts $TypeCounts
     }
 }
 
-if ($ShowProgress) {
-    Write-Progress -Activity "Processing AD users" -Completed
-}
+if ($ShowProgress) { Write-Progress -Activity "Processing AD objects" -Completed }
 
 Write-Section "Summary" -Color Green
 
-$GetStatusCount = {
-    param([string]$Status)
-    if ($AggregatedStatusCounts.ContainsKey($Status)) { return $AggregatedStatusCounts[$Status] }
+$GetCount = {
+    param([hashtable]$Table, [string]$Key)
+    if ($Table.ContainsKey($Key)) { return $Table[$Key] }
     return 0
 }
 
-$CountRemoved  = & $GetStatusCount "Removed"
-$CountDryRun   = (& $GetStatusCount "Identified (DryRun)") + (& $GetStatusCount "Identified (WhatIf)")
-$CountFailed   = & $GetStatusCount "Update Failed"
-$CountCorrupt  = (
-    (& $GetStatusCount "Skipped - Corrupt") +
-    (& $GetStatusCount "Identified Corrupt (DryRun)") +
-    (& $GetStatusCount "Identified Corrupt (WhatIf)") +
-    (& $GetStatusCount "Skipped Corrupt (WhatIf/Confirm)") +
-    (& $GetStatusCount "Removed Corrupt") +
-    (& $GetStatusCount "Corrupt Update Failed") +
-    (& $GetStatusCount "Skipped - Last Valid Cert Protection")
-)
+$ARemoved    = & $GetCount $ActionCounts "Removed"
+$AIdentified = & $GetCount $ActionCounts "Identified"
+$ASkipped    = & $GetCount $ActionCounts "Skipped"
+$AFailed     = & $GetCount $ActionCounts "Failed"
 
-Write-Host "  Removed            : $CountRemoved"
-Write-Host "  Identified (DryRun): $CountDryRun"   -ForegroundColor DarkYellow
-Write-Host "  Update Failed      : $CountFailed"   -ForegroundColor $(if ($CountFailed) {"Red"} else {"Gray"})
-Write-Host "  Corrupt Blobs      : $CountCorrupt"  -ForegroundColor $(if ($CountCorrupt) {"Magenta"} else {"Gray"})
-Write-Host "  Users scanned      : $UsersScanned"
-Write-Host "  Users with certs   : $UsersWithCerts"
+$TExpired    = & $GetCount $TypeCounts "Expired"
+$TCorrupt    = & $GetCount $TypeCounts "Corrupt"
+$TOos        = & $GetCount $TypeCounts "OutOfScopeOnly"
+$TProtection = & $GetCount $TypeCounts "Protection"
+$TKill       = & $GetCount $TypeCounts "KillSwitch"
+$TActive     = & $GetCount $TypeCounts "Active"
 
-# Export CSV
+Write-Host "  Target                       : $Target"
+Write-Host "  Issuer scope                 : $(if ($RequiredIssuer) { "$IssuerMatchMode '$RequiredIssuer'" } else { '<none>' })"
+Write-Host ""
+Write-Host "  -- Object-level counters --"
+Write-Host "  Objects scanned              : $ObjectsScanned"
+Write-Host "  Objects with certs           : $ObjectsWithCerts"
+Write-Host "  Objects modified*            : $ObjectsModified"            -ForegroundColor $(if ($ObjectsModified)      { "Green"   } else { "Gray" })
+Write-Host "  Objects ISE-broken**         : $ObjectsBroken"              -ForegroundColor $(if ($ObjectsBroken)        { "Yellow"  } else { "Gray" })
+Write-Host "  Objects empty-attr protected : $ObjectsProtected"           -ForegroundColor $(if ($ObjectsProtected)     { "DarkCyan"} else { "Gray" })
+Write-Host "  Objects out-of-scope only    : $ObjectsOutOfScopeOnly"      -ForegroundColor $(if ($ObjectsOutOfScopeOnly){ "DarkGray"} else { "Gray" })
+Write-Host "  Objects kill-switched        : $ObjectsKillSwitched"        -ForegroundColor $(if ($ObjectsKillSwitched)  { "Red"     } else { "Gray" })
+Write-Host ""
+Write-Host "  -- Domain cert population (in query scope) --"
+Write-Host "  Total cert blobs seen        : $TotalCertsSeen"             -ForegroundColor Cyan
+Write-Host "  Valid in-scope               : $TotalValidInScope"          -ForegroundColor $(if ($TotalValidInScope) { "Green" } else { "Gray" })
+Write-Host "  Out-of-scope                 : $TotalOutOfScope"            -ForegroundColor $(if ($TotalOutOfScope)   { "DarkGray" } else { "Gray" })
+Write-Host "  Expired                      : $TotalExpiredSeen"           -ForegroundColor $(if ($TotalExpiredSeen)  { "Yellow" } else { "Gray" })
+Write-Host "  Corrupt                      : $TotalCorruptSeen"           -ForegroundColor $(if ($TotalCorruptSeen)  { "Magenta" } else { "Gray" })
+$_PopulationSum = $TotalValidInScope + $TotalOutOfScope + $TotalExpiredSeen + $TotalCorruptSeen
+if ($_PopulationSum -ne $TotalCertsSeen) {
+    Write-Warning ("  Population invariant mismatch: $TotalValidInScope + $TotalOutOfScope + $TotalExpiredSeen + $TotalCorruptSeen = $_PopulationSum, expected $TotalCertsSeen. " +
+                   "Difference is likely from kill-switched objects whose blobs weren't classified.")
+}
+Write-Host ""
+Write-Host "  -- Record-level (per blob)  --"
+Write-Host "  Action: Removed              : $ARemoved"                   -ForegroundColor $(if ($ARemoved)             { "Green"   } else { "Gray" })
+Write-Host "  Action: Identified (DryRun)  : $AIdentified"                -ForegroundColor DarkYellow
+Write-Host "  Action: Skipped              : $ASkipped"
+Write-Host "  Action: Failed               : $AFailed"                    -ForegroundColor $(if ($AFailed)              { "Red"     } else { "Gray" })
+Write-Host "  Type:   Expired              : $TExpired"
+Write-Host "  Type:   Corrupt              : $TCorrupt"                   -ForegroundColor $(if ($TCorrupt)             { "Magenta" } else { "Gray" })
+Write-Host "  Type:   OutOfScopeOnly       : $TOos"
+Write-Host "  Type:   Protection           : $TProtection"
+Write-Host "  Type:   KillSwitch           : $TKill"                      -ForegroundColor $(if ($TKill)                { "Red"     } else { "Gray" })
+Write-Host "  Type:   Active (inventory)   : $TActive"                    -ForegroundColor $(if ($TActive)              { "Green"   } else { "Gray" })
+
+Write-Host ""
+Write-Host "  *  modified = write attempted (committed run) or planned (DryRun)."
+Write-Host "  ** ISE-broken = no in-scope, non-expired cert remains for the object" -ForegroundColor $(if ($ObjectsBroken) { "Yellow" } else { "Gray" })
+Write-Host "     after this run. These objects fail ISE binary comparison until"   -ForegroundColor $(if ($ObjectsBroken) { "Yellow" } else { "Gray" })
+Write-Host "     autoenrollment publishes a new cert AND replication reaches the"  -ForegroundColor $(if ($ObjectsBroken) { "Yellow" } else { "Gray" })
+Write-Host "     DC the ISE Join Point reads from."                                 -ForegroundColor $(if ($ObjectsBroken) { "Yellow" } else { "Gray" })
+
+# CSV export
 if ($CsvInitialized) {
-    try {
-        Write-Host ""
-        Write-Host "  Audit log: $LogFile" -ForegroundColor Cyan
-    } catch {
-        Write-Warning "Could not write audit log to ${LogFile}: $($_.Exception.Message)"
-    }
-
-    # Out-GridView only when the environment supports it
-    if ($IsStreamingMode) {
-        Write-Host "  (Out-GridView skipped because results were streamed to CSV in batches.)" `
-            -ForegroundColor DarkGray
-    } elseif (Get-Command Out-GridView -ErrorAction SilentlyContinue) {
-        $Results | Out-GridView -Title "Certificate Audit  |  DryRun=$DryRun"
-    } else {
-        Write-Host "  (Out-GridView unavailable — review the CSV above.)" `
-            -ForegroundColor DarkGray
-    }
+    Write-Host ""
+    Write-Host "  Audit log: $LogFile" -ForegroundColor Cyan
 } elseif ($Results.Count -gt 0) {
     try {
         if (!(Test-Path $LogPath)) {
@@ -889,16 +1369,28 @@ if ($CsvInitialized) {
     } catch {
         Write-Warning "Could not write audit log to ${LogFile}: $($_.Exception.Message)"
     }
-
-    if (Get-Command Out-GridView -ErrorAction SilentlyContinue) {
-        $Results | Out-GridView -Title "Certificate Audit  |  DryRun=$DryRun"
-    } else {
-        Write-Host "  (Out-GridView unavailable — review the CSV above.)" `
-            -ForegroundColor DarkGray
-    }
 } else {
     Write-Host ""
-    Write-Host "  No expired or corrupt certificates found." -ForegroundColor Gray
+    Write-Host "  No expired or corrupt certificates found in scope." -ForegroundColor Gray
+}
+
+# Replication reminder for live runs
+if (-not $DryRun -and $ARemoved -gt 0) {
+    Write-Host ""
+    Write-Host "  Reminder: AD changes must replicate before ISE sees them." -ForegroundColor Cyan
+    Write-Host "  - If ISE's Join Point points to a specific DC, prefer that DC for -Server." -ForegroundColor Cyan
+    Write-Host "  - Otherwise allow your normal intra-site replication interval before retesting." -ForegroundColor Cyan
+}
+
+# Out-GridView (interactive sessions only, non-streaming)
+if ($CsvInitialized) {
+    if ($IsStreamingMode) {
+        Write-Host "  (Out-GridView skipped: streamed to CSV in batches.)" -ForegroundColor DarkGray
+    } elseif (Get-Command Out-GridView -ErrorAction SilentlyContinue) {
+        $Results | Out-GridView -Title "Cert Audit  |  Target=$Target  |  DryRun=$DryRun  |  Issuer=$RequiredIssuer ($IssuerMatchMode)"
+    } else {
+        Write-Host "  (Out-GridView unavailable — review the CSV above.)" -ForegroundColor DarkGray
+    }
 }
 
 Write-Host ""

@@ -221,16 +221,17 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
+    "0 - Notes/Active Directory Certificate Services.md",
+    "Homepage.md",
+    "0 - Notes/Cisco ISE.md",
     "Script_Clean-Expired-userCertificate.ps1",
     "attachments/Script_Clean-Expired-userCertificate.ps1",
     "1 - Excalidraw/Cisco ISE.md",
-    "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260424150748.png",
     "attachments/Pasted image 20260424150609.png",
     "attachments/Pasted image 20260424150448.png",
-    "Homepage.md",
     "attachments/Pasted image 20260424141558.png",
     "attachments/Pasted image 20260424145227.png",
     "attachments/Pasted image 20260424145144.png",
@@ -239,7 +240,6 @@
     "attachments/Pasted image 20260424141809.png",
     "attachments/Pasted image 20260424141754.png",
     "0 - Notes/Windows Management Instrumentation.md",
-    "0 - Notes/Active Directory Certificate Services.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
@@ -268,7 +268,6 @@
     "2 - Categories/Topics/Systems",
     "3 - Templates/Bases/Topic/Security/Security General.base",
     "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
-    "3 - Templates/Bases/Topic/Security/Network-Based Attacks.base",
     "Untitled.canvas"
   ]
 }
