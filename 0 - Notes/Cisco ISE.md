@@ -315,7 +315,8 @@ In this case the <strong>Machine Certificate</strong> is issued on the <strong>S
 
 ##### Script To Remove Expired userCertificate
 The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script. 
- By default this script is in read only mode, read the description for the how to use.
+By default this script is in read only mode, read the description for the how to use.
+
 ```powershell
 <#
 .SYNOPSIS
