@@ -47,16 +47,21 @@ ISE can leverage existing infrastructures to manage user network access.
 ## Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
 ### Active Directory
+
 ![[Pasted image 20260421124607.png]]
+
 Cisco ISE can join Microsoft Active Directory as an External Identity Source under the item Active Directory. 
 
 The AD is used to identify the users when they do an authentication. They can be checked with their domain password or with the domain certificates they provide ISE.
 
 For the server ISE to be able to join the domain, it has to have a machine account in the domain and a DNS entry, while the AD User Name must have the permissions to join ISE to AD. 
+
 ![[Pasted image 20260421152119.png]]
 
 On this section it is also possible to retrieve groups from the AD to create policies around the user group identity. 
+
 ![[Pasted image 20260421125524.png]]
+
 ### Certificate Authority #certificates
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication. 
 #### Server Certificates
@@ -67,6 +72,7 @@ Certificates are also used to secure EAP communications, to form a Transport Lay
 - <strong>RADIUS DTLS</strong>: RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
 - <strong>Portal</strong>: Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices. 
 - <strong>pxGrid</strong>: This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information. 
+
 ![[Pasted image 20260421153234.png]]
 
 To add a certificate
@@ -84,6 +90,7 @@ Here it is set to Subject Alternate Name (SAN) as the CAP will be used for both 
 | User Certificate                     | Machine Certificate                  |
 | ------------------------------------ | ------------------------------------ |
 | ![[Pasted image 20260424145144.png]] | ![[Pasted image 20260424145227.png]] |
+
 The selection <strong>Match Client Certificate Against Certificate In Identity Store</strong>:
 - <strong>Only to resolve identity ambiguity</strong>: This is the standard setting. It tells ISE to use the certificate information to identify the user in AD, but it doesn't require a byte-for-byte match of the certificate itself against an AD attribute.
 - <strong>Always perform binary comparison</strong>: <mark style="background: #FF5582A6;">Use this only if you have physically uploaded or published the user/machine certificates into the <strong>userCertificate</strong> attribute in Active Directory</mark>. <mark style="background: #FFB86CA6;">ISE will then perform a byte-for-byte comparison between the certificate the client presents and the one stored in AD</mark>. If they don't match exactly, authentication will fail.
@@ -117,6 +124,7 @@ As the Domain Admin Certificate is made for admins that have a domain user accou
 ###### Enrollment - Windows Manual
 ![[Manual Enrollment of Admin Certificate.mp4]]
 ###### Enrollment - Windows Script
+
 ```powershell
 param(
     [ValidateSet("All", "Step1", "Step2")]
@@ -220,6 +228,7 @@ elseif ($Step -eq "All") {
 ```
 
 ###### Enrollment - Apple Script
+
 ```applescript
 -- Define paths
 set userName to short user name of (system info)
@@ -298,9 +307,12 @@ For Computer Certificates, duplicate from the default <strong>Workstation Authen
 | General tab                          | Extensions tab                       | Security tab                         | Subject Name tab                     |
 | ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------ |
 | ![[Pasted image 20260424150448.png]] | ![[Pasted image 20260424141629.png]] | ![[Pasted image 20260424141754.png]] | ![[Pasted image 20260424141809.png]] |
+
 Like the User certificate templates <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA server</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. 
 In this case the <strong>Machine Certificate</strong> is issued on the <strong>SubordinateCA02</strong>.
+
 ![[Pasted image 20260424141851.png]]
+
 ##### Script To Remove Expired userCertificate
 The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script. 
  By default this script is in read only mode, read the description for the how to use.
