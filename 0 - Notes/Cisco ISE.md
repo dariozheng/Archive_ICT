@@ -297,7 +297,7 @@ Like the User certificate templates <mark style="background: #FF5582A6;">issue t
 In this case the <strong>Machine Certificate</strong> is issued on the <strong>SubordinateCA02</strong>.
 ![[Pasted image 20260424141851.png]]
 ##### Script To Remove Expired userCertificate
-The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script.
+The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script. 
 
 ```powershell
 <#
@@ -430,7 +430,8 @@ The expired certificates in the userCertificate attribute cannot be removed auto
     attribute empty.
 
 .PARAMETER Server
-    Optional DC for reads/writes. Pin to the DC ISE's Join Point queries.
+    Optional DC for reads/writes. Pin to the DC ISE's Join Point queries, can be checked in ISE
+    server admin portal, in External Identity Sources, Active Directory, Connection, Domain Controller.
 
 .PARAMETER Credential
     Optional PSCredential.
@@ -480,7 +481,7 @@ The expired certificates in the userCertificate attribute cannot be removed auto
         -Target Computer `
         -RequiredIssuer 'CN=Publiacqua Issuing CA, DC=publiacqua, DC=local' `
         -IssuerMatchMode Exact `
-        -Server dc01.publiacqua.local
+        -Server dc01.publiacqua.it
 
 .EXAMPLE
     # Commit removals on computers, exact issuer match, prompt per object
@@ -489,7 +490,7 @@ The expired certificates in the userCertificate attribute cannot be removed auto
         -RequiredIssuer 'CN=Publiacqua Issuing CA, DC=publiacqua, DC=local' `
         -IssuerMatchMode Exact `
         -DryRun:$false -Confirm `
-        -Server dc01.publiacqua.local
+        -Server dc01.publiacqua.it
 
 .NOTES
     Requires the ActiveDirectory module and write permissions for live runs.
