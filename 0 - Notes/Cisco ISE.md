@@ -74,7 +74,9 @@ To add a certificate
 
 ###### CRL Revocation List
 ##### Certificate Authentication Profile
+
 ![[Pasted image 20260424144802.png]]
+
 <strong>Certificate Authentication Profile</strong>(CAP) section is used to decide which <mark style="background: #FF5582A6;">attribute of the certificate</mark> the server ISE will use to check identity of the client. 
 
 Here it is set to Subject Alternate Name (SAN) as the CAP will be used for both Machine and User EAP authentication protocols. The Users in the SAN will use the UPN while the Machines will use the DNS Name.
@@ -102,9 +104,12 @@ For Users Certificates, duplicate from the default <strong>User</strong> certifi
 | General tab               | Request Handling tab               | Extensions tab               | Security tab               | Subject Name tab               |
 | ------------------------- | ---------------------------------- | ---------------------------- | -------------------------- | ------------------------------ |
 | ![[General tab.png\|200]] | ![[Request Handling tab.png\|200]] | ![[Extensions tab.png\|200]] | ![[Security tab.png\|200]] | ![[Subject Name tab.png\|200]] |
+
 Once the Domain Users Certificate Template is created, <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA server</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. 
 In this case the <strong>User Certificate</strong> is issued on the <strong>SubordinateCA01</strong>.
+
 ![[Pasted image 20260424135651.png]]
+
 ##### Domain Admin Certificate
 For the <strong>Domain Admin Certificate</strong> template copy the <strong>Domain User Certificate</strong> template and <mark style="background: #FFF3A3A6;">change Security tab <strong>Group or user names</strong> section</mark>, <mark style="background: #FFB86CA6;">remove Domain Users</mark> and in <mark style="background: #ABF7F7A6;">Domain Admin permissions, allow Read, Write, and Enroll</mark>. The Write permission is used to modify the certificate template. 
 
@@ -298,7 +303,6 @@ In this case the <strong>Machine Certificate</strong> is issued on the <strong>S
 ![[Pasted image 20260424141851.png]]
 ##### Script To Remove Expired userCertificate
 The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script. 
-
  By default this script is in read only mode, read the description for the how to use.
 ```powershell
 <#

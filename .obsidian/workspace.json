@@ -28,8 +28,8 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "source",
-                "source": false
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
               "title": "Cisco ISE"
@@ -222,7 +222,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
     "0 - Notes/Active Directory Certificate Services.md",
     "Homepage.md",
