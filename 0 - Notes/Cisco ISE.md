@@ -89,7 +89,7 @@ To create a certificate signed the a external Certificate Authority like Microso
 
 The ISE GUI also allows the customization of the Subject Alternative Name (SAN) field, which is meant to carry a number of different attributes, each designed to aid in the identification of the certificate:
 
-- <strong>DNS Name</strong>: This is the FQDN of the ISE node. If the certificate will be a wildcard certificate, be sure to specify the wildcard notation *<strong>*</strong>.
+- <strong>DNS Name</strong>: This is the FQDN of the ISE node. If the certificate will be a wildcard certificate, be sure to specify the wildcard notation <strong>*</strong>, EX: <strong>*.publiacqua.it</strong>
 - <strong>IP Address</strong>: This is the IP address of the ISE node associated with the certificate
 - <strong>Uniform Resource Name</strong>: This is the URI associated with the certificate.
 - <strong>Directory Name</strong>: This is a string representation of the distinguished name (DN). DNs are defined in RFC 2253.
