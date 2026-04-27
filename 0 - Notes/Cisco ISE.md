@@ -106,6 +106,8 @@ The new cert should show on System Certificates list.
 ##### Trusted Certificates
 Trusted certificates are used for validation. <mark style="background: #FFF3A3A6;">They are the certificates</mark> (usually Root or Intermediate CA certificates) <mark style="background: #FFF3A3A6;">that ISE uses to verify the identity of someone else</mark>. 
 
+In <strong>Administration > System > Certificates > Trusted Certificates</strong> a copy of the <mark style="background: #FF5582A6;">signing certificate authority’s public key must be stored</mark>, and that certificate must be trusted for purpose of authentication.
+
 ![[Pasted image 20260427145832.png]]
 
 When a client presents a certificate for EAP authentication protocol, the ISE server will check if the issuer of the client certificate is present on the list of Trusted Certificates. 
@@ -373,6 +375,8 @@ By default this script is in read only mode, read the description for the how to
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
 
 # Network Devices
+# Packet Flow with Cisco ISE
+
 # Tutorial
 # Reference 
 

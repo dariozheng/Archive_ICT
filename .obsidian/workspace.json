@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -236,9 +236,9 @@
   },
   "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
-    "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/Cisco ISE.md",
     "1 - Excalidraw/Cisco ISE.md",
+    "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
     "attachments/Pasted image 20260427170229.png",
     "attachments/Pasted image 20260427170213.png",
     "attachments/Pasted image 20260427170031.png",
