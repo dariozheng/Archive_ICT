@@ -1,7 +1,7 @@
 {
   "attachmentFolderPath": "attachments",
   "newFileLocation": "folder",
-  "newFileFolderPath": "Notes",
+  "newFileFolderPath": "0 - Notes",
   "promptDelete": false,
   "userIgnoreFilters": [
     "Templates/",
