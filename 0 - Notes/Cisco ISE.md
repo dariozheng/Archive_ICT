@@ -110,12 +110,20 @@ Trusted certificates are used for validation. <mark style="background: #FFF3A3A6
 
 When a client presents a certificate for EAP authentication protocol, the ISE server will check if the issuer of the client certificate is present on the list of Trusted Certificates. 
 ![[Pasted image 20260427162757.png | 200]]
-
-
-
-
+![[Pasted image 20260427165456.png]]
+If the issuing certificate authority is not present among the Trusted Certificate the authentication fails. 
 ###### CRL Revocation List
+In the Trusted Certificates is also set the CRL validation for the selected certificate. 
+The Certificate Revocation List is a list of the revoked certificates, it is used to check for certificates that are not expired but are not usable because they are expired. 
 
+![[Pasted image 20260427165632.png]]
+
+The CRL Distribution URL can be retrieved from the Certificate Authority server
+![[Pasted image 20260427170031.png]]
+
+When a certificate is revoked outside of the automated cycle, you must trigger a manual CRL publication to synchronize the revocation status across all validating clients:
+![[Pasted image 20260427170213.png]]
+![[Pasted image 20260427170229.png]]
 ##### Certificate Authentication Profile
 
 ![[Pasted image 20260424144802.png]]
