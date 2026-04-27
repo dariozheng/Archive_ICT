@@ -65,6 +65,7 @@ On this section it is also possible to retrieve groups from the AD to create pol
 ### Certificate Authority #certificates
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication. 
 #### Server Certificates
+The ISE server has two types of certificates, system certificates that are used to identify itself, and trusted certificates that are used to validate clients.
 ##### System Certificates
 There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication.
 Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant):
@@ -89,7 +90,7 @@ To create a certificate signed the a external Certificate Authority like Microso
 
 The ISE GUI also allows the customization of the Subject Alternative Name (SAN) field, which is meant to carry a number of different attributes, each designed to aid in the identification of the certificate:
 
-- <strong>DNS Name</strong>: This is the FQDN of the ISE node. If the certificate will be a wildcard certificate, be sure to specify the wildcard notation <strong>*</strong>, like <strong>*.publiacqua.it</strong>
+- <strong>DNS Name</strong>: This is the FQDN of the ISE node. If the certificate will be a wildcard certificate, be sure to specify the wildcard notation <strong>*</strong>, like <strong>*.publiacqua.it</strong>.
 - <strong>IP Address</strong>: This is the IP address of the ISE node associated with the certificate
 - <strong>Uniform Resource Name</strong>: This is the URI associated with the certificate.
 - <strong>Directory Name</strong>: This is a string representation of the distinguished name (DN). DNs are defined in RFC 2253.
@@ -103,9 +104,14 @@ Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Cert
 
 The new cert should show on System Certificates list.
 ##### Trusted Certificates
-Trusted certificates are used for validation. They are the certificates (usually Root or Intermediate CA certificates) that ISE uses to verify the identity of someone else.
+Trusted certificates are used for validation. <mark style="background: #FFF3A3A6;">They are the certificates</mark> (usually Root or Intermediate CA certificates) <mark style="background: #FFF3A3A6;">that ISE uses to verify the identity of someone else</mark>. 
 
 ![[Pasted image 20260427145832.png]]
+
+When a client presents a certificate for EAP authentication protocol, the ISE server will check if the issuer of the client certificate is present on the list of Trusted Certificates. 
+![[Pasted image 20260427162757.png | 200]]
+
+
 
 
 ###### CRL Revocation List
