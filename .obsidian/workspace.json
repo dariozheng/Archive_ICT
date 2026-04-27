@@ -212,7 +212,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -233,7 +234,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "6f78ba7ec3b5902e",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "1 - Excalidraw/Cisco ISE.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
