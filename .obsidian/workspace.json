@@ -48,7 +48,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -121,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1 - Excalidraw/Cisco ISE.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
@@ -234,10 +234,10 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "3b60c39f2018fd73",
+  "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
-    "0 - Notes/Cisco ISE.md",
     "1 - Excalidraw/Cisco ISE.md",
+    "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260427170229.png",
     "attachments/Pasted image 20260427170213.png",
     "attachments/Pasted image 20260427170031.png",
