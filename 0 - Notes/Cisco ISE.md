@@ -99,8 +99,9 @@ A client that is presented with a certificate compare <mark style="background: #
 The newly created CSR is saved in the <strong>Certificate Signing Requests</strong> section and it can be exported, it is a <strong>Base64-encoded plaintext file</strong> known as a <strong>PEM</strong> file.
 Open the CSR with a text editor, copy its content and paste it on the certificate authority web server similar to the procedure in[[#Enrollment - Windows Manual | this link]] except that the CSR is already present.
 
-Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link to the certificate to the CSR used to make this cert.
+Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link to the certificate to the CSR used to make this cert. 
 
+The new cert should show on System Certificates list.
 ##### Trusted Certificates
 Trusted certificates are used for validation. They are the certificates (usually Root or Intermediate CA certificates) that ISE uses to verify the identity of someone else.
 
@@ -353,6 +354,8 @@ The Group Policy Management service is used to deploy the configuration of Windo
 # Network Devices
 # Tutorial
 # Reference 
+
+
 | Voce                  | Topic        | Link                                                                                                      |
 | --------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
 | Certificate Templates | Certificates | https://sendthepayload.com/configuring-certificate-templates-with-active-directory-certificate-services/# |

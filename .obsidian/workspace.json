@@ -39,18 +39,16 @@
             "id": "3b60c39f2018fd73",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "excalidraw",
               "state": {
-                "file": "2 - Categories/Topics/Microsoft/Windows Server.md",
-                "mode": "source",
-                "source": false
+                "file": "1 - Excalidraw/Cisco ISE.md"
               },
-              "icon": "lucide-file",
-              "title": "Windows Server"
+              "icon": "excalidraw-icon",
+              "title": "Cisco ISE"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -123,13 +121,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2 - Categories/Topics/Microsoft/Windows Server.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Windows Server"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -236,14 +234,15 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "3b60c39f2018fd73",
+  "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
-    "Untitled.md",
+    "1 - Excalidraw/Cisco ISE.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
+    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "0 - Notes/Untitled.md",
+    "Untitled.md",
     "0 - Notes/Cisco ISE.md",
     "Homepage.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "1 - Excalidraw/Cisco ISE.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "0 - Notes/Script To Remove Expired userCertificate.md",
@@ -279,7 +278,6 @@
     "2 - Categories/Systems.md",
     "2 - Categories/Topics/Security/Palo Alto Networks.md",
     "README.md",
-    "0 - Notes/Denial-of-Service (DoS).md",
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",
