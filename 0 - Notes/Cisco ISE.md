@@ -376,7 +376,8 @@ The Group Policy Management service is used to deploy the configuration of Windo
 
 # Network Devices
 # Packet Flow with Cisco ISE
-
+Certificate authentication: 
+CLIENT send certificate, ISE CHECK if issuer is in trusted, the expiry date, CRL, proof of possession (server privat key + client public key (the certificate sent for authentication) + random data) the client need to decrypt the data with client private key and server public key. 
 # Tutorial
 # Reference 
 
