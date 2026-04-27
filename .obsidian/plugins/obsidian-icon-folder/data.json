@@ -299,5 +299,9 @@
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
   },
-  "1 - Excalidraw/Cisco ISE.md": "SiCisco"
+  "1 - Excalidraw/Cisco ISE.md": "SiCisco",
+  "0 - Notes/Script To Remove Expired userCertificate.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
+  }
 }
