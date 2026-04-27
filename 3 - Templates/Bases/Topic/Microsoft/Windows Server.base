@@ -4,3 +4,4 @@ views:
     filters:
       and:
         - product.contains(link("Windows Server"))
+        - '!file.tags.contains("script")'

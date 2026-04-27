@@ -27,28 +27,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Script To Remove Expired userCertificate.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Script To Remove Expired userCertificate"
+              "title": "Cisco ISE"
             }
           },
           {
             "id": "3b60c39f2018fd73",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
+              "type": "markdown",
               "state": {
-                "file": "1 - Excalidraw/Cisco ISE.md"
+                "file": "2 - Categories/Topics/Microsoft/Windows Server.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "excalidraw-icon",
-              "title": "Cisco ISE"
+              "icon": "lucide-file",
+              "title": "Windows Server"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -121,13 +123,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Script To Remove Expired userCertificate.md",
+                "file": "2 - Categories/Topics/Microsoft/Windows Server.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Script To Remove Expired userCertificate"
+              "title": "Outline of Windows Server"
             }
           },
           {
@@ -234,16 +236,19 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "6f78ba7ec3b5902e",
+  "active": "3b60c39f2018fd73",
   "lastOpenFiles": [
-    "0 - Notes/Cisco ISE.md",
+    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "2 - Categories/Topics/Microsoft/Windows Server.md",
     "1 - Excalidraw/Cisco ISE.md",
+    "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
+    "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "Homepage.md",
+    "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "attachments/Pasted image 20260427150149.png",
     "attachments/Pasted image 20260427145832.png",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
-    "2 - Categories/Topics/Microsoft/Windows Server.md",
     "0 - Notes/Active Directory Certificate Services.md",
     "Script_Clean-Expired-userCertificate.ps1",
     "attachments/Script_Clean-Expired-userCertificate.ps1",
@@ -256,11 +261,9 @@
     "attachments/Pasted image 20260424144802.png",
     "attachments/Pasted image 20260424141851.png",
     "0 - Notes/Windows Management Instrumentation.md",
-    "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "2 - Categories/Topics/Microsoft/Active Directory.md",
     "2 - Categories/Microsoft.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
     "attachments/Manual Enrollment of Admin Certificate.mp4",
     "0 - Notes/OSI Model.md",
     "2 - Categories/Topics/Networking/Networking General.md",
@@ -280,7 +283,6 @@
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",
     "3 - Templates/Bases/Topic/Security/Security General.base",
-    "3 - Templates/Bases/Topic/Security/Palo Alto Networks.base",
     "Untitled.canvas"
   ]
 }
