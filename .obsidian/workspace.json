@@ -34,6 +34,18 @@
               "icon": "lucide-file",
               "title": "Cisco ISE"
             }
+          },
+          {
+            "id": "3b60c39f2018fd73",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "1 - Excalidraw/Cisco ISE.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Cisco ISE"
+            }
           }
         ],
         "currentTab": 1
@@ -222,16 +234,19 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
-    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "1 - Excalidraw/Cisco ISE.md",
     "0 - Notes/Cisco ISE.md",
+    "Homepage.md",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "attachments/Pasted image 20260427150149.png",
+    "attachments/Pasted image 20260427145832.png",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
     "0 - Notes/Active Directory Certificate Services.md",
-    "Homepage.md",
     "Script_Clean-Expired-userCertificate.ps1",
     "attachments/Script_Clean-Expired-userCertificate.ps1",
-    "1 - Excalidraw/Cisco ISE.md",
     "attachments/Pasted image 20260424150748.png",
     "attachments/Pasted image 20260424150609.png",
     "attachments/Pasted image 20260424150448.png",
@@ -240,15 +255,12 @@
     "attachments/Pasted image 20260424145144.png",
     "attachments/Pasted image 20260424144802.png",
     "attachments/Pasted image 20260424141851.png",
-    "attachments/Pasted image 20260424141809.png",
-    "attachments/Pasted image 20260424141754.png",
     "0 - Notes/Windows Management Instrumentation.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "2 - Categories/Topics/Microsoft/Active Directory.md",
     "2 - Categories/Microsoft.md",
     "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "attachments/Manual Enrollment of Admin Certificate.mp4",
     "0 - Notes/OSI Model.md",
     "2 - Categories/Topics/Networking/Networking General.md",
@@ -264,7 +276,6 @@
     "2 - Categories/Topics/Security/Palo Alto Networks.md",
     "README.md",
     "0 - Notes/Denial-of-Service (DoS).md",
-    "0 - Notes/Autonomous Digital Experience Management.md",
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",

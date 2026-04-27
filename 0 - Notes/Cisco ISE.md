@@ -65,18 +65,47 @@ On this section it is also possible to retrieve groups from the AD to create pol
 ### Certificate Authority #certificates
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication. 
 #### Server Certificates
+##### System Certificates
 There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication.
 Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant):
 - <strong>Admin</strong>: for <mark style="background: #FF5582A6;">ISE Admin Portal</mark>. If this is chosen the ISE node needs to restart all services to use the newly applied certificate.
-- <strong>EAP Authentication</strong>: ISE will use this certificate for <mark style="background: #FFB86CA6;">EAP protocols that use SSL/TLS tunneling</mark>.
+- <strong><mark style="background: #D2B3FFA6;">EAP Authentication</mark></strong>: ISE will use this certificate for <mark style="background: #FFB86CA6;">EAP protocols that use SSL/TLS tunneling</mark>. <mark style="background: #FFF3A3A6;">This is the certificate the ISE will present to the client to prove itself as trusted server</mark>.
 - <strong>RADIUS DTLS</strong>: RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
 - <strong>Portal</strong>: Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices. 
 - <strong>pxGrid</strong>: This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information. 
 
 ![[Pasted image 20260421153234.png]]
 
-To add a certificate
+###### Certificate Signing Request
+To create a certificate signed the a external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong> 
+
+![[Pasted image 20260427150149.png]]
+- <strong>Common Name (CN)</strong> : The CN should be a <mark style="background: #FF5582A6;">FQDN that will resolve via DNS to the IP address of ISE node</mark>.
+- <strong>Organization(O)</strong>: The organization the certificate is meant ot represent, the org implementing ISE
+- <strong>Organizational Unit(OU)</strong>: This is the division of the organization that is controlling the device for which the certificate is being used
+- <strong>Locality(L)</strong>: The city where the entity resides
+- <strong>State(ST)</strong>: The state or the province the entity resides in
+- <strong>Country(C)</strong>: This is the country that the entity resides in
+
+The ISE GUI also allows the customization of the Subject Alternative Name (SAN) field, which is meant to carry a number of different attributes, each designed to aid in the identification of the certificate:
+
+- <strong>DNS Name</strong>: This is the FQDN of the ISE node. If the certificate will be a wildcard certificate, be sure to specify the wildcard notation *<strong>*</strong>.
+- <strong>IP Address</strong>: This is the IP address of the ISE node associated with the certificate
+- <strong>Uniform Resource Name</strong>: This is the URI associated with the certificate.
+- <strong>Directory Name</strong>: This is a string representation of the distinguished name (DN). DNs are defined in RFC 2253.
+
+A client that is presented with a certificate compare <mark style="background: #ABF7F7A6;">the name of the host</mark> with <mark style="background: #ADCCFFA6;">the CN field of the certificate subject</mark>. If the hostname or FQDN used to reach the host doesn’t match what is in the CN field, a certificate mismatch occurs.
+
+The newly created CSR is saved in the <strong>Certificate Signing Requests</strong> section and it can be exported, it is a <strong>Base64-encoded plaintext file</strong> known as a <strong>PEM</strong> file.
+Open the CSR with a text editor, copy its content and paste it on the certificate authority web server similar to the procedure in[[#Enrollment - Windows Manual | this link]] except that the CSR is already present.
+
+Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link to the certificate to the CSR used to make this cert.
+
 ##### Trusted Certificates
+Trusted certificates are used for validation. They are the certificates (usually Root or Intermediate CA certificates) that ISE uses to verify the identity of someone else.
+
+![[Pasted image 20260427145832.png]]
+
 
 ###### CRL Revocation List
 
