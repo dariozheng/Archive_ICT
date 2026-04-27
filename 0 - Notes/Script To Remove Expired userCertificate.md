@@ -159,6 +159,15 @@ iconColor: "#0078D4"
     Most users paste a DN and don't think about regex escaping; the warning
     is there to catch that case before it produces silently-wrong matches.
 
+    PERFORMANCE: Test-IssuerInScope runs once per cert blob (not per
+    object). With expensive regex patterns — anything with backtracking,
+    alternation, or unanchored wildcards — this becomes the per-blob hot
+    path. For domain-wide runs with -IncludeActiveCerts producing tens of
+    thousands of evaluations, prefer Exact mode (which is a string
+    comparison and orders of magnitude faster). The default Regex mode is
+    fine for normal DN patterns; this only matters if you've crafted a
+    deliberately complex pattern.
+
 .PARAMETER RemoveCorruptBlobs
     When $true, unreadable/corrupt certificate blobs are removed in addition
     to expired certificates. Default $false.
@@ -267,6 +276,14 @@ iconColor: "#0078D4"
 
     Has no effect in DryRun mode (no writes, nothing to crash mid-write).
 
+    Scope of guarantee: EagerFlush flushes after objects that received an
+    AD write. Audit rows for objects that DIDN'T receive a write — Active-
+    inventory rows from -IncludeActiveCerts on objects with no removals,
+    Skipped/OutOfScopeOnly rows, KillSwitch rows — are still buffered and
+    follow the standard 1000-row size cap. On a crash, you may lose up to
+    1000 of these "no-AD-change" rows. The rows that describe completed
+    AD changes are always durable.
+
 .EXAMPLE
     # Default: dry-run on users in the current domain
     .\Invoke-ExpiredCertCleanup.ps1
@@ -335,6 +352,27 @@ iconColor: "#0078D4"
     not a query-time abort. For very large domains, scope tightly with
     -SearchBase. The userCertificate=* filter is matched against an
     unindexed attribute in many schemas, so OU scoping is doubly important.
+
+    NOTE on concurrent invocations: do NOT run multiple instances of this
+    script simultaneously against the same scope. Both runners would see
+    the same expired blobs, and the second runner's Set-ADObject -Remove
+    will fail with "value not present in attribute" because the first
+    already removed it. The retry loop will exhaust and the audit log
+    will show spurious 'Failed' rows for blobs that are in fact gone.
+    The script does not lock or coordinate across invocations — operator
+    discipline is required. Stagger by SearchBase if parallelism is
+    needed.
+
+    NOTE on disk-write failure: Flush-ResultsBuffer uses Export-Csv with
+    -ErrorAction Stop. If the audit-log disk fills up or permissions
+    break mid-run, the throw bubbles out of the script and the in-memory
+    $Results buffer is lost (no fallback save). For unattended -EagerFlush
+    runs, this means a disk hiccup terminates the script with a partial
+    CSV. There is no automatic retry on disk write — recovery is not
+    meaningful (the operator wanted durable logs, the disk said no, the
+    only honest response is to fail loudly). Plan unattended runs against
+    a disk with headroom; on-disk audit log up to the failure point is
+    preserved.
 #>
 
 #Requires -Version 5.1
@@ -459,7 +497,13 @@ function New-ResultRecord {
         [string]$Detail         = ""
     )
     [PSCustomObject]@{
-        Timestamp      = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+        # [datetime]::Now.ToString(...) is ~10x faster than `Get-Date -Format ...`
+        # because it skips the cmdlet pipeline. The format string here is the
+        # same. Matters at scale: a 100k-row -IncludeActiveCerts run saves
+        # roughly a second of wallclock for free. NOTE: column order below is
+        # contractual — downstream filters and Detail-field references rely
+        # on it. Append new columns; do not reorder.
+        Timestamp      = [datetime]::Now.ToString("yyyy-MM-dd HH:mm:ss")
         ObjectClass    = $ObjectClass
         Name           = $ObjectName
         ObjectDN       = $ObjectDN
@@ -559,13 +603,15 @@ function Flush-ResultsBuffer {
         Drains $Buffer to the audit CSV and updates the in-memory counters.
         No-op when the buffer is empty.
 
-        $CsvInitialized is intentionally a script-scope variable accessed
-        via a [ref] — see the call sites and the comment near the variable
-        declaration for why this is safe in PS 5.1+.
+        $CsvInitialized is passed by [ref] so the caller's value is updated
+        on first write (controls Export-Csv -Append vs. fresh-file mode on
+        subsequent calls).
+
+        Caller is responsible for ensuring the parent directory of $LogFile
+        exists. The script-init block creates it once at startup.
     #>
     param(
         [System.Collections.Generic.List[PSObject]]$Buffer,
-        [string]$LogPath,
         [string]$LogFile,
         [hashtable]$ActionCounts,
         [hashtable]$TypeCounts,
@@ -576,10 +622,6 @@ function Flush-ResultsBuffer {
 
     foreach ($r in $Buffer) {
         Update-RecordCounters -Record $r -ActionCounts $ActionCounts -TypeCounts $TypeCounts
-    }
-
-    if (!(Test-Path $LogPath)) {
-        New-Item -ItemType Directory -Path $LogPath -Force -ErrorAction Stop | Out-Null
     }
 
     if ($CsvInitialized.Value) {
@@ -669,15 +711,23 @@ function Test-IssuerInScope {
 # view is not.
 $Now     = Get-Date
 $LogFile = Join-Path $LogPath "ExpiredCertCleanup_$(Get-Date -Format 'yyyyMMdd_HHmmss').csv"
+
+# Create the log directory once at script start, before any potential flush.
+# Flush-ResultsBuffer used to do this on every call, but that's wasteful
+# under -EagerFlush (one Test-Path per AD write). Doing it here means the
+# directory is guaranteed to exist before the first flush attempts to write.
+if (!(Test-Path $LogPath)) {
+    New-Item -ItemType Directory -Path $LogPath -Force -ErrorAction Stop | Out-Null
+}
+
 $Results = [System.Collections.Generic.List[PSObject]]::new()
 $ActionCounts    = @{}
 $TypeCounts      = @{}
 
-# $script:CsvInitialized is intentionally scoped explicitly. We pass it to
-# Flush-ResultsBuffer via [ref], and PSReference binds to the underlying
-# variable at the call site. Using $script: makes the binding target
-# unambiguous and refactor-safe — if anyone ever lifts this code into an
-# advanced function or module, the [ref] semantics won't break silently.
+# CsvInitialized tracks whether the audit CSV has been opened yet. Scoped
+# at script: so [ref]-passing to Flush-ResultsBuffer binds unambiguously.
+# Either form (local or $script:) works in current code; using $script:
+# makes the binding explicit at every call site.
 $script:CsvInitialized = $false
 
 # ── Domain-wide cert population counters ───────────────────────────────────
@@ -763,10 +813,13 @@ if ($SearchBase) { $GetADObjectParams.SearchBase = $SearchBase }
 if ($Server)     { $GetADObjectParams.Server     = $Server     }
 if ($Credential) { $GetADObjectParams.Credential = $Credential }
 
+# Naming note: $AdObjects, not $ObjectStream. Get-ADObject materializes
+# the entire result set before returning, despite appearances — a name
+# like "Stream" would imply lazy iteration that isn't happening.
 try {
-    $ObjectStream = Get-ADObject @GetADObjectParams
+    $AdObjects = Get-ADObject @GetADObjectParams
     Write-Host "  LDAP filter: $LdapFilter" -ForegroundColor DarkGray
-    Write-Host "  Streaming objects with at least one userCertificate value..." -ForegroundColor Cyan
+    Write-Host "  Iterating objects with at least one userCertificate value..." -ForegroundColor Cyan
 } catch {
     throw "AD query failed: $($_.Exception.Message)"
 }
@@ -786,7 +839,7 @@ $ObjectsProtected       = 0  # empty-attr protection tripped (object-level)
 $ObjectsKillSwitched    = 0  # per-object too-many-certs guard tripped
 $ObjectsOutOfScopeOnly  = 0  # no in-scope certs, nothing to do (but logged)
 
-foreach ($AdObject in $ObjectStream) {
+foreach ($AdObject in $AdObjects) {
     $ObjectsScanned++
 
     # Broad query-size guard. Compared against scanned (not just cert-bearing)
@@ -1028,11 +1081,11 @@ foreach ($AdObject in $ObjectStream) {
     # — won't have a usable match after the run.
     if ($BlobsToRemove.Count -gt 0 -and $ValidCount -eq 0) {
         $ObjectsBroken++
-        $verb = if ($DryRun) { "would fail" } else { "will fail" }
+        $verbPhrase = if ($DryRun) { "would fail" } else { "will fail" }
         if ($RequiredIssuer) {
-            Write-Warning "  [$FriendlyName] After cleanup, no certs from issuer matching '$RequiredIssuer' remain. ISE binary comparison $verb for this object until autoenrollment runs."
+            Write-Warning "  [$FriendlyName] After cleanup, no certs from issuer matching '$RequiredIssuer' remain. ISE binary comparison $verbPhrase for this object until autoenrollment runs."
         } else {
-            Write-Warning "  [$FriendlyName] Cleanup $verb leave no non-expired certificates."
+            Write-Warning "  [$FriendlyName] Cleanup $verbPhrase leave no non-expired certificates."
         }
     }
 
@@ -1216,34 +1269,34 @@ foreach ($AdObject in $ObjectStream) {
     }
 
     # ── End-of-object flush ───────────────────────────────────────────────
-    # Two independent triggers (both can fire in the same iteration):
+    # Single conditional with two mutually-exclusive triggers. Either:
     #   1. -EagerFlush + a successful committed AD write — drain so the on-
     #      disk audit log reflects every committed change up to a crash. We
     #      drain HERE (after Active rows are emitted) rather than inside the
     #      commit block so a single flush per object covers all rows about
     #      that object: Expired/Corrupt removal records AND the surviving
-    #      Active inventory rows. The cost is that an Active row added
-    #      between the AD write and this flush would be lost on a crash —
-    #      but the Active rows are inventory only; the AD-changed rows
-    #      that matter for crash recovery were added before the AD write
-    #      returned and are now on disk.
+    #      Active inventory rows.
     #   2. Size-based buffer cap (>=1000 rows) — bounds memory growth in
     #      ALL modes, including DryRun + EagerFlush (where trigger #1 never
     #      fires because there are no AD writes). Without this, a long
     #      DryRun with -IncludeActiveCerts could buffer the entire run.
+    #
+    # Why elseif (not two separate ifs): right after an EagerFlush the
+    # buffer is empty, so the size-cap branch would always be a no-op
+    # anyway. The elseif makes that explicit and prevents a future edit
+    # from accidentally introducing a double-flush by adding code that
+    # appends to $Results between the two branches.
     if ($EagerFlush -and -not $DryRun -and $RemovalApplied) {
         Flush-ResultsBuffer `
             -Buffer          $Results `
-            -LogPath         $LogPath `
             -LogFile         $LogFile `
             -ActionCounts    $ActionCounts `
             -TypeCounts      $TypeCounts `
             -CsvInitialized  ([ref]$script:CsvInitialized)
     }
-    if ($Results.Count -ge 1000) {
+    elseif ($Results.Count -ge 1000) {
         Flush-ResultsBuffer `
             -Buffer          $Results `
-            -LogPath         $LogPath `
             -LogFile         $LogFile `
             -ActionCounts    $ActionCounts `
             -TypeCounts      $TypeCounts `
@@ -1263,7 +1316,6 @@ foreach ($AdObject in $ObjectStream) {
 # produced no audit rows at all.
 Flush-ResultsBuffer `
     -Buffer          $Results `
-    -LogPath         $LogPath `
     -LogFile         $LogFile `
     -ActionCounts    $ActionCounts `
     -TypeCounts      $TypeCounts `
@@ -1325,8 +1377,8 @@ Write-Host ("  {0,-13} Seen={1,-7} Valid={2,-7} OOS={3,-7} Expired={4,-7} Corrup
 Write-Host ("  {0,-13} Seen={1,-7} Valid={2,-7} OOS={3,-7} Expired={4,-7} Corrupt={5}" -f `
     "computers:", $ClassTotals.computer.Seen, $ClassTotals.computer.Valid, $ClassTotals.computer.OOS, $ClassTotals.computer.Expired, $ClassTotals.computer.Corrupt)
 
-$_PopulationSum = $TotalValidInScope + $TotalOutOfScope + $TotalExpiredSeen + $TotalCorruptSeen
-if ($_PopulationSum -ne $TotalCertsSeen) {
+$populationSum = $TotalValidInScope + $TotalOutOfScope + $TotalExpiredSeen + $TotalCorruptSeen
+if ($populationSum -ne $TotalCertsSeen) {
     # This invariant is supposed to hold tautologically: every cert blob
     # the script classifies bumps exactly one of the four sub-counters
     # AND the global $TotalCertsSeen. Kill-switched objects don't
@@ -1334,7 +1386,7 @@ if ($_PopulationSum -ne $TotalCertsSeen) {
     # and before the totals increment). If this fires, something
     # genuinely unexpected happened — re-examine the classify/totals
     # block before trusting the run.
-    Write-Warning ("  Population invariant mismatch: $TotalValidInScope + $TotalOutOfScope + $TotalExpiredSeen + $TotalCorruptSeen = $_PopulationSum, expected $TotalCertsSeen. " +
+    Write-Warning ("  Population invariant mismatch: $TotalValidInScope + $TotalOutOfScope + $TotalExpiredSeen + $TotalCorruptSeen = $populationSum, expected $TotalCertsSeen. " +
                    "This should not happen — please re-run and report if reproducible.")
 }
 Write-Host ""
