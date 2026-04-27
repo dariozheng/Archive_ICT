@@ -119,10 +119,13 @@ The Certificate Revocation List is a list of the revoked certificates, it is use
 ![[Pasted image 20260427165632.png]]
 
 The CRL Distribution URL can be retrieved from the Certificate Authority server
+
 ![[Pasted image 20260427170031.png]]
 
 When a certificate is revoked outside of the automated cycle, you must trigger a manual CRL publication to synchronize the revocation status across all validating clients:
+
 ![[Pasted image 20260427170213.png]]
+
 ![[Pasted image 20260427170229.png]]
 ##### Certificate Authentication Profile
 
