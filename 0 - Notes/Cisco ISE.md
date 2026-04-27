@@ -109,8 +109,11 @@ Trusted certificates are used for validation. <mark style="background: #FFF3A3A6
 ![[Pasted image 20260427145832.png]]
 
 When a client presents a certificate for EAP authentication protocol, the ISE server will check if the issuer of the client certificate is present on the list of Trusted Certificates. 
+
 ![[Pasted image 20260427162757.png | 200]]
+
 ![[Pasted image 20260427165456.png]]
+
 If the issuing certificate authority is not present among the Trusted Certificate the authentication fails. 
 ###### CRL Revocation List
 In the Trusted Certificates is also set the CRL validation for the selected certificate. 
