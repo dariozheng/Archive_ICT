@@ -317,7 +317,6 @@ In this case the <strong>Machine Certificate</strong> is issued on the <strong>S
 ##### Script To Remove Expired userCertificate
 The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script. 
 By default this script is in read only mode, read the description for the how to use.
-
 [[Script To Remove Expired userCertificate]]
 ### Group Policy Management
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
