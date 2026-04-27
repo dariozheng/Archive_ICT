@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -212,8 +212,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -236,8 +235,9 @@
   },
   "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
-    "1 - Excalidraw/Cisco ISE.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/Cisco ISE.md",
+    "1 - Excalidraw/Cisco ISE.md",
     "attachments/Pasted image 20260427170229.png",
     "attachments/Pasted image 20260427170213.png",
     "attachments/Pasted image 20260427170031.png",
@@ -255,7 +255,6 @@
     "Untitled.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "0 - Notes/Active Directory Certificate Services.md",
     "Script_Clean-Expired-userCertificate.ps1",
