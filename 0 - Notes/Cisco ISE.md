@@ -42,11 +42,9 @@ Cisco Identity Services Engine (ISE) is an <strong>identity-based network access
 
 
 
-# External Services
-ISE can leverage existing infrastructures to manage user network access. 
-## Microsoft Servers
+# Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
-### Active Directory
+## Active Directory
 
 ![[Pasted image 20260421124607.png]]
 
@@ -62,11 +60,11 @@ On this section it is also possible to retrieve groups from the AD to create pol
 
 ![[Pasted image 20260421125524.png]]
 
-### Certificate Authority #certificates
+## Certificate Authority #certificates
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication. 
-#### Server Certificates
+### Server Certificates
 The ISE server has two types of certificates, system certificates that are used to identify itself, and trusted certificates that are used to validate clients.
-##### System Certificates
+#### System Certificates
 There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication.
 Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant):
 - <strong>Admin</strong>: for <mark style="background: #FF5582A6;">ISE Admin Portal</mark>. If this is chosen the ISE node needs to restart all services to use the newly applied certificate.
@@ -77,7 +75,7 @@ Certificates are also used to secure EAP communications, to form a Transport Lay
 
 ![[Pasted image 20260421153234.png]]
 
-###### Certificate Signing Request
+##### Certificate Signing Request
 To create a certificate signed the a external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong> 
 
 ![[Pasted image 20260427150149.png]]
@@ -103,7 +101,7 @@ Open the CSR with a text editor, copy its content and paste it on the certificat
 Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link to the certificate to the CSR used to make this cert. 
 
 The new cert should show on System Certificates list.
-##### Trusted Certificates
+#### Trusted Certificates
 Trusted certificates are used for validation. <mark style="background: #FFF3A3A6;">They are the certificates</mark> (usually Root or Intermediate CA certificates) <mark style="background: #FFF3A3A6;">that ISE uses to verify the identity of someone else</mark>. 
 
 In <strong>Administration > System > Certificates > Trusted Certificates</strong> a copy of the <mark style="background: #FF5582A6;">signing certificate authority’s public key must be stored</mark>, and that certificate must be trusted for purpose of authentication.
@@ -117,7 +115,7 @@ When a client presents a certificate for EAP authentication protocol, the ISE se
 ![[Pasted image 20260427165456.png]]
 
 If the issuing certificate authority is not present among the Trusted Certificate the authentication fails. 
-###### CRL Revocation List
+##### CRL Revocation List
 In the Trusted Certificates is also set the CRL validation for the selected certificate. 
 The Certificate Revocation List is a list of the revoked certificates, it is used to check for certificates that are not expired but are not usable because they are expired. 
 
@@ -132,7 +130,7 @@ When a certificate is revoked outside of the automated cycle, you must trigger a
 ![[Pasted image 20260427170213.png]]
 
 ![[Pasted image 20260427170229.png]]
-##### Certificate Authentication Profile
+#### Certificate Authentication Profile
 
 ![[Pasted image 20260424144802.png]]
 
@@ -150,10 +148,10 @@ The selection <strong>Match Client Certificate Against Certificate In Identity S
    [[#Domain Users Certificate| Link to configuration of a domain user certificate and the img of userCertificate attribute]]
    [[#Script To Remove Expired userCertificate| Link to the managing of expired userCertificate attribute]]
 - **Never:** Choose this if you are not using an identity store at all for this profile. This would be common for Guest or BYOD setups where you just want to verify that the certificate is valid and signed by a trusted CA without checking it against an AD account.
-#### Client Certificates 
+### Client Certificates 
 Client Certificates are used by users, machine or both to authenticate to ISE. 
 In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 
-##### Domain Users Certificate
+#### Domain Users Certificate
 For Users Certificates, duplicate from the default <strong>User</strong> certificate template:
 - On the <u>General tab</u> create a logical template name. The <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the user <strong>userCertificate</strong> attribute in Active Directory. ![[Pasted image 20260424150748.png|200]]
 - On the <u>Request Handling tab</u>, uncheck the <strong>Allow private key to be exported</strong> box. 
@@ -170,13 +168,13 @@ In this case the <strong>User Certificate</strong> is issued on the <strong>Subo
 
 ![[Pasted image 20260424135651.png]]
 
-##### Domain Admin Certificate
+#### Domain Admin Certificate
 For the <strong>Domain Admin Certificate</strong> template copy the <strong>Domain User Certificate</strong> template and <mark style="background: #FFF3A3A6;">change Security tab <strong>Group or user names</strong> section</mark>, <mark style="background: #FFB86CA6;">remove Domain Users</mark> and in <mark style="background: #ABF7F7A6;">Domain Admin permissions, allow Read, Write, and Enroll</mark>. The Write permission is used to modify the certificate template. 
 
 As the Domain Admin Certificate is made for admins that have a domain user account but not a domain computer, the enrollment is done manually. 
-###### Enrollment - Windows Manual
+##### Enrollment - Windows Manual
 ![[Manual Enrollment of Admin Certificate.mp4]]
-###### Enrollment - Windows Script
+##### Enrollment - Windows Script
 
 ```powershell
 param(
@@ -280,7 +278,7 @@ elseif ($Step -eq "All") {
 }
 ```
 
-###### Enrollment - Apple Script
+##### Enrollment - Apple Script
 
 ```applescript
 -- Define paths
@@ -350,7 +348,7 @@ on moveToTrash(fileList)
 end moveToTrash
 ```
 
-##### Domain Computer Certificate
+#### Domain Computer Certificate
 For Computer Certificates, duplicate from the default <strong>Workstation Authentication</strong> certificate template:
 - On the <u>General tab</u> create a logical template name, the <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the computer <strong>userCertificate</strong> attribute in Active Directory. ![[Pasted image 20260424150609.png|200]]
 - On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong>. The <strong>Edit Application Policies Extension</strong> window will pop up. Click the <strong>Add</strong> button. Then, add the <strong>Server Authentication</strong> policy to the <strong>Application Policies</strong>. Then click <strong>OK</strong> to close the <strong>Edit Application Policies Extension</strong> window.
@@ -366,18 +364,20 @@ In this case the <strong>Machine Certificate</strong> is issued on the <strong>S
 
 ![[Pasted image 20260424141851.png]]
 
-##### Script To Remove Expired userCertificate
+#### Script To Remove Expired userCertificate
 The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script. 
 By default this script is in read only mode, read the description for the how to use.
 
 [[Script To Remove Expired userCertificate]]
-### Group Policy Management
+## Group Policy Management
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates. 
 
 # Network Devices
 # Packet Flow with Cisco ISE
 Certificate authentication: 
 CLIENT send certificate, ISE CHECK if issuer is in trusted, the expiry date, CRL, proof of possession (server privat key + client public key (the certificate sent for authentication) + random data) the client need to decrypt the data with client private key and server public key. 
+
+
 # Tutorial
 # Reference 
 

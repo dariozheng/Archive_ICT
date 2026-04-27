@@ -212,8 +212,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -234,7 +233,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "6f78ba7ec3b5902e",
+  "active": "479baed5a072decf",
   "lastOpenFiles": [
     "1 - Excalidraw/Cisco ISE.md",
     "0 - Notes/Cisco ISE.md",
