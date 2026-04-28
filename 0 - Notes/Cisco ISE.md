@@ -447,12 +447,12 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
 2. Network authentication method → <strong>Microsoft: Tunnel EAP (TEAP)</strong>.
 3. Click <strong>Settings</strong>:
     - <strong>Identity privacy</strong> → anonymous.
-    - <strong>Trusted Root Certification Authorities</strong> → tick the root that signed the ISE EAP certificate. (If you have a 2-tier PKI, only tick the offline root, not the issuing CA)
-    - Client authentication:
-        * Primary EAP method → Microsoft: Smart Card or other certificate (EAP-TLS)
-	        * Configure: Use a certificate on this computer, Verify server's identity by validating certificate, select Root CA. This is your machine auth.
-        * Secondary EAP method → same (EAP-TLS) → this becomes the user auth.
-        * ✔ Enable EAP Chaining (this is the critical TEAP setting that makes both inner methods get evaluated and chained in one RADIUS conversation).
+    - <strong>Trusted Root Certification Authorities</strong> → tick the root that signed the ISE [[#EAP Authentication Certificate]]. (If you have a 2-tier PKI, <mark style="background: #FF5582A6;">only tick the <strong>offline root</strong></mark>, not the issuing CA)
+    - <strong>Client authentication</strong>:
+        - <strong>Primary EAP method </strong>→ <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this is the computer authentication.
+	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Verify server's identity by validating certificate</strong>, select the Root CA that signed the ISE [[#EAP Authentication Certificate]].
+        - <strong>Secondary EAP method</strong> → <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this becomes the user auth.
+	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Verify server's identity by validating certificate</strong>, select the Root CA that signed the ISE [[#EAP Authentication Certificate]].
 4. Back on the Authentication tab → Additional settings → tick Specify authentication mode → User or computer authentication.
 
 ### User GPO
