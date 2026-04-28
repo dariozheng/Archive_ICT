@@ -410,7 +410,20 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
     - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>, this make it so that after user-authentication, Windows will release/renew DHCP, flush Kerberos tickets tied to the old IP, and re-register DNS. This may cause a 2-8 seconds in connectivity loss.
 
 Under <strong>Scope → Security Filtering</strong> add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
-#### 
+#### EAP-TLS
+This is a GPO with authentication protocol set in EAP-TLS, made specifically for RDP connection, see the policy rule made for this. 
+
+- **General tab**: enable <strong>Use Windows Wired Auto Config service for clients</strong>
+- **Security tab**:
+    - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
+	- Network authentication method: <strong>Microsoft: Smart Card or other certificate</strong>
+    - Authentication Mode: <strong>Computer only</strong>
+    - Max authentication failures: 1–3
+    - Tick <strong>Cache user information for subsequent connections</strong>
+
+Under <strong>Scope → Security Filtering</strong> add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
+#### TEAP
+
 # Network Devices
 # Packet Flow with Cisco ISE
 Certificate authentication: 
