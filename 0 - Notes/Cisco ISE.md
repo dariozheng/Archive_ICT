@@ -376,6 +376,7 @@ Make sure the GPO with the desired configuration is winning against other GPOs a
 ### Computer GPO
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Computers</mark> with the [[#Domain Computer Certificate]] and enable <mark style="background: #FFB86CA6;">Wired AutoConfig</mark> on computers. 
 
+All computer GPO must be create in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> which is where the Domain Computer accounts are stored.
 <mark style="background: #FFB8EBA6;"><u>At each change of computer GPO, there must be a reboot of the client computer to apply the GPO configuration</u></mark>.
 
 <strong>Wired AutoConfig</strong> (<strong>DOT3SVC</strong>) is a Windows service that manages <mark style="background: #FF5582A6;">IEEE 802.1X authentication on Ethernet connections</mark>. It enables computers to authenticate themselves on secure networks, often used in corporate environments to enforce network access control. 
@@ -389,7 +390,14 @@ To activate Auto-Enrollment go to <strong>Computer Configuration → Policies �
 
 ![[Pasted Graphic.png]]
 
-Core 802.1X configuration is the <strong>Wired Network (IEEE 802.3) Policies</strong> in <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Wired Network (IEEE 802.3) Policies</strong>, in the current deployment there are <strong>PEAP</strong>, <strong>TEAP</strong> and <strong>EAP-TLS</strong>.
+<mark style="background: #ABF7F7A6;">Core 802.1X configuration is the <strong>Wired Network (IEEE 802.3) Policies</strong></mark> in <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Wired Network (IEEE 802.3) Policies</strong>, in the current deployment there are <strong>PEAP</strong>, <strong>TEAP</strong> and <strong>EAP-TLS</strong>.
+
+GPO hierarchy: <strong>EAP-TLS → PEAP-MSCHAPv2 → TEAP</strong>
+- <strong>TEAP</strong> GPO — scoped to <strong>Domain Computers</strong>. This makes TEAP the default authentication method for the entire fleet.
+- <strong>PEAP MSCHAPv2</strong> GPO — scoped to a custom security group (e.g., <strong>GPO_C_PC_Enable_PEAP</strong>) for machines that require PEAP.
+- <strong>EAP-TLS</strong> GPO — scoped to a custom security group (e.g., <strong>GPO_C_PC_Enable_EAP-TLS</strong>) for machines that require EAP-TLS.
+Because the EAP-TLS and PEAP GPOs are linked at higher precedence than TEAP, <mark style="background: #FFB86CA6;">any computer added to one of the custom groups will have that GPO's wired profile applied last and override the default TEAP profile</mark>. <mark style="background: #BBFABBA6;">To switch a machine's authentication method, just add its computer object to the appropriate group</mark> — no per-machine configuration needed.
+So the default is TEAP and when some computers need EAP-TLS or PEAP they just need to be dropped in to the custom groups, they will automatically pick the correct authentication method at new reboot. 
 #### PEAP MSCHAPv2
 PEAP is used for Domain Users that cannot or do not want to use the certification to authenticate to ISE.
 
@@ -409,7 +417,7 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
     - Tick <strong>Enable Single Sign On for this network</strong> → <strong>Perform immediately before user logon</strong>, <mark style="background: #FFB8EBA6;">it triggers re-authentication of the port at User logon</mark> <mark style="background: #FF5582A6;">using the same credentials as User logon</mark> <mark style="background: #FFB8EBA6;">for PEAP authentication</mark>, if this is ticked, untick <strong>Allow additional dialogs to be displayed during Single Sign On</strong> <mark style="background: #FFB86CA6;">as there is no need for dialogs to be displayed if the PEAP authentication uses User logon credentials</mark>.
     - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>, this make it so that after user-authentication, Windows will release/renew DHCP, flush Kerberos tickets tied to the old IP, and re-register DNS. This may cause a 2-8 seconds in connectivity loss.
 
-Under <strong>Scope → Security Filtering</strong> add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
+Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### EAP-TLS
 This is a GPO with authentication protocol set in EAP-TLS, made specifically for RDP connection, see the policy rule made for this. 
 
@@ -421,8 +429,10 @@ This is a GPO with authentication protocol set in EAP-TLS, made specifically for
     - Max authentication failures: 1–3
     - Tick <strong>Cache user information for subsequent connections</strong>
 
-Under <strong>Scope → Security Filtering</strong> add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
+Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### TEAP
+
+### User GPO
 
 # Network Devices
 # Packet Flow with Cisco ISE
