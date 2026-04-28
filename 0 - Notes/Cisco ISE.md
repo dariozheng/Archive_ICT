@@ -66,16 +66,21 @@ The Certificate Authority service is used to provide certificates to both ISE se
 The ISE server has two types of certificates, system certificates that are used to identify itself, and trusted certificates that are used to validate clients.
 #### System Certificates
 There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication.
-Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant):
-- <strong>Admin</strong>: for <mark style="background: #FF5582A6;">ISE Admin Portal</mark>. If this is chosen the ISE node needs to restart all services to use the newly applied certificate.
-- <strong><mark style="background: #D2B3FFA6;">EAP Authentication</mark></strong>: ISE will use this certificate for <mark style="background: #FFB86CA6;">EAP protocols that use SSL/TLS tunneling</mark>. <mark style="background: #FFF3A3A6;">This is the certificate the ISE will present to the client to prove itself as trusted server</mark>.
-- <strong>RADIUS DTLS</strong>: RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
-- <strong>Portal</strong>: Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices. 
-- <strong>pxGrid</strong>: This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information. 
+Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant)
 
 ![[Pasted image 20260421153234.png]]
 
-##### Certificate Signing Request
+#### Admin
+For <mark style="background: #FF5582A6;">ISE Admin Portal</mark>. If this is chosen the ISE node needs to restart all services to use the newly applied certificate.
+#### EAP Authentication 
+ISE will use this certificate for <mark style="background: #FFB86CA6;">EAP protocols that use SSL/TLS tunneling</mark>. <mark style="background: #FFF3A3A6;">This is the certificate the ISE will present to the client to prove itself as trusted server</mark>.
+#### RADIUS DTLS 
+RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
+#### Portal 
+Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices. 
+#### pxGrid 
+This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information. 
+#### Certificate Signing Request
 To create a certificate signed the a external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong> 
 
 ![[Pasted image 20260427150149.png]]
@@ -431,6 +436,24 @@ This is a GPO with authentication protocol set in EAP-TLS, made specifically for
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### TEAP
+TEAP authentication protocol is the default protocol used by Domain Users and Domain Computers. 
+
+On Group Policy Management editor, the TEAP authentication method is broken, to rollout this type of authentication method we need to import a XML configuration from a working Win10/11 client. 
+##### TEAP profile 
+On a domain-joined client that has both the machine and user certs already enrolled, configure the wired NIC manually so you can export it.
+
+Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab:
+1. Tick <strong>Enable IEEE 802.1X authentication</strong>.
+2. Network authentication method → <strong>Microsoft: Tunnel EAP (TEAP)</strong>.
+3. Click <strong>Settings</strong>:
+    - <strong>Identity privacy</strong> → anonymous.
+    - <strong>Trusted Root Certification Authorities</strong> → tick the root that signed the ISE EAP certificate. (If you have a 2-tier PKI, only tick the offline root, not the issuing CA)
+    - Client authentication:
+        * Primary EAP method → Microsoft: Smart Card or other certificate (EAP-TLS)
+	        * Configure: Use a certificate on this computer, Verify server's identity by validating certificate, select Root CA. This is your machine auth.
+        * Secondary EAP method → same (EAP-TLS) → this becomes the user auth.
+        * ✔ Enable EAP Chaining (this is the critical TEAP setting that makes both inner methods get evaluated and chained in one RADIUS conversation).
+4. Back on the Authentication tab → Additional settings → tick Specify authentication mode → User or computer authentication.
 
 ### User GPO
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Users</mark> with the [[#Domain Users Certificate]].
