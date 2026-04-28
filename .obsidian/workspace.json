@@ -123,7 +123,7 @@
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": true,
-                "showSearch": false,
+                "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
@@ -233,7 +233,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "6f78ba7ec3b5902e",
+  "active": "479baed5a072decf",
   "lastOpenFiles": [
     "attachments/Pasted Graphic.png",
     "attachments/Pasted Graphic 2.png",

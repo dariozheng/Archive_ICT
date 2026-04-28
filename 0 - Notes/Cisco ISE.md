@@ -373,8 +373,10 @@ By default this script is in read only mode, read the description for the how to
 The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates and other setting to manage the user and computer configuration. 
 
 Make sure the GPO with the desired configuration is winning against other GPOs and its policies are enforced, and the <strong>Security Filtering</strong> is applied correctly. This is possible to check on <strong>Group Policy Results Wizard</strong> on <strong>Group Policy Management</strong>.
-### C_PC-NAC
+### Computer GPO
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Computers</mark> with the [[#Domain Computer Certificate]] and enable <mark style="background: #FFB86CA6;">Wired AutoConfig</mark> on computers. 
+
+<mark style="background: #FFB8EBA6;"><u>At each change of computer GPO, there must be a reboot of the client computer to apply the GPO configuration</u></mark>.
 
 <strong>Wired AutoConfig</strong> (<strong>DOT3SVC</strong>) is a Windows service that manages <mark style="background: #FF5582A6;">IEEE 802.1X authentication on Ethernet connections</mark>. It enables computers to authenticate themselves on secure networks, often used in corporate environments to enforce network access control. 
 <strong>Computer Configuration → Policies → Windows Settings → Security Settings → System Services → Wired AutoConfig</strong>
@@ -386,6 +388,25 @@ The [[#Domain Computer Certificate]] has Auto-Enrollment configured on its certi
 To activate Auto-Enrollment go to <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Public Key Policies → Certificate Services Client - Auto-Enrollment</strong> 
 
 ![[Pasted Graphic.png]]
+
+Core 802.1X configuration is the <strong>Wired Network (IEEE 802.3) Policies</strong> in <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Wired Network (IEEE 802.3) Policies</strong>, in the current deployment there are <strong>PEAP</strong>, <strong>TEAP</strong> and <strong>EAP-TLS</strong>.
+#### PEAP
+PEAP is used for Domain Users that cannot or do not want to use the certification to authenticate to ISE. 
+- **General tab**: enable <strong>Use Windows Wired Auto Config service for clients</strong>
+- **Security tab**:
+    - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
+	- Network authentication method: <strong>Microsoft: Protected EAP (PEAP)</strong> for <strong>MSCHAPv2</strong>
+    - Authentication Mode: <strong>User authentication</strong>
+    - Max authentication failures: 1–3
+    - Tick <strong>Cache user information for subsequent connections</strong>
+- **Security → Advanced**:
+    - Enforce advanced 802.1X settings
+	    - <strong>Max Eapol-Start Msgs</strong>: 3
+	    - <strong>Held Period</strong>: 60
+	    - <strong>Start Period</strong>: 5
+	    - <strong>Auth Period</strong>: 30
+    - Tick <strong>Enable Single Sign On for this network</strong> → <strong>Perform immediately before user logon</strong>, <mark style="background: #FFB8EBA6;">it triggers re-authentication of the port at User logon</mark> <mark style="background: #FF5582A6;">using the same credentials as User logon</mark> <mark style="background: #FFB8EBA6;">for PEAP authentication</mark>, if this is ticked, untick <strong>Allow additional dialogs to be displayed during Single Sign On</strong> <mark style="background: #FFB86CA6;">as there is no need for dialogs to be displayed if the PEAP authentication uses User logon credentials</mark>.
+    - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>, this make it so that after user-authentication, Windows will release/renew DHCP, flush Kerberos tickets tied to the old IP, and re-register DNS. This may cause a 2-8 seconds in connectivity loss.
 
 # Network Devices
 # Packet Flow with Cisco ISE
