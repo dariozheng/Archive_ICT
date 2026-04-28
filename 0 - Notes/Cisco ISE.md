@@ -460,6 +460,7 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
 	- Tick <strong>Enable Single Sign On for this network</strong> 
 		- Tick <strong>Perform immediately before user logon</strong>
 		- Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong> 
+##### Export the profile to XML
 
 ### User GPO
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Users</mark> with the [[#Domain Users Certificate]].
