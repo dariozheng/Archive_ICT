@@ -440,6 +440,8 @@ TEAP authentication protocol is the default protocol used by Domain Users and Do
 
 On Group Policy Management editor, the TEAP authentication method is broken, to rollout this type of authentication method we need to import a XML configuration from a working Win10/11 client. 
 ##### TEAP profile 
+First we need to create a TEAP profile to export as XML. 
+
 On a domain-joined client that has both the machine and user certs already enrolled, configure the wired NIC manually so you can export it.
 
 Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab:
@@ -453,7 +455,11 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
 	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Verify server's identity by validating certificate</strong>, select the Root CA that signed the ISE [[#EAP Authentication Certificate]].
         - <strong>Secondary EAP method</strong> → <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this becomes the user auth.
 	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Verify server's identity by validating certificate</strong>, select the Root CA that signed the ISE [[#EAP Authentication Certificate]].
-4. Back on the Authentication tab → Additional settings → tick Specify authentication mode → User or computer authentication.
+4. Back on the <strong>Authentication</strong> tab → <strong>Additional settings</strong> 
+	- Tick <strong>Specify authentication mode</strong> → <strong>User or computer authentication</strong>.
+	- Tick <strong>Enable Single Sign On for this network</strong> 
+		- Tick <strong>Perform immediately before user logon</strong>
+		- Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong> 
 
 ### User GPO
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Users</mark> with the [[#Domain Users Certificate]].
