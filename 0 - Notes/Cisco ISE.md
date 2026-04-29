@@ -791,7 +791,6 @@ This is a GPO with authentication protocol set in EAP-TLS, made specifically for
 	- Network authentication method: <strong>Microsoft: Smart Card or other certificate</strong>
     - Authentication Mode: <strong>Computer only</strong>
     - Max authentication failures: 1–3
-    - Tick <strong>Cache user information for subsequent connections</strong>
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### TEAP
