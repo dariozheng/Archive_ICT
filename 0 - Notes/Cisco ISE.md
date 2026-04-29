@@ -772,14 +772,6 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
     - Authentication Mode: <strong>User authentication</strong>
     - Max authentication failures: 1–3
     - Tick <strong>Cache user information for subsequent connections</strong>, to decide if to tick or not. 
-- <strong>Security → Advanced</strong>:
-    - Tick <strong>Enforce advanced 802.1X settings</strong>
-	    - <strong>Max Eapol-Start Msgs</strong>: 3
-	    - <strong>Held Period</strong>: 20
-	    - <strong>Start Period</strong>: 5
-	    - <strong>Auth Period</strong>: 30
-    - Tick <strong>Enable Single Sign On for this network</strong> → <strong>Perform immediately before user logon</strong>, <mark style="background: #FFB8EBA6;">it triggers re-authentication of the port at User logon</mark> <mark style="background: #FF5582A6;">using the same credentials as User logon</mark> <mark style="background: #FFB8EBA6;">for PEAP authentication</mark>, if this is ticked, untick <strong>Allow additional dialogs to be displayed during Single Sign On</strong> <mark style="background: #FFB86CA6;">as there is no need for dialogs to be displayed if the PEAP authentication uses User logon credentials</mark>.
-    - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>, this make it so that after user-authentication, Windows will release/renew DHCP, flush Kerberos tickets tied to the old IP, and re-register DNS. This may cause a 2-8 seconds in connectivity loss.
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### EAP-TLS
