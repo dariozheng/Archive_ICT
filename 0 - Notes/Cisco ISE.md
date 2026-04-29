@@ -101,7 +101,7 @@ The ISE GUI also allows the customization of the Subject Alternative Name (SAN) 
 A client that is presented with a certificate compare <mark style="background: #ABF7F7A6;">the name of the host</mark> with <mark style="background: #ADCCFFA6;">the CN field of the certificate subject</mark>. If the hostname or FQDN used to reach the host doesn’t match what is in the CN field, a certificate mismatch occurs.
 
 The newly created CSR is saved in the <strong>Certificate Signing Requests</strong> section and it can be exported, it is a <strong>Base64-encoded plaintext file</strong> known as a <strong>PEM</strong> file.
-Open the CSR with a text editor, copy its content and paste it on the certificate authority web server similar to the procedure in[[#Enrollment - Windows Manual | this link]] except that the CSR is already present.
+Open the CSR with a text editor, copy its content and paste it on the certificate authority web server similar to the procedure in [[#Enrollment - Windows Manual | this link]] except that the CSR is already present.
 
 Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link to the certificate to the CSR used to make this cert. 
 
@@ -180,17 +180,52 @@ As the Domain Admin Certificate is made for admins that have a domain user accou
 ##### Enrollment - Windows Manual
 ![[Manual Enrollment of Admin Certificate.mp4]]
 ##### Enrollment - Windows Script
+This is a script that enroll a non domain computer with a domain certificate if the user is an admin with a account in the Active Directory. 
+
+To correctly activate this script, it must be saved with <strong>.ps1</strong> extension in the format <strong>UTF-8 with BOM</strong>.
+
+It's advised to install the 64-base <strong>certnew.p7b</strong> certificate chain, for easiest install, but the <strong>certnew.cer</strong> certificate works too.
 
 ```powershell
 param(
     [ValidateSet("All", "Step1", "Step2")]
     [string]$Step = "All",
-    [string]$CertPath = "$env:USERPROFILE\Downloads\certnew.cer"
+    [string]$CertPath
 )
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+# Require elevation — CA chain import writes to LocalMachine stores
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+        [Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    throw "This script must be run as Administrator (right-click → Run as administrator)."
+}
+
+# Verify certreq is available before doing anything else
+if (-not (Get-Command certreq.exe -ErrorAction SilentlyContinue)) {
+    throw "certreq.exe not found on this system. This script requires the Windows certificate request utility."
+}
+
+# Load VB assembly once at script scope (used by Move-UsedFilesToRecycleBin)
+Add-Type -AssemblyName Microsoft.VisualBasic
+
 # Paths
-$infPath = Join-Path $env:TEMP "cert_request.inf"
-$csrPath = Join-Path $env:USERPROFILE "Desktop\request.csr"
-$subcaUrl = "https://subordinateca01.publiacqua.it/certsrv/certrqxt.asp"
+$desktop      = [Environment]::GetFolderPath('Desktop')
+$downloadsDir = Join-Path $env:USERPROFILE 'Downloads'
+$infPath      = Join-Path $env:TEMP "cert_request.inf"
+$csrPath      = Join-Path $desktop  "request.csr"
+$subcaBase    = "https://subordinateca01.publiacqua.it/certsrv"
+$subcaUrl     = "$subcaBase/certrqxt.asp"
+$caChainPage  = "$subcaBase/certcarc.asp"
+$scriptName   = $MyInvocation.MyCommand.Name
+$eventSource  = "EAPEnroll"
+
+# Expected template name (for display only)
+$expectedTemplate = "EAP-Admin-User"
+
+$script:Step1StartTime = $null
+$IsCertPathExplicit    = $PSBoundParameters.ContainsKey('CertPath')
 
 $infContent = @"
 [NewRequest]
@@ -200,85 +235,407 @@ Exportable = TRUE
 MachineKeySet = FALSE
 RequestType = PKCS10
 ProviderName = "Microsoft Software Key Storage Provider"
+
 [EnhancedKeyUsageExtension]
 OID = 1.3.6.1.5.5.7.3.2 ; Client Authentication
 "@
 
+function Write-EnrollmentEvent {
+    param(
+        [string]$Message,
+        [ValidateSet('Information','Warning','Error')]
+        [string]$EntryType = 'Information'
+    )
+    try {
+        if (-not [System.Diagnostics.EventLog]::SourceExists($eventSource)) {
+            try { New-EventLog -LogName Application -Source $eventSource -ErrorAction Stop } catch { return }
+        }
+        Write-EventLog -LogName Application -Source $eventSource -EventId 1000 `
+            -EntryType $EntryType -Message $Message -ErrorAction Stop
+    }
+    catch {
+        # Best-effort.
+    }
+}
+
+function Find-NewestCertificate {
+    param([datetime]$SinceTime)
+
+    if (-not (Test-Path $downloadsDir)) { return $null }
+
+    $candidates = Get-ChildItem -Path $downloadsDir -File -ErrorAction SilentlyContinue |
+        Where-Object { $_.Extension -in '.cer','.p7b' }
+
+    if ($SinceTime) {
+        $candidates = $candidates | Where-Object { $_.LastWriteTime -ge $SinceTime }
+    }
+
+    $newest = $candidates | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    if ($newest) { return $newest.FullName }
+    return $null
+}
+
+function Test-IsCACertificate {
+    param([System.Security.Cryptography.X509Certificates.X509Certificate2]$Certificate)
+
+    $bcExt = $Certificate.Extensions | Where-Object { $_.Oid.Value -eq '2.5.29.19' } | Select-Object -First 1
+    if (-not $bcExt) { return $false }
+    return ([System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension]$bcExt).CertificateAuthority
+}
+
+function Test-DownloadedCertificate {
+    <#
+    Accepts either a single-cert (.cer) or PKCS#7 chain (.p7b).
+    For a chain, finds the leaf (non-CA) certificate and validates it.
+    #>
+    param([string]$Path)
+
+    $result = [ordered]@{
+        Valid       = $false
+        Reason      = $null
+        Certificate = $null
+        CACerts     = @()
+    }
+
+    $collection = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
+    try {
+        $collection.Import($Path)
+    }
+    catch {
+        $result.Reason = "File could not be parsed as a certificate or PKCS#7 chain: $_"
+        return $result
+    }
+
+    if ($collection.Count -eq 0) {
+        $result.Reason = "File contains no certificates."
+        return $result
+    }
+
+    $leafCandidates = @()
+    $caCerts        = @()
+    foreach ($c in $collection) {
+        if (Test-IsCACertificate -Certificate $c) { $caCerts += $c }
+        else { $leafCandidates += $c }
+    }
+
+    if ($leafCandidates.Count -eq 0) {
+        $result.Reason = "File contains only CA certificates — no user/leaf certificate found. Did you download the CA chain instead of your issued certificate?"
+        return $result
+    }
+    if ($leafCandidates.Count -gt 1) {
+        $result.Reason = "File contains multiple non-CA certificates ($($leafCandidates.Count)). Cannot determine which is yours."
+        return $result
+    }
+
+    $cert = $leafCandidates[0]
+    $result.Certificate = $cert
+    $result.CACerts     = $caCerts
+
+    $clientAuthOid = '1.3.6.1.5.5.7.3.2'
+    $ekuExts = $cert.Extensions | Where-Object { $_.Oid.Value -eq '2.5.29.37' }
+    if (-not $ekuExts) {
+        $result.Reason = "Certificate has no Enhanced Key Usage extension. Wrong template?"
+        return $result
+    }
+
+    $ekuOids = foreach ($ext in $ekuExts) {
+        ([System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension]$ext).EnhancedKeyUsages |
+            ForEach-Object { $_.Value }
+    }
+
+    if ($clientAuthOid -notin $ekuOids) {
+        $result.Reason = "Certificate is missing Client Authentication EKU. Found EKUs: $($ekuOids -join ', ')"
+        return $result
+    }
+
+    $now = Get-Date
+    if ($cert.NotAfter -lt $now) {
+        $result.Reason = "Certificate is already expired (NotAfter: $($cert.NotAfter))."
+        return $result
+    }
+    if ($cert.NotBefore -gt $now) {
+        $result.Reason = "Certificate is not yet valid (NotBefore: $($cert.NotBefore)) — possible clock skew."
+        return $result
+    }
+
+    $result.Valid = $true
+    return $result
+}
+
+function Install-CAChainFromCerts {
+    param([System.Security.Cryptography.X509Certificates.X509Certificate2[]]$CACerts)
+
+    if (-not $CACerts -or $CACerts.Count -eq 0) { return $false }
+
+    $rootStore = $null
+    $caStore   = $null
+    try {
+        $rootStore = New-Object System.Security.Cryptography.X509Certificates.X509Store('Root','LocalMachine')
+        $caStore   = New-Object System.Security.Cryptography.X509Certificates.X509Store('CA','LocalMachine')
+        $rootStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+        $caStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+
+        foreach ($c in $CACerts) {
+            $isSelfSigned = ($c.Subject -eq $c.Issuer)
+            if ($isSelfSigned) {
+                $rootStore.Add($c)
+                Write-Host "  Installed root: $($c.Subject)" -ForegroundColor DarkGreen
+            } else {
+                $caStore.Add($c)
+                Write-Host "  Installed intermediate: $($c.Subject)" -ForegroundColor DarkGreen
+            }
+        }
+        return $true
+    }
+    catch {
+        Write-Warning " CA chain import failed: $_"
+        return $false
+    }
+    finally {
+        if ($rootStore) { $rootStore.Close() }
+        if ($caStore)   { $caStore.Close() }
+    }
+}
+
+function Install-CAChainViaBrowser {
+    <#
+    Asks the user to download the CA certificate chain .p7b through their browser
+    (auth is handled by the browser), then finds it in Downloads, validates that
+    it contains only CA certs, and installs it.
+
+    Returns the path to the installed .p7b on success, or $null on failure.
+    #>
+
+    Write-Host ""
+    Write-Host " The downloaded certificate does not include the CA chain." -ForegroundColor Yellow
+    Write-Host " The CA chain must be installed before the certificate can be bound to its private key." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host " Opening the CA certificate download page:" -ForegroundColor Cyan
+    Write-Host "   $caChainPage" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host " On that page:" -ForegroundColor Cyan
+    Write-Host "   1. Select 'Base 64'" -ForegroundColor Cyan
+    Write-Host "   2. Click 'Download CA certificate chain'" -ForegroundColor Cyan
+    Write-Host "   3. Save the .p7b file to your Downloads folder" -ForegroundColor Cyan
+
+    $promptTime = Get-Date
+    Start-Process $caChainPage
+
+    [void](Read-Host "`n Press ENTER once the .p7b is downloaded")
+
+    Write-Host " Looking for newly downloaded .p7b in $downloadsDir..." -ForegroundColor Cyan
+    $p7bPath = $null
+    for ($i = 0; $i -lt 10; $i++) {
+        $candidate = Get-ChildItem -Path $downloadsDir -Filter '*.p7b' -File -ErrorAction SilentlyContinue |
+            Where-Object { $_.LastWriteTime -ge $promptTime } |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+        if ($candidate) { $p7bPath = $candidate.FullName; break }
+        Start-Sleep -Milliseconds 500
+    }
+
+    if (-not $p7bPath) {
+        Write-Error " No .p7b file found in $downloadsDir newer than $($promptTime.ToString('HH:mm:ss'))."
+        return $null
+    }
+    Write-Host " Found chain file: $p7bPath" -ForegroundColor Cyan
+
+    try {
+        $coll = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
+        $coll.Import($p7bPath)
+    }
+    catch {
+        Write-Error " Could not parse $p7bPath as PKCS#7: $_"
+        return $null
+    }
+
+    if ($coll.Count -eq 0) {
+        Write-Error " The downloaded file contains no certificates."
+        return $null
+    }
+
+    # Refuse anything that isn't a CA cert — we're installing into trusted stores
+    $caOnly = @($coll | Where-Object { Test-IsCACertificate -Certificate $_ })
+    if ($caOnly.Count -ne $coll.Count) {
+        Write-Error " The downloaded chain file contains non-CA certificates. Aborting for safety — you may have downloaded the wrong file."
+        return $null
+    }
+
+    Write-Host " Installing $($caOnly.Count) CA cert(s) from the chain..." -ForegroundColor Cyan
+    if (-not (Install-CAChainFromCerts -CACerts $caOnly)) {
+        return $null
+    }
+
+    return $p7bPath
+}
+
 function Move-UsedFilesToRecycleBin {
-    $filesToMove = @($infPath, $csrPath, $CertPath)
+    param(
+        [string]$ResolvedCertPath,
+        [string]$CAChainPath
+    )
+
+    $filesToMove = @($infPath, $csrPath, $ResolvedCertPath, $CAChainPath)
     foreach ($file in $filesToMove) {
-        if (Test-Path $file) {
-            [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile(
-                $file,
-                [Microsoft.VisualBasic.FileIO.UIOption]::OnlyErrorDialogs,
-                [Microsoft.VisualBasic.FileIO.RecycleOption]::SendToRecycleBin
-            )
+        if ($file -and (Test-Path $file)) {
+            try {
+                [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile(
+                    $file,
+                    [Microsoft.VisualBasic.FileIO.UIOption]::OnlyErrorDialogs,
+                    [Microsoft.VisualBasic.FileIO.RecycleOption]::SendToRecycleBin
+                )
+            }
+            catch {
+                Write-Warning "Could not move '$file' to Recycle Bin: $_"
+            }
         }
     }
 }
 
 function Invoke-Step1 {
-    Set-Content -Path $infPath -Value $infContent
-    certreq -new $infPath $csrPath
+    if (Test-Path $csrPath) { Remove-Item $csrPath -Force }
+    if (Test-Path $infPath) { Remove-Item $infPath -Force }
 
-    if (Test-Path $csrPath) {
-        $csrText = Get-Content $csrPath -Raw
-        $csrText | Set-Clipboard
-        Write-Host "`n CSR saved and copied to clipboard." -ForegroundColor Green
-        Write-Host "`n Use Publiacqua domain credentials." -ForegroundColor Green
-        Write-Host "`n Paste the CSR to $subcaUrl" -ForegroundColor Green
-        Write-Host "`n Certificate Template must be EAP-Admin-User." -ForegroundColor Green
-        Write-Host "`n Download the Base64 certificate as certnew.cer in the Download folder." -ForegroundColor Green
-        Start-Process $subcaUrl
-    }
-    else {
-        Write-Error "Failed to generate CSR."
+    $script:Step1StartTime = Get-Date
+
+    Set-Content -Path $infPath -Value $infContent -Encoding ASCII
+
+    certreq -new $infPath $csrPath
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $csrPath)) {
+        Write-Error "certreq -new failed (exit code $LASTEXITCODE). CSR was not generated."
         return $false
     }
+
+    $csrText = Get-Content $csrPath -Raw
+
+    $clipboardOk = $false
+    try {
+        $csrText | Set-Clipboard
+        $clipboardOk = $true
+    }
+    catch {
+        Write-Warning "Clipboard unavailable: $_"
+    }
+
+    if ($clipboardOk) {
+        Write-Host "`n CSR saved and copied to clipboard (your previous clipboard contents have been replaced)." -ForegroundColor Green
+    }
+    else {
+        Write-Host "`n CSR saved to: $csrPath" -ForegroundColor Yellow
+        Write-Host " Clipboard was unavailable — open the file and copy its contents manually." -ForegroundColor Yellow
+    }
+
+    Write-Host "`n Use Publiacqua domain credentials." -ForegroundColor Green
+    Write-Host "`n Paste the CSR to $subcaUrl" -ForegroundColor Green
+    Write-Host "`n Certificate Template must be $expectedTemplate." -ForegroundColor Green
+    Write-Host "`n Download the Base64 certificate (.cer) OR full chain (.p7b) to the Downloads folder." -ForegroundColor Green
+
+    Start-Process $subcaUrl
     return $true
 }
 
 function Invoke-Step2 {
-    if (-not (Test-Path $CertPath)) {
-        Write-Error "`n Certificate file not found: $CertPath"
-        Write-Host "`n If needed, specify it explicitly:" -ForegroundColor Yellow
-        Write-Host "`n .\EAP-Admin-User_Cert_Enroll.ps1 -Step Step2 -CertPath 'C:\path\certnew.cer'" -ForegroundColor Yellow
-        return $false
-    }
-    if (Import-Certificate -FilePath $CertPath -CertStoreLocation "Cert:\CurrentUser\My") {
-        Write-Host "`n certnew.cer installed to CurrentUser\Personal store." -ForegroundColor Green
-        Add-Type -AssemblyName Microsoft.VisualBasic
-        Move-UsedFilesToRecycleBin
-        Write-Host "`n Used files sent to user Recycle Bin." -ForegroundColor Green
-        return $true
+    $resolvedPath = $null
+
+    if ($IsCertPathExplicit) {
+        $resolvedPath = $CertPath
     }
     else {
-        Write-Error "`n Certificate import failed."
+        Write-Host "`n Looking for newly downloaded .cer or .p7b in $downloadsDir..." -ForegroundColor Cyan
+        for ($i = 0; $i -lt 10; $i++) {
+            $resolvedPath = Find-NewestCertificate -SinceTime $script:Step1StartTime
+            if ($resolvedPath) { break }
+            Start-Sleep -Milliseconds 500
+        }
+
+        if (-not $resolvedPath) {
+            Write-Error "`n No .cer or .p7b file found in $downloadsDir$(if ($script:Step1StartTime) { " newer than $($script:Step1StartTime.ToString('HH:mm:ss'))" })."
+            Write-Host " If needed, specify it explicitly:" -ForegroundColor Yellow
+            Write-Host "   .\$scriptName -Step Step2 -CertPath 'C:\path\certnew.cer'" -ForegroundColor Yellow
+            return $false
+        }
+        Write-Host " Auto-detected: $resolvedPath" -ForegroundColor Cyan
+    }
+
+    if (-not (Test-Path $resolvedPath)) {
+        Write-Error "`n Certificate file not found: $resolvedPath"
         return $false
     }
+
+    $validation = Test-DownloadedCertificate -Path $resolvedPath
+    if (-not $validation.Valid) {
+        Write-Error "`n Certificate validation failed: $($validation.Reason)"
+        Write-Host "   File: $resolvedPath" -ForegroundColor Yellow
+        Write-Host "   Re-download from $subcaUrl using template '$expectedTemplate'." -ForegroundColor Yellow
+        return $false
+    }
+
+    Write-Host " Certificate validated (Subject: $($validation.Certificate.Subject), Issuer: $($validation.Certificate.Issuer))." -ForegroundColor Green
+    if ($validation.CACerts.Count -gt 0) {
+        Write-Host " Found $($validation.CACerts.Count) CA cert(s) bundled in the file." -ForegroundColor Green
+    }
+
+    # Install CA chain — either from the downloaded .p7b, or by asking the user to download one
+    $chainP7bPath = $null
+    if ($validation.CACerts.Count -gt 0) {
+        Write-Host "`n Installing CA chain from the downloaded file..." -ForegroundColor Cyan
+        if (-not (Install-CAChainFromCerts -CACerts $validation.CACerts)) {
+            Write-Error " CA chain installation failed."
+            return $false
+        }
+        Write-Host " CA chain installed." -ForegroundColor Green
+    } else {
+        $chainP7bPath = Install-CAChainViaBrowser
+        if (-not $chainP7bPath) {
+            Write-Error " CA chain not installed. certreq -accept would fail with UNTRUSTEDROOT."
+            return $false
+        }
+        Write-Host " CA chain installed." -ForegroundColor Green
+    }
+
+    # certreq -accept handles both .cer and .p7b; binds the issued cert to the private key in the CSP
+    certreq -accept $resolvedPath
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "`n certreq -accept failed (exit code $LASTEXITCODE). The issued certificate could not be bound to its private key."
+        return $false
+    }
+
+    $imported = Get-ChildItem Cert:\CurrentUser\My |
+        Where-Object {
+            $_.Thumbprint -eq $validation.Certificate.Thumbprint -and $_.HasPrivateKey
+        } |
+        Select-Object -First 1
+
+    if (-not $imported) {
+        Write-Warning "Certificate accepted, but no matching cert with a private key was found in CurrentUser\My. EAP authentication may fail."
+    }
+    else {
+        Write-Host "`n Certificate installed to CurrentUser\Personal store (thumbprint $($imported.Thumbprint))." -ForegroundColor Green
+        Write-EnrollmentEvent -Message "EAP cert enrolled for $env:USERNAME on $env:COMPUTERNAME, thumbprint $($imported.Thumbprint), source file $resolvedPath"
+    }
+
+    Move-UsedFilesToRecycleBin -ResolvedCertPath $resolvedPath -CAChainPath $chainP7bPath
+    Write-Host "`n Used files sent to user Recycle Bin." -ForegroundColor Green
+    return $true
 }
 
-if ($Step -eq "Step1") {
-    [void](Invoke-Step1)
-}
-elseif ($Step -eq "Step2") {
-    if (-not (Invoke-Step2)) {
-        exit 1
+switch ($Step) {
+    'Step1' {
+        if (-not (Invoke-Step1)) { exit 1 }
     }
-}
-elseif ($Step -eq "All") {
-    $okStep1 = Invoke-Step1
-    if (-not $okStep1) {
-        exit 1
+    'Step2' {
+        if (-not (Invoke-Step2)) { exit 1 }
     }
-    Write-Host "`n Once the certnew.cer is downloaded, press ENTER to continue " -ForegroundColor Yellow
-    $userInput = Read-Host "`n Press ENTER to continue or Q to quit"
-    if ($userInput -match '^[Qq]$') {
-        Write-Host "`n Stopped after Step 1. You can later run: .\EAP-Admin-User_Cert_Enroll.ps1 -Step Step2" -ForegroundColor Yellow
-        exit 0
-    }
-    if (-not (Invoke-Step2)) {
-        exit 1
+    'All' {
+        if (-not (Invoke-Step1)) { exit 1 }
+
+        $userInput = Read-Host "`n Once the certificate is downloaded, press ENTER to continue or Q to quit"
+        if ($userInput -match '^[Qq]$') {
+            Write-Host "`n Stopped after Step 1. You can later run: .\$scriptName -Step Step2" -ForegroundColor Yellow
+            exit 0
+        }
+
+        if (-not (Invoke-Step2)) { exit 1 }
     }
 }
 ```
