@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -200,8 +200,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -222,14 +221,14 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
-    "Homepage.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/Cisco ISE.md",
+    "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "1 - Excalidraw/Cisco ISE.md",
     "0 - Notes/Script To Enroll a Non Domain Computer.md",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
     "attachments/Pasted Graphic 3.png",
     "attachments/Pasted Graphic.png",
     "attachments/Pasted Graphic 2.png",
