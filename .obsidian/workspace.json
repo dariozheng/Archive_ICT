@@ -200,7 +200,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -221,12 +222,12 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "6f78ba7ec3b5902e",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
-    "1 - Excalidraw/Cisco ISE.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "Homepage.md",
     "0 - Notes/Cisco ISE.md",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "1 - Excalidraw/Cisco ISE.md",
     "0 - Notes/Script To Enroll a Non Domain Computer.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "attachments/Pasted Graphic 3.png",
