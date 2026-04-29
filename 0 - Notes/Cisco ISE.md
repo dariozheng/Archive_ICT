@@ -771,7 +771,7 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
 	- Network authentication method: <strong>Microsoft: Protected EAP (PEAP)</strong> for <strong>MSCHAPv2</strong>
     - Authentication Mode: <strong>User authentication</strong>
     - Max authentication failures: 1–3
-    - Tick <strong>Cache user information for subsequent connections</strong>
+    - Tick <strong>Cache user information for subsequent connections</strong>, to decide if to tick or not. 
 - <strong>Security → Advanced</strong>:
     - Tick <strong>Enforce advanced 802.1X settings</strong>
 	    - <strong>Max Eapol-Start Msgs</strong>: 3
