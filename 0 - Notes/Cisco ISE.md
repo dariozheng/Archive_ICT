@@ -777,7 +777,6 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
     - Authentication Mode: <strong>User authentication</strong>
     - Max authentication failures: 1–3
     - Tick <strong>Cache user information for subsequent connections</strong>, to decide if to tick or not. 
-- 
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### EAP-TLS
