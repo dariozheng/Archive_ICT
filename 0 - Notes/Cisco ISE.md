@@ -858,9 +858,6 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
 	- **Security tab**:
 	    - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
 		- Network authentication method: Pick <strong>Microsoft: Protected EAP (PEAP)</strong> for placeholder, it will be overwritten. 
-	    - Authentication Mode: <strong>User or Computer authentication</strong>
-	    - Max authentication failures: 1
-	    - Untick <strong>Cache user information for subsequent connections</strong>
 	- **Security → Advanced**:
 	    - Tick <strong>Enforce advanced 802.1X settings</strong>
 		    - <strong>Max Eapol-Start Msgs</strong>: 2
