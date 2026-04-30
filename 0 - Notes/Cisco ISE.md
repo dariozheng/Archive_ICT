@@ -799,13 +799,14 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
 2. Network authentication method → <strong>Microsoft: Tunnel EAP (TEAP)</strong>.
 3. Click <strong>Settings</strong>:
     - <strong>Identity privacy</strong> → anonymous.
-    - <strong>Connect to these servers</strong>: Cisco ISE server FQDN.
+    - <strong>Connect to these servers</strong>: Cisco ISE servers FQDN.
     - <strong>Trusted Root Certification Authorities</strong> → tick the root that signed the ISE [[#EAP Authentication Certificate]]. (If you have a 2-tier PKI, <mark style="background: #FF5582A6;">only tick the <strong>offline root</strong></mark>, not the issuing CA)
+	    - Tick <strong>Don't prompt user if unable to authorize server</strong>
     - <strong>Client authentication</strong>:
         - <strong>Primary EAP method </strong>→ <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this is the computer authentication.
-	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Verify server's identity by validating certificate</strong>, <strong>Connect to these servers</strong>: Cisco ISE server FQDN, select the Root CA that signed the ISE [[#EAP Authentication Certificate]], tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Use simple certificate selection</strong>, <strong>Verify server's identity by validating certificate</strong>, <strong>Connect to these servers</strong>: Cisco ISE server FQDN, select the Root CA that signed the ISE [[#EAP Authentication Certificate]], tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
         - <strong>Secondary EAP method</strong> → <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this becomes the user auth.
-	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Verify server's identity by validating certificate</strong>, <strong>Connect to these servers</strong>: Cisco ISE server FQDN, select the Root CA that signed the ISE [[#EAP Authentication Certificate]], tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Use simple certificate selection</strong>, <strong>Verify server's identity by validating certificate</strong>, <strong>Connect to these servers</strong>: Cisco ISE server FQDN, select the Root CA that signed the ISE [[#EAP Authentication Certificate]], tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
 4. Back on the <strong>Authentication</strong> tab → <strong>Additional settings</strong> 
 	- Tick <strong>Specify authentication mode</strong> → <strong>User or computer authentication</strong>.
 	- Tick <strong>Enable Single Sign On for this network</strong> 
