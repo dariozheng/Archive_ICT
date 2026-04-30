@@ -844,19 +844,19 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
 <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Wired Network (IEEE 802.3) Policies → right-click → Create A New Wired Network Policy for Windows Vista and Later Releases</strong>.
 
 1. Make a dummy authentication profile that will be rewritten by the XML config file. 
-	- <strong>General tab</strong>: enable <strong>Use Windows Wired Auto Config service for clients</strong>
+	- <strong>General tab</strong>: Choose a <strong>Policy Name</strong>, enable <strong>Use Windows Wired Auto Config service for clients</strong>
 	- **Security tab**:
 	    - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
 		- Network authentication method: Pick <strong>Microsoft: Protected EAP (PEAP)</strong> for placeholder, it will be overwritten. 
 	    - Authentication Mode: <strong>User or Computer authentication</strong>
 	    - Max authentication failures: 1
-	    - Tick <strong>Cache user information for subsequent connections</strong>
+	    - Untick <strong>Cache user information for subsequent connections</strong>
 	- **Security → Advanced**:
 	    - Tick <strong>Enforce advanced 802.1X settings</strong>
 		    - <strong>Max Eapol-Start Msgs</strong>: 2
 		    - <strong>Held Period</strong>: 20
 		    - <strong>Start Period</strong>: 3
-		    - <strong>Auth Period</strong>: 18
+		    - <strong>Auth Period</strong>: 10
 	    - Tick <strong>Enable Single Sign On for this network</strong> → <strong>Perform immediately before user logon</strong>.
 	    - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>.
 2. Save the policy, go to <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Group Policy Objects</strong>, find the saved policy.
