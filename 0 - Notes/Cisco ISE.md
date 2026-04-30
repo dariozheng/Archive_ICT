@@ -777,6 +777,7 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
     - Authentication Mode: <strong>User authentication</strong>
     - Max authentication failures: 1–3
     - Tick <strong>Cache user information for subsequent connections</strong>, to decide if to tick or not. 
+- 
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### EAP-TLS
@@ -869,13 +870,12 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
 2. Save the policy, go to <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Group Policy Objects</strong>, find the saved policy.
 3. Back Up... → Choose the Location (C:\Users\Username\Desktop).
 4. Open the folder and open <strong>Backup.xml</strong> file with a text editor.
-5. Find the block <strong>OneXEnforced</strong> set it to true, this will disable <strong>Fallback to unauthorized network access</strong>.
-6. Find the block <strong>OneX xmlns="http://www.microsoft.com/networking/OneX/v1"</strong> 
-7. Replace the whole block with the customized one, save and close. 
-8. Return to <strong>Group Policy Objects</strong>, click <strong>Restore from Backup...</strong> 
-9. Select Backup folder, if the the GUID folder was inside <strong>C:\Users\username\Desktop</strong> just select <strong>C:\Users\username\Desktop</strong> and not the GUID folder.
-10. And finish the restore of the backup.
-11. Check that it works.
+5. Find the block <strong>OneX xmlns="http://www.microsoft.com/networking/OneX/v1"</strong> 
+6. Replace the whole block with the customized one, save and close. 
+7. Return to <strong>Group Policy Objects</strong>, click <strong>Restore from Backup...</strong> 
+8. Select Backup folder, if the the GUID folder was inside <strong>C:\Users\username\Desktop</strong> just select <strong>C:\Users\username\Desktop</strong> and not the GUID folder.
+9. And finish the restore of the backup.
+10. Check that it works.
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add <strong>Domain Computers</strong> which is the group this GPO will be applied to. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 ### User GPO
