@@ -126,7 +126,15 @@ The Certificate Revocation List is a list of the revoked certificates, it is use
 
 ![[Pasted image 20260504121014.png]]
 
-The Retrive CRL timers should be set accordingly to the CA CRL timers.
+The Retrieve CRL timers should be set accordingly to the CA CRL timers.
+
+![[Pasted image 20260504122151.png | 200]]
+
+- <strong>Effective date</strong> is the date the CRL will start to be valid. 
+- <strong>Next update</strong> is the time the CRL will expire.
+- <strong>Next CRL Publish</strong> is when the new CRL will be published but is still not active
+The Retrieve CRL set to 8 hours before expiration is set 8 hours before the <strong>Next update</strong> so it will retrive the <strong>Next CRL Publish</strong> CRL.
+The old CRL and the new CRL have 8 hours overlap in which both CRL are active, so the timer set to Automatically 8 hour before expire with 10 minutes of wait before retry, is correct and leave no black periods. 
 
 The CRL Distribution URL can be retrieved from the Certificate Authority server
 
