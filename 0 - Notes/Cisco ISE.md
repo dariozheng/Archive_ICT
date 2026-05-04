@@ -145,6 +145,8 @@ When a certificate is revoked outside of the automated cycle, you must trigger a
 ![[Pasted image 20260427170213.png]]
 
 ![[Pasted image 20260427170229.png]]
+
+When doing a manual CRL publication do a manual download of the CRL in ISE server too, by setting the Retrieve CRL download to every 1 minute and then change back. 
 #### Certificate Authentication Profile
 
 ![[Pasted image 20260424144802.png]]
