@@ -19,8 +19,6 @@ aliases:
   - Identity Service Engine
   - Cisco Identity Service Engine
   - ISE
-cssclasses:
-  - img-grid
 ---
 Cisco <strong>Identity Service Engine</strong> (ISE) is a <strong>Network Access Control</strong> solution that manages access to network ensuring only authenticated, authorized, and compliant users and devices can connect. 
 
