@@ -200,7 +200,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -221,7 +222,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "bc141edaea2b9680",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "0 - Notes/Cisco ISE.md",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",

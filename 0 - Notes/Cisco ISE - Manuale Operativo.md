@@ -2,6 +2,7 @@
 categories:
   - "[[Networking]]"
 topic@networking:
+  - "[[Networking General]]"
 tags:
   - project
   - nac
