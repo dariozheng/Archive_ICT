@@ -774,9 +774,9 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
 		- In Trusted Root Certification Authorities select the Root CA that signed the ISE [[#EAP Authentication Certificate]], <strong>Don't ask user to authorize new servers or trusted CAs</strong>.
 		- Authentication Method: <strong>Secured password (EAP-MSCHAP v2)</strong>
 		- Tick <strong>Enable Fast Reconnect</strong>
-    - Authentication Mode: <strong>User authentication</strong>
-    - Max authentication failures: 1–3
-    - Tick <strong>Cache user information for subsequent connections</strong>, to decide if to tick or not. 
+	- Authentication Mode: <strong>User authentication</strong>
+	- Max authentication failures: 1–3
+	- Tick <strong>Cache user information for subsequent connections</strong>, to decide if to tick or not. 
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### EAP-TLS
@@ -786,8 +786,14 @@ This is a GPO with authentication protocol set in EAP-TLS, made specifically for
 - **Security tab**:
     - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
 	- Network authentication method: <strong>Microsoft: Smart Card or other certificate</strong>
-    - Authentication Mode: <strong>Computer only</strong>
-    - Max authentication failures: 1–3
+		- Tick <strong>Use a certificate on this computer</strong>
+		- Tick <strong>Use simple certificate selection</strong> 
+		- Tick <strong>Verify server's identity by validating certificate</strong> 
+		- Tick <strong>Connect to these servers</strong>: Cisco ISE servers FQDN 
+		- In <strong>Trusted Root Certificate Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]] 
+		- Tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+	- Authentication Mode: <strong>Computer only</strong>
+	- Max authentication failures: 1–3
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 #### TEAP
@@ -809,9 +815,19 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
 	    - Tick <strong>Don't prompt user if unable to authorize server</strong>
     - <strong>Client authentication</strong>:
         - <strong>Primary EAP method </strong>→ <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this is the computer authentication.
-	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Use simple certificate selection</strong>, <strong>Verify server's identity by validating certificate</strong>, <strong>Connect to these servers</strong>: Cisco ISE servers FQDN, in <strong>Trusted Root Certificate Authorities</strong> select the Root CA that signed the ISE [[#EAP Authentication Certificate]], tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+	        -  Tick <strong>Use a certificate on this computer</strong>
+			- Tick <strong>Use simple certificate selection</strong> 
+			- Tick <strong>Verify server's identity by validating certificate</strong> 
+			- Tick <strong>Connect to these servers</strong>: Cisco ISE servers FQDN 
+			- In <strong>Trusted Root Certificate Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]] 
+			- Tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
         - <strong>Secondary EAP method</strong> → <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this becomes the user auth.
-	        - <strong>Configure</strong>: Tick <strong>Use a certificate on this computer</strong>, <strong>Use simple certificate selection</strong>, <strong>Verify server's identity by validating certificate</strong>, <strong>Connect to these servers</strong>: Cisco ISE servers FQDN, in <strong>Trusted Root Certificate Authorities</strong> select the Root CA that signed the ISE [[#EAP Authentication Certificate]], tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+	        - Tick <strong>Use a certificate on this computer</strong>
+			- Tick <strong>Use simple certificate selection</strong> 
+			- Tick <strong>Verify server's identity by validating certificate</strong> 
+			- Tick <strong>Connect to these servers</strong>: Cisco ISE servers FQDN 
+			- In <strong>Trusted Root Certificate Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]] 
+			- Tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
 4. Back on the <strong>Authentication</strong> tab → <strong>Additional settings</strong> 
 	- Tick <strong>Specify authentication mode</strong> → <strong>User or computer authentication</strong>.
 	- Tick <strong>Enable Single Sign On for this network</strong> 

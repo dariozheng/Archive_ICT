@@ -186,8 +186,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -208,7 +207,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "6f78ba7ec3b5902e",
   "lastOpenFiles": [
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "0 - Notes/Cisco ISE.md",
