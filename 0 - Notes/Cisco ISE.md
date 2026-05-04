@@ -845,6 +845,7 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
 	- Tick <strong>Enable Single Sign On for this network</strong> 
 		- Tick <strong>Perform immediately before user logon</strong>
 		- Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong> 
+The <strong>Fallback to unauthorized network access</strong> must remain <strong>ticked</strong>, as without this option enabled if the user connect to a switch with no authenticator it will not get network access.
 ##### Export the profile to XML
 From an elevated cmd on the same client:
 ```powershell
@@ -856,7 +857,7 @@ The interface="" depends on the show lan profiles.
 Note that the <strong>netsh</strong> can have a bug where the TrustedRootCAHash block have malformed hash like `fc 5 c2 6 c0 a7 f0 6e 66 10 3f f0 65 3b ad 49 bf 59 85 9e
 where bytes `0x05` and `0x06` came out as single hex digits. Change it like `fc 05 c2 06 c0 a7 f0 6e 66 10 3f f0 65 3b ad 49 bf 59 85 9e`.
 
-When there are more than one FQDN in the ServerNames block, separate the FQDNs with <strong>;</strong> with no trailing spaces.
+When there are more than one FQDN in the ServerNames block, separate the FQDNs with a semicolon <strong>;</strong> with no trailing spaces.
 
 Open the resulting XML and copy everything inside the OneX block. 
 ```xml
