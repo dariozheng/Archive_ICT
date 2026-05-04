@@ -124,7 +124,9 @@ If the issuing certificate authority is not present among the Trusted Certificat
 In the Trusted Certificates is also set the CRL validation for the selected certificate. 
 The Certificate Revocation List is a list of the revoked certificates, it is used to check for certificates that are not expired but are not usable because they are expired. 
 
-![[Pasted image 20260427165632.png]]
+![[Pasted image 20260504121014.png]]
+
+The Retrive CRL timers should be set accordingly to the CA CRL timers.
 
 The CRL Distribution URL can be retrieved from the Certificate Authority server
 

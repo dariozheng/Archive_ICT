@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "3dac7147da7a0270",
+        "id": "5445dd50d159960c",
         "type": "tabs",
         "children": [
           {
-            "id": "6f78ba7ec3b5902e",
+            "id": "41fc5e53c245e6d7",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -207,10 +207,12 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "6f78ba7ec3b5902e",
+  "active": "41fc5e53c245e6d7",
   "lastOpenFiles": [
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "attachments/Pasted image 20260427165632.png",
     "0 - Notes/Cisco ISE.md",
+    "attachments/Pasted image 20260504121014.png",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "Homepage.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "1 - Excalidraw/Cisco ISE.md",
@@ -221,10 +223,8 @@
     "attachments/Pasted image 20260427170229.png",
     "attachments/Pasted image 20260427170213.png",
     "attachments/Pasted image 20260427170031.png",
-    "attachments/Pasted image 20260427165632.png",
     "attachments/Pasted image 20260427165456.png",
     "attachments/Pasted image 20260427165540.png",
-    "attachments/Pasted image 20260427162757.png",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
     "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
     "Untitled.md",
