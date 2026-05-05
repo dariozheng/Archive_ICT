@@ -46,7 +46,8 @@ In a Cisco dominant environment the default network device profile for Cisco is 
 
 ![[Pasted image 20260505110209.png]]
 
-These attributes are additional info the NAD put on the headers of their packets. <strong>Radius:Service-Type</strong> indicate if the packet is a Ethernet or a Wireless packet.
+Enter the attributes and values that your device uses for the various flows like <strong>Wired MAB</strong>, <strong>802.1X</strong>, in the <strong>Flow Type Conditions</strong> section. This is necessary for ISE to detect the right flow type for your device according to the attributes it uses.
+<strong>Radius:Service-Type</strong> indicate if the packet is a Ethernet or a Wireless packet.
 <strong>Radius:NAS-Port-Type</strong> determine if the authorization protocol is a <strong>Call Check</strong> (Use MAB) <strong>Framed</strong> (Use 802.1X) or <strong>Login</strong> (Web Portal).
 
 <mark style="background: #FF5582A6;"><strong>Attribute Aliasing</strong> allows a <strong>NAD Profile</strong> to map vendor-specific attributes to a common attribute so that policy rules can use the friendly name</mark>. 
@@ -55,6 +56,7 @@ It simplifies attribute selection, reduces the number of authentication/authoriz
 
 <strong>Host Lookup</strong> allows you to define which attributes and protocols your device uses for MAB.
 Different (non-Cisco) vendors populate the RADIUS Calling-Station-ID and password attributes differently while doing a MAB authentication. For Cisco NADs doing MAB, enabling the Process Host Lookup option is sufficient.
+
 ## Policy Sets
 
 
