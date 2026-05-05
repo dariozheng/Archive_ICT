@@ -93,6 +93,23 @@ Static means a URL has to be configured into the device (manually). It does not 
 The other type is <strong>dynamic URL</strong> – this is where <mark style="background: #FF5582A6;">ISE can use a RADIUS attribute to tell the device where to redirect to dynamically</mark>. It is not necessary to manually configure the device. 
 
 The <strong>Parameter Names</strong> are arguments passed by the device in the redirect URL. ISE needs to be told the names of these parameters so it can extract them correctly from the URL. <mark style="background: #BBFABBA6;">It uses them to identify the client and session, as well as the original URL the client was trying to get to so that it can redirect it</mark>.
+
+### Network Devices Groups 
+
+![[Pasted image 20260505125347.png]]
+
+Network Device Groups can be set to define NAD attributes that will be used in policy sets, they can be whatever you want to. Here there are Device Types and Locations. 
+### Network Devices
+
+![[Pasted image 20260505125643.png]]
+
+In Network Devices are added all NAD in the NAC system.
+They can configured with Network Device Profile, Model Name, Software Version or with the attributes set in the Network Device Groups. 
+
+They need at least one Authentication Settings, be it RADIUS or TACAS, with the credentials that must be the same in the local NAD configuration. 
+
+![[Pasted image 20260505125842.png]]
+
 ## Policy Sets
 
 
