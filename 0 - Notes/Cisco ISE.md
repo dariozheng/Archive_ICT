@@ -39,24 +39,33 @@ ISE supports third-party NADs through the use of network device profiles. The NA
 ![[Pasted image 20260505104601.png]]
 
 In a Cisco dominant environment the default network device profile for Cisco is enough.
-
 #### Authentication/Authorization
 
 ![[Pasted image 20260505110156.png]]
 
 ![[Pasted image 20260505110209.png]]
 
+##### Flow Type Conditions
 Enter the attributes and values that your device uses for the various flows like <strong>Wired MAB</strong>, <strong>802.1X</strong>, in the <strong>Flow Type Conditions</strong> section. This is necessary for ISE to detect the right flow type for your device according to the attributes it uses.
 <strong>Radius:Service-Type</strong> indicate if the packet is a Ethernet or a Wireless packet.
 <strong>Radius:NAS-Port-Type</strong> determine if the authorization protocol is a <strong>Call Check</strong> (Use MAB) <strong>Framed</strong> (Use 802.1X) or <strong>Login</strong> (Web Portal).
-
+##### Attribute Aliasing
 <mark style="background: #FF5582A6;"><strong>Attribute Aliasing</strong> allows a <strong>NAD Profile</strong> to map vendor-specific attributes to a common attribute so that policy rules can use the friendly name</mark>. 
 It simplifies attribute selection, reduces the number of authentication/authorization policy rules required for different vendor devices, and is potentially less error prone. 
 <mark style="background: #ADCCFFA6;">For example, the Wireless SSID involved in a flow could be included in the <strong>Airespace-Wlan-ID</strong>, <strong>Aruba-ESSID-Name</strong>, or <strong>Called-Station-ID</strong> depending on the type of NAD involved</mark>. They can all be aliased to <strong>SSID</strong>.
-
+##### Host Lookup
 <strong>Host Lookup</strong> allows you to define which attributes and protocols your device uses for MAB.
 Different (non-Cisco) vendors populate the RADIUS Calling-Station-ID and password attributes differently while doing a MAB authentication. For Cisco NADs doing MAB, enabling the Process Host Lookup option is sufficient.
+#### Permissions
 
+![[Pasted image 20260505111657.png]]
+
+This section defines which attributes your device uses for setting a VLAN or ACL. 
+They may be IETF standard attributes or vendor specific. These are usually published in your device’s Admin Guide.
+
+For the VLAN permission, you can specify a single RADIUS attribute (e.g. Aruba-User-VLAN).
+
+For the ACL permission, you can specify a single RADIUS attribute, to be used for setting a named ACL on NADs relevant to the current NAD profile.
 ## Policy Sets
 
 
