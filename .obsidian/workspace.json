@@ -200,7 +200,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -221,7 +222,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "attachments/Pasted image 20260505112153.png",
     "attachments/Pasted image 20260505111657.png",
