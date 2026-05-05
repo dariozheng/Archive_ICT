@@ -66,6 +66,29 @@ They may be IETF standard attributes or vendor specific. These are usually publi
 For the VLAN permission, you can specify a single RADIUS attribute (e.g. Aruba-User-VLAN).
 
 For the ACL permission, you can specify a single RADIUS attribute, to be used for setting a named ACL on NADs relevant to the current NAD profile.
+#### Change of Authorization (CoA)
+
+![[Pasted image 20260505112153.png]]
+
+This section allows you to define what CoA capabilities your device has. Refer to your device documentation for information – look for references to terms like “RFC 5176”, “Change of Authorization” or “CoA”. Most non-Cisco devices with RFC 5176 support will support “Push” and “Disconnect”, but not Re-authenticate, so if unsure try enabling the two checkboxes marked “RFC 5176”.
+
+While RFC 5176 defines the types of CoA requests, the required attributes in the requests vary from device to device. Some devices are very particular about attributes sent in the CoA request.
+If your CoA requests are getting a CoA ‘NAK’ back from the device, check some of the following tips:
+- Some require the RADIUS User-Name attribute from the access-request to be included in CoA requests
+- Some do not accept both Calling-Station-ID and Acct-Session-ID sent in the same request (send one)
+- Some do not accept other vendors VSAs in a request
+- Some devices can be configured to expect (or not) Event-Timestamp and the CoA configuration above must match
+#### URL Redirect
+This section defines the device’s URL Redirect capabilities. 
+URL redirection is necessary for complex flows like Guest, BYOD and Posture. It needs to be capable of redirecting to an ISE portal, i.e. local web auth is not sufficient.
+
+There are two general types of URL redirect found on devices; static and dynamic. 
+
+Static means a URL has to be configured into the device (manually). It does not support being told where to redirect dynamically via a RADIUS attribute. Typically, you copy and paste the ISE portal URL into the device’s configuration.
+
+The other type is <strong>dynamic URL</strong> – this is where ISE can use a RADIUS attribute to tell the device where to redirect to dynamically. It is not necessary to manually configure the device. If your device supports dynamic URLs, you should use it as it simplifies configuration.
+
+The <strong>Parameter Names</strong> are arguments passed by the device in the redirect URL. ISE needs to be told the names of these parameters so it can extract them correctly from the URL. <mark style="background: #BBFABBA6;">It uses them to identify the client and session, as well as the original URL the client was trying to get to so that it can redirect it</mark>.
 ## Policy Sets
 
 
