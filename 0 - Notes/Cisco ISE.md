@@ -29,11 +29,33 @@ ISE can leverage <strong>external services</strong> to understand more about the
 <mark style="background: #FFB8EBA6;">The server ISE acts as the core, it's where the policies are defined</mark>. <mark style="background: #FF5582A6;">The network devices acts as the authenticator</mark> and <strong>enforce</strong> the policies from the server ISE. <mark style="background: #FFF3A3A6;">The endpoint receives the response</mark> <mark style="background: #FFB86CA6;">given by the server ISE</mark> <mark style="background: #BBFABBA6;">from the network access device</mark>. Most of the high level host endpoint have <mark style="background: #ABF7F7A6;">supplicants that allow them to communicate with the authenticator or NAD</mark>.  <mark style="background: #D2B3FFA6;">The server ISE can use external services</mark>, such as the <strong>Microsoft Active Directory</strong>, <mark style="background: #D2B3FFA6;">to get knowledge about the users</mark>. 
 # ISE Server
 Cisco Identity Services Engine (ISE) is an <strong>identity-based network access control</strong> and <strong>policy enforcement system</strong>. It functions as a common policy engine that enables <mark style="background: #FFF3A3A6;">endpoint access control </mark>and <mark style="background: #BBFABBA6;">network device administration</mark> for enterprises.
+## Network Resources
+In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the enforcement point of policies set by the server ISE.
+### Network Devices Profiles
+ISE supports third-party NADs through the use of network device profiles. The NAD profiles are configured to define the capabilities and attributes of these third-party devices.
 
+![[Pasted image 20260505104543.png]]
 
+![[Pasted image 20260505104601.png]]
 
+In a Cisco dominant environment the default network device profile for Cisco is enough.
 
+#### Authentication/Authorization
 
+![[Pasted image 20260505110156.png]]
+
+![[Pasted image 20260505110209.png]]
+
+These attributes are additional info the NAD put on the headers of their packets. <strong>Radius:Service-Type</strong> indicate if the packet is a Ethernet or a Wireless packet.
+<strong>Radius:NAS-Port-Type</strong> determine if the authorization protocol is a <strong>Call Check</strong> (Use MAB) <strong>Framed</strong> (Use 802.1X) or <strong>Login</strong> (Web Portal).
+
+<mark style="background: #FF5582A6;"><strong>Attribute Aliasing</strong> allows a <strong>NAD Profile</strong> to map vendor-specific attributes to a common attribute so that policy rules can use the friendly name</mark>. 
+It simplifies attribute selection, reduces the number of authentication/authorization policy rules required for different vendor devices, and is potentially less error prone. 
+<mark style="background: #ADCCFFA6;">For example, the Wireless SSID involved in a flow could be included in the <strong>Airespace-Wlan-ID</strong>, <strong>Aruba-ESSID-Name</strong>, or <strong>Called-Station-ID</strong> depending on the type of NAD involved</mark>. They can all be aliased to <strong>SSID</strong>.
+
+<strong>Host Lookup</strong> allows you to define which attributes and protocols your device uses for MAB.
+Different (non-Cisco) vendors populate the RADIUS Calling-Station-ID and password attributes differently while doing a MAB authentication. For Cisco NADs doing MAB, enabling the Process Host Lookup option is sufficient.
+## Policy Sets
 
 
 
@@ -916,12 +938,12 @@ To activate Auto-Enrollment go to <strong>User Configuration → Policies → Wi
 
 The GPO should be in <strong>Enforced</strong> mode to ensure that it will be applied.
 # Network Devices
+
 # Packet Flow with Cisco ISE
 Certificate authentication: 
 CLIENT send certificate, ISE CHECK if issuer is in trusted, the expiry date, CRL, proof of possession (server privat key + client public key (the certificate sent for authentication) + random data) the client need to decrypt the data with client private key and server public key. 
 
 
-# Tutorial
 # Reference 
 
 
