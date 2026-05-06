@@ -105,10 +105,23 @@ Ed infine ci sono i vari attributi come Location, Device type, Device Profile ec
 
 ## TEAP User and machine both succeeded - Authorization Result Redirect_Guest_Wired
 ![[Screenshot 2026-05-06 at 15-54-15 Cisco Identity Services Engine.png]]
-Questo è un Report quasi completamente simile al report precedente, solo che l'Authorization Result è Redirect_Guest_Wired. Questo Result viene fornita a tutti client che non sono stati autorizzati dal server ISE. 
-In questo caso l'utente non è stato autorizzato per che il certificato computer è presente sul computer locale e sulla SubCA02 ma non è presente sulla AD. 
+Questo è un Report quasi completamente simile al report precedente, solo che l'Authorization Result è Redirect_Guest_Wired.
+Questo Result viene fornita a tutti client che non sono stati autorizzati dal server ISE. 
+
+In questo caso l'utente non è stato autorizzato perché il certificato computer è presente sul computer locale e sulla SubCA02 ma non è presente sull'account computer AD, dove ISE fa il binary comparison.
 
 ![[Pasted image 20260506161129.png]]
+
+## TEAP User succeeded and machine failed 
+
+![[Pasted image 20260506164436.png]]
+
+L'autenticazione utente ha passato ma quella del computer no, il computer non problemi con il certificato. L'utente ha comunque accesso perché è appartiene al gruppo Admin. 
+Se l'utente non era admin, il profilo di autenticazione risulterebbe una Guest Redirect.
+## TEAP User and machine both failed
+
+![[Pasted image 20260506164146.png]]
+Il computer in dominio ha ricevuto male le policy ed i certificati non sono presenti o non vengono inviati. 
 # Tabella Step ID sugli errori negli report di ISE
 
 | Step ID | Description                                                                                                                                                     | Errore |
