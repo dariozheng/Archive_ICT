@@ -71,13 +71,13 @@ Il gruppo blacklist si chiama appunto <strong>Blacklist</strong>.
 ![[Pasted image 20260506142431.png]]
 
 ![[Pasted image 20260506142459.png]]
-# Accesso MAB
+## Accesso MAB
 Per fornire un'autorizzazioni speciali, ed utilizzare l'accesso per indirizzi MAC, bisogna inserire il PC dell'utente sul gruppo whitelist designato: MAB_Whitelist.
 
 Ogni volta che viene aggiunto un computer sulla whitelist, va segnato sul file <mark style="background: #FF5582A6;">Excel</mark>.
 
 ![[Pasted image 20260506142539.png]]
-# Live Logs
+## Live Logs
 
 ![[Pasted image 20260506152434.png]]
 
@@ -88,12 +88,13 @@ In questa lista è possibile trovare vari filtri da usare per facilitare l'opera
 - Location 
 - Authorization Profile 
 - IP address
-## Detailed Report
+### Detailed Report
 Cliccando sull’icona della lente in una riga di Live Logs si apre il Detailed Report. 
 
 ![[Screenshot 2026-05-06 at 15.39.20.png]]
-## Esempi Visivi 
-## TEAP User and machine both succeeded - Authorization Result Correct
+### Esempi Visivi 
+Esempi di varie situazioni sui report in live logs.
+#### TEAP User and machine both succeeded - Authorization Result Correct
 In questo esempio vediamo che l'autenticazione è andato a buon fine la Authorization Result è la VLAN corretta. 
 Sono presenti entrambi account, account utente e account computer, con i loro certificati, tutto verificato. 
 L'Authorization Result viene data dal gruppo AD che appartiene l'utente. In questo caso <strong>InfrastructureAdmin</strong> prevale sul gruppo AD <strong>Utenti_Publiacqua</strong>, che è il gruppo di default.
@@ -103,7 +104,7 @@ Ed infine ci sono i vari attributi come Location, Device type, Device Profile ec
 
 ![[Pasted image 20260506155921.png]]
 
-## TEAP User and machine both succeeded - Authorization Result Redirect_Guest_Wired
+#### TEAP User and machine both succeeded - Authorization Result Redirect_Guest_Wired
 ![[Screenshot 2026-05-06 at 15-54-15 Cisco Identity Services Engine.png]]
 Questo è un Report quasi completamente simile al report precedente, solo che l'Authorization Result è Redirect_Guest_Wired.
 Questo Result viene fornita a tutti client che non sono stati autorizzati dal server ISE. 
@@ -112,16 +113,17 @@ In questo caso l'utente non è stato autorizzato perché il certificato computer
 
 ![[Pasted image 20260506161129.png]]
 
-## TEAP User succeeded and machine failed 
+#### TEAP User succeeded and machine failed 
 
 ![[Pasted image 20260506164436.png]]
 
 L'autenticazione utente ha passato ma quella del computer no, il computer non problemi con il certificato. L'utente ha comunque accesso perché è appartiene al gruppo Admin. 
 Se l'utente non era admin, il profilo di autenticazione risulterebbe una Guest Redirect.
-## TEAP User and machine both failed
+#### TEAP User and machine both failed
 
 ![[Pasted image 20260506164146.png]]
 Il computer in dominio ha ricevuto male le policy ed i certificati non sono presenti o non vengono inviati. 
+# 
 # Tabella Step ID sugli errori negli report di ISE
 
 | Step ID | Description                                                                                                                                                     | Errore |
