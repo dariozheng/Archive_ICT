@@ -200,8 +200,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -224,6 +223,7 @@
   },
   "active": "bc141edaea2b9680",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260506082019.png",
     "0 - Notes/Cisco ISE.md",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
