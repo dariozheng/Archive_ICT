@@ -59,9 +59,9 @@ Il nodo secondario viene solitamente tenuto spento, viene acceso quando il nodo 
 Le operazioni a primo livello che possono essere eseguiti sono: 
 - Mettere un computer in Blacklist
 - Attivare l'accesso MAB (Accesso per indirizzo MAC)
-- Sbloccare un utente che è stato rifiutato troppe volte
 - Live Logs e Live Sessions
 - Fare fare la re-autenticazione all'utente
+- Sbloccare un utente che è stato rifiutato troppe volte
 - Onboarding di nuovi PC e Utenze 
 - Guest Portal 
 ## Utente in Blacklist
@@ -123,7 +123,20 @@ Se l'utente non era admin, il profilo di autenticazione risulterebbe una Guest R
 
 ![[Pasted image 20260506164146.png]]
 Il computer in dominio ha ricevuto male le policy ed i certificati non sono presenti o non vengono inviati. 
-# 
+## Re-autenticazione dell'utente
+Per provare una quick-fix è possibile far fare una re-autenticazione all'utente per provare a generare nuovi log o a risolvere il problema.
+
+![[Pasted image 20260506165348.png]]
+
+![[Pasted image 20260506165428.png]]
+Andare nella sezione sull'immagine, filtrare l'attributo desiderato, fare un refresh per attivare i filtri, selezionare il computer e avviare il CoA Session Reauth. 
+## Sbloccare un utente che è stato rifiutato troppe volte
+Se un utente ha provato a fare troppi accessi in un tot temporale, può essere messo in Rejected. 
+
+Per sbloccarlo andare nella sezione Endpoint e filtrare per Rejected, seleziona il computer negato e fare un Release Rejected. 
+![[Pasted image 20260506165926.png]]
+
+Alcune volte il computer può essere negato in silenzio, non viene mostrato sui Logs. Per sbloccarlo si deve andare su.
 # Tabella Step ID sugli errori negli report di ISE
 
 | Step ID | Description                                                                                                                                                     | Errore |
