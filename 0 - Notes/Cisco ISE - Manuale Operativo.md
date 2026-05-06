@@ -55,18 +55,63 @@ Nodo Secondario = [https://pba-ise02.publiacqua.it](https://pba-ise02.publiacqua
 L’accesso alla GUI ISE avviene con credenziali nominali integrate con Active Directory Publiacqua. Le attività di operation sono lettura Live Logs e Live Sessions, esecuzione CoA (Session Reauthentication e Port Bounce), gestione di Endpoint Identity Group per mettere computer in Blacklist/Whitelist. 
 
 Il nodo secondario viene solitamente tenuto spento, viene acceso quando il nodo primario è down.
-# 
-# Operazioni di gestione utente
-- Mettere l'utente in Blacklist 
-- Come cambiare i protocolli di autenticazione per l'utente 
-- Come attivare MAB per utenti esterni
-- 
+# Operazioni
+Le operazioni a primo livello che possono essere eseguiti sono: 
+- Mettere un computer in Blacklist
+- Attivare l'accesso MAB (Accesso per indirizzo MAC)
+- Sbloccare un utente che è stato rifiutato troppe volte
+- Live Logs e Live Sessions
+- Fare fare la re-autenticazione all'utente
+- Onboarding di nuovi PC e Utenze 
+- Guest Portal 
+## Utente in Blacklist
+Per inserire un computer in blacklist, andare nella sezione illustrata nell'immagine ed inserire l'indirizzo MAC da bloccare. 
+Il gruppo blacklist si chiama appunto <strong>Blacklist</strong>. 
 
+![[Pasted image 20260506142431.png]]
 
+![[Pasted image 20260506142459.png]]
+# Accesso MAB
+Per fornire un'autorizzazioni speciali, ed utilizzare l'accesso per indirizzi MAC, bisogna inserire il PC dell'utente sul gruppo whitelist designato: MAB_Whitelist.
 
+Ogni volta che viene aggiunto un computer sulla whitelist, va segnato sul file <mark style="background: #FF5582A6;">Excel</mark>.
+
+![[Pasted image 20260506142539.png]]
+# Live Logs
+
+![[Pasted image 20260506152434.png]]
+
+In questa lista è possibile trovare vari filtri da usare per facilitare l'operazione di monitoring: 
+- Authentication Policy (Wired o Wireless)
+- AD username 
+- Mac Address 
+- Location 
+- Authorization Profile 
+- IP address
+## Detailed Report
+Cliccando sull’icona della lente in una riga di Live Logs si apre il Detailed Report. 
+
+![[Screenshot 2026-05-06 at 15.39.20.png]]
+## Esempi Visivi 
+## TEAP User and machine both succeeded - Authorization Result Correct
+In questo esempio vediamo che l'autenticazione è andato a buon fine la Authorization Result è la VLAN corretta. 
+Sono presenti entrambi account, account utente e account computer, con i loro certificati, tutto verificato. 
+L'Authorization Result viene data dal gruppo AD che appartiene l'utente. In questo caso <strong>InfrastructureAdmin</strong> prevale sul gruppo AD <strong>Utenti_Publiacqua</strong>, che è il gruppo di default.
+Essendo un autenticazione con i certificati, ci sono i dettagli sui due certificati che ha fornito i due client. 
+
+Ed infine ci sono i vari attributi come Location, Device type, Device Profile ecc.
+
+![[Pasted image 20260506155921.png]]
+
+## TEAP User and machine both succeeded - Authorization Result Redirect_Guest_Wired
+![[Screenshot 2026-05-06 at 15-54-15 Cisco Identity Services Engine.png]]
+Questo è un Report quasi completamente simile al report precedente, solo che l'Authorization Result è Redirect_Guest_Wired. Questo Result viene fornita a tutti client che non sono stati autorizzati dal server ISE. 
+In questo caso l'utente non è stato autorizzato per che il certificato computer è presente sul computer locale e sulla SubCA02 ma non è presente sulla AD. 
+
+![[Pasted image 20260506161129.png]]
 # Tabella Step ID sugli errori negli report di ISE
 
-| Step ID | Description                                              | Errore                                                                                                |
-| ------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 24363   | Client certificate does not match AD account certificate Il certificato è presente sul PC locale dell'utente e sulla SubCA, ma non è presente sull'account AD o  |
-|         |                                                                                                                                                                  |
+| Step ID | Description                                                                                                                                                     | Errore |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 24363   | Client certificate does not match AD account certificate Il certificato è presente sul PC locale dell'utente e sulla SubCA, ma non è presente sull'account AD o |        |
+|         |                                                                                                                                                                 |        |
