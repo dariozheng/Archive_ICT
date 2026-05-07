@@ -10,5 +10,7 @@
   "obsidian-icon-folder",
   "metadata-menu",
   "homepage",
-  "obsidian-minimal-settings"
+  "obsidian-minimal-settings",
+  "linked-note-exporter",
+  "find-orphaned-images"
 ]
