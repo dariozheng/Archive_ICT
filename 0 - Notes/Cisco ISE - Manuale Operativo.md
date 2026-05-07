@@ -141,7 +141,20 @@ Alcune volte il computer può essere negato in silenzio, non viene mostrato sui 
 ![[Pasted image 20260507085550.png]]
 
 ![[Pasted image 20260507085628.png]]
+## Accesso Guest
+Tutti gli utenti che non falliscono l'autenticazione o non sono autenticati vengono messi sul profilo <strong>Redirect_Guest_Wired</strong> dove l'utente non potrà accedere ad internet finché non viene autorizzato da un utente Publiacqua. 
 
+Per accedere al portale Guest basta andare su un browser ed inserire un URL qualsiasi, l'utente verrà chiesto di accettare il re-indirizzamento del URL. 
+
+In alcuni casi i browser bloccano il re-indirizzamento degli URL per motivi di sicurezza, in questi casi basta inserire un indirizzo IP a caso ( es. 4.4.4.4 o 5.5.5.5 ) e si aprirà il portale Guest. Questo metodo può essere usato anche nel caso in cui il re-indirizzamento del URL è troppo lento. 
+
+![[Pasted image 20260507091442.png]]
+
+![[Pasted image 20260507091455.png]]
+
+Per approvare la registrazione del guest, un utente Publiacqua deve fornire la sua mail al guest. Sulla mail verrà poi inviato la mail per accettare il guest.
+## Onboarding di nuovi PC e Utenze 
+Per accesso iniziale alla rete Publiacqua è possibile connettersi un prima volta alla Wi-Fi PBA per mettere il PC in dominio. Una volta che il PC verrà messa sotto dominio, gli verrà automaticamente fornita una certificazione computer, a quel punto accedendo con un utente in dominio, ci sono tutti e due certificati necessari per autenticarsi ad ISE. 
 # Tabella Step ID sugli errori negli report di ISE
 
 | Step ID | Description                                                                                                                                                     | Errore |
