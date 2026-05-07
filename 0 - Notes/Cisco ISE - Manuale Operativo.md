@@ -156,8 +156,9 @@ Per approvare la registrazione del guest, un utente Publiacqua deve fornire la s
 ## Onboarding di nuovi PC e Utenze 
 Per accesso iniziale alla rete Publiacqua è possibile connettersi un prima volta alla Wi-Fi PBA per mettere il PC in dominio. Una volta che il PC verrà messa sotto dominio, gli verrà automaticamente fornita una certificazione computer, a quel punto accedendo con un utente in dominio, ci sono tutti e due certificati necessari per autenticarsi ad ISE. 
 # Tabella Step ID sugli errori negli report di ISE
+In questa tabella sono stati riportati i vari errori che saranno presenti sul Report in Live Logs di ISE. Gli errori sono segnati da un Step ID con la descrizione dell'errore. 
 
-| Step ID | Description                                                                                                                                                     | Errore |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| 24363   | Client certificate does not match AD account certificate Il certificato è presente sul PC locale dell'utente e sulla SubCA, ma non è presente sull'account AD o |        |
-|         |                                                                                                                                                                 |        |
+| Step ID | Description                                                                                                                                                     |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 24363   | Client certificate does not match AD account certificate Il certificato è presente sul PC locale dell'utente e sulla SubCA, ma non è presente sull'account AD o |
+|         |                                                                                                                                                                 |
