@@ -158,6 +158,7 @@ Per accesso iniziale alla rete Publiacqua è possibile connettersi un prima volt
 # Tabella Step ID sugli errori negli report di ISE
 In questa tabella sono stati riportati i vari errori che saranno presenti sul Report in Live Logs di ISE. Gli errori sono segnati da un Step ID con la descrizione dell'errore. 
 
+
 | Step ID | Description                                                                                                                                                     |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 24363   | Client certificate does not match AD account certificate Il certificato è presente sul PC locale dell'utente e sulla SubCA, ma non è presente sull'account AD o |
