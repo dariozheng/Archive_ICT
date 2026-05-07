@@ -136,7 +136,12 @@ Se un utente ha provato a fare troppi accessi in un tot temporale, può essere m
 Per sbloccarlo andare nella sezione Endpoint e filtrare per Rejected, seleziona il computer negato e fare un Release Rejected. 
 ![[Pasted image 20260506165926.png]]
 
-Alcune volte il computer può essere negato in silenzio, non viene mostrato sui Logs. Per sbloccarlo si deve andare su.
+Alcune volte il computer può essere negato in silenzio, non viene mostrato sui Logs. Per sbloccarlo si deve andare sulla sezione in immagine e disattivare il <strong>Reject RADIUS requests from clients with repeated failures</strong>, riprovare a fare l'accesso, vedere i log che produce e riattivare il <strong>Reject RADIUS requests from clients with repeated failures</strong>.
+
+![[Pasted image 20260507085550.png]]
+
+![[Pasted image 20260507085628.png]]
+
 # Tabella Step ID sugli errori negli report di ISE
 
 | Step ID | Description                                                                                                                                                     | Errore |
