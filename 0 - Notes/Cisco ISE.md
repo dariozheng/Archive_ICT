@@ -91,9 +91,10 @@ Identity Source Sequences (ISS) compile a list of identity stores and it's used 
 
 ![[Pasted image 20260508113958.png]]
 ## Admin Access 
-In Admin Access are configured the permissions for each group or type of users. 
+In Admin Access are configured ISE GUI permissions for each group or type of users. 
 
-
+![[Pasted image 20260508114440.png]]
+### Admin Access - Authorization
 
 ## Network Resources
 In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the enforcement point of policies set by the server ISE.
