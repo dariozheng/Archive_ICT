@@ -30,6 +30,57 @@ ISE can leverage <strong>external services</strong> to understand more about the
 # ISE Server
 Cisco Identity Services Engine (ISE) is an <strong>identity-based network access control</strong> and <strong>policy enforcement system</strong>. It functions as a common policy engine that enables <mark style="background: #FFF3A3A6;">endpoint access control </mark>and <mark style="background: #BBFABBA6;">network device administration</mark> for enterprises.
 ## Identity Management
+Identity Management managed all identities for ISE, from ISE GUI admins to users that have to authenticate to ISE.
+
+![[Pasted image 20260508100508.png]]
+### Identities 
+In identities it's possible to configure local users, they can be identities that are used to log in the ISE GUI or identities used for network access. 
+
+![[Pasted image 20260508105029.png]]
+
+![[Pasted image 20260508105040.png]]
+
+### Groups 
+Endpoint and User Groups, they can be used as attributes in Policy Sets. 
+
+![[Pasted image 20260508105117.png]]
+
+#### Endpoint Identity Groups
+
+![[Pasted image 20260508105337.png]]
+
+Endpoint Identity Groups are filled with Mac Addresses that ISE server have seen at least once or they can be filled through an CSV import.
+
+![[Pasted image 20260508105729.png]]
+
+![[Pasted image 20260508105738.png]]
+
+For new CSV import template use the <strong>Generate a Template</strong> function else use this template:
+```csv
+MACAddress,EndPointPolicy,IdentityGroup,PortalUser.GuestType,Description,PortalUser.Location,PortalUser.GuestStatus,StaticAssignment,User-Name,DeviceRegistrationStatus,PortalUser.CreationType,AUPAccepted,PortalUser.EmailAddress,PortalUser.PhoneNumber,FirstName,ip,Device Type,host-name,StaticGroupAssignment,MDMEnrolled,MDMOSVersion,PortalUser.LastName,PortalUser.GuestSponsor,EmailAddress,PortalUser,PortalUser.FirstName,BYODRegistration,MDMServerName,LastName,MDMServerID,Location
+
+60:18:95:30:CA:DB,,Printers,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+```
+#### User Identity Groups
+
+![[Pasted image 20260508110112.png]]
+
+The User Identity Group accept only Internal Users. 
+### External Identity Sources 
+External Identity Sources can leverage existing external identity store for network authentication. 
+
+![[Pasted image 20260508100508.png]]
+
+#### Certificate Authentication Profile 
+This is an important setting for certificate based authentication. 
+See [[#Certificate Authentication Profile certificates|Link]]
+#### Active Directory
+Active directory is the most used External Identity Store. 
+
+## Admin Access 
+In Admin Access are configured the permissions for each group or type of users. 
+
+
 
 ## Network Resources
 In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the enforcement point of policies set by the server ISE.
@@ -226,7 +277,7 @@ When a certificate is revoked outside of the automated cycle, you must trigger a
 ![[Pasted image 20260427170229.png]]
 
 When doing a manual CRL publication do a manual download of the CRL in ISE server too, by setting the Retrieve CRL download to every 1 minute and then change back. 
-#### Certificate Authentication Profile
+#### Certificate Authentication Profile #certificates 
 
 ![[Pasted image 20260424144802.png]]
 

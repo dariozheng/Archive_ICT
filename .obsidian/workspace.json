@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Cisco ISE - Manuale Operativo.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Cisco ISE - Manuale Operativo"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -185,8 +185,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -208,20 +207,21 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "41fc5e53c245e6d7",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260508110112.png",
+    "attachments/Pasted image 20260508105738.png",
+    "attachments/Pasted image 20260508105729.png",
+    "attachments/Pasted image 20260508105337.png",
+    "attachments/Pasted image 20260508105117.png",
+    "attachments/Pasted image 20260508105040.png",
+    "attachments/Pasted image 20260508105029.png",
+    "attachments/Pasted image 20260508100508.png",
+    "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "Orphaned Images Report.md",
     "attachments/Pasted image 20260505125640.png",
     "attachments/Windows-Based Agent Configuration.png",
-    "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "attachments/Pasted image 20260507091455.png",
-    "attachments/Pasted image 20260507091442.png",
-    "attachments/Pasted image 20260507091334.png",
-    "attachments/Pasted image 20260507085628.png",
-    "attachments/Pasted image 20260507085550.png",
-    "attachments/Pasted image 20260506165926.png",
-    "attachments/Pasted image 20260506165428.png",
-    "attachments/Pasted image 20260506165348.png",
     "0 - Notes/Cisco ISE.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
