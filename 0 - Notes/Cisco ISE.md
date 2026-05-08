@@ -77,6 +77,19 @@ See [[#Certificate Authentication Profile certificates|Link]]
 #### Active Directory
 Active directory is the most used External Identity Store. 
 
+Add the domain and use a domain admin account to join. 
+![[Pasted image 20260508113216.png]]
+
+Allowed Domains set the scope for identity extraction, here it's set to everything is allowed. 
+![[Pasted image 20260508113401.png]]
+
+In this section it's possible to retrieve groups from Active Directory and use them as attributes for Policy Sets
+![[Pasted image 20260508113546.png]]
+### Identity Source Sequences
+Identity Source Sequences (ISS) compile a list of identity stores and it's used by Policy Sets to define which identity store to use for which policy. It includes the selection of Certificate Authentication Profile. 
+![[Pasted image 20260508113927.png]]
+
+![[Pasted image 20260508113958.png]]
 ## Admin Access 
 In Admin Access are configured the permissions for each group or type of users. 
 
