@@ -104,7 +104,8 @@ If you want to allow only a specific section of the submenu like showing only <s
 ![[Pasted image 20260508114835.png]]
 ##### Data Access
 The Data Access List is used to configure which data a user is allowed to see or to modify. 
-It's best 
+These changes impact the type of log one can see, so if you want to limit data access It's best put them in Read Only instead of No Access.
+
 ![[Pasted image 20260508115415.png]]
 
 ## Network Resources
