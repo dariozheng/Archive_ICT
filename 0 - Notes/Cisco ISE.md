@@ -95,6 +95,17 @@ In Admin Access are configured ISE GUI permissions for each group or type of use
 
 ![[Pasted image 20260508114440.png]]
 ### Admin Access - Authorization
+#### Admin Access - Authorization - Permissions
+##### Menu Access
+Menu Access List is used to set which menu section is allowed and which is not.
+
+If you want to allow only a specific section of the submenu like showing only <strong>Groups</strong> while hiding the <strong>Identities</strong>, <strong>External Identity Source</strong>, and others under the menu <strong>Identity Management</strong>. You have to show <strong>Identity Management</strong>, save, then go back and hide the not allowed menu section manually.
+
+![[Pasted image 20260508114835.png]]
+##### Data Access
+The Data Access List is used to configure which data a user is allowed to see or to modify. 
+It's best 
+![[Pasted image 20260508115415.png]]
 
 ## Network Resources
 In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the enforcement point of policies set by the server ISE.
@@ -1034,9 +1045,9 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
 	- **Security → Advanced**:
 	    - Tick <strong>Enforce advanced 802.1X settings</strong>
 		    - <strong>Max Eapol-Start Msgs</strong>: 2
-		    - <strong>Held Period</strong>: 20
+		    - <strong>Held Period</strong>: 60
 		    - <strong>Start Period</strong>: 3
-		    - <strong>Auth Period</strong>: 10
+		    - <strong>Auth Period</strong>: 30
 	    - Tick <strong>Enable Single Sign On for this network</strong> → <strong>Perform immediately before user logon</strong>.
 	    - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>.
 2. Save the policy, go to <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Group Policy Objects</strong>, find the saved policy.
