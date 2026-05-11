@@ -112,6 +112,13 @@ These changes impact the type of log one can see, so if you want to limit data a
 In this section you use the permissions set in Menu Access and Data Access to configure the RBAC policy for Admin Groups. 
 
 ![[Pasted image 20260511145530.png]]
+### Admin Access - Administrators
+#### Admin Access - Administrators - Admin Groups
+In Admin Groups, you can configure the groups for which you can build a RBAC Policy around. 
+
+![[Pasted image 20260511145958.png]]
+
+![[Pasted image 20260511150013.png]]
 
 ## Network Resources
 In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the enforcement point of policies set by the server ISE.
