@@ -108,6 +108,8 @@ These changes impact the type of log one can see, so if you want to limit data a
 
 ![[Pasted image 20260508115415.png]]
 
+#### Admin Access - Authorization - RBAC Policy
+
 ## Network Resources
 In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the enforcement point of policies set by the server ISE.
 ### Network Devices Profiles
