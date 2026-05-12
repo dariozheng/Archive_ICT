@@ -34,7 +34,12 @@ Identity Management managed all identities for ISE, from ISE GUI admins to users
 
 ![[Pasted image 20260508100508.png]]
 ### Identities 
+Cisco ISE has a built-in internal user database that can be used for a limited number of user accounts, referred to as internal users, also as network access users.
 In identities it's possible to configure local users, they can be identities that are used to log in the ISE GUI or identities used for network access. 
+
+This internal identity store can be used to authenticate and authorize a preconfigured account for a contractor or other temporary worker to access the wireless network, without adding them to the company’s main identity store.
+
+Any internal user accounts configured can then be associated with a defined user identity group that sets the type of internal account being created.
 
 ![[Pasted image 20260508105029.png]]
 
@@ -49,7 +54,7 @@ Endpoint and User Groups, they can be used as attributes in Policy Sets.
 
 ![[Pasted image 20260508105337.png]]
 
-Endpoint Identity Groups are filled with Mac Addresses that ISE server have seen at least once or they can be filled through an CSV import.
+Endpoint Identity Groups stores information about all the endpoint devices that connect to the network infrastructure or they can be filled through an CSV import.
 
 ![[Pasted image 20260508105729.png]]
 
@@ -75,9 +80,23 @@ External Identity Sources can leverage existing external identity store for netw
 This is an important setting for certificate based authentication. 
 See [[#Certificate Authentication Profile certificates|Link]]
 #### Active Directory
-Active directory is the most used External Identity Store. 
+Microsoft’s Active Directory (AD) is a highly available distributed database deployments. 
 
-Add the domain and use a domain admin account to join. 
+![[Example AD Forest.png]]
+
+It follows the X.500 structure, like the DNS does, the AD is very tightly coupled with DNS and requires DNS for AD to function normally.
+
+AD leverages AD domains, which are groupings of users and machine accounts, permissions, and policies.
+
+AD domains belong to an AD forest, which is a collection of domains with trust relationships between them.
+
+
+To join Cisco ISE to an AD domain, the ISE machine account used need to have the permissions: 
+- to Search AD (to see if the ISE machine account already exists)
+- to add Workstation to Domain (if it does not already exist)
+- to set Attributes on the New Machine Account
+
+To join an AD Domain go to <strong>Administration > Identity Management > External Identity Sources > Active Directory</strong>, add the domain and use a domain admin account to join. 
 ![[Pasted image 20260508113216.png]]
 
 Allowed Domains set the scope for identity extraction, here it's set to everything is allowed. 
@@ -204,7 +223,7 @@ They need at least one Authentication Settings, be it RADIUS or TACAS, with the 
 
 
 ## Policy Sets
-
+In Policy Sets are defined policies flow to authenticate the clients.  
 
 
 
