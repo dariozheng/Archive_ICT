@@ -285,9 +285,77 @@ Authorization Results are the results for each authorization policy.
 ##### Authorization Profiles
 Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy.
 ![[Pasted image 20260512122923.png]]
+###### Pre-auth-profile
 
+![[Pasted image 20260512124255.png]]
+
+The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends a ACCESS_ACCEPT with the DACL Pre-Auth that limit the computer to Internet, Domain Controller and Certificate Authority.
 ##### Downloadable ACLs
+They are Access Lists that are configured on the server ISE and are meant to be sent dynamically to the NAD that calls it. 
 
+![[Pasted image 20260512124736.png]]
+
+##### Pre-Auth
+This DACL is used for computer that have authenticated with machine certificate but not with user certificate for various reasons:
+- The user is not logged-on, so the user certificate is not available
+- There change in user happening 
+- The user does not have a certificate enrolled
+- ect
+
+For these case the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+
+```text
+permit udp any any eq bootps
+permit udp any any eq bootpc
+permit udp any any eq domain
+permit tcp any any eq domain
+permit icmp any any
+
+permit udp any host 10.140.4.250 eq 123
+permit tcp any host 10.140.4.250 eq 88
+permit udp any host 10.140.4.250 eq 88
+permit tcp any host 10.140.4.250 eq 135
+permit tcp any host 10.140.4.250 eq 389
+permit udp any host 10.140.4.250 eq 389
+permit tcp any host 10.140.4.250 eq 464
+permit udp any host 10.140.4.250 eq 464
+permit tcp any host 10.140.4.250 eq 636
+permit tcp any host 10.140.4.250 eq 3268
+permit tcp any host 10.140.4.250 eq 445
+permit tcp any host 10.140.4.250 range 49152 65535
+
+permit udp any host 10.140.4.252 eq 123
+permit tcp any host 10.140.4.252 eq 88
+permit udp any host 10.140.4.252 eq 88
+permit tcp any host 10.140.4.252 eq 135
+permit tcp any host 10.140.4.252 eq 389
+permit udp any host 10.140.4.252 eq 389
+permit udp any host 10.140.4.252 eq 464
+permit tcp any host 10.140.4.252 eq 464
+permit tcp any host 10.140.4.252 eq 636
+permit tcp any host 10.140.4.252 eq 3268
+permit tcp any host 10.140.4.252 eq 445
+permit tcp any host 10.140.4.252 range 49152 65535
+
+
+permit tcp any host 10.140.2.198 eq 135
+permit tcp any host 10.140.2.198 eq 80
+permit tcp any host 10.140.2.198 eq 443
+permit tcp any host 10.140.2.198 range 49152 65535
+
+permit tcp any host 10.140.2.199 eq 135
+permit tcp any host 10.140.2.199 eq 80
+permit tcp any host 10.140.2.199 eq 443
+permit tcp any host 10.140.2.199 range 49152 65535
+
+permit tcp any host 10.140.2.31 eq 8443
+permit tcp any host 10.140.2.31 eq 8905
+permit tcp any host 10.140.2.31 eq 443
+permit tcp any host 10.140.2.32 eq 8443
+permit tcp any host 10.140.2.32 eq 8905
+permit tcp any host 10.140.2.32 eq 443
+deny ip any any
+```
 # Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
 ## Active Directory

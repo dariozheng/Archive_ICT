@@ -187,8 +187,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -210,8 +209,10 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "41fc5e53c245e6d7",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260512124736.png",
+    "attachments/Pasted image 20260512124255.png",
     "attachments/Pasted image 20260512122923.png",
     "attachments/Screenshot 2026-05-12 at 11-06-37 Identity Services Engine.png",
     "attachments/Screenshot 2026-05-12 at 11-05-25 Identity Services Engine.png",
@@ -222,8 +223,6 @@
     "attachments/Pasted image 20260511145958.png",
     "attachments/Pasted image 20260511145530.png",
     "attachments/Pasted image 20260508115415.png",
-    "attachments/Pasted image 20260508114835.png",
-    "attachments/Pasted image 20260508114440.png",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "Orphaned Images Report.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
