@@ -238,8 +238,11 @@ The SNMP Settings section is where the SNMP community for the NAD is configured,
 ## Policy 
 In Policy section are defined the Policy Sets, Dictionaries, Conditions and Results. 
 ### Dictionaries
+
 ### Conditions
 ### Policy Sets
+
+![[Pasted image 20260512103918.png]]
 
 ### Results
 
