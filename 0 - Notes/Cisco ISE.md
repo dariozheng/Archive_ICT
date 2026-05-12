@@ -246,6 +246,7 @@ In Policy section are defined the Policy Sets, Dictionaries, Conditions and Resu
 
 ### Results
 #### Policy - Results - Authentication
+Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
 ##### Allowed Protocols
 After the conditions are matched in a top-level rule, the rule then determines what authentication protocols are permitted for that policy set.
 
@@ -282,6 +283,13 @@ In the current deployment:
     - <strong>EAP-TTLS</strong>: It encapsulates a TLS session by using a handshake phase and a data phase. During the handshake, the server authenticates itself to the client or they both mutually authenticate using standard TLS. The server can then use that established tunnel to authenticate the client. Versions of Windows prior to Windows 8 do not support EAP-TTLS natively. However, Microsoft has included native supplicant support in Windows 8 and later. The EAP inner methods that are accepted with EAP-TTLS include PAP, CHAP, MS-CHAPv1, MS-CHAPv2, and EAP-MD5.
 	-  <strong>TEAP</strong>: It enables secure communication between a peer and server using TLS to establish a mutually authenticated tunnel. EAP-Chaining is possible.
 #### Policy - Results - Authorization
+Authorization Results are the results for each authorization policy. 
+They can be Authorization Profiles or Downloadable ACLs. 
+##### Authorization Profiles
+
+![[Pasted image 20260512122923.png]]
+
+##### Downloadable ACLs
 
 # Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
