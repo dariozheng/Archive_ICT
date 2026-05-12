@@ -261,7 +261,7 @@ In the current deployment:
 - PEAP MSCHAPv2 for occasional clients
 - PEAP EAP-TLS for Admin Users with non domain computers
 - TEAP for default Domain Users
-###### Authentication Protocols: 
+###### Extensible Authentication Protocols 
 - <strong>PAP</strong>: With <strong>Password Authentication Protocol</strong> (<strong>PAP</strong>), the username is sent in plaintext, and the password is optionally encrypted.
   
 - <strong>CHAP</strong>: With <strong>Challenge Handshake Authentication Protocol</strong> (<strong>CHAP</strong>), the username and password are encrypted using a challenge sent from the server. CHAP is not often used with network access.
