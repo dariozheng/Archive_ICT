@@ -36,14 +36,14 @@ The serial console port is an RJ-45 connection on all firewalls. It has default 
 ![[Configure Service Routes.pdf]]
 # Reset to Factory Configuration
 ## From the CLI with a Known Admin User Password
-You can use the CLI operational command: **>** **request system private-data-reset** if you know the admin account password. This method:
+You can use the CLI operational command: <strong>></strong> <strong>request system private-data-reset</strong> if you know the admin account password. This method:
 - Erases all logs.
 - Resets all settings, including IP addressing, which causes loss of connectivity.
 - Saves a default configuration after the MGT IP address is changed.
 ## During boot up with an Unknown Admin User Password
 If you do not know the admin account password, you must first boot the firewall into maintenance mode. 
-- As the firewall is booting up, type the operational command **maint** into the CLI through the serial console port. 
-- After some time has elapsed, you can choose **Reset to Factory Default** to reset the firewall to its factory default settings. 
+- As the firewall is booting up, type the operational command <strong>maint</strong> into the CLI through the serial console port. 
+- After some time has elapsed, you can choose <strong>Reset to Factory Default</strong> to reset the firewall to its factory default settings. 
 - You can set the default admin password or load a previous configuration file if the admin password has been inadvertently changed or an invalid config has been loaded.
 # Activation, Licensing and Software
 Before you can start using your firewall to secure the traffic on your network, you must <mark style="background: #D2B3FFA6;">register</mark> your firewall with Palo Alto Networks, <mark style="background: #D2B3FFA6;">activate your support license</mark>, and then <mark style="background: #D2B3FFA6;">activate the licenses for each subscription that you purchased</mark>.

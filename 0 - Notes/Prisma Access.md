@@ -107,7 +107,7 @@ The IPSec tunnel configuration allows you to <strong>authenticate</strong> and/o
 ##### 1. Name
 Provide a name for the IPSec tunnel.
 ##### 2. IKE Gateway
-From drop-down list, select the **IKE Gateway** that you previously configured.
+From drop-down list, select the <strong>IKE Gateway</strong> that you previously configured.
 ##### 3. IPSec Crypto Profile
 Choose either a default [[Prisma Access#Predefined IPSec and IKE Crypto Profiles|IPSec crypto profile]] or a customized one that you have created.
 ##### 4. Enable Replay Protection
@@ -153,7 +153,7 @@ To configure static routing, navigate to <strong>Panorama > Cloud Services > Con
 ### Creating a QoS Profile to Prioritize Business Critical Traffic #configuration 
 The second approach to controlling throughput for service connections involves enabling QoS and creating a QoS Profile.
 
-To configure Quality of Service (QoS) for the service connection, you will need to enable QoS  and then specify a QoS Profile. To enable QoS, navigate to **Panorama > Cloud Services > Configuration > Service Connection** and on the **QoS** tab, select **Enable** .
+To configure Quality of Service (QoS) for the service connection, you will need to enable QoS  and then specify a QoS Profile. To enable QoS, navigate to <strong>Panorama > Cloud Services > Configuration > Service Connection</strong> and on the <strong>QoS</strong> tab, select <strong>Enable</strong> .
 ![[Creating a QoS Profile to Prioritize Business Critical Traffic.png]]
 
 If you plan to configure Prisma Access security policy rules <mark style="background: #FFB8EBA6;">to apply QoS markings to ingress traffic</mark>, or <mark style="background: #FFB86CA6;">you have a device at the HQ/DC that marks ingress traffic</mark>, <mark style="background: #BBFABBA6;">you can shape the traffic egressing the site by defining a QoS Profile</mark>:
@@ -174,13 +174,13 @@ The autonomous system (AS) to which the eBGP router at the HQ/DC belongs. This i
 ##### Router ID
 The IP address is assigned as the Router ID of the eBGP router on the HQ/DC network. This is called the Peer Address.
 #### Dynamic Routing Configuration Settings
-To use Dynamic Routing to advertise HQ/DC subnets, navigate to **Panorama > Cloud Services > Configuration > Service Connection**. In the Onboarding section, click **Add** and select the **BGP** tab. Click **Enable** and configure the following settings:
-- **Add no-export community:** To add a no-export community for SC-CANs to the outbound prefixes from the eBGP peers at the customer premises equipment (CPE), set Add no-export community to Enabled Out. This capability is Disabled by default. 
-- **Don’t Advertise Prisma Access Routes**: Select this option to prevent the Prisma Access BGP peer from forwarding routes into your organization’s network. 
-- **Peer AS:** Enter the Peer AS, which is the autonomous system (AS) for your network.
-- **Peer Address:** Enter the IP address assigned as the Router ID of the eBGP router on the data center/HQ network for which you're configuring this service connection. 
-- **Local IP Address:** Enter the IP address that Prisma Access uses as its Local IP Address for BGP.
-- **Secret and Confirm Secret:** Enter a secret password to authenticate BGP peer communications and enter it again to confirm. 
+To use Dynamic Routing to advertise HQ/DC subnets, navigate to <strong>Panorama > Cloud Services > Configuration > Service Connection</strong>. In the Onboarding section, click <strong>Add</strong> and select the <strong>BGP</strong> tab. Click <strong>Enable</strong> and configure the following settings:
+- <strong>Add no-export community:</strong> To add a no-export community for SC-CANs to the outbound prefixes from the eBGP peers at the customer premises equipment (CPE), set Add no-export community to Enabled Out. This capability is Disabled by default. 
+- <strong>Don’t Advertise Prisma Access Routes</strong>: Select this option to prevent the Prisma Access BGP peer from forwarding routes into your organization’s network. 
+- <strong>Peer AS:</strong> Enter the Peer AS, which is the autonomous system (AS) for your network.
+- <strong>Peer Address:</strong> Enter the IP address assigned as the Router ID of the eBGP router on the data center/HQ network for which you're configuring this service connection. 
+- <strong>Local IP Address:</strong> Enter the IP address that Prisma Access uses as its Local IP Address for BGP.
+- <strong>Secret and Confirm Secret:</strong> Enter a secret password to authenticate BGP peer communications and enter it again to confirm. 
 ![[Dynamic Routing Configuration Settings.png]]
 # Remote Networks
 <strong>Remote networks</strong> are designed <mark style="background: #FFB8EBA6;">to secure users and devices</mark> <mark style="background: #FFB86CA6;">in remote network locations, such as branch offices or remote sites</mark>. 
@@ -227,12 +227,12 @@ You can then repeat this workflow to optionally set up a secondary tunnel. When 
 
 To establish secure connections between your remote network sites and Prisma Access, <mark style="background: #FFB8EBA6;">you must create an IPSec tunnel from your branch IPSec device to Prisma Access</mark>.
 #### Add a Primary IPSec Virtual Private Network (VPN) Tunnel
-IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and your on-premises VPN device. Panorama provides several preconfigured third-party IPSec tunnels to simplify configuration, or you can click **Add** to begin adding a new one.
+IPSec tunnels establish and manage IPSec VPN tunnels between Prisma Access and your on-premises VPN device. Panorama provides several preconfigured third-party IPSec tunnels to simplify configuration, or you can click <strong>Add</strong> to begin adding a new one.
 ![[Add a Primary IPSec Virtual Private Network (VPN) Tunnel.png]]
 ### Remote Network Onboarding 
 <mark style="background: #D2B3FFA6;">To add a new remote network site to Prisma Access</mark>, start by specifying the location and defining the amount of bandwidth to allocate to the connection.
 
-Navigate to **Panorama > Cloud Services > Configuration > Remote Networks > Onboarding** to onboard a remote network.
+Navigate to <strong>Panorama > Cloud Services > Configuration > Remote Networks > Onboarding</strong> to onboard a remote network.
 ![[Remote Network Onboarding.png]]
 ### Secure Inbound Access 
 If your organization hosts <mark style="background: #FF5582A6;">internet-accessible applications</mark> at a remote network site, <mark style="background: #FFF3A3A6;">providing access to those applications exposes your network to all the threats the open internet poses</mark>. 
@@ -255,22 +255,22 @@ Remote networks that are configured for <strong>secure inbound access</strong> <
 #### Secure Inbound Access #configuration 
 Follow these steps to make an application accessible from a remote network site to all internet-connected users.
 
-Go to **Panorama > Cloud Services > Configuration > Remote Networks**, and select **Inbound Access Remote Networks**. Then, click **Add**.
+Go to <strong>Panorama > Cloud Services > Configuration > Remote Networks</strong>, and select <strong>Inbound Access Remote Networks</strong>. Then, click <strong>Add</strong>.
 ![[Secure Inbound Access.png]]
 
 Specify the following settings for the inbound access remote network connection:
-- Provide a **Name** for your inbound access
-- Specify the **Location** for your Prisma Access
-- Set a **Bandwidth**
-- Select the **Number of Public IPs** you want to use for the applications, either five or ten
-- Select the **IPSec Tunnel** to use with the inbound access connection.
+- Provide a <strong>Name</strong> for your inbound access
+- Specify the <strong>Location</strong> for your Prisma Access
+- Set a <strong>Bandwidth</strong>
+- Select the <strong>Number of Public IPs</strong> you want to use for the applications, either five or ten
+- Select the <strong>IPSec Tunnel</strong> to use with the inbound access connection.
 ![[Secure Inbound Access2.png]]
 
-Select the **Inbound Access** tab and click **Add** to add the inbound access applications for which you want to secure access. This option displays additional fields in a table.
+Select the <strong>Inbound Access</strong> tab and click <strong>Add</strong> to add the inbound access applications for which you want to secure access. This option displays additional fields in a table.
 ![[Secure Inbound Access3.png]]
 
-In the table, provide a suitable name for your inbound access application. Enter the **Private IP** address where your Prisma Access environment is running. Set the **Protocol** to **TCP** and provide a **Port**. 
-Click **OK** to save your changes.![[Secure Inbound Access4.png]]
+In the table, provide a suitable name for your inbound access application. Enter the <strong>Private IP</strong> address where your Prisma Access environment is running. Set the <strong>Protocol</strong> to <strong>TCP</strong> and provide a <strong>Port</strong>. 
+Click <strong>OK</strong> to save your changes.![[Secure Inbound Access4.png]]
 #### Secure Inbound Access Deployments
 Here are inbound access examples, along with the IP addresses that Prisma Access assigns in various deployments.
 
@@ -338,7 +338,7 @@ Secure the data that traverses the VPN tunnel. The Encapsulating Security Payloa
 #### Verify the Status of Remote Networks
 After you have configured the IPSec VPN device on the remote network, verify the tunnel status.
 
-To check the status of the remote networks, navigate to **Panorama > Cloud Services > Status > Status** to verify that the remote network connections have been successfully deployed. The **Deployment Status** allows you to view the progress of onboarding and deployment jobs before they complete, as well as see more information about the status of completed jobs.
+To check the status of the remote networks, navigate to <strong>Panorama > Cloud Services > Status > Status</strong> to verify that the remote network connections have been successfully deployed. The <strong>Deployment Status</strong> allows you to view the progress of onboarding and deployment jobs before they complete, as well as see more information about the status of completed jobs.
 
 If there are errors or warnings, review the system log and local logs on the remote network device. Resolve issues before proceeding with the configuration and then continue adding remote networks as needed.
 ![[Verify the Status of Remote Networks.png]]
@@ -407,8 +407,8 @@ Prior to Prisma Access 5.1, an on-premises NGFW had to be deployed as an interna
 With Prisma Access cloud-native internal gateway, you can avoid using on-premises internal gateways; <mark style="background: #FFB86CA6;">the Prisma Access internal gateway generates the IP user mappings and HIPs locally in remote networks</mark>. <mark style="background: #FF5582A6;">Remote networks consume IP user mappings and HIPs from the local database</mark> for posture checks, instead of learning them from other firewalls.
 ![[nternal Gateway GlobalProtect.png]]
 
-To enable the Prisma Access internal gateway, navigate to **Workflows > Prisma Access Setup > Remote Networks > Advanced Settings**. Select the **Enable Internal Gateway** checkbox, and then click **Save**. 
-If you do not want to use your own DNS server, you can select the **Enable Internal Host Detection** checkbox for IPv4. 
+To enable the Prisma Access internal gateway, navigate to <strong>Workflows > Prisma Access Setup > Remote Networks > Advanced Settings</strong>. Select the <strong>Enable Internal Gateway</strong> checkbox, and then click <strong>Save</strong>. 
+If you do not want to use your own DNS server, you can select the <strong>Enable Internal Host Detection</strong> checkbox for IPv4. 
 
 When you enable the internal gateway, <mark style="background: #D2B3FFA6;">the remote network instances act as internal gateways</mark>. When you enable the internal host detection, <mark style="background: #CACFD9A6;">Prisma Access creates PTR records on the remote network DNS proxy servers for the internal host detection process</mark>. If you enable Internal Host Detection, <mark style="background: #FFF3A3A6;">verify that the DNS resolution is working, perform a reverse DNS lookup from your internal network to the DNS proxy server IP, and ensure it returns an FQDN starting with <strong>any-igw</strong></mark>.
 ## GlobalProtect #configuration 
@@ -420,7 +420,7 @@ The <strong>Static IP Address Allocation</strong> feature allows <mark style="ba
 
 To enable secure access for your mobile workforce no matter where they are located, you can strategically <mark style="background: #FFB8EBA6;">deploy additional Palo Alto Networks Next-Generation Firewalls (NGFWs)</mark> and <mark style="background: #FF5582A6;">configure them as GlobalProtect gateways</mark>.
 
-To configure GlobalProtect on Prisma Access, navigate to **Workflow > Prisma Access Setup > GlobalProtect**.
+To configure GlobalProtect on Prisma Access, navigate to <strong>Workflow > Prisma Access Setup > GlobalProtect</strong>.
 #### Steps for Configuring GlobalProtect
 Follow these steps to configure GlobalProtect in Prisma Access:
 ##### Step 1: Determine the Connection Methods
@@ -444,26 +444,26 @@ Once the user authentication is completed, the settings need to be pushed to Pri
 #### Enable Portal Only for Proxy Mode on GP Agent
 When GlobalProtect is set to proxy mode, <mark style="background: #FFB8EBA6;">GlobalProtect portals can be onboarded without gateways when the Agent Proxy feature is enabled</mark>. Complete the following steps to enable explicit proxy and the <strong>Enable Portal Only for Proxy Mode</strong> on <strong>GP Agent</strong> feature for GlobalProtect.
 ##### Step 1: Enable Explicit Proxy and Agent-Based Proxy 
-Navigate to **Workflows > Prisma Access Setup > Mobile Users > Explicit Proxy** and click **Enable**. Once enabled, click **Explicit Proxy Setup**. Under **Explicit Proxy Setup > Infrastructure Settings**, click **Set Up Proxy Settings**. Under Proxy URL Settings, provide an **Explicit Proxy URL** and a local proxy port that mobile users will use to connect to Prisma Access. Select **Enable Agent Proxy** and click **Save**.![[Enable Explicit Proxy and Agent-Based Proxy.png]]
+Navigate to <strong>Workflows > Prisma Access Setup > Mobile Users > Explicit Proxy</strong> and click <strong>Enable</strong>. Once enabled, click <strong>Explicit Proxy Setup</strong>. Under <strong>Explicit Proxy Setup > Infrastructure Settings</strong>, click <strong>Set Up Proxy Settings</strong>. Under Proxy URL Settings, provide an <strong>Explicit Proxy URL</strong> and a local proxy port that mobile users will use to connect to Prisma Access. Select <strong>Enable Agent Proxy</strong> and click <strong>Save</strong>.![[Enable Explicit Proxy and Agent-Based Proxy.png]]
 ##### Step 2: Configure GlobalProtect 
-After enabling explicit proxy, navigate to **Workflows > Prisma Access Setup > GlobalProtect**. Under **Infrastructure Settings**, click the **Enable Portal only for Proxy Mode on GP Agent** checkbox.
+After enabling explicit proxy, navigate to <strong>Workflows > Prisma Access Setup > GlobalProtect</strong>. Under <strong>Infrastructure Settings</strong>, click the <strong>Enable Portal only for Proxy Mode on GP Agent</strong> checkbox.
 ![[Configure GlobalProtect.png]]
 ##### Step 3: Review Prisma Access Locations
-Once the **Enable Portal only for Proxy Mode on GP Agent** feature has been enabled, you will not have the option to add Prisma Access locations.
+Once the <strong>Enable Portal only for Proxy Mode on GP Agent</strong> feature has been enabled, you will not have the option to add Prisma Access locations.
 ![[Review Prisma Access Locations.png]]
 #### Mobile Users 
 Before configuring mobile users, <mark style="background: #FFB8EBA6;">ensure that you have the required licenses</mark> (<mark style="background: #FF5582A6;">a Prisma Access license for mobile users</mark> and <mark style="background: #FFB86CA6;">a Strata Logging Service license with proper PAN-OS storage space</mark>). If mobile users will be connecting to other connected networks, you will need either the <mark style="background: #FFF3A3A6;">Zero Trust Network Access (ZTNA)</mark> or <mark style="background: #FFF3A3A6;">Enterprise Edition Prisma Access license</mark> that will provide the <strong>corporate access node</strong> (CAN) necessary to connect.
 ##### Step 1: Choose GlobalProtect Connection  
 Determine how mobile users in the location you’re setting up should connect to Prisma Access. You can divide your mobile user license between GlobalProtect and explicit proxy connections; some users can connect through GlobalProtect and others through explicit proxy.
 
-These steps are for GlobalProtect. From the GlobalProtect Connection panel, click **Enable > GlobalProtect Setup > Setup Infrastructure Settings.**
+These steps are for GlobalProtect. From the GlobalProtect Connection panel, click <strong>Enable > GlobalProtect Setup > Setup Infrastructure Settings.</strong>
 ![[Choose GlobalProtect Connection.png]]
 ##### Step 2: Portal Hostname  
-Add a fully qualified domain name as the Portal Hostname, and add a DNS region. In the image, Worldwide has been selected as the DNS region. Then, click **Save**.![[Portal Hostname.png]]
+Add a fully qualified domain name as the Portal Hostname, and add a DNS region. In the image, Worldwide has been selected as the DNS region. Then, click <strong>Save</strong>.![[Portal Hostname.png]]
 ##### Step 3: Choose Prisma Access Locations  
-Once you have configured the Portal Hostname and DNS Region, you can select a location. Click **Add Locations** and the location map will appear. The map displays the global regions where you can deploy Prisma Access for users: North America, South America, Europe, Africa, Middle East, Asia, Japan, and ANZ (Australia and New Zealand). In addition, Prisma Access provides multiple locations within each region to ensure that your users can connect to a location that provides a user experience tailored to the users’ locale. For the best performance, select **All**. 
+Once you have configured the Portal Hostname and DNS Region, you can select a location. Click <strong>Add Locations</strong> and the location map will appear. The map displays the global regions where you can deploy Prisma Access for users: North America, South America, Europe, Africa, Middle East, Asia, Japan, and ANZ (Australia and New Zealand). In addition, Prisma Access provides multiple locations within each region to ensure that your users can connect to a location that provides a user experience tailored to the users’ locale. For the best performance, select <strong>All</strong>. 
 
-Choose regions and locations, and then click **Save**.
+Choose regions and locations, and then click <strong>Save</strong>.
 ![[Choose Prisma Access Locations.png]]
 ##### Step 4: Authenticate Mobile Users  
 Set up User Authentication so that only legitimate users have access to your services and applications. To test your setup, you can add users that Prisma Access authenticates locally, or you can go straight to setting up enterprise-level authentication.
@@ -471,14 +471,14 @@ Set up User Authentication so that only legitimate users have access to your ser
 #### Customize the Portal Address
 You can configure your company domain in the portal address that your mobile users connect to for secure access to the internet, data centers, and headquarters. By default, Prisma Access uses the gpcloudservice.com domain.
 ##### Step 1
-Navigate to **Workflows > Prisma Access Setup > GlobalProtect** and click the gear icon to edit the **Infrastructure Settings.** First, select **Custom Domain** on Portal Name Type, and enter the **Portal Hostname** you want to use. Next, add the **Portal DNS CNAME** to which to map your DNS server entries. Lastly, click **Import** to import the certificate you provisioned for your custom domain portal address.![[Customize the Portal Address.png]]
+Navigate to <strong>Workflows > Prisma Access Setup > GlobalProtect</strong> and click the gear icon to edit the <strong>Infrastructure Settings.</strong> First, select <strong>Custom Domain</strong> on Portal Name Type, and enter the <strong>Portal Hostname</strong> you want to use. Next, add the <strong>Portal DNS CNAME</strong> to which to map your DNS server entries. Lastly, click <strong>Import</strong> to import the certificate you provisioned for your custom domain portal address.![[Customize the Portal Address.png]]
 ##### Step 2
-On the Import Certificate panel, enter a name for the certificate and click **Choose File** to upload the certificate file. Next, select a certificate format for the certificate you are importing from the **Format** drop-down menu. You have two options, select either:
-- **Encrypted Private Key and Certificate (PKCS12):** The key and certificate are in a single container (Certificate File).
-- **Base64 Encoded Certificate (PEM):** If you select this option, click **Choose File** to upload the Key File separately from the certificate.
-Lastly, enter a passphrase to encrypt the key into the **Passphrase** and **Confirm Passphrase** fields, then click **Save.**![[Customize the Portal Address2.png]]
+On the Import Certificate panel, enter a name for the certificate and click <strong>Choose File</strong> to upload the certificate file. Next, select a certificate format for the certificate you are importing from the <strong>Format</strong> drop-down menu. You have two options, select either:
+- <strong>Encrypted Private Key and Certificate (PKCS12):</strong> The key and certificate are in a single container (Certificate File).
+- <strong>Base64 Encoded Certificate (PEM):</strong> If you select this option, click <strong>Choose File</strong> to upload the Key File separately from the certificate.
+Lastly, enter a passphrase to encrypt the key into the <strong>Passphrase</strong> and <strong>Confirm Passphrase</strong> fields, then click <strong>Save.</strong>![[Customize the Portal Address2.png]]
 ##### Step 3
-If you have not already done so, configure your DNS servers to point to the Prisma Access DNS CNAME you defined. Click **Save** and **Push Config** to Prisma Access.![[Customize the Portal Address3.png]]
+If you have not already done so, configure your DNS servers to point to the Prisma Access DNS CNAME you defined. Click <strong>Save</strong> and <strong>Push Config</strong> to Prisma Access.![[Customize the Portal Address3.png]]
 #### Customize App Settings
 Customize how your end users interact with the GlobalProtect app. You can explore all GlobalProtect settings on the GlobalProtect App page. The following are some of the options available to you.
 ##### Authentication Override
@@ -497,35 +497,35 @@ Specify the method that the GlobalProtect app uses to connect to Prisma Access:
 ![[Customize App Settings2.png]]
 ##### GlobalProtect  
 Decide what GlobalProtect app settings the user can adjust:  
-- **Disable GlobalProtect:** Decide whether or not users can disable the GlobalProtect app.
-- **Uninstall GlobalProtect:** Allow users to uninstall the GlobalProtect app, prevent them from uninstalling the GlobalProtect app, or allow them to uninstall if they enter a password you create.
-- **Upgrade GlobalProtect:** Specify how app upgrades should work, including whether users can initiate updates.
-- **Allow User to Change Portal:** Let users change the portal the GlobalProtect app uses to connect to Prisma Access.
+- <strong>Disable GlobalProtect:</strong> Decide whether or not users can disable the GlobalProtect app.
+- <strong>Uninstall GlobalProtect:</strong> Allow users to uninstall the GlobalProtect app, prevent them from uninstalling the GlobalProtect app, or allow them to uninstall if they enter a password you create.
+- <strong>Upgrade GlobalProtect:</strong> Specify how app upgrades should work, including whether users can initiate updates.
+- <strong>Allow User to Change Portal:</strong> Let users change the portal the GlobalProtect app uses to connect to Prisma Access.
 ![[Customize App Settings3.png]]
 ##### Internal Host Detection  
 If you do not require your mobile users to connect to Prisma Access when they are on the internal network, enable internal host detection to enable the GlobalProtect app to determine whether the network is internal or external.
 ##### Gateways  
 By default, all the gateways in your Prisma Access locations are available to users. If you have additional GlobalProtect gateways that you’d like your users to be able to connect to, you can add those gateways here.![[Customize App Settings4.png]]
 ##### HIP Data Collection  
-Define custom host information profile (HIP) data that you want the app to collect or exclude from collection. When this option is enabled, the app collects data from devices running Windows, macOS, or Linux operating systems. Go to **Objects > HIP Objects / HIP Profiles**. It is important to remember that adding and requiring a sync with too many items can restrict a user from logging on and can cause a denial.
+Define custom host information profile (HIP) data that you want the app to collect or exclude from collection. When this option is enabled, the app collects data from devices running Windows, macOS, or Linux operating systems. Go to <strong>Objects > HIP Objects / HIP Profiles</strong>. It is important to remember that adding and requiring a sync with too many items can restrict a user from logging on and can cause a denial.
 ![[Customize App Settings5.png]]
 #### Setting Up Mobile User Authentication
 You can authenticate mobile users to Prisma Access using any of the supported authentication types.
 ##### Step 1
-Go to **Workflows > Prisma Access Setup > GlobalProtect > Infrastructure > User Authentication** and click the **Add Authentication**.
+Go to <strong>Workflows > Prisma Access Setup > GlobalProtect > Infrastructure > User Authentication</strong> and click the <strong>Add Authentication</strong>.
 ##### Step 2
-Select the **Authentication Method** from the supported authentication types.
+Select the <strong>Authentication Method</strong> from the supported authentication types.
 ##### Step 3
-Specify the **Certificate Authentication** settings.
+Specify the <strong>Certificate Authentication</strong> settings.
 #### Steps to Enable Mobile Users to Access Corporate Resources
-To allow mobile users to access resources on your HQ, data center networks, or other branch locations, you must configure the Prisma Access Infrastructure Settings to enable the network backbone after you complete the steps below. To complete the necessary configurations, go to **Workflows** **> Prisma Access Setup > Service Connections > Service Connections Setup**.
+To allow mobile users to access resources on your HQ, data center networks, or other branch locations, you must configure the Prisma Access Infrastructure Settings to enable the network backbone after you complete the steps below. To complete the necessary configurations, go to <strong>Workflows</strong> <strong>> Prisma Access Setup > Service Connections > Service Connections Setup</strong>.
 ##### Step 1
-Navigate to **Workflows > Prisma Access Setup > GlobalProtect > Infrastructure** tab and click **Set Up Infrastructure Settings**.  
-Under Client IP Pool, click **Add IP Pool** and then define the IP address pools Prisma Access uses to assign IP addresses to your mobile users.
+Navigate to <strong>Workflows > Prisma Access Setup > GlobalProtect > Infrastructure</strong> tab and click <strong>Set Up Infrastructure Settings</strong>.  
+Under Client IP Pool, click <strong>Add IP Pool</strong> and then define the IP address pools Prisma Access uses to assign IP addresses to your mobile users.
 ##### Step 2
 In the Create new IP Pool screen, select your region and add the IP address range for that pool.
 Review or adjust the client IP Pool that Prisma Access uses to assign IP addresses to mobile users. You can customize per region to set up IP pools dedicated to regions or locations. For regions or locations for which you do not specify an IP pool, Prisma Access uses the Worldwide IP pool.
-**Note:** Make sure to Push Config to Prisma Access to save the new mobile user settings.
+<strong>Note:</strong> Make sure to Push Config to Prisma Access to save the new mobile user settings.
 ## Split Tunneling
 <strong>Split Tunneling</strong> allows you to <mark style="background: #FFB8EBA6;">customize traffic routing</mark> through <mark style="background: #FF5582A6;">the VPN tunnel to Prisma Access</mark> <mark style="background: #FFB86CA6;">via the GlobalProtect app</mark>. This functionality not only <mark style="background: #FFF3A3A6;">conserves bandwidth by excluding non-business-critical or non-productive traffic</mark> but also <mark style="background: #BBFABBA6;">provides flexibility in defining which users, devices, or systems should receive specific tunnel settings</mark>.
 
@@ -541,11 +541,11 @@ By default, <mark style="background: #BBFABBA6;">the <strong>GlobalProtect</stro
 The <strong>Clientless VPN</strong> <mark style="background: #FF5582A6;">allows users without the GlobalProtect app</mark> (for example, partners or contractors) <mark style="background: #FFB86CA6;">to securely access enterprise applications by enabling them to authenticate to GlobalProtect in a browser</mark>.
 ### Clientless VPN #configuration 
 #### Step 1
-Navigate to **Workflows > Prisma Access Setup > GlobalProtect** and click the **Clientless VPN** tab. Then, click **Add Applications**.![[Clientless VPN.png]]
+Navigate to <strong>Workflows > Prisma Access Setup > GlobalProtect</strong> and click the <strong>Clientless VPN</strong> tab. Then, click <strong>Add Applications</strong>.![[Clientless VPN.png]]
 #### Step 2
-Toggle the **Enable Clientless VPN** option and click **Add Rule** to specify the users and applications that can use Clientless VPN.![[Clientless VPN1.png]]
+Toggle the <strong>Enable Clientless VPN</strong> option and click <strong>Add Rule</strong> to specify the users and applications that can use Clientless VPN.![[Clientless VPN1.png]]
 #### Step 3
-Configure the Timeout Settings and the advanced settings (if required). Then, click **Save**.![[Clientless VPN3.png]]
+Configure the Timeout Settings and the advanced settings (if required). Then, click <strong>Save</strong>.![[Clientless VPN3.png]]
 ## Certificate Authentication
 For enhanced security, use a <strong>certificate</strong> (in addition to your authentication service) <mark style="background: #FFB8EBA6;">to obtain usernames and authenticate users to Prisma Access</mark>. 
 
@@ -627,7 +627,7 @@ Allows you to define objects for the <strong>Host Information Profile (HIP)</str
 ##### Schedules
 By default, <mark style="background: #FFB8EBA6;">Security policy rules are always in effect (on all dates and times)</mark>. <mark style="background: #FFB86CA6;">To limit a Security policy rule to specific times</mark>, <mark style="background: #ABF7F7A6;">you can define schedules and then apply them to the appropriate rules</mark>. For each schedule, <mark style="background: #D2B3FFA6;">you can specify a fixed date and time range or a recurring daily or weekly schedule</mark>. Add or edit a Security policy rule to get started.
 ##### Quarantine Device Lists
-Prisma Access allows you to identify and quarantine compromised devices with the GlobalProtect app. <mark style="background: #CACFD9A6;">You can either manually or automatically (based on auto-tags) add devices to a quarantine list</mark>. <mark style="background: #FFF3A3A6;">You can block quarantined devices from accessing the network or restrict the device traffic based on a security rule</mark>. To get started, go to **Configuration** > **Objects** and set up a Quarantined Device List. Then, use the list as part of identity redistribution.
+Prisma Access allows you to identify and quarantine compromised devices with the GlobalProtect app. <mark style="background: #CACFD9A6;">You can either manually or automatically (based on auto-tags) add devices to a quarantine list</mark>. <mark style="background: #FFF3A3A6;">You can block quarantined devices from accessing the network or restrict the device traffic based on a security rule</mark>. To get started, go to <strong>Configuration</strong> > <strong>Objects</strong> and set up a Quarantined Device List. Then, use the list as part of identity redistribution.
 ##### Certificates
 <mark style="background: #FFB8EBA6;">Centrally manage the certificates you use to secure communication across your network</mark>. In one place, <mark style="background: #FF5582A6;">set up your certificates</mark>, <mark style="background: #FFB86CA6;">add a certificate</mark>, <mark style="background: #FFF3A3A6;">add OCSP responders</mark>, and <mark style="background: #BBFABBA6;">deﬁne certificate checks you want to require</mark>. The certificates and settings you set up here can be used throughout your Prisma Access deployment to secure features like decryption, your authentication portal, and the GlobalProtect app.
 ##### URL Category
@@ -635,16 +635,16 @@ Allows you to create<mark style="background: #ABF7F7A6;"> a custom URL category 
 ### Security Profiles
 <strong>Security profiles</strong> <mark style="background: #FF5582A6;">are fundamental components for enabling security services</mark> such as Threat Prevention, WildFire, and URL Filtering on your network traffic. <mark style="background: #FFF3A3A6;">These profiles perform <mark style="background: #FF5582A6;">advanced inspection</mark> on traffic that a Security rule allows</mark>; <mark style="background: #FFB86CA6;">they scan for and prevent threats, attacks, misuse, and abuse</mark>.
 
-For customization, management, and visibility into each Security profile type, you can access the Security profiles via **Manage > Configuration > NGFW and Prisma Access > Security Services**. 
+For customization, management, and visibility into each Security profile type, you can access the Security profiles via <strong>Manage > Configuration > NGFW and Prisma Access > Security Services</strong>. 
 
 <strong>Security profiles</strong> <mark style="background: #BBFABBA6;">consolidate profile configuration</mark>, <mark style="background: #FFB86CA6;">centralizing everything you need to set up and manage profiles is in one place</mark>. The interfaces also give you access to all the features a profile offers and resources you can use to update profiles, such as content release updates, the Threat Vault, and PAN-DB site classifications.
 
 When working with Security profiles, it's especially important to know about profile groups. <mark style="background: #FFB8EBA6;">Security rules reference profile groups</mark>, not individual profiles. <mark style="background: #FF5582A6;">Therefore, for a profile to be active</mark>, <mark style="background: #FFB8EBA6;">it must be part of a profile group that a Security rule is using</mark>.![[Security Profiles and Profile Groups.png]]
-You can create, manage, and enable your Security Services profiles via **Manage > Configuration > NGFW and Prisma Access > Security Services** and select the available profile types. The profile dashboards allow you to review the best practice profiles, add a new profile, update existing profiles, and create and manage overrides.
+You can create, manage, and enable your Security Services profiles via <strong>Manage > Configuration > NGFW and Prisma Access > Security Services</strong> and select the available profile types. The profile dashboards allow you to review the best practice profiles, add a new profile, update existing profiles, and create and manage overrides.
 
 In <strong>Strata Cloud Manager</strong>, a Security profile is only active when the following two conditions are met:
 ##### 1. The Security Profile Is in a Profile Group
-You can add a Security profile to a Profile Group by navigating to **Manage >** **Configuration > NGFW and Prisma Access > Security Services > Profile Groups**. 
+You can add a Security profile to a Profile Group by navigating to <strong>Manage ></strong> <strong>Configuration > NGFW and Prisma Access > Security Services > Profile Groups</strong>. 
 
 A <strong>profile group</strong> <mark style="background: #FFB8EBA6;">is a collection of profiles</mark>, and <mark style="background: #FF5582A6;">it can include <strong>one</strong> profile from each type</mark>.
 For each profile, <mark style="background: #FFF3A3A6;">best-practice settings are built in and enabled by default</mark>. You can use these out-of-the-box profiles as a starting point to customize and build upon the predefined settings.
@@ -660,21 +660,21 @@ Best-practice profiles use the strictest security settings recommended by Palo A
 This type of protection zeros in on <strong>threats</strong> <mark style="background: #FFB8EBA6;">that affect users' outbound activity</mark>, <mark style="background: #FF5582A6;">especially command-and-control (C2) activity</mark>, where an infected client is being leveraged as part of a remotely conducted cyberattack. It is a part of the Threat Prevention subscription.
 ![[Anti-Spyware.png]]
 <mark style="background: #FFB86CA6;">Anti-spyware detects <strong>command-and-control (C2)</strong> activity</mark>, where spyware on an infected client is <mark style="background: #FFF3A3A6;">collecting data without the user's consent</mark> and/or <mark style="background: #ABF7F7A6;">communicating with a remote attacker</mark>. Prisma Access enforces a strict best-practice Anti-Spyware profile by default, but it also provides an alternate best-practice profile. The best-practice profiles enforce one of two actions on matching traffic:
-- **Default** - The default action Palo Alto Networks sets for a specific signature. Typically, the default action is an alert or a reset-both.
-- **Reset Both** - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
+- <strong>Default</strong> - The default action Palo Alto Networks sets for a specific signature. Typically, the default action is an alert or a reset-both.
+- <strong>Reset Both</strong> - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
 ##### Vulnerability Protection
 Vulnerability Protection <mark style="background: #FFB86CA6;">stops the attacker’s attempts to exploit the system flaws</mark> and gain unauthorized access to your network. It is one part of the Threat Prevention subscription. This type of protection zeros in on <mark style="background: #FF5582A6;">inbound threats</mark>, <mark style="background: #BBFABBA6;">where an attacker is attempting to exploit a system flaw to breach your network</mark>.
 ![[Vulnerability Protection.png]]
 Vulnerability Protection detects system flaws that an attacker might otherwise attempt to exploit. Whereas Anti-Spyware identifies infected hosts as traffic leaves the network, Vulnerability Protection <mark style="background: #D2B3FFA6;">protects against threats entering the network</mark>.
-- **Default** - The default action Palo Alto Networks specifies for a specific signature. Typically, the default action is an alert or a reset-both.
-- **Reset Both** - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
+- <strong>Default</strong> - The default action Palo Alto Networks specifies for a specific signature. Typically, the default action is an alert or a reset-both.
+- <strong>Reset Both</strong> - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
 ##### WildFire and Antivirus
 ![[WildFire and Antivirus.png]]
 Antivirus detects <mark style="background: #ADCCFFA6;">viruses and malware found in executables and file types</mark>. These profiles scan inside compressed files and data-encoding schemes, and if you have enabled decryption, they also scan decrypted content. 
 
 The best-practice Antivirus profile takes one of the following two actions on traffic:
-- **Alert** - Generates an alert for each application traffic flow. The alert is saved in the threat log.
-- **Reset Both** - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
+- <strong>Alert</strong> - Generates an alert for each application traffic flow. The alert is saved in the threat log.
+- <strong>Reset Both</strong> - For TCP, resets the connection on both client and server ends. For UDP, drops the connection.
 ##### DNS Security
 By leveraging <mark style="background: #FFB8EBA6;">advanced machine learning and predictive analytics</mark>, the <mark style="background: #FFB86CA6;">service provides real-time DNS request analysis</mark> and <mark style="background: #FFF3A3A6;">rapidly produces and distributes DNS signatures that are specifically designed to defend against malware using DNS for C2 and data theft</mark>. Combined with an extensible cloud architecture, it provides access to a scalable threat intelligence system to keep your network protections up to date. Threat protection service is designed to protect and defend your networks from advanced threats.
 ![[DNS Security.png]]
@@ -689,9 +689,9 @@ URL Filtering enables you to control how users interact with web content. The UR
 <mark style="background: #ADCCFFA6;">File blocking allows you to identify specific file types that you want to block or monitor</mark>. For most traffic (including traffic on your internal network), block files that are known to carry threats or that have no real use case for upload/download.
 ![[File Blocking.png]]
 File blocking gives you a way to monitor file types in use and limit or stop access to risky file types. The strict best-practice File Blocking profile blocks risky file types and logs the rest (there are over 150 file types that File Blocking detects):
-- **Alert** - When the specified file type is detected, a log is generated in the Data Filtering log.
-- **Block** - When the risky file type is detected, the file is blocked and a customizable block page is presented to the user. A log is also generated in the Data Filtering log.
-- **Continue** - When the specified file type is detected, a response page is displayed to the user. The user can click through the page to download the file, and Data Filtering logs record this event.
+- <strong>Alert</strong> - When the specified file type is detected, a log is generated in the Data Filtering log.
+- <strong>Block</strong> - When the risky file type is detected, the file is blocked and a customizable block page is presented to the user. A log is also generated in the Data Filtering log.
+- <strong>Continue</strong> - When the specified file type is detected, a response page is displayed to the user. The user can click through the page to download the file, and Data Filtering logs record this event.
 ##### HTTP Header Insertion
 There are predefined settings built in that you can use to manage access to popular SaaS applications, such as Google and YouTube, and create a custom rule to do HTTP header insertion for any other applications.
 ![[HTTP Header Insertion.png]]

@@ -7,7 +7,7 @@ if you want to view the source visit the plugins github repository
 
 var obsidian = require('obsidian');
 
-/*! *****************************************************************************
+/*! <strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong>*
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -20,7 +20,7 @@ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
 LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
+<strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong>* */
 
 function __awaiter(thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -1571,7 +1571,7 @@ Sortable.prototype =
     }
   },
   _delayedDragTouchMoveHandler: function _delayedDragTouchMoveHandler(
-  /** TouchEvent|PointerEvent **/
+  /<strong> TouchEvent|PointerEvent </strong>/
   e) {
     var touch = e.touches ? e.touches[0] : e;
 

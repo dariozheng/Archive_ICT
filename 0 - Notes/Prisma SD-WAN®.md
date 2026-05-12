@@ -181,8 +181,8 @@ Internet cable <strong>broadband</strong>, metered internet <strong>LTE</strong>
 <mark style="background: #ABF7F7A6;">Once an allowed circuit comes up, statistics and logs will be exported to controller</mark>.
 #### Application Reachability Probes and QoS
 ![[Application Reachability Probes and QoS.png]]
-- **Use For Application Reachability Probes:** This allows the circuit category to check the reachability of an application on a given path.
-- **QoS:** Select QoS to enable shaping and queuing of traffic as defined in your application policy rules.
+- <strong>Use For Application Reachability Probes:</strong> This allows the circuit category to check the reachability of an application on a given path.
+- <strong>QoS:</strong> Select QoS to enable shaping and queuing of traffic as defined in your application policy rules.
 #### Link Quality Monitoring (LQM)
 ![[Link Quality Monitoring (LQM).png]]
 <mark style="background: #ADCCFFA6;">Select <strong>LQ Monitoring</strong> to enable link quality measurements such as <strong>latency</strong>, <strong>loss</strong>, and <strong>jitter</strong></mark>.
@@ -732,15 +732,15 @@ The following diagram shows an ION 3K in <mark style="background: #FF5582A6;">L3
 Given that the IONs perform real time measurement and analysis from Layers 3 to 7, we can provide rich application performance metrics and react in real time to application performance anomalies.
 ## Application Health Distribution
 <mark style="background: #FFB8EBA6;">Used to track the performance and health of applications</mark>. <mark style="background: #FF5582A6;">This information can be used to identify problems with applications</mark> and <mark style="background: #FFB86CA6;">to make changes to improve performance and reliability</mark>. Based on the latest health score, the graph displays the distribution of Good, Fair, and Poor Applications for a given tenant.
-- **Good** (70-100)
-- **Fair** (30-69)
-- **Poor** (0-29)
+- <strong>Good</strong> (70-100)
+- <strong>Fair</strong> (30-69)
+- <strong>Poor</strong> (0-29)
 ![[Application Health Distribution.png]]
 ## Application Initialization and Transaction Failures
 <mark style="background: #BBFABBA6;"><strong>Application initialization</strong> and <strong>transaction failures</strong> are tracked on a <strong>per-destination/application/path basis</strong></mark>, allowing for granular and specific path changes to be made based on each destination IP within a specific application.
 
-- **Init Failure:** <mark style="background: #ADCCFFA6;">Failure to complete the <strong>three-way handshake</strong></mark>. Reasons for failure may include a misconfigured firewall, an application server issue, a misconfigured network access control list, or a WAN network provider issue.
-- **TXNs Failure:** <mark style="background: #ABF7F7A6;">Unsuccessful transfer of data after the completion of the three-way handshake</mark>. Reasons for failure can include a misconfigured firewall, an application server issue, a misconfigured network access control list, or a WAN network provider issue.
+- <strong>Init Failure:</strong> <mark style="background: #ADCCFFA6;">Failure to complete the <strong>three-way handshake</strong></mark>. Reasons for failure may include a misconfigured firewall, an application server issue, a misconfigured network access control list, or a WAN network provider issue.
+- <strong>TXNs Failure:</strong> <mark style="background: #ABF7F7A6;">Unsuccessful transfer of data after the completion of the three-way handshake</mark>. Reasons for failure can include a misconfigured firewall, an application server issue, a misconfigured network access control list, or a WAN network provider issue.
 ## Concurrent Flows
 <mark style="background: #D2B3FFA6;">The Concurrent Flow chart helps to understand how many connections are active on your network by application</mark>. 
 

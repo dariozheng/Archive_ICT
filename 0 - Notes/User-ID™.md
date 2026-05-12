@@ -154,7 +154,7 @@ On Windows host ensure the port 5007 is not blocked by firewalls.
 ###### Agent Host Type
 You can add an agent using Serial Number or Host and Port. 
 -  <strong>Serial Number</strong>
-If the firewall will connect to a <mark style="background: #FFF3A3A6;"><strong>Panorama management appliance</strong></mark> to collect User-ID information, then select **Serial Number** as the host type.
+If the firewall will connect to a <mark style="background: #FFF3A3A6;"><strong>Panorama management appliance</strong></mark> to collect User-ID information, then select <strong>Serial Number</strong> as the host type.
 -  <strong>Host and Port</strong>
 If the firewall will connect to a <mark style="background: #BBFABBA6;"><strong>Windows-based agent</strong> or an agent on another firewall</mark>, then select <strong>Host and Port</strong> as the host type. 
 
@@ -179,7 +179,7 @@ Use the firewall’s web interface and the Windows agent to confirm connectivity
 Mappings can be displayed from the Windows agent or from the firewall CLI.
 ![[Confirm Connection to the User-ID Agent.png]]
 ###### From the Windows Agent
-Use the **Monitoring** tab in the Windows agent to display IP address-to-username mappings by the Windows agent.
+Use the <strong>Monitoring</strong> tab in the Windows agent to display IP address-to-username mappings by the Windows agent.
 ![[From the Windows Agent.png]]
 ###### From the Firewall CLI
 You can display how users and IP addresses are being mapped on the firewall only by using the firewall’s CLI.

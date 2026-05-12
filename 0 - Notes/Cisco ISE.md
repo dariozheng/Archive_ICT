@@ -245,6 +245,35 @@ In Policy section are defined the Policy Sets, Dictionaries, Conditions and Resu
 ![[Pasted image 20260512103918.png]]
 
 ### Results
+#### Policy - Results - Authentication
+##### Allowed Protocols
+After the conditions are matched in a top-level rule, the rule then determines what authentication protocols are permitted for that policy set.
+
+The Default Network Access list of allowed protocols has almost every supported authentication protocol selected.
+
+<strong>Policy > Policy Elements > Results > Authentication > Allowed Protocols</strong>
+
+Protocols: 
+- <strong>PAP</strong>: With <strong>Password Authentication Protocol</strong> (<strong>PAP</strong>), the username is sent in plaintext, and the password is optionally encrypted.
+  
+- <strong>CHAP</strong>: With <strong>Challenge Handshake Authentication Protocol</strong> (<strong>CHAP</strong>), the username and password are encrypted using a challenge sent from the server. CHAP is not often used with network access.
+  
+- <strong>Extensible Authentication Protocol (EAP) types</strong>: <strong>EAP</strong> is an authentication framework that provides for the transport and use of identity credentials. EAP encapsulates the usernames, passwords, and certificates that a client is sending for purposes of authentication. There are many different EAP types, each with benefits and downsides. (802.1X defines EAP over LAN.)
+    - <strong>EAP-MD5</strong>: EAP-MD5 uses a Message Digest algorithm to hide the credentials in a hash. The hash is sent to the server, where it is compared to a local hash to see if the credentials are accurate. EAP-MD5 does not have a mechanism for mutual authentication. This means the server is validating the client, but the client does not authenticate the server. EAP-MD5 is common on some IP phones, and it is also possible for some switches to send MAB requests within EAP-MD5.
+    - <strong>EAP-TLS</strong>: This EAP type uses TLS (Transport Layer Security) to provide secure identity transactions. EAP-TLS is considered universally supported across many different operating systems and mobile devices. EAP-TLS uses X.509 certificates and provides the ability to support mutual authentication, where the client must trust the server’s certificate and vice versa. It is considered among the most secure EAP types because password capture is not an option; the endpoint must have the private key.
+- <strong>Tunneled EAP types</strong>: The previous EAP types transmit credentials immediately. These following EAP types of form encrypted secure tunnels first and then transmit the credentials within the tunnel
+    - <strong>PEAP</strong>: <strong>Protected EAP</strong> (<strong>PEAP</strong>), is an EAP tunnel type. PEAP forms a potentially encrypted TLS tunnel between the clients and server using the X.509 certificate on the server in much the same way an SSL tunnel is established between a web browser and a secure website. After the tunnel has been formed, PEAP uses another EAP type as an “inner method” to authenticate the client using EAP within the outer tunnel. PEAP supports the following inner methods:
+        - <strong>EAP MSCHAPv2</strong>: Using this inner method, the client’s credentials are sent to the server encrypted within an MS-CHAPv2 session. It allows for simple transmission of username and password or even computer name and computer password to the RADIUS server, which authenticates them to Active Directory.
+        - <strong>EAP-GTC</strong>: <strong>EAP-Generic Token Card</strong> (<strong>GTC</strong>) is an inner method created by Cisco as an alternative to MS-CHAPv2 that allows generic authentications to virtually any identity store, including one-time-password (OTP) token servers, LDAP, Novell eDirectory, and more.
+        - <strong>EAP-TLS</strong>: PEAP is capable of using EAP-TLS as an inner method. EAP-TLS adds an additional layer of security by tunneling the EAP authentication.
+    - <strong>EAP-FAST</strong>: <strong>Flexible Authentication via Secure Tunneling (FAST)</strong> is very similar to PEAP. Cisco created FAST as an alternative to PEAP that allows for faster re-authentication and supports faster wireless roaming. FAST forms a TLS outer tunnel and then transmits the client credentials within that TLS tunnel. Where FAST differs from the PEAP is in the ability to use Protected Access Credentials (PACs). A PAC can be thought of as a secure cookie that is stored locally on the host as proof of a successful authentication. The Windows native supplicant does not support EAP-FAST. Instead, the AnyConnect software client with the Network Access Manager (NAM) can be installed on endpoints running Windows Vista and later. NAM acts as the supplicant for the endpoint, which allows Windows to support arrange of new EAP options. EAP-FAST supports the following inner methods:
+        - <strong>EAP-MS-CHAPv2</strong>
+        - <strong>EAP-GTC</strong>
+        - <strong>EAP-TLS</strong>
+        - <strong>EAP chaining with EAP-FASTv2</strong>: Windows AnyConnect NAM software. As an enhancement to EAP-FAST, a differentiation was made to have both a user credential and a machine credential authenticated. These credentials can be certificates or username and password. This provides ISE administrators the ability to validate that a machine is an authenticated domain computer and to validate the credentials of the user. EAP chaining makes it possible for multiple credentials to be authenticated within a single EAP transaction.
+        - <strong>EAP-TTLS</strong>: It encapsulates a TLS session by using a handshake phase and a data phase. During the handshake, the server authenticates itself to the client or they both mutually authenticate using standard TLS. The server can then use that established tunnel to authenticate the client. Versions of Windows prior to Windows 8 do not support EAP-TTLS natively. However, Microsoft has included native supplicant support in Windows 8 and later. The EAP inner methods that are accepted with EAP-TTLS include PAP, CHAP, MS-CHAPv1, MS-CHAPv2, and EAP-MD5.
+        - <strong>TEAP</strong>: It enables secure communication between a peer and server using TLS to establish a mutually authenticated tunnel.
+
 
 # Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
@@ -368,7 +397,7 @@ The selection <strong>Match Client Certificate Against Certificate In Identity S
 - <strong>Always perform binary comparison</strong>: <mark style="background: #FF5582A6;">Use this only if you have physically uploaded or published the user/machine certificates into the <strong>userCertificate</strong> attribute in Active Directory</mark>. <mark style="background: #FFB86CA6;">ISE will then perform a byte-for-byte comparison between the certificate the client presents and the one stored in AD</mark>. If they don't match exactly, authentication will fail.
    [[#Domain Users Certificate| Link to configuration of a domain user certificate and the img of userCertificate attribute]]
    [[#Script To Remove Expired userCertificate| Link to the managing of expired userCertificate attribute]]
-- **Never:** Choose this if you are not using an identity store at all for this profile. This would be common for Guest or BYOD setups where you just want to verify that the certificate is valid and signed by a trusted CA without checking it against an AD account.
+- <strong>Never:</strong> Choose this if you are not using an identity store at all for this profile. This would be common for Guest or BYOD setups where you just want to verify that the certificate is valid and signed by a trusted CA without checking it against an AD account.
 ### Client Certificates 
 Client Certificates are used by users, machine or both to authenticate to ISE. 
 In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 
@@ -998,8 +1027,8 @@ Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for
 #### EAP-TLS
 This is a GPO with authentication protocol set in EAP-TLS, made specifically for RDP connection, see the policy rule made for this. 
 
-- **General tab**: enable <strong>Use Windows Wired Auto Config service for clients</strong>
-- **Security tab**:
+- <strong>General tab</strong>: enable <strong>Use Windows Wired Auto Config service for clients</strong>
+- <strong>Security tab</strong>:
     - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
 	- Network authentication method: <strong>Microsoft: Smart Card or other certificate</strong>
 		- Tick <strong>Use a certificate on this computer</strong>
@@ -1088,10 +1117,10 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
 
 1. Make a dummy authentication profile that will be rewritten by the XML config file. 
 	- <strong>General tab</strong>: Choose a <strong>Policy Name</strong>, enable <strong>Use Windows Wired Auto Config service for clients</strong>
-	- **Security tab**:
+	- <strong>Security tab</strong>:
 	    - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
 		- Network authentication method: Pick <strong>Microsoft: Protected EAP (PEAP)</strong> for placeholder, it will be overwritten. 
-	- **Security → Advanced**:
+	- <strong>Security → Advanced</strong>:
 	    - Tick <strong>Enforce advanced 802.1X settings</strong>
 		    - <strong>Max Eapol-Start Msgs</strong>: 2
 		    - <strong>Held Period</strong>: 60

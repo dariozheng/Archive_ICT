@@ -2,9 +2,9 @@
     overflow-y: auto;
 }
 
-/*****************/
-/** Table Views **/
-/*****************/
+/<strong></strong><strong></strong><strong></strong><strong></strong>*/
+/<strong> Table Views </strong>/
+/<strong></strong><strong></strong><strong></strong><strong></strong>*/
 
 /* List View Default Styling; rendered internally as a table. */
 .table-view-table {
@@ -60,9 +60,9 @@
     padding-left: 8px;
 }
 
-/*******************/
-/** Inline Fields **/
-/*******************/
+/<strong></strong><strong></strong><strong></strong><strong></strong>***/
+/<strong> Inline Fields </strong>/
+/<strong></strong><strong></strong><strong></strong><strong></strong>***/
 
 .dataview.inline-field-key {
     padding-left: 8px;
@@ -88,9 +88,9 @@
     color: var(--nav-item-color-selected);
 }
 
-/***************/
-/** Task View **/
-/***************/
+/<strong></strong><strong></strong><strong></strong>***/
+/<strong> Task View </strong>/
+/<strong></strong><strong></strong><strong></strong>***/
 
 .dataview.task-list-item, .dataview.task-list-basic-item {
     margin-top: 3px;
@@ -104,9 +104,9 @@
     cursor: pointer;
 }
 
-/*****************/
-/** Error Views **/
-/*****************/
+/<strong></strong><strong></strong><strong></strong><strong></strong>*/
+/<strong> Error Views </strong>/
+/<strong></strong><strong></strong><strong></strong><strong></strong>*/
 
 div.dataview-error-box {
     width: 100%;
@@ -122,9 +122,9 @@ div.dataview-error-box {
     text-align: center;
 }
 
-/*************************/
-/** Additional Metadata **/
-/*************************/
+/<strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong>*/
+/<strong> Additional Metadata </strong>/
+/<strong></strong><strong></strong><strong></strong><strong></strong><strong></strong><strong></strong>*/
 
 .dataview.small-text {
     font-size: smaller;

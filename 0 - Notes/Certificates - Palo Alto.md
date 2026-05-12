@@ -25,7 +25,7 @@ This is because most endpoints will already have the Root CA certificate importe
 
 However, this may not be applicable if you are creating self-signed certificates.
 
-**Note:** It is also recommended to use one Subordinate CA per gateway for easier management of certificates. Additionally, self-signed certificates should be installed in the operating system's certificate store for all browsers on Windows. This includes Chrome, Opera, Safari, and Explorer. For Firefox, the certificate store is built into the browser, with the option to default to the system's store if needed.
+<strong>Note:</strong> It is also recommended to use one Subordinate CA per gateway for easier management of certificates. Additionally, self-signed certificates should be installed in the operating system's certificate store for all browsers on Windows. This includes Chrome, Opera, Safari, and Explorer. For Firefox, the certificate store is built into the browser, with the option to default to the system's store if needed.
 
 # Forward Proxy
 

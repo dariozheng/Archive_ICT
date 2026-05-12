@@ -74,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -209,7 +210,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "41fc5e53c245e6d7",
+  "active": "a627c530cd5eaf30",
   "lastOpenFiles": [
     "attachments/Pasted image 20260512103918.png",
     "attachments/Example AD Forest.png",

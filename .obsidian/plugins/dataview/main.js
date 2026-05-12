@@ -352,42 +352,42 @@ class SystemZone extends Zone {
     return singleton$1;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get type() {
     return "system";
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get name() {
     return new Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isUniversal() {
     return false;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offsetName(ts, { format, locale }) {
     return parseZoneInfo(ts, format, locale);
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   formatOffset(ts, format) {
     return formatOffset(this.offset(ts), format);
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offset(ts) {
     return -new Date(ts).getTimezoneOffset();
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   equals(otherZone) {
     return otherZone.type === "system";
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isValid() {
     return true;
   }
@@ -504,38 +504,38 @@ class IANAZone extends Zone {
 
   constructor(name) {
     super();
-    /** @private **/
+    /<strong> @private </strong>/
     this.zoneName = name;
-    /** @private **/
+    /<strong> @private </strong>/
     this.valid = IANAZone.isValidZone(name);
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get type() {
     return "iana";
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get name() {
     return this.zoneName;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isUniversal() {
     return false;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offsetName(ts, { format, locale }) {
     return parseZoneInfo(ts, format, locale, this.name);
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   formatOffset(ts, format) {
     return formatOffset(this.offset(ts), format);
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offset(ts) {
     const date = new Date(ts);
 
@@ -569,12 +569,12 @@ class IANAZone extends Zone {
     return (asUTC - asTS) / (60 * 1000);
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   equals(otherZone) {
     return otherZone.type === "iana" && otherZone.name === this.name;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isValid() {
     return this.valid;
   }
@@ -1115,16 +1115,16 @@ class FixedOffsetZone extends Zone {
 
   constructor(offset) {
     super();
-    /** @private **/
+    /<strong> @private </strong>/
     this.fixed = offset;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get type() {
     return "fixed";
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get name() {
     return this.fixed === 0 ? "UTC" : `UTC${formatOffset(this.fixed, "narrow")}`;
   }
@@ -1137,32 +1137,32 @@ class FixedOffsetZone extends Zone {
     }
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offsetName() {
     return this.name;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   formatOffset(ts, format) {
     return formatOffset(this.fixed, format);
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isUniversal() {
     return true;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offset() {
     return this.fixed;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   equals(otherZone) {
     return otherZone.type === "fixed" && otherZone.fixed === this.fixed;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isValid() {
     return true;
   }
@@ -1179,42 +1179,42 @@ class InvalidZone extends Zone {
     this.zoneName = zoneName;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get type() {
     return "invalid";
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get name() {
     return this.zoneName;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isUniversal() {
     return false;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offsetName() {
     return null;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   formatOffset() {
     return "";
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   offset() {
     return NaN;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   equals() {
     return false;
   }
 
-  /** @override **/
+  /<strong> @override </strong>/
   get isValid() {
     return false;
   }
@@ -2748,11 +2748,11 @@ function removeZeroes(vals) {
  *
  * Here is a brief overview of commonly used methods and getters in Duration:
  *
- * * **Creation** To create a Duration, use {@link Duration.fromMillis}, {@link Duration.fromObject}, or {@link Duration.fromISO}.
- * * **Unit values** See the {@link Duration#years}, {@link Duration#months}, {@link Duration#weeks}, {@link Duration#days}, {@link Duration#hours}, {@link Duration#minutes}, {@link Duration#seconds}, {@link Duration#milliseconds} accessors.
- * * **Configuration** See  {@link Duration#locale} and {@link Duration#numberingSystem} accessors.
- * * **Transformation** To create new Durations out of old ones use {@link Duration#plus}, {@link Duration#minus}, {@link Duration#normalize}, {@link Duration#set}, {@link Duration#reconfigure}, {@link Duration#shiftTo}, and {@link Duration#negate}.
- * * **Output** To convert the Duration into other representations, see {@link Duration#as}, {@link Duration#toISO}, {@link Duration#toFormat}, and {@link Duration#toJSON}
+ * * <strong>Creation</strong> To create a Duration, use {@link Duration.fromMillis}, {@link Duration.fromObject}, or {@link Duration.fromISO}.
+ * * <strong>Unit values</strong> See the {@link Duration#years}, {@link Duration#months}, {@link Duration#weeks}, {@link Duration#days}, {@link Duration#hours}, {@link Duration#minutes}, {@link Duration#seconds}, {@link Duration#milliseconds} accessors.
+ * * <strong>Configuration</strong> See  {@link Duration#locale} and {@link Duration#numberingSystem} accessors.
+ * * <strong>Transformation</strong> To create new Durations out of old ones use {@link Duration#plus}, {@link Duration#minus}, {@link Duration#normalize}, {@link Duration#set}, {@link Duration#reconfigure}, {@link Duration#shiftTo}, and {@link Duration#negate}.
+ * * <strong>Output</strong> To convert the Duration into other representations, see {@link Duration#as}, {@link Duration#toISO}, {@link Duration#toFormat}, and {@link Duration#toJSON}
  *
  * There's are more methods documented below. In addition, for more information on subtler topics like internationalization and validity, see the external documentation.
  */
@@ -3542,12 +3542,12 @@ function validateStartEnd(start, end) {
  *
  * Here is a brief overview of the most commonly used methods and getters in Interval:
  *
- * * **Creation** To create an Interval, use {@link Interval.fromDateTimes}, {@link Interval.after}, {@link Interval.before}, or {@link Interval.fromISO}.
- * * **Accessors** Use {@link Interval#start} and {@link Interval#end} to get the start and end.
- * * **Interrogation** To analyze the Interval, use {@link Interval#count}, {@link Interval#length}, {@link Interval#hasSame}, {@link Interval#contains}, {@link Interval#isAfter}, or {@link Interval#isBefore}.
- * * **Transformation** To create other Intervals out of this one, use {@link Interval#set}, {@link Interval#splitAt}, {@link Interval#splitBy}, {@link Interval#divideEqually}, {@link Interval.merge}, {@link Interval.xor}, {@link Interval#union}, {@link Interval#intersection}, or {@link Interval#difference}.
- * * **Comparison** To compare this Interval to another one, use {@link Interval#equals}, {@link Interval#overlaps}, {@link Interval#abutsStart}, {@link Interval#abutsEnd}, {@link Interval#engulfs}
- * * **Output** To convert the Interval into other representations, see {@link Interval#toString}, {@link Interval#toLocaleString}, {@link Interval#toISO}, {@link Interval#toISODate}, {@link Interval#toISOTime}, {@link Interval#toFormat}, and {@link Interval#toDuration}.
+ * * <strong>Creation</strong> To create an Interval, use {@link Interval.fromDateTimes}, {@link Interval.after}, {@link Interval.before}, or {@link Interval.fromISO}.
+ * * <strong>Accessors</strong> Use {@link Interval#start} and {@link Interval#end} to get the start and end.
+ * * <strong>Interrogation</strong> To analyze the Interval, use {@link Interval#count}, {@link Interval#length}, {@link Interval#hasSame}, {@link Interval#contains}, {@link Interval#isAfter}, or {@link Interval#isBefore}.
+ * * <strong>Transformation</strong> To create other Intervals out of this one, use {@link Interval#set}, {@link Interval#splitAt}, {@link Interval#splitBy}, {@link Interval#divideEqually}, {@link Interval.merge}, {@link Interval.xor}, {@link Interval#union}, {@link Interval#intersection}, or {@link Interval#difference}.
+ * * <strong>Comparison</strong> To compare this Interval to another one, use {@link Interval#equals}, {@link Interval#overlaps}, {@link Interval#abutsStart}, {@link Interval#abutsEnd}, {@link Interval#engulfs}
+ * * <strong>Output</strong> To convert the Interval into other representations, see {@link Interval#toString}, {@link Interval#toLocaleString}, {@link Interval#toISO}, {@link Interval#toISODate}, {@link Interval#toISOTime}, {@link Interval#toFormat}, and {@link Interval#toDuration}.
  */
 class Interval {
   /**
@@ -4104,7 +4104,7 @@ class Interval {
 
   /**
    * Returns a string representation of this Interval formatted according to the specified format
-   * string. **You may not want this.** See {@link Interval#toLocaleString} for a more flexible
+   * string. <strong>You may not want this.</strong> See {@link Interval#toLocaleString} for a more flexible
    * formatting tool.
    * @param {string} dateFormat - The format string. This string formats the start and end time.
    * See {@link DateTime#toFormat} for details.
@@ -5468,13 +5468,13 @@ function lastOpts(argList) {
  *
  * Here is a brief overview of the most commonly used functionality it provides:
  *
- * * **Creation**: To create a DateTime from its components, use one of its factory class methods: {@link DateTime.local}, {@link DateTime.utc}, and (most flexibly) {@link DateTime.fromObject}. To create one from a standard string format, use {@link DateTime.fromISO}, {@link DateTime.fromHTTP}, and {@link DateTime.fromRFC2822}. To create one from a custom string format, use {@link DateTime.fromFormat}. To create one from a native JS date, use {@link DateTime.fromJSDate}.
- * * **Gregorian calendar and time**: To examine the Gregorian properties of a DateTime individually (i.e as opposed to collectively through {@link DateTime#toObject}), use the {@link DateTime#year}, {@link DateTime#month},
+ * * <strong>Creation</strong>: To create a DateTime from its components, use one of its factory class methods: {@link DateTime.local}, {@link DateTime.utc}, and (most flexibly) {@link DateTime.fromObject}. To create one from a standard string format, use {@link DateTime.fromISO}, {@link DateTime.fromHTTP}, and {@link DateTime.fromRFC2822}. To create one from a custom string format, use {@link DateTime.fromFormat}. To create one from a native JS date, use {@link DateTime.fromJSDate}.
+ * * <strong>Gregorian calendar and time</strong>: To examine the Gregorian properties of a DateTime individually (i.e as opposed to collectively through {@link DateTime#toObject}), use the {@link DateTime#year}, {@link DateTime#month},
  * {@link DateTime#day}, {@link DateTime#hour}, {@link DateTime#minute}, {@link DateTime#second}, {@link DateTime#millisecond} accessors.
- * * **Week calendar**: For ISO week calendar attributes, see the {@link DateTime#weekYear}, {@link DateTime#weekNumber}, and {@link DateTime#weekday} accessors.
- * * **Configuration** See the {@link DateTime#locale} and {@link DateTime#numberingSystem} accessors.
- * * **Transformation**: To transform the DateTime into other DateTimes, use {@link DateTime#set}, {@link DateTime#reconfigure}, {@link DateTime#setZone}, {@link DateTime#setLocale}, {@link DateTime.plus}, {@link DateTime#minus}, {@link DateTime#endOf}, {@link DateTime#startOf}, {@link DateTime#toUTC}, and {@link DateTime#toLocal}.
- * * **Output**: To convert the DateTime to other representations, use the {@link DateTime#toRelative}, {@link DateTime#toRelativeCalendar}, {@link DateTime#toJSON}, {@link DateTime#toISO}, {@link DateTime#toHTTP}, {@link DateTime#toObject}, {@link DateTime#toRFC2822}, {@link DateTime#toString}, {@link DateTime#toLocaleString}, {@link DateTime#toFormat}, {@link DateTime#toMillis} and {@link DateTime#toJSDate}.
+ * * <strong>Week calendar</strong>: For ISO week calendar attributes, see the {@link DateTime#weekYear}, {@link DateTime#weekNumber}, and {@link DateTime#weekday} accessors.
+ * * <strong>Configuration</strong> See the {@link DateTime#locale} and {@link DateTime#numberingSystem} accessors.
+ * * <strong>Transformation</strong>: To transform the DateTime into other DateTimes, use {@link DateTime#set}, {@link DateTime#reconfigure}, {@link DateTime#setZone}, {@link DateTime#setLocale}, {@link DateTime.plus}, {@link DateTime#minus}, {@link DateTime#endOf}, {@link DateTime#startOf}, {@link DateTime#toUTC}, and {@link DateTime#toLocal}.
+ * * <strong>Output</strong>: To convert the DateTime to other representations, use the {@link DateTime#toRelative}, {@link DateTime#toRelativeCalendar}, {@link DateTime#toJSON}, {@link DateTime#toISO}, {@link DateTime#toHTTP}, {@link DateTime#toObject}, {@link DateTime#toRFC2822}, {@link DateTime#toString}, {@link DateTime#toLocaleString}, {@link DateTime#toFormat}, {@link DateTime#toMillis} and {@link DateTime#toJSDate}.
  *
  * There's plenty others documented below. In addition, for more information on subtler topics like internationalization, time zones, alternative calendars, validity, and so on, see the external documentation.
  */
@@ -6612,7 +6612,7 @@ class DateTime {
 
   /**
    * Returns a string representation of this DateTime formatted according to the specified format string.
-   * **You may not want this.** See {@link DateTime#toLocaleString} for a more flexible formatting tool. For a table of tokens and their interpretations, see [here](https://moment.github.io/luxon/#/formatting?id=table-of-tokens).
+   * <strong>You may not want this.</strong> See {@link DateTime#toLocaleString} for a more flexible formatting tool. For a table of tokens and their interpretations, see [here](https://moment.github.io/luxon/#/formatting?id=table-of-tokens).
    * Defaults to en-US if no locale has been specified, regardless of the system's locale.
    * @param {string} fmt - the format string
    * @param {Object} opts - opts to override the configuration options on this DateTime
@@ -6995,7 +6995,7 @@ class DateTime {
   /**
    * Return whether this DateTime is in the same unit of time as another DateTime.
    * Higher-order units must also be identical for this function to return `true`.
-   * Note that time zones are **ignored** in this comparison, which compares the **local** calendar time. Use {@link DateTime#setZone} to convert one of the dates if needed.
+   * Note that time zones are <strong>ignored</strong> in this comparison, which compares the <strong>local</strong> calendar time. Use {@link DateTime#setZone} to convert one of the dates if needed.
    * @param {DateTime} otherDateTime - the other DateTime
    * @param {string} unit - the unit of time to check sameness on
    * @example DateTime.now().hasSame(otherDT, 'day'); //~> true if otherDT is in the same current calendar day

@@ -28,7 +28,7 @@ SaaS providers <mark style="background: #ABF7F7A6;">operate, manage and maintain
 #### instance network interface 
 is a <strong>virtual network card </strong>attached to a compute instance (virtual machine), acting as its point of connection to a virtual network (VPC). 
 It holds essential network info (IP addresses, MAC address, security groups):
-- **AWS**: Elastic Network Interface (ENI)
-- **Azure**: Network Interface (NIC)
-- **Google Cloud**: Network Interface
-- **OCI (Oracle)**: VNIC
+- <strong>AWS</strong>: Elastic Network Interface (ENI)
+- <strong>Azure</strong>: Network Interface (NIC)
+- <strong>Google Cloud</strong>: Network Interface
+- <strong>OCI (Oracle)</strong>: VNIC

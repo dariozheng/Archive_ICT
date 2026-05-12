@@ -70,7 +70,7 @@ Before you can set up VPNs, you must understand your network topology and be abl
 To configure an IPsec VPN tunnel, you must create various components.
 
 Create the tunnel interface or <mark style="background: #FF5582A6;">Phase 1 objects</mark>:
-- To configure the interface in the web interface, navigate to **Network > Interfaces > Tunnel**. 
+- To configure the interface in the web interface, navigate to <strong>Network > Interfaces > Tunnel</strong>. 
 - The new <mark style="background: #FFB86CA6;">logical interface</mark> must be <mark style="background: #FFF3A3A6;">added to a Layer 3 zone</mark> <mark style="background: #BBFABBA6;">and to a virtual router</mark>, just as any other logical Layer 3 interface is handled.
 
 Configure the IPsec tunnel or <mark style="background: #FF5582A6;">Phase 2 objects</mark>:

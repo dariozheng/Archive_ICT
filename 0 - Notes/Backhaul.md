@@ -32,13 +32,13 @@ ISPs connect you to the internet through a backbone network connecting data cent
 
 # How does backhaul work?
 ![[Backhaul.png]]
-1. **Data Centre**: When a customer requests a movie, the content is retrieved from Netflix’s servers in a data centre.
-2. **Backbone network**: The data travels through the backbone network, a high capacity network that connects regions, ISPs and data centers to the internet and cloud services.
+1. <strong>Data Centre</strong>: When a customer requests a movie, the content is retrieved from Netflix’s servers in a data centre.
+2. <strong>Backbone network</strong>: The data travels through the backbone network, a high capacity network that connects regions, ISPs and data centers to the internet and cloud services.
 3. <strong>Exchange backhaul</strong>: <mark style="background: #FFB86CA6;">Backhaul connects the backbone network to your local exchange</mark>, <mark style="background: #ABF7F7A6;">ensuring the data is transported efficiently <strong>to</strong> and <strong>from</strong> the internet</mark>.
-4. **Access network**: If the customer uses a fixed-line connection like DSL or fibre, the data may pass through a street cabinet connecting to their home or business.
-5. **Router**: The data reaches their router, which creates a wired or wireless local area network o deliver the movie to their laptop, mobile phone or smart TV. You connect your devices to the router by Wi-Fi or by plugging in an Ethernet cable.
+4. <strong>Access network</strong>: If the customer uses a fixed-line connection like DSL or fibre, the data may pass through a street cabinet connecting to their home or business.
+5. <strong>Router</strong>: The data reaches their router, which creates a wired or wireless local area network o deliver the movie to their laptop, mobile phone or smart TV. You connect your devices to the router by Wi-Fi or by plugging in an Ethernet cable.
 
-Exchange backhaul plays a critical role in this process. By providing high capacity transport between the **backbone network (2)** and the customer’s local **access network (4)**, backhaul ensures their content is transmitted efficiently, ensuring a smooth streaming experience.
+Exchange backhaul plays a critical role in this process. By providing high capacity transport between the <strong>backbone network (2)</strong> and the customer’s local <strong>access network (4)</strong>, backhaul ensures their content is transmitted efficiently, ensuring a smooth streaming experience.
 # Types of backhaul
 Backhaul solutions can be divided into two broad categories: wired or wireless.
 ### Wired (fixed-line) backhaul
