@@ -261,11 +261,12 @@ Cisco ISE smart conditions are pre-defined, intelligent policy building blocks d
 
 ![[Pasted image 20260512103918.png]]
 
-Policy Sets are high-level containers that group authentication and authorization rules into manageable logical buckets. Instead of managing one giant list of rules, policy sets allow you to organize network access by use case, such as separating Wired, Wireless, VPN, or Guest access.
+<strong>Policy Sets</strong> are high-level containers that group authentication and authorization rules into manageable logical buckets. 
+Instead of managing one giant list of rules, policy sets allow you to organize network access by use case, such as separating Wired, Wireless, VPN, or Guest access.
 
 Each policy set functions as a "rule book" evaluated from the top down. Once a request matches a policy set's top-level conditions, ISE evaluates the internal policies in this order: 
 - <strong>Top-Level Condition</strong>: The "gatekeeper" that determines if a request belongs in that specific set. If the request is Wireless, Wired, from a specific location, time ecc.
-- <strong>Allowed Protocols</strong>: Defines which protocols (like PAP, CHAP, or EAP-TLS) are permitted for the initial connection.
+- <strong>[[#Allowed Protocols|Allowed Protocols]]</strong>: Defines which protocols (like PAP, CHAP, or EAP-TLS) are permitted for the initial connection.
 - <strong>Authentication Policy</strong>: Verifies the identity of the user or device using identity sources like Active Directory or internal databases.
 - <strong>Authorization Policy</strong>: Grants specific permissions—such as VLAN assignment, Security Group Tags (SGTs), or Downloadable ACLs (dACLs)—based on the user's role or device posture.
 
@@ -273,7 +274,7 @@ Each policy set functions as a "rule book" evaluated from the top down. Once a r
 #### Policy - Results - Authentication
 Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
 ##### Allowed Protocols
-After the conditions are matched in a top-level rule,  ISE determines what authentication protocols are permitted for that policy set.
+After the conditions are matched in a top-level rule,  ISE determines what authentication protocols are permitted for that policy set. If the user send a authentication request that is not in the allowed protocol, the request is denied.
 
 <strong>Policy > Policy Elements > Results > Authentication > Allowed Protocols</strong>
 
@@ -285,6 +286,8 @@ In the current deployment:
 - PEAP MSCHAPv2 for occasional clients
 - PEAP EAP-TLS for Admin Users with non domain computers
 - TEAP for default Domain Users
+
+The allowed protocols definition:
 ###### Extensible Authentication Protocols 
 - <strong>PAP</strong>: With <strong>Password Authentication Protocol</strong> (<strong>PAP</strong>), the username is sent in plaintext, and the password is optionally encrypted.
   
