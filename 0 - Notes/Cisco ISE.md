@@ -296,6 +296,8 @@ When a device connects to a switch port configured for 802.1X/MAB, the following
 5. **Authorization**: Based on your configured **Policy Sets**, ISE sends back a RADIUS Access-Accept with specific permissions, such as a VLAN assignment or a Downloadable ACL (dACL).
 
 In the current deployment even if the MAB check fails, the server ISE allow the authentication request to continue to the authorization policies, where they will be met with [[#Guest Redirect|Guest Redirect]] Authorization Policy. 
+
+The conditions for MAB is the [[#Smart Conditions|predefined Wired_Mab]].
 ##### Dot1X (802.1X)
 Dot1X (802.1X) should be the most used/default authentication policy. 
 It's the authentication where the client has a supplicant ([[#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] to authenticate itself.
