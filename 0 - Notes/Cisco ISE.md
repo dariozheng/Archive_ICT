@@ -289,7 +289,17 @@ Authorization Profiles are reusable policy objects that define the specific acce
 
 ![[Pasted image 20260512124255.png]]
 
-The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends a ACCESS_ACCEPT with the DACL Pre-Auth that limit the computer to Internet, Domain Controller and Certificate Authority.
+The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends a ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit the computer to Internet, Domain Controller and Certificate Authority.
+
+This DACL is used for computer that have authenticated with machine certificate but not with user certificate for various reasons:
+- The user is not logged-on, so the user certificate is not available
+- There change in user happening 
+- The user does not have a certificate enrolled
+- ect
+
+For these case the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+
+###### Vlan_802_Lan_Client
 ##### Downloadable ACLs
 They are Access Lists that are configured on the server ISE and are meant to be sent dynamically to the NAD that calls it. 
 
