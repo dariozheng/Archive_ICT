@@ -238,8 +238,12 @@ The SNMP Settings section is where the SNMP community for the NAD is configured,
 ## Policy 
 In Policy section are defined the Policy Sets, Dictionaries, Conditions and Results. 
 ### Dictionaries
+Cisco ISE dictionary attributes are pre-defined or custom RADIUS and system-level parameters used to create policy conditions, such as device type, user group, or location, for authentication and authorization. These attributes, found in <strong>Policy > Policy Elements > Dictionaries</strong>, allow network admins to build granular policies
+
+![[Pasted image 20260512145615.png]]
 
 ### Conditions
+
 ### Policy Sets
 
 ![[Pasted image 20260512103918.png]]
@@ -311,7 +315,7 @@ It sends the VLAN for clients and the re-authentication timer.
 
 ![[Pasted image 20260512143139.png]]
 
-The Redirect_Guest_Wired is the first Authorization Profile for guest users. 
+The Redirect_Guest_Wired is the first Authorization Profile for guest users, it send a redirection URL to the CWA guest portal.  
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
 - <strong>Tunnel-Private-Group-ID</strong> = 1:805 : VLAN 805
 - <strong>Tunnel-Type = 1:13</strong> : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
