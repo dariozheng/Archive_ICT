@@ -105,7 +105,8 @@ Allowed Domains set the scope for identity extraction, here it's set to everythi
 In this section it's possible to retrieve groups from Active Directory and use them as attributes for Policy Sets
 ![[Pasted image 20260508113546.png]]
 ### Identity Source Sequences
-Identity Source Sequences (ISS) compile a list of identity stores and it's used by Policy Sets to define which identity store to use for which policy. It includes the selection of Certificate Authentication Profile. 
+Identity Source Sequences (ISS) checks a series of identity sources from top to bottom, enabling a single authentication rule to check several identity sources instead of just one. It includes the selection of Certificate Authentication Profile. 
+
 ![[Pasted image 20260508113927.png]]
 
 ![[Pasted image 20260508113958.png]]
@@ -234,12 +235,13 @@ Each NAD object must be configured with one or more IP addresses. Each NAD can b
 ![[Pasted image 20260505125842.png]]
 
 The SNMP Settings section is where the SNMP community for the NAD is configured, the ISE will use this to query the NAD for profiling attributes such as CDP and LLDP cache information. The SNMP setting should be configured only for device that do not use the device sensor to send ISE profiling data within RADIUS accounting packets.
-## Policy Sets
-In Policy Sets are defined policies flow to authenticate the clients.  
+## Policy 
+In Policy section are defined the Policy Sets, Dictionaries, Conditions and Results. 
+### Dictionaries
+### Conditions
+### Policy Sets
 
-
-
-
+### Results
 
 # Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
