@@ -248,9 +248,7 @@ In Policy section are defined the Policy Sets, Dictionaries, Conditions and Resu
 #### Policy - Results - Authentication
 Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
 ##### Allowed Protocols
-After the conditions are matched in a top-level rule, the rule then determines what authentication protocols are permitted for that policy set.
-
-The Default Network Access list of allowed protocols has almost every supported authentication protocol selected.
+After the conditions are matched in a top-level rule,  ISE determines what authentication protocols are permitted for that policy set.
 
 <strong>Policy > Policy Elements > Results > Authentication > Allowed Protocols</strong>
 
@@ -284,9 +282,8 @@ In the current deployment:
 	-  <strong>TEAP</strong>: It enables secure communication between a peer and server using TLS to establish a mutually authenticated tunnel. EAP-Chaining is possible.
 #### Policy - Results - Authorization
 Authorization Results are the results for each authorization policy. 
-They can be Authorization Profiles or Downloadable ACLs. 
 ##### Authorization Profiles
-
+Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy.
 ![[Pasted image 20260512122923.png]]
 
 ##### Downloadable ACLs
