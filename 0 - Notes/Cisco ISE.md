@@ -163,9 +163,10 @@ In a Cisco dominant environment the default network device profile for Cisco is 
 
 ![[Pasted image 20260505110209.png]]
 
-It’s possible to set the conditions for which, based on the attributes received on the header the packet is considered a Wired, Wireless, MAB, 802.1X connection.
+It’s possible to set the conditions for which, based on the attributes received on the header, the packet is considered a Wired, Wireless, MAB, or 802.1X connection.
 ##### Flow Type Conditions
 Enter the attributes and values that your device uses for the various flows like <strong>Wired MAB</strong>, <strong>802.1X</strong>, in the <strong>Flow Type Conditions</strong> section. This is necessary for ISE to detect the right flow type for your device according to the attributes it uses.
+
 <strong>Radius:Service-Type</strong> indicate if the packet is a Ethernet or a Wireless packet.
 <strong>Radius:NAS-Port-Type</strong> determine if the authorization protocol is a <strong>Call Check</strong> (Use MAB) <strong>Framed</strong> (Use 802.1X) or <strong>Login</strong> (Web Portal).
 ##### Attribute Aliasing
@@ -243,6 +244,18 @@ Cisco ISE dictionary attributes are pre-defined or custom RADIUS and system-leve
 ![[Pasted image 20260512145615.png]]
 
 ### Conditions
+Cisco ISE policy conditions are rule-based elements (attributes, operators, values) used to define network access, profiling, posture, and guest services. They enable granular control, allowing policies based on user identity, device type, location, or time. Conditions can be Simple (one attribute) or Compound (combined using AND/OR) and are managed within the Conditions Studio
+#### Library Conditions
+Cisco ISE <strong>library conditions</strong> are pre-configured, reusable policy elements found under <strong>Policy > Policy Elements > Conditions</strong>. They allow administrators to define complex logic once (e.g., specific device types, time ranges, or location attributes) and reuse them across multiple authorization policies, simplifying policy management and reducing errors.
+
+![[Pasted image 20260512150602.png]]
+
+#### Smart Conditions
+Cisco ISE smart conditions are pre-defined, intelligent policy building blocks designed to simplify rule creation by abstracting complex RADIUS attribute-value pairs into human-readable, usable logic. These RADIUS attribute-value pairs are mapped from [[#Authentication/Authorization|Network Device Profiles]] 
+
+![[Pasted image 20260512145913.png]]
+
+![[Pasted image 20260512150521.png]]
 
 ### Policy Sets
 
