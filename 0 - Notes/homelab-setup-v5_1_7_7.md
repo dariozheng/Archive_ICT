@@ -1,4 +1,124 @@
-# Homelab Setup Guide v5.1.7.6 — Ubuntu Server 24.04 LTS on Raspberry Pi 5
+# Homelab Setup Guide v5.1.7.7 — Ubuntu Server 24.04 LTS on Raspberry Pi 5
+
+> **Bug-fix changelog (v5.1.7.7):**
+> - Top-of-doc revision-notes chain: deleted. Every `**Revision notes vs vX:**` line was a one-liner pointer of the form "N bugs fixed (see vY changelog below)", adding nothing the corresponding changelog block right below it didn't already say in more detail. The chain grew by one entry per release and had become pure bloat. Fixes #81 (added missing v5.1.7.2 line) and #84 (added missing v5 + v5.1 lines) were correctly applied to the doc state at the time; the text they edited is now gone wholesale, but their numbered fix entries remain in the historical changelog as written (fix #91)
+
+> **Bug-fix changelog (v5.1.7.6):**
+> - Revision notes header: added missing `Revision notes vs v5:` and `Revision notes vs v5.1:` lines between the `vs v4.1` and `vs v5.1.3` entries — both v5.1 (changelog block with 23 fixes #9–#31) and v5.1.3 (changelog block with 15 fixes #32–#46) were real releases with their own blockquote changelogs and summary tables, but the top-of-doc chain of revision notes jumped straight from "vs v4.1" → "vs v5.1.3" with no headers describing what changed in v5.1 (vs v5) or v5.1.3 (vs v5.1); fix #81's claim that "every other version in the chain has a corresponding header" was therefore inaccurate when applied to the broader chain (fix #84)
+> - Changelog formatting: removed two extra blank lines between the v5.1.7.4 and v5.1.7.3 changelog sections — three consecutive blank lines had been introduced when the v5.1.7.4 changelog block was inserted in v5.1.7.4 and survived through v5.1.7.5; only a single blank line is used as a section separator everywhere else in the changelogs (same class of bug as fix #75 fixed for v5.1.4/v5.1.3) (fix #85)
+> - §12 backup script trap comment: updated the prose list of services that would otherwise be left stopped to include `mosquitto` — the comment listed "Pi-hole, HA, NPM, Portainer, and Kuma" (5 services) but `STOP_LIST` has had `mosquitto` in it since fix #56 (v5.1.6), giving 6 services; same class of doc-lag-behind-code bug as fix #48 and fix #79 (fix #86)
+> - §10 Mosquitto bind mount: removed `:ro` from the `mosquitto.passwd` mount and added a pre-deploy `touch` step — the existing instructions tell the user to populate the password file via `docker exec -it mosquitto mosquitto_passwd -c /mosquitto/config/mosquitto.passwd <user>`, which is a write operation that fails with EACCES on a read-only mount; additionally, without a pre-deploy `touch`, Docker auto-creates the bind-mount source as a *directory* on first deploy, causing Mosquitto's config parse to fail (same class as fix #44 fixed for relative paths) (fix #87)
+> - §3 directory mkdir: added `portainer` to the brace expansion in `mkdir -p /opt/{...}` — the §15 directory tree showed `/opt/portainer/` (with a "no compose file — bootstrapped via docker run" note) but `/opt/portainer` was never actually created on disk because it was missing from the `mkdir` line; either the directory had to exist or the §15 tree had to drop the row — chose the former to match the existing §15 documentation (fix #88)
+> - §3 DOCKER-USER prose: corrected "binding admin ports to `127.0.0.1`, which we do from §6 onward" → "from §3 onward" — Portainer's own `docker run` in §3 already binds to `127.0.0.1:9443:9443`, so the loopback-binding pattern starts in §3, not §6; the prose lagged the code (fix #89)
+> - §13 health push script: replaced `[ "$CRIT" = "0x00" ]` with `[ "$((CRIT))" -eq 0 ]` — the strict string match flagged a healthy drive as critical whenever `smartctl` emitted the Critical Warning value as bare `0` instead of `0x00` (which it does on some smartmontools versions, depending on output style); arithmetic expansion normalizes both `0` and `0x00` (and any other hex value) to an integer, so a real critical warning still produces a non-zero result and the comparison still flips the monitor to `down` (fix #90)
+
+> **Bug-fix changelog (v5.1.7.5):**
+> - Revision notes header: added missing `Revision notes vs v5.1.7.2:` line between the `vs v5.1.7.1` and `vs v5.1.7.3` entries — v5.1.7.3 was a released version with its own changelog block and summary table, but the top-of-doc chain of revision notes jumped straight from v5.1.7.1 to v5.1.7.3, with no header describing what changed in v5.1.7.3 vs v5.1.7.2; every other version in the chain has a corresponding header (fix #81)
+> - §4 `protonvpn.conf` MTU comment: rewrote the math/rationale paragraph — fix #72 added a comment that asserted "keeping wg0 below 1320 - 60 = 1260 prevents the stacked packet from exceeding 1320 and causing fragmentation" and then closed with "1280 is the safe floor (IPv6 minimum MTU)", silently contradicting itself since 1280 is *not* below 1260; the comment now states explicitly that strict no-fragmentation would need wg0 ≤ 1260, that 1280 is the IPv6 minimum below which IPv6 breaks on the interface, and that 1280 is therefore a deliberate trade-off (slight PMTU-discovery noise in exchange for keeping IPv6 working) (fix #82)
+> - v5.1.7.3 changelog text + summary table: corrected the fix #76 entry's per-invocation arithmetic — the original wording said "all four `curl` calls" (correct count in the script) but then claimed "with three calls that is up to 6 minutes per invocation"; the script's `if/else` structure means exactly two calls fire per invocation (one of the SoC branches, one of the NVMe branches), so the worst-case stall is closer to ~4 minutes, not 6; same wording was mirrored in the v5.1.7.3 summary table near the end of the doc and was corrected there too (fix #83)
+
+> **Bug-fix changelog (v5.1.7.4):**
+> - §3 `docker-user-rules.sh`: added `ip6tables` DOCKER-USER chain rules to mirror the existing `iptables` block — containers that bind to `::` (IPv6 all-interfaces) were not covered by the IPv4-only rules, leaving the DOCKER-USER lockdown entirely ineffective for IPv6; added `RELATED,ESTABLISHED`, `wg0`, ULA (`fc00::/7`), and loopback (`::1/128`) RETURN rules followed by DROP; also updated the post-install verification command to check both `iptables` and `ip6tables` chains (fix #77)
+> - §12 `homelab-backup-notify@.service`: added `--max-time 10` to the Telegram `curl` call — fix #76 added timeouts to the health push script but the notify service had the identical problem; an unreachable `api.telegram.org` causes the notify unit to hang indefinitely, blocking systemd's failure-handling path (fix #78)
+> - §12 Restore drill: added `/etc/ssh` restore and `ls` verification step — `/etc/ssh` (including `sshd_config.d/99-hardening.conf`) is backed up by the restic invocation but was never included in the drill; updated the prose count from \"five\" to \"six\" config paths (fix #79)
+> - §13 Health push script: removed stale `FIX #49` comment from the sysfs-unreadable `else` branch — the comment explained that `--cacert` is unnecessary on plain HTTP, which is true of the main code path but irrelevant inside the error branch; the correct explanation belongs on the `KUMA_BASE` declaration, where it already appears (fix #80)
+
+> **Bug-fix changelog (v5.1.7.3):**
+> - §5.1 changelog: added missing fix #24 entry — fix #24 (removing `-k` from the §14 functional test `curl` call) appeared in the v5.1 summary table and was correctly applied to the document, but was never logged in the v5.1 changelog text, leaving a gap between #23 and #25; the summary also claimed "23 new fixes" while the changelog only listed 22 (fix #73)
+> - Changelog headers: added missing `v5 bug-fix summary` section — the revision notes for v4 and v4.1 both reference "see v5 bug-fix changelog below" but no such section existed; the five structural changes made in the v5 rewrite had no corresponding changelog entry, leaving two broken cross-references (fix #74)
+> - Changelog formatting: removed two extra blank lines between the v5.1.4 and v5.1.3 changelog sections — three consecutive blank lines had survived since fix #31 (which removed a double blank line elsewhere); only a single blank line is used as a section separator everywhere else in the changelogs (fix #75)
+> - §13 Health push script: added `--max-time 5` to all four `curl` calls — the script runs every 60 seconds via cron; without a timeout, a temporarily unresponsive Kuma causes each `curl` to block for curl's default connect timeout (~2 minutes per call); the script's `if/else` structure means exactly two calls fire per invocation (one of the SoC branches, one of the NVMe branches), giving up to ~4 minutes per invocation; successive cron firings then pile up processes that do not resolve until Kuma recovers (fix #76)
+
+> **Bug-fix changelog (v5.1.7.2):**
+> - §12 `v5.1.7.1 bug-fix summary` table: corrected "4 new fixes" → "7 new fixes" — the table lists fixes #62–#68 (seven entries) and the revision header on line 15 also says "seven", but the summary table header was never updated from an earlier draft count (fix #69)
+> - §12 `homelab-backup-notify@.service`: added `After=network-online.target` and `Wants=network-online.target` — a backup failure that occurs very early at boot (before the network stack is ready) causes the `curl` to `api.telegram.org` to fail with a connection error; the failure is swallowed silently and no Telegram notification is sent (fix #70)
+> - §12 Restore drill: moved all five `ls` verification steps inside the `sudo bash -c` block — running them outside as the `pi` user means they execute even if a restore failed early and left the target dir empty or partial; since `/tmp` is world-readable, `ls` on a non-existent or empty path would appear to succeed, giving false confidence (fix #71)
+> - §4 `protonvpn.conf` MTU comment: added explanation that 1320 is ProtonVPN's server-imposed ceiling, why it differs from wg0's 1280 (stacked encapsulation overhead), and what to do if the ISP path MTU is below 1320 (PPPoE links) — previously the value appeared with no comment while wg0's MTU had a detailed explanation, leaving readers without context on the relationship between the two values (fix #72)
+
+> **Bug-fix changelog (v5.1.7.1):**
+> - §5 wg0 server config: lowered `MTU` from `1320` to `1280` — at 1320 the wg0 encapsulation overhead (~60 B) pushes packets past protonvpn's own 1320-byte MTU, causing fragmentation or silent large-transfer stalls; 1280 is the IPv6 minimum MTU and the safe floor for a wg0-inside-protonvpn stack (fix #62)
+> - §5 wg0 client config: added `fd00:10:10::1` to the `DNS` field and aligned client `MTU` to `1280` — with `AllowedIPs = ::/0`, all IPv6 traffic routes through the tunnel; IPv6-first OSes (iOS, Android, macOS) attempt DNS over IPv6 and bypass Pi-hole entirely if only the IPv4 address is listed, leaking DNS to the carrier resolver (fix #63)
+> - §12 Backup script: added `/etc/cloud/cloud.cfg.d` to the restic backup paths — fix #41 added the cloud-init network-management disable step but its config file was never backed up; a restic-only restore loses it, causing cloud-init to overwrite `50-cloud-init.yaml` with DHCP on the next reboot (fix #64)
+> - §13 Health push script: added `else` branch to the NVMe device check — when `$NVME_DEV` doesn't exist (wrong path, USB SSD, forgotten update) no push was sent; Kuma's push monitor heartbeat expired silently and showed "down" with no message, indistinguishable from a real SMART failure; now pushes `status=down` with a clear "not found" message (fix #65)
+> - §15 MTU verification: corrected stale description — fix #62 set wg0 to MTU 1280 but the §15 prose still said "both tunnels are MTU 1320"; updated the ping probe range and the threshold guidance to match the new values; also corrected the troubleshooting table row that still said "lower MTU to 1280" (fix #66)
+> - §12 `homelab-backup.service`: added `Requires=docker.service` — `After=` alone only orders startup; if Docker is manually stopped, the backup fires at 04:00, `docker volume ls` returns nothing, the volume-tarball loop produces no files, and restic completes successfully with only `/opt` and config files — a silent partial backup with a green exit code and no notification (fix #67)
+> - §12 Restore drill: added `/etc/cloud/cloud.cfg.d` restore and `ls` step — fix #64 added this path to the backup but the drill was never updated; a drill that doesn't verify the cloud-init disable file gives false confidence that a restore will land with static IP intact (fix #68)
+
+> **Bug-fix changelog (v5.1.7):**
+> - §13 Health push script: removed stale `--cacert /opt/step-ca/homelab-root-ca.crt` from all three `curl` calls — fix #49 changed `KUMA_BASE` to `http://127.0.0.1` (plain HTTP); curl silently ignores `--cacert` on plain HTTP connections; the flag was dead code and its TLS/MITM rationale no longer applies to a loopback call (fix #57)
+> - §3 DOCKER-USER chain: added `iptables -A DOCKER-USER -s 127.0.0.0/8 -j RETURN` before the DROP — host-to-container traffic on loopback (health push to `127.0.0.1:3001`, `docker run` calls in the backup volume loop) has source `127.x.x.x` which is not matched by the `172.16.0.0/12` inter-container rule and was silently DROP'd (fix #58)
+> - §10 Mosquitto: corrected port binding comment — port is bound to `192.168.70.5:1883` (LAN interface only); nothing listens on `127.0.0.1:1883`; HA must connect to `192.168.70.5`, not `localhost` (fix #59)
+> - §2 Unattended upgrades: changed `Automatic-Reboot-Time` from `03:00` to `02:00` and added note explaining the conflict — the backup timer runs at `04:00` with `Persistent=true`; a reboot finishing close to 04:00 can trigger the backup before containers are healthy; 02:00 provides a clean two-hour margin (fix #60)
+> - §15 gitleaks: replaced `pip install --user pre-commit` with `pipx install pre-commit` — Ubuntu 24.04 enforces PEP 668 and `pip install` outside a virtual environment exits with "externally-managed-environment"; `pipx` is the Ubuntu-recommended approach and handles its own isolated environment (fix #61)
+
+> **Bug-fix changelog (v5.1.6):**
+> - §5 Client config: corrected `Address = 10.10.0.2/24, fd00:10:10::2/64` → `/32, /128` — using subnet masks on the client `Address` field tells the WireGuard interface it owns the entire subnet locally, causing the client to bypass the tunnel for peer-to-peer VPN traffic and potentially conflicting with the client device's routing table; host masks (`/32`, `/128`) are correct and consistent with the `AllowedIPs` in the server's `[Peer]` blocks (fix #52)
+> - §12 `homelab-backup.service`: added `[Install]` section with `WantedBy=multi-user.target` — without it `systemctl enable homelab-backup.service` fails with "Unit file has no [Install] section"; the timer remains the correct activation path but the section prevents confusing errors during troubleshooting (fix #53)
+> - §15 UFW deny note for HA port 8123: corrected wrong claim that "NPM reaches it via the host loopback" — NPM is a container on the `172.31.x.x` Docker bridge and reaches HA at `192.168.70.5:8123`; the conclusion (rule won't break NPM) was coincidentally correct but the stated reason was wrong (fix #54)
+> - §12 Backup script: pinned `alpine` → `alpine:3.21` in the volume tar loop — the only unpinned image in the guide; an implicit `:latest` pull during a backup run could silently change behaviour on an Alpine major bump or fail if the registry is temporarily unavailable (fix #55)
+> - §12 Backup script: added `mosquitto` to `STOP_LIST` — Mosquitto has an active broker writing to its data volume; listing it is safe unconditionally because `docker stop` is a no-op for containers that aren't running (fix #56)
+
+> **Bug-fix changelog (v5.1.5):**
+> - §13 Health push script: changed `KUMA_BASE` from `https://kuma.berrypi5.lan/api/push` to `http://127.0.0.1:3001/api/push` — the NPM/DNS chain requires Pi-hole and NPM to be running; the loopback URL hits Kuma directly and keeps pushes working when either is down or quiesced during a backup run (fix #49)
+> - §12 Backup script: changed `/etc/systemd/system/homelab-backup.service.d` (directory) to `/etc/systemd/system/homelab-backup.service.d/notify.conf` (explicit file) — all other systemd unit entries in the backup path list individual files; backing up the directory works but is inconsistent and could pick up unrelated drop-ins added by other packages (fix #50)
+> - §15 Troubleshooting: added `cd /opt/<service> &&` to the Watchtower rollback fix — the `docker compose` commands require a compose file in the working directory; without the `cd`, the command fails silently with "no configuration file provided" if run from any other directory (fix #51)
+
+> **Bug-fix changelog (v5.1.4):**
+> - §12 Backup failure notifications: changed `OnFailure=homelab-backup-notify@%n.service` to `@%p.service` — `%n` expands to the full unit name including its `.service` suffix (`homelab-backup.service`), producing the invalid instance `homelab-backup-notify@homelab-backup.service.service` and silently failing to trigger the notification on backup failure (fix #47)
+> - §12 Restore drill: corrected "three config dirs" to "four" — fix #35 added `/etc/sysctl.d` to the drill, making it four directories (wireguard, netplan, chrony, sysctl.d), but the prose description was never updated (fix #48)
+
+> **Bug-fix changelog (v5.1.3):**
+> - §12 Backup script: replaced `for vol in $(docker volume ls -q)` with `mapfile -t VOLUMES < <(docker volume ls -q)` + `for vol in "${VOLUMES[@]}"` — the original command word-splits on volume names containing spaces or special characters, silently skipping them (fix #32)
+> - §3 daemon.json: changed `default-address-pools` base from `172.17.0.0/16` to `172.20.0.0/14` — `172.17.x` is Docker's own `docker0` bridge address; using it as the auto-allocation pool risks collisions with the pre-existing bridge on restart (fix #33)
+> - §13 Kuma push monitors: added explicit note to set each Push monitor's heartbeat interval to ≥60s — the cron fires every 60s, and a shorter heartbeat causes false "down" alerts between pushes (fix #34)
+> - §12 Restore drill: expanded to also restore and verify `/etc/netplan`, `/etc/chrony`, and `/etc/sysctl.d` — the original only tested `/etc/wireguard`, leaving critical config dirs unverified (fix #35)
+> - §3 Portainer: moved the "no `-v /var/run/docker.sock`" explanation to a callout *before* the `docker run` command rather than a note after it — readers scanning the command block need the context before running it (fix #36)
+> - §15 troubleshooting table: replaced `sudo ip rule flush` with targeted `ip rule del priority 50/51` — `ip rule flush` deletes kernel-default rules at priorities 0/32766/32767, breaking all routing until reboot (fix #37)
+> - §8 NPM proxy hosts: added "Ignore Certificate" warning for `stepca.berrypi5.lan` — Step-CA's backend is HTTPS with a cert that NPM may not automatically trust, same as Portainer; missing this causes a 502 (fix #38)
+> - §12 Backup script: added `/etc/sysctl.d`, `/etc/cron.d`, `/usr/local/bin/homelab-*.sh`, `/usr/local/bin/docker-user-rules.sh`, and the homelab systemd unit files to the restic backup paths — previously only in git, leaving a restic-only restore incomplete (fix #39)
+> - §2 Hostname: restored `::1 localhost` entries stripped by the original `echo` command — removing IPv6 loopback from `/etc/hosts` breaks IPv6 loopback resolution for Docker and some HA integrations (fix #40)
+> - §2 Static IP: added `echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg` step after `netplan apply` — without this cloud-init regenerates `50-cloud-init.yaml` on boot and reverts the Pi to DHCP, losing the static IP and breaking every dependent service (fix #41)
+> - §10 Mosquitto: snippet was missing the top-level `volumes:` entries for `mosquitto-data` and `mosquitto-log`; without them `docker compose up` fails with "volume not declared"; also added note that HA reaches Mosquitto via localhost since both use host networking (fix #42)
+> - §7 Step-CA: added `localhost` and `127.0.0.1` to `DOCKER_STEPCA_INIT_DNS_NAMES` — the guide directs bootstrap access via `https://127.0.0.1:9000` over SSH tunnel but the TLS cert lacked those SANs, causing x509 validation failure (fix #43)
+> - §10 Mosquitto: changed relative bind-mount paths (`./mosquitto.conf`, `./mosquitto.passwd`) to absolute paths (`/opt/homeassistant/…`) — Portainer's web-editor working directory is `/`, so relative paths resolved to `/mosquitto.conf` and Docker created a directory instead of a file, causing Mosquitto to fail on config parse (fix #44)
+> - §13 Health push script: removed `-k` (skip-TLS-verify) from all three `curl` calls and replaced with `--cacert /opt/step-ca/homelab-root-ca.crt` — `-k` silently disabled TLS verification on every push, making the calls susceptible to local MITM; the root CA is already on disk from §7 so no system-wide CA install is required (fix #45)
+> - §12 Backup script: renamed `TMPDIR` variable to `STAGING` — `TMPDIR` is the POSIX standard env var that programs (including restic) consult when creating their own temp files; with the old name, restic wrote pack-assembly scratch into the staging dir and those files were included in every snapshot, inflating backup size (fix #46)
+
+> **Bug-fix changelog (v5.1):**
+> - §6 Pi-hole admin URL: replaced `http://192.168.70.5:8080/admin` (unreachable — port is loopback-only) with SSH tunnel instructions for pre-NPM access (fix #9)
+> - §12 Backup script: added `TMPDIR` cleanup to the trap so a mid-run failure doesn't leave GB-sized volume tarballs in `/tmp/` indefinitely; also moved `TMPDIR=$(mktemp -d)` before the trap so the variable is always in scope when the trap fires (fix #10)
+> - §2 systemd-resolved: removed stale "no chattr" from heading and intro sentence — the body correctly uses `chattr +i` after setup; heading was a carry-over from v1 (fix #11)
+> - §12 restic init: moved admin-key warning to *before* the init steps and restructured the block so the write-only env file and admin-key init path are unambiguously separate (fix #12)
+> - v4 changes summary: added Watchtower `1.7.1` to the image-pins table, which listed all other pinned images but omitted it (fix #13)
+> - Header: corrected "Revision notes vs v5" → "vs v4.1" (fix #14)
+> - §6 Pi-hole compose: corrected `FTLCONF_webserver_port: "8080o"` (invalid) → `"8080"` with explicit `FTLCONF_webserver_tls_port: "-1"` to disable container-level HTTPS (fix #15)
+> - §12 Backup script: removed redundant `rm -rf "$TMPDIR"` after restic — the EXIT trap already handles cleanup on all paths; switched trap to double-quoted expansion to be safe under `set -u` (fix #16)
+> - §3 + §15 Portainer: added `-e DOCKER_HOST=tcp://docker-socket-proxy:2375` to both the initial `docker run` and the update command in §15; updated first-run wizard note accordingly (fix #17)
+> - §5 wg0.conf: clarified that ip6tables FORWARD rules are unconditional — comment previously implied they were optional like the MASQUERADE rule (fix #18)
+> - §3 daemon.json: added `default-address-pools` to prevent Docker's auto-allocator colliding with the manually-pinned `proxy-net` (`172.31.0.0/24`) and `dns-net` (`172.30.0.0/24`) subnets (fix #19)
+> - §2 + §6 systemd-resolved: moved `chattr +i /etc/resolv.conf` out of the §2 early-setup block (where it would block netplan/cloud-init) into a new deferred step at the end of §6 after Pi-hole is confirmed working (fix #20)
+> - §10 Mosquitto: added warning that `mosquitto_passwd -c` overwrites the password file — must not be used when adding a second user (fix #21)
+> - §3 Docker install: added warning that `newgrp docker` only affects the current shell; a fresh login is needed before running `docker` commands without `sudo` in other terminals (fix #22)
+> - §11 DDNS: fixed typo "fastback-up" → "fallback" (fix #23)
+> - §14 Functional tests: removed `-k` from `curl -k https://ha.berrypi5.lan` — `-k` suppresses TLS errors, defeating the entire point of the test (verifying the root CA is trusted on the client); added inline comment explaining the check is intentionally strict (fix #24)
+> - §9 gateway table: renamed "Option C" → "Option B" — the table jumped from A to C after an earlier edit removed Option B (fix #25)
+> - §15 Ubuntu gotchas: updated `chattr +i` cross-reference from "(see §2)" → "(see §6)" following fix #20 (fix #26)
+> - §12 restore drill: added `sudo bash -c '...'` wrapper — `/root/.restic-env` is `chmod 600` root-only; running `source` without sudo gives "Permission denied" for the `pi` user (fix #27)
+> - §15 troubleshooting table: fixed `docker compose pull && up -d` → `docker compose pull && docker compose up -d` — `up -d` alone is not a valid command (fix #28)
+> - §3 container startup order: moved `docker-socket-proxy` before Portainer — Portainer's `DOCKER_HOST` env var points at the proxy and attempts to connect immediately on start; proxy must exist first (fix #29)
+> - §13 health script: added empty-value guard around `TEMP_MC` — if sysfs is unreadable, the unguarded `awk` arithmetic produced a syntax error; script now reports "down" with a clear message instead of crashing (fix #30)
+> - §2 formatting: removed double blank line left by the `chattr` relocation in fix #20 (fix #31)
+
+> **Bug-fix changelog (v4.1):**
+> - §7 Step-CA: added `step-ca` to `DOCKER_STEPCA_INIT_DNS_NAMES` — without it NPM's ACME client fails x509 hostname validation when connecting to `https://step-ca:9000` (fix #1)
+> - §4 IPv6 kill switch: added `ip6tables -A PROTON_KS -o wg0 -j RETURN` and `fd00:10:10::/64` exemption — without them the Pi host couldn't reach wg0 peers over IPv6 while Proton was running (fix #2)
+> - §8 NPM: replaced one-off `docker exec npm update-ca-certificates` with an `entrypoint:` override that re-runs it on every container start — previously the trust bundle was wiped on any container recreate, silently breaking ACME (fix #3)
+> - §12 Backup script: added `trap 'docker start …' EXIT` so quiesced services are always restarted even when the script exits early due to a failure (fix #4)
+> - §3 DOCKER-USER chain: removed the unreachable `iptables -A DOCKER-USER -j RETURN` that followed a terminal `DROP` (fix #5)
+> - §3 docker-socket-proxy: added `-e DELETE=1` so Watchtower's `WATCHTOWER_CLEANUP: "true"` can actually delete old images; without it old image layers accumulate on the SSD (fix #6)
+> - §15 troubleshooting table: removed the stale "don't chattr +i" note that contradicted §2's deliberate use of it after setup (fix #7)
+> - §13 Watchtower: added the opt-in label to an example service (Kuma) and a note explaining `WATCHTOWER_LABEL_ENABLE` requires it — previously Watchtower ran every Sunday and did nothing (fix #8)
+
 ## Network Info
 
 | Setting | Value |
@@ -1977,3 +2097,197 @@ Now every `git commit` runs gitleaks; a hit blocks the commit until you redact.
 `/opt/*/docker-compose.yml`, `/etc/netplan/50-cloud-init.yaml`, `/etc/sysctl.d/99-homelab.conf`, `/etc/ssh/sshd_config.d/99-hardening.conf`, `/etc/chrony/chrony.conf`, `/etc/wireguard/protonvpn-up.sh`, `/etc/wireguard/protonvpn-down.sh`, `/usr/local/bin/homelab-backup.sh`, `/usr/local/bin/homelab-health-push.sh`, `/usr/local/bin/docker-user-rules.sh`, `/etc/systemd/system/docker-user-rules.service`, `/etc/cron.d/homelab-health`, the rest of the systemd unit files, and a sanitised version of `wg0.conf` (keys redacted). Commit the lot to a private GitHub repo with `gitleaks` as a pre-commit hook. Restic handles the rest (data); git handles the recipe.
 
 Keep the on-disk compose files in sync with what you paste into Portainer. The easiest habit: edit the file on disk first, then paste the updated content into the Portainer stack editor. That way git always has the source of truth.
+
+---
+
+**v5.1 bug-fix summary** — the 5 fixes applied to v5 plus 23 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 9 | §6 Pi-hole | `http://192.168.70.5:8080/admin` is unreachable before NPM exists — port 8080 is bound to `127.0.0.1` only | Replaced with SSH-tunnel instructions for pre-NPM access |
+| 10 | §12 Backup | `trap` restarted containers but never cleaned up `$TMPDIR`; a mid-run `set -e` exit left GB-sized tarballs in `/tmp/`; also `TMPDIR` was created after the trap, so the variable could be unset when the trap fired | Moved `TMPDIR=$(mktemp -d)` before the trap; added `rm -rf "$TMPDIR"` to the trap body |
+| 11 | §2 systemd-resolved | Heading said "no chattr" and intro said not to use `chattr +i`, but the body correctly used it — stale text from v1 that was never updated when v4 reversed the decision | Rewrote heading and intro paragraph to match the actual instructions |
+| 12 | §12 restic init | Admin-key warning appeared *after* `restic init` was already invoked with the write-only key — users following top-to-bottom would hit the wrong credential order | Moved warning before the init steps; restructured into clearly separated write-only env block and admin-key init block |
+| 13 | v4 changes summary | Watchtower `1.7.1` was pinned in the compose file (§13) but absent from the end-of-document image-pins table used for quarterly review | Added `Watchtower 1.7.1` to the pins table |
+| 14 | Header | "Revision notes vs v5" was a self-reference — current doc IS v5; should read "vs v4.1" | Corrected to "vs v4.1" |
+| 15 | §6 Pi-hole compose | `FTLCONF_webserver_port: "8080o"` — the `o` suffix is not a valid Pi-hole v6 port specifier and would likely break the web server | Corrected to `"8080"` with explicit `FTLCONF_webserver_tls_port: "-1"` to disable container HTTPS |
+| 16 | §12 Backup script | Redundant `rm -rf "$TMPDIR"` on the success path after restic — EXIT trap already covers cleanup; also trap was single-quoted, deferring `$STOP_LIST` expansion to fire time, which is fragile under `set -u` | Removed redundant rm; switched trap to double-quoted expansion |
+| 17 | §3 + §15 Portainer | `-e DOCKER_HOST=tcp://docker-socket-proxy:2375` was missing from both the initial `docker run` and the §15 update command — after any container recreate, Portainer would lose its socket-proxy connection | Added env var to both commands; updated first-run wizard note |
+| 18 | §5 wg0.conf | Comment implied ip6tables FORWARD rules were optional (like the ip6tables MASQUERADE rule) — they are unconditional and always needed for the tunnel to carry IPv6 | Clarified comment; rules unchanged |
+| 19 | §3 daemon.json | `proxy-net` (`172.31.0.0/24`) and `dns-net` (`172.30.0.0/24`) sit inside Docker's default auto-allocation pool (`172.16.0.0/12`); Docker could auto-assign a new network the same prefix, silently breaking routing | Added `default-address-pools` to `daemon.json` (base `172.17.0.0/16` — later corrected to `172.20.0.0/14` by fix #33) |
+| 20 | §2 + §6 systemd-resolved | `chattr +i /etc/resolv.conf` was placed in the §2 early-setup code block, but running it there blocks netplan and cloud-init for the rest of initial setup — the inline comment even said "run after setup only" | Removed `chattr +i` from §2; added a new deferred "Pin resolv.conf" step at the end of §6 after Pi-hole is confirmed working |
+| 21 | §10 Mosquitto | `mosquitto_passwd -c` creates and overwrites the password file — using it to add a second user silently deletes the first; no warning was present | Added explicit warning; showed the no-`-c` form for adding subsequent users |
+| 22 | §3 Docker install | `newgrp docker` only applies the group to the current shell; other open terminals require a full logout/login before `docker` works without `sudo` | Added warning and recommended `exit` + re-SSH before continuing |
+| 23 | §11 DDNS | Typo "fastback-up" instead of "fallback" | Fixed |
+| 24 | §14 Functional tests | `curl -k https://ha.berrypi5.lan` suppresses TLS errors with `-k`, defeating the entire point of verifying the root CA is trusted on the client | Removed `-k`; added inline comment explaining the test is intentionally strict |
+| 25 | §9 gateway table | Table labels jumped from "Option A" to "Option C" — Option B had been deleted in an earlier edit but the label on C was never updated | Renamed "Option C" to "Option B" |
+| 26 | §15 Ubuntu gotchas | `chattr +i` cross-reference said "(see §2)" after the step was moved to §6 in fix #20 | Updated to "(see §6)" |
+| 27 | §12 restore drill | `source /root/.restic-env` shown without `sudo` — the file is `chmod 600` root-only; running as `pi` gives "Permission denied" | Wrapped commands in `sudo bash -c '...'` |
+| 28 | §15 troubleshooting table | `docker compose pull && up -d` — `up -d` is not a standalone command; would fail with "command not found" | Fixed to `docker compose pull && docker compose up -d` |
+| 29 | §3 container startup order | `docker run portainer` appeared before `docker run docker-socket-proxy`; Portainer's `DOCKER_HOST` env var points at the proxy and tries to connect immediately — proxy must exist first | Swapped order: docker-socket-proxy first, then Portainer; added explanatory note |
+| 30 | §13 health script | `TEMP_MC` had no guard against empty/unreadable sysfs output; an empty value caused `awk` arithmetic syntax error, silently crashing the script | Added empty-value check; script now pushes a "down" status with a clear message if sysfs is unreadable |
+| 31 | §2 formatting | Two consecutive blank lines left after removing `chattr +i` from §2 in fix #20 | Removed extra blank line |
+
+**v5.1.7.7 bug-fix summary** — 1 new fix:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 91 | Top-of-doc revision-notes chain | Each `**Revision notes vs vX:**` line was a pure pointer to the changelog block immediately below it ("N bugs fixed, see vY changelog below") — no unique information, growing by one line per release; pure bloat | Deleted the entire chain |
+
+**v5.1.7.6 bug-fix summary** — 7 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 84 | Revision notes header | Chain at top of doc jumped from `vs v4.1` straight to `vs v5.1.3` — both v5.1 (changelog block with 23 fixes #9–#31) and v5.1.3 (changelog block with 15 fixes #32–#46) were real releases with their own blockquote changelogs and summary tables, but no `vs v5` or `vs v5.1` headers existed in the chain to describe the v5→v5.1→v5.1.3 transitions; fix #81's claim that "every other version in the chain has a corresponding header" was inaccurate when applied to this gap | Inserted `Revision notes vs v5:` and `Revision notes vs v5.1:` lines between the `vs v4.1` and `vs v5.1.3` entries, in chronological position |
+| 85 | Changelog formatting | Three consecutive blank lines between the v5.1.7.4 and v5.1.7.3 changelog sections — introduced when the v5.1.7.4 changelog block was inserted in v5.1.7.4 and survived through v5.1.7.5; only a single blank line is used as a section separator everywhere else in the changelogs | Reduced to a single blank line, consistent with all other changelog section separators (same class of fix as #75) |
+| 86 | §12 backup script trap comment | Prose listed "Pi-hole, HA, NPM, Portainer, and Kuma" (5 services) as the things left stopped on a mid-backup failure, but `STOP_LIST` has had `mosquitto` in it since fix #56 (v5.1.6) — six services in total; doc lagged code | Updated comment to list six services including Mosquitto |
+| 87 | §10 Mosquitto bind mount | `mosquitto.passwd` mount declared `:ro`, but the §10 instructions immediately tell the user to populate the file via `docker exec -it mosquitto mosquitto_passwd -c /mosquitto/config/mosquitto.passwd <user>` — a write operation that fails with EACCES on a read-only mount; additionally, on first deploy without a pre-existing host file, Docker auto-creates the bind-mount source as a *directory*, causing Mosquitto's config parse to fail (same class as fix #44) | Dropped `:ro` from the `mosquitto.passwd` mount; added an explicit `touch` step before stack deploy and an explanatory note in the YAML comment about the trade-off |
+| 88 | §3 directory mkdir | `mkdir -p /opt/{dns,step-ca,npm,homeassistant,kuma,watchtower}` omitted `portainer` from the brace expansion, but the §15 directory tree at the end of the doc lists `/opt/portainer/` (with a "no compose file — bootstrapped via docker run" note); either the directory had to exist on disk or the §15 row had to be dropped | Added `portainer` to the brace expansion so the directory matches what §15 documents |
+| 89 | §3 DOCKER-USER prose | "Binding admin ports to `127.0.0.1`, which we do from §6 onward" — Portainer's own `docker run` in §3 already binds to `127.0.0.1:9443:9443`, so the loopback-binding pattern starts in §3, not §6; the prose lagged the code | Corrected to "from §3 onward" with a parenthetical noting Portainer as the first instance |
+| 90 | §13 health push script | `[ "$CRIT" = "0x00" ]` is a strict string match; some `smartctl` versions emit the Critical Warning value as bare `0` rather than `0x00`, which would flip a healthy drive's monitor to "down" as a false alarm | Replaced with `[ "$((CRIT))" -eq 0 ]` — arithmetic expansion normalizes both `0` and `0x00` (and any real warning bits) to an integer, preserving the broken-state behaviour while accepting both output formats |
+
+**v5.1.7.5 bug-fix summary** — 3 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 81 | Revision notes header | Missing `Revision notes vs v5.1.7.2:` line — the chain at the top of the doc jumped from `vs v5.1.7.1` straight to `vs v5.1.7.3`, even though v5.1.7.3 was a released version with its own changelog block and summary table; every other version in the chain had a corresponding header | Inserted the missing line between the `vs v5.1.7.1` and `vs v5.1.7.3` entries, in chronological position |
+| 82 | §4 `protonvpn.conf` MTU comment | Fix #72 added a comment that said "keeping wg0 below 1320 - 60 = 1260 prevents the stacked packet from exceeding 1320 and causing fragmentation" and then closed with "1280 is the safe floor (IPv6 minimum MTU)" — silently contradicting itself, since 1280 is not below 1260; readers were left to deduce that 1280 was a deliberate trade-off rather than a strict no-fragmentation value | Rewrote the paragraph to state the trade-off explicitly: strict no-fragmentation needs ≤1260; 1280 is the IPv6 minimum below which IPv6 breaks on wg0; we pick 1280 and accept slight PMTU-discovery overhead to keep IPv6 working |
+| 83 | v5.1.7.3 changelog text + summary table | Fix #76's entry was internally inconsistent — said "all four `curl` calls" (correct count in the script) but then claimed "with three calls that is up to 6 minutes per invocation"; the script's `if/else` structure means exactly two calls fire per invocation (one SoC branch + one NVMe branch), so the worst-case stall is ~4 minutes, not 6; same wording was mirrored in the v5.1.7.3 summary table | Corrected the per-invocation count to "two" and the worst-case duration to "~4 minutes" in both the changelog text and the summary table |
+
+**v5.1.7.4 bug-fix summary** — 4 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 77 | §3 `docker-user-rules.sh` | Only `iptables` rules were present; containers binding to `::` (IPv6 all-interfaces) bypassed the DOCKER-USER lockdown entirely on IPv6 | Added matching `ip6tables` block: RELATED,ESTABLISHED, wg0, ULA (`fc00::/7`), loopback (`::1/128`) RETURNs and a final DROP; updated verification command to check both tables |
+| 78 | §12 `homelab-backup-notify@.service` | `curl` call had no `--max-time`; an unreachable `api.telegram.org` caused the notify unit to hang indefinitely, blocking systemd's failure-handling path — the same class of bug fixed in the health script by fix #76 | Added `--max-time 10` |
+| 79 | §12 Restore drill | `/etc/ssh` is included in the restic backup but was never restored or verified in the drill; prose said "five config paths" | Added `restic restore … --include /etc/ssh` and matching `ls` step; updated prose count to "six" |
+| 80 | §13 Health push script | Stale `FIX #49` comment appeared inside the sysfs-unreadable `else` branch explaining that `--cacert` is unnecessary on plain HTTP — true, but irrelevant inside the error branch; the explanation already appears correctly on the `KUMA_BASE` declaration | Removed the misplaced comment from the error branch |
+
+**v5.1.7.3 bug-fix summary** — 4 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 73 | v5.1 changelog | Fix #24 (remove `-k` from §14 functional test curl) was in the summary table and applied to the doc, but absent from the changelog text — the sequence jumped #23 → #25; the "23 new fixes" header was correct against the table but misleading against the changelog | Added the missing changelog entry between #23 and #25 |
+| 74 | Revision notes (top of doc) | "Revision notes vs v4" and "vs v4.1" both said "see v5 bug-fix changelog below" — no such section existed; the five structural v5 changes had no changelog | Added `v5 bug-fix summary` table documenting the five v5 structural changes |
+| 75 | Changelog formatting | Three consecutive blank lines between v5.1.4 and v5.1.3 changelog sections — fix #31 removed a stray double blank line elsewhere but this one was missed | Reduced to a single blank line, consistent with all other changelog section separators |
+| 76 | §13 Health push script | All four `curl` calls had no `--max-time` — on a temporarily unresponsive Kuma, each call blocks for curl's default timeout (~2 min); the script's `if/else` structure means exactly two calls fire per invocation (one SoC branch + one NVMe branch), so a single run can stall for ~4 minutes; with a 60-second cron period, processes pile up and don't resolve until Kuma recovers | Added `--max-time 5` to all four calls |
+
+**v5.1.7.2 bug-fix summary** — 4 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 69 | v5.1.7.1 summary table | Header said "4 new fixes" but the table contained 7 entries (#62–#68); the revision note at the top correctly said "Seven bugs fixed" | Corrected to "7 new fixes" |
+| 70 | §12 `homelab-backup-notify@.service` | No `After=`/`Wants=network-online.target` — a backup failure before the network stack was ready caused the Telegram `curl` to fail silently with no notification delivered | Added `After=network-online.target` and `Wants=network-online.target` |
+| 71 | §12 Restore drill | Five `ls` verification steps ran outside the `sudo bash -c` block as the `pi` user — they executed even when a restore had failed early, since `/tmp` is world-readable; a partial or empty restore target looked like a success | Moved all `ls` steps inside the `sudo bash -c` block so they only run after the restores complete and fail visibly if any path is missing |
+| 72 | §4 `protonvpn.conf` | `MTU = 1320` had no comment explaining it is ProtonVPN's server ceiling, why it differs from wg0's 1280, or what to do on low-path-MTU ISP links — left readers without context on the relationship between the two MTU values | Added inline comment explaining the ceiling, the stacked-encapsulation arithmetic, and the §15 probe as the diagnostic tool |
+
+**v5.1.7.1 bug-fix summary** — 7 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 62 | §5 wg0 server config | `MTU = 1320` — after wg0 encapsulation (~60 B overhead) the packet exceeds protonvpn's own 1320-byte MTU, causing fragmentation or silent large-transfer stalls on the stacked tunnel | Lowered to `MTU = 1280` (IPv6 minimum MTU, safe floor for wg0-inside-protonvpn); added comment explaining the interaction |
+| 63 | §5 wg0 client config | `DNS = 10.10.0.1` only — with `AllowedIPs = ::/0`, IPv6-first OSes (iOS, Android, macOS) attempt DNS over IPv6 and bypass Pi-hole entirely when no IPv6 DNS address is listed, leaking DNS to the carrier resolver; also client `MTU = 1320` didn't match the now-corrected server value | Added `fd00:10:10::1` to DNS field; aligned client MTU to `1280` |
+| 64 | §12 Backup script | `/etc/cloud/cloud.cfg.d` absent from restic backup paths — fix #41 added the cloud-init network-management disable step but its config file was never included in the backup; a restic-only restore loses it and cloud-init overwrites `50-cloud-init.yaml` with DHCP on the next reboot | Added `/etc/cloud/cloud.cfg.d` to the `restic backup` invocation |
+| 65 | §13 Health push script | No `else` branch on the `if [ -e "$NVME_DEV" ]` check — when the device path is wrong or missing, no push is sent; Kuma's push monitor heartbeat expires silently and shows "down" with no message, indistinguishable from a real SMART critical warning | Added `else` branch that pushes `status=down&msg=NVME_DEV+<path>+not+found` with a pointer to `lsblk` for diagnosis |
+| 66 | §15 MTU verification | §15 prose said "Both wg0 and protonvpn are set to MTU 1320" — fix #62 changed wg0 to 1280; the stale description, ping probe range, and troubleshooting table row all referred to the old value | Updated prose, probe range, and troubleshooting row to reflect wg0 MTU 1280 |
+| 67 | §12 `homelab-backup.service` | `After=docker.service` without `Requires=` — if Docker is stopped manually, the backup fires at 04:00, `docker volume ls` returns nothing, the volume-tarball loop is empty, and restic exits successfully with only config files backed up; no volumes, no alert | Added `Requires=docker.service`; systemd now refuses to start the backup if Docker is not running |
+| 68 | §12 Restore drill | `/etc/cloud/cloud.cfg.d` added to the backup by fix #64 but not to the drill — the drill gave false confidence that a restore would land correctly, since it never verified the cloud-init disable file that prevents the DHCP revert | Added `restic restore … --include /etc/cloud/cloud.cfg.d` and matching `ls` step; updated the prose count from "four" to "five" |
+
+**v5.1.7 bug-fix summary** — 5 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 57 | §13 Health push script | All three `curl` calls carried `--cacert /opt/step-ca/homelab-root-ca.crt` — fix #49 changed `KUMA_BASE` to `http://` (plain HTTP); curl ignores `--cacert` on plain HTTP; the flag was dead code and the TLS/MITM rationale in the comment was stale | Removed `--cacert` from all three calls; updated comment to note that loopback HTTP needs no certificate |
+| 58 | §3 DOCKER-USER chain | Missing `127.0.0.0/8` RETURN rule — host-to-container loopback traffic (health push to `127.0.0.1:3001`, `docker run` in backup volume loop) has source `127.x.x.x`, which is not matched by the `172.16.0.0/12` inter-container RETURN and was silently DROP'd | Added `iptables -A DOCKER-USER -s 127.0.0.0/8 -j RETURN` before the DROP, with explanatory comment |
+| 59 | §10 Mosquitto | Port binding comment claimed `localhost:1883` works alongside `192.168.70.5:1883` — port is bound to `192.168.70.5` only; nothing listens on `127.0.0.1:1883`; HA MQTT integration configured with `localhost` would get connection refused | Corrected comment to state HA must use `192.168.70.5:1883` |
+| 60 | §2 Unattended upgrades | `Automatic-Reboot-Time "03:00"` — backup timer runs at `04:00` with `Persistent=true`; a reboot finishing close to 04:00 can trigger backup immediately before containers are fully up | Changed to `02:00`; added note explaining the 04:00 backup timer interaction and the dead zone to avoid |
+| 61 | §15 gitleaks | `pip install --user pre-commit` fails on Ubuntu 24.04 with "externally-managed-environment" (PEP 668 enforcement); `--user` does not bypass this restriction | Replaced with `sudo apt install -y pipx && pipx install pre-commit && pipx ensurepath`; added note explaining why |
+
+**v5.1.6 bug-fix summary** — 5 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 52 | §5 Client config | `Address = 10.10.0.2/24, fd00:10:10::2/64` — subnet masks on a WireGuard client `Address` cause the interface to claim ownership of the whole subnet locally, breaking peer-to-peer VPN routing and potentially conflicting with the client device's routing table | Corrected to `/32` and `/128` (host masks), consistent with the server-side `[Peer]` `AllowedIPs` |
+| 53 | §12 `homelab-backup.service` | Missing `[Install]` section — `systemctl enable homelab-backup.service` would fail with "Unit file has no [Install] section"; the timer is the correct activation path but the absence causes confusing errors during troubleshooting | Added `[Install]` with `WantedBy=multi-user.target` and a comment clarifying the timer is the intended trigger |
+| 54 | §15 UFW deny note | Claimed NPM reaches HA "via the host loopback" — NPM is a container on the `172.31.x.x` Docker bridge and reaches HA at `192.168.70.5:8123`; the conclusion (rule won't block NPM) was coincidentally correct but the reason was factually wrong | Corrected to state NPM traffic originates from `172.31.x.x`, not the LAN range, so the LAN deny rule does not affect it |
+| 55 | §12 Backup script | `alpine` (implicit `:latest`) was the only unpinned image in the guide — could silently change behaviour on a major Alpine bump or fail if the registry is unavailable mid-backup | Pinned to `alpine:3.21` |
+| 56 | §12 Backup script | `mosquitto` missing from `STOP_LIST` — its `mosquitto-data` volume was being tarred while the broker was live and writing; `docker stop` on a non-existent container is a no-op so it is safe to include unconditionally | Added `mosquitto` to `STOP_LIST` with explanatory comment |
+
+**v5.1.5 bug-fix summary** — 3 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 49 | §13 Health push script | `KUMA_BASE` used `https://kuma.berrypi5.lan/api/push` — this resolves via Pi-hole DNS then traverses NPM; if either is down (or quiesced during a backup run), the push fails silently with a DNS/connection error instead of a meaningful status push | Changed to `http://127.0.0.1:3001/api/push`, which hits Kuma directly on its loopback-bound port, bypassing Pi-hole and NPM entirely |
+| 50 | §12 Backup script | `/etc/systemd/system/homelab-backup.service.d` was listed as a directory entry — inconsistent with every other unit in the backup path list, which are individual files; could silently pick up unrelated drop-ins from other packages in the same directory | Changed to the explicit file `/etc/systemd/system/homelab-backup.service.d/notify.conf` |
+| 51 | §15 Troubleshooting | "Watchtower broke a service" fix showed `docker compose pull && docker compose up -d` without a `cd` — fails with "no configuration file provided" if run from any directory other than `/opt/<service>` | Prepended `cd /opt/<service> &&` to make the command self-contained |
+
+**v5.1.4 bug-fix summary** — 2 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 47 | §12 Backup failure notifications | `OnFailure=homelab-backup-notify@%n.service` — `%n` expands to the full unit name including its `.service` suffix (`homelab-backup.service`), so the instantiated unit name becomes `homelab-backup-notify@homelab-backup.service.service` (double suffix), which systemd can't find; backup failures were silently swallowed | Changed to `@%p.service`; `%p` expands to the prefix without the suffix (`homelab-backup`), giving the correct instance `homelab-backup-notify@homelab-backup.service` |
+| 48 | §12 Restore drill | Prose said "the three config dirs most critical to a working network (VPN keys, static IP, NTP)" — but fix #35 added `/etc/sysctl.d` to the drill, making it four directories; the description was never updated | Corrected to "four config dirs" with the updated parenthetical "(VPN keys, static IP, NTP, and kernel tunables)" |
+
+**v5.1.3 bug-fix summary** — 15 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 32 | §12 Backup script | `for vol in $(docker volume ls -q)` word-splits on volume names with spaces or special characters, silently skipping them and producing a broken tar path | Replaced with `mapfile -t VOLUMES < <(docker volume ls -q)` + `for vol in "${VOLUMES[@]}"` |
+| 33 | §3 daemon.json | `default-address-pools` base was `172.17.0.0/16` — Docker's own `docker0` bridge defaults to `172.17.0.1`; using the same range as the auto-allocation pool risks a prefix collision on daemon restart | Changed base to `172.20.0.0/14`, which avoids both `docker0` (`172.17.x`) and the manually-pinned `172.30–172.31.x` ranges |
+| 34 | §13 Kuma push monitors | No instruction to set the Push monitor heartbeat interval — default may be shorter than the 60s cron period, causing false "down" alerts between script runs | Added explicit callout: set heartbeat interval to ≥60s when creating the Push monitors |
+| 35 | §12 Restore drill | Drill only restored and verified `/etc/wireguard`; `/etc/netplan`, `/etc/chrony`, and `/etc/sysctl.d` are equally critical to a working network after a restore but were never tested | Expanded drill to restore and `ls`-verify all four dirs; added cleanup reminder |
+| 36 | §3 Portainer | The "no `-v /var/run/docker.sock`" security note appeared *after* the `docker run` command — readers scanning the command block had no context before running it | Converted to a `> ℹ️` callout placed *before* the command; removed the trailing inline note |
+| 37 | §15 troubleshooting table | `sudo ip rule flush` deletes all routing policy rules including the kernel defaults at priorities 0/32766/32767, breaking all routing until reboot — presented as the fix for a stale Proton rule | Replaced with targeted `ip rule del priority 50` + `ip rule del priority 51`, which remove only the rules this guide adds |
+| 38 | §8 NPM proxy hosts | No "Ignore Certificate" warning for `stepca.berrypi5.lan` — Step-CA's backend is HTTPS and NPM may not trust the cert depending on timing, same situation as Portainer which already had the warning | Added equivalent "Ignore Certificate" callout for Step-CA |
+| 39 | §12 Backup script | `/etc/sysctl.d`, `/etc/cron.d`, `/usr/local/bin/homelab-*.sh`, `/usr/local/bin/docker-user-rules.sh`, and the homelab systemd unit files were absent from the restic backup paths — documented as "put in git" but git is not a backup; a restic-only restore would lose these files | Added all missing paths to the `restic backup` invocation |
+| 40 | §2 Hostname | `echo -e "127.0.0.1 localhost\n192.168.70.5 berrypi5"` overwrote `/etc/hosts` without the `::1 localhost` IPv6 loopback entries — removing them breaks IPv6 loopback resolution for Docker networking and some HA integrations | Replaced with `printf` that preserves `::1 localhost ip6-localhost ip6-loopback` |
+| 41 | §2 Static IP | Guide edits `50-cloud-init.yaml` directly but never disables cloud-init network management — cloud-init regenerates the file on boot and reverts the Pi to DHCP, silently breaking the static IP on the next reboot or apt upgrade that triggers cloud-init | Added `echo "network: {config: disabled}" > /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg` immediately after `netplan apply`; also noted in the Ubuntu gotchas table |
+| 42 | §10 Mosquitto | Snippet shown as "add to the homeassistant stack" was missing `mosquitto-data:` and `mosquitto-log:` entries in the top-level `volumes:` block — `docker compose up` fails with "named volume not declared" without them; also unclear that HA (host network) reaches Mosquitto via localhost | Added explicit merged `volumes:` block and network clarification comment |
+| 43 | §7 Step-CA | `DOCKER_STEPCA_INIT_DNS_NAMES` lacked `localhost` and `127.0.0.1`; the guide directs bootstrap access via `https://127.0.0.1:9000` over SSH tunnel but clients got `x509: certificate is valid for [other IPs], not 127.0.0.1` | Added `localhost` and `127.0.0.1` to the DNS names list |
+| 44 | §10 Mosquitto | Bind-mount paths `./mosquitto.conf` and `./mosquitto.passwd` are relative; Portainer's web-editor working directory is `/`, resolving them to `/mosquitto.conf` — Docker creates a directory instead of a file, Mosquitto fails to parse config | Changed to absolute paths `/opt/homeassistant/mosquitto.conf` and `/opt/homeassistant/mosquitto.passwd` |
+| 45 | §13 Health push | All three `curl` calls used `-sk` (`-s -k`) — `-k` silently disabled TLS verification, making pushes susceptible to local MITM and undermining the whole Step-CA setup | Replaced `-k` with `--cacert /opt/step-ca/homelab-root-ca.crt`; root CA already on disk from §7, no system-wide install needed |
+| 46 | §12 Backup script | Variable named `TMPDIR` shadows the POSIX standard env var of the same name; restic and other child processes read `$TMPDIR` for their own scratch space, writing into the backup staging dir; those files were then included in every restic snapshot | Renamed to `STAGING` throughout the script |
+
+**v5 bug-fix summary** — the 5 fixes applied in the initial v5 release:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| A | §4 ProtonVPN | Kill switch used inline `PostUp`/`PreDown` with multiple `! -d` flags — rejected by iptables 1.8.10 (nf_tables backend) on Ubuntu 24.04 | Moved all kill-switch logic to external `protonvpn-up.sh` / `protonvpn-down.sh` scripts; replaced multi-flag rules with a named `PROTON_KS` chain |
+| B | §6 Pi-hole | v5 (Alpine base) introduced `FTLCONF_*` env var schema; old vars (`WEBPASSWORD`, `DNSMASQ_LISTENING`, `PIHOLE_DNS_`) silently ignored | Updated stack to use `FTLCONF_*` throughout; added migration note |
+| C | §3 Docker | Admin ports bound to `0.0.0.0` allowed any LAN client to reach Portainer, NPM admin, Pi-hole admin, Step-CA, and Kuma directly, bypassing UFW | Bound all admin ports to `127.0.0.1`; added `DOCKER-USER` chain and `proxy-net` bridge |
+| D | §12 Backup | Only Pi-hole and HA were quiesced; NPM, Portainer, and Kuma were tarred live, producing inconsistent snapshots | Added NPM, Portainer, and Kuma to `STOP_LIST` |
+| E | §7 Step-CA / §8 NPM | `docker-socket-proxy` not present; Portainer and Watchtower mounted `/var/run/docker.sock` directly — root-equivalent on the host | Added `tecnativa/docker-socket-proxy`; updated Portainer and Watchtower to use `DOCKER_HOST=tcp://docker-socket-proxy:2375` |
+
+> ℹ️ The v5 fixes above are structural changes introduced with the v5 rewrite, not individually numbered like the incremental fixes in v5.1 onward. The v5.1 changelog (#9 onward) covers bugs found after the v5 release.
+
+**v4.1 bug-fix summary** — the 8 fixes applied to the previous revision:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 1 | §7 Step-CA | `step-ca` (Docker container name) absent from `DOCKER_STEPCA_INIT_DNS_NAMES`; NPM's ACME client failed x509 hostname validation | Added `step-ca` as first entry in DNS names |
+| 2 | §4 IPv6 kill switch | `ip6tables PROTON_KS` had no exemption for `wg0` egress or `fd00:10:10::/64`; Pi couldn't reach wg0 peers over IPv6 while Proton was running | Added `-o wg0 -j RETURN` and `-d fd00:10:10::/64 -j RETURN` before the final REJECT |
+| 3 | §8 NPM | `docker exec npm update-ca-certificates` only persisted into the container's writable layer, lost on every recreate; ACME broke silently after any image update or stack redeploy | Replaced one-off exec with `entrypoint:` override that runs `update-ca-certificates && /init` on every container start |
+| 4 | §12 Backup | `set -euo pipefail` with no trap meant a mid-backup failure left Pi-hole, HA, NPM, Portainer, and Kuma stopped permanently | Added `trap 'docker start $STOP_LIST' EXIT` before the stop; removed the now-redundant explicit `docker start` at the end |
+| 5 | §3 DOCKER-USER | `iptables -A DOCKER-USER -j RETURN` appeared after the terminal `DROP` — unreachable and misleading | Removed the dead RETURN |
+| 6 | §3 docker-socket-proxy | `DELETE=1` missing; `WATCHTOWER_CLEANUP: "true"` silently failed, old image layers accumulated on the SSD | Added `-e DELETE=1` to the `docker run` command |
+| 7 | §15 troubleshooting | Table said "don't chattr +i" — contradicted §2's deliberate use of it post-setup | Updated to explain chattr +i is intentional and applied after setup |
+| 8 | §13 Watchtower | `WATCHTOWER_LABEL_ENABLE: "true"` with no labelled containers anywhere; Watchtower did nothing on every Sunday run | Added opt-in label to the Kuma stack as a worked example; added explanatory note in the Watchtower section |
+
+**v4 changes summary** — for your own reference when comparing to v3:
+
+- **Docker→UFW bypass closed.** All admin UIs (Portainer 9443, NPM 81, Pi-hole 8080, Step-CA 9000, Kuma 3001) bound to `127.0.0.1`. Shared `proxy-net` Docker bridge created so NPM can reach them by container name. UFW `after.rules` adds a `DOCKER-USER` chain that drops all non-LAN, non-VPN container egress as defence-in-depth.
+- **IPv6 on wg0.** ULA `fd00:10:10::/64` carried inside the tunnel; clients now route `::/0` over wg0 so dual-stack mobile data doesn't leak v6 outside the tunnel.
+- **Pi-hole v6** with new `FTLCONF_*` env var schema (Alpine base). Web password moved to Portainer env vars panel, out of YAML/git.
+- **chrony** with LAN-router NTP preferred; NTP exception in the Proton kill switch (UDP/123 RETURN). Boot-time clock drift during Proton outages no longer cascades into Step-CA TLS failures.
+- **B2 split keys + Object Lock.** Daily backup key has no `deleteFiles`; admin key for `forget --prune` lives off-Pi. Object Lock prevents historical-backup wipe even on full credentialed compromise.
+- **Backup widened.** NPM, Portainer, and Kuma are now quiesced alongside Pi-hole and HA. `forget`/`prune` moved out of the daily script to a manual weekly run from a different machine.
+- **docker-socket-proxy.** Portainer and Watchtower no longer mount `/var/run/docker.sock` directly; both go through `tecnativa/docker-socket-proxy` with `EXEC=0` and minimal API capabilities.
+- **HA: `privileged: true` removed.** Explicit `cap_add: [NET_ADMIN, NET_RAW, SYS_NICE]` plus `devices:` for Zigbee/Z-Wave (commented examples).
+- **SMART + thermal monitoring** via Kuma push monitors fed by a cron-driven script (`homelab-health-push.sh`).
+- **Image pins refreshed:** Pi-hole `2026.04.0`, HA `2026.5`, NPM `2.12.3`, Portainer `2.27.5`, Step-CA `0.28.4`, Kuma `1.23.16`, Mosquitto `2.0.21`, Unbound `1.22.0`, docker-socket-proxy `0.3.0`, Watchtower `1.7.1`.
+- **MTU verification** procedure for stacked wg0+Proton tunnels added to ops.
+- **gitleaks pre-commit hook** for the config repo.
+- **Image-pin review cadence** recommendation added (quarterly).
+- **TOC anchor for §9 fixed.**
+- Pre-flight cleaned up; SD-card warning removed (the rest of the doc assumes SSD).
+- Active cooler recommendation added.
