@@ -187,8 +187,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -210,7 +209,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "a627c530cd5eaf30",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
     "attachments/Pasted image 20260512103918.png",
     "attachments/Example AD Forest.png",
