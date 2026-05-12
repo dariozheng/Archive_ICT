@@ -187,7 +187,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -209,8 +210,11 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "41fc5e53c245e6d7",
   "lastOpenFiles": [
+    "attachments/Screenshot 2026-05-12 at 11-06-37 Identity Services Engine.png",
+    "attachments/Screenshot 2026-05-12 at 11-05-25 Identity Services Engine.png",
+    "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260512103918.png",
     "attachments/Example AD Forest.png",
     "attachments/Pasted image 20260511150013.png",
@@ -220,11 +224,8 @@
     "attachments/Pasted image 20260508114835.png",
     "attachments/Pasted image 20260508114440.png",
     "attachments/Pasted image 20260508113958.png",
-    "attachments/Pasted image 20260508113927.png",
-    "attachments/Pasted image 20260508113546.png",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "Orphaned Images Report.md",
-    "0 - Notes/Cisco ISE.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "Homepage.md",
