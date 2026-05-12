@@ -55,6 +55,7 @@ Endpoint and User Groups, they can be used as attributes in Policy Sets.
 ![[Pasted image 20260508105337.png]]
 
 Endpoint Identity Groups stores information about all the endpoint devices that connect to the network infrastructure or they can be filled through an CSV import.
+It's possible to create groups to use as attributes in Policy Sets.
 
 ![[Pasted image 20260508105729.png]]
 
@@ -284,8 +285,18 @@ An authentication policy is a set of rules and criteria used to verify the ident
 In Cisco ISE, it specifically determines how a connection request should be identified and where to look up their credentials (like [[#External Identity Sources - Active Directory|Active Directory]] or an [[#User Identity Groups|internal database]])
 
 There are three predefined policies:
-##### MAB (MAC Authentication Bypass) 
+##### MAB (MAC Authentication Bypass)
+<strong>MAC Authentication Bypass (MAB)</strong> is a fallback network access control method that uses a device's <strong>MAC address</strong> to grant or deny access. It is primarily used for "headless" devices that cannot run an 802.1X supplicant, such as printers, IP phones, cameras, and IoT equipment.
+
+When a device connects to a switch port configured for 802.1X/MAB, the following process typically occurs:
+1. **Detection**: The switch initially tries to authenticate the device via 802.1X.
+2. **Fallback**: If the device fails to respond to 802.1X requests (usually after a timeout), the switch "falls back" to MAB.
+3. **RADIUS Request**: The switch sends a RADIUS Access-Request to Cisco ISE, using the device's MAC address as both the username and password.
+4. **ISE Decision**: ISE checks the MAC address against its [[#Endpoint Identity Groups|Internal Endpoints]] database or performs **Profiling** to identify the device type.
+5. **Authorization**: Based on your configured **Policy Sets**, ISE sends back a RADIUS Access-Accept with specific permissions, such as a VLAN assignment or a Downloadable ACL (dACL).
+
 ##### Dot1X (802.1X)
+
 ##### Default
 
 #### Authorization Policy
