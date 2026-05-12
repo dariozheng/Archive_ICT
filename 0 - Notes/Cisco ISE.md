@@ -140,7 +140,14 @@ In Admin Groups, you can configure the groups for which you can build a RBAC Pol
 ![[Pasted image 20260511150013.png]]
 
 ## Network Resources
-In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the enforcement point of policies set by the server ISE.
+In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the point of access for an endpoint and the main enforcement point of policies set by the server ISE.
+Common NAD types include the following:
+- Wired Ethernet switch
+- Wireless LAN controller (WLC)
+- Cisco Adaptive Security Appliance (ASA)
+- Cisco Firepower device
+- Load balancer
+- Software application that uses ISE for AAA
 ### Network Devices Profiles
 ISE supports third-party NADs through the use of network device profiles. The NAD profiles are configured to define the capabilities and attributes of these third-party devices.
 
@@ -155,6 +162,7 @@ In a Cisco dominant environment the default network device profile for Cisco is 
 
 ![[Pasted image 20260505110209.png]]
 
+It’s possible to set the conditions for which, based on the attributes received on the header the packet is considered a Wired, Wireless, MAB, 802.1X connection.
 ##### Flow Type Conditions
 Enter the attributes and values that your device uses for the various flows like <strong>Wired MAB</strong>, <strong>802.1X</strong>, in the <strong>Flow Type Conditions</strong> section. This is necessary for ISE to detect the right flow type for your device according to the attributes it uses.
 <strong>Radius:Service-Type</strong> indicate if the packet is a Ethernet or a Wireless packet.
@@ -213,15 +221,19 @@ Network Device Groups can be set to define NAD attributes that will be used in p
 
 ![[Pasted image 20260505125643.png]]
 
-In Network Devices are added all NAD in the NAC system.
+To add a NAD, navigate to <strong>Administration > Network Resources > Network Devices</strong> and click <strong>Add</strong>. 
+
 They can configured with Network Device Profile, Model Name, Software Version or with the attributes set in the Network Device Groups. 
 
-They need at least one Authentication Settings, be it RADIUS or TACAS, with the credentials that must be the same in the local NAD configuration. 
+The network device is added to ISE as an object.
+
+The object has a shared secret key for RADIUS, TACACS authentication settings, SNMP community strings, and TrustSec configuration. The RADIUS shared secret key must match the configured key on the NAD exactly.
+
+Each NAD object must be configured with one or more IP addresses. Each NAD can be assigned to one NDG of each type: one Location group, one Device Type group, and one of each manually created top-level NDGs.
 
 ![[Pasted image 20260505125842.png]]
 
-
-
+The SNMP Settings section is where the SNMP community for the NAD is configured, the ISE will use this to query the NAD for profiling attributes such as CDP and LLDP cache information. The SNMP setting should be configured only for device that do not use the device sensor to send ISE profiling data within RADIUS accounting packets.
 ## Policy Sets
 In Policy Sets are defined policies flow to authenticate the clients.  
 
