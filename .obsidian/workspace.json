@@ -185,8 +185,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -210,6 +209,8 @@
   },
   "active": "41fc5e53c245e6d7",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260512143139.png",
+    "attachments/Pasted image 20260512142840.png",
     "1 - Excalidraw/ENCOR.md",
     "0 - Notes/OSI Model.md",
     "1 - Excalidraw/Cisco ISE.md",
@@ -224,7 +225,6 @@
     "attachments/Example AD Forest.png",
     "attachments/Pasted image 20260511150013.png",
     "attachments/Pasted image 20260511145958.png",
-    "attachments/Pasted image 20260511145530.png",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "Orphaned Images Report.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
@@ -251,7 +251,6 @@
     "2 - Categories/Cloud Computing.md",
     "2 - Categories/Topics/Security/Security General.md",
     "2 - Categories/Hardware.md",
-    "2 - Categories/Networking.md",
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",

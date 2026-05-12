@@ -299,7 +299,25 @@ This DACL is used for computer that have authenticated with machine certificate 
 For these case the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
 ###### Vlan_802_Lan_Client
 
+![[Pasted image 20260512142840.png]]
 
+Vlan_802_Lan_Client should be the default Authorization Policy for most of domain users. 
+It sends the VLAN for clients and the re-authentication timer.
+###### Redirect_Guest_Wired
+
+![[Pasted image 20260512143139.png]]
+
+The Redirect_Guest_Wired is the first Authorization Profile for guest users. 
+- <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
+- <strong>Tunnel-Private-Group-ID</strong> = 1:805 : VLAN 805
+- <strong>Tunnel-Type = 1:13</strong> : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
+- <strong>Tunnel-Medium-Type = 1:6</strong> : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
+- <strong>cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT</strong> : This indicate which local access list the client must use. 
+- <strong>cisco-av-pair = url-redirect=https://guestportal1.publiacqua.it:port/portal/gateway?sessionId=SessionIdValue&portal=4f145223-7d12-411b-a511-92abfafef0d8&action=cwa</strong> : The redirect guest portal from the CWA
+- <strong>Session-Timeout = 43200</strong> : The timer for the session
+- <strong>Termination-Action = Default</strong> : When the timer of Session-Timeout runs out, kick the user off and make them start over
+- <strong>Idle-Timeout = 7200</strong> : Tells the switch or WLC to disconnect the user if their device is completely silent for 2 hours
+- <strong>cisco-av-pair = subscriber:service-name=Guest_Redirect</strong> : This tells the switch to activate the local service-template Guest_Redirect.
 ##### Downloadable ACLs
 They are Access Lists that are configured on the server ISE and are meant to be sent dynamically to the NAD that calls it. 
 
