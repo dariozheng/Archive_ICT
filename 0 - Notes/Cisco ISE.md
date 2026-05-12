@@ -303,6 +303,10 @@ For these case the DACL allow the connection to Internet, Domain Controller and 
 
 Vlan_802_Lan_Client should be the default Authorization Policy for most of domain users. 
 It sends the VLAN for clients and the re-authentication timer.
+- <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
+- <strong>Tunnel-Private-Group-ID</strong> = 1:802 : VLAN 802
+- <strong>Tunnel-Type = 1:13</strong> : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
+- <strong>Tunnel-Medium-Type = 1:6</strong> : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
 ###### Redirect_Guest_Wired
 
 ![[Pasted image 20260512143139.png]]
