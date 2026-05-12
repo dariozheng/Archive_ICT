@@ -317,7 +317,7 @@ The Redirect_Guest_Wired is the first Authorization Profile for guest users.
 - <strong>Session-Timeout = 43200</strong> : The timer for the session
 - <strong>Termination-Action = Default</strong> : When the timer of Session-Timeout runs out, kick the user off and make them start over
 - <strong>Idle-Timeout = 7200</strong> : Tells the switch or WLC to disconnect the user if their device is completely silent for 2 hours
-- <strong>cisco-av-pair = subscriber:service-name=Guest_Redirect</strong> : This tells the switch to activate the local service-template [[#Guest_Redirect|Guest_Redirect]], in this deployment the Guest_Redirect service-template is empty. It's used to match for <strong>class-map type control subscriber match-all AAA-DOWN_GUEST_USER</strong>. 
+- <strong>cisco-av-pair = subscriber:service-name=Guest_Redirect</strong> : This tells the switch to activate the local service-template [[#Guest_Redirect|Guest_Redirect]], in this deployment the Guest_Redirect service-template is empty. It's used to trick the switch to match for <strong>class-map type control subscriber match-all AAA-DOWN_GUEST_USER</strong>.
 ##### Downloadable ACLs
 They are Access Lists that are configured on the server ISE and are meant to be sent dynamically to the NAD that calls it. 
 
