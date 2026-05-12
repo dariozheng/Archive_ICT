@@ -295,12 +295,14 @@ When a device connects to a switch port configured for 802.1X/MAB, the following
 4. **ISE Decision**: ISE checks the MAC address against its [[#Endpoint Identity Groups|Internal Endpoints]] database or performs **Profiling** to identify the device type.
 5. **Authorization**: Based on your configured **Policy Sets**, ISE sends back a RADIUS Access-Accept with specific permissions, such as a VLAN assignment or a Downloadable ACL (dACL).
 
+In the current deployment even if the MAB check fails, the server ISE allow the authentication request to continue to the authorization policies, where they will be met with [[#Guest Redirect|Guest Redirect]] Authorization Policy. 
 ##### Dot1X (802.1X)
 
 ##### Default
 
 #### Authorization Policy
 
+##### Guest Redirect
 ### Results
 #### Policy - Results - Authentication
 Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
