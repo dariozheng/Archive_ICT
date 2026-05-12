@@ -76,10 +76,10 @@ External Identity Sources can leverage existing external identity store for netw
 
 ![[Pasted image 20260508100508.png]]
 
-#### Certificate Authentication Profile 
+#### External Identity Sources - Certificate Authentication Profile 
 This is an important setting for certificate based authentication. 
 See [[#Certificate Authentication Profile certificates|Link]]
-#### Active Directory
+#### External Identity Sources  - Active Directory 
 Microsoft’s Active Directory (AD) is a highly available distributed database deployments. 
 
 ![[Example AD Forest.png]]
@@ -270,6 +270,26 @@ Each policy set functions as a "rule book" evaluated from the top down. Once a r
 - <strong>Authentication Policy</strong>: Verifies the identity of the user or device using identity sources like Active Directory or internal databases.
 - <strong>Authorization Policy</strong>: Grants specific permissions—such as VLAN assignment, Security Group Tags (SGTs), or Downloadable ACLs (dACLs)—based on the user's role or device posture.
 
+The Top-Level Condition in this deployment are Wired, Wired_Monitor, Wireless and DNAC, and they distribute the clients based on the type of connection (Wired or Wireless) and if the Device Type is a DNAC-server. 
+
+![[Pasted image 20260512152559.png]]
+
+The Wired_Monitor is a temporary condition that is used on monitoring deployment together with the NAD command <strong>no access-session closed</strong>, in this deployment there is only ACCEPT or DENY authentication request, and all DENY authentication requests are ignored and the client can have access to the network anyway. 
+
+#### Authentication Policy
+
+![[Pasted image 20260512154735.png]]
+
+An authentication policy is a set of rules and criteria used to verify the identity of a user or device before they are allowed access to a system. 
+In Cisco ISE, it specifically determines how a connection request should be identified and where to look up their credentials (like [[#External Identity Sources - Active Directory|Active Directory]] or an [[#User Identity Groups|internal database]])
+
+There are three predefined policies:
+##### MAB (MAC Authentication Bypass) 
+##### Dot1X (802.1X)
+##### Default
+
+#### Authorization Policy
+
 ### Results
 #### Policy - Results - Authentication
 Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
@@ -419,7 +439,7 @@ deny ip any any
 
 # Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
-## Active Directory
+## Active Directory 
 
 ![[Pasted image 20260421124607.png]]
 
