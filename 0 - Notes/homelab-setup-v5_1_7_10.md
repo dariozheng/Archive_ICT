@@ -1,4 +1,21 @@
-# Homelab Setup Guide v5.1.7.7 — Ubuntu Server 24.04 LTS on Raspberry Pi 5
+# Homelab Setup Guide v5.1.7.10 — Ubuntu Server 24.04 LTS on Raspberry Pi 5
+
+> **Bug-fix changelog (v5.1.7.10):**
+> - §7 Step-CA CLI fallback: regression introduced by fix #92 — the Portainer-path instructions correctly tell the user to set `DOCKER_STEPCA_INIT_PASSWORD` in the stack's env-vars panel, but the immediately-adjacent CLI fallback (`cd /opt/step-ca && docker compose up -d`) silently ignored the password requirement; a user following the CLI path would get the random-generated-and-logged behaviour back (the very thing fix #92 set out to eliminate). Patched the CLI fallback to pass `DOCKER_STEPCA_INIT_PASSWORD='...'` inline, matching the pattern used by the Pi-hole `dns` stack's CLI fallback (fix #101)
+> - §13 Watchtower CLI fallback: pre-existing same-class bug — the prose tells the user to set `WATCHTOWER_NOTIFICATION_URL` in the Portainer env-vars panel, but the CLI fallback (`cd /opt/watchtower && docker compose up -d`) didn't pass it inline, so a user following the CLI path would deploy Watchtower with notifications silently disabled and the Sunday update schedule would fire without any Telegram alerts. Patched the CLI fallback to pass `WATCHTOWER_NOTIFICATION_URL='telegram://<token>@telegram?chats=<chat-id>'` inline with a placeholder format (fix #102)
+
+> **Bug-fix changelog (v5.1.7.9):**
+> - §14 kill-switch test: replaced `systemctl stop wg-quick@protonvpn` with `ip link set protonvpn down` — the systemctl approach runs `protonvpn-down.sh` (the wg-quick PreDown hook), which removes the `PROTON_KS` chain from `OUTPUT` before the verification curl runs; the curl then succeeds (route falls back to the ISP), making the entire block a "did wg-quick clean up correctly?" test rather than a "does the kill switch hold when the tunnel drops?" test. `ip link set` drops the interface without invoking PreDown, leaving the chain loaded so the curl can actually be blocked by it. Recovery is now `systemctl restart wg-quick@protonvpn` (handshake state needs a full restart, not just `ip link set up`) (fix #95)
+> - §15 MTU verification + breakage table: aligned both spots with fix #82's IPv6-minimum constraint — the verification prose said "(or to 1240 as a conservative floor)" and the breakage table said "1240 is a safe conservative value" without acknowledging that fix #82 (in §4) established 1280 as the absolute floor for retaining IPv6 on wg0; dropping below 1280 sacrifices v6 on wg0. Rewrote both as an explicit trade-off ("v4-only on wg0 in exchange for no fragmentation") so the user can choose knowingly (fix #96)
+> - §3 `docker-user-rules.sh` comment: corrected the claim that "NPM's 80/443 are unaffected — those match the RELATED,ESTABLISHED RETURN first" — RELATED,ESTABLISHED only matches reply traffic in a connection that's already been allowed; the *initial* SYN from a LAN client to NPM 80/443 matches the LAN-source RETURN (`-s 192.168.68.0/22`). Reply packets in the same connection then match RELATED,ESTABLISHED. Both rules are needed; neither alone is sufficient. Rewrote the comment to describe both directions correctly (fix #97)
+> - §14 router-config table + new ⚠️ note: the rows for "optional 80/TCP and 443/TCP port forwards" implied a router-side toggle was sufficient to publicly expose NPM, but DOCKER-USER drops WAN-sourced packets to containers — the source IP (external client) doesn't match any of the `-j RETURN` rules, the final `-j DROP` applies, and the public connection silently fails. Added a footnote under the table explaining the trade-off and showing the additional `iptables -A DOCKER-USER -p tcp -m multiport --dports 80,443 -j RETURN` rule that would be needed in `docker-user-rules.sh` if the user actually wants public NPM exposure (and the auth-strength implications that come with it) (fix #98)
+> - §3 "What cannot be a Portainer stack" list: added `docker-socket-proxy` — the list documented Portainer, wg0, ProtonVPN, and Restic as the four non-stack components, but docker-socket-proxy is also a non-stack `docker run` (deployed in §3 above Portainer for the same chicken-and-egg reason: Portainer's `DOCKER_HOST` env var targets the proxy and needs it running first). Now listed alongside Portainer with the rationale (fix #99)
+> - §8 TOC entry: removed misleading "+ local DNS records" suffix — the local-DNS-records subsection (Pi-hole admin → Local DNS → DNS Records) lives in §6, not §8. The TOC entry was a leftover from an earlier doc structure that has since shifted the DNS records to where they actually run (against Pi-hole) (fix #100)
+
+> **Bug-fix changelog (v5.1.7.8):**
+> - §7 Step-CA provisioner password: switched from "let Step-CA generate a random password and grep it out of `docker logs step-ca`" to "set `DOCKER_STEPCA_INIT_PASSWORD` in the Portainer stack's env-vars panel before first deploy" — the log-extraction approach is fragile because the log line is printed exactly once and Docker's default `json-file` driver with `max-size=10m, max-file=3` (per `daemon.json`) can age it out within hours; users who miss the window have no recovery short of destroying the `step-ca-data` volume and re-initialising the CA (which forces re-installing the new root cert on every device). Same pattern Pi-hole already uses for `FTLCONF_webserver_api_password`. Updated the YAML comment, the surrounding callout, and added historical context noting why the legacy approach existed (fix #92)
+> - §12 restic backup paths + restore drill + §15 git list: added `/etc/apt/apt.conf.d/50unattended-upgrades` — §2 modifies this file to set `Unattended-Upgrade::Automatic-Reboot "true"` and `Unattended-Upgrade::Automatic-Reboot-Time "02:00"` (so security updates reboot the Pi at a sane hour), but the file was never in the backup paths, restore drill, or "what to put in git" list; a restore would silently land with the default package config and lose the customised reboot window. Updated the drill prose count from "six" to "seven config paths" (fix #93)
+> - §12 setup: pre-pull `alpine:3.21` during initial restic setup — the backup script's volume-tarball loop runs `docker run --rm -v "$vol":/src -v "$STAGING":/dst alpine:3.21 tar czf ...`; if `alpine:3.21` is not in the local Docker cache when the first scheduled 04:00 backup fires and ProtonVPN is down at that moment (kill switch blocks egress), the pull fails, `set -euo pipefail` aborts the script, the `OnFailure` unit fires a Telegram alert, and no backup completes. Pulling once during setup (with the tunnel known-up) caches the image; the pin prevents Watchtower from pruning it (fix #94)
 
 > **Bug-fix changelog (v5.1.7.7):**
 > - Top-of-doc revision-notes chain: deleted. Every `**Revision notes vs vX:**` line was a one-liner pointer of the form "N bugs fixed (see vY changelog below)", adding nothing the corresponding changelog block right below it didn't already say in more detail. The chain grew by one entry per release and had become pure bloat. Fixes #81 (added missing v5.1.7.2 line) and #84 (added missing v5 + v5.1 lines) were correctly applied to the doc state at the time; the text they edited is now gone wholesale, but their numbered fix entries remain in the historical changelog as written (fix #91)
@@ -165,7 +182,7 @@
 5. [WireGuard remote access — wg0](#5-wireguard-remote-access--wg0)
 6. [Pi-hole + Unbound](#6-pi-hole--unbound)
 7. [Step-CA](#7-step-ca)
-8. [Nginx Proxy Manager + local DNS records](#8-nginx-proxy-manager)
+8. [Nginx Proxy Manager](#8-nginx-proxy-manager)
 9. [LAN Gateway — keep the router, not the Pi](#9-lan-gateway--keep-the-router-not-the-pi)
 10. [Home Assistant Container](#10-home-assistant-container)
 11. [DDNS](#11-dynamic-dns-ddns)
@@ -476,7 +493,13 @@ sudo nano /usr/local/bin/docker-user-rules.sh
 #!/bin/bash
 # Flush and rebuild DOCKER-USER chain to lock down container egress.
 # Container ports bound to 0.0.0.0:* will only be reachable from LAN + wg0.
-# NPM's 80/443 are unaffected — those match the RELATED,ESTABLISHED RETURN first.
+# NPM's 80/443 from LAN: the initial SYN matches the LAN-source RETURN
+# below (`-s 192.168.68.0/22`); subsequent reply traffic in the same
+# connection matches the RELATED,ESTABLISHED RETURN at the top of the
+# chain. Both directions need a RETURN somewhere — neither rule alone is
+# sufficient. (FIX #97: earlier wording claimed NPM's new connections
+# matched the RELATED,ESTABLISHED RETURN first; they don't — that rule
+# is for reply traffic only.)
 set -e
 iptables -F DOCKER-USER
 iptables -A DOCKER-USER -m state --state RELATED,ESTABLISHED -j RETURN
@@ -619,8 +642,9 @@ Because `DOCKER_HOST=tcp://docker-socket-proxy:2375` is now passed as an env var
 
 Everything from §6 onward (Pi-hole, Step-CA, NPM, Home Assistant, Uptime Kuma, Watchtower) is deployed as a **Portainer Stack** instead of raw `docker compose` CLI commands. Portainer stores the stack definition, manages the containers, and gives you one-click redeploy, live logs, and restart from the UI.
 
-**What cannot be a Portainer stack** (these stay as systemd services):
+**What cannot be a Portainer stack** (these stay as systemd services or bare `docker run`):
 - Portainer itself — chicken-and-egg, must exist before stacks can be created
+- `docker-socket-proxy` — same chicken-and-egg: Portainer's `DOCKER_HOST` points at it, so it must exist before Portainer can connect; deployed as a `docker run` above (FIX #99)
 - WireGuard `wg0` — requires host network config and `wg-quick` systemd integration
 - ProtonVPN — same as above
 - Restic backups — a systemd timer, not a container
@@ -1047,6 +1071,16 @@ services:
       - step-ca-data:/home/step
     environment:
       DOCKER_STEPCA_INIT_NAME: "Homelab CA"
+      # FIX #92: DOCKER_STEPCA_INIT_PASSWORD is set in Portainer's stack env-vars
+      # panel, NOT in this YAML — the YAML lives in git, the password does not.
+      # Without this variable Step-CA generates a random password and prints it
+      # to the container log exactly once on first start; if the user misses
+      # that log line (or Docker log rotation ages it out) there is no recovery
+      # short of destroying the step-ca-data volume and re-initialising the CA
+      # (which then requires re-installing the new root cert on every device).
+      # Setting it up front makes the password deterministic and recoverable
+      # from the user's password manager. Same pattern as Pi-hole's
+      # FTLCONF_webserver_api_password — see the callout below.
       # FIX #1: added "step-ca" (the Docker container name) as the first entry.
       # NPM's ACME client connects to https://step-ca:9000 via Docker DNS on
       # proxy-net. The TLS certificate Step-CA presents must include "step-ca"
@@ -1072,15 +1106,16 @@ volumes:
 
 ```bash
 # Portainer → Stacks → + Add stack → name: step-ca → Web editor → paste YAML → Deploy
-# CLI fallback:
-cd /opt/step-ca && docker compose up -d
+# CLI fallback (must pass DOCKER_STEPCA_INIT_PASSWORD inline — the Portainer
+# env-vars panel obviously doesn't exist when running compose directly):
+cd /opt/step-ca && DOCKER_STEPCA_INIT_PASSWORD='...' docker compose up -d
 ```
 
-> ⚠️ **Save the provisioner password now.** Step-CA prints it exactly once on first start. Run the following immediately and store the password in your password manager:
-> ```bash
-> docker logs step-ca 2>&1 | grep -i -E "password|Password"
-> ```
-> If you lose it you must re-initialise the CA and re-install the root cert on every device.
+> 🔑 **In Portainer:** under the `step-ca` stack's **Environment variables** panel (the lower section of the Stack editor, *not* the YAML), add `DOCKER_STEPCA_INIT_PASSWORD=<long-strong-password>` **before clicking Deploy**. Generate it from your password manager and store it there. Do NOT put it in the YAML — the YAML lives in git, the password does not. Same pattern as Pi-hole's `FTLCONF_webserver_api_password`.
+>
+> The Step-CA image consumes `DOCKER_STEPCA_INIT_PASSWORD` exactly once on first start (when it generates the CA's signing keypair and writes the encrypted private key to the volume). Changing it later via env-var has no effect — the password is baked into the encrypted key file at init time. If you ever lose the password you must destroy the `step-ca-data` volume, re-initialise the CA, and re-install the new root cert on every device.
+>
+> The legacy approach (used in earlier revisions of this guide) was to let Step-CA generate a random password and extract it from `docker logs step-ca` on first start. That worked, but was fragile: the log line can be missed, and Docker log rotation can age it out within hours. Setting it up front via env-var is strictly better.
 
 ### Get root cert + ACME URL
 
@@ -1355,6 +1390,18 @@ The thing v1 was missing entirely. Without backups, an SD-card death (or a finge
 sudo apt install -y restic
 ```
 
+```bash
+# FIX #94: pre-pull the alpine image the backup script uses for tar'ing Docker
+# volumes. Without this, the very first scheduled 04:00 backup is what pulls
+# alpine:3.21 — and if ProtonVPN happens to be down at 04:00 (the kill switch
+# blocks all egress), the pull fails, set -euo pipefail aborts the script,
+# and the OnFailure unit fires a Telegram alert before any backup has ever
+# succeeded. Pulling now (with the tunnel up during setup) caches the image
+# locally; Watchtower's WATCHTOWER_CLEANUP only prunes images that have been
+# *updated*, and we pin to alpine:3.21, so the cached layer survives.
+sudo docker pull alpine:3.21
+```
+
 ### Set up a Backblaze B2 bucket with split keys + Object Lock
 
 Sign up at backblaze.com → create a bucket. Cheap (~$0.005/GB/month).
@@ -1469,6 +1516,7 @@ restic backup \
   /etc/sysctl.d \
   /etc/cron.d \
   /etc/cloud/cloud.cfg.d \
+  /etc/apt/apt.conf.d/50unattended-upgrades \
   /etc/systemd/system/homelab-backup.service \
   /etc/systemd/system/homelab-backup.service.d/notify.conf \
   /etc/systemd/system/homelab-backup.timer \
@@ -1610,6 +1658,7 @@ restic restore latest --target /tmp/restore-test --include /etc/chrony
 restic restore latest --target /tmp/restore-test --include /etc/sysctl.d
 restic restore latest --target /tmp/restore-test --include /etc/cloud/cloud.cfg.d
 restic restore latest --target /tmp/restore-test --include /etc/ssh
+restic restore latest --target /tmp/restore-test --include /etc/apt/apt.conf.d/50unattended-upgrades
 # Verify all six paths inside the same privileged shell — avoids false
 # confidence if a restore failed early and left the target dir empty or
 # partial. Running ls outside the sudo bash -c block would succeed even on
@@ -1620,10 +1669,11 @@ ls /tmp/restore-test/etc/chrony/
 ls /tmp/restore-test/etc/sysctl.d/
 ls /tmp/restore-test/etc/cloud/cloud.cfg.d/
 ls /tmp/restore-test/etc/ssh/
+ls /tmp/restore-test/etc/apt/apt.conf.d/
 '
 ```
 
-The drill confirms the six config paths most critical to a working network (VPN keys, static IP, NTP, kernel tunables, cloud-init network disable, and SSH hardening) are present in the snapshot. Clean up after: `sudo rm -rf /tmp/restore-test`.
+The drill confirms the seven config paths most critical to a working network and host (VPN keys, static IP, NTP, kernel tunables, cloud-init network disable, SSH hardening, and the unattended-upgrades reboot-window config) are present in the snapshot. Clean up after: `sudo rm -rf /tmp/restore-test`.
 
 ---
 
@@ -1821,8 +1871,9 @@ networks:
 # Portainer → Stacks → + Add stack → name: watchtower → Web editor → paste YAML
 # Set WATCHTOWER_NOTIFICATION_URL in the Environment variables panel (not in the YAML)
 # → Deploy
-# CLI fallback:
-cd /opt/watchtower && docker compose up -d
+# CLI fallback (must pass WATCHTOWER_NOTIFICATION_URL inline — see the
+# Portainer-path note just above for why it's not in the compose YAML):
+cd /opt/watchtower && WATCHTOWER_NOTIFICATION_URL='telegram://<token>@telegram?chats=<chat-id>' docker compose up -d
 ```
 
 ---
@@ -1861,8 +1912,10 @@ Plus the two containers that aren't stacks: `portainer` itself and `docker-socke
 | DHCP DNS primary | `192.168.70.5` (Pi-hole) |
 | DHCP DNS secondary | `1.1.1.1` (fallback if Pi-hole down) |
 | Port forward 51820/UDP | → `192.168.70.5:51820` (WireGuard) |
-| Port forward 80/TCP | → `192.168.70.5:80` (NPM, optional if you want public access) |
-| Port forward 443/TCP | → `192.168.70.5:443` (NPM, optional) |
+| Port forward 80/TCP | → `192.168.70.5:80` (NPM, optional if you want public access — see note below) |
+| Port forward 443/TCP | → `192.168.70.5:443` (NPM, optional — see note below) |
+
+> ⚠️ **The optional 80/443 forwards don't work without a DOCKER-USER change** (FIX #98). When a WAN-sourced packet reaches the Pi via the router's port forward, the FORWARD chain sees the original external client IP as the source — none of the DOCKER-USER `-j RETURN` rules (`-i wg0`, `-s 192.168.68.0/22`, `-s 172.16.0.0/12`, `-s 127.0.0.0/8`) match it, and the final `-j DROP` applies. The doc's primary remote-access path is wg0, not public NPM, so this is the safe default. If you genuinely want public NPM exposure, you need to add a permissive rule to `/usr/local/bin/docker-user-rules.sh` **before** the final DROP — e.g. `iptables -A DOCKER-USER -p tcp -m multiport --dports 80,443 -j RETURN` — and accept that NPM-fronted services are now reachable from the public internet (with all the auth-strength and rate-limiting implications that follow).
 
 ### Trust-store install of `homelab-root-ca.crt`
 
@@ -1905,10 +1958,20 @@ visit ipv6leak.com                     # confirms no native v6 leak
 
 **Tunnel-down behavior (intentional kill switch test):**
 ```bash
-sudo systemctl stop wg-quick@protonvpn
+# FIX #95: drop the interface directly, NOT via `systemctl stop wg-quick@protonvpn`.
+# `systemctl stop` runs `protonvpn-down.sh` (the wg-quick PreDown hook), which
+# REMOVES the PROTON_KS chain from OUTPUT — turning this into a "did wg-quick
+# clean up correctly?" check instead of a "does the kill switch actually hold
+# when the tunnel drops?" check. The interface goes down here in a way that
+# simulates a real tunnel drop (server reboot, transient network blip): the
+# wg-quick teardown is NOT invoked, so the kill switch is still loaded in
+# iptables and the curl below has nowhere to go.
+sudo ip link set protonvpn down
 curl --max-time 5 ifconfig.me           # should fail (kill switch active)
 chronyc tracking                        # should STILL work — NTP is in the kill-switch exception
-sudo systemctl start wg-quick@protonvpn
+# Cleanest recovery is a full wg-quick restart — bringing the link back up
+# manually doesn't re-establish the WireGuard handshake state.
+sudo systemctl restart wg-quick@protonvpn
 ```
 
 ---
@@ -1988,7 +2051,7 @@ for s in 1160 1180 1200 1220 1240 1260 1280; do
 done
 ```
 
-The last `OK` size + 28 (ICMP+IP headers) is your true effective MTU. If it's below 1280, drop both the wg0 server and client `MTU` values to match (or to 1240 as a conservative floor). Mismatched MTUs typically show up as "WireGuard connects but big requests hang" — HTTPS handshakes complete, but large responses stall.
+The last `OK` size + 28 (ICMP+IP headers) is your true effective MTU. **Going below 1280 breaks IPv6 on the wg0 interface** — 1280 is the IPv6 minimum MTU (see fix #82 in §4). If the probe shows the path can't carry 1280-byte packets and you must lower wg0 further, you're making a deliberate trade-off: no IPv6 on wg0 in exchange for no fragmentation. Drop both server and client to e.g. 1240 only if you accept v4-only on wg0. Mismatched MTUs typically show up as "WireGuard connects but big requests hang" — HTTPS handshakes complete, but large responses stall.
 
 ### Image-pin review cadence
 
@@ -2036,7 +2099,7 @@ Now every `git commit` runs gitleaks; a hit blocks the commit until you redact.
 | VPN clients connect but no DNS | Missing `ufw allow in on wg0 to any port 53` | Add the UFW rule, reload |
 | Pi-hole won't start | `systemd-resolved` came back from updates, OR v5→v6 migration confusion | `sudo systemctl disable --now systemd-resolved`; for env vars: v6 uses `FTLCONF_*`, old `WEBPASSWORD`/`DNSMASQ_LISTENING` are silently ignored |
 | Cert errors on `*.berrypi5.lan` | Root CA not installed on that device | See trust-store table |
-| Slow VPN throughput / random disconnects | MTU too high through stacked tunnels | wg0 is already set to 1280 (fix #62); run the MTU probe in §15 and lower wg0 + clients further if the stall persists (1240 is a safe conservative value) |
+| Slow VPN throughput / random disconnects | MTU too high through stacked tunnels | wg0 is already set to 1280 (fix #62, IPv6 minimum per fix #82); run the MTU probe in §15. Only lower wg0 + clients further if the stall persists **and** you accept losing IPv6 on the wg0 interface — 1240 is conservative but makes wg0 v4-only |
 | Watchtower broke a service | Bad image tag picked up | `cd /opt/<service> && docker compose pull && docker compose up -d` with last-known-good tag |
 
 ### Ubuntu vs Debian gotchas
@@ -2094,7 +2157,7 @@ Now every `git commit` runs gitleaks; a hit blocks the commit until you redact.
 
 ### What to put in git
 
-`/opt/*/docker-compose.yml`, `/etc/netplan/50-cloud-init.yaml`, `/etc/sysctl.d/99-homelab.conf`, `/etc/ssh/sshd_config.d/99-hardening.conf`, `/etc/chrony/chrony.conf`, `/etc/wireguard/protonvpn-up.sh`, `/etc/wireguard/protonvpn-down.sh`, `/usr/local/bin/homelab-backup.sh`, `/usr/local/bin/homelab-health-push.sh`, `/usr/local/bin/docker-user-rules.sh`, `/etc/systemd/system/docker-user-rules.service`, `/etc/cron.d/homelab-health`, the rest of the systemd unit files, and a sanitised version of `wg0.conf` (keys redacted). Commit the lot to a private GitHub repo with `gitleaks` as a pre-commit hook. Restic handles the rest (data); git handles the recipe.
+`/opt/*/docker-compose.yml`, `/etc/netplan/50-cloud-init.yaml`, `/etc/sysctl.d/99-homelab.conf`, `/etc/ssh/sshd_config.d/99-hardening.conf`, `/etc/chrony/chrony.conf`, `/etc/apt/apt.conf.d/50unattended-upgrades`, `/etc/wireguard/protonvpn-up.sh`, `/etc/wireguard/protonvpn-down.sh`, `/usr/local/bin/homelab-backup.sh`, `/usr/local/bin/homelab-health-push.sh`, `/usr/local/bin/docker-user-rules.sh`, `/etc/systemd/system/docker-user-rules.service`, `/etc/cron.d/homelab-health`, the rest of the systemd unit files, and a sanitised version of `wg0.conf` (keys redacted). Commit the lot to a private GitHub repo with `gitleaks` as a pre-commit hook. Restic handles the rest (data); git handles the recipe.
 
 Keep the on-disk compose files in sync with what you paste into Portainer. The easiest habit: edit the file on disk first, then paste the updated content into the Portainer stack editor. That way git always has the source of truth.
 
@@ -2127,6 +2190,32 @@ Keep the on-disk compose files in sync with what you paste into Portainer. The e
 | 29 | §3 container startup order | `docker run portainer` appeared before `docker run docker-socket-proxy`; Portainer's `DOCKER_HOST` env var points at the proxy and tries to connect immediately — proxy must exist first | Swapped order: docker-socket-proxy first, then Portainer; added explanatory note |
 | 30 | §13 health script | `TEMP_MC` had no guard against empty/unreadable sysfs output; an empty value caused `awk` arithmetic syntax error, silently crashing the script | Added empty-value check; script now pushes a "down" status with a clear message if sysfs is unreadable |
 | 31 | §2 formatting | Two consecutive blank lines left after removing `chattr +i` from §2 in fix #20 | Removed extra blank line |
+
+**v5.1.7.10 bug-fix summary** — 2 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 101 | §7 Step-CA CLI fallback | Regression from fix #92: the Portainer-path instructions correctly tell the user to set `DOCKER_STEPCA_INIT_PASSWORD` in the stack's env-vars panel, but the adjacent CLI fallback (`cd /opt/step-ca && docker compose up -d`) didn't pass the env var inline; a CLI-path user would get the random-generated-and-logged behaviour back — the very thing fix #92 set out to eliminate | Patched the CLI fallback to `cd /opt/step-ca && DOCKER_STEPCA_INIT_PASSWORD='...' docker compose up -d`, matching the pattern used by the Pi-hole `dns` stack's CLI fallback (`FTLCONF_webserver_api_password='...'`) |
+| 102 | §13 Watchtower CLI fallback | Pre-existing same-class bug: the prose tells the user to set `WATCHTOWER_NOTIFICATION_URL` in the Portainer env-vars panel, but the CLI fallback didn't pass it inline; a CLI-path user would deploy Watchtower with notifications silently disabled and the Sunday update schedule would fire without any Telegram alerts | Patched the CLI fallback to `WATCHTOWER_NOTIFICATION_URL='telegram://<token>@telegram?chats=<chat-id>' docker compose up -d` with a placeholder showing the expected shoutrrr URL format |
+
+**v5.1.7.9 bug-fix summary** — 6 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 95 | §14 kill-switch test | `systemctl stop wg-quick@protonvpn` runs the `protonvpn-down.sh` PreDown hook, which removes the `PROTON_KS` chain from `OUTPUT`; the verification curl that followed therefore succeeded (route falls back to ISP) — the test was checking wg-quick teardown, not the kill switch itself | Replaced with `ip link set protonvpn down`, which drops the interface without invoking PreDown — the chain stays loaded and the curl is actually blocked; recovery is `systemctl restart wg-quick@protonvpn` so the handshake state is rebuilt cleanly |
+| 96 | §15 MTU verification + breakage table | Both spots recommended dropping wg0 to 1240 "as a conservative value", contradicting fix #82's establishment of 1280 as the IPv6 minimum below which IPv6 breaks on wg0; fix #82 only updated the §4 comment | Rewrote both as an explicit IPv4-only-on-wg0 trade-off with cross-reference to fix #82 |
+| 97 | §3 `docker-user-rules.sh` comment | Said "NPM's 80/443 are unaffected — those match the RELATED,ESTABLISHED RETURN first" — wrong; RELATED,ESTABLISHED only matches reply traffic in an already-allowed connection. The initial SYN from LAN to NPM 80/443 matches the LAN-source RETURN; reply packets ride RELATED,ESTABLISHED. Both rules are needed | Rewrote the comment to describe both directions correctly |
+| 98 | §14 router-config table | Rows for "optional 80/443 port forwards (NPM, optional if you want public access)" implied a router-side toggle was sufficient, but DOCKER-USER's final DROP applies to WAN-sourced packets reaching the FORWARD chain; the public exposure silently fails | Added a ⚠️ footnote under the table explaining the DOCKER-USER constraint and showing the additional `iptables -A DOCKER-USER -p tcp -m multiport --dports 80,443 -j RETURN` rule that would be needed in `docker-user-rules.sh` |
+| 99 | §3 "What cannot be a Portainer stack" list | Listed Portainer, wg0, ProtonVPN, and Restic as the four non-stack components but omitted `docker-socket-proxy`, which is also a non-stack `docker run` for the same chicken-and-egg reason as Portainer (Portainer's `DOCKER_HOST` targets it and needs it running first) | Added `docker-socket-proxy` as a bullet alongside Portainer with the rationale |
+| 100 | §8 TOC entry | Read `[Nginx Proxy Manager + local DNS records](#8-nginx-proxy-manager)` — but the local-DNS-records subsection lives in §6 (Pi-hole admin → Local DNS → DNS Records), not §8; misleading TOC suffix from an earlier doc structure that has since shifted | Dropped the "+ local DNS records" suffix; entry now matches the actual section title |
+
+**v5.1.7.8 bug-fix summary** — 3 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 92 | §7 Step-CA | Provisioner password was generated by Step-CA on first start and printed to logs exactly once — fragile because the log line can be missed and `daemon.json`'s `max-size=10m, max-file=3` log rotation can age it out within hours; lost password = destroy volume + re-init CA + re-install root cert on every device | Set `DOCKER_STEPCA_INIT_PASSWORD` in Portainer's stack env-vars panel before first deploy (same pattern as Pi-hole's `FTLCONF_webserver_api_password`); rewrote the surrounding callout to describe the env-vars approach with the legacy log-extraction noted as historical context |
+| 93 | §12 backup script + restore drill + §15 git list | `/etc/apt/apt.conf.d/50unattended-upgrades` (the file §2 edits to set the 02:00 automatic-reboot window) was absent from restic backup paths, the restore drill, and the "what to put in git" list — a restore would silently revert to the package's default config and lose the customised reboot window | Added the path to all three places (backup, drill `--include` + `ls`, git list); updated the drill prose count from "six" to "seven config paths" |
+| 94 | §12 setup | `alpine:3.21` (used by the backup script's volume-tarball loop) was never explicitly pre-pulled; the first scheduled 04:00 backup would be what triggers the pull, and if ProtonVPN happens to be down at that moment the kill switch blocks the pull, `set -euo pipefail` aborts the script, the `OnFailure` unit fires a Telegram alert, and no backup ever completes | Added `sudo docker pull alpine:3.21` step right after `apt install -y restic`, with a comment explaining the failure mode and why the image survives Watchtower cleanup (it's pinned, never auto-updated) |
 
 **v5.1.7.7 bug-fix summary** — 1 new fix:
 

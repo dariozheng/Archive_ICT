@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/homelab-setup-v5_1_7_7.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "homelab-setup-v5_1_7_7"
+              "title": "Cisco ISE"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/homelab-setup-v5_1_7_7.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of homelab-setup-v5_1_7_7"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -209,6 +209,9 @@
   },
   "active": "ec846b8afa317e07",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260513105840.png",
+    "attachments/Pasted image 20260513100654.png",
+    "0 - Notes/homelab-setup-v5_1_7_10.md",
     "0 - Notes/Cisco ISE.md",
     "0 - Notes/homelab-setup-v5_1_7_7.md",
     "0 - Notes/homelab-setup-v5_1_7_6.md",
@@ -226,7 +229,6 @@
     "attachments/Pasted image 20260512142840.png",
     "1 - Excalidraw/Cisco ISE.md",
     "1 - Excalidraw/Drawing 2026-05-12 13.excalidraw.md",
-    "attachments/Pasted image 20260512124736.png",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "Orphaned Images Report.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
@@ -249,8 +251,6 @@
     "0 - Notes/Web-Based Enterprise Management.md",
     "0 - Notes/IP Spoofing.md",
     "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
-    "2 - Categories/Cloud Computing.md",
-    "2 - Categories/Topics/Security/Security General.md",
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",

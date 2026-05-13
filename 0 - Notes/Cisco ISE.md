@@ -46,7 +46,7 @@ Any internal user accounts configured can then be associated with a defined user
 ![[Pasted image 20260508105040.png]]
 
 ### Groups 
-Endpoint and User Groups, they can be used as attributes in Policy Sets. 
+Endpoint and User Groups, they can be used as attributes in Policy Sets.
 
 ![[Pasted image 20260508105117.png]]
 
@@ -79,7 +79,7 @@ External Identity Sources can leverage existing external identity store for netw
 
 #### External Identity Sources - Certificate Authentication Profile 
 This is an important setting for certificate based authentication. 
-See [[#Certificate Authentication Profile certificates|Link]]
+See [[#Certificate Authentication Profile certificates|Link]].
 #### External Identity Sources  - Active Directory 
 Microsoft’s Active Directory (AD) is a highly available distributed database deployments. 
 
@@ -91,6 +91,7 @@ AD leverages AD domains, which are groupings of users and machine accounts, perm
 
 AD domains belong to an AD forest, which is a collection of domains with trust relationships between them.
 
+---
 
 To join Cisco ISE to an AD domain, the ISE machine account used need to have the permissions: 
 - to Search AD (to see if the ISE machine account already exists)
@@ -98,19 +99,25 @@ To join Cisco ISE to an AD domain, the ISE machine account used need to have the
 - to set Attributes on the New Machine Account
 
 To join an AD Domain go to <strong>Administration > Identity Management > External Identity Sources > Active Directory</strong>, add the domain and use a domain admin account to join. 
+
 ![[Pasted image 20260508113216.png]]
 
 Allowed Domains set the scope for identity extraction, here it's set to everything is allowed. 
+
 ![[Pasted image 20260508113401.png]]
 
 In this section it's possible to retrieve groups from Active Directory and use them as attributes for Policy Sets
 ![[Pasted image 20260508113546.png]]
+
 ### Identity Source Sequences
 Identity Source Sequences (ISS) checks a series of identity sources from top to bottom, enabling a single authentication rule to check several identity sources instead of just one. It includes the selection of Certificate Authentication Profile. 
 
 ![[Pasted image 20260508113927.png]]
 
+In the Publiacqua deployment the ISS is Publiacqua_ISS which have [[#External Identity Sources - Certificate Authentication Profile|EAP_PBA]] as CAP and only [[#External Identity Sources - Active Directory|Publiacqua_AD]] in its list. 
+
 ![[Pasted image 20260508113958.png]]
+
 ## Admin Access 
 In Admin Access are configured ISE GUI permissions for each group or type of users. 
 
@@ -166,10 +173,38 @@ In a Cisco dominant environment the default network device profile for Cisco is 
 
 It’s possible to set the conditions for which, based on the attributes received on the header, the packet is considered a Wired, Wireless, MAB, or 802.1X connection.
 ##### Flow Type Conditions
-Enter the attributes and values that your device uses for the various flows like <strong>Wired MAB</strong>, <strong>802.1X</strong>, in the <strong>Flow Type Conditions</strong> section. This is necessary for ISE to detect the right flow type for your device according to the attributes it uses.
+Enter the <strong>attributes</strong> and <strong>values</strong> that your device vendor uses for the network flows types in the <strong>Flow Type Conditions</strong>: 
+- Wired MAB
+- Wireless MAB
+- Wired 802.1x
+- Wireless 802.1x
+- Wired Web Authentication
+- Wireless Web Authentication
 
-<strong>Radius:Service-Type</strong> indicate if the packet is a Ethernet or a Wireless packet.
-<strong>Radius:NAS-Port-Type</strong> determine if the authorization protocol is a <strong>Call Check</strong> (Use MAB) <strong>Framed</strong> (Use 802.1X) or <strong>Login</strong> (Web Portal).
+This is necessary for ISE to detect the right flow type for your device according to the attributes it uses.
+###### Cisco
+
+![[Pasted image 20260513100654.png]]
+
+Cisco uses the <strong>attribute</strong> and <strong>value</strong> pair:
+
+Radius:NAS-Port-Type = <strong>Ethernet</strong> for wired flows
+Radius:NAS-Port-Type = <strong>Wireless - IEEE 802.11</strong> for wireless flows
+
+Radius:Service-Type = <strong>Call Check</strong> for MAB access
+Radius:Service-Type = <strong>Framed</strong> for 802.1X access
+Radius:Service-Type = <strong>Login</strong> for Web Portal access
+###### ArubaWireless
+
+![[Pasted image 20260513105840.png]]
+
+<strong>Aruba Networks</strong> views all wireless access as a user initiating a standard data session. Because of this, the Aruba controller sends the exact same generic `Service-Type` for both authentication methods.
+
+Radius:NAS-Port-Type = <strong>Wireless - IEEE 802.11</strong> for wireless flows
+
+Radius:User-Name = <strong>Radius:Calling-Station-ID</strong> for MAB access
+
+Radius:Service-Type = <strong>Login</strong> for all wireless 
 ##### Attribute Aliasing
 <mark style="background: #FF5582A6;"><strong>Attribute Aliasing</strong> allows a <strong>NAD Profile</strong> to map vendor-specific attributes to a common attribute so that policy rules can use the friendly name</mark>. 
 It simplifies attribute selection, reduces the number of authentication/authorization policy rules required for different vendor devices, and is potentially less error prone. 
@@ -252,7 +287,9 @@ Cisco ISE <strong>library conditions</strong> are pre-configured, reusable polic
 ![[Pasted image 20260512150602.png]]
 
 #### Smart Conditions
-Cisco ISE smart conditions are pre-defined, intelligent policy building blocks designed to simplify rule creation by abstracting complex RADIUS attribute-value pairs into human-readable, usable logic. These RADIUS attribute-value pairs are mapped from [[#Authentication/Authorization|Network Device Profiles]] 
+Cisco ISE smart conditions are pre-defined, intelligent policy building blocks designed to simplify policy rule creation by abstracting complex RADIUS attribute-value pairs into human-readable, usable logic. 
+
+These RADIUS attribute-value pairs are mapped from [[#Authentication/Authorization|Network Device Profiles]] 
 
 ![[Pasted image 20260512145913.png]]
 
@@ -292,15 +329,18 @@ When a device connects to a switch port configured for 802.1X/MAB, the following
 1. **Detection**: The switch initially tries to authenticate the device via 802.1X.
 2. **Fallback**: If the device fails to respond to 802.1X requests (usually after a timeout), the switch "falls back" to MAB.
 3. **RADIUS Request**: The switch sends a RADIUS Access-Request to Cisco ISE, using the device's MAC address as both the username and password.
-4. **ISE Decision**: ISE checks the MAC address against its [[#Endpoint Identity Groups|Internal Endpoints]] database or performs **Profiling** to identify the device type.
+4. **ISE Decision**: ISE checks the MAC address against all MAC addresses in the [[#Endpoint Identity Groups|Internal Endpoints]] database or performs **Profiling** to identify the device type.
 5. **Authorization**: Based on your configured **Policy Sets**, ISE sends back a RADIUS Access-Accept with specific permissions, such as a VLAN assignment or a Downloadable ACL (dACL).
 
 In the current deployment even if the MAB check fails, the server ISE allow the authentication request to continue to the authorization policies, where they will be met with [[#Guest Redirect|Guest Redirect]] Authorization Policy. 
 
-The conditions for MAB is the [[#Smart Conditions|predefined Wired_Mab]].
+The conditions for MAB is the [[#Flow Type Conditions|predefined Wired_Mab]].
 ##### Dot1X (802.1X)
 Dot1X (802.1X) should be the most used/default authentication policy. 
-It's the authentication where the client has a supplicant ([[#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] to authenticate itself.
+It's the authentication policy where the client has a supplicant ([[#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] to authenticate itself.
+
+The condition for request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it check the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]].
+
 
 ##### Default
 
