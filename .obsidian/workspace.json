@@ -185,8 +185,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -210,6 +209,7 @@
   },
   "active": "ec846b8afa317e07",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260513122119.png",
     "attachments/Pasted image 20260513121938.png",
     "attachments/Pasted image 20260513121704.png",
     "attachments/Pasted image 20260513121610.png",
@@ -222,7 +222,6 @@
     "attachments/Pasted image 20260513115747.png",
     "attachments/Pasted image 20260513115650.png",
     "attachments/Pasted image 20260513115229.png",
-    "attachments/Pasted image 20260513115115.png",
     "0 - Notes/homelab-setup-v5_1_7_10.md",
     "0 - Notes/homelab-setup-v5_1_7_7.md",
     "0 - Notes/homelab-setup-v5_1_7_6.md",

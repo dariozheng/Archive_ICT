@@ -352,6 +352,36 @@ This attribute identifies the **endpoint device** that is requesting access to t
 
 ![[Pasted image 20260513115229.png]]
 
+##### cisco-av-pair
+
+![[Pasted image 20260513122119.png]]
+
+In Cisco ISE, **`cisco-avpair`** is a Vendor-Specific Attribute (VSA) classified under the **RADIUS > Cisco** dictionary (Vendor ID: `9`, Sub-ID: `1`)
+
+The syntax always follows a strict string format: `protocol:attribute=value`.
+
+Common uses:
+
+<strong>Central Web Authentication (CWA)</strong> and Guest Portals: When an unknown device connects to the network, ISE uses two specific AV pairs to tell the switch to intercept the user's web browser traffic and redirect them to a login portal:
+
+<strong>url-redirect</strong>: Tells the switch exactly where the ISE Guest or Hotspot portal is hosted.
+  ```cisco-av-pair = url-redirect=https://guestportal1.publiacqua.it:port/portal/gateway?sessionId=SessionIdValue&portal=4f145223-7d12-411b-a511-92abfafef0d8&action=cwa```
+
+<strong>url-redirect-acl</strong>: Specifies the name of the local Access Control List (ACL) pre-configured on the switch that defines what traffic should be redirected versus allowed (e.g., allow DNS and DHCP, but redirect HTTP).
+```cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT```
+
+<strong>Network Controller Access Control (Role-Based Access)</strong>: When managing logins to Cisco fabric platforms like Cisco DNA Center (Catalyst Center) or Cisco APIC (ACI) via RADIUS, ISE passes the exact user roles through an AV pair:
+
+Cisco DNA Center / Catalyst Center Login:
+```cisco-av-pair = ROLE=SUPER-ADMIN-ROLE```
+
+Cisco APIC / ACI Fabric Login:
+```cisco-avpair=shell:domains=all/admin/```
+
+Administrative Privilege Levels (Switch CLI via RADIUS)If you are using RADIUS (instead of TACACS+) to secure administrative command-line access to Cisco switches and firewalls, you must use an AV pair to drop the administrator directly into the privileged executive mode (enable):shell:priv-lvl: Grants immediate execution privileges.Value: cisco-avpair=shell:priv-lvl=15
+
+Posture Assessment & Security ComplianceWhen utilizing Cisco Secure Client (AnyConnect) for host inspection, ISE pushes state tokens down to the NAD to quarantine or clear endpoints based on their antivirus or patch status:posture-token: Communicates the compliance state to the NAD.Value: cisco-avpair=posture-token=Compliant
+
 
 ### Conditions
 Cisco ISE policy conditions are rule-based elements (attributes, operators, values) used to define network access, profiling, posture, and guest services. They enable granular control, allowing policies based on user identity, device type, location, or time. Conditions can be Simple (one attribute) or Compound (combined using AND/OR) and are managed within the Conditions Studio
