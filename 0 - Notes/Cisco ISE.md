@@ -276,8 +276,23 @@ The SNMP Settings section is where the SNMP community for the NAD is configured,
 In Policy section are defined the Policy Sets, Dictionaries, Conditions and Results. 
 ### Dictionaries
 Cisco ISE dictionary attributes are pre-defined or custom RADIUS and system-level parameters used to create policy conditions, such as device type, user group, or location, for authentication and authorization. These attributes, found in <strong>Policy > Policy Elements > Dictionaries</strong>, allow network admins to build granular policies
+#### Radius Dictionary
 
-![[Pasted image 20260512145615.png]]
+![[Pasted image 20260513115115.png]]
+
+##### NAS-Port-Type
+
+![[Pasted image 20260513115848.png]]
+
+Radius Attribute that indicates the port type. 
+Important values are:
+- 15 = Ethernet
+- 19 = Wireless - IEEE 802.11
+
+#### Cisco Dictionary
+
+![[Pasted image 20260513115229.png]]
+
 
 ### Conditions
 Cisco ISE policy conditions are rule-based elements (attributes, operators, values) used to define network access, profiling, posture, and guest services. They enable granular control, allowing policies based on user identity, device type, location, or time. Conditions can be Simple (one attribute) or Compound (combined using AND/OR) and are managed within the Conditions Studio
