@@ -498,7 +498,13 @@ In this deployment it's shouldn't be hit at all.
 Authorization Policies decides which [[#Authorization Profiles]] does the client get.
 
 The authorization policies order is first match, the client get authorization profile of the fist authorization policy it hits.
-
+##### Deny Access
+##### Admin Access
+##### Machine Access
+##### Client Access
+##### RDP Access
+##### MAB Access
+##### Guest Access
 ##### Guest Redirect
 ### Results
 #### Policy - Results - Authentication
