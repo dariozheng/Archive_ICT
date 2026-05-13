@@ -496,7 +496,9 @@ It's usually used for requests that the policies before this one could not catch
 In this deployment it's shouldn't be hit at all. 
 #### Authorization Policy
 Authorization Policies decides which [[#Authorization Profiles]] does the client get.
-The authorization policy check first if the computer is in the Blacklist 
+
+The authorization policies order is first match, the client get authorization profile of the fist authorization policy it hits.
+
 ##### Guest Redirect
 ### Results
 #### Policy - Results - Authentication
