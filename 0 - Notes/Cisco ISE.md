@@ -312,6 +312,42 @@ Common Service-Type values:
 
 For the switch to send this data it needs to be configured with `radius-server attribute 6 on-for-login-auth
 
+##### Called-Station-ID
+
+![[Pasted image 20260513121704.png]]
+
+This attribute identifies the **infrastructure access point** or <strong>port where the endpoint is physically or logically connecting</strong>.
+
+The contents change drastically depending on whether the connection is **Wired** or **Wireless**:
+
+1. On Wireless Networks (Sent by WLCs)
+
+It transmits the MAC address of the Access Point's radio (BSSID) combined with the name of the Wi-Fi network (SSID).
+
+- **Format:** `AA-BB-CC-DD-EE-FF:Corporate-Wi-Fi` or `Corporate-Wi-Fi` (depending on configuration).
+- **Why it is notable in ISE:** This allows you to write specific rules based on the Wi-Fi network name. You can create a policy rule stating: _If `Radius.Called-Station-ID ENDS_WITH :Guest-Wi-Fi`, push the Guest web-portal redirect._
+
+2. On Wired Networks (Sent by Switches)
+
+It traditionally transmits the MAC address of the physical switch chassis or the specific VLAN/port identifier where the Ethernet cable is plugged in.
+
+- **Format:** Typically the MAC address of the switch interface or the bridge group ID.
+
+##### Calling-Station-ID
+
+![[Pasted image 20260513121938.png]]
+
+This attribute identifies the **endpoint device** that is requesting access to the network.
+
+- **What it contains:** In almost all modern enterprise networks (Wired, Wireless, and VPN), it transmits the **MAC address** of the client machine, smartphone, or IoT device.
+- **Format:** The format depends on the brand of your network switch or wireless controller. Common formats include:
+    - `aa-bb-cc-dd-ee-ff`
+    - `aabb.ccdd.eeff`
+    - `AA:BB:CC:DD:EE:FF`
+- **Why it is notable in ISE:**
+    - **MAC Authentication Bypass (MAB):** For headless devices like printers or security cameras, ISE copies the MAC address from this attribute and checks it against the internal endpoint database.
+    - **Device Profiling:** The ISE Profiler evaluates this MAC address vendor prefix (OUI) to help determine if the device is an Apple iPhone, a Windows workstation, or an IP phone.
+
 #### Cisco Dictionary
 
 ![[Pasted image 20260513115229.png]]

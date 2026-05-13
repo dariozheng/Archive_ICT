@@ -185,7 +185,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -207,8 +208,11 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "ec846b8afa317e07",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260513121938.png",
+    "attachments/Pasted image 20260513121704.png",
+    "attachments/Pasted image 20260513121610.png",
     "0 - Notes/Denial-of-Service (DoS).md",
     "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260513120458.png",
@@ -219,8 +223,6 @@
     "attachments/Pasted image 20260513115650.png",
     "attachments/Pasted image 20260513115229.png",
     "attachments/Pasted image 20260513115115.png",
-    "attachments/Pasted image 20260513105840.png",
-    "attachments/Pasted image 20260513100654.png",
     "0 - Notes/homelab-setup-v5_1_7_10.md",
     "0 - Notes/homelab-setup-v5_1_7_7.md",
     "0 - Notes/homelab-setup-v5_1_7_6.md",
@@ -250,7 +252,6 @@
     "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/Web-Based Enterprise Management.md",
     "0 - Notes/IP Spoofing.md",
-    "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md",
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",
