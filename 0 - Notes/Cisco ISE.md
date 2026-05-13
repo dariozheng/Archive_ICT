@@ -52,7 +52,7 @@ Endpoint and User Groups, they can be used as attributes in Policy Sets.
 
 #### Endpoint Identity Groups
 
-![[Pasted image 20260508105337.png]]
+![[Pasted image 20260513164133.png]]
 
 Endpoint Identity Groups stores information about all the endpoint devices that connect to the network infrastructure or they can be filled through an CSV import.
 It's possible to create groups to use as attributes in Policy Sets.
@@ -67,6 +67,14 @@ MACAddress,EndPointPolicy,IdentityGroup,PortalUser.GuestType,Description,PortalU
 
 60:18:95:30:CA:DB,,Printers,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ```
+
+##### PBA_Blacklist
+All MAC Address that must be denied access to the network. 
+##### PBA_Printers
+All Printers MAC Addresses, there are child groups that distribute the MAC Addresses by location. 
+The Printers MAC Addresses can be get from the ARP table in the core switches/routers, and they and be imported with the CSV.
+##### PBA_Whitelist
+MAC Addresses that must be whitelisted. Used in the MAB Access.
 #### User Identity Groups
 
 ![[Pasted image 20260508110112.png]]
@@ -488,7 +496,7 @@ It's usually used for requests that the policies before this one could not catch
 In this deployment it's shouldn't be hit at all. 
 #### Authorization Policy
 Authorization Policies decides which [[#Authorization Profiles]] does the client get.
-
+The authorization policy check first if the computer is in the Blacklist 
 ##### Guest Redirect
 ### Results
 #### Policy - Results - Authentication
