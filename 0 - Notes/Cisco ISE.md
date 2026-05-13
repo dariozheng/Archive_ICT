@@ -539,7 +539,7 @@ It sends the VLAN for clients and the re-authentication timer.
 
 The Redirect_Guest_Wired is the first Authorization Profile for guest users, it send a redirection URL to the CWA guest portal.  
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
-- [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:805 : VLAN 805
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID = 1:805]] : Put the client in VLAN 805
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
 - [[#cisco-av-pair|cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT]] : This indicate which local access list the client must use. 
