@@ -429,11 +429,15 @@ Each policy set functions as a "rule book" evaluated from the top down. Once a r
 - <strong>Authentication Policy</strong>: Verifies the identity of the user or device using identity sources like Active Directory or internal databases.
 - <strong>Authorization Policy</strong>: Grants specific permissions—such as VLAN assignment, Security Group Tags (SGTs), or Downloadable ACLs (dACLs)—based on the user's role or device posture.
 
-The Top-Level Condition in this deployment are Wired, Wired_Monitor, Wireless and DNAC, and they distribute the clients based on the type of connection (Wired or Wireless) and if the Device Type is a DNAC-server. 
+The Top-Level Condition in this deployment are <strong>Wired</strong>, <strong>Wired_Monitor</strong>, <strong>Wireless</strong> and <strong>DNAC</strong>, they distribute the client requests based on the type of connection (Wired or Wireless) and if the Device Type is a DNAC-server. 
 
 ![[Pasted image 20260512152559.png]]
 
-The Wired_Monitor is a temporary condition that is used on monitoring deployment together with the NAD command <strong>no access-session closed</strong>, in this deployment there is only ACCEPT or DENY authentication request, and all DENY authentication requests are ignored and the client can have access to the network anyway. 
+The <strong>Wired_Monitor</strong> Top-Level Condition is used temporarily in Cisco ISE monitoring deployments alongside the <strong>Network Access Device</strong> command `no access-session closed` to gather visibility data without restricting network access. 
+
+In this deployment model, the system only generates ACCEPT or DENY responses, and all DENY requests are ignored to ensure clients maintain uninterrupted connectivity. 
+
+Because Cisco ISE functions strictly as an information-gathering tool in this phase, authorization profiles must not apply Downloadable ACLs or VLAN changes, as these active policies cannot be ignored and will directly disrupt user network access.
 
 #### Authentication Policy
 
@@ -458,13 +462,16 @@ In the current deployment even if the MAB check fails, the server ISE allow the 
 The conditions for MAB is the [[#Flow Type Conditions|predefined Wired_Mab]].
 ##### Dot1X (802.1X)
 Dot1X (802.1X) should be the most used/default authentication policy. 
-It's the authentication policy where the client has a supplicant ([[#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] to authenticate itself.
 
-The condition for request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it check the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]].
+It's the authentication policy where the client has a supplicant ([[#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
 
-
+The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it check the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]].
+If the user is found in the ISS then it is authenticated and the request is passed for authorization policy check. 
+If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
 ##### Default
-
+The Default authentication policy is a catch all type of policy, set to deny all request.
+It's usually used for requests that the policies before this one could not catch. 
+In this deployment it's shouldn't be hit at all. 
 #### Authorization Policy
 
 ##### Guest Redirect
