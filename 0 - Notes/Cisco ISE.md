@@ -439,6 +439,20 @@ In this deployment model, the system only generates ACCEPT or DENY responses, an
 
 Because Cisco ISE functions strictly as an information-gathering tool in this phase, authorization profiles must not apply Downloadable ACLs or VLAN changes, as these active policies cannot be ignored and will directly disrupt user network access.
 
+The active deployment logic is:
+- Top Rule Condition = Wired, Wireless or DNAC
+- Allowed Protocol
+- Authentication Policy
+	- Condition = MAB or 802.1X
+	- Identity Store = [[#Endpoint Identity Groups|Internal Endpoin]]t for MAB or [[#Publiacqua_ISS]] for 802.1X
+- Authorization Policy
+	- Is computer in Blacklist?
+	- Is user an Admin?
+	- Is User not logged on?
+	- Is Client a normal Domain User with Domain Computer?
+	- Is the Client a PC that must be always accessible in RDP?
+	- Is the computer in Whitelist?
+	- Guest Redirect
 #### Authentication Policy
 
 ![[Pasted image 20260512154735.png]]
@@ -473,6 +487,7 @@ The Default authentication policy is a catch all type of policy, set to deny all
 It's usually used for requests that the policies before this one could not catch. 
 In this deployment it's shouldn't be hit at all. 
 #### Authorization Policy
+Authorization Policies decides which [[#Authorization Profiles]] does the client get.
 
 ##### Guest Redirect
 ### Results
