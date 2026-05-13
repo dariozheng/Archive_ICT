@@ -530,18 +530,18 @@ For these case the DACL allow the connection to Internet, Domain Controller and 
 Vlan_802_Lan_Client should be the default Authorization Policy for most of domain users. 
 It sends the VLAN for clients and the re-authentication timer.
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
-- <strong>Tunnel-Private-Group-ID</strong> = 1:802 : VLAN 802
-- <strong>Tunnel-Type = 1:13</strong> : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
-- <strong>Tunnel-Medium-Type = 1:6</strong> : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:802 : VLAN 802
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
 ###### Redirect_Guest_Wired
 
 ![[Pasted image 20260512143139.png]]
 
 The Redirect_Guest_Wired is the first Authorization Profile for guest users, it send a redirection URL to the CWA guest portal.  
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
-- <strong>Tunnel-Private-Group-ID</strong> = 1:805 : VLAN 805
-- <strong>Tunnel-Type = 1:13</strong> : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
-- <strong>Tunnel-Medium-Type = 1:6</strong> : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:805 : VLAN 805
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
 - [[#cisco-av-pair|cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT]] : This indicate which local access list the client must use. 
 - [[#cisco-av-pair|cisco-av-pair = url-redirect=https://guestportal1.publiacqua.it:port/portal/gateway?sessionId=SessionIdValue&portal=4f145223-7d12-411b-a511-92abfafef0d8&action=cwa]] : The redirect guest portal from the CWA
 - <strong>Session-Timeout = 43200</strong> : The timer for the session
