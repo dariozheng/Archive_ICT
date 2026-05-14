@@ -542,7 +542,11 @@ The authorization policies order is first match, the client get authorization pr
 ##### Deny Access
 The fist authorization policy is to check if the client computer is on the [[#PBA_Blacklist|Blacklist]], if the MAC address is found on the [[#PBA_Blacklist|Endpoint Identity Group]] they will reject the client request, if it's not found then the policy is not hit and ISE will check the following policy. 
 ##### Admin Access
-Admin Access allows all users in the admin AD group to get the authorization profile for VLAN Admin. Which is set to VLAN 850. The authorization profile is the same as the one for [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
+Admin Access allows all users in the admin AD group to get the authorization profile for the VLAN Admin, which is set to VLAN 850. The authorization profile is configured in the same way as the one for [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
+
+The condition to hit this policy is that [[#EAPs|the client must use an EAP protocol]], [[#ID_Admin_User|the user must be in the Admin group]] and [[#Authentication Passed|the authentication result is a pass]].
+
+The authorization profile is configured to give only the VLAN Admin while the admin permissions are provided by the network and security configuration for VLAN Admin.
 ##### Machine Access
 ##### Client Access
 ##### RDP Access
