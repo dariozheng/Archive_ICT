@@ -427,6 +427,7 @@ Users in the AD group [[#External Identity Sources - Active Directory|Infrastruc
 
 ##### ID_Domain_User
 Users in the AD group [[#External Identity Sources - Active Directory|Utenti_Publiacqua]].
+
 ![[Pasted image 20260514111525.png]]
 
 ##### Authentication Passed
