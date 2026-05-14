@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -185,7 +185,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -211,6 +212,8 @@
   "lastOpenFiles": [
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "0 - Notes/Cisco ISE.md",
+    "attachments/Pasted image 20260514114124.png",
+    "attachments/Pasted image 20260514113635.png",
     "0 - Notes/Backhaul.md",
     "0 - Notes/Certificates - Palo Alto.md",
     "0 - Notes/App-ID™.md",
@@ -228,8 +231,6 @@
     "0 - Notes/Glossaries/Networking Glossary.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "attachments/Pasted image 20260513164133.png",
-    "attachments/Pasted image 20260513153903.png",
-    "attachments/Pasted image 20260513153658.png",
     "0 - Notes/Denial-of-Service (DoS).md",
     "0 - Notes/homelab-setup-v5_1_7_7.md",
     "0 - Notes/homelab-setup-v5_1_7_6.md",
@@ -248,7 +249,6 @@
     "0 - Notes/Active Directory Certificate Services.md",
     "Script_Clean-Expired-userCertificate.ps1",
     "attachments/Script_Clean-Expired-userCertificate.ps1",
-    "0 - Notes/Windows Management Instrumentation.md",
     "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
     "attachments/Manual Enrollment of Admin Certificate.mp4",
     "Excalidraw",

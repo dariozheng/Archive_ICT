@@ -430,6 +430,14 @@ Users in the AD group [[#External Identity Sources - Active Directory|Utenti_Pub
 
 ![[Pasted image 20260514111525.png]]
 
+##### Blacklist 
+MAC Addresses in [[#PBA_Blacklist|PBA_Blacklist]].
+
+![[Pasted image 20260514114124.png]]
+
+##### Whitelist
+MAC Addresses in [[#PBA_Whitelist|PBA_Whitelist]].
+
 ##### Authentication Passed
 Check if the AuthenticationStatus is a Passed
 
@@ -443,6 +451,10 @@ This condition will match if the client using TEAP protocol have the machine cer
 
 ![[Pasted image 20260514111237.png]]
 
+##### Not_TEAP
+This condition is used if you want to get a computer certificate but you don't want the computer certificate to pass from TEAP EAP protocol.
+
+![[Pasted image 20260514113635.png]]
 
 
 #### Smart Conditions
