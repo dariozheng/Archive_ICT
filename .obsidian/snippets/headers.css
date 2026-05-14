@@ -1,50 +1,50 @@
 body {
-  --h1-color: #01579b; /* Deep ocean blue */
-  --h2-color: #0277bd; /* Ocean blue */
-  --h3-color: #0288d1; /* Blue */
-  --h4-color: #00acc1; /* Turquoise */
-  --h5-color: #26a69a; /* Teal */
-  --h6-color: #80cbc4; /* Mint */
+  --h1-color: #01579b; 
+  --h2-color: #0277bd; 
+  --h3-color: #0288d1; 
+  --h4-color: #00acc1; 
+  --h5-color: #26a69a; 
+  --h6-color: #80cbc4; 
 }
 
 /* Font sizing with dramatic hierarchy */
 h1 {
-  font-size: 4.5rem; /* 56px - was 40px */
+  font-size: 4.5rem; 
   color: var(--h1-color);
   line-height: 1.2;
   font-weight: 700;
 }
 
 h2 {
-  font-size: 3.75rem; /* 44px - was 32px */
+  font-size: 3.75rem; 
   color: var(--h2-color);
   line-height: 1.3;
   font-weight: 700;
 }
 
 h3 {
-  font-size: 3.25rem; /* 36px - was 28px */
+  font-size: 3.25rem; 
   color: var(--h3-color);
   line-height: 1.3;
   font-weight: 600;
 }
 
 h4 {
-  font-size: 2.75rem; /* 28px - was 24px */
+  font-size: 2.75rem; 
   color: var(--h4-color);
   line-height: 1.4;
   font-weight: 600;
 }
 
 h5 {
-  font-size: 2.35rem; /* 21.6px - was 20px */
+  font-size: 2.35rem; 
   color: var(--h5-color);
   line-height: 1.4;
   font-weight: 600;
 }
 
 h6 {
-  font-size: 5rem; /* 16px - unchanged */
+  font-size: 5rem; 
   color: var(--h6-color);
   line-height: 1.5;
   font-weight: 600;

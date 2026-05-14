@@ -583,7 +583,14 @@ The hit conditions are [[#Smart Conditions|Wired_MAB]], [[#PBA_Whitelist|Whiteli
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]]. 
 ##### Guest Access
+The Guest Access is used together with [[#Guest Redirect]] and it will be hit only if the client user authenticate to [[#Guest Redirect]]. 
+
+The Authorization Profiles is VLAN Guest which is VLAN 805. It has the same configuration of [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
 ##### Guest Redirect
+The Guest Redirect authorization protocol is the catch all for all devices and users not authorized/authenticated and for guest users. 
+
+The hit condition is all [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. 
+The Authorization Profiles is [[#Redirect_Guest_Wired]]. 
 ### Results
 #### Policy - Results - Authentication
 Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.

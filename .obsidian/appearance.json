@@ -3,7 +3,8 @@
   "enabledCssSnippets": [
     "text_color",
     "excalidraw",
-    "image-grid"
+    "image-grid",
+    "headers"
   ],
   "baseFontSizeAction": false,
   "baseFontSize": 18,
