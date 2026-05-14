@@ -577,6 +577,11 @@ The hit conditions are EAP-TLS machine certificate, [[#Not_TEAP]], and [[#Authen
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### MAB Access
+MAB Access is for computer or devices that for reasons don't have a supplicant to send 802.1X authentication packets. At the moment the authorization profiles for this access is also VLAN 802
+
+The hit conditions are [[#Smart Conditions|Wired_MAB]], [[#PBA_Whitelist|Whitelist]] and [[#Authentication Passed]]. 
+
+The Authorization Profiles is [[#Vlan_802_Lan_Client]]. 
 ##### Guest Access
 ##### Guest Redirect
 ### Results
