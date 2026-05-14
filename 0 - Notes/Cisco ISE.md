@@ -570,7 +570,12 @@ The conditions to hit this policy is [[#Client Authorizations]] and [[#Authentic
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### RDP Access
+The RDP Access authorization policy is used for computer that for most of the time must be accessible through RDP but are not servers. 
+The Machine Access DACL is too limited, so there is a specific policy that gives access to VLAN 802.
 
+The hit conditions are EAP-TLS machine certificate, [[#Not_TEAP]], and [[#Authentication Passed]].
+
+The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### MAB Access
 ##### Guest Access
 ##### Guest Redirect
