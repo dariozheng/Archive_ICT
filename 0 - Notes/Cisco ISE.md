@@ -456,7 +456,6 @@ This condition is used if you want to get a computer certificate but you don't w
 
 ![[Pasted image 20260514113635.png]]
 
-
 #### Smart Conditions
 Cisco ISE smart conditions are pre-defined, intelligent policy building blocks designed to simplify policy rule creation by abstracting complex RADIUS attribute-value pairs into human-readable, usable logic. 
 
