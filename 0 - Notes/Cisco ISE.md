@@ -757,6 +757,8 @@ permit tcp any host 10.140.2.32 eq 443
 deny ip any any
 ```
 
+## CWA
+
 # Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
 ## Active Directory 
