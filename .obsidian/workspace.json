@@ -185,8 +185,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -208,8 +207,9 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "ec846b8afa317e07",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260514115226.png",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260514114124.png",

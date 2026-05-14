@@ -538,6 +538,8 @@ In this deployment it's shouldn't be hit at all.
 #### Authorization Policy
 Authorization Policies decides which [[#Authorization Profiles]] does the client get.
 
+![[Pasted image 20260514115226.png]]
+
 The authorization policies order is first match, the client get authorization profile of the fist authorization policy it hits.
 ##### Deny Access
 The fist authorization policy is to check if the client computer is on the [[#PBA_Blacklist|Blacklist]], if the MAC address is found on the [[#PBA_Blacklist|Endpoint Identity Group]] they will reject the client request, if it's not found then the policy is not hit and ISE will check the following policy. 
@@ -548,6 +550,7 @@ The condition to hit this policy is that [[#EAPs|the client must use an EAP prot
 
 The authorization profile is configured to give only the VLAN Admin while the admin permissions are provided by the network and security configuration for VLAN Admin.
 ##### Machine Access
+
 ##### Client Access
 ##### RDP Access
 ##### MAB Access
