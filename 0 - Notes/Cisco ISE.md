@@ -427,7 +427,7 @@ Users in the AD group [[#External Identity Sources - Active Directory|Infrastruc
 ![[Pasted image 20260514112106.png]]
 
 ##### ID_Domain_User
-Users in the AD group [[#External Identity Sources - Active Directory|Utenti_Publiacqua]].
+Check if the user is in the AD group [[#External Identity Sources - Active Directory|Utenti_Publiacqua]].
 
 ![[Pasted image 20260514111525.png]]
 
@@ -456,6 +456,10 @@ This condition will match if the client using TEAP protocol have the [[#Domain C
 This condition is used if you want to get a computer certificate but you don't want the computer certificate to pass from TEAP EAP protocol.
 
 ![[Pasted image 20260514113635.png]]
+##### Client Authorizations
+Client Authorizations conditions check if the client user is [[#ID_Domain_User]] and if the EAP protocol they use is PEAP or TEAP. The domain users should use only TEAP and PEAP in rare occasions.
+
+![[Pasted image 20260514140414.png]]
 
 #### Smart Conditions
 Cisco ISE smart conditions are pre-defined, intelligent policy building blocks designed to simplify policy rule creation by abstracting complex RADIUS attribute-value pairs into human-readable, usable logic. 
@@ -562,9 +566,11 @@ The authorization profiles it provides is [[#Pre-Auth-profile]].
 ##### Client Access
 The Client Access is the default policy for Publiacqua Domain Users, when this policy is hit the user get access to VLAN 802 which is the LAN Client. 
 
-The conditions to hit this policy is [[#ID_Domain_User]], TEAP or PEAP and [[#Authentication Passed]]. 
+The conditions to hit this policy is [[#Client Authorizations]] and [[#Authentication Passed]]. 
 
+The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### RDP Access
+
 ##### MAB Access
 ##### Guest Access
 ##### Guest Redirect
