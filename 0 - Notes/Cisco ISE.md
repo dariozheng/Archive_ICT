@@ -407,6 +407,14 @@ Cisco APIC / ACI Fabric Login:
 <strong>Administrative Privilege Levels</strong> (Switch CLI via RADIUS): If you are using RADIUS (instead of TACACS+) to secure administrative command-line access to Cisco switches and firewalls, you must use an AV pair to drop the administrator directly into the privileged executive mode (`enable`):
 <strong>shell:priv-lvl</strong>: Grants immediate execution privileges.
 ```cisco-av-pair = shell:priv-lvl=15```
+#### Network Access Dictionary
+##### UseCase
+
+![[Pasted image 20260514153230.png]]
+
+`NetworkAccess:UseCase` is an internal system enumeration attribute used to track the contextual state of an endpoint's session.
+
+When this attribute evaluates to `Guest Flow` (formatted as `NetworkAccess:UseCase = GuestFlow`), it explicitly means that <strong>the endpoint has successfully completed web authentication (WebAuth) via an ISE guest portal and is now executing a post-portal network re-authorization</strong>.
 
 ### Conditions
 Cisco ISE policy conditions are rule-based elements (attributes, operators, values) used to define network access, profiling, posture, and guest services. They enable granular control, allowing policies based on user identity, device type, location, or time. Conditions can be Simple (one attribute) or Compound (combined using AND/OR) and are managed within the Conditions Studio
@@ -460,6 +468,13 @@ This condition is used if you want to get a computer certificate but you don't w
 Client Authorizations conditions check if the client user is [[#ID_Domain_User]] and if the EAP protocol they use is PEAP or TEAP. The domain users should use only TEAP and PEAP in rare occasions.
 
 ![[Pasted image 20260514140414.png]]
+
+##### Guest_Flow
+Condition is hit if the client request packet has attribute [[#UseCase|NetworkAccess:UserCase]].
+
+When this attribute evaluates to `Guest Flow` (formatted as `NetworkAccess:UseCase = GuestFlow`), it explicitly means that <strong>the endpoint has successfully completed web authentication (WebAuth) via an ISE guest portal and is now executing a post-portal network re-authorization</strong>.
+
+![[Pasted image 20260514155208.png]]
 
 #### Smart Conditions
 Cisco ISE smart conditions are pre-defined, intelligent policy building blocks designed to simplify policy rule creation by abstracting complex RADIUS attribute-value pairs into human-readable, usable logic. 
@@ -585,12 +600,13 @@ The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### Guest Access
 The Guest Access is used together with [[#Guest Redirect]] and it will be hit only if the client user authenticate to [[#Guest Redirect]]. 
 
+The hit condition is [[#Guest_Flow]].
 The Authorization Profiles is VLAN Guest which is VLAN 805. It has the same configuration of [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
 ##### Guest Redirect
 The Guest Redirect authorization protocol is the catch all for all devices and users not authorized/authenticated and for guest users. 
 
 The hit condition is all [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. 
-The Authorization Profiles is [[#Redirect_Guest_Wired]]. 
+The Authorization Profiles is [[#Redirect_Guest_Wired]], if the Guest Authentication is a success it will hit the default [[#UseCase|Guest Flow]] condition of [[#Guest Access]], and the client will have Internet access. 
 ### Results
 #### Policy - Results - Authentication
 Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
