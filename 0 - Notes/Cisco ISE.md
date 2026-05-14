@@ -493,7 +493,7 @@ The active deployment logic is:
 - Allowed Protocol
 - Authentication Policy
 	- Condition = MAB or 802.1X
-	- Identity Store = [[#Endpoint Identity Groups|Internal Endpoin]]t for MAB or [[#Publiacqua_ISS]] for 802.1X
+	- Identity Store = [[#Endpoint Identity Groups|Internal Endpoint]] for MAB or [[#Publiacqua_ISS]] for 802.1X.
 - Authorization Policy
 	- Is computer in Blacklist?
 	- Is user an Admin?
