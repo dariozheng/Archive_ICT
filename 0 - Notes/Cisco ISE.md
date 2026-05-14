@@ -269,7 +269,7 @@ Network Device Groups can be set to define NAD attributes that will be used in p
 
 To add a NAD, navigate to <strong>Administration > Network Resources > Network Devices</strong> and click <strong>Add</strong>. 
 
-They can configured with Network Device Profile, Model Name, Software Version or with the attributes set in the Network Device Groups. 
+They can be configured with Network Device Profile, Model Name, Software Version or with the attributes set in the Network Device Groups. 
 
 The network device is added to ISE as an object.
 
@@ -280,6 +280,8 @@ Each NAD object must be configured with one or more IP addresses. Each NAD can b
 ![[Pasted image 20260505125842.png]]
 
 The SNMP Settings section is where the SNMP community for the NAD is configured, the ISE will use this to query the NAD for profiling attributes such as CDP and LLDP cache information. The SNMP setting should be configured only for device that do not use the device sensor to send ISE profiling data within RADIUS accounting packets.
+
+The NADs can be imported with a CSV. 
 ## Policy 
 In Policy section are defined the Policy Sets, Dictionaries, Conditions and Results. 
 ### Dictionaries
@@ -756,8 +758,6 @@ permit tcp any host 10.140.2.32 eq 8905
 permit tcp any host 10.140.2.32 eq 443
 deny ip any any
 ```
-
-## CWA
 
 # Microsoft Servers
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
