@@ -1635,11 +1635,16 @@ To activate Auto-Enrollment go to <strong>User Configuration → Policies → Wi
 
 The GPO should be in <strong>Enforced</strong> mode to ensure that it will be applied.
 # Network Access Devices
+Network Access Devices are the point of access for an endpoint and the main enforcement point of policies set by the server ISE. 
 
-
-
-
-
+NAD types include the following:
+- Access switch
+- Wireless LAN controller (WLC)
+- Cisco Adaptive Security Appliance (ASA)
+- Cisco Firepower device
+- Load balancer
+- Software application that uses ISE for AAA
+## Access Switch
 
 # Packet Flow with Cisco ISE
 Certificate authentication: 
