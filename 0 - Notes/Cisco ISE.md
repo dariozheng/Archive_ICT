@@ -417,6 +417,7 @@ Cisco ISE <strong>library conditions</strong> are pre-configured, reusable polic
 
 ##### EAPs
 The EAPs condition check the if the client request is using one of these [[#Allowed Protocols|EAP protocols]].
+The EAP protocols inside the conditions are PEAP, EAP-TLS and TEAP, the admin should be using one of these protocols. 
 
 ![[Pasted image 20260514110551.png]]
 
@@ -559,6 +560,10 @@ In these case the Machine Access policy provides the client with Internet access
 The conditions to hit Machine Access are [[#TEAP_Machine]] and [[#Authentication Passed]]. 
 The authorization profiles it provides is [[#Pre-Auth-profile]].
 ##### Client Access
+The Client Access is the default policy for Publiacqua Domain Users, when this policy is hit the user get access to VLAN 802 which is the LAN Client. 
+
+The conditions to hit this policy is [[#ID_Domain_User]], TEAP or PEAP and [[#Authentication Passed]]. 
+
 ##### RDP Access
 ##### MAB Access
 ##### Guest Access
