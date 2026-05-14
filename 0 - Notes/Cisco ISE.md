@@ -447,7 +447,7 @@ Check if the AuthenticationStatus is a Failed
 
 ![[Pasted image 20260514111110.png]]
 ##### TEAP_Machine
-This condition will match if the client using TEAP protocol have the machine certificate pass but fail the user certificate authentication.  
+This condition will match if the client using TEAP protocol have the [[#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[#Domain Users Certificate|user certificate]] authentication. 
 
 ![[Pasted image 20260514111237.png]]
 
@@ -550,7 +550,14 @@ The condition to hit this policy is that [[#EAPs|the client must use an EAP prot
 
 The authorization profile is configured to give only the VLAN Admin while the admin permissions are provided by the network and security configuration for VLAN Admin.
 ##### Machine Access
+The Machine Access an authorization protocol created for situations where the [[#Domain Users Certificate|User Certificate]] is not available: 
+- User is not logged-on the domain computer
+- New user needs to access a domain computer
+- Problems with user certificate
+In these case the Machine Access policy provides the client with Internet access and connection to Domain Controller and the Certificate Authority Server. 
 
+The conditions to hit Machine Access are [[#TEAP_Machine]] and [[#Authentication Passed]]. 
+The authorization profiles it provides is [[#Pre-Auth-profile]].
 ##### Client Access
 ##### RDP Access
 ##### MAB Access
@@ -599,7 +606,7 @@ Authorization Results are the results for each authorization policy.
 ##### Authorization Profiles
 Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy.
 ![[Pasted image 20260512122923.png]]
-###### Pre-auth-profile
+###### Pre-Auth-profile
 
 ![[Pasted image 20260512124255.png]]
 
@@ -649,6 +656,9 @@ This DACL is used for computer that have authenticated with machine certificate 
 - ect
 
 For these case the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+
+DC01 and DC02 = 10.140.4.250 and 10.140.4.252
+subordinateca01 and subordinateca02 = 10.140.2.198 and 10.140.2.199
 
 ```text
 permit udp any any eq bootps
