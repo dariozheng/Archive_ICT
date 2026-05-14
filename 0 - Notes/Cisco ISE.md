@@ -1634,7 +1634,12 @@ To activate Auto-Enrollment go to <strong>User Configuration → Policies → Wi
 ![[Pasted Graphic 3.png]]
 
 The GPO should be in <strong>Enforced</strong> mode to ensure that it will be applied.
-# Network Devices
+# Network Access Devices
+
+
+
+
+
 
 # Packet Flow with Cisco ISE
 Certificate authentication: 

@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "545317851a5a1021",
+        "id": "1b989520e32c1154",
         "type": "tabs",
         "children": [
           {
-            "id": "ec846b8afa317e07",
+            "id": "343cacf5591b6e84",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -144,9 +144,9 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "1 - Excalidraw/Homepage.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "collapseAll": false,
-                "extraContext": false,
+                "extraContext": true,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Homepage"
+              "title": "Backlinks for Cisco ISE"
             }
           },
           {
@@ -185,8 +185,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -208,12 +207,13 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
+    "1 - Excalidraw/Cisco ISE.md",
+    "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260514155208.png",
     "attachments/Pasted image 20260514153230.png",
     "0 - Notes/Microsoft Remote Procedure Call.md",
-    "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260514140414.png",
     "attachments/Pasted image 20260514115226.png",
     "attachments/Pasted image 20260514114124.png",
@@ -227,7 +227,6 @@
     "attachments/Pasted image 20260514111525.png",
     "attachments/Pasted image 20260514111237.png",
     "attachments/Pasted image 20260514111110.png",
-    "attachments/Pasted image 20260514110848.png",
     "0 - Notes/homelab-setup-v5_1_7_11.md",
     "0 - Notes/homelab-setup-v5_1_7_10.md",
     "0 - Notes/Glossaries/Networking Glossary.md",
@@ -237,7 +236,6 @@
     "0 - Notes/homelab-setup-v5_1_7_6.md",
     "1 - Excalidraw/ENCOR.md",
     "0 - Notes/OSI Model.md",
-    "1 - Excalidraw/Cisco ISE.md",
     "1 - Excalidraw/Drawing 2026-05-12 13.excalidraw.md",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "Orphaned Images Report.md",
