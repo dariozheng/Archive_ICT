@@ -1646,6 +1646,10 @@ NAD types include the following:
 - Software application that uses ISE for AAA
 ## Access Switch
 
+
+
+
+
 # Packet Flow with Cisco ISE
 Certificate authentication: 
 CLIENT send certificate, ISE CHECK if issuer is in trusted, the expiry date, CRL, proof of possession (server privat key + client public key (the certificate sent for authentication) + random data) the client need to decrypt the data with client private key and server public key. 
