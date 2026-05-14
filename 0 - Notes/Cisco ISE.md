@@ -415,6 +415,35 @@ Cisco ISE <strong>library conditions</strong> are pre-configured, reusable polic
 
 ![[Pasted image 20260512150602.png]]
 
+##### EAPs
+The EAPs condition check the if the client request is using one of these [[#Allowed Protocols|EAP protocols]].
+
+![[Pasted image 20260514110551.png]]
+
+##### ID_Admin_User
+Users in the AD group [[#External Identity Sources - Active Directory|InfrastructureAdmin]].
+
+![[Pasted image 20260514112106.png]]
+
+##### ID_Domain_User
+Users in the AD group [[#External Identity Sources - Active Directory|Utenti_Publiacqua]].
+![[Pasted image 20260514111525.png]]
+
+##### Authentication Passed
+Check if the AuthenticationStatus is a Passed
+
+![[Pasted image 20260514110848.png]]
+##### Authentication Failed
+Check if the AuthenticationStatus is a Failed
+
+![[Pasted image 20260514111110.png]]
+##### TEAP_Machine
+This condition will match if the client using TEAP protocol have the machine certificate pass but fail the user certificate authentication.  
+
+![[Pasted image 20260514111237.png]]
+
+
+
 #### Smart Conditions
 Cisco ISE smart conditions are pre-defined, intelligent policy building blocks designed to simplify policy rule creation by abstracting complex RADIUS attribute-value pairs into human-readable, usable logic. 
 
@@ -499,7 +528,9 @@ Authorization Policies decides which [[#Authorization Profiles]] does the client
 
 The authorization policies order is first match, the client get authorization profile of the fist authorization policy it hits.
 ##### Deny Access
+The fist authorization policy is to check if the client computer is on the [[#PBA_Blacklist|Blacklist]], if the MAC address is found on the [[#PBA_Blacklist|Endpoint Identity Group]] they will reject the client request, if it's not found then the policy is not hit and ISE will check the following policy. 
 ##### Admin Access
+Admin Access allows all users in the admin AD group to get the authorization profile for VLAN Admin. Which is set to VLAN 850. The authorization profile is the same as the one for [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
 ##### Machine Access
 ##### Client Access
 ##### RDP Access

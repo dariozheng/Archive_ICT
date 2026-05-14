@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -104,16 +104,6 @@
             }
           },
           {
-            "id": "a627c530cd5eaf30",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "git-pull-request",
-              "title": "Source Control"
-            }
-          },
-          {
             "id": "4358fb8c6f77a4fb",
             "type": "leaf",
             "state": {
@@ -184,9 +174,19 @@
               "icon": "lucide-archive",
               "title": "All properties"
             }
+          },
+          {
+            "id": "0aa7a519a475b13e",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
@@ -194,37 +194,44 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "obsidian-git:Open Git source control": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "command-palette:Open command palette": false,
       "bases:Create new base": false,
-      "obsidian-git:Open Git source control": false,
       "templater-obsidian:Templater": false,
       "table-editor-obsidian:Advanced Tables Toolbar": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
       "homepage:Open homepage": false,
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "ec846b8afa317e07",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
+    "0 - Notes/Microsoft Remote Procedure Call.md",
+    "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Backhaul.md",
+    "0 - Notes/Certificates - Palo Alto.md",
+    "0 - Notes/App-ID™.md",
+    "Homepage.md",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "attachments/Pasted image 20260514112106.png",
+    "attachments/Pasted image 20260514111525.png",
+    "attachments/Pasted image 20260514111237.png",
+    "attachments/Pasted image 20260514111110.png",
+    "attachments/Pasted image 20260514110848.png",
+    "attachments/Pasted image 20260514110551.png",
+    "attachments/Pasted image 20260514110532.png",
+    "0 - Notes/homelab-setup-v5_1_7_11.md",
+    "0 - Notes/homelab-setup-v5_1_7_10.md",
     "0 - Notes/Glossaries/Networking Glossary.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/Cisco ISE.md",
     "attachments/Pasted image 20260513164133.png",
     "attachments/Pasted image 20260513153903.png",
     "attachments/Pasted image 20260513153658.png",
-    "attachments/Pasted image 20260513152509.png",
-    "attachments/Pasted image 20260513122119.png",
-    "attachments/Pasted image 20260513121938.png",
-    "attachments/Pasted image 20260513121704.png",
-    "attachments/Pasted image 20260513121610.png",
     "0 - Notes/Denial-of-Service (DoS).md",
-    "attachments/Pasted image 20260513120458.png",
-    "attachments/Pasted image 20260513120438.png",
-    "0 - Notes/homelab-setup-v5_1_7_10.md",
     "0 - Notes/homelab-setup-v5_1_7_7.md",
     "0 - Notes/homelab-setup-v5_1_7_6.md",
     "1 - Excalidraw/ENCOR.md",
@@ -233,8 +240,6 @@
     "1 - Excalidraw/Drawing 2026-05-12 13.excalidraw.md",
     "0 - Notes/Cisco ISE - Manuale Operativo.md",
     "Orphaned Images Report.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
-    "Homepage.md",
     "0 - Notes/Script To Enroll a Non Domain Computer.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
     "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
@@ -246,12 +251,7 @@
     "attachments/Script_Clean-Expired-userCertificate.ps1",
     "0 - Notes/Windows Management Instrumentation.md",
     "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
-    "2 - Categories/Topics/Microsoft/Active Directory.md",
-    "2 - Categories/Microsoft.md",
     "attachments/Manual Enrollment of Admin Certificate.mp4",
-    "2 - Categories/Topics/Networking/Networking General.md",
-    "0 - Notes/Web-Based Enterprise Management.md",
-    "0 - Notes/IP Spoofing.md",
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",

@@ -1,16 +1,16 @@
 [
-  "highlightr-plugin",
   "obsidian-wrap-with-shortcuts",
-  "dataview",
-  "obsidian-git",
   "templater-obsidian",
   "table-editor-obsidian",
   "note-locker",
   "obsidian-excalidraw-plugin",
-  "obsidian-icon-folder",
   "metadata-menu",
   "homepage",
   "obsidian-minimal-settings",
   "linked-note-exporter",
-  "find-orphaned-images"
+  "find-orphaned-images",
+  "highlightr-plugin",
+  "obsidian-icon-folder",
+  "obsidian-git",
+  "dataview"
 ]

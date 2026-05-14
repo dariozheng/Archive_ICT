@@ -6,18 +6,13 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "LiLock",
-      "FasCloud",
-      "FasNetworkWired",
-      "SiMicrosoft",
-      "FasServer",
-      "SiCisco",
-      "LiHome",
       "SiWindows",
-      "SiPaloaltonetworks",
-      "FasUserSecret"
+      "FasNetworkWired",
+      "FasUserSecret",
+      "SiCisco",
+      "SiPaloaltonetworks"
     ],
-    "recentlyUsedIconsSize": 10,
+    "recentlyUsedIconsSize": 5,
     "rules": [],
     "extraMargin": {
       "top": 0,
@@ -39,233 +34,13 @@
     "debugMode": false,
     "useInternalPlugins": false
   },
-  "0 - Notes/OSI Model.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "0 - Notes/Prisma SD-WAN®.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Prisma Access.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/NGFW - Palo Alto Networks.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Certificates - Palo Alto.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Prisma SASE.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Site-to-Site VPN - Palo Alto.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Autonomous Digital Experience Management.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Cloud Access Security Broker.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/User-ID™.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Device-ID.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Dynamic User Groups - Palo Alto.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Data Redistribution - Palo Alto.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/App-ID™.md": {
-    "iconName": "SiPaloaltonetworks",
-    "iconColor": "#F04E23"
-  },
-  "0 - Notes/Crawler.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "0 - Notes/Windows Remote Management Protocol.md": {
-    "iconName": "SiMicrosoft",
-    "iconColor": "#0078D4"
-  },
-  "0 - Notes/Microsoft Remote Procedure Call.md": {
-    "iconName": "SiMicrosoft",
-    "iconColor": "#0078D4"
-  },
-  "0 - Notes/Windows Management Instrumentation.md": {
-    "iconName": "SiWindows",
-    "iconColor": "#0078D4"
-  },
-  "0 - Notes/Backhaul.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "0 - Notes/Server Name Indication.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "0 - Notes/Unauthorized Packet Sniffing.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Bots and Botnets.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Denial-of-Service (DoS).md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Buffer Overflow Attack.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Distributed Denial-of-Service (DDoS).md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/IP Spoofing.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Man-in-the-Middle Attacks.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Network Scanning.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Glossaries": {
-    "iconName": "LiBookA",
-    "iconColor": "#e51010"
-  },
-  "1 - Excalidraw": {
-    "iconName": "SiExcalidraw",
-    "iconColor": "#6965db"
-  },
-  "2 - Categories": {
-    "iconName": "FasLayerGroup",
-    "iconColor": "#1475db"
-  },
-  "3 - Templates": {
-    "iconName": "LiLayoutTemplate",
-    "iconColor": "#3cd7bd"
-  },
-  "attachments": {
-    "iconName": "LiImages",
-    "iconColor": "#f2c936"
-  },
-  "0 - Notes": {
-    "iconName": "LiNotebookText",
-    "iconColor": "#d54894"
-  },
-  "2 - Categories/Topics/Microsoft": {
-    "iconName": "SiMicrosoft",
-    "iconColor": "#0078d4"
-  },
-  "2 - Categories/Topics/Networking": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "2 - Categories/Topics/Hardware": {
-    "iconName": "FasComputer",
-    "iconColor": "#5541e6"
-  },
-  "2 - Categories/Topics/Cloud Computing": {
-    "iconName": "FasCloud",
-    "iconColor": "#68adee"
-  },
-  "2 - Categories/Topics/Security": {
+  "2 - Categories/Topics/Security/Security General.md": {
     "iconName": "LiLock",
     "iconColor": "#e95a2b"
-  },
-  "2 - Categories/Topics": {
-    "iconName": "FasObjectUngroup",
-    "iconColor": "#8b2d2d"
-  },
-  "3 - Templates/Bases": {
-    "iconName": "LiDatabase",
-    "iconColor": "#1f1bee"
-  },
-  "3 - Templates/Bases/Topic": {
-    "iconName": "FasObjectUngroup",
-    "iconColor": "#8b2d2d"
-  },
-  "3 - Templates/Bases/Topic/Cloud Computing": {
-    "iconName": "FasCloud",
-    "iconColor": "#68adee"
-  },
-  "3 - Templates/Bases/Topic/Hardware": {
-    "iconName": "FasComputer",
-    "iconColor": "#5541e6"
-  },
-  "3 - Templates/Bases/Topic/Microsoft": {
-    "iconName": "SiMicrosoft",
-    "iconColor": "#0078d4"
-  },
-  "3 - Templates/Bases/Topic/Networking": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "3 - Templates/Bases/Topic/Security": {
-    "iconName": "LiLock",
-    "iconColor": "#e95a2b"
-  },
-  "3 - Templates/Notes": {
-    "iconName": "LiNotepadText",
-    "iconColor": "#d54894"
-  },
-  "3 - Templates/Notes/Codes": {
-    "iconName": "FasCode",
-    "iconColor": "#3aaddf"
-  },
-  "0 - Notes/Cisco ISE.md": {
-    "iconName": "SiCisco",
-    "iconColor": "#1BA0D7"
-  },
-  "0 - Notes/Common Information Model.md": {
-    "iconName": "FasServer",
-    "iconColor": "#103f7aff"
-  },
-  "0 - Notes/Web-Based Enterprise Management.md": {
-    "iconName": "FasServer",
-    "iconColor": "#103f7aff"
-  },
-  "2 - Categories/Topics/Systems": {
-    "iconName": "FasServer",
-    "iconColor": "#103f7a"
-  },
-  "3 - Templates/Bases/Topic/Systems": {
-    "iconName": "FasServer",
-    "iconColor": "#103f7a"
   },
   "2 - Categories/Topics/Security/Palo Alto Networks.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
-  },
-  "2 - Categories/Topics/Microsoft/Microsoft Protocols.md": {
-    "iconName": "SiMicrosoft",
-    "iconColor": "#0078D4"
-  },
-  "2 - Categories/Topics/Microsoft/Microsoft General.md": {
-    "iconName": "SiMicrosoft",
-    "iconColor": "#0078D4"
   },
   "2 - Categories/Topics/Security/Network-Based Attacks.md": {
     "iconName": "FasUserSecret",
@@ -275,28 +50,151 @@
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
   },
-  "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md": {
-    "iconName": "FasCloud",
-    "iconColor": "#68adee"
-  },
-  "2 - Categories/Topics/Security/Security General.md": {
-    "iconName": "LiLock",
-    "iconColor": "#e95a2b"
-  },
-  "1 - Excalidraw/ENCOR.md": {
-    "iconName": "SiCisco",
-    "iconColor": "#1ba0d7"
-  },
   "2 - Categories/Topics/Microsoft/Windows Server.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
   },
-  "0 - Notes/Active Directory Certificate Services.md": {
+  "2 - Categories/Topics/Microsoft/Microsoft Protocols.md": {
+    "iconName": "SiMicrosoft",
+    "iconColor": "#0078D4"
+  },
+  "2 - Categories/Topics/Microsoft/Microsoft General.md": {
+    "iconName": "SiMicrosoft",
+    "iconColor": "#0078D4"
+  },
+  "2 - Categories/Topics/Cloud Computing/Cloud Computing General.md": {
+    "iconName": "FasCloud",
+    "iconColor": "#68adee"
+  },
+  "0 - Notes/Windows Remote Management Protocol.md": {
+    "iconName": "SiMicrosoft",
+    "iconColor": "#0078D4"
+  },
+  "0 - Notes/Windows Management Instrumentation.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
   },
-  "1 - Excalidraw/Cisco ISE.md": "SiCisco",
+  "0 - Notes/Web-Based Enterprise Management.md": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7aff"
+  },
+  "0 - Notes/User-ID™.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Unauthorized Packet Sniffing.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Site-to-Site VPN - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Server Name Indication.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
   "0 - Notes/Script To Remove Expired userCertificate.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
+  },
+  "0 - Notes/Prisma SD-WAN®.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Prisma SASE.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Prisma Access.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/OSI Model.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Network Scanning.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/NGFW - Palo Alto Networks.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Microsoft Remote Procedure Call.md": {
+    "iconName": "SiMicrosoft",
+    "iconColor": "#0078D4"
+  },
+  "0 - Notes/Man-in-the-Middle Attacks.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/IP Spoofing.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Dynamic User Groups - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Distributed Denial-of-Service (DDoS).md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Device-ID.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Denial-of-Service (DoS).md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Data Redistribution - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Crawler.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Common Information Model.md": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7aff"
+  },
+  "0 - Notes/Cloud Access Security Broker.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Cisco ISE.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/Certificates - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Buffer Overflow Attack.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Bots and Botnets.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Backhaul.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Autonomous Digital Experience Management.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/App-ID™.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Active Directory Certificate Services.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
   }

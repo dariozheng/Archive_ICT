@@ -1,4 +1,11 @@
-# Homelab Setup Guide v5.1.7.10 — Ubuntu Server 24.04 LTS on Raspberry Pi 5
+# Homelab Setup Guide v5.1.7.11 — Ubuntu Server 24.04 LTS on Raspberry Pi 5
+
+> **Bug-fix changelog (v5.1.7.11):**
+> - §4 `protonvpn-up.sh` kill switch: added `iptables -A PROTON_KS -d 172.16.0.0/12 -j RETURN` before the final `REJECT`. Without it, host→container traffic over Docker bridges is rejected by the kill switch: the host's own DNS queries (resolv.conf → `127.0.0.1:53` → docker-proxy → Pi-hole container at `172.30.0.x`), `curl 127.0.0.1:9443` to Portainer, `curl 127.0.0.1:3001` to Kuma from the health-push script, etc. all carry a destination of a *container* IP, which is not a LOCAL address (so the `ADDRTYPE LOCAL` RETURN doesn't catch it) and not in the LAN/wg0 ranges — so it falls through to `REJECT`. Same class as fix #58, which added `-s 127.0.0.0/8` to `DOCKER-USER` for the host-loopback *source* direction; this is the host→container *destination* direction in `PROTON_KS`. Symptom: after §4, Portainer/Pi-hole admin and the Pi's own DNS all break; `systemctl stop wg-quick@protonvpn` makes them work again because that tears the chain down. `protonvpn-down.sh` needs no edit — it flushes the whole chain (fix #103)
+> - §8 NPM `entrypoint:`: changed `update-ca-certificates && /init` to `update-ca-certificates && exec /init`. Without `exec`, `/bin/sh` stays as PID 1 and `/init` runs as its child; NPM's s6-overlay base image hard-checks `getpid() == 1` in `s6-overlay-suexec` and aborts with `fatal: can only run as pid 1`, so the container crash-loops forever (the cert-update line prints once per restart, masking the loop on a casual log glance). `exec` replaces the shell process so `/init` inherits PID 1. Fix #3 introduced the entrypoint override with the right intent but dropped `exec`; `jc21/nginx-proxy-manager:2.12.3` ships s6-overlay v3.x which enforces the PID 1 check strictly (fix #104)
+> - §8 SSH tunnel example: changed `ssh -L 81:127.0.0.1:81` to `ssh -L 8081:127.0.0.1:81`. Port 81 is privileged (<1024); binding it on the *client* side fails with `bind: Permission denied` for any non-root user on macOS/Linux. The forwarded-to port on the Pi stays `81` (that's where NPM's admin UI listens); only the local listen-port changes. Same pattern §6 already uses correctly with `8080:127.0.0.1:8080`. Access URL updated to `http://127.0.0.1:8081` to match (fix #105)
+> - §2 UFW + §10 + §15: added `ufw allow` rules for port 8123. Home Assistant runs `network_mode: host`, binding directly to `0.0.0.0:8123` on the Pi — it is NOT behind Docker's port-publishing NAT, so Docker adds no iptables rules for it and UFW's `default deny incoming` drops every packet to 8123. The §2 rule set never opened the port, yet §10 says "Access `http://192.168.70.5:8123` and onboard" and §15 claimed 8123 "remains reachable from the whole LAN" — both false as written. Worse, NPM (a container on `172.31.x.x`) forwarding `ha.berrypi5.lan` to `192.168.70.5:8123` is also dropped, so the HA proxy host 504s. Added `ufw allow from 172.16.0.0/12 to any port 8123` (NPM→HA, required) and `ufw allow from 192.168.68.0/22 to any port 8123` (LAN-direct, for the §10 onboarding step) to §2; updated the §15 deny-to-restrict note to use `ufw insert 1` so the deny precedes the allow (fix #106)
+> - §6 Pi-hole `FTLCONF_dns_upstreams`: changed `172.30.0.2#5335` to `172.30.0.2` and corrected the surrounding comment and the §6 troubleshooting callout. The `#5335` port convention comes from *bare-metal* Pi-hole + Unbound setups, where both run on the host and Unbound must listen on a non-53 port to avoid colliding with Pi-hole's own `:53`. In this guide Unbound runs in its own container with its own IP (`172.30.0.2`) and its own port namespace — the `mvance/unbound-rpi` image listens on **port 53** by default, so `172.30.0.2#5335` pointed Pi-hole at a port nothing was listening on and upstream resolution silently failed (no internet via Pi-hole). Dropping the `#5335` lets FTL default to port 53, which is where Unbound actually is. The stale comment ("Pi-hole v6 keeps the v5 #port separator") and the troubleshooting callout's `["172.30.0.2#5335"]` / `172.30.0.2:5335` references were corrected to match (fix #107)
 
 > **Bug-fix changelog (v5.1.7.10):**
 > - §7 Step-CA CLI fallback: regression introduced by fix #92 — the Portainer-path instructions correctly tell the user to set `DOCKER_STEPCA_INIT_PASSWORD` in the stack's env-vars panel, but the immediately-adjacent CLI fallback (`cd /opt/step-ca && docker compose up -d`) silently ignored the password requirement; a user following the CLI path would get the random-generated-and-logged behaviour back (the very thing fix #92 set out to eliminate). Patched the CLI fallback to pass `DOCKER_STEPCA_INIT_PASSWORD='...'` inline, matching the pattern used by the Pi-hole `dns` stack's CLI fallback (fix #101)
@@ -408,6 +415,18 @@ sudo ufw allow in on wg0 to any port 80,443 proto tcp comment 'NPM via VPN'
 # DNS from home LAN (Pi-hole)
 sudo ufw allow from 192.168.68.0/22 to any port 53
 
+# FIX #106: Home Assistant (§10) runs network_mode: host, binding directly to
+# 0.0.0.0:8123 on the Pi. It is NOT behind Docker's port-publishing NAT, so
+# Docker adds no iptables rules for it and UFW's `default deny incoming` would
+# otherwise drop every packet to 8123 — breaking both LAN-direct access AND
+# NPM's ha.berrypi5.lan proxy host (NPM is a container on 172.31.x.x and
+# forwards to 192.168.70.5:8123). These rules are added now even though HA is
+# deployed in §10; UFW happily allows a port nothing is listening on yet.
+sudo ufw allow from 172.16.0.0/12 to any port 8123 comment 'NPM container -> HA on host network'
+sudo ufw allow from 192.168.68.0/22 to any port 8123 comment 'HA direct from LAN'
+# Optional — also allow wg0 clients to reach HA directly (not just via NPM):
+# sudo ufw allow in on wg0 to any port 8123 comment 'HA via VPN'
+
 sudo ufw enable
 sudo ufw status verbose
 ```
@@ -749,6 +768,19 @@ iptables -A PROTON_KS -m addrtype --dst-type LOCAL -j RETURN
 # chrony.conf in §2 prefers the LAN router (already in the bypass), but the
 # public pool is the backup, and we let UDP/123 to public NTP through here.
 iptables -A PROTON_KS -p udp --dport 123 -j RETURN
+# FIX #103: exempt Docker bridge subnets. Without this, host->container traffic
+# over Docker bridges is REJECT'd: the host's own DNS queries (resolv.conf
+# 127.0.0.1:53 -> docker-proxy -> Pi-hole container at 172.30.0.x), curl to
+# 127.0.0.1:9443 (Portainer) or 127.0.0.1:3001 (Kuma, from the health-push
+# script), etc. all have a *container* IP as their destination. A container IP
+# is not a LOCAL address, so the ADDRTYPE LOCAL RETURN above does not match it,
+# and it is not in the LAN/wg0 ranges -- so it falls through to the REJECT
+# below. Same class as fix #58, which added -s 127.0.0.0/8 to DOCKER-USER for
+# the host-loopback *source* direction; this is the host->container
+# *destination* direction. 172.16.0.0/12 covers docker0 (172.17.x), the
+# auto-allocation pool (172.20.0.0/14 per daemon.json), and the manually-pinned
+# dns-net (172.30.0.0/24) and proxy-net (172.31.0.0/24).
+iptables -A PROTON_KS -d 172.16.0.0/12 -j RETURN
 iptables -A PROTON_KS -j REJECT
 iptables -I OUTPUT -j PROTON_KS
 
@@ -956,7 +988,7 @@ services:
       TZ: "Europe/Rome"
       # Secrets via Portainer env vars panel, NOT this YAML:
       #   FTLCONF_webserver_api_password   <-- set in Portainer Stack env
-      FTLCONF_dns_upstreams: "172.30.0.2#5335"   # Pi-hole v6 keeps the v5 "#port" separator
+      FTLCONF_dns_upstreams: "172.30.0.2"   # FIX #107: Unbound at 172.30.0.2, port 53 (default — no #port). The mvance/unbound-rpi image listens on 53; the "#5335" convention is for bare-metal setups where Unbound must dodge Pi-hole's own :53.
       FTLCONF_dns_dnssec: "false"          # Unbound already validates — no double-validation
       FTLCONF_dns_listeningMode: "ALL"
       FTLCONF_webserver_port: "8080"        # admin UI on 8080; HTTP only (no TLS — NPM terminates it)
@@ -1000,7 +1032,7 @@ cd /opt/dns && FTLCONF_webserver_api_password='...' docker compose up -d
 
 **Why we dropped `/etc/dnsmasq.d` from volumes:** v6 collapses everything into `/etc/pihole/pihole.toml`. The old `pihole-dnsmasq` volume is unused starting at v6 and adding it back will trigger a one-time migration on first start (harmless but confusing).
 
-> ⚠️ **If upstream resolution fails after deploying:** the `<ip>#<port>` syntax was inherited from v5's dnsmasq backend. v6 replaces dnsmasq with FTL's own resolver, and at least one user reports v6 also accepts `<ip>:<port>`. If `nslookup google.com 192.168.70.5` times out, exec into Pi-hole and check `/etc/pihole/pihole.toml` — under `[dns]` the `upstreams` value should be `["172.30.0.2#5335"]`. If FTL logs show "unable to parse upstream", try `FTLCONF_dns_upstreams: "172.30.0.2:5335"` instead and redeploy.
+> ⚠️ **If upstream resolution fails after deploying:** the `mvance/unbound-rpi` image listens on **port 53**, so `FTLCONF_dns_upstreams: "172.30.0.2"` (no port — FTL defaults to 53) is correct. The `#5335` port you may have seen in other Pi-hole + Unbound guides is for *bare-metal* setups, where Unbound and Pi-hole share a host and Unbound must avoid Pi-hole's own `:53`; it does **not** apply here and pointing FTL at `172.30.0.2#5335` makes it query a port nothing is listening on, so all resolution silently fails. If `nslookup google.com 192.168.70.5` times out, exec into Pi-hole and check `/etc/pihole/pihole.toml` — under `[dns]` the `upstreams` value should be `["172.30.0.2"]`. Confirm Unbound is actually answering on 53 with `docker exec pihole dig @172.30.0.2 -p 53 google.com` — if that returns an answer but Pi-hole still doesn't resolve, the problem is FTL's config, not Unbound.
 
 ### Add local DNS records (so `*.berrypi5.lan` resolves)
 
@@ -1170,7 +1202,15 @@ services:
     # trust bundle, silently breaking ACME until someone remembers to re-run
     # the command. The entrypoint override rebuilds the bundle from the
     # volume-mounted cert on every start, making it idempotent.
-    entrypoint: ["/bin/sh", "-c", "update-ca-certificates && /init"]
+    # FIX #104: the `exec` before `/init` is MANDATORY, not cosmetic. Without
+    # it, `/bin/sh` stays as PID 1 and `/init` runs as its child; NPM's
+    # s6-overlay base image hard-checks `getpid() == 1` in s6-overlay-suexec
+    # and aborts with `fatal: can only run as pid 1`, crash-looping the
+    # container forever. `exec` replaces the shell process so `/init` inherits
+    # PID 1. (jc21/nginx-proxy-manager:2.12.3 ships s6-overlay v3.x, which
+    # enforces this strictly; older s6 versions were more lenient, which is why
+    # fix #3's original `&& /init` appeared to work on earlier image tags.)
+    entrypoint: ["/bin/sh", "-c", "update-ca-certificates && exec /init"]
     networks:
       - proxy-net
 
@@ -1189,7 +1229,7 @@ volumes:
 cd /opt/npm && docker compose up -d
 ```
 
-Access `http://127.0.0.1:81` via SSH tunnel: `ssh -L 81:127.0.0.1:81 pi@192.168.70.5`. Default login `admin@example.com` / `changeme` — change immediately.
+Access `http://127.0.0.1:8081` via SSH tunnel: `ssh -L 8081:127.0.0.1:81 pi@192.168.70.5`. (The local listen-port is `8081`, not `81` — port 81 is privileged and `ssh -L` can't bind it on the client side without root. The Pi-side target stays `81`, where NPM's admin UI listens. Same pattern §6 uses for the Pi-hole tunnel.) Default login `admin@example.com` / `changeme` — change immediately.
 
 ### Add proxy hosts
 
@@ -1997,7 +2037,7 @@ ssh -L 9443:127.0.0.1:9443 pi@192.168.70.5
 | Step-CA | `https://127.0.0.1:9000` | `https://stepca.berrypi5.lan` |
 | Uptime Kuma | `http://127.0.0.1:3001` | `https://kuma.berrypi5.lan` |
 
-> ℹ️ Home Assistant intentionally stays on `network_mode: host` (mDNS / HomeKit requirement) and so its port 8123 remains reachable from the whole LAN. If you want to enforce NPM-only access to HA as well, add a UFW rule: `sudo ufw deny from 192.168.68.0/22 to any port 8123` (NPM reaches HA at `192.168.70.5:8123` — its traffic originates from the `172.31.x.x` Docker bridge, not `192.168.68.0/22`, so it is unaffected by this rule).
+> ℹ️ Home Assistant intentionally stays on `network_mode: host` (mDNS / HomeKit requirement). §2's UFW rules (fix #106) explicitly open port 8123 to the LAN and to the Docker bridge range, so `http://192.168.70.5:8123` is reachable from the whole LAN and `ha.berrypi5.lan` works through NPM. If you want to enforce NPM-only access to HA — i.e. block LAN devices from hitting `192.168.70.5:8123` directly while still letting NPM proxy it — you must **insert** a deny rule *before* the `allow from 192.168.68.0/22 ... 8123` rule, because UFW is first-match-wins and the allow was added first: `sudo ufw insert 1 deny from 192.168.68.0/22 to any port 8123`. NPM is unaffected — its traffic originates from the `172.31.x.x` Docker bridge (matched by the separate `from 172.16.0.0/12` allow), not from `192.168.68.0/22`. Re-check ordering afterwards with `sudo ufw status numbered`.
 
 ### Updating images deliberately
 
@@ -2190,6 +2230,16 @@ Keep the on-disk compose files in sync with what you paste into Portainer. The e
 | 29 | §3 container startup order | `docker run portainer` appeared before `docker run docker-socket-proxy`; Portainer's `DOCKER_HOST` env var points at the proxy and tries to connect immediately — proxy must exist first | Swapped order: docker-socket-proxy first, then Portainer; added explanatory note |
 | 30 | §13 health script | `TEMP_MC` had no guard against empty/unreadable sysfs output; an empty value caused `awk` arithmetic syntax error, silently crashing the script | Added empty-value check; script now pushes a "down" status with a clear message if sysfs is unreadable |
 | 31 | §2 formatting | Two consecutive blank lines left after removing `chattr +i` from §2 in fix #20 | Removed extra blank line |
+
+**v5.1.7.11 bug-fix summary** — 5 new fixes:
+
+| # | Where | What was wrong | What changed |
+|---|---|---|---|
+| 103 | §4 `protonvpn-up.sh` kill switch | `PROTON_KS` had no exemption for Docker bridge subnets; host→container traffic over the bridges (host DNS via docker-proxy→Pi-hole, `curl 127.0.0.1:9443`→Portainer, health-push→Kuma) carries a container IP as destination, which is not LOCAL and not in the LAN/wg0 ranges, so it falls through to the final `REJECT`. After §4, Portainer/Pi-hole admin and the Pi's own DNS all break | Added `iptables -A PROTON_KS -d 172.16.0.0/12 -j RETURN` before the `REJECT`, with a comment. Same class as fix #58 but for the host→container *destination* direction. `protonvpn-down.sh` needs no edit (it flushes the whole chain) |
+| 104 | §8 NPM `entrypoint:` | `update-ca-certificates && /init` leaves `/bin/sh` as PID 1 and runs `/init` as its child; NPM's s6-overlay v3.x base image hard-checks `getpid() == 1` and aborts with `s6-overlay-suexec: fatal: can only run as pid 1`, crash-looping the container forever | Changed to `update-ca-certificates && exec /init` so `/init` replaces the shell and inherits PID 1; expanded the comment to document why `exec` is mandatory |
+| 105 | §8 SSH tunnel example | `ssh -L 81:127.0.0.1:81` fails with `bind: Permission denied` — port 81 is privileged and the `-L` local listen-port can't be bound by a non-root user on macOS/Linux | Changed local listen-port to `8081` (`ssh -L 8081:127.0.0.1:81`); Pi-side target stays `81`; access URL updated to `http://127.0.0.1:8081`. Same pattern §6 already uses |
+| 106 | §2 UFW + §10 + §15 | HA runs `network_mode: host` on `0.0.0.0:8123`, outside Docker's port-NAT, so UFW's `default deny incoming` drops all traffic to 8123 — but §2 never opened the port while §10 and §15 both assumed it was reachable. NPM's `ha.berrypi5.lan` proxy host 504s as a result | Added `ufw allow from 172.16.0.0/12 to any port 8123` (NPM→HA) and `ufw allow from 192.168.68.0/22 to any port 8123` (LAN-direct) to §2; rewrote the §15 deny-to-restrict note to use `ufw insert 1` so the deny precedes the allow (UFW is first-match-wins) |
+| 107 | §6 Pi-hole `FTLCONF_dns_upstreams` | `172.30.0.2#5335` pointed FTL at port 5335, but the `mvance/unbound-rpi` container listens on port 53 — the `#5335` convention is for bare-metal setups where Unbound must dodge Pi-hole's own `:53`. Result: upstream resolution silently failed, no internet via Pi-hole | Changed to `172.30.0.2` (FTL defaults to port 53); corrected the stale inline comment and the §6 troubleshooting callout that referenced `#5335` / `:5335` |
 
 **v5.1.7.10 bug-fix summary** — 2 new fixes:
 
