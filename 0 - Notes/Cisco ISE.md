@@ -1680,9 +1680,36 @@ interface <UPLINK-INTERFACE>
 !
 aaa new-model
 !
+!
+!
+!
+radius server radius-mgmnt-auth01
+ address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 3
+ key 7 11593A0C2411241F37192474
+!
+ip radius source-interface Vlan800
+!
+aaa group server radius RADSERV
+ server name radius-mgmnt-auth01
+!
+!
+!
+aaa authentication login default group RADSERV local-case 
+aaa authentication login console local-case
+aaa authentication login HTTPSRV group RADSERV local-case
+aaa authentication enable default enable
+aaa authorization exec default group RADSERV if-authenticated
+aaa authorization exec HTTPSRV group RADSERV if-authenticated
+aaa accounting exec default start-stop group RADSERV
+aaa session-id common 
+!
 line vty 0 4
  transport input ssh
  login local
+!
+!
 !
 snmp-server community publiacqua RO
 snmp-server community publiacquarw RW
@@ -1691,6 +1718,7 @@ netconf-yang
 !
 end
 write memory
+!
 ```
 
 ### General Configuration
@@ -1746,20 +1774,28 @@ vlan 812
  name LAN-VOIP
 !
 vlan 830
- name MGMNT-AP
+ name WLAN-MGMNT-AP
 !
 vlan 850
  name LAN-ADMIN
 ```
 
 ```bash
-interface Vlan800
- no shut
+interface Vlan1
+ no ip address
  no ip route-cache
+ shutdown
+!
+interface Vlan800
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ no ip route-cache
+ no shutdown
 !
 interface Vlan805
- no shut
  description GUEST-INTERCEPT-SVI
+ no shutdown
 !
 ```
 
@@ -1860,6 +1896,7 @@ line vty 5 15
 ```bash
 end
 write memory
+!
 ```
 
 #### DNA - PBA BASIC
@@ -1978,10 +2015,10 @@ vlan 808
  name LAN-TIMBRATORI
 !
 vlan 812
- name LAN-VOIP
+ name LAN-VOIP
 !
 vlan 830
- name MGMNT-AP
+ name MGMNT-AP
 !
 vlan 850
  name LAN-ADMIN
