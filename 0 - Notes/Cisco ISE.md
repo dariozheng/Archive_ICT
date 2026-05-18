@@ -2214,7 +2214,10 @@ dot1x system-auth-control
 ! allows the switch to send a specific EAPOL-Success message to a connecting device even if the RADIUS server is unreachable
 dot1x critical eapol 
 ! allows a device (MAC address) to move from one switch port to another without being blocked
-no access-session mac-move deny 
+#INTERACTIVE
+no access-session mac-move deny<IQ>.*Do you wish to continue\? \[yes\]:\s*<R>yes
+#ENDS_INTERACTIVE
+ 
 !
 aaa session-id common 
 !
@@ -2395,7 +2398,7 @@ ip access-list extended ACL_AAA-Down
 !
 !
 service-template Critical_Access 
- vlan 805
+ vlan 802
  access-group ACL_AAA-Down
 !
 service-template Guest_Redirect
@@ -2478,7 +2481,7 @@ policy-map type control subscriber ISE-NAC-POLICY
    20 authenticate using mab priority 20 
   50 class MAB_DENIED do-until-failure
    10 terminate mab
-   20 unauthenticate
+   20 unauthorize
   60 class DOT1X_NO_SUPPLICANT do-until-failure
    10 terminate dot1x
    20 authenticate using mab priority 20
@@ -2558,6 +2561,7 @@ interface {{ interface.portName }}
 ! enable ip dhcp snooping trust under trunk ports 
  ip dhcp snooping trust
  ip arp inspection trust
+ switchport trunk allowed vlan add 802,805,850
  device-tracking attach-policy Disable_DT_Trunk
 {% endif %}
 {% endfor %}
@@ -2569,7 +2573,7 @@ no ip http server
 ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
-ip http authentication aaa login-authentication default
+ip http authentication aaa login-authentication HTTPSRV
 !
 !
 !
