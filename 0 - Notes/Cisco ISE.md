@@ -1693,7 +1693,7 @@ end
 write memory
 ```
 
-### General 
+### General Configuration
 
 ```bash
 clock timezone CET 1 0
@@ -1701,30 +1701,13 @@ clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
 ```
 
 ```bash
-ip name-server 10.140.4.250 10.140.4.252 172.20.129.250 172.20.129.252
-ip domain name publiacqua.it
-```
-
-```bash
-line con 0
- session-timeout 5
- exec-timeout 30 0
- privilege level 15
- logging synchronous
- login authentication console
- stopbits 1
-line vty 0 4
- session-timeout 60
- exec-timeout 60 0
- logging synchronous
- history size 64
- transport input ssh
-line vty 5 15
- session-timeout 60
- exec-timeout 60 0
- logging synchronous
- history size 64
- transport input ssh
+vrf definition Mgmt-vrf
+!
+address-family ipv4
+exit-address-family
+!
+address-family ipv6
+exit-address-family
 ```
 
 ```bash
@@ -1757,23 +1740,19 @@ vlan 850
 ```
 
 ```bash
-vrf definition Mgmt-vrf
+interface Vlan800
+ no shut
+ no ip route-cache
 !
-address-family ipv4
-exit-address-family
+interface Vlan805
+ no shut
+ description GUEST-INTERCEPT-SVI
 !
-address-family ipv6
-exit-address-family
 ```
 
 ```bash
-ntp source Vlan800
-ntp server 172.20.129.64
-ntp server 172.20.129.65 prefer
-```
-
-```bash
-aaa new-model
+ip name-server 10.140.4.250 10.140.4.252 172.20.129.250 172.20.129.252
+ip domain name publiacqua.it
 ```
 
 ```bash
@@ -1782,21 +1761,16 @@ radius server radius-mgmnt-auth01
  timeout 2
  retransmit 3
  key 7 11593A0C2411241F37192474
- exit
-```
 
-```bash
 ip radius source-interface Vlan800
-```
 
-```bash
 aaa group server radius RADSERV
  server name radius-mgmnt-auth01
 ```
 
 ```bash
 aaa authentication login default group RADSERV local-case 
-aaa authentication login console group local-case
+aaa authentication login console local-case
 aaa authentication login HTTPSRV group RADSERV local-case
 !
 aaa authentication enable default enable
@@ -1810,19 +1784,23 @@ aaa session-id common
 ```
 
 ```bash
-interface Vlan800
- no shut
- no ip route-cache
-!
-interface Vlan805
- no shut
- description GUEST-INTERCEPT-SVI
-!
+ntp source Vlan800
+ntp server 172.20.129.64
+ntp server 172.20.129.65 prefer
 ```
 
 ```bash
-errdisable recovery cause udld
-errdisable recovery interval 90
+snmp-server community publiacqua RO
+snmp-server community publiacquarw RW
+snmp-server trap-source Vlan800
+```
+
+```bash
+logging facility local6
+logging source-interface Vlan800
+logging host 10.140.2.181
+logging host 10.140.2.24
+logging host 10.139.108.10
 ```
 
 ```bash
@@ -1838,16 +1816,57 @@ ip ssh time-out 30
 ```
 
 ```bash
-logging facility local6
-logging source-interface Vlan800
-logging host 10.140.2.181
-logging host 10.140.2.24
-logging host 10.139.108.10
+errdisable recovery cause udld
+errdisable recovery interval 90
 ```
 
 ```bash
-snmp-server trap-source Vlan800
+line con 0
+ session-timeout 5
+ exec-timeout 30 0
+ privilege level 15
+ logging synchronous
+ login authentication console
+ stopbits 1
+line vty 0 4
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
+line vty 5 15
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
 ```
+
+```bash
+end
+write memory
+```
+
+
+
+```bash
+
+```
+
+```bash
+
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Packet Flow with Cisco ISE
