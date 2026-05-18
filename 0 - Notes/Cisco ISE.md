@@ -1847,7 +1847,7 @@ end
 write memory
 ```
 
-### NAC Configuration
+### NAD Configuration
 
 ```bash
 
