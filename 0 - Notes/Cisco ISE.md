@@ -2127,6 +2127,459 @@ wr
 
 ```
 
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+
+```bash
+! Template to enable Cisco ISE - NAC
+!
+!
+!
+aaa new-model
+!
+!
+!
+! enable 802.1X globally 
+dot1x system-auth-control 
+! allows the switch to send a specific EAPOL-Success message to a connecting device even if the RADIUS server is unreachable
+dot1x critical eapol 
+! allows a device (MAC address) to move from one switch port to another without being blocked
+no access-session mac-move deny 
+!
+aaa session-id common 
+!
+!
+!
+vlan 800
+ name LAN-MGMT
+!
+vlan 802
+ name LAN-CLIENT
+!
+vlan 805
+ name LAN-GUEST-ACCESS
+!
+vlan 850
+ name LAN-ADMIN
+!
+!
+!
+username test-user privilege 0 password 7 06120A3258031918160405041E00
+!
+!
+!
+ip radius source-interface Vlan800
+!
+!
+!
+radius server ISE01
+ address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
+! ignore-acct-port keyword indicates that the switch must not validate the accounting port number that the server will use. 
+! probe-on keyword indicates that the switch must send test probes only when the server is marked as Dead.
+ automate-tester username test-user ignore-acct-port probe-on
+ key 7 075F02457D0A36162421045C
+!
+radius server ISE02
+ address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
+ automate-tester username test-user ignore-acct-port probe-on
+ key 7 0054300F375824153C12431E
+!
+! Global RADIUS timers and dead-server detection
+radius-server timeout 5
+radius-server retransmit 3
+radius-server dead-criteria time 5 tries 3
+radius-server deadtime 15
+!   
+! RADIUS attribute behaviour
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 6 support-multiple
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server attribute 31 mac format ietf upper-case
+radius-server attribute 31 send nas-port-detail mac-only
+!
+! @start-ignore-compliance
+radius-server vsa send authentication
+radius-server vsa send accounting
+! @end-ignore-compliance
+!
+!
+!
+aaa group server radius ISESERV
+ server name ISE01
+ server name ISE02
+ deadtime 15
+!
+aaa authentication dot1x default group ISESERV
+aaa authorization network default group ISESERV
+!
+#INTERACTIVE
+aaa accounting identity default start-stop group ISESERV<IQ>.*Do you wish to continue.*<R>yes
+#ENDS_INTERACTIVE
+aaa accounting system default start-stop group ISESERV
+aaa accounting update newinfo periodic 2880
+!
+!
+!
+aaa server radius dynamic-author
+ client 10.140.2.31 server-key 7 040B280F3C22635D3A2A0A47
+ client 10.140.2.32 server-key 7 08716F473A1A2A0421380354
+!
+!
+!
+! defines how the switch identifies itself when probing a device
+device-tracking tracking auto-source 
+!
+! custom policy for access ports
+device-tracking policy IPDT_POLICY 
+!
+! extracts IP/MAC bindings from packets (ARP, DHCP, ND)
+ security-level glean 
+!
+! security measure that prevents a single port from claiming more than 10 different IP addresses
+ limit address-count 10 
+!
+! activates the tracking logic for any port this policy is applied to
+ tracking enable 
+!
+! policy for trunk ports 
+device-tracking policy Disable_DT_Trunk 
+! 
+! tells the switch that the information coming from this port is already verified
+ trusted-port 
+! 
+! tells the tracking engine that the neighbor is another infrastructure device
+ device-role switch 
+!
+! 
+!
+ip dhcp snooping 
+ip dhcp snooping vlan 800,802,805,850
+!
+! disables the insertion of DHCP Option 82 data into DHCP request packets
+no ip dhcp snooping information option 
+!
+!
+!
+ip arp inspection vlan 800,802,805,850
+!
+!
+!
+cdp run
+!
+! creates a named list of DHCP options that the switch will specifically "listen" for and collect from connected devices
+device-sensor filter-list dhcp list dhcp_list
+ option name host-name
+ option name requested-address
+ option name parameter-request-list
+ option name class-identifier
+ option name client-identifier
+! command tells the switch to actually start using the filter list
+device-sensor filter-spec dhcp include list dhcp_list 
+!
+!
+!
+! listen and collect the following cdp information
+device-sensor filter-list cdp list cdp_list 
+ tlv name device-name
+ tlv name address-type
+ tlv name capabilities-type
+ tlv name platform-type
+ tlv name version-type
+device-sensor filter-spec cdp include list cdp_list
+!
+!
+! command ensures that the switch sends a real-time update to ISE the moment any tracked attribute changes
+device-sensor notify all-changes 
+!
+!
+!
+! links the data that the device-sensor has collected to the actual RADIUS messages sent to ISE
+access-session attributes filter-list list sensor_list 
+ cdp
+ dhcp
+!
+! binds the custom list to RADIUS accounting records 
+access-session accounting attributes filter-spec include list sensor_list 
+! binds the list to RADIUS authentication (Access-Request) packets
+access-session authentication attributes filter-spec include list sensor_list 
+!
+!
+!
+ip access-list extended ACL_GUEST_REDIRECT
+ 10 deny udp any any eq domain
+ 20 deny udp any any eq bootps
+ 30 deny ip any host 10.140.2.31  
+ 40 deny ip any host 10.140.2.32  
+ 50 permit tcp any any eq www
+ 60 permit tcp any any eq 443
+!
+ip access-list extended ACL_AAA-Down
+ 10 permit udp any any eq domain
+ 20 permit udp any eq bootpc any eq bootps
+ 30 deny ip any 10.0.0.0 0.255.255.255
+ 40 deny ip any 172.16.0.0 0.0.15.255
+ 50 deny ip any 192.168.0.0 0.0.255.255
+ 60 permit ip any any
+!
+!
+!
+service-template Critical_Access 
+ vlan 805
+ access-group ACL_AAA-Down
+!
+service-template Guest_Redirect
+!
+!
+!
+parameter-map type webauth global
+ type webauth
+ virtual-ip ipv4 192.0.2.1
+ intercept-https-enable
+!
+!
+!
+class-map type control subscriber match-all DOT1X
+ match method dot1x
+!
+class-map type control subscriber match-all DOT1X_DENIED
+ match method dot1x
+ match result-type method dot1x authoritative
+!
+class-map type control subscriber match-all DOT1X_NO_SUPPLICANT
+ match result-type method dot1x agent-not-found
+!
+class-map type control subscriber match-all DOT1X_TIMEOUT
+ match method dot1x
+ match result-type method dot1x method-timeout
+!
+class-map type control subscriber match-all MAB
+ match method mab
+!
+class-map type control subscriber match-all MAB_DENIED
+ match method mab
+ match result-type method mab authoritative
+!
+class-map type control subscriber match-all AAA-DOWN_UNAUTH_USER
+ match result-type aaa-timeout
+ match authorization-status unauthorized
+!
+class-map type control subscriber match-all AAA-DOWN_GUEST_USER
+ match result-type aaa-timeout
+ match activated-service-template Guest_Redirect
+!
+class-map type control subscriber match-all AAA-DOWN_AUTH_USER
+ match result-type aaa-timeout
+ match authorization-status authorized
+!
+class-map type control subscriber match-all CRITICAL_AUTH
+ match activated-service-template Critical_Access
+!
+class-map type control subscriber match-none NOT_CRITICAL_AUTH
+ match activated-service-template Critical_Access
+!
+!
+!
+policy-map type control subscriber ISE-NAC-POLICY
+!
+ event session-started match-all
+  10 class always do-until-failure
+    10 authenticate using dot1x priority 10
+    20 authenticate using mab priority 20
+!
+ event authentication-failure match-first
+  5 class DOT1X_DENIED do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  10 class AAA-DOWN_GUEST_USER do-until-failure
+   10 clear-session
+   20 activate service-template Critical_Access
+   30 authorize
+   40 pause reauthentication
+  20 class AAA-DOWN_AUTH_USER do-until-failure
+   10 authorize
+   20 pause reauthentication
+  30 class AAA-DOWN_UNAUTH_USER do-until-failure
+   10 activate service-template Critical_Access
+   20 authorize
+   30 pause reauthentication
+  40 class DOT1X_TIMEOUT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20 
+  50 class MAB_DENIED do-until-failure
+   10 terminate mab
+   20 unauthenticate
+  60 class DOT1X_NO_SUPPLICANT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  70 class always do-until-failure
+   10 terminate mab
+   20 terminate dot1x
+   30 authentication-restart 60
+!    
+ event aaa-available match-all
+  10 class CRITICAL_AUTH do-until-failure
+   10 clear-session
+  20 class NOT_CRITICAL_AUTH do-until-failure
+   10 resume reauthentication
+!
+ event agent-found match-all
+  10 class always do-until-failure
+   10 terminate mab
+   20 authenticate using dot1x priority 10
+!    
+ event inactivity-timeout match-all
+  10 class always do-until-failure
+   10 clear-session
+!    
+ event authentication-success match-all
+  10 class DOT1X do-until-failure
+   10 authorize
+  20 class MAB do-until-failure
+   10 authorize 
+!    
+ event violation match-all
+  10 class always do-until-failure
+   10 restrict
+!
+!
+!
+template NAC-INT-TEMPLATE
+ description NAC INTERFACE
+ switchport mode access
+ switchport access vlan 802
+ ip dhcp snooping limit rate 20
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+! enable the feature to recheck the user credentials
+ authentication periodic
+!
+! tells the switch to let the ISESERV decides how ofter a device must log in again
+ authentication timer reauthenticate server
+ mab
+ access-session control-direction in
+!
+! this mode allows a single MAC address in each domain, the data and the voice domain, to allow more MAC address per port use multi-auth or multi-hosts
+ access-session host-mode multi-domain 
+ access-session closed
+!
+! the switch dynamically decides to permit or restrict traffic based on the result of the policy map
+ access-session port-control auto
+!
+! tells the port to act as the Authenticator 
+ dot1x pae authenticator
+ dot1x timeout tx-period 7
+ dot1x max-reauth-req 3
+ device-tracking attach-policy IPDT_POLICY
+ service-policy type control subscriber ISE-NAC-POLICY
+!
+!
+!
+{% block interfaces %}
+{% for interface in __interface %}
+{% if interface.vlanId == 802 %}
+interface {{ interface.portName }}
+! enable the template and delete the access vlan under interface as there is already an access vlan under template 
+ source template NAC-INT-TEMPLATE
+ no switchport access vlan 802
+{% elif interface.portMode == 'trunk' %}
+interface {{ interface.portName }}
+! enable ip dhcp snooping trust under trunk ports 
+ ip dhcp snooping trust
+ ip arp inspection trust
+ device-tracking attach-policy Disable_DT_Trunk
+{% endif %}
+{% endfor %}
+{% endblock %}
+!
+!
+!
+no ip http server
+ip http secure-server
+ip http secure-active-session-modules none
+ip http active-session-modules none
+ip http authentication aaa login-authentication default
+!
+!
+!
+end
+! @start-ignore-compliance
+wr
+! @end-ignore-compliance
+!
+```
+
 
 
 
