@@ -1711,6 +1711,13 @@ exit-address-family
 ```
 
 ```bash
+vtp mode transparent
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+```
+
+```bash
 vlan 800
  name LAN-MGMT
 !
@@ -1734,6 +1741,12 @@ vlan 806
 !
 vlan 808
  name LAN-TIMBRATORI
+!
+vlan 812
+ name LAN-VOIP
+!
+vlan 830
+ name MGMNT-AP
 !
 vlan 850
  name LAN-ADMIN
