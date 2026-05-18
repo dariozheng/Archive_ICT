@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWireguard",
       "SiCisco",
       "LiLock",
       "SiPaloaltonetworks",
-      "FasNetworkWired",
-      "SiMicrosoft"
+      "FasNetworkWired"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -197,5 +197,9 @@
   "0 - Notes/Active Directory Certificate Services.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
+  },
+  "0 - Notes/WireGuard.md": {
+    "iconName": "SiWireguard",
+    "iconColor": "#87151F"
   }
 }

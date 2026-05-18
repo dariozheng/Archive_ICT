@@ -1645,8 +1645,125 @@ NAD types include the following:
 - Load balancer
 - Software application that uses ISE for AAA
 ## Access Switch
+### General 
+All NAD should have at least these configuration set for it be configurable with Cisco DNA.
+
+```bash
+conf t
+netconf-yang
+hostname <HOSTNAME>
+ip domain name publiacqua.it
+
+crypto key generate rsa modulus 2048
+ip ssh version 2
+
+line vty 0 4
+transport input ssh
+login local
+
+enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
+
+username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo 
+
+snmp-server community publiacqua RO
+snmp-server community publiacquarw RW
+
+aaa new-model
+
+vlan 800
+int vlan 800 
+ip address <IP-ADDRESS> <SUBNET-MASK>
+no shut 
+exit
+
+ip default-gateway <DEFAULT-GATEWAY>
+int <INTERFACE>
+ip dhcp snooping trust
+switchport mode trunk
+switchport trunk allowed vlan add 800
+end
+wr
+```
+
+```bash
+
+```
+
+```bash
+
+```
+
+```bash
+ntp source Vlan800
+ntp server 172.20.129.64
+ntp server 172.20.129.65 prefer
+```
+
+```bash
+line con 0
+ session-timeout 5
+ exec-timeout 30 0
+ privilege level 15
+ logging synchronous
+ login authentication console
+ stopbits 1
+line vty 0 4
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
+line vty 5 15
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
+```
 
 
+```bash
+vlan 800
+ name LAN-MGMT
+!
+vlan 801
+ name LAN-STAMPANTI
+!
+vlan 802
+ name LAN-CLIENT
+!
+vlan 803
+ name LAN-THIN-CLIENT
+!
+vlan 804
+ name WLAN-CLIENT
+!
+vlan 805
+ name LAN-GUEST-ACCESS
+!
+vlan 806
+ name WLAN-MGMT
+!
+vlan 808
+ name LAN-TIMBRATORI
+!
+vlan 850
+ name LAN-ADMIN
+```
+
+```bash
+vrf definition Mgmt-vrf
+!
+address-family ipv4
+exit-address-family
+!
+address-family ipv6
+exit-address-family
+```
+
+```bash
+
+```
 
 
 
@@ -1658,8 +1775,9 @@ CLIENT send certificate, ISE CHECK if issuer is in trusted, the expiry date, CRL
 # Reference 
 
 
-| Voce                  | Topic        | Link                                                                                                      |
-| --------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
-| Certificate Templates | Certificates | https://sendthepayload.com/configuring-certificate-templates-with-active-directory-certificate-services/# |
-| Windows Certificates  | Certificates | https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certreq_1                |
-|                       |              |                                                                                                           |
+| Voce                                               | Topic        | Link                                                                                                      |
+| -------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
+| Cisco Identity Services Engine Administrator Guide | General      | https://www.cisco.com/c/en/us/td/docs/security/ise/3-5/admin_guide/b_ise_admin_3_5.html                   |
+| ISE BERG                                           | General      | https://community.cisco.com/t5/security-knowledge-base/ise-berg/ta-p/5041171                              |
+| Windows Certificates                               | Certificates | https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/certreq_1                |
+| Certificate Templates                              | Certificates | https://sendthepayload.com/configuring-certificate-templates-with-active-directory-certificate-services/# |

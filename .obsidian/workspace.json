@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 275.5026054382324
+    "width": 275.5026054382324,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -144,7 +145,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
+                "file": "0 - Notes/homelab-setup-v5_1_7_11.md",
                 "collapseAll": false,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +155,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Cisco ISE"
+              "title": "Backlinks for homelab-setup-v5_1_7_11"
             }
           },
           {
@@ -210,8 +211,14 @@
   },
   "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "1 - Excalidraw/Cisco ISE.md",
+    "0 - Notes/homelab-setup-v5_1_7_17.md",
+    "0 - Notes/homelab-setup-v5_1_7_19.md",
+    "0 - Notes/homelab-setup-v5_1_7_20.md",
     "0 - Notes/Cisco ISE.md",
+    "0 - Notes/homelab-setup-v5_1_7_11.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/App-ID™.md",
+    "1 - Excalidraw/Cisco ISE.md",
     "attachments/Pasted image 20260514155208.png",
     "attachments/Pasted image 20260514153230.png",
     "0 - Notes/Microsoft Remote Procedure Call.md",
@@ -221,14 +228,12 @@
     "attachments/Pasted image 20260514113635.png",
     "0 - Notes/Backhaul.md",
     "0 - Notes/Certificates - Palo Alto.md",
-    "0 - Notes/App-ID™.md",
     "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "attachments/Pasted image 20260514112106.png",
     "attachments/Pasted image 20260514111525.png",
     "attachments/Pasted image 20260514111237.png",
     "attachments/Pasted image 20260514111110.png",
-    "0 - Notes/homelab-setup-v5_1_7_11.md",
     "0 - Notes/homelab-setup-v5_1_7_10.md",
     "0 - Notes/Glossaries/Networking Glossary.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
@@ -242,11 +247,8 @@
     "Orphaned Images Report.md",
     "0 - Notes/Script To Enroll a Non Domain Computer.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "Untitled.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
-    "0 - Notes/Active Directory Certificate Services.md",
     "Script_Clean-Expired-userCertificate.ps1",
     "attachments/Script_Clean-Expired-userCertificate.ps1",
     "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
