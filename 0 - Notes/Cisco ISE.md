@@ -1684,6 +1684,9 @@ line vty 0 4
  transport input ssh
  login local
 !
+snmp-server community publiacqua RO
+snmp-server community publiacquarw RW
+!
 netconf-yang
 !
 end
