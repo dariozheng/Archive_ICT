@@ -1666,8 +1666,16 @@ ip ssh source-interface Vlan800
 vlan 800
  name LAN-MGMT
 !
+vlan 805
+ name LAN-GUEST-ACCESS
+!
 interface Vlan800
  description LAN-MGMT
+ ip address <IP-ADDRESS> <SUBNET-MASK>
+ no shutdown
+!
+interface Vlan805
+ description GUEST-INTERCEPT-SVI
  ip address <IP-ADDRESS> <SUBNET-MASK>
  no shutdown
 !
@@ -2217,7 +2225,8 @@ dot1x critical eapol
 #INTERACTIVE
 no access-session mac-move deny<IQ>.*Do you wish to continue\? \[yes\]:\s*<R>yes
 #ENDS_INTERACTIVE
- 
+!
+!
 !
 aaa session-id common 
 !
@@ -2234,6 +2243,12 @@ vlan 805
 !
 vlan 850
  name LAN-ADMIN
+!
+!
+!
+interface Vlan805
+ description GUEST-INTERCEPT-SVI
+ no shutdown
 !
 !
 !
@@ -2331,8 +2346,6 @@ ip dhcp snooping vlan 800,802,805,850
 !
 ! disables the insertion of DHCP Option 82 data into DHCP request packets
 no ip dhcp snooping information option 
-!
-!
 !
 ip arp inspection vlan 800,802,805,850
 !
@@ -2574,6 +2587,8 @@ ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
 ip http authentication aaa login-authentication HTTPSRV
+ip http client source-interface Vlan800
+ip forward-protocol nd
 !
 !
 !
