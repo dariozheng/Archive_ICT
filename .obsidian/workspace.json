@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -186,7 +186,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -208,7 +209,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "343cacf5591b6e84",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "0 - Notes/homelab-setup-v5_1_7_17.md",
     "0 - Notes/homelab-setup-v5_1_7_19.md",
