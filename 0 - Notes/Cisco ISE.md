@@ -1661,6 +1661,7 @@ crypto key generate rsa modulus 2048
 ip ssh version 2
 ip ssh time-out 30
 ip ssh bulk-mode 131072
+ip ssh source-interface Vlan800
 !
 vlan 800
  name LAN-MGMT
@@ -1825,6 +1826,8 @@ ip http client source-interface Vlan800
 ip forward-protocol nd
 ip ssh bulk-mode 131072
 ip ssh time-out 30
+ip ssh version 2
+ip ssh source-interface Vlan800
 ```
 
 ```bash
