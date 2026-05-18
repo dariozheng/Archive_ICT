@@ -1771,10 +1771,10 @@ vlan 808
  name LAN-TIMBRATORI
 !
 vlan 812
- name LAN-VOIP
+ name LAN-VOIP
 !
 vlan 830
- name WLAN-MGMNT-AP
+ name WLAN-MGMNT-AP
 !
 vlan 850
  name LAN-ADMIN
@@ -2018,7 +2018,7 @@ vlan 812
  name LAN-VOIP
 !
 vlan 830
- name MGMNT-AP
+ name WLAN-MGMNT-AP
 !
 vlan 850
  name LAN-ADMIN
@@ -2035,17 +2035,17 @@ interface Vlan1
  no ip route-cache
  shutdown
 !
-!
-!
 interface Vlan800
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
  no ip route-cache
  no shutdown
-!
-!
 !
 interface Vlan805
  description GUEST-INTERCEPT-SVI
  no shutdown
+!
 !
 !
 !
