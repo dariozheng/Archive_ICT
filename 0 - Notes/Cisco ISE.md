@@ -1661,7 +1661,6 @@ crypto key generate rsa modulus 2048
 ip ssh version 2
 ip ssh time-out 30
 ip ssh bulk-mode 131072
-ip ssh source-interface Vlan800
 !
 vlan 800
  name LAN-MGMT
@@ -1774,9 +1773,9 @@ radius server radius-mgmnt-auth01
  timeout 2
  retransmit 3
  key 7 11593A0C2411241F37192474
-
+!
 ip radius source-interface Vlan800
-
+!
 aaa group server radius RADSERV
  server name radius-mgmnt-auth01
 ```
@@ -1858,6 +1857,224 @@ line vty 5 15
 ```bash
 end
 write memory
+```
+
+#### DNA - PBA BASIC
+
+```bash
+!
+service password-encryption 
+service call-home
+!
+!
+!
+vrf definition Mgmt-vrf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+clock timezone CET 1 0
+clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
+!
+!
+!
+ip name-server 10.140.4.250 10.140.4.252 172.20.129.250 172.20.129.252
+ip domain name publiacqua.it
+!
+!
+!
+enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
+!
+username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
+!
+!
+!
+! @start-ignore-compliance
+ip ssh version 2
+! @end-ignore-compliance
+ip ssh time-out 30
+ip ssh bulk-mode 131072
+ip ssh source-interface Vlan800
+!
+!
+!
+aaa new-model
+!
+radius server radius-mgmnt-auth01
+ address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 3
+ key 7 11593A0C2411241F37192474
+!
+!
+!
+ip radius source-interface Vlan800
+!
+!
+!
+aaa group server radius RADSERV
+ server name radius-mgmnt-auth01
+!
+!
+!
+aaa authentication login default group RADSERV local-case 
+aaa authentication login console local-case
+aaa authentication login HTTPSRV group RADSERV local-case
+!
+aaa authentication enable default enable
+!
+aaa authorization exec default group RADSERV if-authenticated
+aaa authorization exec HTTPSRV group RADSERV if-authenticated
+!
+aaa accounting exec default start-stop group RADSERV
+!
+aaa session-id common 
+!
+login on-success log
+!
+!
+!
+netconf-yang
+!
+!
+!
+vtp mode transparent
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+!
+!
+vlan 800
+ name LAN-MGMT
+!
+vlan 801
+ name LAN-STAMPANTI
+!
+vlan 802
+ name LAN-CLIENT
+!
+vlan 803
+ name LAN-THIN-CLIENT
+!
+vlan 804
+ name WLAN-CLIENT
+!
+vlan 805
+ name LAN-GUEST-ACCESS
+!
+vlan 806
+ name WLAN-MGMT
+!
+vlan 808
+ name LAN-TIMBRATORI
+!
+vlan 812
+ name LAN-VOIP
+!
+vlan 830
+ name MGMNT-AP
+!
+vlan 850
+ name LAN-ADMIN
+!
+!
+!
+{% block interfaces %}
+{% endblock %}
+!
+!
+!
+interface Vlan1
+ no ip address
+ no ip route-cache
+ shutdown
+!
+!
+!
+interface Vlan800
+ no ip route-cache
+ no shutdown
+!
+!
+!
+interface Vlan805
+ description GUEST-INTERCEPT-SVI
+ no shutdown
+!
+!
+!
+snmp-server community publiacqua RO
+snmp-server community publiacquarw RW
+snmp-server trap-source Vlan800
+snmp-server location {{ SNMPLocation }}
+snmp-server contact operationcenter@publiacqua.it
+!
+!
+!
+logging facility local6
+logging source-interface Vlan800
+logging host 10.140.2.181
+logging host 10.140.2.24
+logging host 10.139.108.10
+!
+!
+!
+ntp source Vlan800
+ntp server 172.20.129.64
+ntp server 172.20.129.65 prefer
+!
+!
+!
+ip http server
+ip http secure-server
+ip http secure-active-session-modules none
+ip http active-session-modules none
+ip http authentication aaa login-authentication default
+ip http client source-interface Vlan800
+ip forward-protocol nd
+!
+!
+!
+errdisable recovery cause udld
+errdisable recovery interval 90
+!
+diagnostic bootup level minimal
+!
+!
+!
+line con 0
+ session-timeout 5
+ exec-timeout 30 0
+ privilege level 15
+ logging synchronous
+ login authentication console
+ stopbits 1
+line vty 0 4
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
+line vty 5 15
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
+!
+!
+!
+end
+! @start-ignore-compliance
+wr 
+! @end-ignore-compliance
+!
 ```
 
 ### NAD Configuration
