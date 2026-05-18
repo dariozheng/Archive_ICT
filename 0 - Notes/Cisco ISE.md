@@ -1650,39 +1650,44 @@ All NAD should have at least these configuration set for it be configurable with
 
 ```bash
 conf t
-netconf-yang
 hostname <HOSTNAME>
 ip domain name publiacqua.it
-
+!
+enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
+!
+username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
+!
 crypto key generate rsa modulus 2048
 ip ssh version 2
-
-line vty 0 4
-transport input ssh
-login local
-
-enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
-
-username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo 
-
-snmp-server community publiacqua RO
-snmp-server community publiacquarw RW
-
-aaa new-model
-
+ip ssh time-out 30
+ip ssh bulk-mode 131072
+ip ssh source-interface Vlan800
+!
 vlan 800
-int vlan 800 
-ip address <IP-ADDRESS> <SUBNET-MASK>
-no shut 
-exit
-
+ name LAN-MGMT
+!
+interface Vlan800
+ description LAN-MGMT
+ ip address <IP-ADDRESS> <SUBNET-MASK>
+ no shutdown
+!
 ip default-gateway <DEFAULT-GATEWAY>
-int <INTERFACE>
-ip dhcp snooping trust
-switchport mode trunk
-switchport trunk allowed vlan add 800
+!
+interface <UPLINK-INTERFACE>
+ ip dhcp snooping trust
+ switchport mode trunk
+ switchport trunk allowed vlan add 800
+!
+aaa new-model
+!
+line vty 0 4
+ transport input ssh
+ login local
+!
+netconf-yang
+!
 end
-wr
+write memory
 ```
 
 ### General 

@@ -186,7 +186,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -208,7 +209,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "343cacf5591b6e84",
   "lastOpenFiles": [
     "0 - Notes/homelab-setup-v5_1_7_17.md",
     "0 - Notes/homelab-setup-v5_1_7_19.md",
