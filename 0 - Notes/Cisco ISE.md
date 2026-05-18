@@ -1645,8 +1645,8 @@ NAD types include the following:
 - Load balancer
 - Software application that uses ISE for AAA
 ## Access Switch
-### General 
-All NAD should have at least these configuration set for it be configurable with Cisco DNA.
+### Initial Configuration
+All NAD should have at least these configuration set for it be configurable with Cisco DNA or to be reachable in SSH.
 
 ```bash
 conf t
@@ -1685,18 +1685,16 @@ end
 wr
 ```
 
-```bash
+### General 
 
+```bash
+clock timezone CET 1 0
+clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
 ```
 
 ```bash
-
-```
-
-```bash
-ntp source Vlan800
-ntp server 172.20.129.64
-ntp server 172.20.129.65 prefer
+ip name-server 10.140.4.250 10.140.4.252 172.20.129.250 172.20.129.252
+ip domain name publiacqua.it
 ```
 
 ```bash
@@ -1720,7 +1718,6 @@ line vty 5 15
  history size 64
  transport input ssh
 ```
-
 
 ```bash
 vlan 800
@@ -1762,9 +1759,87 @@ exit-address-family
 ```
 
 ```bash
-
+ntp source Vlan800
+ntp server 172.20.129.64
+ntp server 172.20.129.65 prefer
 ```
 
+```bash
+aaa new-model
+```
+
+```bash
+radius server radius-mgmnt-auth01
+ address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 3
+ key 7 11593A0C2411241F37192474
+ exit
+```
+
+```bash
+ip radius source-interface Vlan800
+```
+
+```bash
+aaa group server radius RADSERV
+ server name radius-mgmnt-auth01
+```
+
+```bash
+aaa authentication login default group RADSERV local-case 
+aaa authentication login console group local-case
+aaa authentication login HTTPSRV group RADSERV local-case
+!
+aaa authentication enable default enable
+!
+aaa authorization exec default group RADSERV if-authenticated
+aaa authorization exec HTTPSRV group RADSERV if-authenticated
+!
+aaa accounting exec default start-stop group RADSERV
+!
+aaa session-id common 
+```
+
+```bash
+interface Vlan800
+ no shut
+ no ip route-cache
+!
+interface Vlan805
+ no shut
+ description GUEST-INTERCEPT-SVI
+!
+```
+
+```bash
+errdisable recovery cause udld
+errdisable recovery interval 90
+```
+
+```bash
+ip http server
+ip http secure-server
+ip http secure-active-session-modules none
+ip http active-session-modules none
+ip http authentication aaa login-authentication default
+ip http client source-interface Vlan800
+ip forward-protocol nd
+ip ssh bulk-mode 131072
+ip ssh time-out 30
+```
+
+```bash
+logging facility local6
+logging source-interface Vlan800
+logging host 10.140.2.181
+logging host 10.140.2.24
+logging host 10.139.108.10
+```
+
+```bash
+snmp-server trap-source Vlan800
+```
 
 
 # Packet Flow with Cisco ISE
