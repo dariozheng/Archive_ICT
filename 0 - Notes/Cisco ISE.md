@@ -2176,10 +2176,10 @@ radius server ISE01
  key 7 075F02457D0A36162421045C
 ```
 
-<strong>radius server ISE01</strong>
+- <strong>radius server ISE01</strong>
 Simply a named object for this specific ISE node. The name ISE01 is local to the switch, it means nothing to ISE itself. It's just how the switch refers to this server internally.
 
-<strong>address ipv4 10.140.2.31 auth-port 1812 acct-port 1813</strong>
+- <strong>address ipv4 10.140.2.31 auth-port 1812 acct-port 1813</strong>
 
 | Part                       | Meaning                                                |
 | -------------------------- | ------------------------------------------------------ |
@@ -2189,10 +2189,10 @@ Simply a named object for this specific ISE node. The name ISE01 is local to the
 
 > 1812 and 1813 are the **IANA standard RADIUS ports** — always use these with ISE unless specifically configured otherwise.
 
-<strong>automate-tester username test-user ignore-acct-port probe-on</strong>
+- <strong>automate-tester username test-user ignore-acct-port probe-on</strong>
 
 This is a three-part instruction:
-<strong>automate-tester username test-user</strong>
+1. <strong>automate-tester username test-user</strong>
 
 ```
 Switch → ISE:  Access-Request for "test-user"
@@ -2202,7 +2202,7 @@ Switch: "ISE01 is alive"
 
 Sends periodic test probes to ISE using `test-user` to monitor server health. The switch only does this when the server is marked **dead** (probe-on behavior).
 
-<strong>ignore-acct-port</strong>
+ 2. <strong>ignore-acct-port</strong>
 ```
 Without it:
   Probe sent to auth-port 1812  
@@ -2215,7 +2215,7 @@ With it:
 
 > ISE sometimes doesn't respond on 1813 the same way — this prevents the switch from falsely marking ISE as dead just because the accounting port didn't respond to a probe.
 
-<strong>probe-on</strong>
+3.  <strong>probe-on</strong>
 Controls **when** the switch sends probes:
 ```
 Without probe-on:
@@ -2227,7 +2227,7 @@ With probe-on:
   → Once ISE responds → marked ALIVE again 
 ```
 
-<strong>key 7 075F02457D0A36162421045C</strong>
+4. <strong>key 7 075F02457D0A36162421045C</strong>
 The **shared secret** between the switch and ISE — this must match exactly on both sides.
 
 ---
