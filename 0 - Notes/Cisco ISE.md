@@ -2127,29 +2127,116 @@ wr
 
 ### NAD Configuration
 
-```bash
+####  `aaa new-model`
+Activates the AAA framework, it switches the switch's authentication engine from the old model to the new model.
+
+It enables the aaa authentication, authorization, accounting commands.
+
+--- 
+
+####  `aaa authentication dot1x default group ISESERV`
+Tells the switch _who_ to ask when a device tries to authenticate via 802.1X.
 
 ```
+aaa authentication dot1x     → for dot1x/802.1X authentication specifically
 
-```bash
+default                      → applies to all 802.1X-enabled ports (default list)
 
+group ISESERV                → send the request to ISE01 and ISE02 
 ```
 
-```bash
+> When a PC plugs in and sends EAP credentials, the switch forwards them to ISE via this instruction.
+
+--- 
+
+#### `aaa authorization network default group ISESERV`
+After a device authenticates, this tells the switch to ask ISE _what to do with it_ — what VLAN, ACL, SGT, etc. to apply.
+
+- <strong>network</strong>
+
+This specifically covers **network access policy attributes** pushed back from ISE in the RADIUS Access-Accept packet, such as:
+
+| Attribute                                                | Example                                              | What it does                         |
+| -------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------ |
+| [[#Dynamic VLAN Assignment Attributes\|VLAN assignment]] | `Tunnel-Private-Group-ID = 802`                      | Puts device in correct VLAN          |
+| [[#Downloadable ACLs\|dACL]]                             | `DACL = Pre-Auth`                                    | Applies a downloadable ACL           |
+| [[#cisco-av-pair\|Redirect URL]]                         | `Cisco-AVPair = url-redirect=...`                    | Sends guest to captive portal        |
+| [[#cisco-av-pair\|Redirect ACL]]                         | `Cisco-AVPair = url-redirect-acl=ACL_GUEST_REDIRECT` | Defines what traffic gets redirected |
+
+> The word `network` is what tells the switch to **accept and apply** these attributes. Without it, the switch ignores everything ISE sends back.
+
+- <strong>default</strong>
+
+This is a **named list** — and `default` means it applies everywhere automatically.
 
 ```
+! Named list = default → applies to ALL ports automatically
+aaa authorization network default group ISESERV
 
-```bash
-
+! vs a custom named list → you'd have to manually attach it per interface
+aaa authorization network MY_CUSTOM_LIST group ISESERV
 ```
 
-```bash
+- <strong>group ISESERV</strong>
+
+Tells the switch which RADIUS server group to send the authorization request to — in this case:
 
 ```
+aaa group server radius ISESERV
+ server name ISE01
+ server name ISE02
+```
 
-```bash
+ISE processes the request against its policy sets and returns the Access-Accept with all the attributes attached.
+
+--- 
+
+#### `aaa accounting identity default start-stop group ISESERV`
+Sends session accounting records to ISE — start when a session opens, stop when it closes.
 
 ```
+aaa accounting identity      → tracks identity/802.1X sessions specifically
+
+default                      → applies to all sessions
+
+start-stop                   → sends a START record when session begins, STOP when it ends
+
+group ISESERV                → sends these records to ISESERV radius group
+```
+
+--- 
+
+#### `aaa accounting system default start-stop group ISESERV`
+Sends accounting records for **system-level events** — switch reloads, config changes, etc.
+
+```
+aaa accounting system        → tracks switch system events (reloads, uptime)
+default
+start-stop                   → sends records at system start and stop
+group ISESERV                → sends to ISE
+```
+
+> Useful for audit trails — ISE logs when the switch rebooted or came back online.
+
+--- 
+
+#### `aaa accounting update newinfo periodic 2880`
+This is a two-part instruction:
+
+|Part|Meaning|
+|---|---|
+|`newinfo`|If ISE sends **new information** mid-session (e.g. CoA updates the VLAN), immediately send an updated accounting record|
+|`periodic 2880`|Every **2880 minutes (48 hours)**, send a keepalive accounting update even if nothing changed|
+
+> Without `newinfo`, ISE wouldn't know when CoA changed a session's policy. Without `periodic`, long-lived sessions (like servers) might appear as dead in ISE's session table.
+
+--- 
+
+
+
+
+
+
 
 ```bash
 
@@ -2208,6 +2295,7 @@ wr
 ```
 
 #### DNA - PBA NAC
+
 ```bash
 ! Template to enable Cisco ISE - NAC
 !
@@ -2598,18 +2686,6 @@ wr
 ! @end-ignore-compliance
 !
 ```
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Packet Flow with Cisco ISE
 Certificate authentication: 
