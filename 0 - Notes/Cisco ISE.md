@@ -2166,7 +2166,7 @@ With `aaa session-id common`, all these messages carry the **same session ID** �
 The switch sends periodic **test probes** to ISE using this username to check if the RADIUS server is alive or dead. It needs a valid local username to send in the probe packet.
 
 --- 
-
+RADIUS Server Definitions
 #### `radius server ISE01`
 
 ```
@@ -2417,7 +2417,46 @@ ISE receives:
 
 --- 
 
+#### `radius-server vsa send authentication`
 
+Tells the switch to **include Cisco VSAs in Access-Request packets** sent to ISE during authentication.
+
+```
+Without it:
+  Access-Request → standard attributes only
+  ISE receives limited information about the device
+
+With it:
+  Access-Request → standard attributes + Cisco VSAs
+  ISE receives richer context:
+    cisco-av-pair = audit-session-id=xxxxx
+    cisco-av-pair = method=dot1x
+    cisco-av-pair = client-iif-id=xxxxx
+```
+
+> The **audit-session-id** VSA is particularly critical — it is the unique identifier ISE uses to track the entire session lifecycle and target CoA messages correctly.
+
+#### `radius-server vsa send accounting`
+
+Tells the switch to **include Cisco VSAs in Accounting packets** sent to ISE.
+
+```
+Without it:
+  Accounting-Start/Stop → standard attributes only
+  ISE session records incomplete
+
+With it:
+  Accounting-Start/Stop → standard attributes + Cisco VSAs
+  ISE receives:
+    cisco-av-pair = audit-session-id=xxxxx
+    cisco-av-pair = connect-progress=Auth Open
+    cisco-av-pair = nas-rx-speed=xxxxx
+    cisco-av-pair = nas-tx-speed=xxxxx
+```
+
+> Without this, ISE **Live Sessions** and **session reporting** are missing critical data fields.
+
+---
 
 
 ####  `placeholder`
@@ -2425,14 +2464,8 @@ ISE receives:
 ####  `placeholder`
 
 ####  `placeholder`
-radius-server attribute 6 on-for-login-auth
-radius-server attribute 6 support-multiple
-radius-server attribute 8 include-in-access-req
-radius-server attribute 25 access-request include
-radius-server attribute 31 mac format ietf upper-case
-radius-server attribute 31 send nas-port-detail mac-only
-!
-! @start-ignore-compliance
+
+
 radius-server vsa send authentication
 radius-server vsa send accounting
 
