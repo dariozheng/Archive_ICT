@@ -2050,11 +2050,6 @@ interface Vlan800
  no ip route-cache
  no shutdown
 !
-interface Vlan805
- description GUEST-INTERCEPT-SVI
- no shutdown
-!
-!
 !
 !
 snmp-server community publiacqua RO
@@ -2079,11 +2074,11 @@ ntp server 172.20.129.65 prefer
 !
 !
 !
-ip http server
+no ip http server
 ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
-ip http authentication aaa login-authentication default
+ip http authentication aaa login-authentication HTTPSRV
 ip http client source-interface Vlan800
 ip forward-protocol nd
 !
@@ -2605,9 +2600,6 @@ With this:
   CoA processed ✅
 ```
 
-
-
-
 ---
 
 ####  `aaa authentication dot1x default group ISESERV`
@@ -2707,8 +2699,16 @@ This is a two-part instruction:
 > Without `newinfo`, ISE wouldn't know when CoA changed a session's policy. Without `periodic`, long-lived sessions (like servers) might appear as dead in ISE's session table.
 
 --- 
+GUEST Configuration commands
+#### `interface Vlan805`
 
-
+```
+interface Vlan805
+ description GUEST-INTERCEPT-SVI
+ ip address <IP-ADDRESS> <SUBNET-MASK>
+ no shutdown
+```
+The 
 
 
 
@@ -3089,7 +3089,7 @@ interface {{ interface.portName }}
 !
 !
 !
-no ip http server
+ip http server
 ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
