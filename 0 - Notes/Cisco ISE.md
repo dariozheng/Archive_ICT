@@ -2131,8 +2131,106 @@ wr
 Activates the AAA framework, it switches the switch's authentication engine from the old model to the new model.
 
 It enables the aaa authentication, authorization, accounting commands.
+Use this command only if there are local user or radius server, else it can lock the switch.
 
 --- 
+
+####  `aaa session-id common`
+
+It tells the switch to use a **single shared session ID** across all three AAA services for the same session:
+
+```
+Authentication  ┐
+Authorization   ├──→ all share the same session ID
+Accounting      ┘
+```
+
+Without it, each AAA service generates its **own separate session ID** for the same device connection — making it very difficult to correlate records.
+
+When a device connects, ISE receives multiple RADIUS messages:
+
+```
+Access-Request   (authentication)
+Access-Request   (authorization)
+Accounting-Start (session begins)
+Accounting-Update
+Accounting-Stop  (session ends)
+```
+
+With `aaa session-id common`, all these messages carry the **same session ID** — ISE can tie them all together into one clean session record.
+
+--- 
+
+####  `username test-user privilege 0 password 7 06120A3258031918160405041E00`
+
+The switch sends periodic **test probes** to ISE using this username to check if the RADIUS server is alive or dead. It needs a valid local username to send in the probe packet.
+
+--- 
+
+#### `radius server ISE01`
+
+```
+radius server ISE01
+ address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
+ automate-tester username test-user ignore-acct-port probe-on
+ key 7 075F02457D0A36162421045C
+```
+
+<strong>radius server ISE01</strong>
+Simply a named object for this specific ISE node. The name ISE01 is local to the switch, it means nothing to ISE itself. It's just how the switch refers to this server internally.
+
+<strong>address ipv4 10.140.2.31 auth-port 1812 acct-port 1813</strong>
+
+| Part                       | Meaning                                                |
+| -------------------------- | ------------------------------------------------------ |
+| `address ipv4 10.140.2.31` | ISE PSN (Policy Service Node) IP address               |
+| `auth-port 1812`           | Port for authentication (Access-Request/Accept/Reject) |
+| `acct-port 1813`           | Port for accounting (Start/Stop/Update records)        |
+
+> 1812 and 1813 are the **IANA standard RADIUS ports** — always use these with ISE unless specifically configured otherwise.
+
+<strong>automate-tester username test-user ignore-acct-port probe-on</strong>
+
+This is a three-part instruction:
+<strong>automate-tester username test-user</strong>
+
+```
+Switch → ISE:  Access-Request for "test-user"
+ISE    → Switch: Access-Accept or Reject
+Switch: "ISE01 is alive"
+```
+
+Sends periodic test probes to ISE using `test-user` to monitor server health. The switch only does this when the server is marked **dead** (probe-on behavior).
+
+<strong>ignore-acct-port</strong>
+```
+Without it:
+  Probe sent to auth-port 1812  
+  Probe sent to acct-port 1813  ← also tested, can cause false dead detection
+
+With it:
+  Probe sent to auth-port 1812 only
+  Accounting port ignored in health check
+```
+
+> ISE sometimes doesn't respond on 1813 the same way — this prevents the switch from falsely marking ISE as dead just because the accounting port didn't respond to a probe.
+
+<strong>probe-on</strong>
+Controls **when** the switch sends probes:
+```
+Without probe-on:
+  Switch probes ISE constantly → unnecessary traffic 
+
+With probe-on:
+  Switch only probes when ISE is marked DEAD
+  → "Are you back yet?"
+  → Once ISE responds → marked ALIVE again 
+```
+
+<strong>key 7 075F02457D0A36162421045C</strong>
+The **shared secret** between the switch and ISE — this must match exactly on both sides.
+
+---
 
 ####  `aaa authentication dot1x default group ISESERV`
 Tells the switch _who_ to ask when a device tries to authenticate via 802.1X.
@@ -2235,64 +2333,6 @@ This is a two-part instruction:
 
 
 
-
-
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
 
 #### DNA - PBA NAC
 
