@@ -2231,6 +2231,215 @@ With probe-on:
 The **shared secret** between the switch and ISE — this must match exactly on both sides.
 
 ---
+Global RAIDIUS Timers
+#### `radius-server timeout 5`
+How long the switch **waits for a response** from ISE before giving up on that attempt.
+
+```
+Switch → ISE:  Access-Request
+                    ↓
+              waiting 5 seconds...
+                    ↓
+No response → try again (retransmit)
+```
+
+#### `radius-server retransmit 3`
+How many times the switch **retries** before giving up on that specific request.
+```
+Attempt 1 → wait 5s → no response
+Attempt 2 → wait 5s → no response
+Attempt 3 → wait 5s → no response
+              ↓
+Give up on this request → try next server
+```
+
+> So worst case before failover to ISE02:
+
+```
+3 retransmits × 5 second timeout = 15 seconds maximum wait
+```
+
+#### `radius-server dead-criteria time 5 tries 3`
+This is the **threshold** that triggers marking a server as DEAD. It has two conditions — **both must be met:**
+
+ `time 5`
+At least **5 seconds** must have passed with no valid response from this server.
+
+`tries 3`
+At least **3 consecutive failures** must have occurred within that time window.
+
+```
+Failure 1 at 0s   ─┐
+Failure 2 at 5s    ├── all within time window + 3 tries met
+Failure 3 at 10s  ─┘
+        ↓
+ISE01 marked DEAD ❌
+Switch immediately fails over to ISE02
+automate-tester starts probing ISE01
+```
+
+> Both conditions protect against false positives — a single slow response won't kill the server.
+
+#### `radius-server deadtime 15`
+Once a server is marked DEAD, how long the switch **completely ignores it** before trying again.
+
+```
+ISE01 marked DEAD
+        ↓
+15 minutes of silence
+        ↓
+Switch tries ISE01 again
+        ↓
+Response received → ISE01 marked ALIVE ✅
+No response       → stays DEAD, reset 15 min timer
+```
+
+> Without deadtime, the switch would constantly retry a dead server — wasting time on every authentication request.
+
+---
+RADIUS Attribute Commands
+####  `radius-server attribute 6 on-for-login-auth`
+Attribute 6 = [[#Service - Type]] — tells ISE what kind of service the device is requesting.
+
+```
+Without this:
+  Switch sends Access-Request
+  Service-Type attribute missing
+  ISE doesn't know if this is a login or network request
+
+With this:
+  Switch includes Service-Type = Login (1)
+  ISE knows this is an authentication request
+```
+
+> ISE uses Service-Type in its authorization policy conditions. Without it, some ISE policy rules that match on Service-Type won't trigger correctly.
+
+####  `radius-server attribute 6 support-multiple`
+Allows the switch to **send and receive multiple Service-Type values** in a single RADIUS packet.
+
+```
+Single Service-Type:
+  Service-Type = Framed (2)      ← only one value
+
+Multiple Service-Type:
+  Service-Type = Framed (2)
+  Service-Type = Call-Check (10) ← MAB uses this
+```
+
+> Critical for environments running both **802.1X and MAB** on the same ports — each method uses a different Service-Type value. Without this, MAB authentication can behave unexpectedly.
+
+#### `radius-server attribute 8 include-in-access-req`
+Attribute 8 = Framed-IP-Address — the IP address of the connecting device.
+
+```
+Without this:
+  Access-Request → no IP address included
+  ISE sees: MAC address only
+
+With this:
+  Access-Request → includes device IP address
+  ISE sees: MAC address + IP address 
+```
+
+> ISE uses this for **profiling and session tracking**. Knowing the IP address lets ISE:
+
+- Match endpoint to IP in session table
+- Apply IP-based policy conditions
+- Correlate with DHCP snooping data
+
+#### `radius-server attribute 25 access-request include`
+**Attribute 25 = Class** — normally sent by ISE back to the switch, but this tells the switch to also **send it in the Access-Request.**
+
+```
+Normal flow:
+  Switch → ISE: Access-Request (no Class attribute)
+  ISE → Switch: Access-Accept (includes Class attribute)
+
+With this command:
+  Switch → ISE: Access-Request (includes Class from previous session)
+  ISE → Switch: Access-Accept (includes updated Class attribute)
+```
+
+> Helps ISE **maintain session continuity** — when a device re-authenticates, ISE can recognize it as the same session using the Class attribute from the previous exchange. Important for **re-authentication and CoA** scenarios.
+
+#### `radius-server attribute 31 mac format ietf upper-case`
+**Attribute 31 = Calling-Station-Id** — carries the **MAC address** of the connecting device.
+This controls how the MAC address is formatted:
+
+| Format          | Example              |
+| --------------- | -------------------- |
+| Default Cisco   | `0050.56ab.cdef`     |
+| IETF upper-case | `00-50-56-AB-CD-EF`  |
+| IETF lower-case | `00-50-56-ab-cd-ef`  |
+| No format set   | varies by platform   |
+
+```
+ISE expects:    00-50-56-AB-CD-EF  (IETF upper-case)
+Switch sends:   0050.56ab.cdef     (Cisco default)
+                        ↓
+ISE can't match MAC → MAB fails 
+```
+
+> **Critical for MAB** — if the MAC format doesn't match what ISE expects, the switch sends a MAC address that ISE can't find in its endpoint database, and the device fails authentication.
+
+#### `radius-server attribute 31 send nas-port-detail mac-only`
+Controls **what is included** in the Calling-Station-Id attribute alongside the MAC address.
+
+```
+Without mac-only:
+  Calling-Station-Id = 00-50-56-AB-CD-EF:GigabitEthernet1/0/1
+  ← MAC + port name combined
+
+With mac-only:
+  Calling-Station-Id = 00-50-56-AB-CD-EF
+  ← MAC address only 
+```
+
+> ISE expects **MAC address only** in Calling-Station-Id. If port detail is appended, ISE can't parse the MAC correctly — again breaking MAB and endpoint identification.
+
+####  `radius-server attribute 32 include-in-access-req format %h`
+**Attribute 32 = NAS-Identifier** — tells ISE the **hostname of the switch** that is authenticating the device.
+
+|Part|Meaning|
+|---|---|
+|`attribute 32`|NAS-Identifier|
+|`include-in-access-req`|send it in every Access-Request|
+|`format %h`|use the switch hostname as the value|
+
+```
+ISE receives:
+  NAS-Identifier     = SWITCH-FLOOR-2-BLD-A
+  NAS-IP-Address     = 10.140.1.10
+  NAS-Port-Type      = Ethernet (15)
+```
+
+> Lets ISE build **location-aware policies** — apply different rules based on which switch the device is connected to.
+
+--- 
+
+
+
+
+####  `placeholder`
+
+####  `placeholder`
+
+####  `placeholder`
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 6 support-multiple
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server attribute 31 mac format ietf upper-case
+radius-server attribute 31 send nas-port-detail mac-only
+!
+! @start-ignore-compliance
+radius-server vsa send authentication
+radius-server vsa send accounting
+
+
+
+
+---
 
 ####  `aaa authentication dot1x default group ISESERV`
 Tells the switch _who_ to ask when a device tries to authenticate via 802.1X.
@@ -2413,6 +2622,7 @@ radius-server attribute 8 include-in-access-req
 radius-server attribute 25 access-request include
 radius-server attribute 31 mac format ietf upper-case
 radius-server attribute 31 send nas-port-detail mac-only
+radius-server attribute 32 include-in-access-req format %h
 !
 ! @start-ignore-compliance
 radius-server vsa send authentication
