@@ -2458,16 +2458,152 @@ With it:
 
 ---
 
+#### `dot1x system-auth-control`
 
-####  `placeholder`
+This is a **global enable switch** for 802.1X on the entire switch. Without it, 802.1X simply won't work on **any** port — even if you've configured it perfectly at the interface level.
 
-####  `placeholder`
+Think of it as the **master on/off switch** for 802.1X.
 
-####  `placeholder`
+---
 
+#### `dot1x critical eapol`
+When ISE is dead and a device gets placed into **Critical Authentication**, the switch sends an **EAPOL-Success message directly to the device** — even though no real authentication happened with ISE.
 
-radius-server vsa send authentication
-radius-server vsa send accounting
+```
+Normal auth:       ISE says yes → switch tells device → EAPOL-Success
+Critical eapol:    ISE is dead  → switch tells device → EAPOL-Success anyway
+```
+
+The device (PC, phone, printer) runs an **802.1X supplicant** — software that manages the authentication conversation. That supplicant is always listening for EAP messages.
+
+```
+Without dot1x critical eapol:
+
+  ISE goes down
+        ↓
+  Switch puts port in Critical Auth (VLAN 802)
+  Switch says nothing to the device
+        ↓
+  Device supplicant: "I never got an EAPOL-Success..."
+  Device supplicant: "Authentication must still be pending..."
+  Device supplicant: sitting there confused 😕
+        ↓
+  ISE comes back
+        ↓
+  Switch tries to reauthenticate
+  Device supplicant doesn't respond cleanly
+  → Physical unplug/replug needed ❌
+```
+
+```
+With dot1x critical eapol:
+
+  ISE goes down
+        ↓
+  Switch puts port in Critical Auth (VLAN 802)
+  Switch immediately sends EAPOL-Success to device
+        ↓
+  Device supplicant: "Got it — I am authorized ✅"
+  Device supplicant: sitting in clean known state 😊
+        ↓
+  ISE comes back
+        ↓
+  Switch triggers reauthentication
+  Device supplicant responds immediately ✅
+  → Clean recovery, no user impact
+```
+
+#### `no access-session mac-move deny`
+A device physically moving from one port to another on the same switch:
+
+```
+Device on Gi1/0/1 (authenticated) ──unplugs──> plugs into Gi1/0/5
+```
+
+ Default Behaviour — MAC Move Denied
+
+```
+Default: access-session mac-move deny (enabled by default)
+
+Device authenticated on Gi1/0/1
+        ↓
+Device unplugs → plugs into Gi1/0/5
+        ↓
+Switch sees same MAC on new port
+        ↓
+DENIED ❌ — MAC already authenticated on another port
+        ↓
+Device blocked until original session times out
+```
+
+> In a busy office environment this causes constant issues — laptops moving between docking stations, devices being moved between ports, IP phones relocated.
+
+With `no access-session mac-move deny`
+
+```
+no access-session mac-move deny = MAC move ALLOWED
+
+Device authenticated on Gi1/0/1
+        ↓
+Device unplugs → plugs into Gi1/0/5
+        ↓
+Switch sees same MAC on new port
+        ↓
+Old session on Gi1/0/1 cleared automatically
+New authentication triggered on Gi1/0/5 ✅
+        ↓
+Device authenticates cleanly on new port
+```
+
+---
+
+#### `aaa server radius dynamic-author` 
+
+```
+aaa server radius dynamic-author
+ client 10.140.2.31 server-key 7 040B280F3C22635D3A2A0A47
+ client 10.140.2.32 server-key 7 08716F473A1A2A0421380354
+```
+ 
+Standard RADIUS is a **one-way conversation** — the switch asks, ISE answers:
+
+```
+Standard RADIUS:
+  Switch → ISE    "Can this device access the network?"
+  ISE → Switch    "Yes, put it in VLAN 802"
+  
+  Session starts... ISE cannot touch it again ❌
+```
+
+Dynamic Authorization (CoA) makes it **two-way** — ISE can now initiate communication back to the switch **mid-session:**
+
+```
+With CoA:
+  Switch → ISE    "Can this device access the network?"
+  ISE → Switch    "Yes, put it in VLAN 802"
+  
+  Session running...
+  
+  ISE → Switch    "Change that device to VLAN 805" ← ISE initiates ✅
+  ISE → Switch    "Disconnect that device now"      ← ISE initiates ✅
+  ISE → Switch    "Apply this new ACL"              ← ISE initiates ✅
+```
+
+ `dynamic-author`
+
+Opens a **listener on the switch** — specifically on port **3799** (RFC 5176 standard CoA port) — waiting for incoming RADIUS messages from ISE.
+
+```
+Without this:
+  ISE sends CoA to switch port 3799
+  Switch: "Nobody listening on that port"
+  CoA ignored ❌
+
+With this:
+  ISE sends CoA to switch port 3799
+  Switch: "ISE is authorized to send me instructions"
+  CoA processed ✅
+```
 
 
 
