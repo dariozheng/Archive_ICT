@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "74e8044746b6008e",
+        "id": "43ac11cef66362f1",
         "type": "tabs",
         "children": [
           {
-            "id": "2194abf4b183253a",
+            "id": "310f1ddbfac8aab4",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -209,9 +209,12 @@
   },
   "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/homelab-setup-v5_1_7_22.md",
     "0 - Notes/Cisco ISE.md",
+    "0 - Notes/homelab-setup-WEBNOVEL.md",
+    "0 - Notes/homelab-setup-v5_1_7_22_old.md",
     "0 - Notes/homelab-setup-v5_1_7_20.md",
+    "0 - Notes/README.md",
+    "0 - Notes/homelab-setup-v5_1_7_22.md",
     "0 - Notes/homelab-setup-v5_1_7_17.md",
     "0 - Notes/homelab-setup-v5_1_7_19.md",
     "0 - Notes/homelab-setup-v5_1_7_11.md",
@@ -242,9 +245,6 @@
     "1 - Excalidraw/ENCOR.md",
     "0 - Notes/OSI Model.md",
     "1 - Excalidraw/Drawing 2026-05-12 13.excalidraw.md",
-    "0 - Notes/Cisco ISE - Manuale Operativo.md",
-    "Orphaned Images Report.md",
-    "0 - Notes/Script To Enroll a Non Domain Computer.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "Script_Clean-Expired-userCertificate.ps1",

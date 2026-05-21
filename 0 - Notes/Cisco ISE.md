@@ -1644,8 +1644,7 @@ NAD types include the following:
 - Cisco Firepower device
 - Load balancer
 - Software application that uses ISE for AAA
-## Access Switch
-### Initial Configuration
+## Initial Configuration
 All NAD should have at least these configuration set for it be configurable with Cisco DNA or to be reachable in SSH.
 
 ```bash
@@ -1729,7 +1728,7 @@ write memory
 !
 ```
 
-### General Configuration
+## General Configuration
 
 ```bash
 clock timezone CET 1 0
@@ -2120,19 +2119,23 @@ wr
 !
 ```
 
-### NAD Configuration
+## NAD Configuration
 
-####  `aaa new-model`
-Activates the AAA framework, it switches the switch's authentication engine from the old model to the new model.
+---
 
-It enables the aaa authentication, authorization, accounting commands.
-Use this command only if there are local user or radius server, else it can lock the switch.
+### AAA Framework
 
---- 
+#### `aaa new-model`
 
-####  `aaa session-id common`
+Activates the AAA framework, switching the device's authentication engine from the legacy model to the new model. This enables the `aaa authentication`, `aaa authorization`, and `aaa accounting` command families.
 
-It tells the switch to use a **single shared session ID** across all three AAA services for the same session:
+> Only configure this if local users or a RADIUS server are already defined — enabling it without either can lock you out of the switch.
+
+---
+
+#### `aaa session-id common`
+
+Instructs the switch to use a **single shared session ID** across all three AAA services for the same session:
 
 ```
 Authentication  ┐
@@ -2140,7 +2143,7 @@ Authorization   ├──→ all share the same session ID
 Accounting      ┘
 ```
 
-Without it, each AAA service generates its **own separate session ID** for the same device connection — making it very difficult to correlate records.
+Without this, each AAA service generates its **own separate session ID** for the same connection, making it very difficult to correlate records in ISE.
 
 When a device connects, ISE receives multiple RADIUS messages:
 
@@ -2152,18 +2155,19 @@ Accounting-Update
 Accounting-Stop  (session ends)
 ```
 
-With `aaa session-id common`, all these messages carry the **same session ID** — ISE can tie them all together into one clean session record.
+With `aaa session-id common`, all these messages carry the **same session ID**, allowing ISE to tie them together into a single clean session record.
 
---- 
+---
 
-####  `username test-user privilege 0 password 7 06120A3258031918160405041E00`
+### Local User for RADIUS Probing
 
-The switch sends periodic **test probes** to ISE using this username to check if the RADIUS server is alive or dead. It needs a valid local username to send in the probe packet.
+#### `username test-user privilege 0 password 7 06120A3258031918160405041E00`
 
---- 
-RADIUS Server Definitions
-#### `radius server ISE01`
+The switch sends periodic **health-check probes** to ISE using this username to determine whether the RADIUS server is alive or dead. A valid local username is required to populate the probe packet.
 
+---
+
+### RADIUS Server Definitions
 ```
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
@@ -2171,63 +2175,64 @@ radius server ISE01
  key 7 075F02457D0A36162421045C
 ```
 
-- <strong>radius server ISE01</strong>
-Simply a named object for this specific ISE node. The name ISE01 is local to the switch, it means nothing to ISE itself. It's just how the switch refers to this server internally.
+`radius server ISE01` A locally significant name for this ISE node. The label `ISE01` has no meaning to ISE itself — it is purely how the switch refers to this server internally.
 
-- <strong>address ipv4 10.140.2.31 auth-port 1812 acct-port 1813</strong>
+`address ipv4 10.140.2.31 auth-port 1812 acct-port 1813`
 
-| Part                       | Meaning                                                |
-| -------------------------- | ------------------------------------------------------ |
-| `address ipv4 10.140.2.31` | ISE PSN (Policy Service Node) IP address               |
-| `auth-port 1812`           | Port for authentication (Access-Request/Accept/Reject) |
-| `acct-port 1813`           | Port for accounting (Start/Stop/Update records)        |
+|Part|Meaning|
+|---|---|
+|`address ipv4 10.140.2.31`|ISE PSN (Policy Service Node) IP address|
+|`auth-port 1812`|Port for authentication (Access-Request / Accept / Reject)|
+|`acct-port 1813`|Port for accounting (Start / Stop / Update records)|
 
-> 1812 and 1813 are the **IANA standard RADIUS ports** — always use these with ISE unless specifically configured otherwise.
+> 1812 and 1813 are the **IANA standard RADIUS ports** — always use these with ISE unless explicitly configured otherwise.
 
-- <strong>automate-tester username test-user ignore-acct-port probe-on</strong>
+`automate-tester username test-user ignore-acct-port probe-on`
 
 This is a three-part instruction:
-1. <strong>automate-tester username test-user</strong>
+
+1. `automate-tester username test-user` — Sends periodic test probes to ISE using the [[#`username test-user privilege 0 password 7 06120A3258031918160405041E00`|test-user]] account to monitor server health:
 
 ```
-Switch → ISE:  Access-Request for "test-user"
-ISE    → Switch: Access-Accept or Reject
-Switch: "ISE01 is alive"
+Switch → ISE:   Access-Request for "test-user"
+ISE → Switch:   Access-Accept or Reject
+Switch:         "ISE01 is alive"
 ```
 
-Sends periodic test probes to ISE using `test-user` to monitor server health. The switch only does this when the server is marked **dead** (probe-on behavior).
+2. `ignore-acct-port` — Restricts health probes to the authentication port only:
 
- 2. <strong>ignore-acct-port</strong>
 ```
 Without it:
-  Probe sent to auth-port 1812  
-  Probe sent to acct-port 1813  ← also tested, can cause false dead detection
+  Probe sent to auth-port 1812  ✓
+  Probe sent to acct-port 1813  ← can cause false dead detection
 
 With it:
   Probe sent to auth-port 1812 only
   Accounting port ignored in health check
 ```
 
-> ISE sometimes doesn't respond on 1813 the same way — this prevents the switch from falsely marking ISE as dead just because the accounting port didn't respond to a probe.
+> ISE does not always respond on port 1813 in the same way — omitting this can cause the switch to falsely mark ISE as dead.
 
-3.  <strong>probe-on</strong>
-Controls **when** the switch sends probes:
+3. **`probe-on`** — Controls _when_ probes are sent:
+
 ```
 Without probe-on:
-  Switch probes ISE constantly → unnecessary traffic 
+  Switch probes ISE constantly → unnecessary traffic
 
 With probe-on:
   Switch only probes when ISE is marked DEAD
   → "Are you back yet?"
-  → Once ISE responds → marked ALIVE again 
+  → Once ISE responds → marked ALIVE again
 ```
 
-4. <strong>key 7 075F02457D0A36162421045C</strong>
-The **shared secret** between the switch and ISE — this must match exactly on both sides.
+`key 7 075F02457D0A36162421045C` The **shared secret** between the switch and ISE. This must match exactly on both sides for ISE to return a Access-Accept.
 
 ---
-Global RAIDIUS Timers
+
+### Global RADIUS Timers
+
 #### `radius-server timeout 5`
+
 How long the switch **waits for a response** from ISE before giving up on that attempt.
 
 ```
@@ -2235,48 +2240,45 @@ Switch → ISE:  Access-Request
                     ↓
               waiting 5 seconds...
                     ↓
-No response → try again (retransmit)
+No response → retransmit
 ```
 
 #### `radius-server retransmit 3`
-How many times the switch **retries** before giving up on that specific request.
+
+How many times the switch **retries a request** before declaring it failed and moving to the next server.
+
 ```
 Attempt 1 → wait 5s → no response
 Attempt 2 → wait 5s → no response
 Attempt 3 → wait 5s → no response
               ↓
-Give up on this request → try next server
+Give up → try next server (ISE02)
 ```
 
-> So worst case before failover to ISE02:
-
-```
-3 retransmits × 5 second timeout = 15 seconds maximum wait
-```
+> Worst-case failover time before switching to ISE02: `3 retransmits × 5 second timeout = 15 seconds maximum`
 
 #### `radius-server dead-criteria time 5 tries 3`
-This is the **threshold** that triggers marking a server as DEAD. It has two conditions — **both must be met:**
 
- `time 5`
-At least **5 seconds** must have passed with no valid response from this server.
+The **threshold** that triggers marking a server as DEAD. Both conditions must be met simultaneously:
 
-`tries 3`
-At least **3 consecutive failures** must have occurred within that time window.
+- **`time 5`** — At least **5 seconds** have passed with no valid response.
+- **`tries 3`** — At least **3 consecutive failures** have occurred within that window.
 
 ```
 Failure 1 at 0s   ─┐
-Failure 2 at 5s    ├── all within time window + 3 tries met
+Failure 2 at 5s    ├── time window met + 3 failures reached
 Failure 3 at 10s  ─┘
         ↓
 ISE01 marked DEAD ❌
 Switch immediately fails over to ISE02
-automate-tester starts probing ISE01
+automate-tester begins probing ISE01
 ```
 
-> Both conditions protect against false positives — a single slow response won't kill the server.
+> Requiring both conditions prevents false positives — a single slow response won't prematurely kill the server.
 
 #### `radius-server deadtime 15`
-Once a server is marked DEAD, how long the switch **completely ignores it** before trying again.
+
+Once a server is marked DEAD, how long the switch **ignores it entirely** before attempting contact again.
 
 ```
 ISE01 marked DEAD
@@ -2286,44 +2288,48 @@ ISE01 marked DEAD
 Switch tries ISE01 again
         ↓
 Response received → ISE01 marked ALIVE ✅
-No response       → stays DEAD, reset 15 min timer
+No response       → stays DEAD, 15-minute timer resets
 ```
 
-> Without deadtime, the switch would constantly retry a dead server — wasting time on every authentication request.
+> Without a deadtime, the switch would retry a dead server on every authentication request, adding unnecessary delay.
 
 ---
-RADIUS Attribute Commands
-####  `radius-server attribute 6 on-for-login-auth`
-Attribute 6 = [[#Service - Type]] — tells ISE what kind of service the device is requesting.
+
+### RADIUS Attribute Commands
+
+#### `radius-server attribute 6 on-for-login-auth`
+
+Attribute 6 = [[#Service-Type]] — tells ISE what kind of service the device is requesting.
 
 ```
 Without this:
-  Switch sends Access-Request
-  Service-Type attribute missing
-  ISE doesn't know if this is a login or network request
+  Access-Request sent with no Service-Type attribute
+  ISE cannot determine whether this is a login or network request
 
 With this:
-  Switch includes Service-Type = Login (1)
-  ISE knows this is an authentication request
+  Access-Request includes Service-Type = Login (1)
+  ISE can correctly classify the request
 ```
 
-> ISE uses Service-Type in its authorization policy conditions. Without it, some ISE policy rules that match on Service-Type won't trigger correctly.
+> ISE uses Service-Type in authorization policy conditions. Without it, policy rules that match on Service-Type will not evaluate correctly.
 
-####  `radius-server attribute 6 support-multiple`
-Allows the switch to **send and receive multiple Service-Type values** in a single RADIUS packet.
+#### `radius-server attribute 6 support-multiple`
+
+Allows the switch to **send and receive multiple Service-Type values** within a single RADIUS packet.
 
 ```
 Single Service-Type:
-  Service-Type = Framed (2)      ← only one value
+  Service-Type = Framed (2)       ← one value only
 
 Multiple Service-Type:
   Service-Type = Framed (2)
-  Service-Type = Call-Check (10) ← MAB uses this
+  Service-Type = Call-Check (10)  ← MAB uses this
 ```
 
-> Critical for environments running both **802.1X and MAB** on the same ports — each method uses a different Service-Type value. Without this, MAB authentication can behave unexpectedly.
+> Critical in environments running both **802.1X and MAB** on the same ports — each method uses a different Service-Type value. Without this, MAB authentication can behave unexpectedly.
 
 #### `radius-server attribute 8 include-in-access-req`
+
 Attribute 8 = Framed-IP-Address — the IP address of the connecting device.
 
 ```
@@ -2333,17 +2339,18 @@ Without this:
 
 With this:
   Access-Request → includes device IP address
-  ISE sees: MAC address + IP address 
+  ISE sees: MAC address + IP address
 ```
 
-> ISE uses this for **profiling and session tracking**. Knowing the IP address lets ISE:
-
-- Match endpoint to IP in session table
-- Apply IP-based policy conditions
-- Correlate with DHCP snooping data
+> ISE uses this for **profiling and session tracking**. Knowing the IP address allows ISE to:
+> 
+> - Match the endpoint to its IP in the session table
+> - Apply IP-based policy conditions
+> - Correlate with DHCP snooping data
 
 #### `radius-server attribute 25 access-request include`
-**Attribute 25 = Class** — normally sent by ISE back to the switch, but this tells the switch to also **send it in the Access-Request.**
+
+Attribute 25 = Class — normally returned by ISE to the switch, but this command instructs the switch to also **include it in the Access-Request**.
 
 ```
 Normal flow:
@@ -2355,71 +2362,74 @@ With this command:
   ISE → Switch: Access-Accept (includes updated Class attribute)
 ```
 
-> Helps ISE **maintain session continuity** — when a device re-authenticates, ISE can recognize it as the same session using the Class attribute from the previous exchange. Important for **re-authentication and CoA** scenarios.
+> Helps ISE **maintain session continuity** — when a device re-authenticates, ISE can recognise it as the same session using the Class attribute from the previous exchange. Important for **re-authentication and CoA** scenarios.
 
 #### `radius-server attribute 31 mac format ietf upper-case`
-**Attribute 31 = Calling-Station-Id** — carries the **MAC address** of the connecting device.
-This controls how the MAC address is formatted:
 
-| Format          | Example              |
-| --------------- | -------------------- |
-| Default Cisco   | `0050.56ab.cdef`     |
-| IETF upper-case | `00-50-56-AB-CD-EF`  |
-| IETF lower-case | `00-50-56-ab-cd-ef`  |
-| No format set   | varies by platform   |
+Attribute 31 = Calling-Station-Id — carries the **MAC address** of the connecting device. This controls how that MAC address is formatted in the packet:
+
+|Format|Example|
+|---|---|
+|Default Cisco|`0050.56ab.cdef`|
+|IETF upper-case|`00-50-56-AB-CD-EF`|
+|IETF lower-case|`00-50-56-ab-cd-ef`|
 
 ```
-ISE expects:    00-50-56-AB-CD-EF  (IETF upper-case)
-Switch sends:   0050.56ab.cdef     (Cisco default)
-                        ↓
-ISE can't match MAC → MAB fails 
+ISE expects:  00-50-56-AB-CD-EF  (IETF upper-case)
+Switch sends: 0050.56ab.cdef     (Cisco default)
+                      ↓
+ISE cannot match MAC → MAB fails ❌
 ```
 
-> **Critical for MAB** — if the MAC format doesn't match what ISE expects, the switch sends a MAC address that ISE can't find in its endpoint database, and the device fails authentication.
+> **Critical for MAB** — if the MAC format does not match what ISE expects, the switch sends a MAC address that ISE cannot find in its endpoint database, causing authentication failure.
 
 #### `radius-server attribute 31 send nas-port-detail mac-only`
+
 Controls **what is included** in the Calling-Station-Id attribute alongside the MAC address.
 
 ```
 Without mac-only:
   Calling-Station-Id = 00-50-56-AB-CD-EF:GigabitEthernet1/0/1
-  ← MAC + port name combined
+  ← MAC address + port name combined
 
 With mac-only:
   Calling-Station-Id = 00-50-56-AB-CD-EF
-  ← MAC address only 
+  ← MAC address only
 ```
 
-> ISE expects **MAC address only** in Calling-Station-Id. If port detail is appended, ISE can't parse the MAC correctly — again breaking MAB and endpoint identification.
+> ISE expects **MAC address only** in Calling-Station-Id. If port information is appended, ISE cannot parse the MAC correctly — again breaking MAB and endpoint identification.
 
-####  `radius-server attribute 32 include-in-access-req format %h`
-**Attribute 32 = NAS-Identifier** — tells ISE the **hostname of the switch** that is authenticating the device.
+#### `radius-server attribute 32 include-in-access-req format %h`
+
+Attribute 32 = NAS-Identifier — tells ISE the **hostname of the switch** that is authenticating the device.
 
 |Part|Meaning|
 |---|---|
 |`attribute 32`|NAS-Identifier|
-|`include-in-access-req`|send it in every Access-Request|
-|`format %h`|use the switch hostname as the value|
+|`include-in-access-req`|Send it in every Access-Request|
+|`format %h`|Use the switch hostname as the value|
 
 ```
 ISE receives:
-  NAS-Identifier     = SWITCH-FLOOR-2-BLD-A
-  NAS-IP-Address     = 10.140.1.10
-  NAS-Port-Type      = Ethernet (15)
+  NAS-Identifier  = SWITCH-FLOOR-2-BLD-A
+  NAS-IP-Address  = 10.140.1.10
+  NAS-Port-Type   = Ethernet (15)
 ```
 
-> Lets ISE build **location-aware policies** — apply different rules based on which switch the device is connected to.
+> Enables ISE to build **location-aware policies** — applying different rules based on which switch the device is connected to.
 
---- 
+---
+
+### RADIUS VSA Commands
 
 #### `radius-server vsa send authentication`
 
-Tells the switch to **include Cisco VSAs in Access-Request packets** sent to ISE during authentication.
+Instructs the switch to **include Cisco VSAs in Access-Request packets** sent during authentication.
 
 ```
 Without it:
   Access-Request → standard attributes only
-  ISE receives limited information about the device
+  ISE receives limited context about the session
 
 With it:
   Access-Request → standard attributes + Cisco VSAs
@@ -2429,16 +2439,16 @@ With it:
     cisco-av-pair = client-iif-id=xxxxx
 ```
 
-> The **audit-session-id** VSA is particularly critical — it is the unique identifier ISE uses to track the entire session lifecycle and target CoA messages correctly.
+> The **audit-session-id** VSA is especially important — it is the unique identifier ISE uses to track the full session lifecycle and correctly target CoA messages.
 
 #### `radius-server vsa send accounting`
 
-Tells the switch to **include Cisco VSAs in Accounting packets** sent to ISE.
+Instructs the switch to **include Cisco VSAs in Accounting packets** sent to ISE.
 
 ```
 Without it:
   Accounting-Start/Stop → standard attributes only
-  ISE session records incomplete
+  ISE session records are incomplete
 
 With it:
   Accounting-Start/Stop → standard attributes + Cisco VSAs
@@ -2449,45 +2459,43 @@ With it:
     cisco-av-pair = nas-tx-speed=xxxxx
 ```
 
-> Without this, ISE **Live Sessions** and **session reporting** are missing critical data fields.
+> Without this, ISE **Live Sessions** and session reporting will be missing critical data fields.
 
 ---
+
+### 802.1X Global Commands
 
 #### `dot1x system-auth-control`
 
-This is a **global enable switch** for 802.1X on the entire switch. Without it, 802.1X simply won't work on **any** port — even if you've configured it perfectly at the interface level.
-
-Think of it as the **master on/off switch** for 802.1X.
-
----
+The **global enable switch** for 802.1X on the entire device. Without it, 802.1X will not function on **any** port — regardless of per-interface configuration. Think of it as the master on/off switch for 802.1X.
 
 #### `dot1x critical eapol`
-When ISE is dead and a device gets placed into **Critical Authentication**, the switch sends an **EAPOL-Success message directly to the device** — even though no real authentication happened with ISE.
+
+When ISE is unreachable and a device is placed into **Critical Authentication**, the switch sends an **EAPOL-Success message directly to the device** — even though no real authentication took place with ISE.
 
 ```
-Normal auth:       ISE says yes → switch tells device → EAPOL-Success
-Critical eapol:    ISE is dead  → switch tells device → EAPOL-Success anyway
+Normal auth:      ISE approves → switch notifies device → EAPOL-Success
+Critical eapol:   ISE is dead  → switch notifies device → EAPOL-Success anyway
 ```
 
-The device (PC, phone, printer) runs an **802.1X supplicant** — software that manages the authentication conversation. That supplicant is always listening for EAP messages.
+The device runs an **802.1X supplicant** that manages the EAP conversation and is always listening for EAP messages.
 
 ```
 Without dot1x critical eapol:
 
   ISE goes down
         ↓
-  Switch puts port in Critical Auth (VLAN 802)
-  Switch says nothing to the device
+  Switch places port in Critical Auth (VLAN 802)
+  Switch sends nothing to the device
         ↓
-  Device supplicant: "I never got an EAPOL-Success..."
-  Device supplicant: "Authentication must still be pending..."
-  Device supplicant: sitting there confused 😕
+  Supplicant: "I never received an EAPOL-Success..."
+  Supplicant: sitting in an unknown pending state 😕
         ↓
-  ISE comes back
+  ISE recovers
         ↓
-  Switch tries to reauthenticate
-  Device supplicant doesn't respond cleanly
-  → Physical unplug/replug needed ❌
+  Switch triggers reauthentication
+  Supplicant does not respond cleanly
+  → Physical unplug/replug required ❌
 ```
 
 ```
@@ -2495,224 +2503,203 @@ With dot1x critical eapol:
 
   ISE goes down
         ↓
-  Switch puts port in Critical Auth (VLAN 802)
+  Switch places port in Critical Auth (VLAN 802)
   Switch immediately sends EAPOL-Success to device
         ↓
-  Device supplicant: "Got it — I am authorized ✅"
-  Device supplicant: sitting in clean known state 😊
+  Supplicant: "Authorised ✅"
+  Supplicant: sitting in a clean, known state 😊
         ↓
-  ISE comes back
+  ISE recovers
         ↓
   Switch triggers reauthentication
-  Device supplicant responds immediately ✅
+  Supplicant responds immediately ✅
   → Clean recovery, no user impact
 ```
 
 #### `no access-session mac-move deny`
-A device physically moving from one port to another on the same switch:
+
+Controls whether a device can move from one port to another on the same switch without being blocked.
+
+**Default behaviour — MAC move denied:**
 
 ```
-Device on Gi1/0/1 (authenticated) ──unplugs──> plugs into Gi1/0/5
-```
-
- Default Behaviour — MAC Move Denied
-
-```
-Default: access-session mac-move deny (enabled by default)
-
 Device authenticated on Gi1/0/1
         ↓
 Device unplugs → plugs into Gi1/0/5
         ↓
-Switch sees same MAC on new port
+Switch sees same MAC on a new port
         ↓
 DENIED ❌ — MAC already authenticated on another port
         ↓
-Device blocked until original session times out
+Device blocked until the original session times out
 ```
 
-> In a busy office environment this causes constant issues — laptops moving between docking stations, devices being moved between ports, IP phones relocated.
+> In busy office environments this causes constant problems — laptops moving between docking stations, phones being relocated, devices swapped between ports.
 
-With `no access-session mac-move deny`
+**With `no access-session mac-move deny`:**
 
 ```
-no access-session mac-move deny = MAC move ALLOWED
-
 Device authenticated on Gi1/0/1
         ↓
 Device unplugs → plugs into Gi1/0/5
         ↓
-Switch sees same MAC on new port
+Switch sees same MAC on a new port
         ↓
 Old session on Gi1/0/1 cleared automatically
 New authentication triggered on Gi1/0/5 ✅
         ↓
-Device authenticates cleanly on new port
+Device authenticates cleanly on the new port
 ```
 
 ---
 
-#### `aaa server radius dynamic-author` 
+### Dynamic Authorization (CoA)
+
+#### `aaa server radius dynamic-author`
 
 ```
 aaa server radius dynamic-author
  client 10.140.2.31 server-key 7 040B280F3C22635D3A2A0A47
  client 10.140.2.32 server-key 7 08716F473A1A2A0421380354
 ```
- 
+
 Standard RADIUS is a **one-way conversation** — the switch asks, ISE answers:
 
 ```
 Standard RADIUS:
-  Switch → ISE    "Can this device access the network?"
-  ISE → Switch    "Yes, put it in VLAN 802"
-  
-  Session starts... ISE cannot touch it again ❌
+  Switch → ISE:  "Can this device access the network?"
+  ISE → Switch:  "Yes, put it in VLAN 802"
+
+  Session starts... ISE cannot modify it ❌
 ```
 
-Dynamic Authorization (CoA) makes it **two-way** — ISE can now initiate communication back to the switch **mid-session:**
+Dynamic Authorization (CoA) makes RADIUS **bidirectional** — ISE can now initiate communication back to the switch mid-session:
 
 ```
 With CoA:
-  Switch → ISE    "Can this device access the network?"
-  ISE → Switch    "Yes, put it in VLAN 802"
-  
+  Switch → ISE:  "Can this device access the network?"
+  ISE → Switch:  "Yes, put it in VLAN 802"
+
   Session running...
-  
-  ISE → Switch    "Change that device to VLAN 805" ← ISE initiates ✅
-  ISE → Switch    "Disconnect that device now"      ← ISE initiates ✅
-  ISE → Switch    "Apply this new ACL"              ← ISE initiates ✅
+
+  ISE → Switch:  "Move that device to VLAN 805"  ← ISE initiates ✅
+  ISE → Switch:  "Disconnect that device now"     ← ISE initiates ✅
+  ISE → Switch:  "Apply this new ACL"             ← ISE initiates ✅
 ```
 
- `dynamic-author`
-
-Opens a **listener on the switch** — specifically on port **3799** (RFC 5176 standard CoA port) — waiting for incoming RADIUS messages from ISE.
+The `dynamic-author` block opens a **listener on the switch** on port **3799** (RFC 5176 standard CoA port), waiting for incoming RADIUS messages from ISE.
 
 ```
 Without this:
   ISE sends CoA to switch port 3799
-  Switch: "Nobody listening on that port"
+  Switch: "Nothing is listening on that port"
   CoA ignored ❌
 
 With this:
   ISE sends CoA to switch port 3799
-  Switch: "ISE is authorized to send me instructions"
+  Switch: "ISE is authorised to send me instructions"
   CoA processed ✅
 ```
 
 ---
 
-####  `aaa authentication dot1x default group ISESERV`
-Tells the switch _who_ to ask when a device tries to authenticate via 802.1X.
+### AAA Method Lists
 
-```
-aaa authentication dot1x     → for dot1x/802.1X authentication specifically
+#### `aaa authentication dot1x default group ISESERV`
 
-default                      → applies to all 802.1X-enabled ports (default list)
+Tells the switch **who to ask** when a device attempts to authenticate via 802.1X.
 
-group ISESERV                → send the request to ISE01 and ISE02 
-```
+| Part                       | Meaning                                           |
+| -------------------------- | ------------------------------------------------- |
+| `aaa authentication dot1x` | Applies to 802.1X authentication specifically     |
+| `default`                  | Applies to all 802.1X-enabled ports automatically |
+| `group ISESERV`            | Send requests to the ISESERV RADIUS server group  |
 
 > When a PC plugs in and sends EAP credentials, the switch forwards them to ISE via this instruction.
 
---- 
-
 #### `aaa authorization network default group ISESERV`
-After a device authenticates, this tells the switch to ask ISE _what to do with it_ — what VLAN, ACL, SGT, etc. to apply.
 
-- <strong>network</strong>
+After a device authenticates, this tells the switch to ask ISE **what to do with it** — which VLAN, ACL, SGT, etc. to apply.
 
-This specifically covers **network access policy attributes** pushed back from ISE in the RADIUS Access-Accept packet, such as:
+The keyword `network` specifically covers **network access policy attributes** pushed back from ISE in the Access-Accept packet:
 
-| Attribute                                                | Example                                              | What it does                         |
-| -------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------ |
-| [[#Dynamic VLAN Assignment Attributes\|VLAN assignment]] | `Tunnel-Private-Group-ID = 802`                      | Puts device in correct VLAN          |
-| [[#Downloadable ACLs\|dACL]]                             | `DACL = Pre-Auth`                                    | Applies a downloadable ACL           |
-| [[#cisco-av-pair\|Redirect URL]]                         | `Cisco-AVPair = url-redirect=...`                    | Sends guest to captive portal        |
-| [[#cisco-av-pair\|Redirect ACL]]                         | `Cisco-AVPair = url-redirect-acl=ACL_GUEST_REDIRECT` | Defines what traffic gets redirected |
+|Attribute|Example|Effect|
+|---|---|---|
+|[[#Dynamic VLAN Assignment Attributes\|VLAN assignment]]|`Tunnel-Private-Group-ID = 802`|Places device in the correct VLAN|
+|[[#Downloadable ACLs\|dACL]]|`DACL = Pre-Auth`|Applies a downloadable ACL|
+|[[#cisco-av-pair\|Redirect URL]]|`Cisco-AVPair = url-redirect=...`|Sends guest to captive portal|
+|[[#cisco-av-pair\|Redirect ACL]]|`Cisco-AVPair = url-redirect-acl=ACL_GUEST_REDIRECT`|Defines which traffic gets redirected|
 
-> The word `network` is what tells the switch to **accept and apply** these attributes. Without it, the switch ignores everything ISE sends back.
+> Without `network`, the switch ignores all policy attributes returned by ISE. 
 
-- <strong>default</strong>
+The `default` list applies everywhere automatically, unlike a custom named list which would need to be manually attached per interface.
 
-This is a **named list** — and `default` means it applies everywhere automatically.
-
-```
-! Named list = default → applies to ALL ports automatically
-aaa authorization network default group ISESERV
-
-! vs a custom named list → you'd have to manually attach it per interface
-aaa authorization network MY_CUSTOM_LIST group ISESERV
-```
-
-- <strong>group ISESERV</strong>
-
-Tells the switch which RADIUS server group to send the authorization request to — in this case:
-
-```
-aaa group server radius ISESERV
- server name ISE01
- server name ISE02
-```
-
-ISE processes the request against its policy sets and returns the Access-Accept with all the attributes attached.
-
---- 
+The switch query `group ISESERV` to get the attributes, the ISE server cannot randomly push permissions to a switch out of nowhere. It relies on a request-and-response model. With the only exception of CoA.
 
 #### `aaa accounting identity default start-stop group ISESERV`
-Sends session accounting records to ISE — start when a session opens, stop when it closes.
 
-```
-aaa accounting identity      → tracks identity/802.1X sessions specifically
-
-default                      → applies to all sessions
-
-start-stop                   → sends a START record when session begins, STOP when it ends
-
-group ISESERV                → sends these records to ISESERV radius group
-```
-
---- 
-
-#### `aaa accounting system default start-stop group ISESERV`
-Sends accounting records for **system-level events** — switch reloads, config changes, etc.
-
-```
-aaa accounting system        → tracks switch system events (reloads, uptime)
-default
-start-stop                   → sends records at system start and stop
-group ISESERV                → sends to ISE
-```
-
-> Useful for audit trails — ISE logs when the switch rebooted or came back online.
-
---- 
-
-#### `aaa accounting update newinfo periodic 2880`
-This is a two-part instruction:
+Sends session accounting records to ISE — a START record when a session opens and a STOP record when it closes.
 
 |Part|Meaning|
 |---|---|
-|`newinfo`|If ISE sends **new information** mid-session (e.g. CoA updates the VLAN), immediately send an updated accounting record|
-|`periodic 2880`|Every **2880 minutes (48 hours)**, send a keepalive accounting update even if nothing changed|
+|`aaa accounting identity`|Tracks 802.1X / identity sessions specifically|
+|`default`|Applies to all sessions|
+|`start-stop`|Sends START at session begin, STOP at session end|
+|`group ISESERV`|Sends records to the ISESERV RADIUS group|
 
-> Without `newinfo`, ISE wouldn't know when CoA changed a session's policy. Without `periodic`, long-lived sessions (like servers) might appear as dead in ISE's session table.
+#### `aaa accounting system default start-stop group ISESERV`
 
---- 
-GUEST Configuration commands
-#### `interface Vlan805`
+Sends accounting records for **system-level events** such as switch reloads and configuration changes.
+
+|Part|Meaning|
+|---|---|
+|`aaa accounting system`|Tracks switch system events (reloads, uptime)|
+|`start-stop`|Sends records at system start and stop|
+|`group ISESERV`|Sends to ISE|
+
+> Useful for audit trails — ISE logs when the switch rebooted or came back online.
+
+#### `aaa accounting update newinfo periodic 2880`
+
+A two-part instruction that controls when **interim accounting updates** are sent:
+
+|Part|Meaning|
+|---|---|
+|`newinfo`|If ISE pushes new information mid-session (e.g. a CoA changes the VLAN), immediately send an updated accounting record|
+|`periodic 2880`|Every **2880 minutes (48 hours)**, send a keepalive update even if nothing has changed|
+
+> Without `newinfo`, ISE would not know when a CoA changed a session's policy. Without `periodic`, long-lived sessions (such as servers) may appear as dead in ISE's session table.
+
+---
+
+### Guest Configuration
+
+_Guest Redirect using Cisco Centralized Web Authentication (CWA)_
+
+#### VLAN for Guest Access
+
+```bash
+vlan 805
+ name LAN-GUEST-ACCESS
+```
+
+#### Guest Intercept SVI
 
 ```
 interface Vlan805
  description GUEST-INTERCEPT-SVI
  ip address <IP-ADDRESS> <SUBNET-MASK>
  no shutdown
+
+parameter-map type webauth global
+ type webauth
+ virtual-ip ipv4 192.0.2.1
+ intercept-https-enable
 ```
-The 
 
+Creates the SVI used to intercept and redirect unauthenticated guest traffic toward the ISE Guest Portal.
 
-
-#### DNA - PBA NAC
+### DNA - PBA NAC
 
 ```bash
 ! Template to enable Cisco ISE - NAC

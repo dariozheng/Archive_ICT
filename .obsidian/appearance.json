@@ -1,13 +1,3 @@
 {
-  "cssTheme": "Minimal",
-  "enabledCssSnippets": [
-    "text_color",
-    "excalidraw",
-    "image-grid",
-    "headers"
-  ],
-  "baseFontSizeAction": false,
-  "baseFontSize": 18,
-  "theme": "moonstone",
-  "accentColor": ""
+  "cssTheme": "Minimal"
 }

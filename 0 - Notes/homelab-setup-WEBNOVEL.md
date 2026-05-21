@@ -1,30 +1,8 @@
 # Homelab Setup Guide v5.1.7.22 — Ubuntu Server 24.04 LTS on Raspberry Pi 5
 
 > **Bug-fix changelog (v5.1.7.22):**
-> - **New §11 — PostgreSQL 18.4-alpine database server for future self-hosted web apps.** Pinned `postgres:18.4-alpine`. Picked PostgreSQL over MariaDB/MySQL because the modern self-hosted ecosystem (Immich, Paperless-ngx, Authentik, Vaultwarden's `vaultwarden-postgres`, Gitea/Forgejo, Synapse, Mastodon, Nextcloud's recommended backend) almost uniformly defaults to or recommends Postgres; pinned to the Alpine variant for ~80MB image vs ~150MB for the Debian variant and a smaller running RSS on the Pi 5's 8 GB. **Two PG 18 gotchas baked into the §11 compose to save the next deploy:** (a) `PGDATA` changed to `/var/lib/postgresql/18/docker` (was `/var/lib/postgresql/data`) and the declared VOLUME moved from `/var/lib/postgresql/data` → `/var/lib/postgresql` (PR docker-library/postgres#1259, released with PG 18 GA Sept 2025) — mounting the old path on PG 18 gets you `Error: ... configured to store database data in a format which is compatible with "pg_ctlcluster" ... Counter to that, there appears to be PostgreSQL data in: /var/lib/postgresql/data (unused mount/volume)` and the container won't start; the §11 compose mounts `postgres-data:/var/lib/postgresql` (the new convention, which also lets future `pg_upgrade --link` between major versions work without crossing mount-point boundaries); (b) the Alpine PG 18 image ships a compatibility symlink `/var/lib/postgresql/data → .` that the Debian variant does **not** — sticking with Alpine therefore preserves the option of bind-mounting the legacy path in a one-off recovery scenario, the Debian variant would not. The 18.4 line specifically also adds `liburing` / `--with-liburing` for io_uring async I/O on the arm64 build, which on NVMe-backed Pi 5s gives a measurable read latency drop on heavy concurrent workloads. SCRAM-SHA-256 is the default password auth method (since PG 14) so `pg_hba.conf` needs no tweaks for that.
-> - **New shared bridge `db-net` (`172.29.0.0/24`), pre-created in §11 with the same `external: true` pattern proxy-net uses.** Lives below dns-net (`172.30.0.0/24`) and proxy-net (`172.31.0.0/24`), and crucially **outside the §3 `default-address-pools` range `172.20.0.0/14`** (which covers `172.20–172.23.x`) — so no daemon.json edit is required and Docker's auto-allocator can't collide with it. Postgres pins to `172.29.0.10` following the same static-IP convention fix #120 established for proxy-net/dns-net. Future web-app stacks attach to **both** `db-net` and `proxy-net` (db-net for the Postgres connection, proxy-net for Caddy to reverse-proxy them); the §11 "Adding a web app later" subsection has the worked compose snippet plus the Caddyfile stanza, Pi-hole local DNS record, and Kuma monitor entries.
-> - **No port published to the host on the Postgres container.** Admin happens via `docker exec -it postgres psql -U postgres`, not via a `127.0.0.1:5432` bind. The reasoning matches fix #120's general direction: every additional `127.0.0.1:*` bind is one more thing to remember to firewall, one more thing the DOCKER-USER chain (§3) needs to reason about, and one more attack surface for any future LAN-side compromise. Web apps reach Postgres at `postgres:5432` over db-net (Docker embedded DNS resolves the container name), which is the only path that needs to work — and that path doesn't need a host-side port publish at all. Adminer / pgAdmin can be added as a separate proxy-net+db-net container later if a UI becomes useful; the §11 prose calls this out without prescribing it.
-> - **POSTGRES_PASSWORD via Portainer env-vars panel, not in YAML.** Same convention §6 Pi-hole (`FTLCONF_webserver_api_password`), §7 Step-CA (`DOCKER_STEPCA_INIT_PASSWORD`), and §12 Watchtower (`WATCHTOWER_NOTIFICATION_URL`) already use, with the same `cd /opt/postgres && POSTGRES_PASSWORD='...' docker compose up -d` CLI fallback that matches the pattern the v5.1.7.10 fix #101/#102 sweep established. Per-app database+role creation is documented as a post-deploy `psql` step rather than via `/docker-entrypoint-initdb.d/*.sql` mounts — init scripts run **only** on first init (empty PGDATA), so using them for the per-app schemas creates a quietly different behaviour between "deployed today" and "redeployed after a volume wipe", which is exactly the kind of footgun the rest of this guide spends pages avoiding.
-> - **Backup gap explicitly acknowledged in §11.** §12 Restic was removed in v5.1.7.19 (fix #122), so the database has **no automated backup** unless the user adds one. The §11 prose includes a one-paragraph recommendation: a `pg_dumpall` cron entry to `/opt/postgres/dumps/` (gitignored) is the minimum that preserves data across a volume wipe. Not auto-deployed — adding it without a corresponding offsite copy creates a false-confidence loop (backups exist on the same SSD that's failing), and the user removed Restic deliberately. This is flagged rather than fixed; the user makes the call.
-> - **Sections renumbered.** Old §11 DDNS → new §12; old §12 Monitoring + Watchtower → new §13; old §13 Final Checklist → new §14; old §14 Operations and Troubleshooting → new §15. The renumber sweep updated: the live cross-references in §2 (`smartmontools ... (§14)` → `(§15)`), §8 Caddyfile callout (`installed (§13 trust-store table)` → `(§14)` and `Add a Kuma monitor for it (§12)` → `(§13)`), §12 DDNS (`In Uptime Kuma (§12)` → `(§13)`), and §15 troubleshooting (`run the MTU probe in §14` → `§15`). The bug-history table at the bottom keeps the original §X numbers per the v5.1.7.19 convention — those rows describe doc state at the time of the fix and intentionally aren't rewritten.
-> - **Incidental TOC fix carried over from v5.1.7.19.** v5.1.7.19 renumbered the doc sections and updated the TOC's anchor URLs but missed the displayed numbers — the TOC read `1, 2, … 10, 11, 13, 14, 15` (skipping 12 entirely, with the 13/14/15 anchors pointing to `#12-…/#13-…/#14-…`). The v5.1.7.22 TOC rewrite is `1, 2, … 11, 12, 13, 14, 15` with all anchors matching. No action required for users who already followed v5.1.7.19+, this is documentation-only.
-> - **Stack section (top-of-doc) gets a PostgreSQL line.** Added between Home Assistant and Step-CA so the stack inventory matches what's actually deployed. (Note: that section still lists "Nginx Proxy Manager" rather than Caddy — that's a pre-existing v5.1.7.17 oversight, intentionally NOT corrected here to keep this changelog scoped; it'll get caught in a future cleanup pass.)
-> - **§14 Final Checklist updates.** `postgres` added to the "Containers expected up" list and the stack-status table (`postgres / postgres / Active`).
-> - **§15 Operations updates.** Directory tree gains `postgres/` under `/opt/`; "What to put in git" path list gains `/opt/postgres/docker-compose.yml` (the `dumps/` subdir is gitignored — write `dumps/` to `/opt/postgres/.gitignore`). Two new rows in the troubleshooting table: (a) the PG 18 wrong-volume-path startup error keyed off the `(unused mount/volume)` log message, with the migration command for anyone who upgraded a PG 17 volume in place; (b) "web app can't reach postgres" → check the app stack attaches both `db-net` AND `proxy-net` as `external: true`, not just one.
->
-> **Operational notes:** there is no v5.1.7.21 → v5.1.7.22 migration step — §11 is purely additive. To bring it up on a running v5.1.7.21 Pi: `docker network create --driver bridge --subnet 172.29.0.0/24 db-net`, then `sudo mkdir -p /opt/postgres && cd /opt/postgres`, write the compose YAML from §11, set `POSTGRES_PASSWORD` in Portainer's env-vars panel (or pass it inline on the CLI fallback), `docker compose up -d`. Verify with `docker exec -it postgres pg_isready -U postgres` (expect `accepting connections`) and `docker exec -it postgres psql -U postgres -c '\\l'` (lists databases: `postgres`, `template0`, `template1` on a fresh init). The renumber doesn't change any on-disk paths or systemd unit names; it's a documentation-only renumber so existing deployments don't need touching.
-
-> **Bug-fix changelog (v5.1.7.21):**
-> - **§4 entirely rewritten — single Proton tunnel → N parallel Proton tunnels with per-client routing (fix #124).** The previous design ran one `protonvpn` tunnel that all Pi-side outbound and all forwarded wg0 client traffic went through. The new design runs `protonvpn0`, `protonvpn1`, … in parallel, each terminating at a different exit country, and uses iptables-mangle `MARK` rules in PREROUTING to tag each wg0 client peer's packets with a per-tunnel routing-table ID — Phone (10.10.0.2) gets mark 100 → routes through protonvpn0's table → Netherlands exit; Laptop (10.10.0.3) gets mark 101 → routes through protonvpn1's table → USA exit. The mapping lives in `/etc/wireguard/proton.conf` (the only file you edit when adding tunnels or reassigning clients) and is applied at boot by `proton-routing.service` and reloadable via `systemctl reload proton-routing.service`. A `proton-healthcheck.service` daemon pings through each tunnel every 60s and (a) restarts wg-quick@protonvpnN on three consecutive failures, (b) reroutes affected clients to `DEFAULT_TUNNEL` if restart doesn't fix it, (c) restores normal routing when the tunnel comes back. `proton-status.sh` gives a one-shot human overview (tunnels, client-routing-mark status, failover overrides, exit IPs).
-> - **Pi-side outbound semantics changed.** This is the biggest behaviour difference and is called out in the §4 "What changed" table. Previously, the Pi's own outbound (Docker pulls, Step-CA ACME calls, Caddy ACME challenges reaching out, Watchtower hitting registries, container egress generally) went through the single Proton tunnel because `wg-quick` auto-installed `ip rule not fwmark 51820 lookup 51820`. In v5.1.7.21 each `protonvpnN.conf` sets `Table = off`, which suppresses wg-quick's auto-routing entirely — so the unmarked Pi-host traffic falls through to the kernel-default main-table route via eth0 → home ISP, unmasked. Only the *forwarded* wg0 client traffic gets per-tunnel marks from `proton-routing.sh`. If you don't want Pi-host outbound exposed to your ISP, stay on v5.1.7.20.
-> - **Fix #117 stance preserved but the plumbing changed.** `FwMark = 51820` on wg0's [Interface] is still load-bearing (and now finally written into the §5 wg0.conf YAML block — the v5.1.7.19 changelog described adding it but the block itself was missed during the §12 deletion sweep). The fwmark-51820 exemption in `PROTON_KS` that previously came for free with the single-tunnel wg-quick is now installed explicitly by the new `/usr/local/bin/proton-killswitch-init.sh`. The fix #117 comment in §5 wg0.conf updated to explain the v5.1.7.21 plumbing change. §14 troubleshooting row for the inbound-148-no-outbound-92 tcpdump signature updated to point at `proton-killswitch-init.service` for the chain origin.
-> - **`/usr/local/bin/proton-killswitch-init.sh` is new (fix #125).** Creates the `PROTON_KS` chain in both `iptables` and `ip6tables`, installs the permanent baseline RETURN rules (LAN, wg0 subnet, Docker bridges, multicast, NTP, addrtype LOCAL, **and the fwmark 51820 wg0-protocol exemption**), and ends with the final REJECT. Per-tunnel `-o protonvpnN` and `-m mark --mark <table>` RETURN lines are inserted by `proton-tunnel-up.sh` at each tunnel's PostUp and removed at PreDown. The chain is created by `proton-killswitch-init.service` which orders `Before=wg-quick@protonvpn0.service wg-quick@protonvpn1.service`, so the chain exists before any individual tunnel comes up. Note: systemd has no globbing in `Before=`, so adding `protonvpn2` later requires editing this unit and `systemctl daemon-reload`. The §4 "Add a new tunnel" subsection documents this.
-> - **`Table = off` is mandatory in each `protonvpnN.conf` (fix #126).** Without it, every `wg-quick@protonvpnN` would auto-install its own ip rule + auto-table with the default fwmark 51820 (the same value!), and the two (or N) tunnels would fight over the same table/rule pair on startup, producing nondeterministic routing depending on which came up last. With `Table = off`, all routing is owned by `proton-tunnel-up.sh`. The template in §4 documents this with an inline comment cross-referencing this exact failure mode.
-> - **MTU pinned to 1320 per Proton tunnel (corrects user's template).** The earlier multi-tunnel script template the user uploaded had `MTU = 1420` — that's the ProtonVPN.com recommendation for direct-to-internet WireGuard, but the homelab stacks wg0 (1280) *inside* protonvpnN, so the outer tunnel needs the canonical 1320 ProtonVPN-server-side ceiling. 1420 caused fragmentation and silent large-transfer stalls in testing.
-> - **IPv6 parity throughout (fix #127).** The user's uploaded scripts were IPv4-only; the v5.1.7.21 doc replicates every mangle / nat / route / rule operation in `ip6tables` and `ip -6`. wg0 carries `fd00:10:10::/64` and the multi-tunnel design now routes that ULA prefix through the same per-client marks as v4. The IPv6 derivation in `proton-routing.sh` is naive but correct for this exact wg0 numbering (10.10.0.N ↔ fd00:10:10::N).
-> - **`proton-healthcheck.sh` hardened (fix #128).** `attempt_restart` sleep bumped from 5s → 15s (cold-path Proton handshake on a freshly restarted tunnel can take 10–15s). `proton-healthcheck.service` gains `StartLimitBurst=5, StartLimitIntervalSec=300` so a config-error crash loop gives up after 5 restarts in 5 minutes instead of filling the journal forever. The `CONNMARK --save-mark` lines from the user's upload removed — the return-path packet routes correctly via main table's `10.10.0.0/24 dev wg0` without needing the mark, so save without matching restore was cosmetic.
-> - **`proton-routing.service` cleanups.** Removed the hardcoded `wg-quick@protonvpn0.service wg-quick@protonvpn1.service` from `After=` (using `After=network-online.target proton-killswitch-init.service` instead, which works regardless of tunnel count); removed `PartOf=wg-quick@protonvpn0.service` which would have torn down routing for laptop if protonvpn0 specifically stopped. Three separate systemd-unit files instead of the user's one-file-with-two-units-concatenated.
-> - **Migration commands for upgrading from v5.1.7.20.** `systemctl disable --now wg-quick@protonvpn`, `rm /etc/wireguard/protonvpn.conf /etc/wireguard/protonvpn-up.sh /etc/wireguard/protonvpn-down.sh`, then walk through the new file installs and enable order. Documented at the bottom of §4.
+> - **New §13: webnovel — Next.js application stack (fix #129).** First user-facing application on the homelab; everything in §3–§12 is infrastructure, this is the first thing that serves you content rather than other services. Self-contained personal library of translated long-form fiction: novels listing, per-novel chapter index, chapter reader with editorial typography, tag browsing, per-user bookmarks, "popular this week" rolling rank, full-text search across all chapter content. Stack: Next.js 15 App Router on React 19 + TypeScript strict, Drizzle ORM against **Postgres 18.4** (rides on top of the existing `postgres:18.4-alpine` container — one DB instance to back up, one to monitor) via the postgres-js driver, Better Auth for email/password + cookie sessions sharing the same Postgres, **tsvector + GIN index** on the `chapters` table for full-text search (BM25-style ranking via `ts_rank_cd`, snippet excerpts via `ts_headline`, no separate search service needed), Tailwind CSS v4 with editorial type system (Fraunces / Source Serif 4 / Instrument Sans via `next/font`). Container build is multi-stage Alpine with `output: standalone` → ~250 MB final image; first build on Pi 5 ~4 min. Migrations applied at container boot by `scripts/migrate.mjs` (Drizzle's runtime migrator, idempotent — tracks state in `drizzle.__drizzle_migrations`). Network placement follows the §3 allocation: static IP `172.31.0.17` on proxy-net (next free slot after Watchtower), bound to `127.0.0.1:3000` on host so Caddy is the sole public route, `webnovel.home.arpa` DNS via Pi-hole Local DNS, Caddy entry uses the standard `reverse_proxy webnovel:3000` pattern plus a long-cache header on `/_next/static/*`. Postgres reach: the existing `postgres` container is one-shot attached to proxy-net (via Portainer or `docker network connect postgres proxy-net`) so webnovel resolves it by container name — no published-port reach needed even though postgres is currently exposed on `0.0.0.0:5432`. Deployment is **Portainer-first** wherever Portainer adds value over CLI: Postgres user+DB creation via Portainer Console (psql inside the postgres container), webnovel stack deployment via Stacks → Add stack → Web editor mode (paste compose YAML + add env vars), env-var changes via Stack Editor + Update, logs/restart/exec via Portainer UI. CLI stays for: the image build itself (multi-stage Alpine, faster + easier to debug on Pi than via Portainer's Repository mode), the Caddyfile edit (one-line append + `docker exec caddy caddy reload`), the systemd ingest timer (host-level), and `pg_dump` backups (host cron OR ride on whatever instance-level Postgres backup you already have). Auth flow: pre-create the `webnovel` Postgres user + database via Portainer Console, register your own account on first boot via `/login`, then flip `WEBNOVEL_DISABLE_SIGNUP=true` via Portainer Stack Editor → Update — service is now lockedown single-user. Ingest pipeline: scraper deposits Markdown + `_meta.json` under `/opt/webnovel/ingest/<slug>/`, `scripts/ingest.ts` upserts into Postgres (idempotent re-runs, optional `--reset-novel <slug>` to wipe-and-reimport one), systemd timer `webnovel-ingest.timer` runs every 6h. Kuma monitor target is `https://webnovel.home.arpa/api/auth/get-session` with 200-499 accepted — an unauthenticated GET returns 401, which proves the entire stack from Caddy through Next.js through Better Auth through Postgres is alive (cheaper than a `/health` endpoint but proves more). Backups: rides on whatever `pg_dump`/`pg_dumpall` schedule already covers the existing Postgres instance; webnovel-only daily `pg_dump -Fc` cron pattern documented in §13.11 with a note pointing at the existing MinIO instance (`minio` container on `:9100`) as a future off-Pi destination via `mc cp`. Cloud migration path documented inline: provision Neon/Supabase/RDS, `npm run db:migrate` against the new URL, `pg_dump --data-only | psql <new-url>`, deploy the same Dockerfile to Vercel / Fly / Railway — zero application code changes (Drizzle's Postgres dialect is the same dialect every managed Postgres speaks). Old §13 (Final Checklist) renumbered to §14; old §14 (Operations and Troubleshooting) renumbered to §15. The previously-shipped multi-tunnel ProtonVPN design (v5.1.7.21) is set aside per user direction — this version is built on top of v5.1.7.20 single-tunnel
+> - **Skipped v5.1.7.21 version label entirely.** The multi-tunnel ProtonVPN doc was assembled under that label but user opted to stay on single-tunnel; rather than reuse the version number for an unrelated feature and create ambiguity in any future archaeology of the doc history, this version skips straight to v5.1.7.22
 
 > **Bug-fix changelog (v5.1.7.20):**
 > - **Bumped `tecnativa/docker-socket-proxy` from `0.3.0` to `v0.4.2`** in the §3 Portainer + docker-socket-proxy combined compose, and updated the matching line in the closing image-pin summary list. v0.4.x is the HAProxy-3.x line (0.3.x ran HAProxy 2.x; an interim attempt at HAProxy 3.x was reverted before 0.3.0, then landed properly in v0.4.0). v0.4.2 specifically added a `touch /var/lib/haproxy/server-state` in the entrypoint to satisfy HAProxy 3.x's expectation that the server-state file exists before workers start — without that, HAProxy 3.x logs `config: Can't open global server state file '/var/lib/haproxy/server-state': No such file or directory` at boot. Tag format also changed: pre-v0.4.x used a bare `0.3.0`/`0.2`-style tag; v0.4.x is prefixed `v0.4.0`/`v0.4.1`/`v0.4.2`. The `--read-only` situation is unchanged in v0.4.x — the entrypoint still sed-renders `haproxy.cfg.template` -> `haproxy.cfg` in `/usr/local/etc/haproxy/`, so the FIX #113 stance (no `--read-only`, `security_opt: [no-new-privileges:true]` instead) still applies. Env var allowlist (`CONTAINERS=1`, `IMAGES=1`, `POST=1`, `DELETE=1`, `EXEC=0`, etc.) is unchanged between 0.3.x and 0.4.x. Upgrade path on a running Pi: edit `/opt/portainer/docker-compose.yml`, change the image tag, then `cd /opt/portainer && sudo docker compose pull docker-socket-proxy && sudo docker compose up -d docker-socket-proxy` — Portainer will briefly lose its `DOCKER_HOST` connection during the recreate, recovers automatically on restart. The compose `depends_on: docker-socket-proxy.service_started` from v5.1.7.19 ensures Portainer is recreated in the right order on any subsequent `docker compose up -d`. (fix #123)
@@ -225,7 +203,7 @@
 > 1. In your router's DHCP settings, shrink the dynamic range to `192.168.68.50 – 192.168.69.250`. The Pi's static IP `192.168.70.5` is now well outside the pool — no conflict possible.
 > 2. Boot the Pi from an NVMe SSD (PCIe HAT) or a quality USB SSD. The rest of this guide assumes SSD; SD cards will not survive Docker write churn long enough to matter.
 > 3. Use the 8 GB Pi 5 model. The 4 GB will run out under HA + Docker + everything else.
-> 4. Have a Pi 5 active cooler (or equivalent fan + heatsink) attached. Without it the SoC will thermal-throttle under sustained load, degrading every service silently — see §15 for monitoring.
+> 4. Have a Pi 5 active cooler (or equivalent fan + heatsink) attached. Without it the SoC will thermal-throttle under sustained load, degrading every service silently — see §14 for monitoring.
 
 ## Stack
 
@@ -234,7 +212,6 @@
 - ProtonVPN — outbound internet for the home LAN
 - Pi-hole + Unbound — ad-blocking DNS + recursive resolver
 - Home Assistant Container (not Supervised — see §10)
-- PostgreSQL 18.4 — database server for self-hosted web apps (see §11)
 - Step-CA — internal certificate authority
 - Nginx Proxy Manager — reverse proxy with Step-CA ACME
 - Portainer — Docker UI
@@ -256,11 +233,10 @@
 8. [Caddy reverse proxy](#8-caddy-reverse-proxy)
 9. [LAN Gateway — keep the router, not the Pi](#9-lan-gateway--keep-the-router-not-the-pi)
 10. [Home Assistant Container](#10-home-assistant-container)
-11. [PostgreSQL database server](#11-postgresql-database-server)
-12. [DDNS](#12-dynamic-dns-ddns)
-13. [Monitoring (Uptime Kuma) + Watchtower](#13-monitoring--watchtower)
-14. [Final checklist + verification](#14-final-checklist)
-15. [Operations and troubleshooting](#15-operations-and-troubleshooting)
+11. [DDNS](#11-dynamic-dns-ddns)
+13. [Monitoring (Uptime Kuma) + Watchtower](#12-monitoring--watchtower)
+14. [Final checklist + verification](#13-final-checklist)
+15. [Operations and troubleshooting](#14-operations-and-troubleshooting)
 
 ---
 
@@ -308,7 +284,7 @@ sudo apt install -y curl wget git nano ufw net-tools gnupg2 ca-certificates \
 # stale snapshot on boot before UFW loads, silently breaking wg0 forwarding.
 # chrony replaces systemd-timesyncd — we want a real NTP client that can
 # survive Proton outages by pointing at the LAN router. See further down.
-# smartmontools is for monitoring NVMe wear (§15).
+# smartmontools is for monitoring NVMe wear (§14).
 ```
 
 ### Static IP via Netplan
@@ -824,749 +800,166 @@ sudo mkdir -p /opt/{dns,step-ca,caddy,homeassistant,kuma,watchtower}
 
 ---
 
-## 4. ProtonVPN via WireGuard — multi-tunnel with per-client routing
-
-v5.1.7.21 replaces the single-tunnel ProtonVPN design with N parallel Proton tunnels, each terminating at a different exit country, plus iptables-mangle MARK rules that route individual wg0 client peers through the tunnel of your choice. Driving use case: pin the phone to a Netherlands exit while the laptop egresses via USA for geo-blocked content, with a health-check daemon failing each client over to a configured fallback tunnel if its primary goes down.
-
-### What changed vs the previous single-tunnel design
-
-| Concern               | Single-tunnel (≤ v5.1.7.20)                                  | Multi-tunnel (v5.1.7.21+)                                                                                                                        |
-| --------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Pi-side outbound      | Through ProtonVPN (kill switch enforced)                     | **Direct via eth0** — Pi container egress, ACME calls, Watchtower pulls all go via home ISP, unmasked                                            |
-| wg0 client outbound   | Through the one Proton tunnel                                | Through the per-client assigned tunnel; unlisted clients use `DEFAULT_TUNNEL`                                                                    |
-| Kill-switch scope     | All Pi outbound + forwarded wg0 traffic                      | **Only forwarded wg0 traffic** — if a client's tunnel is down and no fallback is available, that client is REJECT'd rather than leaking via eth0 |
-| Tunnel count          | 1 (`protonvpn`)                                              | N (`protonvpn0`, `protonvpn1`, …)                                                                                                                |
-| Fwmark per tunnel     | 51820 (wg-quick auto-assigned)                               | Manual, equals each tunnel's routing-table ID (100, 101, …)                                                                                      |
-| wg0 protocol fwmark   | 51820, exempted by wg-quick's auto-installed rule (fix #117) | Still 51820, exempted by an explicit `PROTON_KS -m mark --mark 51820 -j RETURN` installed by `proton-killswitch-init.sh`                         |
-| wg-quick auto-routing | Active (`AllowedIPs = 0.0.0.0/0` with default Table)         | **Disabled** (`Table = off`); all routing managed by `proton-tunnel-up.sh`                                                                       |
-
-**Read carefully:** the "Pi-side outbound now direct" row is the biggest behaviour change. Docker image pulls, Step-CA ACME validation calls reaching out, Caddy ACME challenges fetching content for HTTP-01, Watchtower checking image registries — all now go through your home ISP unmasked. If you don't want that, stay on v5.1.7.20's single-tunnel design.
+## 4. ProtonVPN via WireGuard
 
 ### Install tools
 
 ```bash
-sudo apt install -y wireguard wireguard-tools qrencode iproute2
+sudo apt install -y wireguard wireguard-tools
 ```
 
-### Pick your tunnels
+### Get config from Proton
 
-Decide which ProtonVPN exits you want to terminate. Two is the practical minimum — one country pair gives you a primary plus a fallback for the health-check daemon. Five is the doc's example ceiling (more would mean expanding the `rt_tables` allocation).
+1. https://account.proton.me/vpn → Downloads → WireGuard configuration
+2. Pick a server, generate config, download `.conf`
+3. Copy to `/etc/wireguard/protonvpn.conf` and `chmod 600`
 
-Recommended starter pair: Netherlands (low latency from EU, strict no-logs jurisdiction) + Sweden or Switzerland (different jurisdiction for failover). Add USA / UK / Japan as geo-region needs dictate.
-
-### Routing-table IDs
-
-Append to `/etc/iproute2/rt_tables` once. Each line maps a numeric ID to a human-readable name (the `iproute2` tools accept either):
+### Replace the file with this corrected version
 
 ```bash
-sudo tee -a /etc/iproute2/rt_tables <<'EOF'
-
-# ProtonVPN multi-tunnel routing tables (fix #124)
-100   proton0
-101   proton1
-102   proton2
-103   proton3
-104   proton4
-EOF
-```
-
-Reserve up to whichever ID matches your tunnel count. Don't reuse numbers that already exist in `/etc/iproute2/rt_tables` (the defaults occupy 0, 253, 254, 255).
-
-### Central config
-
-```bash
-sudo nano /etc/wireguard/proton.conf
-sudo chmod 600 /etc/wireguard/proton.conf
-```
-
-```bash
-# /etc/wireguard/proton.conf — multi-tunnel central config
-# This is the ONLY file you edit when adding tunnels or reassigning clients.
-
-# The WireGuard server interface that clients connect to.
-WG_CLIENT_IFACE="wg0"
-
-# Tunnels: "interface_name:routing_table_id:country_label"
-# The routing_table_id must be unique and match the line in /etc/iproute2/rt_tables.
-# country_label is cosmetic — only used by proton-status.sh.
-TUNNELS=(
-  "protonvpn0:100:Netherlands"
-  "protonvpn1:101:USA"
-  # "protonvpn2:102:UK"          # uncomment + add a protonvpn2.conf to enable
-  # "protonvpn3:103:Switzerland"
-)
-
-# Client→tunnel mapping: "label:wg0_peer_ip:tunnel_interface"
-# wg0_peer_ip is the address that peer holds INSIDE wg0 (10.10.0.0/24, see §5).
-# Verify with `sudo wg show wg0` after the client's tunnel is up.
-CLIENTS=(
-  "phone:10.10.0.2:protonvpn0"
-  "laptop:10.10.0.3:protonvpn1"
-  # "tablet:10.10.0.4:protonvpn0"
-)
-
-# Fallback tunnel for any wg0 peer not listed in CLIENTS.
-DEFAULT_TUNNEL="protonvpn0"
-
-# Health check: ping HEALTH_CHECK_HOST through each tunnel every INTERVAL seconds.
-# Mark tunnel DOWN after FAILURES consecutive misses.
-HEALTH_CHECK_HOST="9.9.9.9"          # Quad9, matches the doc's standardised resolver
-HEALTH_CHECK_INTERVAL=60
-HEALTH_CHECK_FAILURES=3
-```
-
-### Per-tunnel WireGuard config
-
-Download a WireGuard config from `https://account.proton.me/vpn → Downloads → WireGuard configuration` for each country you picked. Save each as `/etc/wireguard/protonvpnN.conf` (N = 0, 1, 2, …). Replace the `[Interface]` section with the template below (keep the `[Peer]` section that Proton gave you, verbatim).
-
-```bash
-sudo nano /etc/wireguard/protonvpn0.conf
-sudo chmod 600 /etc/wireguard/protonvpn0.conf
+sudo nano /etc/wireguard/protonvpn.conf
 ```
 
 ```ini
 [Interface]
-# Keep the PrivateKey and Address that Proton gave you.
-PrivateKey = <paste-proton-private-key-here>
+PrivateKey = <your-proton-private-key>
 Address = 10.2.0.2/32
-
-# 1320 is ProtonVPN's MTU ceiling. Don't raise it — their servers reject larger packets,
-# silently stalling large transfers. wg0 (§5) is set to 1280 to leave overhead for THIS
-# tunnel's encapsulation; raising this would invalidate that calculation.
+# 1320 is ProtonVPN's own MTU ceiling — their servers reject larger packets.
+# wg0 is set to 1280 because wg0 encapsulation adds ~60 B overhead on top of
+# this tunnel. Strict no-fragmentation through Proton would require wg0
+# ≤ 1320 - 60 = 1260, but 1280 is the IPv6 minimum MTU — drop below it and
+# IPv6 stops working on the wg0 interface. We pick 1280 as a deliberate
+# trade-off: packets larger than ~1260 inner bytes incur some PMTU-discovery
+# overhead on the stacked path, but IPv6 keeps working. In practice the
+# overhead is small; the §14 probe quantifies it.
+# If your ISP's path MTU is below 1320 (rare but possible on PPPoE links),
+# lower this value to match; the §14 MTU probe is the right diagnostic tool.
+# 1280 remains the absolute floor for retaining IPv6 on wg0.
 MTU = 1320
 
-# Table = off tells wg-quick NOT to install its default routing rules / fwmark for this
-# interface. All routing is managed by proton-tunnel-up.sh and proton-routing.sh below.
-# Without this, wg-quick auto-assigns fwmark 51820 to EVERY Proton tunnel — they collide,
-# and both fight the manual rules the script adds.
-Table = off
+# All PostUp/PreDown logic lives in external scripts — wg-quick inline PostUp
+# has unreliable shell-escaping on Ubuntu 24.04 (iptables 1.8.10, nf_tables).
+PostUp  = /etc/wireguard/protonvpn-up.sh %i
+PreDown = /etc/wireguard/protonvpn-down.sh %i
 
-# FwMark on the wg socket itself. proton-tunnel-up.sh installs an `ip rule fwmark $TABLE
-# lookup $TABLE` for client traffic; this FwMark is the SAME value so the wg socket's
-# own protocol traffic (handshakes to the Proton server) ALSO uses this table. That table
-# has only `default dev protonvpnN` — but the Proton server endpoint is reached via the
-# main table's default route via eth0, not via the tunnel itself, so set this to the
-# table ID to keep behaviour consistent. Replace TABLE_ID below with the matching number
-# for THIS tunnel (100 for protonvpn0, 101 for protonvpn1, etc.)
-FwMark = 100
-
-# DO NOT set DNS = ... here. Pi-hole handles DNS for everything in §6.
-
-# Hooks — proton-tunnel-up.sh manages routing-table population and per-tunnel kill-switch
-# exemptions. %i expands to the interface name (protonvpn0). Replace TABLE_ID below.
-PostUp   = /usr/local/bin/proton-tunnel-up.sh up   %i 100
-PostDown = /usr/local/bin/proton-tunnel-up.sh down %i 100
-
-# === [Peer] section: paste EXACTLY as Proton downloaded it, no edits ===
 [Peer]
-PublicKey = <proton-server-public-key>
-Endpoint = <proton-server-ip>:51820
+PublicKey = <proton-public-key>
+Endpoint  = <proton-server>:51820
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
 
-For each subsequent tunnel, copy this file and update **three numbers** — the `FwMark`, both `TABLE_ID`s in the PostUp/PostDown lines — to match the table ID for that tunnel (`protonvpn1` → 101, `protonvpn2` → 102, …). And of course replace the `[Peer]` block.
+Create the two scripts (make them executable with `sudo chmod +x` after saving):
 
-### Kill-switch chain initialiser
-
-This script previously lived inside the old `protonvpn-up.sh`, tied to the single tunnel's lifecycle. In the multi-tunnel design it's split out so the chain exists *before* any individual tunnel comes up and survives any single tunnel restart.
-
-```bash
-sudo nano /usr/local/bin/proton-killswitch-init.sh
-sudo chmod 755 /usr/local/bin/proton-killswitch-init.sh
-```
-
+**`/etc/wireguard/protonvpn-up.sh`**
 ```bash
 #!/bin/bash
-# /usr/local/bin/proton-killswitch-init.sh
-# Creates the PROTON_KS chain with the permanent baseline exemptions.
-# Per-tunnel RETURN rules are added/removed by /usr/local/bin/proton-tunnel-up.sh.
-set -euo pipefail
+set -e
+IFACE=$1
 
-ACTION="${1:-up}"
-LOG_TAG="proton-killswitch"
-log() { logger -t "$LOG_TAG" "$*"; echo "[$(date '+%H:%M:%S')] $*"; }
+# Routing exceptions — LAN and wg0 bypass the VPN tunnel
+ip rule del priority 50 2>/dev/null || true
+ip rule del priority 51 2>/dev/null || true
+ip rule add to 192.168.68.0/22 lookup main priority 50
+ip rule add to 10.10.0.0/24    lookup main priority 51
 
-create_chain_v4() {
-  iptables -N PROTON_KS 2>/dev/null || iptables -F PROTON_KS
+# NAT for wg0 clients going out through Proton
+iptables -t nat -A POSTROUTING -s 10.10.0.0/24 -o "$IFACE" -j MASQUERADE
 
-  # Permanent exemptions — order matters (most-specific first).
-  iptables -A PROTON_KS -d 192.168.68.0/22 -j RETURN              # LAN
-  iptables -A PROTON_KS -d 10.10.0.0/24    -j RETURN              # wg0 client subnet
-  iptables -A PROTON_KS -d 172.16.0.0/12   -j RETURN              # Docker bridges
-  iptables -A PROTON_KS -d 224.0.0.0/4     -j RETURN              # multicast
-  iptables -A PROTON_KS -m addrtype --dst-type LOCAL -j RETURN    # loopback / local services
-  iptables -A PROTON_KS -p udp --dport 123 -j RETURN              # NTP (chrony fallback)
+# IPv4 kill switch (named chain — iptables 1.8.10 rejects multiple -d flags)
+iptables -N PROTON_KS 2>/dev/null || iptables -F PROTON_KS
+iptables -A PROTON_KS -o "$IFACE" -j RETURN
+iptables -A PROTON_KS -d 192.168.68.0/22 -j RETURN
+iptables -A PROTON_KS -d 10.10.0.0/24 -j RETURN
+iptables -A PROTON_KS -m mark --mark "$(wg show "$IFACE" fwmark)" -j RETURN
+iptables -A PROTON_KS -m addrtype --dst-type LOCAL -j RETURN
+# NTP exception — clock sync must work even when Proton is down or the Pi
+# can't validate any TLS cert (Step-CA leafs included) on next boot.
+# chrony.conf in §2 prefers the LAN router (already in the bypass), but the
+# public pool is the backup, and we let UDP/123 to public NTP through here.
+iptables -A PROTON_KS -p udp --dport 123 -j RETURN
+# FIX #103: exempt Docker bridge subnets. Without this, host->container traffic
+# over Docker bridges is REJECT'd: the host's own DNS queries (resolv.conf
+# 127.0.0.1:53 -> docker-proxy -> Pi-hole container at 172.30.0.x), curl to
+# 127.0.0.1:9443 (Portainer) or 127.0.0.1:3001 (Kuma, from the health-push
+# script), etc. all have a *container* IP as their destination. A container IP
+# is not a LOCAL address, so the ADDRTYPE LOCAL RETURN above does not match it,
+# and it is not in the LAN/wg0 ranges -- so it falls through to the REJECT
+# below. Same class as fix #58, which added -s 127.0.0.0/8 to DOCKER-USER for
+# the host-loopback *source* direction; this is the host->container
+# *destination* direction. 172.16.0.0/12 covers docker0 (172.17.x), the
+# auto-allocation pool (172.20.0.0/14 per daemon.json), and the manually-pinned
+# dns-net (172.30.0.0/24) and proxy-net (172.31.0.0/24).
+iptables -A PROTON_KS -d 172.16.0.0/12 -j RETURN
+iptables -A PROTON_KS -j REJECT
+iptables -I OUTPUT -j PROTON_KS
 
-  # wg0's own protocol traffic — fix #117 stance preserved: wg0 sets FwMark = 51820 on
-  # its UDP socket so handshake replies to remote phone/laptop peers escape the kill switch.
-  # In the single-tunnel design wg-quick auto-installed an equivalent rule; here it's explicit.
-  iptables -A PROTON_KS -m mark --mark 51820 -j RETURN
-
-  # Per-tunnel RETURNs (-o protonvpnN  and  --mark <table>) are added by proton-tunnel-up.sh
-  # when each tunnel comes up, INSERTED above this final REJECT.
-
-  iptables -A PROTON_KS -j REJECT --reject-with icmp-port-unreachable
-
-  # Hook into OUTPUT. Without this jump, the chain exists but does nothing.
-  iptables -C OUTPUT -j PROTON_KS 2>/dev/null || iptables -I OUTPUT -j PROTON_KS
-}
-
-create_chain_v6() {
-  ip6tables -N PROTON_KS 2>/dev/null || ip6tables -F PROTON_KS
-
-  ip6tables -A PROTON_KS -d fd00:10:10::/64 -j RETURN             # wg0 IPv6 ULA
-  ip6tables -A PROTON_KS -d fc00::/7        -j RETURN             # any ULA (LAN if you have one)
-  ip6tables -A PROTON_KS -d fe80::/10       -j RETURN             # link-local
-  ip6tables -A PROTON_KS -d ff00::/8        -j RETURN             # multicast
-  ip6tables -A PROTON_KS -m addrtype --dst-type LOCAL -j RETURN
-  ip6tables -A PROTON_KS -p udp --dport 123 -j RETURN
-
-  ip6tables -A PROTON_KS -m mark --mark 51820 -j RETURN
-
-  ip6tables -A PROTON_KS -j REJECT --reject-with icmp6-port-unreachable
-
-  ip6tables -C OUTPUT -j PROTON_KS 2>/dev/null || ip6tables -I OUTPUT -j PROTON_KS
-}
-
-destroy_chain_v4() {
-  iptables -D OUTPUT -j PROTON_KS 2>/dev/null || true
-  iptables -F PROTON_KS 2>/dev/null || true
-  iptables -X PROTON_KS 2>/dev/null || true
-}
-destroy_chain_v6() {
-  ip6tables -D OUTPUT -j PROTON_KS 2>/dev/null || true
-  ip6tables -F PROTON_KS 2>/dev/null || true
-  ip6tables -X PROTON_KS 2>/dev/null || true
-}
-
-case "$ACTION" in
-  up)   log "Initialising PROTON_KS chain (v4 + v6)"; create_chain_v4; create_chain_v6 ;;
-  down) log "Tearing down PROTON_KS chain (v4 + v6)"; destroy_chain_v4; destroy_chain_v6 ;;
-  *)    echo "Usage: $0 up|down" >&2; exit 1 ;;
-esac
+# IPv6 kill switch
+# FIX #2: added -o wg0 and fd00:10:10::/64 exemptions. Without them the Pi
+# host cannot reach wg0 peers over IPv6 while Proton is running, because wg0
+# traffic leaves on the wg0 interface (not protonvpn), so the -o "$IFACE"
+# RETURN doesn't match it and the final REJECT drops it.
+ip6tables -N PROTON_KS 2>/dev/null || ip6tables -F PROTON_KS
+ip6tables -A PROTON_KS -o "$IFACE" -j RETURN
+ip6tables -A PROTON_KS -o wg0 -j RETURN
+ip6tables -A PROTON_KS -d fd00:10:10::/64 -j RETURN
+ip6tables -A PROTON_KS -m mark --mark "$(wg show "$IFACE" fwmark)" -j RETURN
+ip6tables -A PROTON_KS -m addrtype --dst-type LOCAL -j RETURN
+ip6tables -A PROTON_KS -p udp --dport 123 -j RETURN
+ip6tables -A PROTON_KS -j REJECT
+ip6tables -I OUTPUT -j PROTON_KS
 ```
 
-### Per-tunnel up/down hook
-
-```bash
-sudo nano /usr/local/bin/proton-tunnel-up.sh
-sudo chmod 755 /usr/local/bin/proton-tunnel-up.sh
-```
-
+**`/etc/wireguard/protonvpn-down.sh`**
 ```bash
 #!/bin/bash
-# /usr/local/bin/proton-tunnel-up.sh
-# Called by PostUp / PostDown in each /etc/wireguard/protonvpnN.conf.
-# Adds (or removes) per-tunnel routing and kill-switch exemptions.
-set -euo pipefail
+IFACE=$1
 
-ACTION="${1:?up|down}"
-IFACE="${2:?interface}"
-TABLE="${3:?table_id}"
-LOG_TAG="proton-tunnel"
-log() { logger -t "$LOG_TAG" "$*"; echo "[$(date '+%H:%M:%S')] $*"; }
+ip rule del priority 50 2>/dev/null || true
+ip rule del priority 51 2>/dev/null || true
 
-case "$ACTION" in
-  up)
-    log "Bringing up routing for $IFACE (table $TABLE)"
+iptables -t nat -D POSTROUTING -s 10.10.0.0/24 -o "$IFACE" -j MASQUERADE 2>/dev/null || true
+iptables -D OUTPUT -j PROTON_KS 2>/dev/null || true
+iptables -F PROTON_KS 2>/dev/null || true
+iptables -X PROTON_KS 2>/dev/null || true
 
-    # IPv4 routing table — flush stale, install default via tunnel.
-    ip route flush table "$TABLE" 2>/dev/null || true
-    ip route add default dev "$IFACE" table "$TABLE"
-
-    # Marked traffic uses this table. Use $TABLE as the rule priority too — keeps
-    # priorities collision-free as long as table IDs are unique.
-    ip rule del fwmark "$TABLE" table "$TABLE" 2>/dev/null || true
-    ip rule add fwmark "$TABLE" table "$TABLE" priority "$TABLE"
-
-    # IPv6 — mirror v4 if Proton handed out a v6 address in this tunnel.
-    # (Harmless to install even if Proton didn't — no v6 traffic matches.)
-    ip -6 route flush table "$TABLE" 2>/dev/null || true
-    ip -6 route add default dev "$IFACE" table "$TABLE" 2>/dev/null || true
-    ip -6 rule del fwmark "$TABLE" table "$TABLE" 2>/dev/null || true
-    ip -6 rule add fwmark "$TABLE" table "$TABLE" priority "$TABLE" 2>/dev/null || true
-
-    # MASQUERADE for wg0 client traffic egressing via this tunnel.
-    iptables  -t nat -C POSTROUTING -s 10.10.0.0/24    -o "$IFACE" -j MASQUERADE 2>/dev/null || \
-    iptables  -t nat -A POSTROUTING -s 10.10.0.0/24    -o "$IFACE" -j MASQUERADE
-    ip6tables -t nat -C POSTROUTING -s fd00:10:10::/64 -o "$IFACE" -j MASQUERADE 2>/dev/null || \
-    ip6tables -t nat -A POSTROUTING -s fd00:10:10::/64 -o "$IFACE" -j MASQUERADE 2>/dev/null || true
-
-    # Kill-switch exemptions for THIS tunnel — INSERTED at the top so they fire before
-    # the final REJECT. The chain itself was created by proton-killswitch-init.sh.
-    if iptables -L PROTON_KS >/dev/null 2>&1; then
-      iptables  -I PROTON_KS -o "$IFACE"           -j RETURN
-      iptables  -I PROTON_KS -m mark --mark "$TABLE" -j RETURN
-    else
-      log "WARNING: PROTON_KS chain not found — kill switch is not protecting traffic for $IFACE"
-    fi
-    if ip6tables -L PROTON_KS >/dev/null 2>&1; then
-      ip6tables -I PROTON_KS -o "$IFACE"           -j RETURN 2>/dev/null || true
-      ip6tables -I PROTON_KS -m mark --mark "$TABLE" -j RETURN 2>/dev/null || true
-    fi
-
-    log "Tunnel $IFACE (table $TABLE) up"
-    ;;
-
-  down)
-    log "Tearing down routing for $IFACE (table $TABLE)"
-
-    ip rule del fwmark "$TABLE" table "$TABLE" priority "$TABLE" 2>/dev/null || true
-    ip route flush table "$TABLE" 2>/dev/null || true
-    ip -6 rule del fwmark "$TABLE" table "$TABLE" priority "$TABLE" 2>/dev/null || true
-    ip -6 route flush table "$TABLE" 2>/dev/null || true
-
-    iptables  -t nat -D POSTROUTING -s 10.10.0.0/24    -o "$IFACE" -j MASQUERADE 2>/dev/null || true
-    ip6tables -t nat -D POSTROUTING -s fd00:10:10::/64 -o "$IFACE" -j MASQUERADE 2>/dev/null || true
-
-    iptables  -D PROTON_KS -o "$IFACE"           -j RETURN 2>/dev/null || true
-    iptables  -D PROTON_KS -m mark --mark "$TABLE" -j RETURN 2>/dev/null || true
-    ip6tables -D PROTON_KS -o "$IFACE"           -j RETURN 2>/dev/null || true
-    ip6tables -D PROTON_KS -m mark --mark "$TABLE" -j RETURN 2>/dev/null || true
-
-    log "Tunnel $IFACE (table $TABLE) down"
-    ;;
-esac
-```
-
-### Per-client routing
-
-This reads `/etc/wireguard/proton.conf` and installs mangle-PREROUTING `MARK` rules so each client peer's packets get tagged with the right tunnel's table ID. It runs once at boot via systemd, and on-demand via `sudo proton-routing.sh reload` after editing `proton.conf`.
-
-```bash
-sudo nano /usr/local/bin/proton-routing.sh
-sudo chmod 755 /usr/local/bin/proton-routing.sh
+ip6tables -D OUTPUT -j PROTON_KS 2>/dev/null || true
+ip6tables -F PROTON_KS 2>/dev/null || true
+ip6tables -X PROTON_KS 2>/dev/null || true
 ```
 
 ```bash
-#!/bin/bash
-# /usr/local/bin/proton-routing.sh
-# Applies wg0-client → tunnel mangle MARK rules from /etc/wireguard/proton.conf.
-set -euo pipefail
-
-CONFIG="/etc/wireguard/proton.conf"
-LOG_TAG="proton-routing"
-COMMENT="proton-routing-managed"
-log() { logger -t "$LOG_TAG" "$*"; echo "[$(date '+%H:%M:%S')] $*"; }
-die() { log "ERROR: $*"; exit 1; }
-
-[[ -f "$CONFIG" ]] || die "Config not found: $CONFIG"
-# shellcheck source=/dev/null
-source "$CONFIG"
-
-declare -A TUNNEL_TABLE
-for entry in "${TUNNELS[@]}"; do
-  IFS=: read -r iface table _country <<< "$entry"
-  TUNNEL_TABLE["$iface"]="$table"
-done
-
-flush_rules() {
-  log "Flushing managed mangle rules..."
-  for chain in PREROUTING OUTPUT; do
-    while iptables -t mangle -L "$chain" --line-numbers 2>/dev/null | grep -q "$COMMENT"; do
-      local line
-      line=$(iptables -t mangle -L "$chain" --line-numbers 2>/dev/null | grep "$COMMENT" | head -1 | awk '{print $1}')
-      iptables -t mangle -D "$chain" "$line" 2>/dev/null || break
-    done
-    while ip6tables -t mangle -L "$chain" --line-numbers 2>/dev/null | grep -q "$COMMENT"; do
-      local line
-      line=$(ip6tables -t mangle -L "$chain" --line-numbers 2>/dev/null | grep "$COMMENT" | head -1 | awk '{print $1}')
-      ip6tables -t mangle -D "$chain" "$line" 2>/dev/null || break
-    done
-  done
-}
-
-apply_rules() {
-  local applied=0
-  for entry in "${CLIENTS[@]}"; do
-    IFS=: read -r label client_ip tunnel_iface <<< "$entry"
-    local table="${TUNNEL_TABLE[$tunnel_iface]:-}"
-    if [[ -z "$table" ]]; then
-      log "WARN: client '$label': tunnel '$tunnel_iface' not in TUNNELS — skipping"
-      continue
-    fi
-    log "  $label ($client_ip) → $tunnel_iface (mark $table)"
-
-    iptables -t mangle -A PREROUTING -s "$client_ip" \
-      -m comment --comment "$COMMENT" -j MARK --set-mark "$table"
-
-    # IPv6: derive the corresponding fd00:10:10::N from 10.10.0.N
-    local last_octet="${client_ip##*.}"
-    ip6tables -t mangle -A PREROUTING -s "fd00:10:10::${last_octet}/128" \
-      -m comment --comment "$COMMENT" -j MARK --set-mark "$table" 2>/dev/null || true
-
-    applied=$(( applied + 1 ))
-  done
-
-  # Default fallback for unlisted clients
-  if [[ -n "${DEFAULT_TUNNEL:-}" ]]; then
-    local default_table="${TUNNEL_TABLE[$DEFAULT_TUNNEL]:-}"
-    if [[ -n "$default_table" ]]; then
-      log "  Default → $DEFAULT_TUNNEL (mark $default_table)"
-      iptables -t mangle -A PREROUTING -i "$WG_CLIENT_IFACE" \
-        -m mark --mark 0 -m comment --comment "$COMMENT" \
-        -j MARK --set-mark "$default_table"
-      ip6tables -t mangle -A PREROUTING -i "$WG_CLIENT_IFACE" \
-        -m mark --mark 0 -m comment --comment "$COMMENT" \
-        -j MARK --set-mark "$default_table" 2>/dev/null || true
-    fi
-  fi
-  log "Applied $applied client rules."
-}
-
-case "${1:-apply}" in
-  apply)  apply_rules ;;
-  flush)  flush_rules ;;
-  reload) flush_rules; apply_rules; log "Reload complete." ;;
-  *) die "Unknown action. Use: apply | flush | reload" ;;
-esac
+sudo chmod +x /etc/wireguard/protonvpn-up.sh /etc/wireguard/protonvpn-down.sh
 ```
 
-### Health-check daemon
+### What this does (so you can debug it later)
+
+- `wg-quick` with `AllowedIPs=0.0.0.0/0` automatically sets `fwmark` and adds a rule like `not from all fwmark 0xca6c lookup 51820` at priority 32766. Default route in table 51820 = the tunnel.
+- Our priority 50/51 rules run **before** that and exempt LAN + wg0 destinations, sending those to the main routing table (direct).
+- Result: **the Pi itself and its Docker containers** route public internet through Proton; the Pi's LAN-bound traffic stays direct; **wg0 clients' internet** also goes through Proton (full-tunnel remote = Pi-hole + Proton on the road).
+- LAN clients (your phone on home WiFi, laptops, TV, etc.) never hit any of this — their gateway is still the router, so their traffic goes straight to the ISP.
+- Kill switch uses a named chain (`PROTON_KS`) with individual RETURN exceptions, then REJECT at the bottom — required on Ubuntu 24.04's iptables 1.8.10 (nf_tables backend) which rejects multiple `! -d` flags on a single rule. Both IPv4 (`iptables`) and IPv6 (`ip6tables`) chains are set, so neither address family leaks on tunnel drop.
+- The IPv6 chain also exempts `wg0` egress and the `fd00:10:10::/64` ULA prefix so the Pi can talk to its own VPN clients over IPv6 while Proton is running (fix #2).
+- UDP/123 (NTP) is an explicit exception so chrony can keep the clock synced when Proton is down.
+
+### Enable
 
 ```bash
-sudo nano /usr/local/bin/proton-healthcheck.sh
-sudo chmod 755 /usr/local/bin/proton-healthcheck.sh
-```
-
-```bash
-#!/bin/bash
-# /usr/local/bin/proton-healthcheck.sh
-# Per-tunnel liveness via ping through the iface. On failure: restart wg-quick@iface.
-# If restart fails: reroute affected clients to DEFAULT_TUNNEL (or first healthy alt).
-set -uo pipefail
-
-CONFIG="/etc/wireguard/proton.conf"
-LOG_TAG="proton-health"
-ROUTING="/usr/local/bin/proton-routing.sh"
-log() { logger -t "$LOG_TAG" "$*"; echo "[$(date '+%H:%M:%S')] $*"; }
-
-[[ -f "$CONFIG" ]] || { log "ERROR: $CONFIG not found"; exit 1; }
-# shellcheck source=/dev/null
-source "$CONFIG"
-
-declare -A FAIL_COUNT TUNNEL_DOWN TUNNEL_TABLE
-for entry in "${TUNNELS[@]}"; do
-  IFS=: read -r iface table _country <<< "$entry"
-  FAIL_COUNT["$iface"]=0
-  TUNNEL_DOWN["$iface"]=0
-  TUNNEL_TABLE["$iface"]="$table"
-done
-
-check_tunnel() { ping -c 1 -W 5 -I "$1" "$HEALTH_CHECK_HOST" &>/dev/null; }
-
-attempt_restart() {
-  local iface="$1"
-  log "WARN: attempting restart of wg-quick@${iface}"
-  systemctl restart "wg-quick@${iface}" || return 1
-  # Allow time for handshake to complete on cold paths — 5s is too short.
-  sleep 15
-  check_tunnel "$iface"
-}
-
-reroute_clients_away_from() {
-  local dead_iface="$1" fallback="$DEFAULT_TUNNEL"
-  if [[ "$dead_iface" == "$fallback" ]]; then
-    for entry in "${TUNNELS[@]}"; do
-      IFS=: read -r iface _ _ <<< "$entry"
-      [[ "$iface" != "$dead_iface" && "${TUNNEL_DOWN[$iface]:-1}" == "0" ]] && { fallback="$iface"; break; }
-    done
-  fi
-  [[ "$dead_iface" == "$fallback" ]] && { log "ERROR: no healthy tunnels — clients will lose connectivity (kill-switch active)"; return; }
-
-  log "WARN: rerouting clients from $dead_iface → $fallback"
-  local fallback_table="${TUNNEL_TABLE[$fallback]}"
-  for entry in "${CLIENTS[@]}"; do
-    IFS=: read -r label client_ip tunnel_iface <<< "$entry"
-    if [[ "$tunnel_iface" == "$dead_iface" ]]; then
-      log "    $label ($client_ip) → $fallback"
-      iptables -t mangle -A PREROUTING -s "$client_ip" \
-        -m comment --comment "proton-failover" -j MARK --set-mark "$fallback_table"
-    fi
-  done
-}
-
-restore_clients_to() {
-  log "Tunnel $1 back UP — clearing failover overrides"
-  while iptables -t mangle -L PREROUTING --line-numbers 2>/dev/null | grep -q "proton-failover"; do
-    local line
-    line=$(iptables -t mangle -L PREROUTING --line-numbers | grep "proton-failover" | head -1 | awk '{print $1}')
-    iptables -t mangle -D PREROUTING "$line" 2>/dev/null || break
-  done
-  "$ROUTING" reload >/dev/null || true
-}
-
-log "Daemon started (interval ${HEALTH_CHECK_INTERVAL}s, ${HEALTH_CHECK_FAILURES} strikes to fail)"
-while true; do
-  for entry in "${TUNNELS[@]}"; do
-    IFS=: read -r iface _ country <<< "$entry"
-    if check_tunnel "$iface"; then
-      if [[ "${TUNNEL_DOWN[$iface]}" == "1" ]]; then
-        TUNNEL_DOWN[$iface]=0; FAIL_COUNT[$iface]=0
-        restore_clients_to "$iface"
-      fi
-    else
-      FAIL_COUNT[$iface]=$(( FAIL_COUNT[$iface] + 1 ))
-      log "WARN: $iface ($country) failed (${FAIL_COUNT[$iface]}/${HEALTH_CHECK_FAILURES})"
-      if (( FAIL_COUNT[$iface] >= HEALTH_CHECK_FAILURES )) && [[ "${TUNNEL_DOWN[$iface]}" == "0" ]]; then
-        log "ERROR: $iface ($country) DOWN — attempting recovery"
-        TUNNEL_DOWN[$iface]=1
-        attempt_restart "$iface" || reroute_clients_away_from "$iface"
-      fi
-    fi
-  done
-  sleep "$HEALTH_CHECK_INTERVAL"
-done
-```
-
-### Status display
-
-```bash
-sudo nano /usr/local/bin/proton-status.sh
-sudo chmod 755 /usr/local/bin/proton-status.sh
-```
-
-```bash
-#!/bin/bash
-# /usr/local/bin/proton-status.sh — one-shot human overview.
-# Run as root for full info: `sudo proton-status.sh` (or with `--no-ip` to skip exit-IP lookup).
-CONFIG="/etc/wireguard/proton.conf"
-[[ -f "$CONFIG" ]] || { echo "Config not found: $CONFIG"; exit 1; }
-# shellcheck source=/dev/null
-source "$CONFIG"
-
-R='\033[0;31m'; G='\033[0;32m'; Y='\033[0;33m'; B='\033[0;34m'; C='\033[0;36m'; W='\033[1;37m'; N='\033[0m'
-hr()  { printf "${B}──────────────────────────────────────────────────────────${N}\n"; }
-hdr() { printf "\n${W}%s${N}\n" "$1"; hr; }
-
-declare -A TUNNEL_TABLE TUNNEL_COUNTRY
-for entry in "${TUNNELS[@]}"; do
-  IFS=: read -r iface table country <<< "$entry"
-  TUNNEL_TABLE[$iface]="$table"; TUNNEL_COUNTRY[$iface]="$country"
-done
-
-check_tunnel_up() {
-  ip link show "$1" >/dev/null 2>&1 && wg show "$1" >/dev/null 2>&1
-}
-last_handshake() {
-  local ts; ts=$(wg show "$1" latest-handshakes 2>/dev/null | awk '{print $2}' | head -1)
-  [[ -z "$ts" || "$ts" == 0 ]] && { echo "never"; return; }
-  local ago=$(( $(date +%s) - ts ))
-  if   (( ago < 60 )); then echo "${ago}s"
-  elif (( ago < 3600 )); then echo "$(( ago/60 ))m"
-  else echo "$(( ago/3600 ))h$(( (ago%3600)/60 ))m"
-  fi
-}
-get_exit_ip() {
-  curl -s --interface "$1" --max-time 5 https://ipinfo.io/ip 2>/dev/null || echo "?"
-}
-
-echo; printf "${W}  ProtonVPN multi-tunnel status${N}  $(date '+%a %d %b %H:%M:%S')\n"; hr
-hdr "  Tunnels"
-for entry in "${TUNNELS[@]}"; do
-  IFS=: read -r iface table country <<< "$entry"
-  if check_tunnel_up "$iface"; then
-    printf "  ${W}%-14s${N} ${G}● up${N}  table=%s  country=%s\n" "$iface" "$table" "$country"
-    printf "    handshake: %s ago\n" "$(last_handshake "$iface")"
-    [[ "${1:-}" != "--no-ip" ]] && printf "    exit IP:   %s\n" "$(get_exit_ip "$iface")"
-  else
-    printf "  ${W}%-14s${N} ${R}● down${N} table=%s  country=%s\n" "$iface" "$table" "$country"
-  fi
-done
-
-hdr "  Client routing"
-printf "  %-12s  %-16s  %-14s  %-6s  %s\n" "Label" "Peer IP" "Tunnel" "Mark" "Status"
-hr
-for entry in "${CLIENTS[@]}"; do
-  IFS=: read -r label client_ip tunnel_iface <<< "$entry"
-  table="${TUNNEL_TABLE[$tunnel_iface]:-?}"
-  country="${TUNNEL_COUNTRY[$tunnel_iface]:-?}"
-  if iptables -t mangle -L PREROUTING -n 2>/dev/null | grep -q "$client_ip"; then
-    printf "  %-12s  %-16s  %-14s  %-6s  ${G}active${N}  (%s)\n" "$label" "$client_ip" "$tunnel_iface" "$table" "$country"
-  else
-    printf "  %-12s  %-16s  %-14s  %-6s  ${R}missing${N} (%s)\n" "$label" "$client_ip" "$tunnel_iface" "$table" "$country"
-  fi
-done
-
-hdr "  Failover overrides"
-fover=$(iptables -t mangle -L PREROUTING -n 2>/dev/null | grep "proton-failover")
-[[ -z "$fover" ]] && echo "  ${G}none${N}" || echo "$fover" | sed "s/^/  ${Y}/;s/$/${N}/"
-
-hdr "  System"
-printf "  Uptime:    %s\n" "$(uptime -p)"
-printf "  WG dyndbg: "
-if grep -q "wireguard" /sys/kernel/debug/dynamic_debug/control 2>/dev/null; then
-  printf "${G}enabled${N}\n"
-else
-  printf "${Y}disabled${N}  (enable with: echo 'module wireguard +p' | sudo tee /sys/kernel/debug/dynamic_debug/control)\n"
-fi
-echo
-```
-
-### systemd units
-
-Three separate files. The first creates the kill-switch chain *before* any wg-quick@protonvpn* starts; the second applies client→tunnel routing *after* all tunnels are up; the third runs the health-check daemon continuously.
-
-```bash
-sudo tee /etc/systemd/system/proton-killswitch-init.service >/dev/null <<'EOF'
-[Unit]
-Description=ProtonVPN kill-switch chain (PROTON_KS) initialiser
-After=network-pre.target
-Before=wg-quick@protonvpn0.service wg-quick@protonvpn1.service wg-quick@protonvpn2.service
-DefaultDependencies=no
-
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/local/bin/proton-killswitch-init.sh up
-ExecStop=/usr/local/bin/proton-killswitch-init.sh down
-StandardOutput=journal
-StandardError=journal
-SyslogIdentifier=proton-killswitch
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo tee /etc/systemd/system/proton-routing.service >/dev/null <<'EOF'
-[Unit]
-Description=ProtonVPN client routing marks (wg0 peers → tunnels)
-After=network-online.target proton-killswitch-init.service
-Wants=network-online.target
-# Per-tunnel wg-quick units pull in their own dependencies; not enumerated here so
-# adding a new protonvpnN doesn't require editing this file.
-
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/local/bin/proton-routing.sh apply
-ExecStop=/usr/local/bin/proton-routing.sh flush
-ExecReload=/usr/local/bin/proton-routing.sh reload
-StandardOutput=journal
-StandardError=journal
-SyslogIdentifier=proton-routing
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo tee /etc/systemd/system/proton-healthcheck.service >/dev/null <<'EOF'
-[Unit]
-Description=ProtonVPN tunnel health-check and failover daemon
-After=proton-routing.service
-Wants=proton-routing.service
-# Throttle restart loop — a config-error crash shouldn't fill journal.
-StartLimitBurst=5
-StartLimitIntervalSec=300
-
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/proton-healthcheck.sh
-Restart=always
-RestartSec=10
-StandardOutput=journal
-StandardError=journal
-SyslogIdentifier=proton-health
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl daemon-reload
-```
-
-> ⚠️ Notice that `proton-killswitch-init.service`'s `Before=` line enumerates a hardcoded set of `wg-quick@protonvpn*.service` units. Systemd does not support globbing in `Before=` / `After=`. If you add `protonvpn3`/`protonvpn4`, edit this unit and append them to the `Before=` line, then `systemctl daemon-reload`. The TUNNELS array in `proton.conf` is the source of truth for runtime behaviour; the systemd `Before=` is only there for boot ordering and is fine if a tunnel isn't listed — it just means the chain race-condition is theoretically possible on that one tunnel.
-
-### Migration from the single-tunnel design
-
-If you're upgrading from v5.1.7.20 or earlier:
-
-```bash
-# 1. Stop and disable the old single-tunnel setup.
-sudo systemctl disable --now wg-quick@protonvpn
-
-# 2. Remove the old WireGuard config and hook scripts.
-#    (They'll be replaced by protonvpn0.conf, etc., plus the new helper scripts.)
-sudo rm -f /etc/wireguard/protonvpn.conf
-sudo rm -f /etc/wireguard/protonvpn-up.sh
-sudo rm -f /etc/wireguard/protonvpn-down.sh
-
-# 3. Confirm PROTON_KS chain and ip rules from the old setup are gone.
-sudo iptables -L PROTON_KS 2>/dev/null && echo "STILL THERE — old chain wasn't torn down by wg-quick down"
-sudo ip rule list | grep -E "fwmark 0xca6c"   # should print nothing now
-
-# 4. Write the new files (proton.conf, protonvpn0.conf, protonvpn1.conf, all five scripts,
-#    rt_tables append, three systemd units) per the steps above.
-
-# 5. Enable everything in order.
-sudo systemctl enable --now proton-killswitch-init.service
-sudo systemctl enable --now wg-quick@protonvpn0
-sudo systemctl enable --now wg-quick@protonvpn1
-sudo systemctl enable --now proton-routing.service
-sudo systemctl enable --now proton-healthcheck.service
-
-# 6. Verify.
-sudo proton-status.sh
+sudo systemctl enable --now wg-quick@protonvpn
+sudo wg show
 ```
 
 ### Verify
 
 ```bash
-sudo proton-status.sh
+# Should be a Proton IP (not your home WAN IP)
+curl --interface protonvpn ifconfig.me
+
+# From the Pi itself (also via Proton)
+curl ifconfig.me
 ```
 
-Should show every tunnel `● up`, every client `active`, no `failover overrides`. Test the per-client egress from the actual client (after wg0 handshake completes):
-
-```bash
-# On the phone (assigned to protonvpn0 → Netherlands):
-curl -s https://ipinfo.io/country    # expect: NL
-
-# On the laptop (assigned to protonvpn1 → USA):
-curl -s https://ipinfo.io/country    # expect: US
-```
-
-If `country` returns your home country, the mangle MARK isn't catching that client — `sudo proton-status.sh` will show `missing` under that client's row. Common cause: wrong `wg0_peer_ip` in `proton.conf` — verify with `sudo wg show wg0`.
-
-### Operations
-
-**Add a new tunnel (e.g. UK):**
-
-1. Download a UK WireGuard config from Proton, save as `/etc/wireguard/protonvpn2.conf` with the [Interface] template (`Table = off`, `FwMark = 102`, MTU 1320, hooks calling `proton-tunnel-up.sh up %i 102`).
-2. Append `"protonvpn2:102:UK"` to `TUNNELS=( ... )` in `/etc/wireguard/proton.conf`.
-3. Append `protonvpn2.service` to the `Before=` line in `/etc/systemd/system/proton-killswitch-init.service`. `systemctl daemon-reload`.
-4. `sudo systemctl enable --now wg-quick@protonvpn2`.
-5. `sudo systemctl reload proton-routing.service` (re-reads `proton.conf`).
-6. `sudo proton-status.sh` — confirm protonvpn2 shows `● up` and the new mark is available for client assignment.
-
-**Reassign a client to a different tunnel:**
-
-Edit `/etc/wireguard/proton.conf`, change the tunnel in the client's line, then:
-
-```bash
-sudo systemctl reload proton-routing.service    # or: sudo proton-routing.sh reload
-```
-
-No reboot, no wg0 restart.
-
-**Remove a tunnel:**
-
-1. `sudo systemctl disable --now wg-quick@protonvpn2` (this calls `proton-tunnel-up.sh down` automatically).
-2. Remove its line from `TUNNELS=( ... )` and any clients still pointing at it (move them to another tunnel first or they'll fall to `DEFAULT_TUNNEL`).
-3. `sudo systemctl reload proton-routing.service`.
-4. Optionally remove `/etc/wireguard/protonvpn2.conf` and the `rt_tables` line (102 proton2).
-
-### Useful queries
-
-```bash
-sudo proton-status.sh                       # full overview (with --no-ip for fast)
-journalctl -ft proton-health                # live failover log
-journalctl -ft proton-routing               # live routing-apply log
-sudo iptables -t mangle -L PREROUTING -nv   # what's actually marking traffic
-sudo ip rule show                           # what routes by fwmark
-sudo ip route show table 100                # protonvpn0's table
-sudo iptables -L PROTON_KS -nv              # kill-switch chain + counters
-```
+---
 
 ## 5. WireGuard Remote Access — wg0
 
@@ -1592,24 +985,6 @@ sudo nano /etc/wireguard/wg0.conf
 Address = 10.10.0.1/24, fd00:10:10::1/64
 ListenPort = 51820
 PrivateKey = <wg0-private-key>
-# FIX #117 (updated for v5.1.7.21 multi-tunnel design):
-# Sets fwmark 51820 on wg0's UDP socket. Why this specific number:
-#   - In the single-tunnel design (≤ v5.1.7.20), ProtonVPN's wg-quick auto-assigned
-#     51820 as its own fwmark and auto-installed the matching ip rule + kill-switch
-#     RETURN. Reusing 51820 for wg0 piggybacked on Proton's infrastructure for free.
-#   - In the v5.1.7.21+ multi-tunnel design, wg-quick auto-routing is disabled
-#     (`Table = off` in each protonvpnN.conf), so the 51820 ip rule and PROTON_KS
-#     exemption are no longer auto-installed. They are now installed EXPLICITLY by
-#     /usr/local/bin/proton-killswitch-init.sh: the chain's `--mark 51820 -j RETURN`
-#     line, plus no ip rule (wg0 protocol traffic falls through to the default main
-#     table which routes via eth0). Same end result — wg0 handshake responses egress
-#     via eth0 with source IP 192.168.70.5 and bypass the kill switch — different
-#     plumbing.
-# Failure mode if removed: tcpdump on eth0 shows inbound length-148 handshake
-# initiations from remote clients with NO outbound length-92 response; the reply
-# gets stuck in the kill switch's final REJECT because no PROTON_KS rule matched.
-# Verify after restart: `sudo wg show wg0 fwmark` → `0xca6c` (= 51820 decimal).
-FwMark = 51820
 # 1280 — safe floor for a wg0-inside-protonvpn stack. At 1320 the outer
 # protonvpn encapsulation (~60 B overhead) pushes packets past protonvpn's
 # own 1320-byte MTU, causing fragmentation or silent large-transfer stalls.
@@ -2123,7 +1498,7 @@ docker logs -f caddy
 #   "connection refused" on port 80 — UFW probably blocks 80/tcp; §2 should have allowed it
 ```
 
-After deploy: open `https://ha.home.arpa` in a browser that has `homelab-root-ca.crt` installed (§14 trust-store table). You should see HA's login page with a valid cert and no warnings.
+After deploy: open `https://ha.home.arpa` in a browser that has `homelab-root-ca.crt` installed (§13 trust-store table). You should see HA's login page with a valid cert and no warnings.
 
 ### Add a new proxied service later
 
@@ -2140,7 +1515,7 @@ docker exec caddy caddy reload --config /etc/caddy/Caddyfile
 
 Caddy validates the new config in-process and swaps it atomically — if validation fails, the old config keeps running and you have no downtime. Also remember:
 1. Add `newservice.home.arpa` → `192.168.70.5` to Pi-hole's Local DNS records (§6)
-2. Add a Kuma monitor for it (§13)
+2. Add a Kuma monitor for it (§12)
 
 ### Cert renewal
 
@@ -2297,345 +1672,7 @@ volumes:
 
 ---
 
-## 11. PostgreSQL database server
-
-Reserved for any future self-hosted web app you want to put on this Pi (Immich, Paperless-ngx, Forgejo, Authentik, Vaultwarden with the Postgres backend, etc. — all default to or recommend Postgres). The Postgres container itself sits idle until something connects to it; the "Adding a web app later" subsection at the bottom of this section is the full walkthrough for hooking one up.
-
-**Why Postgres** (vs MariaDB/MySQL): the modern self-hosted ecosystem has converged hard on Postgres. JSONB, partial/expression indexes, `scram-sha-256` as the default password auth method since PG 14 (no `pg_hba.conf` ceremony), and `pg_dump`/`pg_dumpall` producing genuinely portable text dumps. The Alpine variant of the official image is ~80MB pulled vs ~150MB for the Debian variant, runs comfortably on the Pi 5's arm64v8, and PG 18 Alpine now ships `liburing`/io_uring async I/O which on NVMe-backed Pi 5s gives a measurable read-latency drop on concurrent workloads. MariaDB would be a reasonable second choice if you specifically need WordPress or a legacy PHP CMS, but nothing in this guide's likely future-app list needs MySQL-flavoured SQL.
-
-> ⚠️ **No automated backup.** Restic (formerly §12) was removed in v5.1.7.19 (fix #122). This database has *zero* automated backup unless you add one. A `pg_dumpall` cron suggestion is at the bottom of this section — read it before putting anything you care about into this database. SSDs fail.
-
-### Stack name in Portainer: `postgres`
-
-### Pre-create the shared `db-net` bridge
-
-Same one-time-up-front pattern §3 uses for `proxy-net`: every future web-app stack that needs the database attaches to `db-net` via `external: true`, so the network must exist before any stack references it. The subnet (`172.29.0.0/24`) sits below `dns-net` (`172.30.0.0/24`) and `proxy-net` (`172.31.0.0/24`), and crucially **outside the §3 daemon.json `default-address-pools` range `172.20.0.0/14`** (which covers `172.20–172.23.x`), so Docker's auto-allocator can't collide with it and no daemon.json edit is needed.
-
-```bash
-docker network create --driver bridge --subnet 172.29.0.0/24 db-net
-```
-
-Verify:
-
-```bash
-docker network ls | grep db-net
-# Expect: <id>  db-net  bridge  local
-docker network inspect db-net | grep -E 'Subnet|Gateway'
-# Expect: "Subnet": "172.29.0.0/24", "Gateway": "172.29.0.1"
-```
-
-### Compose stack
-
-```bash
-sudo mkdir -p /opt/postgres
-sudo nano /opt/postgres/docker-compose.yml
-```
-
-```yaml
-services:
-  postgres:
-    image: postgres:18.4-alpine
-    container_name: postgres
-    restart: unless-stopped
-    # No `ports:` published to the host. 5432 is reachable only from inside
-    # db-net via Docker's embedded DNS as `postgres:5432`. The reasoning is
-    # the same direction as fix #120's static-IP convention and the §3
-    # loopback-binding default: every additional 127.0.0.1:* bind is one
-    # more thing to firewall, one more thing DOCKER-USER (§3) has to reason
-    # about, and one more attack surface. Admin happens via `docker exec`
-    # — see the "Day-to-day admin" subsection below.
-    environment:
-      TZ: "Europe/Rome"
-      # Secrets via Portainer env vars panel, NOT this YAML:
-      #   POSTGRES_PASSWORD   <-- set in Portainer Stack env (or CLI fallback below)
-      #
-      # POSTGRES_USER defaults to `postgres` (the superuser). We leave it at
-      # the default — per-app users are created separately via `psql` after
-      # deploy, see "Per-app database and role creation" below.
-      #
-      # POSTGRES_DB unset — we don't want the entrypoint to auto-create a
-      # named database called `postgres` (which is what setting it would do).
-      # The default `postgres` DB exists anyway and is used only for admin
-      # connections; real per-app DBs are created explicitly later.
-      POSTGRES_INITDB_ARGS: "--locale=C.UTF-8 --encoding=UTF8"
-      # --locale=C.UTF-8 + --encoding=UTF8 is the safe default: UTF-8 storage
-      # without the en_US.UTF-8 sort order that pulls in glibc locale data
-      # (which the Alpine base doesn't ship in full). C.UTF-8 is byte-sort,
-      # fast, and stable across glibc versions. If a future app specifically
-      # needs locale-aware ORDER BY (rare), override per-database at
-      # CREATE DATABASE time with `LC_COLLATE='...' TEMPLATE template0`.
-    volumes:
-      # ⚠️ Path is /var/lib/postgresql, NOT /var/lib/postgresql/data.
-      # PG 18 changed both PGDATA and the declared VOLUME — PGDATA moved
-      # from /var/lib/postgresql/data to /var/lib/postgresql/18/docker, and
-      # the VOLUME declared by the image moved from /var/lib/postgresql/data
-      # to /var/lib/postgresql (parent dir). docker-library/postgres#1259.
-      # Mounting the old path on PG 18 produces:
-      #   Error: ... configured to store database data in a format which is
-      #   compatible with "pg_ctlcluster" ... Counter to that, there appears
-      #   to be PostgreSQL data in: /var/lib/postgresql/data (unused
-      #   mount/volume)
-      # ... and the container won't start. Mounting the parent /var/lib/
-      # postgresql also future-proofs pg_upgrade between major versions:
-      # PG 19's PGDATA will be /var/lib/postgresql/19/docker (sibling of
-      # 18/docker under the same mount), which is what lets pg_upgrade
-      # --link work without crossing a mount-point boundary. See the §15
-      # troubleshooting row keyed off the "(unused mount/volume)" message
-      # for the recovery path if you hit this from an upgrade.
-      - postgres-data:/var/lib/postgresql
-      - /etc/localtime:/etc/localtime:ro
-    # PG default shm_size is 64 MB — fine for an idle DB, undersized once a
-    # web app starts doing parallel queries (each parallel worker allocates
-    # against shared memory). 256 MB is the comfortable headroom for a
-    # multi-app Pi 5 homelab without giving Postgres so much RAM that
-    # Home Assistant or Pi-hole start swapping. Override upward via
-    # `docker compose down && docker compose up -d` if you add a heavy app
-    # like Immich (their docs recommend 256+ MB for transcoding pipelines).
-    shm_size: 256mb
-    healthcheck:
-      # pg_isready is the canonical "is the server accepting connections"
-      # check; it exits 0 if the listener is up, non-zero otherwise. Don't
-      # use `psql -c 'SELECT 1'` here — psql connects as a real client and
-      # increments login-attempt counters on every invocation, which clutters
-      # pg_stat_activity. pg_isready uses a lightweight protocol-level check.
-      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      # start_period gives initdb time to finish on first deploy (creating
-      # the cluster, running initdb, etc. takes ~10-15s on a Pi 5 NVMe).
-      # Without it, the first ~5 healthchecks fail noisily during normal
-      # bootstrap and Portainer flags the stack red for the first minute.
-      start_period: 30s
-    # FIX #122 cross-reference: Restic (formerly §12) was removed in v5.1.7.19,
-    # so this volume is NOT in any automated backup. See the "Backups" subsection
-    # below for the manual pg_dumpall pattern.
-    networks:
-      db-net:
-        ipv4_address: 172.29.0.10
-
-networks:
-  db-net:
-    external: true
-
-volumes:
-  postgres-data:
-```
-
-> 🔑 **In Portainer:** under the `postgres` stack's **Environment variables** panel, add `POSTGRES_PASSWORD=<long-strong-password>`. Do not put it in the YAML. This is the superuser (`postgres` role) password — store it in your password manager, you will need it for per-app role creation below. Same convention §6 Pi-hole's `FTLCONF_webserver_api_password` and §7 Step-CA's `DOCKER_STEPCA_INIT_PASSWORD` use.
-
-```bash
-# Save the file above to disk, then deploy via Portainer:
-# Stacks → + Add stack → name: postgres → Web editor → paste YAML
-# → Environment variables → add POSTGRES_PASSWORD
-# → Deploy
-# CLI fallback (set the env var inline so the entrypoint sees it on first init;
-# matches the pattern fix #101/#102 established for the dns and watchtower stacks):
-cd /opt/postgres && POSTGRES_PASSWORD='...' docker compose up -d
-```
-
-> ⚠️ **`POSTGRES_PASSWORD` is only consulted on first init** (i.e. when the `postgres-data` volume is empty). Once initdb runs and the cluster is created, the password is set on the `postgres` role in the database and the env var is ignored on subsequent restarts. To **change** the superuser password later, do not just edit the env var — connect with the current password and run `ALTER USER postgres WITH PASSWORD '...';`. If you've lost the current password, the recovery path is: stop the container, set `POSTGRES_HOST_AUTH_METHOD=trust` temporarily via a compose env override, restart, `ALTER USER postgres WITH PASSWORD '...';`, remove the override, restart again. Document the new password in your password manager before unsetting trust.
-
-### Verify
-
-```bash
-# Listener is up and accepting connections:
-docker exec -it postgres pg_isready -U postgres
-# Expect: /var/run/postgresql:5432 - accepting connections
-
-# Cluster initialised cleanly with the three default databases:
-docker exec -it postgres psql -U postgres -c '\l'
-# Expect 3 rows: postgres, template0, template1 — all owned by `postgres`,
-# encoding UTF8, ctype C.UTF-8, collate C.UTF-8
-
-# PG 18 PGDATA layout is correct (sanity check for fix above):
-docker exec -it postgres ls /var/lib/postgresql/18/docker
-# Expect: PG_VERSION, base/, global/, pg_wal/, postgresql.conf, ... — the real
-# data directory. If you see just `data/` containing those entries instead,
-# you've mounted the old PG 17 path; see the §15 troubleshooting row.
-
-# Network reachability from another container on db-net (no app yet, so we
-# use a throwaway alpine container attached to db-net for the test):
-docker run --rm --network db-net alpine:3.21 sh -c \
-  "apk add --no-cache postgresql-client >/dev/null && pg_isready -h postgres -p 5432 -U postgres"
-# Expect: postgres:5432 - accepting connections
-```
-
-### Per-app database and role creation
-
-Each web app should get its own database AND its own role (don't share the `postgres` superuser with apps — a compromised app shouldn't be able to drop other apps' databases). The pattern, run once per new app:
-
-```bash
-docker exec -it postgres psql -U postgres
-```
-
-```sql
--- Create a per-app role with a per-app password.
-CREATE ROLE myapp WITH LOGIN PASSWORD 'long-random-per-app-password';
-
--- Create the database, owned by that role (so the role can create extensions etc.).
-CREATE DATABASE myapp_db OWNER myapp;
-
--- Lock down: the role only sees its own database. PUBLIC defaults in
--- PG 15+ already block cross-database read for non-superusers, but
--- belt-and-braces:
-REVOKE CONNECT ON DATABASE postgres FROM myapp;
-REVOKE ALL ON DATABASE template0, template1 FROM myapp;
-
-\q
-```
-
-The connection string for the app to use:
-
-```
-postgresql://myapp:long-random-per-app-password@postgres:5432/myapp_db
-```
-
-Where `postgres` is the container name (resolved via Docker embedded DNS on db-net), `5432` is the standard PG port, and `myapp_db` is the per-app database.
-
-> ℹ️ **Why not `/docker-entrypoint-initdb.d/*.sql` mounts.** The official image runs `.sql`/`.sh` files in that directory on first init (i.e. when PGDATA is empty), but **only on first init** — never on subsequent starts. Using it for per-app schemas means a redeploy from an existing volume silently skips role/DB creation, while a redeploy after a volume wipe re-runs it. That divergence is exactly the kind of "behaviour depends on hidden volume state" footgun the rest of this guide spends pages avoiding. Manual `psql` is reproducible, version-controllable, and visible.
-
-> 💾 **Document the per-app passwords.** Store each app's database password in your password manager next to the app's other credentials. Web app compose YAMLs reference the password via Portainer env vars (same pattern as `POSTGRES_PASSWORD` itself), never in the YAML committed to git. See "Adding a web app later" below for the worked compose snippet.
-
-### Day-to-day admin
-
-```bash
-# Connect as superuser to a specific app DB (no port-binding on the host, so
-# psql runs inside the container):
-docker exec -it postgres psql -U postgres -d myapp_db
-
-# Connect as the per-app role (useful for debugging permissions):
-docker exec -it postgres psql -U myapp -d myapp_db
-# Prompt: Password for user myapp: <paste from password manager>
-
-# One-off SQL without entering the interactive shell:
-docker exec -i postgres psql -U postgres -c "SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database ORDER BY pg_database_size(datname) DESC;"
-
-# Tail the Postgres logs (the same place Portainer's Logs tab shows):
-docker logs -f postgres
-```
-
-If you find yourself running `psql` regularly and want a less verbose entry point, drop a tiny wrapper in `/usr/local/bin/`:
-
-```bash
-sudo tee /usr/local/bin/psql >/dev/null <<'EOF'
-#!/bin/bash
-# Convenience wrapper: `psql` on the host hands off to the container's psql.
-# Pass `-U <role> -d <db>` etc. through unchanged.
-exec docker exec -it postgres psql "$@"
-EOF
-sudo chmod 755 /usr/local/bin/psql
-```
-
-Then on the host: `psql -U postgres -d myapp_db`. The wrapper isn't in git (it's host-local convenience), but the §15 directory tree notes its presence.
-
-### Backups (manual, opt-in)
-
-Restic (formerly §12) was removed in v5.1.7.19, so there is **no automated backup** for this database. The minimum viable Postgres backup is a daily `pg_dumpall` cron entry dumping to a host directory, plus an offsite copy if you care about the data. Here's the minimum, on the Pi:
-
-```bash
-sudo mkdir -p /opt/postgres/dumps
-sudo chmod 700 /opt/postgres/dumps
-
-sudo nano /usr/local/bin/postgres-dump.sh
-```
-
-```bash
-#!/bin/bash
-# Daily pg_dumpall of all databases + roles + globals to /opt/postgres/dumps/.
-# Run as root via cron. Keep 14 daily dumps, rotated.
-set -euo pipefail
-PATH=/usr/bin:/bin    # Same class as fix #109: cron's default PATH
-
-DUMP_DIR=/opt/postgres/dumps
-TS=$(date +%Y-%m-%d)
-OUT="${DUMP_DIR}/pgdumpall-${TS}.sql.gz"
-
-# pg_dumpall captures roles, tablespaces, AND every database. No password
-# prompt because we exec inside the container as the postgres OS user, who
-# trusts local Unix-socket connections by default in the official image.
-docker exec postgres pg_dumpall -U postgres | gzip -9 > "$OUT"
-
-# Keep 14 days. find -delete is atomic per-file.
-find "$DUMP_DIR" -maxdepth 1 -name 'pgdumpall-*.sql.gz' -mtime +14 -delete
-```
-
-```bash
-sudo chmod 700 /usr/local/bin/postgres-dump.sh
-echo "30 3 * * * root /usr/local/bin/postgres-dump.sh" | sudo tee /etc/cron.d/postgres-dump
-sudo chmod 644 /etc/cron.d/postgres-dump
-```
-
-> ⚠️ **A backup on the same SSD that's failing is not a backup.** `/opt/postgres/dumps/` is enough to survive a `docker volume rm postgres-data` mistake or a corrupted Postgres cluster, but not enough to survive the NVMe dying. If the data matters, add an offsite copy — `rclone copy /opt/postgres/dumps/ remote:postgres-dumps/` to Backblaze B2 / OneDrive / a NAS over WireGuard / wherever, run from a second cron entry an hour after the local dump. Out of scope here because the original Restic-removal decision in v5.1.7.19 was deliberate — you removed the automated-backup machinery on purpose, this section flags rather than re-introduces it.
-
-Also gitignore the dumps directory:
-
-```bash
-echo 'dumps/' | sudo tee /opt/postgres/.gitignore
-```
-
-Restore drill:
-
-```bash
-# To a fresh container (TEST this; don't wait for an emergency):
-gunzip -c /opt/postgres/dumps/pgdumpall-YYYY-MM-DD.sql.gz | docker exec -i postgres psql -U postgres
-```
-
-### Adding a web app later
-
-When you add a self-hosted web app that needs the database, attach it to **both** `db-net` and `proxy-net`. Worked example using a fictional `myapp`:
-
-```yaml
-# /opt/myapp/docker-compose.yml
-services:
-  myapp:
-    image: someorg/myapp:1.2.3
-    container_name: myapp
-    restart: unless-stopped
-    environment:
-      TZ: "Europe/Rome"
-      # Set DATABASE_URL in Portainer env vars panel:
-      #   DATABASE_URL=postgresql://myapp:<per-app-password>@postgres:5432/myapp_db
-    networks:
-      proxy-net:
-        ipv4_address: 172.31.0.20    # next free; see §3 IP allocations
-      db-net:
-        # No static IP needed for outbound clients — only inbound services pin.
-    # If the app has a healthcheck endpoint, depend on it being healthy before
-    # Caddy proxies to it. The app does NOT depend_on postgres here because
-    # they're in different compose projects (cross-stack depends_on isn't a
-    # thing); the app needs its own startup retry logic for DB connect.
-    ports:
-      - "127.0.0.1:8000:8000"        # admin port loopback-bound; reach via Caddy
-
-networks:
-  proxy-net:
-    external: true
-  db-net:
-    external: true
-```
-
-Then wire it into the rest of the stack:
-
-1. **Caddyfile** (`/opt/caddy/Caddyfile`) — append a stanza:
-   ```Caddyfile
-   myapp.home.arpa {
-       reverse_proxy myapp:8000
-   }
-   ```
-   Reload: `docker exec caddy caddy reload --config /etc/caddy/Caddyfile`
-
-2. **Pi-hole Local DNS** — add `myapp.home.arpa` → `192.168.70.5` in **Local DNS → DNS Records** (§6).
-
-3. **Kuma monitor** — add an HTTPS monitor for `https://myapp.home.arpa` (§13).
-
-4. **Create the per-app DB and role** in Postgres if you haven't already — see "Per-app database and role creation" above. The `DATABASE_URL` env var on the app must match what you created.
-
-If the app fails to connect with `could not translate host name "postgres" to address` or similar, the most likely cause is missing `db-net` attachment in the app stack — both networks must be present and both must be `external: true`. See the §15 troubleshooting table for the symptom-keyed entry.
-
----
-
-## 12. Dynamic DNS (DDNS)
+## 11. Dynamic DNS (DDNS)
 
 Your TP-Link router already publishes `greenhouse.tplinkdns.com` and updates it on WAN IP change. **No DDNS container is needed on the Pi.**
 
@@ -2658,13 +1695,13 @@ If `nslookup` returns `NXDOMAIN`, log into the TP-Link admin → Advanced → Ne
 
 ### Optional: monitor the DDNS
 
-In Uptime Kuma (§13), add a **DNS** monitor for `greenhouse.tplinkdns.com` resolving via `8.8.8.8`. If it ever stops resolving — router lost DDNS sync — you'll get a notification before you find out the hard way while standing at a hotel WiFi.
+In Uptime Kuma (§12), add a **DNS** monitor for `greenhouse.tplinkdns.com` resolving via `8.8.8.8`. If it ever stops resolving — router lost DDNS sync — you'll get a notification before you find out the hard way while standing at a hotel WiFi.
 
 > If TP-Link DDNS ever flakes (their service goes down occasionally), the fallback plan is a free DuckDNS account with a small container on the Pi. Recipe in `docker/ddns/` of the repo (commented out by default).
 
 ---
 
-## 13. Monitoring + Watchtower
+## 12. Monitoring + Watchtower
 
 ### Uptime Kuma
 
@@ -2879,6 +1916,306 @@ cd /opt/watchtower && WATCHTOWER_NOTIFICATION_URL='telegram://<token>@telegram?c
 
 ---
 
+## 13. webnovel — Next.js application stack
+
+The first end-user **application** running on the homelab (everything else in §3–§12 is infrastructure). It serves a personal library of translated long-form fiction with per-user bookmarks, tag browsing, full-text search across chapter content, and a "popular this week" ranking. Rides on top of your existing `postgres:18.4-alpine` container — one DB instance to back up, one to monitor. The full project is shipped as `webnovel.zip` alongside this doc; this section is the operational guide for deploying and running it, with Portainer used wherever it adds value over CLI.
+
+### Stack at a glance
+
+| Layer | Technology | Notes |
+|---|---|---|
+| Framework | **Next.js 15** App Router on Node 22 | TS strict, React 19, `output: 'standalone'` for slim container image (~250 MB) |
+| ORM | **Drizzle** | Native Postgres dialect; same queries that would run on Neon/Supabase later |
+| Database | **Postgres 18.4** (your existing instance) | New database `webnovel` owned by user `webnovel` |
+| Driver | **postgres-js** | Smaller and faster than node-pg, Drizzle's recommended Postgres driver |
+| Search | **Postgres tsvector + GIN** | Generated `search_vector` column on `chapters`, ranked with `ts_rank_cd`, snippet extraction via `ts_headline` |
+| Auth | **Better Auth** | Email/password, cookie sessions, Drizzle adapter against the same Postgres |
+| Styling | **Tailwind CSS v4** | Editorial typography (Fraunces / Source Serif 4 / Instrument Sans via `next/font`) |
+| Cache strategy | Next.js route segment + `unstable_cache` | Per-page `revalidate` plus tag-based invalidation from server actions |
+
+Cache tag scheme used by `src/lib/db/queries.ts`:
+- `'novels'` — invalidated when any novel is added/edited
+- `'novel:<slug>'` — invalidated for a specific novel
+- `'chapter:<slug>-<n>'` — invalidated for a specific chapter
+- `'popular'` — invalidated by the 5-minute revalidate window
+- `'tags'` — invalidated when tags change
+
+### Network placement
+
+- **Static IP on `proxy-net`**: `172.31.0.50` (next free slot after Watchtower in §3's allocation table)
+- **Host port binding**: `127.0.0.1:3000` — loopback-only, all public traffic via Caddy
+- **DNS**: `webnovel.home.arpa` → `192.168.70.5` (Pi LAN IP) via Pi-hole's Local DNS Records
+- **TLS**: Caddy auto-requests a cert from Step-CA on first hit (same flow as every other §8 service)
+- **Watchtower**: opted in via the standard `com.centurylinklabs.watchtower.enable=true` label
+- **Database reach**: the `postgres` container is attached to `proxy-net` so webnovel reaches it by container name (`postgres:5432`)
+
+### What's Portainer vs what's CLI
+
+| Task | Where |
+|---|---|
+| Attach `postgres` to `proxy-net` (one-time) | **Portainer** (Containers → postgres → Networks → Join) |
+| Create `webnovel` DB + user (one-time) | **Portainer** (Containers → postgres → Console → psql) |
+| Build the image (one-time + on source changes) | **CLI** (multi-stage build, faster + watchable on Pi) |
+| Deploy the stack | **Portainer** (Stacks → Add stack → Web editor) |
+| Env-var changes, restart, logs, exec | **Portainer** |
+| Caddyfile edit + reload | CLI (one line each) |
+| Pi-hole DNS record | Pi-hole admin UI |
+| Ingest timer, backup cron | Host systemd / cron |
+
+### 13.1 Postgres-side preparation (Portainer)
+
+**Attach `postgres` to `proxy-net`** so webnovel can resolve it by name:
+1. Portainer → **Containers** → click `postgres` row
+2. Scroll to the **Connected networks** section near the bottom
+3. In the **Join a network** dropdown, pick `proxy-net` → click **Join network**
+4. The container stays running; Docker hot-attaches the new interface
+
+Or via CLI if you prefer: `docker network connect proxy-net postgres`
+
+**Create the database + user**. From Portainer → **Containers** → `postgres` → click the **>_** (Console / Exec) icon → use `/bin/sh` → press **Connect**. Then inside the shell:
+
+```sh
+# Strong password; copy this for the .env in §13.3
+PG_PW=$(openssl rand -base64 24 | tr -d '/+=' | head -c 28); echo "$PG_PW"
+
+# Create role + db. -U postgres uses the default superuser; -d postgres avoids
+# trying to connect to a non-existent webnovel DB before we've created it.
+psql -U postgres -d postgres <<SQL
+CREATE USER webnovel WITH PASSWORD '$PG_PW';
+CREATE DATABASE webnovel OWNER webnovel;
+GRANT ALL PRIVILEGES ON DATABASE webnovel TO webnovel;
+SQL
+```
+
+Verify from inside the same shell:
+
+```sh
+psql -U webnovel -d webnovel -c '\conninfo'
+# expected: You are connected to database "webnovel" as user "webnovel" via socket...
+```
+
+### 13.2 Drop the project onto the Pi (CLI — one-time)
+
+```bash
+sudo mkdir -p /opt/webnovel
+sudo chown -R $USER:$USER /opt/webnovel
+cd /opt/webnovel
+unzip ~/webnovel.zip -d /tmp && shopt -s dotglob && mv /tmp/webnovel/* . && shopt -u dotglob
+ls -la                                                    # expect: package.json, Dockerfile, src/, drizzle/, etc.
+```
+
+### 13.3 Build the image (CLI — one-time)
+
+```bash
+cd /opt/webnovel
+docker compose build                                       # ~4 min on Pi 5 first time
+docker images | grep webnovel                              # expect: webnovel  0.1.0  <id>  ...
+```
+
+The compose `build:` block stays in place so later source edits can `docker compose build` again; Portainer then redeploys against the freshly built image.
+
+### 13.4 Deploy the stack (Portainer)
+
+1. Portainer → **Stacks** → **Add stack**
+2. **Name**: `webnovel`
+3. **Build method**: **Web editor**
+4. **Paste** the contents of `/opt/webnovel/docker-compose.yml` into the editor — verbatim, no edits needed; the env vars are pulled from the Environment variables section below
+5. Scroll to **Environment variables** → click **Add an environment variable** for each of:
+   - `DATABASE_URL` = `postgres://webnovel:<the password from §13.1>@postgres:5432/webnovel`
+   - `BETTER_AUTH_URL` = `https://webnovel.home.arpa`
+   - `BETTER_AUTH_SECRET` = `<openssl rand -base64 32>` — generate fresh, don't reuse anything
+   - `WEBNOVEL_DISABLE_SIGNUP` = `false` (you'll flip this to `true` after registering — §13.7)
+6. Leave **Access control** at the defaults
+7. Click **Deploy the stack**
+
+Watch the stack come up: Portainer → **Stacks** → `webnovel` → **Containers** tab → click the container name → **Logs**. Expected sequence:
+
+- `[entrypoint] waiting for Postgres at postgres:5432…`
+- `[entrypoint] Postgres is up`
+- `[migrate] applying pending migrations…` (creates all tables + `search_vector` column + GIN index)
+- `[migrate] done`
+- `▲ Next.js 15.x` + `- Local: http://0.0.0.0:3000` + `✓ Ready in <Xms>`
+
+If migration fails, the container exits and Portainer marks it red. Fix the env var (typically DATABASE_URL password) by editing the stack → Editor tab → modifying the env var → clicking **Update the stack**.
+
+### 13.5 Wire into Caddy + Pi-hole (CLI for Caddy, UI for Pi-hole)
+
+Append to `/opt/caddy/Caddyfile`:
+
+```caddyfile
+webnovel.home.arpa {
+    reverse_proxy webnovel:3000
+
+    @next_static path /_next/static/*
+    header @next_static Cache-Control "public, max-age=31536000, immutable"
+}
+```
+
+Reload Caddy in place:
+
+```bash
+docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+```
+
+(You CAN do the Caddyfile edit via Portainer → Volumes → caddy_config → Browse → caddyfile but in practice CLI is faster; pick whichever you prefer.)
+
+In Pi-hole admin (`https://pihole.home.arpa/admin`) → **Local DNS** → **DNS Records**, add:
+```
+webnovel.home.arpa  →  192.168.70.5
+```
+
+### 13.6 Test from a LAN device
+
+Open `https://webnovel.home.arpa` on a device with the homelab root CA trusted. You should see the cream-paper hero with the "A quiet place to read." heading. An empty-library notice means everything works — you just haven't ingested any novels yet (next steps).
+
+### 13.7 Register + lock sign-ups
+
+Go to `https://webnovel.home.arpa/login` → click **Need an account? Register** → fill name + email + password (≥12 characters per Better Auth's `minPasswordLength`).
+
+After your account is created, lock further sign-ups in Portainer: Stacks → `webnovel` → **Editor** tab → change `WEBNOVEL_DISABLE_SIGNUP` from `false` to `true` → **Update the stack**. Portainer recreates the container with the new env var, takes ~5 seconds.
+
+### 13.8 Ingesting content from cool18_to_epub.py (host CLI + systemd)
+
+The project's ingest pipeline reads a directory of Markdown files. Adapt your scraper so that, alongside the EPUB output, it deposits files under `/opt/webnovel/ingest/`:
+
+```
+/opt/webnovel/ingest/
+└─ <novel-slug>/
+   ├─ _meta.json               # {title, titleOriginal, author, language, description, sourceUrl, tags: [...]}
+   ├─ 001-prologue.md
+   ├─ 002-chapter-one.md
+   └─ …
+```
+
+To run the ingest once on the Pi (outside the container — uses `tsx`):
+
+```bash
+cd /opt/webnovel
+npm install --omit=optional                                # first time only
+DATABASE_URL="$(grep ^DATABASE_URL .env | cut -d= -f2-)" npm run ingest
+```
+
+For continuous operation, wire ingest into a systemd timer (this part must stay on the host — Portainer doesn't manage systemd):
+
+```bash
+sudo tee /etc/systemd/system/webnovel-ingest.service >/dev/null <<EOF
+[Unit]
+Description=Webnovel content ingest
+After=docker.service
+Wants=docker.service
+
+[Service]
+Type=oneshot
+User=$USER
+WorkingDirectory=/opt/webnovel
+EnvironmentFile=/opt/webnovel/.env
+ExecStart=/usr/bin/npm run ingest
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=webnovel-ingest
+EOF
+
+sudo tee /etc/systemd/system/webnovel-ingest.timer >/dev/null <<'EOF'
+[Unit]
+Description=Webnovel ingest every 6 hours
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=6h
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now webnovel-ingest.timer
+systemctl list-timers webnovel-ingest
+```
+
+Note that the systemd unit reads `/opt/webnovel/.env` via `EnvironmentFile=` so the host-side ingest uses the same DATABASE_URL as the container. Mirror the value you put in the Portainer stack env var into `/opt/webnovel/.env` once, just for ingest — the running container does NOT read this file (it gets env vars from Portainer's stack definition).
+
+### 13.9 Kuma monitor
+
+Add a new monitor in Uptime Kuma (§12):
+- **Type**: HTTP(s)
+- **URL**: `https://webnovel.home.arpa/api/auth/get-session`
+- **Heartbeat interval**: 60 seconds
+- **Accept codes**: `200-499` (unauthenticated GET returns 401 — success here, proves the entire stack from Caddy through Next.js through Better Auth through Postgres is alive)
+
+### 13.10 Day-to-day operations (Portainer)
+
+| Task | How |
+|---|---|
+| View live logs | Stacks → webnovel → container → **Logs** (Portainer tails them) |
+| Restart | Stacks → webnovel → **Stop** then **Start**, or just **Update the stack** |
+| Change env var (e.g. lock sign-ups) | Stacks → webnovel → **Editor** → modify env → **Update the stack** |
+| Force a fresh build after code changes | CLI: `cd /opt/webnovel && docker compose build` → Portainer: Stacks → webnovel → **Update the stack** with **Re-pull image** checked |
+| Inspect the DB | Containers → postgres → Console → `psql -U webnovel -d webnovel` |
+| Re-run migrations manually | Containers → webnovel → Console → `node scripts/migrate.mjs` |
+| Check applied-migration list | Containers → postgres → Console → `psql -U webnovel -d webnovel -c "SELECT * FROM drizzle.__drizzle_migrations ORDER BY id;"` |
+| Re-import a single novel | CLI: `cd /opt/webnovel && npm run ingest -- --reset-novel <slug>` |
+
+A quick FTS sanity check from Portainer's postgres console:
+
+```sql
+SELECT c.id, n.title, c.title, ts_rank_cd(c.search_vector, q) AS rank
+FROM chapters c, novels n, websearch_to_tsquery('english', 'dragon') q
+WHERE n.id = c.novel_id AND c.search_vector @@ q
+ORDER BY rank DESC LIMIT 5;
+```
+
+### 13.11 Backups
+
+Two paths depending on what you already do:
+
+**A. Ride on existing Postgres backups.** Whatever `pg_dumpall`/`pg_dump` cron you have for the `postgres` instance now includes the `webnovel` database automatically — nothing new to set up. This is the recommended path.
+
+**B. Standalone webnovel-only daily dump.** Add to host crontab:
+
+```bash
+# /etc/cron.d/webnovel-backup — runs every night at 03:00
+0 3 * * * dariozheng /usr/bin/docker exec postgres pg_dump -U webnovel -d webnovel -Fc -f /tmp/webnovel.dump && /usr/bin/docker cp postgres:/tmp/webnovel.dump /home/dariozheng/backups/webnovel-$(date +\%Y\%m\%d).dump && find /home/dariozheng/backups/ -name "webnovel-*.dump" -mtime +30 -delete
+```
+
+The `-Fc` custom format restores via `pg_restore` and is smaller than plain SQL.
+
+**Future option:** push dumps to your existing **MinIO** instance for off-Pi retention (`mc cp` from the host crontab into a `backups/webnovel/` bucket). Worth wiring up later — MinIO's already running on `:9100`.
+
+### 13.12 Cloud migration path
+
+Drizzle's Postgres dialect is the same dialect Neon, Supabase, RDS, and Fly Postgres all speak. Documented inline in `webnovel/README.md`; summary:
+
+1. Provision a cloud Postgres (Neon free tier is plenty for this workload)
+2. Update `DATABASE_URL` to the new URL, run `npm run db:migrate` once locally to create schema + FTS
+3. Migrate data: `pg_dump --data-only --no-owner -U webnovel -d webnovel | psql <new-url>`
+4. For app hosting:
+   - **Vercel**: `vc deploy` (Next.js standalone build runs natively)
+   - **Fly.io / Railway / Render**: keep the Dockerfile, push the image, set env vars
+5. Caddy → Pi-hole entries become irrelevant; point your real domain at the cloud host
+
+Zero application code changes. The Dockerfile, schema, queries, auth, and pages all work unchanged.
+
+### 13.13 Allocation register update
+
+After this section, your `172.31.0.0/24` proxy-net allocation is:
+
+| IP | Container |
+|---|---|
+| .10 | caddy |
+| .11 | step-ca |
+| .12 | portainer |
+| .13 | docker-socket-proxy |
+| .14 | pihole |
+| .15 | uptime-kuma |
+| .16 | watchtower |
+| **.17** | **webnovel** ← new |
+| .18+ | free |
+
+The `postgres` container picks up its own auto-assigned IP from proxy-net's DHCP range when you attach it in §13.1 — that's fine; it doesn't need a pinned IP because nothing reaches it by IP, only by name.
+
+---
+
 ## 14. Final Checklist
 
 ### Verify all services
@@ -2888,7 +2225,7 @@ sudo wg show
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
 ```
 
-Containers expected up: `pihole`, `unbound`, `step-ca`, `caddy`, `portainer`, `docker-socket-proxy`, `homeassistant`, `postgres`, `uptime-kuma`, `watchtower`. (No DDNS container — TP-Link router handles it.)
+Containers expected up: `pihole`, `unbound`, `step-ca`, `caddy`, `portainer`, `docker-socket-proxy`, `homeassistant`, `uptime-kuma`, `watchtower`. (No DDNS container — TP-Link router handles it.)
 
 **Verify all stacks are healthy in Portainer:** Portainer → **Stacks** — each stack should show **Active** in green. Any stack showing **Unhealthy** or **Inactive** → click in → **Logs** tab to diagnose.
 
@@ -2898,7 +2235,6 @@ Containers expected up: `pihole`, `unbound`, `step-ca`, `caddy`, `portainer`, `d
 | `step-ca` | `step-ca` | Active |
 | `caddy` | `caddy` | Active |
 | `homeassistant` | `homeassistant` | Active |
-| `postgres` | `postgres` | Active |
 | `kuma` | `uptime-kuma` | Active |
 | `watchtower` | `watchtower` | Active |
 
@@ -3099,14 +2435,12 @@ Now every `git commit` runs gitleaks; a hit blocks the commit until you redact.
 | VPN clients connect but no DNS | Missing `ufw allow in on wg0 to any port 53` | Add the UFW rule, reload |
 | Pi-hole won't start | `systemd-resolved` came back from updates, OR v5→v6 migration confusion | `sudo systemctl disable --now systemd-resolved`; for env vars: v6 uses `FTLCONF_*`, old `WEBPASSWORD`/`DNSMASQ_LISTENING` are silently ignored |
 | Cert errors on `*.home.arpa` | Root CA not installed on that device | See trust-store table |
-| Slow VPN throughput / random disconnects | MTU too high through stacked tunnels | wg0 is already set to 1280 (fix #62, IPv6 minimum per fix #82); run the MTU probe in §15. Only lower wg0 + clients further if the stall persists **and** you accept losing IPv6 on the wg0 interface — 1240 is conservative but makes wg0 v4-only |
+| Slow VPN throughput / random disconnects | MTU too high through stacked tunnels | wg0 is already set to 1280 (fix #62, IPv6 minimum per fix #82); run the MTU probe in §14. Only lower wg0 + clients further if the stall persists **and** you accept losing IPv6 on the wg0 interface — 1240 is conservative but makes wg0 v4-only |
 | Watchtower broke a service | Bad image tag picked up | `cd /opt/<service> && docker compose pull && docker compose up -d` with last-known-good tag |
-| wg0 phone client never connects, `tcpdump -ni eth0 'udp port 51820'` shows inbound length-148 packets but NO outbound length-92 response (Proton tunnels up) | wg0 protocol traffic getting REJECT'd by `PROTON_KS` kill-switch chain in OUTPUT because the explicit `-m mark --mark 51820 -j RETURN` rule is missing | Confirm `FwMark = 51820` is in the `[Interface]` block of `/etc/wireguard/wg0.conf` (fix #117). Verify with `sudo wg show wg0 fwmark` → should print `0xca6c`. Then verify the PROTON_KS chain has the exemption: `sudo iptables -L PROTON_KS -n \| grep '0x51820\|mark match 0xca6c'` should print a `RETURN` line. If missing: `sudo systemctl restart proton-killswitch-init.service` (creates the chain with the exemption). In v5.1.7.20 and earlier, the matching rule was auto-installed by ProtonVPN's wg-quick; in v5.1.7.21+ multi-tunnel it's explicit in `/usr/local/bin/proton-killswitch-init.sh` because `Table = off` in each `protonvpnN.conf` disables wg-quick's auto-routing |
+| wg0 phone client never connects, `tcpdump -ni eth0 'udp port 51820'` shows inbound length-148 packets but NO outbound length-92 response (Proton tunnel up) | wg0 protocol traffic routed via Proton tunnel instead of eth0, or REJECT'd by `PROTON_KS` kill-switch chain in OUTPUT (or both) | Confirm `FwMark = 51820` is in the `[Interface]` block of `/etc/wireguard/wg0.conf` (fix #117). Verify with `sudo wg show wg0 fwmark` → should print `0xca6c`. The same fwmark is reused by ProtonVPN's wg-quick, which auto-installs both the matching `ip rule not fwmark 51820 lookup 51820` (routes via main = eth0) and the `PROTON_KS -m mark --mark 51820 -j RETURN` exemption. Using a different fwmark routes correctly but gets REJECT'd by the kill switch — packet never reaches the wire so tcpdump sees no outbound |
 | wg0 phone client connects but `wg show wg0` keeps showing "latest handshake: (none)", `journalctl -kf` (after `echo 'module wireguard +p' \| sudo tee /sys/kernel/debug/dynamic_debug/control`) shows `Invalid MAC of handshake` from the client's IP | Client's PrivateKey doesn't pubkey-derive to the PublicKey configured for that peer in wg0.conf. Almost always: the client's WG app preserved its old `PrivateKey` when you re-imported a QR code over an existing tunnel of the same name (Android/iOS apps both do this) | **Delete the existing tunnel entirely** in the WG app (not just toggle off) **before** scanning the new QR. Re-run `sudo wg-add-client <name>` on the Pi (§5) to generate a fresh QR. If the user keeps hitting this, "kill it with fire": delete every WG tunnel on the device, force-quit the app, re-open, then scan. Disable dyndbg after with `echo 'module wireguard -p' \| sudo tee /sys/kernel/debug/dynamic_debug/control` |
 | `sudo wg syncconf wg0 <(sudo wg-quick strip wg0)` exits with `fopen: No such file or directory` | `sudo` closes file descriptors > 2 on the new process before exec'ing wg; process substitution's `/dev/fd/63` then doesn't exist inside the sudo'd `wg` process | Use a temp file: `wg-quick strip wg0 > /tmp/wg0.stripped && wg syncconf wg0 /tmp/wg0.stripped && rm /tmp/wg0.stripped`. The `wg-add-client` script uses this pattern internally for the same reason |
 | Caddy log shows `tls: failed to verify certificate: x509: certificate signed by unknown authority` during ACME registration | `acme_ca_root` path wrong, root cert not mounted, or Step-CA root cert hasn't been generated yet | Verify `/opt/step-ca/homelab-root-ca.crt` exists on the host (re-run the §7 root-cert export if not), the Caddy compose mount line is present and the path inside the container matches `acme_ca_root` in the Caddyfile global block |
-| `postgres` container won't start, logs include `configured to store database data in a format which is compatible with "pg_ctlcluster" ... Counter to that, there appears to be PostgreSQL data in: /var/lib/postgresql/data (unused mount/volume)` | Volume is mounted at the PG-17-era path `/var/lib/postgresql/data` but the image is PG 18+ which expects `/var/lib/postgresql` (parent dir) as the mount target and PGDATA at `/var/lib/postgresql/18/docker`. docker-library/postgres#1259. Hits anyone who reused a v5.1.7.21 PG-17 volume after bumping to `postgres:18.x` without changing the mount path | New deployment, no existing data: edit `/opt/postgres/docker-compose.yml`, change the volume line from `postgres-data:/var/lib/postgresql/data` to `postgres-data:/var/lib/postgresql`, `docker compose down -v` (drops the unused volume), `docker compose up -d`. Existing PG 17 data you want to keep: a) `docker exec postgres pg_dumpall -U postgres > /tmp/dumpall.sql` from the still-running PG 17 container (revert the image to `postgres:17-alpine` if you already changed it), b) `docker compose down -v` to drop the old volume, c) bump image to `postgres:18.4-alpine` AND fix the mount path, d) `docker compose up -d`, e) `docker exec -i postgres psql -U postgres < /tmp/dumpall.sql` to restore. There is no in-place fix that preserves the old PGDATA layout under PG 18 — the entrypoint explicitly refuses to run |
-| Web app can't reach Postgres: app logs show `could not translate host name "postgres" to address: Temporary failure in name resolution` (or similar DNS error) | App container is missing the `db-net` network attachment. Docker's embedded DNS only resolves container names within networks the requesting container is attached to — being on `proxy-net` alone (so Caddy can reach the app) is not enough; the app also needs `db-net` to see `postgres` | In the app's `/opt/<app>/docker-compose.yml`, confirm BOTH `proxy-net` AND `db-net` are listed under `networks:` for the service AND in the top-level `networks:` block as `external: true`. Verify after `docker compose up -d` with `docker network inspect db-net` — the app container's name should appear in the `Containers` list. If `network not found`, you skipped the §11 `docker network create db-net` step |
 
 ### Ubuntu vs Debian gotchas
 
@@ -3126,7 +2460,6 @@ Now every `git commit` runs gitleaks; a hit blocks the commit until you redact.
 ├── homeassistant/    # HA Container (+ optional Mosquitto)
 ├── caddy/            # Caddy reverse proxy (Caddyfile, named volumes hold ACME state)
 ├── portainer/        # no compose file — Portainer + docker-socket-proxy bootstrapped via docker run (see §3)
-├── postgres/         # PostgreSQL 18 (see §11). dumps/ subdir is gitignored — manual pg_dumpall target.
 ├── step-ca/          # Step-CA
 ├── kuma/             # Uptime Kuma
 └── watchtower/       # Watchtower (talks to docker-socket-proxy, not docker.sock directly)
@@ -3147,13 +2480,10 @@ Now every `git commit` runs gitleaks; a hit blocks the commit until you redact.
 
 /usr/local/bin/
 ├── homelab-health-push.sh
-├── docker-user-rules.sh
-├── postgres-dump.sh  # optional — manual Postgres backup, see §11 backups subsection
-└── psql              # optional — convenience wrapper for `docker exec -it postgres psql`, see §11
+└── docker-user-rules.sh
 
 /etc/cron.d/
-├── homelab-health    # SoC + NVMe push to Kuma every minute
-└── postgres-dump     # optional — daily pg_dumpall, see §11 backups subsection
+└── homelab-health    # SoC + NVMe push to Kuma every minute
 
 /etc/systemd/system/
 │   └── notify.conf
@@ -3162,7 +2492,7 @@ Now every `git commit` runs gitleaks; a hit blocks the commit until you redact.
 
 ### What to put in git
 
-`/opt/*/docker-compose.yml`, `/etc/netplan/50-cloud-init.yaml`, `/etc/sysctl.d/99-homelab.conf`, `/etc/ssh/sshd_config.d/99-hardening.conf`, `/etc/chrony/chrony.conf`, `/etc/apt/apt.conf.d/50unattended-upgrades`, `/etc/wireguard/protonvpn-up.sh`, `/etc/wireguard/protonvpn-down.sh`, `/usr/local/bin/homelab-health-push.sh`, `/usr/local/bin/docker-user-rules.sh`, `/etc/systemd/system/docker-user-rules.service`, `/etc/cron.d/homelab-health`, the rest of the systemd unit files, and a sanitised version of `wg0.conf` (keys redacted). If you set up the optional §11 Postgres backup: add `/usr/local/bin/postgres-dump.sh` and `/etc/cron.d/postgres-dump`. The `/opt/postgres/.gitignore` (just the one line `dumps/`) goes in too — and gets committed *before* you ever write a dump, otherwise the first run will land a multi-GB blob in your repo history. Commit the lot to a private GitHub repo with `gitleaks` as a pre-commit hook.
+`/opt/*/docker-compose.yml`, `/etc/netplan/50-cloud-init.yaml`, `/etc/sysctl.d/99-homelab.conf`, `/etc/ssh/sshd_config.d/99-hardening.conf`, `/etc/chrony/chrony.conf`, `/etc/apt/apt.conf.d/50unattended-upgrades`, `/etc/wireguard/protonvpn-up.sh`, `/etc/wireguard/protonvpn-down.sh`, `/usr/local/bin/homelab-health-push.sh`, `/usr/local/bin/docker-user-rules.sh`, `/etc/systemd/system/docker-user-rules.service`, `/etc/cron.d/homelab-health`, the rest of the systemd unit files, and a sanitised version of `wg0.conf` (keys redacted). Commit the lot to a private GitHub repo with `gitleaks` as a pre-commit hook.
 
 Keep the on-disk compose files in sync with what you paste into Portainer. The easiest habit: edit the file on disk first, then paste the updated content into the Portainer stack editor. That way git always has the source of truth.
 

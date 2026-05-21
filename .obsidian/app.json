@@ -1,14 +1,1 @@
-{
-  "attachmentFolderPath": "attachments",
-  "newFileLocation": "folder",
-  "newFileFolderPath": "0 - Notes",
-  "promptDelete": false,
-  "userIgnoreFilters": [
-    "Templates/",
-    "attachments/"
-  ],
-  "uriCallbacks": false,
-  "showLineNumber": true,
-  "alwaysUpdateLinks": true,
-  "propertiesInDocument": "visible"
-}
+{}
