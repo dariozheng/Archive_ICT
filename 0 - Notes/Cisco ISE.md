@@ -2691,6 +2691,23 @@ interface Vlan805
  ip address <IP-ADDRESS> <SUBNET-MASK>
  no shutdown
 ```
+Creates the SVI used to intercept and redirect unauthenticated guest traffic toward the ISE Guest Portal.
+
+#### ACL for Guest Redirect
+permits only DNS, DHCP, and web traffic (HTTP/HTTPS), while blocking ISE servers directly (so ISE can intercept and redirect)
+
+```
+ip access-list extended ACL_GUEST_REDIRECT
+ 10 deny udp any any eq domain
+ 20 deny udp any any eq bootps
+ 30 deny ip any host 10.140.2.31
+ 40 deny ip any host 10.140.2.32
+ 50 permit tcp any any eq www
+ 60 permit tcp any any eq 443
+```
+
+```
+####
 
 ```bash
 parameter-map type webauth global
@@ -2699,8 +2716,45 @@ parameter-map type webauth global
  intercept-https-enable
 ```
 
-Creates the SVI used to intercept and redirect unauthenticated guest traffic toward the ISE Guest Portal.
+**WebAuth Parameter Map** — defines the virtual IP used to intercept and redirect guest HTTP/HTTPS traffic to the CWA portal
 
+```
+parameter-map type webauth global
+ type webauth
+ virtual-ip ipv4 192.0.2.1
+ intercept-https-enable
+```
+
+#### Policy Map — Guest-related Events
+- ISE authenticates the device via MAB and returns the `Guest_Redirect` service template + `ACL_GUEST_REDIRECT`
+- The ACL blocks everything except HTTP/HTTPS
+- The `parameter-map webauth` intercepts that web traffic and redirects to the ISE CWA portal (using virtual IP `192.0.2.1`)
+- VLAN 805 is the SVI used to intercept and proxy the guest redirect traffic
+- If AAA goes down while a guest session is active, the policy clears the session and applies `Critical_Access` instead
+
+When AAA is down and a guest session is active, clear the session and push Critical Access:
+
+```
+event authentication-failure match-first
+  10 class AAA-DOWN_GUEST_USER do-until-failure
+   10 clear-session
+   20 activate service-template Critical_Access
+   30 authorize
+   40 pause reauthentication
+```
+Service Template for Guest Redirect
+
+```
+service-template Guest_Redirect
+```
+Class Maps for Guest AAA-Down Handling
+
+```
+class-map type control subscriber match-all AAA-DOWN_GUEST_USER
+ match result-type aaa-timeout
+ match activated-service-template Guest_Redirect
+```
+#### 
 ### DNA - PBA NAC
 
 ```bash
