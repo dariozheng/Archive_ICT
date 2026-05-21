@@ -2685,12 +2685,14 @@ vlan 805
 
 #### Guest Intercept SVI
 
-```
+```bash
 interface Vlan805
  description GUEST-INTERCEPT-SVI
  ip address <IP-ADDRESS> <SUBNET-MASK>
  no shutdown
+```
 
+```bash
 parameter-map type webauth global
  type webauth
  virtual-ip ipv4 192.0.2.1
