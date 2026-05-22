@@ -2824,8 +2824,7 @@ From here the [[#WebAuth Parameter Map — Redirect Engine|webauth engine]] take
 > [!note] Exact source-IP behavior 
 > The platform-specific details of _which_ IP appears as the source of the SYN-ACK can vary (some implementations transparently spoof the original destination's address). What matters conceptually is that the switch — not the real destination — handles the handshake, made possible by the SVI's L3 presence on the guest subnet.
 
- What Breaks Without It
-
+If the SVI is not present:
 ```
 No SVI on VLAN 805
         ↓
@@ -2838,15 +2837,13 @@ Virtual IP 192.0.2.1 has no path to respond from
 Guest traffic passes through unintercepted — redirect never fires
 ```
 
-##### SVI IP vs. Virtual IP
+---
 
 |                 | SVI IP                                                     | Virtual IP (`192.0.2.1`)                                      |
 | --------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
 | **What it is**  | Real IP assigned to the switch on VLAN 805                 | Spoofed IP used in the HTTP 302 response                      |
 | **Who sees it** | Used internally for L3 processing                          | Seen by the guest's browser in the redirect                   |
 | **Purpose**     | Lets the switch terminate TCP sessions on the guest subnet | Triggers the browser to follow the redirect to the ISE portal |
-
----
 
 #### Device Tracking Policy — IP-to-MAC Binding
 
@@ -2889,7 +2886,6 @@ HTTP/HTTPS interception fires correctly → CWA flow proceeds
 | `security-level glean`   | Learns bindings from observed traffic without enforcement | Permissive — appropriate for guest ports during onboarding. Use `guard` for stricter environments where traffic violating the binding should be dropped |
 | `limit address-count 10` | Caps IPs allowed per port                                 | Prevents a single device from claiming many bindings (IP spoofing or rogue gateway). A small number is appropriate for host-facing ports                |
 
-
 Attach at interface level
 ```
 interface range GigabitEthernet1/0/1-24 
@@ -2928,13 +2924,88 @@ flowchart TD
 
 ---
 
-
-#### Failure Behavior
+#### Service Templates and Control Policy for Guests
 
 If AAA connectivity to ISE is lost while a guest session is active:
 - The active guest session is cleared.
 - The switch applies the `Critical_Access` policy to the port instead.
 - This prevents uncontrolled access during an ISE outage while keeping the port functional under a fallback policy.
+
+**Service Template for Guest Redirect** (applied by ISE policy)
+
+```
+service-template Guest_Redirect
+```
+
+A **service template** is a named bundle of session attributes — ACLs, redirect URLs, VLANs, timers — that can be activated on a subscriber session.
+
+The local declaration above is intentionally bare. The actual content (redirect URL, redirect ACL name) is pushed by ISE in the MAB Access-Accept response and applied by activating this template on the session. The local name just needs to exist so ISE-pushed `subscriber:service-name=Guest_Redirect` attributes resolve to it.
+
+> [!tip] Why have a local declaration at all? Two reasons:
+> 
+> 1. **Default attributes** — anything defined locally inside the template acts as a fallback if ISE doesn't push the equivalent attribute.
+> 2. **Matching anchor** — other policy logic can match against _which template is active_ on a session. That's exactly how the AAA-failure detection below works.
+
+<strong>Detecting "Guest Mid-Flow When ISE Dies"</strong>
+
+```
+class-map type control subscriber match-all AAA-DOWN_GUEST_USER
+ match result-type aaa-timeout
+ match activated-service-template Guest_Redirect
+```
+
+A `class-map type control subscriber` is an IBNS 2.0 control-plane matching rule. It evaluates **session state**, not packet contents — that's what makes it different from a regular `class-map` (which matches data-plane traffic).
+
+| Element                                           | Meaning                                                                                  |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `type control subscriber`                         | Operates on subscriber sessions (authenticated users on access ports)                    |
+| `match-all`                                       | All conditions below must be true (logical AND)                                          |
+| `match result-type aaa-timeout`                   | Fires when AAA / RADIUS has timed out — the switch can't reach any configured ISE server |
+| `match activated-service-template Guest_Redirect` | Only sessions currently running the `Guest_Redirect` template qualify                    |
+
+In plain English: **"a guest who was mid-redirect when ISE became unreachable."** Authenticated employee sessions, sessions already in critical state, sessions that never reached the redirect stage — none of these match. Only guests caught in flight.
+
+> [!important] Precision matters 
+> The action triggered by this class-map is destructive — it clears the session. Narrowing the match to _only_ in-flight guests is what prevents collateral damage to other session types during an ISE outage.
+
+<strong>The Failure Action</strong>
+
+```
+10 class AAA-DOWN_GUEST_USER do-until-failure
+ 10 clear-session
+ 20 activate service-template Critical_Access
+ 30 authorize
+ 40 pause reauthentication
+```
+This is a fragment of a `policy-map type control subscriber`. When the class-map above matches a session, the inner actions run in sequence.
+
+|Field|Meaning|
+|---|---|
+|`10` (outer)|Class priority within the parent policy-map — other classes may handle other conditions; this one is evaluated at priority 10|
+|`do-until-failure`|Execute the inner actions in order, stop at the first one that fails|
+
+Inner actions:
+
+| #    | Action                                      | Effect                                                                                                                            |
+| ---- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `10` | `clear-session`                             | Tear down the in-flight guest session. The redirect can't complete without ISE, so the half-state is removed cleanly.             |
+| `20` | `activate service-template Critical_Access` | Apply the local fallback policy in its place — typically a limited-access ACL or quarantine VLAN defined elsewhere on the switch. |
+| `30` | `authorize`                                 | Authorize the session under the new template so traffic can flow under the degraded policy.                                       |
+| `40` | `pause reauthentication`                    | Suppress periodic reauth attempts. With AAA unreachable, every reauth would fail and just churn the session.                      |
+
+### Net Behavior on AAA Failure
+
+When ISE goes down with a guest mid-redirect, the policy framework:
+
+1. **Detects** the condition precisely (`aaa-timeout` AND `Guest_Redirect` active).
+2. **Clears** the broken session.
+3. **Demotes** the port to `Critical_Access` — degraded but functional.
+4. **Pauses** reauth attempts until AAA recovers.
+
+This prevents two failure modes at once: guests gaining uncontrolled access during the outage, and the port flapping endlessly against a dead AAA server.
+
+> [!note] Recovery 
+> A counterpart class typically matches on `aaa-available` (or similar) and reverses the process — clearing the critical session so fresh MAB can run and ISE can re-push `Guest_Redirect` once it's back online. 
 
 #### 
 ### DNA - PBA NAC
