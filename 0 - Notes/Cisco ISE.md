@@ -1645,7 +1645,7 @@ NAD types include the following:
 - Load balancer
 - Software application that uses ISE for AAA
 ## Initial Configuration
-All NAD should have at least these configuration set for it be configurable with Cisco DNA or to be reachable in SSH using RADIUS credentials.
+All Switches NAD should have at least these configuration set for it be configurable with Cisco DNA or to be reachable in SSH using RADIUS credentials.
 
 ```bash
 conf t
@@ -2685,7 +2685,20 @@ vlan 805
 VLAN 805 is the Layer 2 segment dedicated to unauthenticated guest traffic. All guest-connected switch ports are placed into this VLAN before authentication completes. It isolates guest traffic from production at L2 and forms the boundary within which the entire CWA redirect flow takes place.
 
 ---
+#### IP HTTP/HTTPS related commands
 
+| Command                                                   | Purpose                                                                                        |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `ip http server`                                          | Enables the HTTP server on the switch (required for web auth to function)                      |
+| `ip http secure-server`                                   | Enables HTTPS server — needed for the guest redirect portal (`intercept-https-enable`)         |
+| `ip http secure-active-session-modules none`              | Disables all HTTPS session modules (prevents unintended web UI access via HTTPS)               |
+| `ip http active-session-modules none`                     | Same for HTTP — locks down the web UI                                                          |
+| `ip http authentication aaa login-authentication HTTPSRV` | Any admin HTTP/HTTPS login goes through AAA (ISE/RADIUS) using the `HTTPSRV` method list       |
+| `ip http client source-interface Vlan800`                 | When the switch itself makes outbound HTTP requests, it uses the management VLAN 800 as source |
+
+**Key point:** Even though the HTTP/HTTPS server is enabled (required for the guest web redirect to work), the `active-session-modules none` lines lock down the management web UI so it can't be browsed directly — keeping it secure while still allowing the guest portal interception to function.
+
+---
 #### ACL_GUEST_REDIRECT 
 
 ```cisco
