@@ -1645,7 +1645,7 @@ NAD types include the following:
 - Load balancer
 - Software application that uses ISE for AAA
 ## Initial Configuration
-All NAD should have at least these configuration set for it be configurable with Cisco DNA or to be reachable in SSH.
+All NAD should have at least these configuration set for it be configurable with Cisco DNA or to be reachable in SSH using RADIUS credentials.
 
 ```bash
 conf t
@@ -2120,9 +2120,7 @@ wr
 ```
 
 ## NAD Configuration
-
----
-
+The commands for Cisco ISE. 
 ### AAA Framework
 
 #### `aaa new-model`
