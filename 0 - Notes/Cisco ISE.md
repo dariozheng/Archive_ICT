@@ -2742,19 +2742,24 @@ Sets the authentication mode. In CWA this tells the switch to act as a proxy int
 
 ##### `virtual-ip ipv4 192.0.2.1`
 
-Sets a spoofed, non-routable IP address. When unauthenticated users try to browse the web, the Cisco device uses this IP to safely intercept their traffic and redirect them to the Cisco ISE portal page. The switch uses the virtual ip to send a HTTP 302 with the location of [[#cisco-av-pair|redirection url]] that is given the ISE.
+Sets a spoofed, non-routable IP address. When unauthenticated users try to browse the web, the Cisco device uses this IP to safely intercept their traffic and redirect them to the Cisco ISE portal page. The switch uses the virtual IP as the source IP address to send a HTTP 302 with the location of [[#cisco-av-pair|redirection url]] that is given the ISE.
 
 ```
-Guest sends HTTP GET to google.com
+Guest's TCP session is now open to the switch (intercepted at the SVI)
         ↓
-Switch intercepts the TCP SYN (matched by redirect ACL)
+Guest sends:  GET / HTTP/1.1
+              Host: google.com
         ↓
-Switch terminates the TCP session locally (via the Vlan805 SVI)
-        ↓
-Switch replies as 192.0.2.1 with an HTTP 302 containing redirect url
+Switch responds as 192.0.2.1 with:
+              HTTP/1.1 302 Found
+              Location: https://<ISE-PSN>/portal/...
         ↓
 Browser follows the 302 → ISE CWA portal
+        ↓
+TCP session to the switch closes
 ```
+
+Without the virtual IP, the switch would have no consistent identity to send the redirect from. The TCP termination at the SVI gets the switch into the conversation; the virtual IP is what it speaks _as_ once it's there.
 
 > [!tip] Why this specific IP?
 > `192.0.2.1` comes from the **TEST-NET-1** range defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737). The `192.0.2.0/24` block is reserved and guaranteed never to be a routable destination on a real network — there is zero risk of conflict with an actual host. Using a real IP here would risk redirecting traffic to an unintended destination.
@@ -2790,15 +2795,38 @@ interface Vlan805
  no shutdown
 ```
 
-##### What It Does
-
 The SVI gives the switch a **Layer 3 presence on the guest subnet**, which is what makes TCP interception physically possible.
 
-When a guest sends an HTTP request, the switch needs to terminate that TCP connection — it must act as an IP endpoint and send back a response. To do that, it needs an IP address reachable from the guest subnet. The Vlan805 SVI provides exactly that.
+When a guest sends an HTTP request, the switch needs to terminate that TCP connection — it must act as an IP endpoint and send back a response. 
 
-Without it, the switch is only a Layer 2 forwarder on that VLAN. It can move frames but cannot participate in IP conversations, and therefore cannot intercept TCP sessions or issue HTTP redirects.
+To do that, it needs an IP address reachable from the guest subnet. 
 
-##### What Breaks Without It
+The Vlan805 SVI provides exactly that. Without it, the switch is only a Layer 2 forwarder on that VLAN — it can move frames but cannot participate in IP conversations, and therefore cannot intercept TCP sessions.
+
+Concretely, without CWA, a normal TCP handshake goes straight to the destination:
+
+```
+Guest SYN  ───────────────────────────→  google.com
+Guest      ←─────────────────────────── SYN-ACK (google.com)
+Guest ACK  ───────────────────────────→  google.com
+TCP session established with google.com
+```
+
+With CWA, the switch intercepts the SYN and completes the handshake itself, using the SVI as its L3 endpoint — the guest ends up with a TCP session open to the **switch**, not to Google:
+
+```
+Guest SYN  ───────────────────────────→  google.com (intended)
+Guest      ←─────────────────────────── SYN-ACK (handled by the switch)
+Guest ACK  ───────────────────────────→  switch
+TCP session established with the SWITCH, not google.com
+```
+
+From here the [[#WebAuth Parameter Map — Redirect Engine|webauth engine]] takes over and issues the HTTP 302 redirect to the ISE portal as `192.0.2.1`.
+
+> [!note] Exact source-IP behavior 
+> The platform-specific details of _which_ IP appears as the source of the SYN-ACK can vary (some implementations transparently spoof the original destination's address). What matters conceptually is that the switch — not the real destination — handles the handshake, made possible by the SVI's L3 presence on the guest subnet.
+
+ What Breaks Without It
 
 ```
 No SVI on VLAN 805
@@ -2812,35 +2840,6 @@ Virtual IP 192.0.2.1 has no path to respond from
 Guest traffic passes through unintercepted — redirect never fires
 ```
 
-##### What "Terminating the TCP Connection" Means
-
-Without CWA, a normal TCP handshake goes straight to the destination:
-
-```
-Guest SYN  ───────────────────────────→  google.com
-Guest      ←─────────────────────────── SYN-ACK (google.com)
-Guest ACK  ───────────────────────────→  google.com
-TCP session established with google.com
-```
-
-With CWA, the switch intercepts the SYN and completes the handshake locally — the guest ends up with a TCP session open to the **switch**, not to Google:
-
-```
-Guest SYN  ───────────────────────────→  google.com (intended)
-Guest      ←─────────────────────────── SYN-ACK (handled by the switch)
-Guest ACK  ───────────────────────────→  switch
-TCP session established with the SWITCH, not google.com
-        ↓
-Guest sends:  GET / HTTP/1.1  Host: google.com
-        ↓
-Switch responds as 192.0.2.1:  HTTP 302 → ISE portal URL
-        ↓
-TCP session closed
-```
-
-> [!note] Exact source-IP behavior
-> The platform-specific details of *which* IP appears as the source of the SYN-ACK can vary (some implementations transparently spoof the original destination's address). What matters conceptually is that the switch — not the real destination — handles the handshake, and `192.0.2.1` is what appears in the HTTP 302 response that triggers the browser redirect.
-
 ##### SVI IP vs. Virtual IP
 
 |  | SVI IP | Virtual IP (`192.0.2.1`) |
@@ -2849,11 +2848,6 @@ TCP session closed
 | **Who sees it** | Used internally for L3 processing | Seen by the guest's browser in the redirect |
 | **Purpose** | Lets the switch terminate TCP sessions on the guest subnet | Triggers the browser to follow the redirect to the ISE portal |
 
-The SVI is the **mechanism**. The virtual IP is the **disguise**.
-
----
-
-#### How It All Fits Together
 
 ```mermaid
 flowchart TD
@@ -2877,7 +2871,6 @@ flowchart TD
 #### Failure Behavior
 
 If AAA connectivity to ISE is lost while a guest session is active:
-
 - The active guest session is cleared.
 - The switch applies the `Critical_Access` policy to the port instead.
 - This prevents uncontrolled access during an ISE outage while keeping the port functional under a fallback policy.
