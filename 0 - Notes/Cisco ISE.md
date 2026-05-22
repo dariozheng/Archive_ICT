@@ -2842,12 +2842,74 @@ Guest traffic passes through unintercepted — redirect never fires
 
 ##### SVI IP vs. Virtual IP
 
-|  | SVI IP | Virtual IP (`192.0.2.1`) |
-|---|---|---|
-| **What it is** | Real IP assigned to the switch on VLAN 805 | Spoofed IP used in the HTTP 302 response |
-| **Who sees it** | Used internally for L3 processing | Seen by the guest's browser in the redirect |
-| **Purpose** | Lets the switch terminate TCP sessions on the guest subnet | Triggers the browser to follow the redirect to the ISE portal |
+|                 | SVI IP                                                     | Virtual IP (`192.0.2.1`)                                      |
+| --------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
+| **What it is**  | Real IP assigned to the switch on VLAN 805                 | Spoofed IP used in the HTTP 302 response                      |
+| **Who sees it** | Used internally for L3 processing                          | Seen by the guest's browser in the redirect                   |
+| **Purpose**     | Lets the switch terminate TCP sessions on the guest subnet | Triggers the browser to follow the redirect to the ISE portal |
 
+---
+
+#### Device Tracking Policy — IP-to-MAC Binding
+
+```
+device-tracking tracking
+
+device-tracking policy IPDT_POLICY
+ security-level glean 
+ limit address-count 10 
+ tracking enable 
+
+vlan configuration 805
+ device-tracking attach-policy IPDT_POLICY
+```
+
+Device tracking maintains a real-time table of **IP → MAC → port** bindings. It's the SISF-based (Switch Integrated Security Features) successor to the legacy `ip device tracking` global commands, and on modern IOS-XE it's the only supported model.
+
+MAB authenticates a session by **MAC address**, but the redirect ACL and downstream session policy operate on **IP addresses**. Device tracking is what bridges the two — it observes the guest's DHCP exchange (and ARP/ND activity), captures the binding, and lets the IP-to-session association form correctly on the port.
+
+> [!important] 
+> Without device tracking, CWA breaks silently The redirect ACL is IP-based. ISE pushes the redirect against a session keyed to the MAB-authenticated MAC. Device tracking is what links those two so the switch knows _which IP_ the redirect ACL should target. CoA also relies on this binding — after the guest authenticates, the policy change has nothing to apply against if no IP is bound to the session.
+
+```
+MAB completes  →  session known by MAC, no IP yet
+        ↓
+Guest sends DHCP DISCOVER / OFFER / REQUEST / ACK
+        ↓
+Device tracking observes the exchange (DHCP snooping integration)
+        ↓
+IP-to-MAC binding is recorded against the port
+        ↓
+Switch can now apply ACL_GUEST_REDIRECT to traffic FROM that IP
+        ↓
+HTTP/HTTPS interception fires correctly → CWA flow proceeds
+```
+
+| Option                   | What it does                                              | Notes                                                                                                                                                   |
+| ------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tracking enable`        | Switch actively probes (ARP / ND) to verify bindings      | Keeps the table fresh; without it, only passive learning occurs and stale entries linger                                                                |
+| `security-level glean`   | Learns bindings from observed traffic without enforcement | Permissive — appropriate for guest ports during onboarding. Use `guard` for stricter environments where traffic violating the binding should be dropped |
+| `limit address-count 10` | Caps IPs allowed per port                                 | Prevents a single device from claiming many bindings (IP spoofing or rogue gateway). A small number is appropriate for host-facing ports                |
+
+
+Attach at interface level
+```
+interface range GigabitEthernet1/0/1-24 
+ device-tracking attach-policy IPDT_POLICY
+```
+
+Verify with:
+```
+show device-tracking database 
+show device-tracking policy IPDT_POLICY
+```
+
+The first command lists every IP-to-MAC binding currently held; the second shows where the policy is attached and which options are active. If a guest is stuck and not getting redirected, an empty or stale binding here is one of the first things to check.
+
+> [!warning] 
+> Don't mix legacy and SISF The legacy `ip device tracking` global commands are deprecated on IOS-XE. Mixing the legacy syntax with the SISF-based `device-tracking policy` model causes unpredictable binding behavior — duplicate entries, stale state, or bindings that silently fail to form. Use the SISF model exclusively.
+
+---
 
 ```mermaid
 flowchart TD
@@ -2867,6 +2929,7 @@ flowchart TD
 ```
 
 ---
+
 
 #### Failure Behavior
 
