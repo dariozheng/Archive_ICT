@@ -2677,7 +2677,7 @@ A two-part instruction that controls when **interim accounting updates** are sen
 
 #### VLAN 805 — Guest Segment
 
-```cisco
+```bash
 vlan 805
  name LAN-GUEST-ACCESS
 ```
@@ -2925,11 +2925,17 @@ flowchart TD
 ---
 
 #### Service Templates and Control Policy for Guests
+When ISE goes down with a guest mid-redirect, the policy framework:
 
-If AAA connectivity to ISE is lost while a guest session is active:
-- The active guest session is cleared.
-- The switch applies the `Critical_Access` policy to the port instead.
-- This prevents uncontrolled access during an ISE outage while keeping the port functional under a fallback policy.
+1. **Detects** the condition precisely (`aaa-timeout` AND `Guest_Redirect` active).
+2. **Clears** the broken session.
+3. **Demotes** the port to `Critical_Access` — degraded but functional.
+4. **Pauses** reauth attempts until AAA recovers.
+
+This prevents two failure modes at once: guests gaining uncontrolled access during the outage, and the port flapping endlessly against a dead AAA server.
+
+> [!note] Recovery 
+> A counterpart class typically matches on `aaa-available` (or similar) and reverses the process — clearing the critical session so fresh MAB can run and ISE can re-push `Guest_Redirect` once it's back online. 
 
 **Service Template for Guest Redirect** (applied by ISE policy)
 
@@ -2993,19 +2999,6 @@ Inner actions:
 | `30` | `authorize`                                 | Authorize the session under the new template so traffic can flow under the degraded policy.                                       |
 | `40` | `pause reauthentication`                    | Suppress periodic reauth attempts. With AAA unreachable, every reauth would fail and just churn the session.                      |
 
-### Net Behavior on AAA Failure
-
-When ISE goes down with a guest mid-redirect, the policy framework:
-
-1. **Detects** the condition precisely (`aaa-timeout` AND `Guest_Redirect` active).
-2. **Clears** the broken session.
-3. **Demotes** the port to `Critical_Access` — degraded but functional.
-4. **Pauses** reauth attempts until AAA recovers.
-
-This prevents two failure modes at once: guests gaining uncontrolled access during the outage, and the port flapping endlessly against a dead AAA server.
-
-> [!note] Recovery 
-> A counterpart class typically matches on `aaa-available` (or similar) and reverses the process — clearing the critical session so fresh MAB can run and ISE can re-push `Guest_Redirect` once it's back online. 
 
 #### 
 ### DNA - PBA NAC
