@@ -2120,7 +2120,7 @@ wr
 ```
 
 ## NAD Configuration
-The commands for Cisco ISE. 
+
 ### AAA Framework
 
 #### `aaa new-model`
