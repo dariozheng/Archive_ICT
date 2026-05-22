@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "SiWireguard",
-      "SiCisco",
-      "LiLock",
-      "SiPaloaltonetworks",
-      "FasNetworkWired"
+      "PeDynu",
+      "SiWindows",
+      "FasNetworkWired",
+      "FasUserSecret",
+      "SiCisco"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -201,5 +201,8 @@
   "0 - Notes/WireGuard.md": {
     "iconName": "SiWireguard",
     "iconColor": "#87151F"
+  },
+  "0 - Notes/Dynu DDNS.md": {
+    "iconName": "PeDynu"
   }
 }

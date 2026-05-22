@@ -1,0 +1,43 @@
+<svg viewBox="15 20 835 240" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="6" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFA845"/>
+      <stop offset="100%" stop-color="#F18A1D"/>
+    </linearGradient>
+
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0A2C9A"/>
+      <stop offset="100%" stop-color="#3B9DF6"/>
+    </linearGradient>
+
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#199D25"/>
+      <stop offset="100%" stop-color="#14F51C"/>
+    </linearGradient>
+
+    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C5C910"/>
+      <stop offset="100%" stop-color="#FFFF10"/>
+    </linearGradient>
+
+    <radialGradient id="redGrad" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#FF7070"/>
+      <stop offset="45%" stop-color="#D60000"/>
+      <stop offset="100%" stop-color="#730000"/>
+    </radialGradient>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <text x="30" y="195" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="190" fill="url(#textGrad)" letter-spacing="-3">Dynu</text>
+
+    <path d="M 572 88 A 180 180 0 0 1 828 88" stroke="url(#blueGrad)" stroke-width="28" stroke-linecap="round" fill="none"/>
+    <path d="M 612 127 A 125 125 0 0 1 788 127" stroke="url(#greenGrad)" stroke-width="28" stroke-linecap="round" fill="none"/>
+    <path d="M 651 166 A 70 70 0 0 1 749 166" stroke="url(#yellowGrad)" stroke-width="28" stroke-linecap="round" fill="none"/>
+
+    <circle cx="700" cy="215" r="26" fill="url(#redGrad)"/>
+  </g>
+</svg>

@@ -2672,88 +2672,216 @@ A two-part instruction that controls when **interim accounting updates** are sen
 
 ---
 
-### Guest Configuration
+### Centralized Web Authentication (CWA) Guest Configuration
 
-_Guest Redirect using Cisco Centralized Web Authentication (CWA)_
+> [!info] What this covers
+> The full guest redirect flow using Cisco **Centralized Web Authentication (CWA)**. In this model the switch does **not** host the login page — it intercepts the guest's web traffic and hands the session off to the ISE Guest Portal.
 
-#### VLAN for Guest Access
+#### VLAN 805 — Guest Segment
 
-```bash
+```cisco
 vlan 805
  name LAN-GUEST-ACCESS
 ```
 
-#### Guest Intercept SVI
+VLAN 805 is the Layer 2 segment dedicated to unauthenticated guest traffic. All guest-connected switch ports are placed into this VLAN before authentication completes. It isolates guest traffic from production at L2 and forms the boundary within which the entire CWA redirect flow takes place.
 
-```bash
+---
+
+#### ACL_GUEST_REDIRECT 
+
+```cisco
+ip access-list extended ACL_GUEST_REDIRECT
+ 10 deny   udp any any eq domain
+ 20 deny   udp any any eq bootps
+ 30 deny   ip  any host 10.140.2.31
+ 40 deny   ip  any host 10.140.2.32
+ 50 permit tcp any any eq www
+ 60 permit tcp any any eq 443
+```
+
+> [!important] 
+> A redirect ACL is **not** a packet filter. Its verbs are inverted relative to a normal ACL:
+>  `permit` → **intercept** this traffic and redirect it to the virtual IP
+>  `deny` → **let this pass freely**, no redirect
+
+So `deny udp any any eq domain` doesn't block DNS — it *allows* DNS through without interception.
+
+| Line | Rule                                | Reason                                                                                                                                                                                          |
+| ---- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `10` | Don't redirect DNS                  | DNS must flow freely so the guest can resolve hostnames. Without it, the browser never resolves an address to connect to and the redirect flow never starts.                                    |
+| `20` | Don't redirect DHCP                 | DHCP must flow freely so the guest gets an IP. The entire redirect flow depends on the guest having a valid IP first.                                                                           |
+| `30` | Don't redirect traffic to ISE PSN 1 | After the switch issues an HTTP 302, the browser follows the redirect to the ISE portal URL. That follow-up traffic must **not** be intercepted again — exempting ISE prevents a redirect loop. |
+| `40` | Don't redirect traffic to ISE PSN 2 | Same reason as line 30, for the second PSN. Both nodes must be exempt so the portal reaches ISE directly regardless of which PSN handles the session.                                           |
+| `50` | Redirect HTTP                       | HTTP matches here and is intercepted by `parameter-map webauth`. The switch hijacks the connection and points the guest at the CWA portal via virtual IP `192.0.2.1`.                           |
+| `60` | Redirect HTTPS                      | Same interception as HTTP. Requires `intercept-https-enable` in the parameter map so guests starting on HTTPS URLs are still caught.                                                            |
+
+This ACL while is present locally, pushed by the DNA template, is **not** statically applied to the switch port. 
+ISE pushes it dynamically per [[#Redirect_Guest_Wired]] authorization profile. 
+The Access-Accept response contains both the ACL name and a redirect URL, and the switch applies both to the port for the duration of the session.
+
+---
+
+#### WebAuth Parameter Map — Redirect Engine
+
+```cisco
+parameter-map type webauth global
+ type webauth
+ virtual-ip ipv4 192.0.2.1
+ intercept-https-enable
+```
+
+The redirect ACL identifies **which** traffic to catch. The parameter map decides **what to do with it**.
+##### `parameter-map type webauth global`
+The parameter map is configured **globally** on the switch. 
+
+It applies to any port that receives a redirect instruction from ISE, so it only needs to be defined once regardless of how many guest ports are active.
+##### `type webauth`
+
+Sets the authentication mode. In CWA this tells the switch to act as a proxy interceptor for a captive portal rather than host its own login page — the switch catches the traffic and hands it off to the ISE portal URL.
+
+##### `virtual-ip ipv4 192.0.2.1`
+
+Sets a spoofed, non-routable IP address. When unauthenticated users try to browse the web, the Cisco device uses this IP to safely intercept their traffic and redirect them to the Cisco ISE portal page. The switch uses the virtual ip to send a HTTP 302 with the location of [[#cisco-av-pair|redirection url]] that is given the ISE.
+
+```
+Guest sends HTTP GET to google.com
+        ↓
+Switch intercepts the TCP SYN (matched by redirect ACL)
+        ↓
+Switch terminates the TCP session locally (via the Vlan805 SVI)
+        ↓
+Switch replies as 192.0.2.1 with an HTTP 302 containing redirect url
+        ↓
+Browser follows the 302 → ISE CWA portal
+```
+
+> [!tip] Why this specific IP?
+> `192.0.2.1` comes from the **TEST-NET-1** range defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737). The `192.0.2.0/24` block is reserved and guaranteed never to be a routable destination on a real network — there is zero risk of conflict with an actual host. Using a real IP here would risk redirecting traffic to an unintended destination.
+
+##### `intercept-https-enable`
+
+Without this, only HTTP (port 80) is intercepted. Since modern browsers default to HTTPS, this is effectively mandatory. When enabled:
+
+```
+Guest opens https://google.com
+        ↓
+Switch receives the TCP SYN on port 443
+        ↓
+Switch intercepts before TLS negotiation completes
+        ↓
+Switch injects a captive-portal redirect response instead
+        ↓
+Browser follows the redirect → ISE CWA portal
+```
+
+> [!warning] Expect a TLS warning
+> The switch does not present a valid certificate for the destination site — it intercepts the TCP flow before TLS can establish and returns a redirect at that point. The guest may see a certificate warning, or modern operating systems may handle it transparently via captive-portal detection (CNA on iOS/macOS, the captive-portal helper on Android/Windows). Exact behaviour varies by platform and OS version.
+
+
+---
+
+#### Guest Intercept SVI — Layer 3 Presence
+
+```cisco
 interface Vlan805
  description GUEST-INTERCEPT-SVI
  ip address <IP-ADDRESS> <SUBNET-MASK>
  no shutdown
 ```
-Creates the SVI used to intercept and redirect unauthenticated guest traffic toward the ISE Guest Portal.
 
-#### ACL for Guest Redirect
-permits only DNS, DHCP, and web traffic (HTTP/HTTPS), while blocking ISE servers directly (so ISE can intercept and redirect)
+##### What It Does
 
-```
-ip access-list extended ACL_GUEST_REDIRECT
- 10 deny udp any any eq domain
- 20 deny udp any any eq bootps
- 30 deny ip any host 10.140.2.31
- 40 deny ip any host 10.140.2.32
- 50 permit tcp any any eq www
- 60 permit tcp any any eq 443
-```
+The SVI gives the switch a **Layer 3 presence on the guest subnet**, which is what makes TCP interception physically possible.
+
+When a guest sends an HTTP request, the switch needs to terminate that TCP connection — it must act as an IP endpoint and send back a response. To do that, it needs an IP address reachable from the guest subnet. The Vlan805 SVI provides exactly that.
+
+Without it, the switch is only a Layer 2 forwarder on that VLAN. It can move frames but cannot participate in IP conversations, and therefore cannot intercept TCP sessions or issue HTTP redirects.
+
+##### What Breaks Without It
 
 ```
-####
-
-```bash
-parameter-map type webauth global
- type webauth
- virtual-ip ipv4 192.0.2.1
- intercept-https-enable
+No SVI on VLAN 805
+        ↓
+Switch has no L3 presence on the guest subnet
+        ↓
+parameter-map webauth has no interface to receive intercepted traffic
+        ↓
+Virtual IP 192.0.2.1 has no path to respond from
+        ↓
+Guest traffic passes through unintercepted — redirect never fires
 ```
 
-**WebAuth Parameter Map** — defines the virtual IP used to intercept and redirect guest HTTP/HTTPS traffic to the CWA portal
+##### What "Terminating the TCP Connection" Means
+
+Without CWA, a normal TCP handshake goes straight to the destination:
 
 ```
-parameter-map type webauth global
- type webauth
- virtual-ip ipv4 192.0.2.1
- intercept-https-enable
+Guest SYN  ───────────────────────────→  google.com
+Guest      ←─────────────────────────── SYN-ACK (google.com)
+Guest ACK  ───────────────────────────→  google.com
+TCP session established with google.com
 ```
 
-#### Policy Map — Guest-related Events
-- ISE authenticates the device via MAB and returns the `Guest_Redirect` service template + `ACL_GUEST_REDIRECT`
-- The ACL blocks everything except HTTP/HTTPS
-- The `parameter-map webauth` intercepts that web traffic and redirects to the ISE CWA portal (using virtual IP `192.0.2.1`)
-- VLAN 805 is the SVI used to intercept and proxy the guest redirect traffic
-- If AAA goes down while a guest session is active, the policy clears the session and applies `Critical_Access` instead
-
-When AAA is down and a guest session is active, clear the session and push Critical Access:
+With CWA, the switch intercepts the SYN and completes the handshake locally — the guest ends up with a TCP session open to the **switch**, not to Google:
 
 ```
-event authentication-failure match-first
-  10 class AAA-DOWN_GUEST_USER do-until-failure
-   10 clear-session
-   20 activate service-template Critical_Access
-   30 authorize
-   40 pause reauthentication
+Guest SYN  ───────────────────────────→  google.com (intended)
+Guest      ←─────────────────────────── SYN-ACK (handled by the switch)
+Guest ACK  ───────────────────────────→  switch
+TCP session established with the SWITCH, not google.com
+        ↓
+Guest sends:  GET / HTTP/1.1  Host: google.com
+        ↓
+Switch responds as 192.0.2.1:  HTTP 302 → ISE portal URL
+        ↓
+TCP session closed
 ```
-Service Template for Guest Redirect
 
-```
-service-template Guest_Redirect
-```
-Class Maps for Guest AAA-Down Handling
+> [!note] Exact source-IP behavior
+> The platform-specific details of *which* IP appears as the source of the SYN-ACK can vary (some implementations transparently spoof the original destination's address). What matters conceptually is that the switch — not the real destination — handles the handshake, and `192.0.2.1` is what appears in the HTTP 302 response that triggers the browser redirect.
 
+##### SVI IP vs. Virtual IP
+
+|  | SVI IP | Virtual IP (`192.0.2.1`) |
+|---|---|---|
+| **What it is** | Real IP assigned to the switch on VLAN 805 | Spoofed IP used in the HTTP 302 response |
+| **Who sees it** | Used internally for L3 processing | Seen by the guest's browser in the redirect |
+| **Purpose** | Lets the switch terminate TCP sessions on the guest subnet | Triggers the browser to follow the redirect to the ISE portal |
+
+The SVI is the **mechanism**. The virtual IP is the **disguise**.
+
+---
+
+#### How It All Fits Together
+
+```mermaid
+flowchart TD
+    subgraph PORT["Guest Switch Port"]
+        ISE_PUSH["ISE pushes via MAB Access-Accept:<br/>• ACL_GUEST_REDIRECT (what to intercept)<br/>• Redirect URL (where to send it)"]
+    end
+    subgraph L2["VLAN 805 — L2 Segment"]
+        TRAFFIC["Guest traffic arrives:<br/>• DHCP/DNS → denied in ACL, passes freely<br/>• HTTP/HTTPS → permitted in ACL, caught"]
+    end
+    subgraph L3["interface Vlan805 — SVI"]
+        TERMINATE["Switch terminates the TCP session at L3<br/>parameter-map webauth responds as 192.0.2.1<br/>Issues HTTP 302 → ISE CWA portal URL"]
+    end
+    subgraph ISE["ISE CWA Portal"]
+        AUTH["Guest authenticates<br/>ISE sends CoA to switch<br/>Switch clears redirect, applies full-access policy"]
+    end
+    PORT --> L2 --> L3 --> ISE
 ```
-class-map type control subscriber match-all AAA-DOWN_GUEST_USER
- match result-type aaa-timeout
- match activated-service-template Guest_Redirect
-```
+
+---
+
+#### Failure Behavior
+
+If AAA connectivity to ISE is lost while a guest session is active:
+
+- The active guest session is cleared.
+- The switch applies the `Critical_Access` policy to the port instead.
+- This prevents uncontrolled access during an ISE outage while keeping the port functional under a fallback policy.
+
 #### 
 ### DNA - PBA NAC
 
