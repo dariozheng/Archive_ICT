@@ -578,7 +578,7 @@ Device Sensor is a passive sensor — it does not generate any of this traffic. 
 
 #### `cdp run` 
 
-Enables CDP globally. Device Sensor cannot collect CDP TLVs from neighbours if CDP itself isn't running. CDP is on by default but is stated explicitly here for clarity.
+Enables CDP globally. Device Sensor cannot collect CDP TLVs from neighbors if CDP itself isn't running. CDP is on by default but is stated explicitly here for clarity.
 
 #### DHCP Filter — Which Options to Collect 
 
@@ -594,13 +594,13 @@ device-sensor filter-spec dhcp include list dhcp_list
 
 The `filter-list` defines _what is available_ to collect; the `filter-spec ... include list` activates it. Without the `filter-spec` line, the list is defined but never used.
 
-|DHCP Option|Name|Why ISE Wants It|
-|---|---|---|
-|12|`host-name`|The endpoint's configured hostname (e.g. `LAPTOP-ABC123`). Useful for profiling and user/device correlation.|
-|50|`requested-address`|The IP the client is asking for. Helps correlate the endpoint with a specific lease.|
-|55|`parameter-request-list`|The list of options the client asks the server for. Different OSes and devices ask in different orders — this is a very strong profiling fingerprint.|
-|60|`class-identifier`|Vendor class identifier (e.g. `MSFT 5.0`, `dhcpcd`). Another strong device-type signal.|
-|61|`client-identifier`|Unique client identifier, typically the MAC. ISE uses this to track devices across sessions.|
+| DHCP Option | Name                     | Why ISE Wants It                                                                                                                                                          |
+| ----------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 12          | `host-name`              | The endpoint's configured hostname (e.g. `LAPTOP-ABC123`). Useful for profiling and user/device correlation.                                                              |
+| 50          | `requested-address`      | The <strong>IP</strong> the client is asking for. Helps correlate the endpoint with a specific lease.                                                                     |
+| 55          | `parameter-request-list` | The list of <strong>DHCP options</strong> the client asks the server for. Different OS and devices ask in different orders — this is a very strong profiling fingerprint. |
+| 60          | `class-identifier`       | <strong>Vendor class identifier</strong> (e.g. `MSFT 5.0`, `dhcpcd`). Another strong device-type signal.                                                                  |
+| 61          | `client-identifier`      | <strong>Unique client identifier</strong>, typically the <strong>MAC</strong>. ISE uses this to track devices across sessions.                                            |
 
 #### CDP Filter — Which TLVs to Collect 
 
@@ -626,7 +626,7 @@ device-sensor filter-spec cdp include list cdp_list
 
 Notifies ISE immediately whenever a tracked attribute changes mid-session. Without this, ISE only sees sensor data at session start, and a profile change wouldn't trigger a policy re-evaluation.
 
-#### Sending Sensor Data to ISE <strong>[Required for profiling]</strong>
+#### Sending Sensor Data to ISE 
 
 Device Sensor collects data into a local cache. The following commands wire that cache into RADIUS messages so ISE actually receives it.
 
