@@ -1644,6 +1644,7 @@ NAD types include the following:
 - Cisco Firepower device
 - Load balancer
 - Software application that uses ISE for AAA
+
 ## Initial Configuration
 All Switches NAD should have at least these configuration set for it be configurable with Cisco DNA or to be reachable in SSH using RADIUS credentials.
 
@@ -3036,6 +3037,668 @@ access-session attributes filter-list list sensor_list
 - Same data but sent during the **authentication phase** not just accounting
 - Allows ISE to make profiling-based policy decisions **at the time of authentication** not just after
 - Combined with the accounting line above — ISE gets profiling data at **both authentication and accounting**
+
+---
+
+### Class-Map Type Control Subscriber
+A `class-map type control subscriber` classifies subscribers based on specific **conditions or events** (not packet content like a regular class-map). It's used inside a **policy-map type control subscriber** to trigger actions when those conditions are met.
+ 
+Syntax
+
+```
+class-map type control subscriber match-all | match-any <name>
+  match <condition>
+```
+
+**`match-all`** — all conditions must be true (AND logic) **`match-any`** — any one condition must be true (OR logic)
+
+```
+class-map type control subscriber match-all DOT1X
+ match method dot1x
+!
+class-map type control subscriber match-all DOT1X_DENIED
+ match method dot1x
+ match result-type method dot1x authoritative
+!
+class-map type control subscriber match-all DOT1X_NO_SUPPLICANT
+ match result-type method dot1x agent-not-found
+!
+class-map type control subscriber match-all DOT1X_TIMEOUT
+ match method dot1x
+ match result-type method dot1x method-timeout
+!
+class-map type control subscriber match-all MAB
+ match method mab
+!
+class-map type control subscriber match-all MAB_DENIED
+ match method mab
+ match result-type method mab authoritative
+!
+class-map type control subscriber match-all AAA-DOWN_UNAUTH_USER
+ match result-type aaa-timeout
+ match authorization-status unauthorized
+!
+class-map type control subscriber match-all AAA-DOWN_GUEST_USER
+ match result-type aaa-timeout
+ match activated-service-template Guest_Redirect
+!
+class-map type control subscriber match-all AAA-DOWN_AUTH_USER
+ match result-type aaa-timeout
+ match authorization-status authorized
+!
+class-map type control subscriber match-all CRITICAL_AUTH
+ match activated-service-template Critical_Access
+!
+class-map type control subscriber match-none NOT_CRITICAL_AUTH
+ match activated-service-template Critical_Access
+!
+```
+
+These class-maps form the classification layer of a typical **wired 802.1X + MAB (MAC Authentication Bypass)** access control policy. Here's each one broken down:
+#### 802.1X Class-Maps
+
+##### `DOT1X`
+
+```
+match method dot1x
+```
+
+Matches **any session where 802.1X is the active authentication method** — regardless of outcome. Used as a broad "dot1x is running" check.
+##### `DOT1X_DENIED`
+
+```
+match method dot1x
+match result-type method dot1x authoritative
+```
+
+Matches a subscriber where dot1x **ran AND returned an authoritative failure** — meaning the RADIUS server explicitly **rejected** the credentials (Access-Reject). This is a hard deny, not a timeout or missing supplicant.
+
+> `authoritative` = the server made a definitive decision (reject). Distinct from a timeout or no-response.
+##### `DOT1X_NO_SUPPLICANT`
+
+```
+match result-type method dot1x agent-not-found
+```
+
+Matches when **no 802.1X supplicant was detected** on the endpoint. The switch sent EAP identity requests, but nothing responded. This typically triggers a **fallback to MAB**.
+##### `DOT1X_TIMEOUT`
+
+```
+match method dot1x
+match result-type method dot1x method-timeout
+```
+
+Matches when dot1x **timed out** — the supplicant may exist but didn't complete the exchange in time. Different from `agent-not-found` (device present but slow) vs. no supplicant at all.
+#### MAB Class-Maps
+
+##### `MAB`
+
+```
+match method mab
+```
+
+Broad match — **MAB is the active auth method**, regardless of result. Parallel to `DOT1X`.
+##### `MAB_DENIED`
+
+```
+match method mab
+match result-type method mab authoritative
+```
+
+MAB ran and the RADIUS server **explicitly rejected** the MAC address (Access-Reject). The MAC is known and denied — not a timeout, not unknown.
+#### AAA Failure Handling Class-Maps
+
+These three handle **AAA server unreachability** and differentiate responses based on the subscriber's prior state:
+
+##### `AAA-DOWN_UNAUTH_USER`
+
+```
+match result-type aaa-timeout
+match authorization-status unauthorized
+```
+
+AAA is unreachable **and** this subscriber has **never been authorized**. A new/unknown device hit the switch while RADIUS is down. → Typically gets **Critical Auth / restricted VLAN**.
+##### `AAA-DOWN_GUEST_USER`
+
+```
+match result-type aaa-timeout
+match activated-service-template Guest_Redirect
+```
+
+AAA is unreachable **and** this subscriber was already in the **Guest (redirect) state** before the outage. → Keep them in guest or hold state, don't escalate privileges.
+##### `AAA-DOWN_AUTH_USER`
+
+```
+match result-type aaa-timeout
+match authorization-status authorized
+```
+
+AAA is unreachable **but** this subscriber was **already fully authorized** before the outage. → Most permissive fallback — maintain their access so legitimate users aren't disrupted.
+#### Critical Auth Class-Maps
+
+##### `CRITICAL_AUTH`
+
+```
+match activated-service-template Critical_Access
+```
+
+Matches sessions that are **currently running under the Critical Access service template** — i.e., they were placed into critical auth mode during an AAA outage.
+##### `NOT_CRITICAL_AUTH` ← Note: `match-none`
+
+```
+match-none
+match activated-service-template Critical_Access
+```
+
+Inverts the logic — matches sessions where **Critical_Access is NOT active**. `match-none` means "true if none of the conditions match," making this the logical complement of `CRITICAL_AUTH`.
+
+> This is commonly used to detect when AAA comes back up — re-authenticate sessions that are **not** in critical auth (i.e., normal sessions that may need to re-auth after recovery).
+
+---
+### Policy-Map Type Control Subscriber ISE-NAC-POLICY
+
+This policy-map is the **state machine** that orchestrates everything that happens on an authentication session. 
+
+When an event fires, the policy-map engine looks at all classes under that event and walks them **in numeric order** (5, 10, 20, 30, ...). What happens next depends on the event's match keyword:
+
+- **`match-all`** — every class whose conditions match has its action list executed (in order).
+- **`match-first`** — only the _first_ class whose conditions match has its actions executed; the rest are skipped entirely.
+
+Within a class, the action list is governed by its modifier:
+
+- **`do-until-failure`** _(used everywhere here)_ — execute actions 10, 20, 30... in order; stop at the first one that fails. This is the safe default.
+- **`do-all`** — execute every action regardless of success/failure.
+- **`do-until-success`** — execute until one succeeds, then stop.
+
+The action numbers (the inner `10`, `20`, `30`) are just an ordering — they don't have semantic meaning, but you typically leave gaps so you can insert new actions later without renumbering.
+
+A note on the action verbs themselves, because they show up repeatedly and aren't interchangeable:
+
+- **`authenticate using <method> priority <n>`** — start a method instance. Lower priority number wins when multiple succeed.
+- **`terminate <method>`** — destroy a specific method instance. The session itself survives; only that method's state is torn down.
+- **`unauthorize`** — remove the authorization (the dynamic VLAN, dACL, etc.) but keep the session record. The port is effectively blocked.
+- **`authorize`** — apply the authorization attributes returned by ISE (or by the active service-template).
+- **`clear-session`** — destroy the entire session. The endpoint will be treated as brand-new next time it sends a packet.
+- **`pause reauthentication`** — keep the session but stop the periodic reauth timer.
+- **`resume reauthentication`** — re-enable that timer.
+- **`activate service-template <name>`** — apply a locally-defined attribute bundle (typically used when no RADIUS profile is available).
+- **`authentication-restart <seconds>`** — kick off the full state machine again after a delay.
+- **`restrict`** — used in violation contexts; drop offending traffic without disabling the port.
+
+```bash
+policy-map type control subscriber ISE-NAC-POLICY
+ event session-started match-all
+  10 class always do-until-failure
+    10 authenticate using dot1x priority 10
+    20 authenticate using mab priority 20
+ event authentication-failure match-first
+  5 class DOT1X_DENIED do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  10 class AAA-DOWN_GUEST_USER do-until-failure
+   10 clear-session
+   20 activate service-template Critical_Access
+   30 authorize
+   40 pause reauthentication
+  20 class AAA-DOWN_AUTH_USER do-until-failure
+   10 authorize
+   20 pause reauthentication
+  30 class AAA-DOWN_UNAUTH_USER do-until-failure
+   10 activate service-template Critical_Access
+   20 authorize
+   30 pause reauthentication
+  40 class DOT1X_TIMEOUT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20 
+  50 class MAB_DENIED do-until-failure
+   10 terminate mab
+   20 unauthorize
+  60 class DOT1X_NO_SUPPLICANT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  70 class always do-until-failure
+   10 terminate mab
+   20 terminate dot1x
+   30 authentication-restart 60
+ event aaa-available match-all
+  10 class CRITICAL_AUTH do-until-failure
+   10 clear-session
+  20 class NOT_CRITICAL_AUTH do-until-failure
+   10 resume reauthentication
+ event agent-found match-all
+  10 class always do-until-failure
+   10 terminate mab
+   20 authenticate using dot1x priority 10 
+ event inactivity-timeout match-all
+  10 class always do-until-failure
+   10 clear-session 
+ event authentication-success match-all
+  10 class DOT1X do-until-failure
+   10 authorize
+  20 class MAB do-until-failure
+   10 authorize     
+ event violation match-all
+  10 class always do-until-failure
+   10 restrict
+```
+
+```
+Device plugs in
+      │
+      ▼
+[session-started] ──► dot1x + MAB simultaneously
+      │
+      ├── dot1x succeeds ──► [auth-success: DOT1X] ──► authorize
+      ├── MAB succeeds ───► [auth-success: MAB] ────► authorize
+      │
+      └── failure ──► [auth-failure match-first]
+                           │
+                    ┌──────┼──────────────────────┐
+               ISE denied  │  ISE down            │
+               → try MAB   │  → Critical Auth     │ Unknown → restart 60s
+                           │  (3 sub-cases)
+                           │
+                    Supplicant found later?
+                    → [agent-found] → upgrade to dot1x
+                           │
+                    ISE comes back?
+                    → [aaa-available] → clear or resume
+```
+
+#### event session-started match-all
+
+_Triggered when a device connects and a session is created._
+
+```
+10 class always do-until-failure
+  10 authenticate using dot1x priority 10
+  20 authenticate using mab priority 20
+```
+
+Fires once, when a new subscriber session is created — link comes up, or a new MAC is learned on a multi-auth/multi-domain port.
+
+The `class always` is a built-in always-true predicate. `do-until-failure` then runs the two `authenticate using` actions in order. Both methods start, but with priorities 10 and 20 respectively — **lower number = higher precedence**. dot1x wins ties. In practice this means:
+
+- EAPOL-Identity-Request frames go out on the wire (dot1x starting).
+- MAB doesn't actually send a RADIUS request until something tells the state machine that dot1x has failed or that no supplicant is present.
+- If dot1x succeeds, MAB never gets to authorize even if it eventually completes.
+
+The `match-all` on the event is redundant here because there's only one class — it's just stylistic consistency.
+
+---
+
+#### event authentication-failure match-first
+
+This is the brain of the policy. It runs when _any_ authentication method reports a non-success result. `match-first` is crucial — classes are evaluated in numeric order and **exactly one runs**. The class ordering encodes a priority for handling different failure causes.
+
+The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA-DOWN_UNAUTH), 40 (DOT1X_TIMEOUT), 50 (MAB_DENIED), 60 (DOT1X_NO_SUPPLICANT), 70 (always) — is deliberate. Most-specific conditions are checked first, with the catch-all at the bottom.
+
+
+
+##### Class 5 — DOT1X_DENIED
+
+```
+10 terminate dot1x
+20 authenticate using mab priority 20
+```
+
+- ISE **explicitly rejected** the dot1x identity (wrong credentials, certificate invalid, policy deny)
+- Don't retry dot1x — terminate it and **fall to MAB** instead
+- Typical use: domain machine failed EAP but might be a known MAC (printer, IP phone)
+
+---
+
+##### Class 10 — AAA-DOWN_GUEST_USER
+
+```
+10 clear-session
+20 activate service-template Critical_Access
+30 authorize
+40 pause reauthentication
+```
+
+- ISE is **unreachable** and the endpoint was previously in a **Guest** role
+- **Clear first** (fresh state), then push `Critical_Access` template (likely a restricted VLAN/dACL)
+- `authorize` commits the template to the session
+- `pause reauthentication` — stops re-auth timers so the session isn't torn down while ISE is down
+
+---
+
+##### Class 20 — AAA-DOWN_AUTH_USER
+
+```
+10 authorize
+20 pause reauthentication
+```
+
+- ISE is **unreachable** but the endpoint **was already authenticated** before the outage
+- No template activation — the existing cached authorization is re-committed as-is
+- Keeps the user working transparently during an ISE failure
+- `pause reauthentication` holds the session stable
+
+---
+
+##### Class 30 — AAA-DOWN_UNAUTH_USER
+
+```
+10 activate service-template Critical_Access
+20 authorize
+30 pause reauthentication
+```
+
+- ISE is **unreachable** and endpoint was **never authenticated** (new connection during outage)
+- No prior auth to fall back to → push `Critical_Access` (restricted fallback access)
+- Same pause logic as above
+
+> **The AAA-DOWN trio (classes 10/20/30)** is your **ISE Critical Auth** design — three different handling paths depending on the endpoint's prior state when ISE goes dark.
+
+---
+
+##### Class 40 — DOT1X_TIMEOUT
+
+```
+10 terminate dot1x
+20 authenticate using mab priority 20
+```
+
+- The **dot1x exchange started but timed out** — supplicant began but didn't complete (slow machine, slow supplicant, partial response)
+- Distinct from DOT1X_NO_SUPPLICANT (never responded) and DOT1X_DENIED (ISE rejected)
+- Fall to MAB as the recovery path
+
+---
+
+##### Class 50 — MAB_DENIED
+
+```
+10 terminate mab
+20 unauthorize
+```
+
+- ISE **explicitly rejected the MAC address** — unknown or blacklisted device
+- No fallback — hard `unauthorize` means the port stays closed
+- This is the **security enforcement** class: unknown MACs get nothing
+
+---
+
+##### Class 60 — DOT1X_NO_SUPPLICANT
+
+```
+10 terminate dot1x
+20 authenticate using mab priority 20
+```
+
+- dot1x was attempted but **no EAPOL response at all** — no supplicant present
+- Classic for printers, cameras, IoT, dumb switches
+- Clean up dot1x and authenticate purely by MAC via MAB
+
+> **DOT1X_DENIED vs DOT1X_TIMEOUT vs DOT1X_NO_SUPPLICANT** — three distinct dot1x failure modes, each handled differently:
+
+|Class|What happened|Action|
+|---|---|---|
+|`DOT1X_DENIED`|ISE said no|Try MAB|
+|`DOT1X_TIMEOUT`|Started but stalled|Try MAB|
+|`DOT1X_NO_SUPPLICANT`|Never responded|Try MAB|
+
+---
+
+##### Class 70 — always (catch-all)
+
+```
+10 terminate mab
+20 terminate dot1x
+30 authentication-restart 60
+```
+
+- Catches **anything not matched above** — both methods failed for an unclassified reason
+- Clean slate: terminate both methods, wait 60 seconds, then restart the whole auth cycle
+- The safety net that prevents sessions from getting stuck
+
+---
+
+#### event aaa-available match-all
+
+_Triggered when ISE/RADIUS becomes reachable again after an outage._
+
+```
+10 class CRITICAL_AUTH do-until-failure
+  10 clear-session
+
+20 class NOT_CRITICAL_AUTH do-until-failure
+  10 resume reauthentication
+```
+
+- **CRITICAL_AUTH** = sessions that were placed into Critical Access during the outage → `clear-session` forces them to re-authenticate from scratch against the now-live ISE
+- **NOT_CRITICAL_AUTH** = sessions that were paused but already had valid auth → `resume reauthentication` gently re-validates them without dropping connectivity
+
+> This is the **recovery pair** that mirrors the AAA-DOWN classes — graceful degradation going down, graceful restoration coming back up.
+
+---
+
+#### event agent-found match-all
+
+_Triggered when an 802.1X supplicant is detected on a session that is currently MAB-authenticated._
+
+```
+10 class always do-until-failure
+  10 terminate mab
+  20 authenticate using dot1x priority 10
+```
+
+- A device was MAB-authenticated (e.g., it booted slowly), then its **dot1x supplicant came online**
+- Terminate the weaker MAB session and **upgrade to dot1x**
+- Common on Windows machines that take time to load the 802.1X stack
+- Ensures machines get their proper identity-based policy, not just MAC-based
+
+---
+
+#### event inactivity-timeout match-all
+
+_Triggered when a session has been idle past the inactivity timer._
+
+```
+10 class always do-until-failure
+  10 clear-session
+```
+
+- No exceptions — every idle session is fully cleared
+- Forces re-authentication when the device becomes active again
+- Prevents stale authorized sessions from persisting on unused ports
+
+---
+
+#### event authentication-success match-all
+
+_Triggered when an auth method succeeds._
+
+```
+10 class DOT1X do-until-failure
+  10 authorize
+
+20 class MAB do-until-failure
+  10 authorize
+```
+
+- Explicit `authorize` action for both success paths — commits the ISE-returned policy (VLAN, dACL, SGT) to the session
+- Separating DOT1X and MAB classes here allows you to insert **different post-auth actions** per method in future (e.g., different accounting, different templates)
+- Without `authorize`, authentication success alone doesn't apply the policy
+
+---
+
+#### event violation match-all
+
+_Triggered when a security violation occurs — most commonly a second MAC address appears on a port._
+
+```
+10 class always do-until-failure
+  10 restrict
+```
+
+- `restrict` drops traffic from the violating MAC and increments a counter, but **does not shut the port**
+- Less aggressive than `shutdown` — the legitimate session stays up
+- ISE can be configured to send a CoA if it detects the violation via syslog/SNMP
+---
+
+### Template NAC-INT-TEMPLATE
+This is the **interface-level building block** that pairs with `ISE-NAC-POLICY`. Where the policy-map defines _what to do_, this template defines _how the port behaves_.
+```
+template NAC-INT-TEMPLATE
+ description NAC INTERFACE
+ switchport mode access
+ switchport access vlan 802
+ ip dhcp snooping limit rate 20
+ ip arp inspection limit rate 100
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ authentication periodic
+ authentication timer reauthenticate server
+ mab
+ access-session control-direction in
+ access-session host-mode multi-domain 
+ access-session closed
+ access-session port-control auto
+ dot1x pae authenticator
+ dot1x timeout tx-period 7
+ dot1x max-reauth-req 3
+ device-tracking attach-policy IPDT_POLICY
+ service-policy type control subscriber ISE-NAC-POLICY
+```
+
+#### Basic configs
+```
+description NAC INTERFACE
+switchport mode access
+switchport access vlan 802
+```
+
+Defines the template name and a human-readable description. The name is what you reference from interfaces.
+
+Forces the port into access (non-trunk) mode and sets the default access VLAN to 802. Note: this is the _static_ assignment, applied before authentication completes. After successful auth, ISE will normally return a Tunnel-Private-Group-ID (dVLAN) attribute that _dynamically overrides_ this with the real user VLAN. VLAN 802 here is functioning as either a pre-auth/quarantine VLAN or a fallback — the number is almost certainly a mnemonic for "802.1X."
+#### Layer-2 security hardening
+
+```
+ip dhcp snooping limit rate 20
+```
+
+DHCP snooping must be enabled globally and on the relevant VLANs separately. This per-interface command rate-limits DHCP packets to 20 pps. Beyond that, the port goes err-disabled. The goal is to stop a rogue client from flooding DHCPDISCOVER/REQUEST to exhaust the pool or trigger a denial-of-service on the snooping table.
+
+```
+ip arp inspection limit rate 100
+```
+
+Same idea for Dynamic ARP Inspection: cap ARP messages at 100 pps. DAI validates ARP messages against the DHCP snooping binding table (or static ARP ACLs) and drops mismatches. The rate limit specifically defends against attackers who would otherwise flood ARPs to overwhelm the CPU.
+
+```
+spanning-tree portfast
+spanning-tree bpduguard enable
+```
+
+PortFast skips the listening/learning STP states, so the port goes straight to forwarding when link comes up — important for endpoints (think a PC trying to grab DHCP within 30 seconds of boot). BPDU Guard is the safety net: if a BPDU ever arrives on this port (meaning someone plugged in a switch), the port immediately err-disables. PortFast without BPDU Guard is dangerous because PortFast disables loop-prevention; together they're the standard access-port pattern.
+#### 802.1X reauthentication behavior
+
+```
+authentication periodic
+authentication timer reauthenticate server
+```
+
+The first command enables periodic reauthentication of the session. The second says: use the reauth interval that the RADIUS server provides (via the `Session-Timeout` attribute paired with `Termination-Action = RADIUS-Request`). Centralizing the timer in ISE means you can tune reauth policy by user group rather than per-switch. Without `server`, you'd specify a fixed value like `authentication timer reauthenticate 3600`.
+
+These are technically legacy-syntax commands but remain valid alongside IBNS 2.0.
+#### Methods enabled on the port
+
+```
+mab
+```
+
+Enables MAC Authentication Bypass on this port. This just makes MAB _available_; it doesn't decide when MAB runs. The policy-map `ISE-NAC-POLICY` (from your previous question) is what actually schedules `authenticate using mab`. If `mab` is missing from the interface, the policy can't fall back to it.
+
+```
+dot1x pae authenticator
+```
+
+PAE = Port Access Entity. This declares the switch's role on this port as the _authenticator_ in the 802.1X conversation (the supplicant being the endpoint, the authentication server being ISE). Without this, the port will not process EAPOL frames.
+
+#### Access-session behavior (IBNS 2.0 mechanics)
+
+```
+access-session control-direction in
+```
+
+Determines which direction of traffic is blocked before authorization succeeds. Two values:
+
+- **`in`** (this config): block traffic _from_ the host _to_ the network, but allow traffic _from_ the network _to_ the host. This is what enables **Wake-on-LAN** — a server can send a WoL magic packet to an unauthenticated/powered-off endpoint.
+- **`both`**: block both directions.
+
+`in` is the more practical default for typical enterprises.
+
+```
+access-session host-mode multi-domain
+```
+
+Defines how many endpoints can share a port. The four modes are:
+
+- **single-host** — exactly one MAC.
+- **multi-host** — one MAC authenticates, then all other MACs are allowed without authenticating (legacy, weak).
+- **multi-auth** — each MAC is authenticated independently. Used when multiple endpoints sit behind a hub or unmanaged switch.
+- **multi-domain** _(this config)_ — exactly one MAC in the data domain and exactly one in the voice domain. This is the classic IP phone scenario: phone authenticates and sits in voice VLAN, PC plugs into the phone's PC port and authenticates separately in the data VLAN. The phone's voice VLAN is signaled via CDP or LLDP-MED.
+
+```
+access-session closed
+```
+
+Closed mode (also called "high-security" or "monitor-disabled" mode): no data traffic — including DHCP, DNS, anything — is permitted on the port until authorization succeeds. The opposite is `access-session open` (low-impact/monitor mode), where traffic is allowed by default and only restricted by a pre-auth ACL. Closed mode is the secure default but the most disruptive during rollout, which is why many shops do a phased migration through open mode first.
+
+```
+access-session port-control auto
+```
+
+The on switch for 802.1X port control. Three values:
+
+- **`auto`** (this config): run the authentication state machine; access depends on the result.
+- **`force-authorized`**: skip authentication and always allow (this effectively disables 802.1X on the port).
+- **`force-unauthorized`**: always block.
+
+If this isn't set to `auto`, none of the authentication machinery actually runs, regardless of how perfectly the policy-map is configured.
+
+#### 802.1X timing tuning
+
+```
+dot1x timeout tx-period 7
+dot1x max-reauth-req 3
+```
+
+These two together control how aggressively the switch hunts for an 802.1X supplicant before declaring "no supplicant" and falling to MAB.
+
+- `tx-period 7`: when sending EAPOL-Identity-Request frames, wait 7 seconds for a response before retransmitting. Default is 30 seconds.
+- `max-reauth-req 3`: send up to 3 _additional_ requests after the initial one (so 4 total attempts) before giving up.
+
+Total time before the policy's `DOT1X_NO_SUPPLICANT` class fires: **tx-period × (max-reauth-req + 1) = 7 × 4 = 28 seconds.**
+
+Compared with the defaults (30 × 3 = 90 seconds), this gets non-supplicant devices like printers and IoT into MAB roughly 3× faster. Going too aggressive risks racing slow supplicants (Windows boot, slow NICs) — 7 seconds is a reasonable middle ground.
+
+#### Device tracking and policy binding
+
+```
+device-tracking attach-policy IPDT_POLICY
+```
+
+Attaches an IP Device Tracking (IPDT / SISF) policy to the port. IPDT maintains the MAC-to-IP binding table by snooping DHCP, ARP, and ND. This table is consumed by many features: downloadable ACLs that resolve to source IPs, IP source guard, Dynamic ARP Inspection, web authentication redirect, and ISE-side endpoint profiling. `IPDT_POLICY` is defined elsewhere (a `device-tracking policy IPDT_POLICY` block) where you tune things like probe behavior, trust settings, and binding limits — important because the default IPDT policy on modern IOS-XE can ARP-probe endpoints aggressively and cause issues with certain devices (older Windows, some IP phones).
+
+```
+service-policy type control subscriber ISE-NAC-POLICY
+```
+
+This is the keystone — it binds the IBNS 2.0 policy-map (the one from your previous question) to this interface. Everything we discussed about `event session-started`, `event authentication-failure`, critical auth, agent-found, etc., only runs on a port that has this `service-policy` applied. Without this line, the port has 802.1X and MAB _available_ but no orchestrator telling it which to run when.
+
+#### How this template ties to the policy-map
+
+The template and the policy-map are co-dependent. Specifically:
+
+- The policy says "authenticate using dot1x" — but `dot1x pae authenticator` and `port-control auto` here are what physically enable that.
+- The policy says "authenticate using mab" — but `mab` here is what makes MAB available.
+- The `DOT1X_NO_SUPPLICANT` class fires after `tx-period × (max-reauth-req+1)` — the 28-second value comes from this template.
+- The "AAA-down" classes in the policy assume `Critical_Access` is a real service-template defined elsewhere. The template doesn't reference it directly, but when AAA times out, the policy activates it on this port.
+- `multi-domain` host-mode determines that two independent sessions (data + voice) can exist on the port, each going through the policy's state machine independently.
+- `access-session closed` ensures the pre-auth state actually blocks traffic — without it, even unauthorized hosts could send DHCP, DNS, etc.
 
 ---
 
