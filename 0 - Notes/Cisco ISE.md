@@ -34,19 +34,20 @@ Identity Management managed all identities for ISE, from ISE GUI admins to users
 
 ![[Pasted image 20260508100508.png]]
 ### Identities 
-Cisco ISE has a built-in internal user database that can be used for a limited number of user accounts, referred to as internal users, also as network access users.
-In identities it's possible to configure local users, they can be identities that are used to log in the ISE GUI or identities used for network access. 
+Cisco ISE includes a built-in internal identity store that supports a limited number of locally defined user accounts, commonly referred to as <strong>internal users</strong> or <strong>network access users</strong>.
 
-This internal identity store can be used to authenticate and authorize a preconfigured account for a contractor or other temporary worker to access the wireless network, without adding them to the company’s main identity store.
+Within the Identities section, administrators can configure local user accounts serving one of two purposes: logging into the ISE GUI, or authenticating for network access.
 
-Any internal user accounts configured can then be associated with a defined user identity group that sets the type of internal account being created.
+This internal store is particularly useful for granting temporary or contractor access to the wireless network without provisioning accounts in the company's primary identity store. 
+
+Each internal user account can be associated with a user identity group, which defines the type and role of the account being created.
 
 ![[Pasted image 20260508105029.png]]
 
 ![[Pasted image 20260508105040.png]]
 
-### Groups 
-Endpoint and User Groups, they can be used as attributes in Policy Sets.
+### Groups
+Endpoint and User Groups can be used as attributes in Policy Sets.
 
 ![[Pasted image 20260508105117.png]]
 
@@ -55,13 +56,14 @@ Endpoint and User Groups, they can be used as attributes in Policy Sets.
 ![[Pasted image 20260513164133.png]]
 
 Endpoint Identity Groups stores information about all the endpoint devices that connect to the network infrastructure or they can be filled through an CSV import.
-It's possible to create groups to use as attributes in Policy Sets.
+
+Endpoint Groups can be used as attributes in Policy Sets.
 
 ![[Pasted image 20260508105729.png]]
 
 ![[Pasted image 20260508105738.png]]
 
-For new CSV import template use the <strong>Generate a Template</strong> function else use this template:
+For new CSV import template use the <strong>Generate a Template</strong> function or use this template:
 ```csv
 MACAddress,EndPointPolicy,IdentityGroup,PortalUser.GuestType,Description,PortalUser.Location,PortalUser.GuestStatus,StaticAssignment,User-Name,DeviceRegistrationStatus,PortalUser.CreationType,AUPAccepted,PortalUser.EmailAddress,PortalUser.PhoneNumber,FirstName,ip,Device Type,host-name,StaticGroupAssignment,MDMEnrolled,MDMOSVersion,PortalUser.LastName,PortalUser.GuestSponsor,EmailAddress,PortalUser,PortalUser.FirstName,BYODRegistration,MDMServerName,LastName,MDMServerID,Location
 
@@ -69,7 +71,7 @@ MACAddress,EndPointPolicy,IdentityGroup,PortalUser.GuestType,Description,PortalU
 ```
 
 ##### PBA_Blacklist
-All MAC Address that must be denied access to the network. 
+All MAC Address that must be denied access to the network are put in this Endpoint Group. 
 ##### PBA_Printers
 All Printers MAC Addresses, there are child groups that distribute the MAC Addresses by location. 
 The Printers MAC Addresses can be get from the ARP table in the core switches/routers, and they and be imported with the CSV.
