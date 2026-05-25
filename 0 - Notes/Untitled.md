@@ -1100,10 +1100,10 @@ Changes to the template propagate automatically to every interface that sources 
 
 #### Basic Port Configuration
 
-|Command|Effect|
-|---|---|
-|`switchport mode access`|Force access mode — no trunk negotiation.|
-|`switchport access vlan 802`|<strong>Real client data VLAN.</strong> This is where authenticated endpoints actually live — it is the production access VLAN, not a quarantine. With `access-session closed`, the port blocks all traffic before authentication regardless of VLAN, so placing the static assignment directly on the production VLAN is safe. ISE can still override per-role via `Tunnel-Private-Group-ID`, but the default destination is fully functional.|
+| Command                      | Effect                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `switchport mode access`     | Force access mode — no trunk negotiation.                                                                                                                                                                                                                                                                                                                                                                                |
+| `switchport access vlan 802` | <strong>Client data VLAN.</strong> This is where authenticated endpoints actually live — it is the production access VLAN. With `access-session closed`, the port blocks all traffic before authentication regardless of VLAN, so placing the static assignment directly on the production VLAN is safe. ISE can still override per-role via `Tunnel-Private-Group-ID`, but the default destination is fully functional. |
 
 #### Layer-2 Hardening
 
@@ -1130,23 +1130,23 @@ Periodic reauth is enabled and the interval is taken from the RADIUS `Session-Ti
 |`mab`|Makes MAB <strong>available</strong> on this port. Whether it actually runs is controlled by the policy-map. Without this, the policy can't fall back to MAB.|
 |`dot1x pae authenticator`|Declares this port as the 802.1X authenticator (the switch side of the dot1x conversation). Without it, EAPOL frames are ignored.|
 
-#### Access-Session Behaviour
+#### Access-Session Behavior
 
-|Command|Effect|
-|---|---|
-|`access-session control-direction in`|Block traffic _from_ the host _to_ the network before authorization; allow traffic in the reverse direction. This enables Wake-on-LAN. The alternative `both` blocks both directions.|
-|`access-session host-mode multi-domain`|Allows one data MAC plus one voice MAC on the port — the classic IP phone + PC scenario. Voice domain is signalled by CDP or LLDP-MED.|
-|`access-session closed`|Pre-auth state blocks <strong>all</strong> traffic (including DHCP, DNS) until authorization completes.|
-|`access-session port-control auto`|The on switch for 802.1X port control. Other values: `force-authorized` (always allow, dot1x off) and `force-unauthorized` (always block).|
+| Command                                 | Effect                                                                                                                                                                                |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `access-session control-direction in`   | Block traffic _from_ the host _to_ the network before authorization; allow traffic in the reverse direction. This enables Wake-on-LAN. The alternative `both` blocks both directions. |
+| `access-session host-mode multi-domain` | Allows one data MAC plus one voice MAC on the port — the classic IP phone + PC scenario. Voice domain is signaled by CDP or LLDP-MED.                                                 |
+| `access-session closed`                 | Pre-auth state blocks <strong>all</strong> traffic (including DHCP, DNS) until authorization completes.                                                                               |
+| `access-session port-control auto`      | The on switch for 802.1X port control. Other values: `force-authorized` (always allow, dot1x off) and `force-unauthorized` (always block).                                            |
 
 ##### Host-Mode Options
 
-|Mode|Behaviour|
-|---|---|
-|`single-host`|Exactly one MAC.|
-|`multi-host`|One MAC authenticates; all others are passively allowed (legacy, weak).|
-|`multi-auth`|Each MAC authenticates independently. For unmanaged switches or hubs behind the port.|
-|`multi-domain`|Exactly one data MAC plus one voice MAC. Used here.|
+| Mode           | Behaviour                                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------------------------- |
+| `single-host`  | Exactly one MAC.                                                                                          |
+| `multi-host`   | One MAC authenticates; all others are passively allowed if the first MAC is authenticated (legacy, weak). |
+| `multi-auth`   | Each MAC authenticates independently. For unmanaged switches or hubs behind the port.                     |
+| `multi-domain` | Exactly one data MAC plus one voice MAC. Used here.                                                       |
 
 #### 802.1X Timing
 
@@ -1162,7 +1162,7 @@ Controls how aggressively the switch hunts for an 802.1X supplicant before falli
 |`tx-period 7`|Wait 7 seconds between EAPOL-Identity-Request retransmissions (default: 30).|
 |`max-reauth-req 3`|Send up to 3 additional retransmissions after the initial one (4 attempts total).|
 
-<strong>Total fallback time = `tx-period × (max-reauth-req + 1) = 7 × 4 = 28 seconds</strong>, vs. the default of 90 seconds.
+Total fallback time = `tx-period × (max-reauth-req + 1) = 7 × 4 = 28 seconds, vs. the default of 90 seconds.
 
 #### Device Tracking and Policy Attachment
 
@@ -1172,37 +1172,6 @@ service-policy type control subscriber ISE-NAC-POLICY
 ```
 
 The first attaches the IPDT policy that maintains IP-to-MAC bindings. The second binds the entire IBNS 2.0 policy-map to this port — <strong>without this line, the port has 802.1X and MAB available but no orchestrator to run them.</strong>
-
-#### Template / Policy Interlock
-
-The template and the policy-map are co-dependent:
-
-- `authenticate using dot1x` in the policy requires `dot1x pae authenticator` and `port-control auto` here.
-- `authenticate using mab` in the policy requires `mab` here.
-- The 28-second `DOT1X_NO_SUPPLICANT` fallback time is set by `tx-period` × `max-reauth-req` here.
-- `access-session closed` makes the pre-auth state actually block traffic.
-- `multi-domain` host-mode is what lets the policy run two independent state machines (data and voice) on the same port.
-
-#### Verification
-
-```cisco
-show access-session interface <int> details
-show derived-config interface <int>            ! shows the template merged into the interface
-show running-config interface <int>
-show authentication sessions interface <int>   ! legacy syntax, still works
-```
-
-#### What Breaks If Missing
-
-|Omission|Symptom|
-|---|---|
-|`service-policy type control subscriber`|Port does no authentication regardless of `mab` / `dot1x` lines.|
-|`dot1x pae authenticator`|EAPOL frames are ignored; only MAB can ever run.|
-|`mab`|No fallback method for non-supplicant devices; printers / IoT can never connect.|
-|`device-tracking attach-policy`|dACLs don't apply correctly; CWA never redirects.|
-|`access-session port-control auto`|Whole authentication machinery is dormant on the port.|
-|`access-session closed`|Endpoints can communicate freely before authentication completes.|
-|Forgot `source template` on actual interface|Template is defined but never applied; ports stay at defaults.|
 
 ---
 
@@ -1258,7 +1227,7 @@ ip access-list extended ACL_GUEST_REDIRECT
 |`50`|Redirect HTTP|HTTP on port 80 is intercepted by the webauth parameter-map; the switch issues the 302 toward the ISE portal.|
 |`60`|Redirect HTTPS|HTTPS on port 443 is intercepted as well. Requires `intercept-https-enable` in the parameter-map.|
 
-> The redirect ACL is <strong>not</strong> statically applied to the interface — ISE pushes it dynamically per the `Redirect_Guest_Wired` authorization profile. The Access-Accept carries both the ACL name and the redirect URL.
+> The redirect ACL while present locally ( pushed by DNA ) is <strong>not</strong> statically applied to the interface — ISE pushes it dynamically per the `Redirect_Guest_Wired` authorization profile. The Access-Accept carries both the ACL name and the redirect URL.
 
 #### WebAuth Parameter Map
 
@@ -1271,16 +1240,15 @@ parameter-map type webauth global
 
 The redirect ACL identifies _which_ traffic to catch. The parameter-map decides _what to do with it_.
 
-|Line|Purpose|
-|---|---|
-|`parameter-map ... global`|Global definition — applies to any port receiving a redirect instruction from ISE.|
-|`type webauth`|Operate as a CWA interceptor (handing off to the ISE portal) rather than hosting a local login page.|
-|`virtual-ip ipv4 192.0.2.1`|The IP the switch uses as the source of its 302 response to the guest's browser. Spoofed and non-routable by design.|
-|`intercept-https-enable`|Enable interception on TCP 443 as well. Without it, only port 80 is caught — and modern browsers default to HTTPS for nearly everything.|
+| Line                        | Purpose                                                                                                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `parameter-map ... global`  | Global definition — applies to any port receiving a redirect instruction from ISE.                                                       |
+| `type webauth`              | Operate as a CWA interceptor (handing off to the ISE portal) rather than hosting a local login page.                                     |
+| `virtual-ip ipv4 192.0.2.1` | The IP the switch uses as the source of its 302 response to the guest's browser. Spoofed and non-routable by design.                     |
+| `intercept-https-enable`    | Enable interception on TCP 443 as well. Without it, only port 80 is caught — and modern browsers default to HTTPS for nearly everything. |
 
-##### Why `192.0.2.1`?
-
-This address belongs to <strong>TEST-NET-1</strong>, defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737) as reserved for documentation and guaranteed never to be a real routable destination. Using a real IP here would risk redirecting guest traffic to an unintended host.
+ > [!note] Why `192.0.2.1`?
+ > This address belongs to <strong>TEST-NET-1</strong>, defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737) as reserved for documentation and guaranteed never to be a real routable destination. Using a real IP here would risk redirecting guest traffic to an unintended host.
 
 ##### Redirect Sequence
 
@@ -1298,14 +1266,6 @@ Browser follows the 302 → ISE CWA portal
         ↓
 TCP session to the switch closes
 ```
-
-##### HTTPS Interception Caveat
-
-When HTTPS is intercepted, the switch cannot present a valid certificate for the destination site — it terminates the TCP session before TLS handshake completes. Behaviour from here depends on the OS:
-
-- iOS / macOS — captive-portal detection (CNA) handles this transparently in most cases.
-- Android / Windows — usually similar, with the captive-portal helper.
-- Manual browsing — a TLS warning is likely.
 
 #### Guest Intercept SVI
 
@@ -1336,7 +1296,7 @@ Guest ACK ───────────────────────�
 TCP established with the SWITCH
 ```
 
-From there the webauth parameter-map issues the 302 redirect as `192.0.2.1`.
+From there the web-auth parameter-map issues the 302 redirect as `192.0.2.1`.
 
 If the SVI is missing:
 
@@ -1350,19 +1310,20 @@ parameter-map webauth has no interface to intercept on
 Guest traffic passes through unintercepted — redirect never fires
 ```
 
-##### SVI IP vs. Virtual IP
-
-||SVI IP|Virtual IP (`192.0.2.1`)|
-|---|---|---|
-|<strong>What it is</strong>|Real IP assigned to the switch on VLAN 805|Spoofed IP used in the HTTP 302 response|
-|<strong>Who sees it</strong>|Used internally for L3 termination|Visible to the guest's browser in the redirect|
-|<strong>Purpose</strong>|Lets the switch terminate TCP sessions on the guest subnet|Triggers the browser to follow the redirect to the ISE portal|
-
 #### Device Tracking for CWA
 
-CWA requires [[#IP Device Tracking — Global <strong>[Required for ISE / dACL / CWA]</strong>|device tracking]] to be in place — the redirect is IP-based but the session is keyed on MAC, so something has to bind them.
+CWA requires [[#IP Device Tracking — Global|device tracking]] to be in place — the redirect is IP-based but the session is keyed on MAC, so something has to bind them.
 
-> [!important] Without device tracking, CWA breaks silently MAB authenticates by MAC. The redirect ACL is IP-based. ISE-pushed policy is keyed against the session, which is itself keyed by MAC. Device tracking is what links MAC and IP. CoA also relies on this binding to find the right session to modify when the guest finally logs in.
+> [!important] 
+> Without device tracking, CWA breaks silently MAB authenticates by MAC. 
+> 
+> The redirect ACL is IP-based. 
+> 
+> ISE-pushed policy is keyed against the session, which is itself keyed by MAC. 
+> 
+> Device tracking is what links MAC and IP. 
+> 
+> CoA also relies on this binding to find the right session to modify when the guest finally logs in.
 
 ```
 MAB completes   →  session known by MAC, no IP yet
@@ -1391,8 +1352,7 @@ Two reasons to have the local declaration even though it's bare:
 1. <strong>Default attributes</strong> — anything you define locally inside the template acts as a fallback if ISE doesn't push the equivalent attribute.
 2. <strong>Matching anchor</strong> — other policy logic can match on whether this template is currently active on a session. That is exactly how the [[#AAA-Down Cases|AAA-DOWN_GUEST_USER]] class-map detects guests caught mid-flow when ISE goes dark.
 
-#### Verification
-
+Verification:
 ```cisco
 show ip http server status
 show parameter-map type webauth global
@@ -1401,137 +1361,6 @@ show ip access-lists interface <int>     ! shows the ACL ISE pushed live
 show access-session interface <int> details
 show ip http server session-module
 ```
-
-#### What Breaks If Missing
-
-|Omission|Symptom|
-|---|---|
-|`ip http secure-server` + `intercept-https-enable`|HTTPS traffic isn't redirected; modern browsers (which prefer HTTPS) never reach the portal.|
-|SVI on VLAN 805|Switch has no L3 presence; redirect never fires; guests sit on an open TCP connection that goes nowhere.|
-|`device-tracking` on access port|No IP-to-MAC binding; redirect ACL has no IP to match; CWA fails silently.|
-|`service-template Guest_Redirect`|ISE-pushed `subscriber:service-name=Guest_Redirect` doesn't resolve; redirect is ignored.|
-|`dynamic-author` (CoA)|Guest logs in on portal but switch never receives the access-grant CoA — session stuck.|
-
----
-
-### Guest Timeline — Wired Visitor with CWA
-
-End-to-end view of what happens to a visitor sitting down with a laptop, from cable insertion to fully-authenticated network access.
-
-```
-T+0s    Cable plugged in
-        Link up → PortFast forwards immediately
-        IBNS [session-started] event fires
-        → dot1x and MAB both armed (dot1x priority 10, MAB 20)
-
-T+0s    Switch sends EAPOL-Identity-Request to laptop
-        Laptop has no corporate supplicant → no response
-
-T+28s   tx-period 7 × (max-reauth-req 3 + 1) = 28s elapsed with no EAPOL
-        IBNS class DOT1X_NO_SUPPLICANT fires
-        → terminate dot1x, authenticate using mab
-
-T+28s   Switch sends RADIUS Access-Request to ISE
-        Calling-Station-Id = 00-50-56-AB-CD-EF (IETF upper-case)
-        Service-Type = Call-Check (MAB)
-        cisco-av-pair = audit-session-id=...
-        + DHCP / CDP sensor data (if already collected)
-
-T+29s   ISE looks up the MAC
-        Unknown endpoint → matches "Guest Default" authorization policy
-        Sends Access-Accept with:
-          • subscriber:service-name=Guest_Redirect
-          • Cisco-AVPair = url-redirect-acl=ACL_GUEST_REDIRECT
-          • Cisco-AVPair = url-redirect=https://<PSN>/portal/...
-
-T+29s   Switch activates the Guest_Redirect template on the session
-        IBNS [authentication-success] event fires for MAB → authorize
-        Port now permits traffic but redirects HTTP/HTTPS
-
-T+30s   Guest's laptop sends DHCP DISCOVER (passes through, ACL exempts DHCP)
-        Switch's device-tracking observes the lease
-        IP-to-MAC binding recorded against the port
-        ip dhcp snooping binding now contains the lease
-
-T+35s   Guest opens browser, types google.com
-        Browser sends DNS query (passes through, ACL exempts DNS)
-        Browser sends TCP SYN to google.com:443
-        Switch (via VLAN 805 SVI) terminates the SYN at L3
-        Switch sends HTTP 302 as 192.0.2.1
-            Location: https://<PSN>/portal/?sessionId=...
-
-T+36s   Browser follows the 302
-        Traffic to PSN1/PSN2 (10.140.2.31/32) is ACL-exempt → passes through
-        Portal page loads in the browser
-
-T+90s   Guest fills out sponsor email / accepts AUP / logs in
-        Portal completes on ISE side
-
-T+91s   ISE sends CoA-ReAuth to the switch (UDP 3799)
-        Switch matches CoA to the session by audit-session-id
-        Switch tears down the redirect-bearing session and re-authenticates
-
-T+92s   Fresh MAB Access-Request to ISE
-        ISE now recognises the endpoint as a successfully-authenticated guest
-        Returns Access-Accept WITHOUT the redirect attributes
-          • Tunnel-Private-Group-ID = 805 (or post-auth VLAN)
-          • Optional dACL = PERMIT_GUEST
-
-T+92s   IBNS [authentication-success] → authorize applies new attributes
-        Redirect ACL removed from the port
-        Guest now has unfiltered internet (per the post-auth ACL)
-
-T+92s+  Periodic accounting updates flow to ISE
-        ISE Live Sessions shows the session with username = sponsor-provided email
-```
-
----
-
-### Happy Path Walkthrough — Domain Windows Laptop
-
-A managed Windows machine with a working 802.1X supplicant. Every line of this config touches the flow somewhere — this walkthrough connects them.
-
-<strong>Step 1 — Cable plugged in.</strong> PortFast forwards the port immediately (`spanning-tree portfast`); BPDU Guard is on standby (`spanning-tree bpduguard enable`). The port is in access mode in VLAN 802 (`switchport mode access` / `switchport access vlan 802`) and the session is currently in pre-auth, so [[#Access-Session Behaviour|`access-session closed`]] blocks all data plane traffic.
-
-<strong>Step 2 — IBNS session-started event fires.</strong> The interface sources `NAC-INT-TEMPLATE`, which attaches `ISE-NAC-POLICY`. The policy's `event session-started` runs `authenticate using dot1x priority 10` and `authenticate using mab priority 20`. dot1x kicks off first because of the lower priority number.
-
-<strong>Step 3 — EAPOL-Identity-Request goes out.</strong> `dot1x pae authenticator` makes this possible. `tx-period 7` controls retransmission interval. The supplicant on the laptop replies promptly with an EAPOL-Identity-Response containing the user/machine identity.
-
-<strong>Step 4 — Switch builds the Access-Request to ISE.</strong> The packet is sourced from VLAN 800 (`ip radius source-interface Vlan800` in the `ISESERV` group) so ISE recognises the NAD. The attributes inside include:
-
-- `User-Name` from the EAP identity
-- `Calling-Station-Id` = `00-50-56-AB-CD-EF` (IETF upper-case, thanks to `radius-server attribute 31 mac format ietf upper-case` + `mac-only`)
-- `NAS-Identifier` = the switch hostname (`attribute 32 ... format %h`)
-- `NAS-IP-Address` = the VLAN 800 IP
-- `Service-Type` = `Framed` (`attribute 6 on-for-login-auth`)
-- `Framed-IP-Address` — populated only if device tracking has already learned it (`attribute 8 include-in-access-req`)
-- Cisco-VSAs including `audit-session-id` (`vsa send authentication`)
-- DHCP-derived attributes (`access-session authentication attributes filter-spec include list sensor_list`)
-
-<strong>Step 5 — RADIUS exchange runs.</strong> ISE sends EAP messages back through the switch. The supplicant completes EAP-TLS (or PEAP-MSCHAPv2, depending on the supplicant config). ISE issues an Access-Accept with:
-
-- No `Tunnel-Private-Group-ID` in the normal case — the static VLAN 802 already places the endpoint in the correct production VLAN. ISE only pushes a dynamic VLAN for specific roles that need to land somewhere else (e.g. contractors → 850).
-- `Cisco-AVPair = ip:inacl#10=permit ip any any` (or a downloadable ACL name to fetch)
-- `Class` attribute (the switch will echo this on the next reauth — `attribute 25 access-request include`)
-- `Session-Timeout = 28800` + `Termination-Action = RADIUS-Request` (drives the next reauth — `authentication timer reauthenticate server`)
-
-<strong>Step 6 — IBNS authentication-success fires.</strong> Matches the `DOT1X` class-map (because `match method dot1x` is true). The action `authorize` commits ISE's attributes to the session:
-
-- Port stays in VLAN 802 (the static client VLAN); closed-mode releases data plane traffic now that authorization has succeeded.
-- Per-session ACL is applied.
-- `Critical_Access` template is <strong>not</strong> activated (this is normal-path).
-
-<strong>Step 7 — Device tracking learns the IP.</strong> The laptop sends DHCP. `ip dhcp snooping` (global + per-VLAN) intercepts the exchange. `device-tracking attach-policy IPDT_POLICY` (with `security-level glean`) records the binding into the SISF table. DAI on VLAN 802 (`ip arp inspection vlan ...`) will now validate the laptop's ARP packets against this binding.
-
-<strong>Step 8 — Accounting flows.</strong> `aaa accounting identity default start-stop group ISESERV` sends Accounting-Start. `aaa accounting update newinfo periodic 2880` ensures attribute changes (or 48-hour keepalives) flow to ISE so Live Sessions stays accurate.
-
-<strong>Step 9 — Periodic reauthentication.</strong> At `Session-Timeout` expiry, dot1x reauthenticates without disrupting the data plane. Because `attribute 25 access-request include` is set, ISE recognises the reauth as a continuation of the existing session.
-
-<strong>Step 10 — Mid-day CoA (optional).</strong> An ISE admin changes policy on this endpoint. ISE sends CoA-Reauth to UDP/3799 on the switch (`aaa server radius dynamic-author`). The switch finds the session by `audit-session-id`, triggers a new authentication, and applies the new attributes — no data plane interruption if `dot1x critical eapol` mechanics aren't in play.
-
-<strong>Step 11 — Laptop unplugs.</strong> Link down → IBNS clears the session → Accounting-Stop sent → ISE Live Sessions removes the entry → SISF binding ages out.
-
----
 
 ### ISE-Side Configuration Reference
 
