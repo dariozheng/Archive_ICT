@@ -1969,7 +1969,8 @@ ip radius source-interface Vlan800
 !
 aaa group server radius RADSERV
  server name radius-mgmnt-auth01
-!
+ deadtime 15
+ ip radius source-interface Vlan800
 !
 !
 aaa authentication login default group RADSERV local-case 
