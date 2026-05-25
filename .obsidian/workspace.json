@@ -20,20 +20,6 @@
               "icon": "lucide-file",
               "title": "Cisco ISE"
             }
-          },
-          {
-            "id": "b3a1809c73b93147",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/Untitled.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "Untitled"
-            }
           }
         ]
       }
@@ -199,8 +185,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -221,7 +206,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
     "0 - Notes/Untitled.md",
     "0 - Notes/Cisco ISE.md",
