@@ -2134,7 +2134,7 @@ Activates the AAA framework, switching the device's authentication engine from t
 
 #### `aaa session-id common`
 
-Instructs the switch to use a **single shared session ID** across all three AAA services for the same session:
+Instructs the switch to use a <strong>single shared session ID</strong> across all three AAA services for the same session:
 
 ```
 Authentication  ┐
@@ -2142,7 +2142,7 @@ Authorization   ├──→ all share the same session ID
 Accounting      ┘
 ```
 
-Without this, each AAA service generates its **own separate session ID** for the same connection, making it very difficult to correlate records in ISE.
+Without this, each AAA service generates its <strong>own separate session ID</strong> for the same connection, making it very difficult to correlate records in ISE.
 
 When a device connects, ISE receives multiple RADIUS messages:
 
@@ -2154,7 +2154,7 @@ Accounting-Update
 Accounting-Stop  (session ends)
 ```
 
-With `aaa session-id common`, all these messages carry the **same session ID**, allowing ISE to tie them together into a single clean session record.
+With `aaa session-id common`, all these messages carry the <strong>same session ID</strong>, allowing ISE to tie them together into a single clean session record.
 
 ---
 
@@ -2162,7 +2162,7 @@ With `aaa session-id common`, all these messages carry the **same session ID**, 
 
 #### `username test-user privilege 0 password 7 06120A3258031918160405041E00`
 
-The switch sends periodic **health-check probes** to ISE using this username to determine whether the RADIUS server is alive or dead. A valid local username is required to populate the probe packet.
+The switch sends periodic <strong>health-check probes</strong> to ISE using this username to determine whether the RADIUS server is alive or dead. A valid local username is required to populate the probe packet.
 
 ---
 
@@ -2184,7 +2184,7 @@ radius server ISE01
 |`auth-port 1812`|Port for authentication (Access-Request / Accept / Reject)|
 |`acct-port 1813`|Port for accounting (Start / Stop / Update records)|
 
-> 1812 and 1813 are the **IANA standard RADIUS ports** — always use these with ISE unless explicitly configured otherwise.
+> 1812 and 1813 are the <strong>IANA standard RADIUS ports</strong> — always use these with ISE unless explicitly configured otherwise.
 
 `automate-tester username test-user ignore-acct-port probe-on`
 
@@ -2224,7 +2224,7 @@ With probe-on:
   → Once ISE responds → marked ALIVE again
 ```
 
-`key 7 075F02457D0A36162421045C` The **shared secret** between the switch and ISE. This must match exactly on both sides for ISE to return a Access-Accept.
+`key 7 075F02457D0A36162421045C` The <strong>shared secret</strong> between the switch and ISE. This must match exactly on both sides for ISE to return a Access-Accept.
 
 ---
 
@@ -2241,7 +2241,7 @@ aaa group server radius ISESERV
 ```
 aaa group server radius ISESERV
 ```
-- Creates a named AAA server group called **ISESERV**
+- Creates a named AAA server group called <strong>ISESERV</strong>
 - Groups multiple RADIUS servers together so method lists reference one group instead of individual servers
 - `radius` specifies the protocol type for this group
 
@@ -2249,15 +2249,15 @@ aaa group server radius ISESERV
  server name ISE01
  server name ISE02
 ```
-- Adds the named RADIUS server blocks **ISE01** and **ISE02** as members of this group
-- `server name` is the **new style** keyword — references the `radius server <name>` blocks defined later in the config
+- Adds the named RADIUS server blocks <strong>ISE01</strong> and <strong>ISE02</strong> as members of this group
+- `server name` is the <strong>new style</strong> keyword — references the `radius server <name>` blocks defined later in the config
 - Old style equivalent would have been `server 10.140.2.31` (IP directly, no name)
-- Order matters — **ISE01 is tried first**, ISE02 is the fallback
+- Order matters — <strong>ISE01 is tried first</strong>, ISE02 is the fallback
 
 ```
  deadtime 15
 ```
-- If a RADIUS server fails, it is marked **dead** and ignored for **15 minutes**
+- If a RADIUS server fails, it is marked <strong>dead</strong> and ignored for <strong>15 minutes</strong>
 - After 15 minutes IOS will try it again
 - Scoped to this group only — only affects ISESERV traffic
 - Old equivalent was global: `radius-server deadtime 15`
@@ -2265,7 +2265,7 @@ aaa group server radius ISESERV
 ```
  ip radius source-interface Vlan800
 ```
-- Forces all RADIUS packets sent by this group to use **Vlan800** as the source IP
+- Forces all RADIUS packets sent by this group to use <strong>Vlan800</strong> as the source IP
 - Critical for ISE because ISE uses the source IP to identify the NAD (Network Access Device)
 - Scoped to this group only
 - Old equivalent was global: `ip radius source-interface Vlan800`
@@ -2276,7 +2276,7 @@ aaa group server radius ISESERV
 
 #### `radius-server timeout 5`
 
-How long the switch **waits for a response** from ISE before giving up on that attempt.
+How long the switch <strong>waits for a response</strong> from ISE before giving up on that attempt.
 
 ```
 Switch → ISE:  Access-Request
@@ -2288,7 +2288,7 @@ No response → retransmit
 
 #### `radius-server retransmit 3`
 
-How many times the switch **retries a request** before declaring it failed and moving to the next server.
+How many times the switch <strong>retries a request</strong> before declaring it failed and moving to the next server.
 
 ```
 Attempt 1 → wait 5s → no response
@@ -2302,10 +2302,10 @@ Give up → try next server (ISE02)
 
 #### `radius-server dead-criteria time 5 tries 3`
 
-The **threshold** that triggers marking a server as DEAD. Both conditions must be met simultaneously:
+The <strong>threshold</strong> that triggers marking a server as DEAD. Both conditions must be met simultaneously:
 
-- **`time 5`** — At least **5 seconds** have passed with no valid response.
-- **`tries 3`** — At least **3 consecutive failures** have occurred within that window.
+- <strong>`time 5`</strong> — At least <strong>5 seconds</strong> have passed with no valid response.
+- <strong>`tries 3`</strong> — At least <strong>3 consecutive failures</strong> have occurred within that window.
 
 ```
 Failure 1 at 0s   ─┐
@@ -2321,7 +2321,7 @@ automate-tester begins probing ISE01
 
 #### `radius-server deadtime 15`
 
-Once a server is marked DEAD, how long the switch **ignores it entirely** before attempting contact again.
+Once a server is marked DEAD, how long the switch <strong>ignores it entirely</strong> before attempting contact again.
 
 ```
 ISE01 marked DEAD
@@ -2358,7 +2358,7 @@ With this:
 
 #### `radius-server attribute 6 support-multiple`
 
-Allows the switch to **send and receive multiple Service-Type values** within a single RADIUS packet.
+Allows the switch to <strong>send and receive multiple Service-Type values</strong> within a single RADIUS packet.
 
 ```
 Single Service-Type:
@@ -2369,7 +2369,7 @@ Multiple Service-Type:
   Service-Type = Call-Check (10)  ← MAB uses this
 ```
 
-> Critical in environments running both **802.1X and MAB** on the same ports — each method uses a different Service-Type value. Without this, MAB authentication can behave unexpectedly.
+> Critical in environments running both <strong>802.1X and MAB</strong> on the same ports — each method uses a different Service-Type value. Without this, MAB authentication can behave unexpectedly.
 
 #### `radius-server attribute 8 include-in-access-req`
 
@@ -2385,7 +2385,7 @@ With this:
   ISE sees: MAC address + IP address
 ```
 
-> ISE uses this for **profiling and session tracking**. Knowing the IP address allows ISE to:
+> ISE uses this for <strong>profiling and session tracking</strong>. Knowing the IP address allows ISE to:
 > 
 > - Match the endpoint to its IP in the session table
 > - Apply IP-based policy conditions
@@ -2393,7 +2393,7 @@ With this:
 
 #### `radius-server attribute 25 access-request include`
 
-Attribute 25 = Class — normally returned by ISE to the switch, but this command instructs the switch to also **include it in the Access-Request**.
+Attribute 25 = Class — normally returned by ISE to the switch, but this command instructs the switch to also <strong>include it in the Access-Request</strong>.
 
 ```
 Normal flow:
@@ -2405,11 +2405,11 @@ With this command:
   ISE → Switch: Access-Accept (includes updated Class attribute)
 ```
 
-> Helps ISE **maintain session continuity** — when a device re-authenticates, ISE can recognise it as the same session using the Class attribute from the previous exchange. Important for **re-authentication and CoA** scenarios.
+> Helps ISE <strong>maintain session continuity</strong> — when a device re-authenticates, ISE can recognise it as the same session using the Class attribute from the previous exchange. Important for <strong>re-authentication and CoA</strong> scenarios.
 
 #### `radius-server attribute 31 mac format ietf upper-case`
 
-Attribute 31 = Calling-Station-Id — carries the **MAC address** of the connecting device. This controls how that MAC address is formatted in the packet:
+Attribute 31 = Calling-Station-Id — carries the <strong>MAC address</strong> of the connecting device. This controls how that MAC address is formatted in the packet:
 
 |Format|Example|
 |---|---|
@@ -2424,11 +2424,11 @@ Switch sends: 0050.56ab.cdef     (Cisco default)
 ISE cannot match MAC → MAB fails ❌
 ```
 
-> **Critical for MAB** — if the MAC format does not match what ISE expects, the switch sends a MAC address that ISE cannot find in its endpoint database, causing authentication failure.
+> <strong>Critical for MAB</strong> — if the MAC format does not match what ISE expects, the switch sends a MAC address that ISE cannot find in its endpoint database, causing authentication failure.
 
 #### `radius-server attribute 31 send nas-port-detail mac-only`
 
-Controls **what is included** in the Calling-Station-Id attribute alongside the MAC address.
+Controls <strong>what is included</strong> in the Calling-Station-Id attribute alongside the MAC address.
 
 ```
 Without mac-only:
@@ -2440,11 +2440,11 @@ With mac-only:
   ← MAC address only
 ```
 
-> ISE expects **MAC address only** in Calling-Station-Id. If port information is appended, ISE cannot parse the MAC correctly — again breaking MAB and endpoint identification.
+> ISE expects <strong>MAC address only</strong> in Calling-Station-Id. If port information is appended, ISE cannot parse the MAC correctly — again breaking MAB and endpoint identification.
 
 #### `radius-server attribute 32 include-in-access-req format %h`
 
-Attribute 32 = NAS-Identifier — tells ISE the **hostname of the switch** that is authenticating the device.
+Attribute 32 = NAS-Identifier — tells ISE the <strong>hostname of the switch</strong> that is authenticating the device.
 
 |Part|Meaning|
 |---|---|
@@ -2459,7 +2459,7 @@ ISE receives:
   NAS-Port-Type   = Ethernet (15)
 ```
 
-> Enables ISE to build **location-aware policies** — applying different rules based on which switch the device is connected to.
+> Enables ISE to build <strong>location-aware policies</strong> — applying different rules based on which switch the device is connected to.
 
 ---
 
@@ -2467,7 +2467,7 @@ ISE receives:
 
 #### `radius-server vsa send authentication`
 
-Instructs the switch to **include Cisco VSAs in Access-Request packets** sent during authentication.
+Instructs the switch to <strong>include Cisco VSAs in Access-Request packets</strong> sent during authentication.
 
 ```
 Without it:
@@ -2482,11 +2482,11 @@ With it:
     cisco-av-pair = client-iif-id=xxxxx
 ```
 
-> The **audit-session-id** VSA is especially important — it is the unique identifier ISE uses to track the full session lifecycle and correctly target CoA messages.
+> The <strong>audit-session-id</strong> VSA is especially important — it is the unique identifier ISE uses to track the full session lifecycle and correctly target CoA messages.
 
 #### `radius-server vsa send accounting`
 
-Instructs the switch to **include Cisco VSAs in Accounting packets** sent to ISE.
+Instructs the switch to <strong>include Cisco VSAs in Accounting packets</strong> sent to ISE.
 
 ```
 Without it:
@@ -2502,7 +2502,7 @@ With it:
     cisco-av-pair = nas-tx-speed=xxxxx
 ```
 
-> Without this, ISE **Live Sessions** and session reporting will be missing critical data fields.
+> Without this, ISE <strong>Live Sessions</strong> and session reporting will be missing critical data fields.
 
 ---
 
@@ -2510,18 +2510,18 @@ With it:
 
 #### `dot1x system-auth-control`
 
-The **global enable switch** for 802.1X on the entire device. Without it, 802.1X will not function on **any** port — regardless of per-interface configuration. Think of it as the master on/off switch for 802.1X.
+The <strong>global enable switch</strong> for 802.1X on the entire device. Without it, 802.1X will not function on <strong>any</strong> port — regardless of per-interface configuration. Think of it as the master on/off switch for 802.1X.
 
 #### `dot1x critical eapol`
 
-When ISE is unreachable and a device is placed into **Critical Authentication**, the switch sends an **EAPOL-Success message directly to the device** — even though no real authentication took place with ISE.
+When ISE is unreachable and a device is placed into <strong>Critical Authentication</strong>, the switch sends an <strong>EAPOL-Success message directly to the device</strong> — even though no real authentication took place with ISE.
 
 ```
 Normal auth:      ISE approves → switch notifies device → EAPOL-Success
 Critical eapol:   ISE is dead  → switch notifies device → EAPOL-Success anyway
 ```
 
-The device runs an **802.1X supplicant** that manages the EAP conversation and is always listening for EAP messages.
+The device runs an <strong>802.1X supplicant</strong> that manages the EAP conversation and is always listening for EAP messages.
 
 ```
 Without dot1x critical eapol:
@@ -2563,7 +2563,7 @@ With dot1x critical eapol:
 
 Controls whether a device can move from one port to another on the same switch without being blocked.
 
-**Default behaviour — MAC move denied:**
+<strong>Default behaviour — MAC move denied:</strong>
 
 ```
 Device authenticated on Gi1/0/1
@@ -2579,7 +2579,7 @@ Device blocked until the original session times out
 
 > In busy office environments this causes constant problems — laptops moving between docking stations, phones being relocated, devices swapped between ports.
 
-**With `no access-session mac-move deny`:**
+<strong>With `no access-session mac-move deny`:</strong>
 
 ```
 Device authenticated on Gi1/0/1
@@ -2606,7 +2606,7 @@ aaa server radius dynamic-author
  client 10.140.2.32 server-key 7 08716F473A1A2A0421380354
 ```
 
-Standard RADIUS is a **one-way conversation** — the switch asks, ISE answers:
+Standard RADIUS is a <strong>one-way conversation</strong> — the switch asks, ISE answers:
 
 ```
 Standard RADIUS:
@@ -2616,7 +2616,7 @@ Standard RADIUS:
   Session starts... ISE cannot modify it ❌
 ```
 
-Dynamic Authorization (CoA) makes RADIUS **bidirectional** — ISE can now initiate communication back to the switch mid-session:
+Dynamic Authorization (CoA) makes RADIUS <strong>bidirectional</strong> — ISE can now initiate communication back to the switch mid-session:
 
 ```
 With CoA:
@@ -2630,7 +2630,7 @@ With CoA:
   ISE → Switch:  "Apply this new ACL"             ← ISE initiates ✅
 ```
 
-The `dynamic-author` block opens a **listener on the switch** on port **3799** (RFC 5176 standard CoA port), waiting for incoming RADIUS messages from ISE.
+The `dynamic-author` block opens a <strong>listener on the switch</strong> on port <strong>3799</strong> (RFC 5176 standard CoA port), waiting for incoming RADIUS messages from ISE.
 
 ```
 Without this:
@@ -2650,7 +2650,7 @@ With this:
 
 #### `aaa authentication dot1x default group ISESERV`
 
-Tells the switch **who to ask** when a device attempts to authenticate via 802.1X.
+Tells the switch <strong>who to ask</strong> when a device attempts to authenticate via 802.1X.
 
 | Part                       | Meaning                                           |
 | -------------------------- | ------------------------------------------------- |
@@ -2662,9 +2662,9 @@ Tells the switch **who to ask** when a device attempts to authenticate via 802.1
 
 #### `aaa authorization network default group ISESERV`
 
-After a device authenticates, this tells the switch to ask ISE **what to do with it** — which VLAN, ACL, SGT, etc. to apply.
+After a device authenticates, this tells the switch to ask ISE <strong>what to do with it</strong> — which VLAN, ACL, SGT, etc. to apply.
 
-The keyword `network` specifically covers **network access policy attributes** pushed back from ISE in the Access-Accept packet:
+The keyword `network` specifically covers <strong>network access policy attributes</strong> pushed back from ISE in the Access-Accept packet:
 
 |Attribute|Example|Effect|
 |---|---|---|
@@ -2692,7 +2692,7 @@ Sends session accounting records to ISE — a START record when a session opens 
 
 #### `aaa accounting system default start-stop group ISESERV`
 
-Sends accounting records for **system-level events** such as switch reloads and configuration changes.
+Sends accounting records for <strong>system-level events</strong> such as switch reloads and configuration changes.
 
 |Part|Meaning|
 |---|---|
@@ -2704,12 +2704,12 @@ Sends accounting records for **system-level events** such as switch reloads and 
 
 #### `aaa accounting update newinfo periodic 2880`
 
-A two-part instruction that controls when **interim accounting updates** are sent:
+A two-part instruction that controls when <strong>interim accounting updates</strong> are sent:
 
-|Part|Meaning|
-|---|---|
-|`newinfo`|If ISE pushes new information mid-session (e.g. a CoA changes the VLAN), immediately send an updated accounting record|
-|`periodic 2880`|Every **2880 minutes (48 hours)**, send a keepalive update even if nothing has changed|
+| Part            | Meaning                                                                                                                |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `newinfo`       | If ISE pushes new information mid-session (e.g. a CoA changes the VLAN), immediately send an updated accounting record |
+| `periodic 2880` | Every <strong>2880 minutes (48 hours)</strong>, send a keepalive update even if nothing has changed                    |
 
 > Without `newinfo`, ISE would not know when a CoA changed a session's policy. Without `periodic`, long-lived sessions (such as servers) may appear as dead in ISE's session table.
 
@@ -2726,14 +2726,14 @@ no ip dhcp snooping information option
 ip dhcp snooping
 ```
 
-- **Globally enables** DHCP snooping on the switch
+- <strong>Globally enables</strong> DHCP snooping on the switch
 - Without this, all other DHCP snooping commands are inactive
-- Once enabled, the switch starts **inspecting DHCP messages** on all ports
-- Ports are either **trusted** or **untrusted**:
-    - **Trusted** — uplinks, DHCP server ports — DHCP messages pass freely
-    - **Untrusted** — access ports, clients — DHCP messages are inspected and filtered
-- By default **all ports are untrusted** until explicitly set otherwise
-- Builds the **DHCP snooping binding table** (IP + MAC + VLAN + port + lease time) which DAI and IPDT rely on
+- Once enabled, the switch starts <strong>inspecting DHCP messages</strong> on all ports
+- Ports are either <strong>trusted</strong> or <strong>untrusted</strong>:
+    - <strong>Trusted</strong> — uplinks, DHCP server ports — DHCP messages pass freely
+    - <strong>Untrusted</strong> — access ports, clients — DHCP messages are inspected and filtered
+- By default <strong>all ports are untrusted</strong> until explicitly set otherwise
+- Builds the <strong>DHCP snooping binding table</strong> (IP + MAC + VLAN + port + lease time) which DAI and IPDT rely on
 
 ---
 
@@ -2741,10 +2741,10 @@ ip dhcp snooping
 ip dhcp snooping vlan 800,802,805,850
 ```
 
-- Enables DHCP snooping **only on these specific VLANs**
-- Even though snooping is globally enabled above, it does **nothing until activated per VLAN**
-- Traffic on VLANs not listed here is **not inspected** and passes freely
-- Allows you to be selective — you would typically only enable it on **user/client VLANs**, not infrastructure VLANs
+- Enables DHCP snooping <strong>only on these specific VLANs</strong>
+- Even though snooping is globally enabled above, it does <strong>nothing until activated per VLAN</strong>
+- Traffic on VLANs not listed here is <strong>not inspected</strong> and passes freely
+- Allows you to be selective — you would typically only enable it on <strong>user/client VLANs</strong>, not infrastructure VLANs
 
 ---
 
@@ -2752,14 +2752,14 @@ ip dhcp snooping vlan 800,802,805,850
 no ip dhcp snooping information option
 ```
 
-- Disables **DHCP Option 82** insertion
-- By default when snooping is enabled, the switch **automatically inserts Option 82** (relay agent information) into DHCP requests — adding port and VLAN info
+- Disables <strong>DHCP Option 82</strong> insertion
+- By default when snooping is enabled, the switch <strong>automatically inserts Option 82</strong> (relay agent information) into DHCP requests — adding port and VLAN info
 - This causes problems when:
-    - There is **no DHCP relay** configured
-    - The DHCP server **does not understand or expect** Option 82
-    - The DHCP server **drops** packets with Option 82 from untrusted sources
-- Disabling it lets DHCP requests pass through **unmodified**
-- Very commonly disabled in **access layer switches** that are not acting as DHCP relay agents
+    - There is <strong>no DHCP relay</strong> configured
+    - The DHCP server <strong>does not understand or expect</strong> Option 82
+    - The DHCP server <strong>drops</strong> packets with Option 82 from untrusted sources
+- Disabling it lets DHCP requests pass through <strong>unmodified</strong>
+- Very commonly disabled in <strong>access layer switches</strong> that are not acting as DHCP relay agents
 
 On trunk mode interfaces put a `ip dhcp snooping trust`
 
@@ -2769,32 +2769,32 @@ On trunk mode interfaces put a `ip dhcp snooping trust`
 
 `ip arp inspection vlan 800,802,805,850`
 
-- Enables **Dynamic ARP Inspection (DAI)** on these specific VLANs
-- DAI protects against **ARP spoofing/poisoning** attacks where a malicious host sends fake ARP replies to poison other hosts' ARP caches
-- Works by **intercepting all ARP packets** on untrusted ports and validating them against the **DHCP snooping binding table**:
-    - If the ARP packet's **IP + MAC matches** an entry in the binding table → **forwarded**
-    - If the ARP packet's **IP + MAC does not match** → **dropped**
-- Like DHCP snooping, ports are either **trusted** or **untrusted**:
-    - **Trusted** — uplinks, server ports — ARP passes freely without inspection
-    - **Untrusted** — access/client ports — every ARP is validated
-- **Depends entirely on the DHCP snooping binding table** — this is why DHCP snooping must be configured first
-- Hosts with **static IPs** need manual ARP ACLs since they won't have a DHCP snooping entry
+- Enables <strong>Dynamic ARP Inspection (DAI)</strong> on these specific VLANs
+- DAI protects against <strong>ARP spoofing/poisoning</strong> attacks where a malicious host sends fake ARP replies to poison other hosts' ARP caches
+- Works by <strong>intercepting all ARP packets</strong> on untrusted ports and validating them against the <strong>DHCP snooping binding table</strong>:
+    - If the ARP packet's <strong>IP + MAC matches</strong> an entry in the binding table → <strong>forwarded</strong>
+    - If the ARP packet's <strong>IP + MAC does not match</strong> → <strong>dropped</strong>
+- Like DHCP snooping, ports are either <strong>trusted</strong> or <strong>untrusted</strong>:
+    - <strong>Trusted</strong> — uplinks, server ports — ARP passes freely without inspection
+    - <strong>Untrusted</strong> — access/client ports — every ARP is validated
+- <strong>Depends entirely on the DHCP snooping binding table</strong> — this is why DHCP snooping must be configured first
+- Hosts with <strong>static IPs</strong> need manual ARP ACLs since they won't have a DHCP snooping entry
 
 ---
 
 ### IP Device Tracking
 
-- Enables **IP Device Tracking (IPDT)** globally on the switch
-- IPDT tracks **which IP address is on which port** by sending ARP probes to connected hosts
-- `auto-source` means the switch **automatically selects the source IP** for those ARP probes rather than requiring a manually configured IP
-    - It picks the **best available IP** on the switch to source the probe from
+- Enables <strong>IP Device Tracking (IPDT)</strong> globally on the switch
+- IPDT tracks <strong>which IP address is on which port</strong> by sending ARP probes to connected hosts
+- `auto-source` means the switch <strong>automatically selects the source IP</strong> for those ARP probes rather than requiring a manually configured IP
+    - It picks the <strong>best available IP</strong> on the switch to source the probe from
     - Without `auto-source` you would need to manually specify a source IP for the probes
-- Builds and maintains its own **device tracking binding table** (IP + MAC + VLAN + port)
+- Builds and maintains its own <strong>device tracking binding table</strong> (IP + MAC + VLAN + port)
 - This binding table is used by:
-    - **ISE** — to know where a device is connected
-    - **802.1X** — to track session location
-    - **DAI** — as an additional validation source
-    - **CoA** — to find and bounce the right port when ISE sends a policy change
+    - <strong>ISE</strong> — to know where a device is connected
+    - <strong>802.1X</strong> — to track session location
+    - <strong>DAI</strong> — as an additional validation source
+    - <strong>CoA</strong> — to find and bounce the right port when ISE sends a policy change
 
 ---
 
@@ -2809,8 +2809,8 @@ limit address-count 10
 tracking enable
 ```
 
-- Creates a named device tracking policy called **IPDT_POLICY**
-- Applied to **access ports** where client devices connect
+- Creates a named device tracking policy called <strong>IPDT_POLICY</strong>
+- Applied to <strong>access ports</strong> where client devices connect
 - Defines how the switch tracks and handles IP/MAC bindings on those ports
 
 ```
@@ -2818,29 +2818,29 @@ tracking enable
 ```
 - Defines how aggressively the switch validates and creates binding table entries
 - Three levels exist:
-    - **glean** — passively collects IP/MAC bindings from any traffic it sees (DHCP, ARP, ND) without validating — most permissive
-    - **guard** — validates bindings against existing entries, drops packets that don't match — most strict
-    - **inspect** — middle ground, inspects but more lenient than guard
-- `glean` is used here because **ISE is doing the actual enforcement** — the switch just needs to collect the data and pass it to ISE, not enforce it locally
+    - <strong>glean</strong> — passively collects IP/MAC bindings from any traffic it sees (DHCP, ARP, ND) without validating — most permissive
+    - <strong>guard</strong> — validates bindings against existing entries, drops packets that don't match — most strict
+    - <strong>inspect</strong> — middle ground, inspects but more lenient than guard
+- `glean` is used here because <strong>ISE is doing the actual enforcement</strong> — the switch just needs to collect the data and pass it to ISE, not enforce it locally
 
 ```
  limit address-count 10
 ```
-- Limits the number of IP addresses that can be tracked **per port**
+- Limits the number of IP addresses that can be tracked <strong>per port</strong>
 - Prevents a single port from flooding the binding table with excessive entries
 - 10 is a reasonable limit for an access port — allows for:
     - A PC with multiple IPs
     - An IP phone + PC on same port
     - VMs if a hypervisor is connected
-- Protects against **binding table exhaustion attacks**
+- Protects against <strong>binding table exhaustion attacks</strong>
 
 ```
  tracking enable
 ```
-- Explicitly enables **active tracking** on ports using this policy
-- Switch will **send ARP probes** to hosts to verify they are still present
+- Explicitly enables <strong>active tracking</strong> on ports using this policy
+- Switch will <strong>send ARP probes</strong> to hosts to verify they are still present
 - Updates the binding table when hosts leave or move
-- Without this, tracking would rely only on **passive gleaning** of traffic
+- Without this, tracking would rely only on <strong>passive gleaning</strong> of traffic
 
 #### `device-tracking policy Disable_DT_Trunk`
 
@@ -2849,16 +2849,16 @@ device-tracking policy Disable_DT_Trunk
  trusted-port
  device-role switch
 ```
-- Creates a named policy called **Disable_DT_Trunk**
-- Applied to **trunk ports / uplinks** where no client devices connect
+- Creates a named policy called <strong>Disable_DT_Trunk</strong>
+- Applied to <strong>trunk ports / uplinks</strong> where no client devices connect
 - Name makes the intent clear — effectively disables device tracking behavior on trunks
 
 ```
  trusted-port
 ```
 
-- Marks the port as **trusted** for device tracking purposes
-- Bindings learned from this port are **not challenged or inspected**
+- Marks the port as <strong>trusted</strong> for device tracking purposes
+- Bindings learned from this port are <strong>not challenged or inspected</strong>
 - ARP and DHCP traffic passes freely without validation
 - Applied to uplinks because the switch on the other end is already trusted infrastructure
 
@@ -2866,8 +2866,8 @@ device-tracking policy Disable_DT_Trunk
  device-role switch
 ```
 
-- Tells IPDT that the device connected to this port is **another switch**, not an end host
-- Changes tracking behavior — the switch will **not send ARP probes** to this port looking for hosts
+- Tells IPDT that the device connected to this port is <strong>another switch</strong>, not an end host
+- Changes tracking behavior — the switch will <strong>not send ARP probes</strong> to this port looking for hosts
 - Prevents the binding table from trying to track the upstream switch's MAC/IP as an endpoint
 - Without this, IPDT would try to track the neighboring switch as if it were a client
 
@@ -2875,10 +2875,10 @@ device-tracking policy Disable_DT_Trunk
 
 ### Device Sensor 
 #### `cdp run`
-- **Globally enables CDP** (Cisco Discovery Protocol) on the switch
+- <strong>Globally enables CDP</strong> (Cisco Discovery Protocol) on the switch
 - CDP is a Cisco proprietary Layer 2 protocol that discovers directly connected Cisco devices
 - Enabled by default on most IOS devices but explicitly stated here for clarity
-- **Device Sensor depends on CDP being running** to collect CDP TLVs from connected devices
+- <strong>Device Sensor depends on CDP being running</strong> to collect CDP TLVs from connected devices
 - Without this, the `cdp_list` filter below would collect nothing
 #### `device-sensor filter-list dhcp list dhcp_list`
 
@@ -2892,30 +2892,30 @@ device-sensor filter-list dhcp list dhcp_list
 device-sensor filter-spec dhcp include list dhcp_list 
 ```
 
-- Creates a named filter list called **dhcp_list** for **DHCP protocol**
-- Defines exactly which DHCP options the switch should **collect and forward to ISE**
+- Creates a named filter list called <strong>dhcp_list</strong> for <strong>DHCP protocol</strong>
+- Defines exactly which DHCP options the switch should <strong>collect and forward to ISE</strong>
 - Device Sensor passively reads DHCP messages already flowing through the switch — it does not generate them
-- Without a filter list, device sensor would collect **all** DHCP options — this scopes it to only what ISE needs
+- Without a filter list, device sensor would collect <strong>all</strong> DHCP options — this scopes it to only what ISE needs
 
 ```
  option name host-name
 ```
-- DHCP **Option 12** — the hostname the client sends in its DHCP request
+- DHCP <strong>Option 12</strong> — the hostname the client sends in its DHCP request
 - Tells ISE the device's configured hostname (e.g. `LAPTOP-ABC123`)
 - Very useful for ISE profiling — helps identify the device type and owner
 
 ```
  option name requested-address
 ```
-- DHCP **Option 50** — the IP address the client is requesting
+- DHCP <strong>Option 50</strong> — the IP address the client is requesting
 - Client sends this when renewing a lease, asking for its previous IP
 - Helps ISE correlate the device to a specific IP address
 
 ```
  option name parameter-request-list
 ```
-- DHCP **Option 55** — list of DHCP options the client is requesting from the server
-- **Extremely valuable for ISE profiling** — different OS/device types request different parameters in a consistent fingerprint:
+- DHCP <strong>Option 55</strong> — list of DHCP options the client is requesting from the server
+- <strong>Extremely valuable for ISE profiling</strong> — different OS/device types request different parameters in a consistent fingerprint:
     - Windows requests certain options
     - Apple iOS requests different ones
     - Android requests its own set
@@ -2924,26 +2924,26 @@ device-sensor filter-spec dhcp include list dhcp_list
 ```
  option name class-identifier
 ```
-- DHCP **Option 60** — vendor class identifier sent by the client
+- DHCP <strong>Option 60</strong> — vendor class identifier sent by the client
 - Client announces what type of device it is (e.g. `MSFT 5.0` for Windows, `dhcpcd` for Linux)
 - Another strong ISE profiling signal for device type identification
 
 ```
  option name client-identifier
 ```
-- DHCP **Option 61** — unique client identifier, usually the MAC address
+- DHCP <strong>Option 61</strong> — unique client identifier, usually the MAC address
 - Used by ISE to uniquely identify and track the device across sessions
 - More reliable than MAC alone in some cases
 
 ```
 device-sensor filter-spec dhcp include list dhcp_list
 ```
-- **Activates** the dhcp_list filter
-- Tells device sensor to **include** (collect and forward) only the DHCP options defined in dhcp_list
-- Without this line the filter list above is defined but **never used**
-- Think of filter-list as defining **what**, filter-spec as saying **use it**
-- This command only tell the device sensor **what to collect and store locally** on the switch
-- The data sits in the **local device sensor cache** on the switch
+- <strong>Activates</strong> the dhcp_list filter
+- Tells device sensor to <strong>include</strong> (collect and forward) only the DHCP options defined in dhcp_list
+- Without this line the filter list above is defined but <strong>never used</strong>
+- Think of filter-list as defining <strong>what</strong>, filter-spec as saying <strong>use it</strong>
+- This command only tell the device sensor <strong>what to collect and store locally</strong> on the switch
+- The data sits in the <strong>local device sensor cache</strong> on the switch
 
 #### `device-sensor filter-list cdp list cdp_list`
 
@@ -2956,7 +2956,7 @@ device-sensor filter-list cdp list cdp_list
  tlv name version-type
 device-sensor filter-spec cdp include list cdp_list
 ```
-- Creates a named filter list called **cdp_list** for **CDP protocol**
+- Creates a named filter list called <strong>cdp_list</strong> for <strong>CDP protocol</strong>
 - Defines exactly which CDP TLVs (Type-Length-Values) to collect and forward to ISE
 - CDP TLVs are fields within CDP messages that describe the sending device
 
@@ -2964,7 +2964,7 @@ device-sensor filter-spec cdp include list cdp_list
  tlv name device-name
 ```
 
-- Collects the **hostname** of the connected Cisco device
+- Collects the <strong>hostname</strong> of the connected Cisco device
 - For non-client ports this could be another switch or phone's name
 - Helps ISE identify Cisco IP phones by their device name
 
@@ -2972,14 +2972,14 @@ device-sensor filter-spec cdp include list cdp_list
  tlv name address-type
 ```
 
-- Collects the **IP address** of the connected device as advertised via CDP
+- Collects the <strong>IP address</strong> of the connected device as advertised via CDP
 - ISE uses this to correlate CDP data with the device's IP in the binding table
 
 ```
  tlv name capabilities-type
 ```
 
-- Collects what **type of device** the neighbor is (switch, router, phone, host)
+- Collects what <strong>type of device</strong> the neighbor is (switch, router, phone, host)
 - Very strong ISE profiling signal — immediately tells ISE if device is a Cisco IP phone
 - Cisco IP phones advertise themselves as `telephone` in this TLV
 
@@ -2987,7 +2987,7 @@ device-sensor filter-spec cdp include list cdp_list
  tlv name platform-type
 ```
 
-- Collects the **exact hardware model** of the connected device (e.g. `Cisco IP Phone 8841`)
+- Collects the <strong>exact hardware model</strong> of the connected device (e.g. `Cisco IP Phone 8841`)
 - One of the most valuable profiling TLVs for ISE
 - Allows ISE to apply very specific policies based on exact phone/device model
 
@@ -2995,7 +2995,7 @@ device-sensor filter-spec cdp include list cdp_list
  tlv name version-type
 ```
 
-- Collects the **firmware/software version** running on the connected device
+- Collects the <strong>firmware/software version</strong> running on the connected device
 - Helps ISE make compliance decisions (e.g. is the phone running an approved firmware?)
 - Can be used to profile and differentiate device types
 
@@ -3003,18 +3003,18 @@ device-sensor filter-spec cdp include list cdp_list
 device-sensor filter-spec cdp include list cdp_list
 ```
 
-- **Activates** the cdp_list filter
-- Without this line the filter list above is defined but **never used**
-- Think of filter-list as defining **what**, filter-spec as saying **use it**
-- This command only tell the device sensor **what to collect and store locally** on the switch
-- The data sits in the **local device sensor cache** on the switch
+- <strong>Activates</strong> the cdp_list filter
+- Without this line the filter list above is defined but <strong>never used</strong>
+- Think of filter-list as defining <strong>what</strong>, filter-spec as saying <strong>use it</strong>
+- This command only tell the device sensor <strong>what to collect and store locally</strong> on the switch
+- The data sits in the <strong>local device sensor cache</strong> on the switch
 
 #### `device-sensor notify all-changes`
-- Tells device sensor to **immediately notify ISE** whenever any attribute changes
+- Tells device sensor to <strong>immediately notify ISE</strong> whenever any attribute changes
 - Without this, sensor data might only be sent at session start
-- `all-changes` means if a device sends a new DHCP request with different options, or CDP updates — ISE is notified **immediately**
-- Critical for ISE to maintain **accurate, up to date profiling** throughout the session lifetime
-- Allows ISE to **re-evaluate and change policy** mid-session if device profile changes
+- `all-changes` means if a device sends a new DHCP request with different options, or CDP updates — ISE is notified <strong>immediately</strong>
+- Critical for ISE to maintain <strong>accurate, up to date profiling</strong> throughout the session lifetime
+- Allows ISE to <strong>re-evaluate and change policy</strong> mid-session if device profile changes
 
 #### `access-session attributes filter-list list sensor_list`
 
@@ -3023,25 +3023,25 @@ access-session attributes filter-list list sensor_list
  cdp
  dhcp
 ```
-- Creates a named list called **sensor_list** that includes **cdp** and **dhcp** as attribute sources
-- Defines which protocol data collected by device sensor should be included in **access-session messages** sent to ISE
-- This is the bridge between **device sensor** (collects data) and **AAA/ISE** (receives data)
+- Creates a named list called <strong>sensor_list</strong> that includes <strong>cdp</strong> and <strong>dhcp</strong> as attribute sources
+- Defines which protocol data collected by device sensor should be included in <strong>access-session messages</strong> sent to ISE
+- This is the bridge between <strong>device sensor</strong> (collects data) and <strong>AAA/ISE</strong> (receives data)
 - Without this, device sensor collects data locally but it never makes it into the AAA messages ISE receives
 #### `access-session accounting attributes filter-spec include list sensor_list`
-- Tells the switch to **include sensor_list attributes** in **RADIUS accounting messages** sent to ISE
-- This means CDP and DHCP profiling data is sent inside **accounting packets** to ISE
-- ISE receives this data and uses it to **profile and classify** the device
+- Tells the switch to <strong>include sensor_list attributes</strong> in <strong>RADIUS accounting messages</strong> sent to ISE
+- This means CDP and DHCP profiling data is sent inside <strong>accounting packets</strong> to ISE
+- ISE receives this data and uses it to <strong>profile and classify</strong> the device
 - Without this, ISE would not receive the CDP/DHCP attributes in accounting messages
 #### `access-session authentication attributes filter-spec include list sensor_list`
-- Tells the switch to **include sensor_list attributes** in **RADIUS authentication messages** sent to ISE
-- Same data but sent during the **authentication phase** not just accounting
-- Allows ISE to make profiling-based policy decisions **at the time of authentication** not just after
-- Combined with the accounting line above — ISE gets profiling data at **both authentication and accounting**
+- Tells the switch to <strong>include sensor_list attributes</strong> in <strong>RADIUS authentication messages</strong> sent to ISE
+- Same data but sent during the <strong>authentication phase</strong> not just accounting
+- Allows ISE to make profiling-based policy decisions <strong>at the time of authentication</strong> not just after
+- Combined with the accounting line above — ISE gets profiling data at <strong>both authentication and accounting</strong>
 
 ---
 
 ### Class-Map Type Control Subscriber
-A `class-map type control subscriber` classifies subscribers based on specific **conditions or events** (not packet content like a regular class-map). It's used inside a **policy-map type control subscriber** to trigger actions when those conditions are met.
+A `class-map type control subscriber` classifies subscribers based on specific <strong>conditions or events</strong> (not packet content like a regular class-map). It's used inside a <strong>policy-map type control subscriber</strong> to trigger actions when those conditions are met.
  
 Syntax
 
@@ -3050,7 +3050,7 @@ class-map type control subscriber match-all | match-any <name>
   match <condition>
 ```
 
-**`match-all`** — all conditions must be true (AND logic) **`match-any`** — any one condition must be true (OR logic)
+<strong>`match-all`</strong> — all conditions must be true (AND logic) <strong>`match-any`</strong> — any one condition must be true (OR logic)
 
 ```
 class-map type control subscriber match-all DOT1X
@@ -3094,7 +3094,7 @@ class-map type control subscriber match-none NOT_CRITICAL_AUTH
 !
 ```
 
-These class-maps form the classification layer of a typical **wired 802.1X + MAB (MAC Authentication Bypass)** access control policy. Here's each one broken down:
+These class-maps form the classification layer of a typical <strong>wired 802.1X + MAB (MAC Authentication Bypass)</strong> access control policy. Here's each one broken down:
 #### 802.1X Class-Maps
 
 ##### `DOT1X`
@@ -3103,7 +3103,7 @@ These class-maps form the classification layer of a typical **wired 802.1X + MAB
 match method dot1x
 ```
 
-Matches **any session where 802.1X is the active authentication method** — regardless of outcome. Used as a broad "dot1x is running" check.
+Matches <strong>any session where 802.1X is the active authentication method</strong> — regardless of outcome. Used as a broad "dot1x is running" check.
 ##### `DOT1X_DENIED`
 
 ```
@@ -3111,7 +3111,7 @@ match method dot1x
 match result-type method dot1x authoritative
 ```
 
-Matches a subscriber where dot1x **ran AND returned an authoritative failure** — meaning the RADIUS server explicitly **rejected** the credentials (Access-Reject). This is a hard deny, not a timeout or missing supplicant.
+Matches a subscriber where dot1x <strong>ran AND returned an authoritative failure</strong> — meaning the RADIUS server explicitly <strong>rejected</strong> the credentials (Access-Reject). This is a hard deny, not a timeout or missing supplicant.
 
 > `authoritative` = the server made a definitive decision (reject). Distinct from a timeout or no-response.
 ##### `DOT1X_NO_SUPPLICANT`
@@ -3120,7 +3120,7 @@ Matches a subscriber where dot1x **ran AND returned an authoritative failure** �
 match result-type method dot1x agent-not-found
 ```
 
-Matches when **no 802.1X supplicant was detected** on the endpoint. The switch sent EAP identity requests, but nothing responded. This typically triggers a **fallback to MAB**.
+Matches when <strong>no 802.1X supplicant was detected</strong> on the endpoint. The switch sent EAP identity requests, but nothing responded. This typically triggers a <strong>fallback to MAB</strong>.
 ##### `DOT1X_TIMEOUT`
 
 ```
@@ -3128,7 +3128,7 @@ match method dot1x
 match result-type method dot1x method-timeout
 ```
 
-Matches when dot1x **timed out** — the supplicant may exist but didn't complete the exchange in time. Different from `agent-not-found` (device present but slow) vs. no supplicant at all.
+Matches when dot1x <strong>timed out</strong> — the supplicant may exist but didn't complete the exchange in time. Different from `agent-not-found` (device present but slow) vs. no supplicant at all.
 #### MAB Class-Maps
 
 ##### `MAB`
@@ -3137,7 +3137,7 @@ Matches when dot1x **timed out** — the supplicant may exist but didn't complet
 match method mab
 ```
 
-Broad match — **MAB is the active auth method**, regardless of result. Parallel to `DOT1X`.
+Broad match — <strong>MAB is the active auth method</strong>, regardless of result. Parallel to `DOT1X`.
 ##### `MAB_DENIED`
 
 ```
@@ -3145,10 +3145,10 @@ match method mab
 match result-type method mab authoritative
 ```
 
-MAB ran and the RADIUS server **explicitly rejected** the MAC address (Access-Reject). The MAC is known and denied — not a timeout, not unknown.
+MAB ran and the RADIUS server <strong>explicitly rejected</strong> the MAC address (Access-Reject). The MAC is known and denied — not a timeout, not unknown.
 #### AAA Failure Handling Class-Maps
 
-These three handle **AAA server unreachability** and differentiate responses based on the subscriber's prior state:
+These three handle <strong>AAA server unreachability</strong> and differentiate responses based on the subscriber's prior state:
 
 ##### `AAA-DOWN_UNAUTH_USER`
 
@@ -3157,7 +3157,7 @@ match result-type aaa-timeout
 match authorization-status unauthorized
 ```
 
-AAA is unreachable **and** this subscriber has **never been authorized**. A new/unknown device hit the switch while RADIUS is down. → Typically gets **Critical Auth / restricted VLAN**.
+AAA is unreachable <strong>and</strong> this subscriber has <strong>never been authorized</strong>. A new/unknown device hit the switch while RADIUS is down. → Typically gets <strong>Critical Auth / restricted VLAN</strong>.
 ##### `AAA-DOWN_GUEST_USER`
 
 ```
@@ -3165,7 +3165,7 @@ match result-type aaa-timeout
 match activated-service-template Guest_Redirect
 ```
 
-AAA is unreachable **and** this subscriber was already in the **Guest (redirect) state** before the outage. → Keep them in guest or hold state, don't escalate privileges.
+AAA is unreachable <strong>and</strong> this subscriber was already in the <strong>Guest (redirect) state</strong> before the outage. → Keep them in guest or hold state, don't escalate privileges.
 ##### `AAA-DOWN_AUTH_USER`
 
 ```
@@ -3173,7 +3173,7 @@ match result-type aaa-timeout
 match authorization-status authorized
 ```
 
-AAA is unreachable **but** this subscriber was **already fully authorized** before the outage. → Most permissive fallback — maintain their access so legitimate users aren't disrupted.
+AAA is unreachable <strong>but</strong> this subscriber was <strong>already fully authorized</strong> before the outage. → Most permissive fallback — maintain their access so legitimate users aren't disrupted.
 #### Critical Auth Class-Maps
 
 ##### `CRITICAL_AUTH`
@@ -3182,7 +3182,7 @@ AAA is unreachable **but** this subscriber was **already fully authorized** befo
 match activated-service-template Critical_Access
 ```
 
-Matches sessions that are **currently running under the Critical Access service template** — i.e., they were placed into critical auth mode during an AAA outage.
+Matches sessions that are <strong>currently running under the Critical Access service template</strong> — i.e., they were placed into critical auth mode during an AAA outage.
 ##### `NOT_CRITICAL_AUTH` ← Note: `match-none`
 
 ```
@@ -3190,40 +3190,40 @@ match-none
 match activated-service-template Critical_Access
 ```
 
-Inverts the logic — matches sessions where **Critical_Access is NOT active**. `match-none` means "true if none of the conditions match," making this the logical complement of `CRITICAL_AUTH`.
+Inverts the logic — matches sessions where <strong>Critical_Access is NOT active</strong>. `match-none` means "true if none of the conditions match," making this the logical complement of `CRITICAL_AUTH`.
 
-> This is commonly used to detect when AAA comes back up — re-authenticate sessions that are **not** in critical auth (i.e., normal sessions that may need to re-auth after recovery).
+> This is commonly used to detect when AAA comes back up — re-authenticate sessions that are <strong>not</strong> in critical auth (i.e., normal sessions that may need to re-auth after recovery).
 
 ---
 ### Policy-Map Type Control Subscriber ISE-NAC-POLICY
 
-This policy-map is the **state machine** that orchestrates everything that happens on an authentication session. 
+This policy-map is the <strong>state machine</strong> that orchestrates everything that happens on an authentication session. 
 
-When an event fires, the policy-map engine looks at all classes under that event and walks them **in numeric order** (5, 10, 20, 30, ...). What happens next depends on the event's match keyword:
+When an event fires, the policy-map engine looks at all classes under that event and walks them <strong>in numeric order</strong> (5, 10, 20, 30, ...). What happens next depends on the event's match keyword:
 
-- **`match-all`** — every class whose conditions match has its action list executed (in order).
-- **`match-first`** — only the _first_ class whose conditions match has its actions executed; the rest are skipped entirely.
+- <strong>`match-all`</strong> — every class whose conditions match has its action list executed (in order).
+- <strong>`match-first`</strong> — only the _first_ class whose conditions match has its actions executed; the rest are skipped entirely.
 
 Within a class, the action list is governed by its modifier:
 
-- **`do-until-failure`** _(used everywhere here)_ — execute actions 10, 20, 30... in order; stop at the first one that fails. This is the safe default.
-- **`do-all`** — execute every action regardless of success/failure.
-- **`do-until-success`** — execute until one succeeds, then stop.
+- <strong>`do-until-failure`</strong> _(used everywhere here)_ — execute actions 10, 20, 30... in order; stop at the first one that fails. This is the safe default.
+- <strong>`do-all`</strong> — execute every action regardless of success/failure.
+- <strong>`do-until-success`</strong> — execute until one succeeds, then stop.
 
 The action numbers (the inner `10`, `20`, `30`) are just an ordering — they don't have semantic meaning, but you typically leave gaps so you can insert new actions later without renumbering.
 
 A note on the action verbs themselves, because they show up repeatedly and aren't interchangeable:
 
-- **`authenticate using <method> priority <n>`** — start a method instance. Lower priority number wins when multiple succeed.
-- **`terminate <method>`** — destroy a specific method instance. The session itself survives; only that method's state is torn down.
-- **`unauthorize`** — remove the authorization (the dynamic VLAN, dACL, etc.) but keep the session record. The port is effectively blocked.
-- **`authorize`** — apply the authorization attributes returned by ISE (or by the active service-template).
-- **`clear-session`** — destroy the entire session. The endpoint will be treated as brand-new next time it sends a packet.
-- **`pause reauthentication`** — keep the session but stop the periodic reauth timer.
-- **`resume reauthentication`** — re-enable that timer.
-- **`activate service-template <name>`** — apply a locally-defined attribute bundle (typically used when no RADIUS profile is available).
-- **`authentication-restart <seconds>`** — kick off the full state machine again after a delay.
-- **`restrict`** — used in violation contexts; drop offending traffic without disabling the port.
+- <strong>`authenticate using <method> priority <n>`</strong> — start a method instance. Lower priority number wins when multiple succeed.
+- <strong>`terminate <method>`</strong> — destroy a specific method instance. The session itself survives; only that method's state is torn down.
+- <strong>`unauthorize`</strong> — remove the authorization (the dynamic VLAN, dACL, etc.) but keep the session record. The port is effectively blocked.
+- <strong>`authorize`</strong> — apply the authorization attributes returned by ISE (or by the active service-template).
+- <strong>`clear-session`</strong> — destroy the entire session. The endpoint will be treated as brand-new next time it sends a packet.
+- <strong>`pause reauthentication`</strong> — keep the session but stop the periodic reauth timer.
+- <strong>`resume reauthentication`</strong> — re-enable that timer.
+- <strong>`activate service-template <name>`</strong> — apply a locally-defined attribute bundle (typically used when no RADIUS profile is available).
+- <strong>`authentication-restart <seconds>`</strong> — kick off the full state machine again after a delay.
+- <strong>`restrict`</strong> — used in violation contexts; drop offending traffic without disabling the port.
 
 ```bash
 policy-map type control subscriber ISE-NAC-POLICY
@@ -3317,7 +3317,7 @@ _Triggered when a device connects and a session is created._
 
 Fires once, when a new subscriber session is created — link comes up, or a new MAC is learned on a multi-auth/multi-domain port.
 
-The `class always` is a built-in always-true predicate. `do-until-failure` then runs the two `authenticate using` actions in order. Both methods start, but with priorities 10 and 20 respectively — **lower number = higher precedence**. dot1x wins ties. In practice this means:
+The `class always` is a built-in always-true predicate. `do-until-failure` then runs the two `authenticate using` actions in order. Both methods start, but with priorities 10 and 20 respectively — <strong>lower number = higher precedence</strong>. dot1x wins ties. In practice this means:
 
 - EAPOL-Identity-Request frames go out on the wire (dot1x starting).
 - MAB doesn't actually send a RADIUS request until something tells the state machine that dot1x has failed or that no supplicant is present.
@@ -3329,7 +3329,7 @@ The `match-all` on the event is redundant here because there's only one class �
 
 #### event authentication-failure match-first
 
-This is the brain of the policy. It runs when _any_ authentication method reports a non-success result. `match-first` is crucial — classes are evaluated in numeric order and **exactly one runs**. The class ordering encodes a priority for handling different failure causes.
+This is the brain of the policy. It runs when _any_ authentication method reports a non-success result. `match-first` is crucial — classes are evaluated in numeric order and <strong>exactly one runs</strong>. The class ordering encodes a priority for handling different failure causes.
 
 The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA-DOWN_UNAUTH), 40 (DOT1X_TIMEOUT), 50 (MAB_DENIED), 60 (DOT1X_NO_SUPPLICANT), 70 (always) — is deliberate. Most-specific conditions are checked first, with the catch-all at the bottom.
 
@@ -3342,8 +3342,8 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 20 authenticate using mab priority 20
 ```
 
-- ISE **explicitly rejected** the dot1x identity (wrong credentials, certificate invalid, policy deny)
-- Don't retry dot1x — terminate it and **fall to MAB** instead
+- ISE <strong>explicitly rejected</strong> the dot1x identity (wrong credentials, certificate invalid, policy deny)
+- Don't retry dot1x — terminate it and <strong>fall to MAB</strong> instead
 - Typical use: domain machine failed EAP but might be a known MAC (printer, IP phone)
 
 ---
@@ -3357,8 +3357,8 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 40 pause reauthentication
 ```
 
-- ISE is **unreachable** and the endpoint was previously in a **Guest** role
-- **Clear first** (fresh state), then push `Critical_Access` template (likely a restricted VLAN/dACL)
+- ISE is <strong>unreachable</strong> and the endpoint was previously in a <strong>Guest</strong> role
+- <strong>Clear first</strong> (fresh state), then push `Critical_Access` template (likely a restricted VLAN/dACL)
 - `authorize` commits the template to the session
 - `pause reauthentication` — stops re-auth timers so the session isn't torn down while ISE is down
 
@@ -3371,7 +3371,7 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 20 pause reauthentication
 ```
 
-- ISE is **unreachable** but the endpoint **was already authenticated** before the outage
+- ISE is <strong>unreachable</strong> but the endpoint <strong>was already authenticated</strong> before the outage
 - No template activation — the existing cached authorization is re-committed as-is
 - Keeps the user working transparently during an ISE failure
 - `pause reauthentication` holds the session stable
@@ -3386,11 +3386,11 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 30 pause reauthentication
 ```
 
-- ISE is **unreachable** and endpoint was **never authenticated** (new connection during outage)
+- ISE is <strong>unreachable</strong> and endpoint was <strong>never authenticated</strong> (new connection during outage)
 - No prior auth to fall back to → push `Critical_Access` (restricted fallback access)
 - Same pause logic as above
 
-> **The AAA-DOWN trio (classes 10/20/30)** is your **ISE Critical Auth** design — three different handling paths depending on the endpoint's prior state when ISE goes dark.
+> <strong>The AAA-DOWN trio (classes 10/20/30)</strong> is your <strong>ISE Critical Auth</strong> design — three different handling paths depending on the endpoint's prior state when ISE goes dark.
 
 ---
 
@@ -3401,7 +3401,7 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 20 authenticate using mab priority 20
 ```
 
-- The **dot1x exchange started but timed out** — supplicant began but didn't complete (slow machine, slow supplicant, partial response)
+- The <strong>dot1x exchange started but timed out</strong> — supplicant began but didn't complete (slow machine, slow supplicant, partial response)
 - Distinct from DOT1X_NO_SUPPLICANT (never responded) and DOT1X_DENIED (ISE rejected)
 - Fall to MAB as the recovery path
 
@@ -3414,9 +3414,9 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 20 unauthorize
 ```
 
-- ISE **explicitly rejected the MAC address** — unknown or blacklisted device
+- ISE <strong>explicitly rejected the MAC address</strong> — unknown or blacklisted device
 - No fallback — hard `unauthorize` means the port stays closed
-- This is the **security enforcement** class: unknown MACs get nothing
+- This is the <strong>security enforcement</strong> class: unknown MACs get nothing
 
 ---
 
@@ -3427,11 +3427,11 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 20 authenticate using mab priority 20
 ```
 
-- dot1x was attempted but **no EAPOL response at all** — no supplicant present
+- dot1x was attempted but <strong>no EAPOL response at all</strong> — no supplicant present
 - Classic for printers, cameras, IoT, dumb switches
 - Clean up dot1x and authenticate purely by MAC via MAB
 
-> **DOT1X_DENIED vs DOT1X_TIMEOUT vs DOT1X_NO_SUPPLICANT** — three distinct dot1x failure modes, each handled differently:
+> <strong>DOT1X_DENIED vs DOT1X_TIMEOUT vs DOT1X_NO_SUPPLICANT</strong> — three distinct dot1x failure modes, each handled differently:
 
 |Class|What happened|Action|
 |---|---|---|
@@ -3449,7 +3449,7 @@ The order — 5 (DOT1X_DENIED), 10 (AAA-DOWN_GUEST), 20 (AAA-DOWN_AUTH), 30 (AAA
 30 authentication-restart 60
 ```
 
-- Catches **anything not matched above** — both methods failed for an unclassified reason
+- Catches <strong>anything not matched above</strong> — both methods failed for an unclassified reason
 - Clean slate: terminate both methods, wait 60 seconds, then restart the whole auth cycle
 - The safety net that prevents sessions from getting stuck
 
@@ -3467,10 +3467,10 @@ _Triggered when ISE/RADIUS becomes reachable again after an outage._
   10 resume reauthentication
 ```
 
-- **CRITICAL_AUTH** = sessions that were placed into Critical Access during the outage → `clear-session` forces them to re-authenticate from scratch against the now-live ISE
-- **NOT_CRITICAL_AUTH** = sessions that were paused but already had valid auth → `resume reauthentication` gently re-validates them without dropping connectivity
+- <strong>CRITICAL_AUTH</strong> = sessions that were placed into Critical Access during the outage → `clear-session` forces them to re-authenticate from scratch against the now-live ISE
+- <strong>NOT_CRITICAL_AUTH</strong> = sessions that were paused but already had valid auth → `resume reauthentication` gently re-validates them without dropping connectivity
 
-> This is the **recovery pair** that mirrors the AAA-DOWN classes — graceful degradation going down, graceful restoration coming back up.
+> This is the <strong>recovery pair</strong> that mirrors the AAA-DOWN classes — graceful degradation going down, graceful restoration coming back up.
 
 ---
 
@@ -3484,8 +3484,8 @@ _Triggered when an 802.1X supplicant is detected on a session that is currently 
   20 authenticate using dot1x priority 10
 ```
 
-- A device was MAB-authenticated (e.g., it booted slowly), then its **dot1x supplicant came online**
-- Terminate the weaker MAB session and **upgrade to dot1x**
+- A device was MAB-authenticated (e.g., it booted slowly), then its <strong>dot1x supplicant came online</strong>
+- Terminate the weaker MAB session and <strong>upgrade to dot1x</strong>
 - Common on Windows machines that take time to load the 802.1X stack
 - Ensures machines get their proper identity-based policy, not just MAC-based
 
@@ -3519,7 +3519,7 @@ _Triggered when an auth method succeeds._
 ```
 
 - Explicit `authorize` action for both success paths — commits the ISE-returned policy (VLAN, dACL, SGT) to the session
-- Separating DOT1X and MAB classes here allows you to insert **different post-auth actions** per method in future (e.g., different accounting, different templates)
+- Separating DOT1X and MAB classes here allows you to insert <strong>different post-auth actions</strong> per method in future (e.g., different accounting, different templates)
 - Without `authorize`, authentication success alone doesn't apply the policy
 
 ---
@@ -3533,13 +3533,13 @@ _Triggered when a security violation occurs — most commonly a second MAC addre
   10 restrict
 ```
 
-- `restrict` drops traffic from the violating MAC and increments a counter, but **does not shut the port**
+- `restrict` drops traffic from the violating MAC and increments a counter, but <strong>does not shut the port</strong>
 - Less aggressive than `shutdown` — the legitimate session stays up
 - ISE can be configured to send a CoA if it detects the violation via syslog/SNMP
 ---
 
 ### Template NAC-INT-TEMPLATE
-This is the **interface-level building block** that pairs with `ISE-NAC-POLICY`. Where the policy-map defines _what to do_, this template defines _how the port behaves_.
+This is the <strong>interface-level building block</strong> that pairs with `ISE-NAC-POLICY`. Where the policy-map defines _what to do_, this template defines _how the port behaves_.
 ```
 template NAC-INT-TEMPLATE
  description NAC INTERFACE
@@ -3625,8 +3625,8 @@ access-session control-direction in
 
 Determines which direction of traffic is blocked before authorization succeeds. Two values:
 
-- **`in`** (this config): block traffic _from_ the host _to_ the network, but allow traffic _from_ the network _to_ the host. This is what enables **Wake-on-LAN** — a server can send a WoL magic packet to an unauthenticated/powered-off endpoint.
-- **`both`**: block both directions.
+- <strong>`in`</strong> (this config): block traffic _from_ the host _to_ the network, but allow traffic _from_ the network _to_ the host. This is what enables <strong>Wake-on-LAN</strong> — a server can send a WoL magic packet to an unauthenticated/powered-off endpoint.
+- <strong>`both`</strong>: block both directions.
 
 `in` is the more practical default for typical enterprises.
 
@@ -3636,10 +3636,10 @@ access-session host-mode multi-domain
 
 Defines how many endpoints can share a port. The four modes are:
 
-- **single-host** — exactly one MAC.
-- **multi-host** — one MAC authenticates, then all other MACs are allowed without authenticating (legacy, weak).
-- **multi-auth** — each MAC is authenticated independently. Used when multiple endpoints sit behind a hub or unmanaged switch.
-- **multi-domain** _(this config)_ — exactly one MAC in the data domain and exactly one in the voice domain. This is the classic IP phone scenario: phone authenticates and sits in voice VLAN, PC plugs into the phone's PC port and authenticates separately in the data VLAN. The phone's voice VLAN is signaled via CDP or LLDP-MED.
+- <strong>single-host</strong> — exactly one MAC.
+- <strong>multi-host</strong> — one MAC authenticates, then all other MACs are allowed without authenticating (legacy, weak).
+- <strong>multi-auth</strong> — each MAC is authenticated independently. Used when multiple endpoints sit behind a hub or unmanaged switch.
+- <strong>multi-domain</strong> _(this config)_ — exactly one MAC in the data domain and exactly one in the voice domain. This is the classic IP phone scenario: phone authenticates and sits in voice VLAN, PC plugs into the phone's PC port and authenticates separately in the data VLAN. The phone's voice VLAN is signaled via CDP or LLDP-MED.
 
 ```
 access-session closed
@@ -3653,9 +3653,9 @@ access-session port-control auto
 
 The on switch for 802.1X port control. Three values:
 
-- **`auto`** (this config): run the authentication state machine; access depends on the result.
-- **`force-authorized`**: skip authentication and always allow (this effectively disables 802.1X on the port).
-- **`force-unauthorized`**: always block.
+- <strong>`auto`</strong> (this config): run the authentication state machine; access depends on the result.
+- <strong>`force-authorized`</strong>: skip authentication and always allow (this effectively disables 802.1X on the port).
+- <strong>`force-unauthorized`</strong>: always block.
 
 If this isn't set to `auto`, none of the authentication machinery actually runs, regardless of how perfectly the policy-map is configured.
 
@@ -3671,7 +3671,7 @@ These two together control how aggressively the switch hunts for an 802.1X suppl
 - `tx-period 7`: when sending EAPOL-Identity-Request frames, wait 7 seconds for a response before retransmitting. Default is 30 seconds.
 - `max-reauth-req 3`: send up to 3 _additional_ requests after the initial one (so 4 total attempts) before giving up.
 
-Total time before the policy's `DOT1X_NO_SUPPLICANT` class fires: **tx-period × (max-reauth-req + 1) = 7 × 4 = 28 seconds.**
+Total time before the policy's `DOT1X_NO_SUPPLICANT` class fires: <strong>tx-period × (max-reauth-req + 1) = 7 × 4 = 28 seconds.</strong>
 
 Compared with the defaults (30 × 3 = 90 seconds), this gets non-supplicant devices like printers and IoT into MAB roughly 3× faster. Going too aggressive risks racing slow supplicants (Windows boot, slow NICs) — 7 seconds is a reasonable middle ground.
 
@@ -3705,7 +3705,7 @@ The template and the policy-map are co-dependent. Specifically:
 ### Centralized Web Authentication (CWA) Guest Configuration
 
 > [!info] What this covers
-> The full guest redirect flow using Cisco **Centralized Web Authentication (CWA)**. In this model the switch does **not** host the login page — it intercepts the guest's web traffic and hands the session off to the ISE Guest Portal.
+> The full guest redirect flow using Cisco <strong>Centralized Web Authentication (CWA)</strong>. In this model the switch does <strong>not</strong> host the login page — it intercepts the guest's web traffic and hands the session off to the ISE Guest Portal.
 
 #### VLAN 805 — Guest Segment
 
@@ -3728,7 +3728,7 @@ VLAN 805 is the Layer 2 segment dedicated to unauthenticated guest traffic. All 
 | `ip http authentication aaa login-authentication HTTPSRV` | Any admin HTTP/HTTPS login goes through AAA (ISE/RADIUS) using the `HTTPSRV` method list       |
 | `ip http client source-interface Vlan800`                 | When the switch itself makes outbound HTTP requests, it uses the management VLAN 800 as source |
 
-**Key point:** Even though the HTTP/HTTPS server is enabled (required for the guest web redirect to work), the `active-session-modules none` lines lock down the management web UI so it can't be browsed directly — keeping it secure while still allowing the guest portal interception to function.
+<strong>Key point:</strong> Even though the HTTP/HTTPS server is enabled (required for the guest web redirect to work), the `active-session-modules none` lines lock down the management web UI so it can't be browsed directly — keeping it secure while still allowing the guest portal interception to function.
 
 ---
 #### ACL_GUEST_REDIRECT 
@@ -3744,9 +3744,9 @@ ip access-list extended ACL_GUEST_REDIRECT
 ```
 
 > [!important] 
-> A redirect ACL is **not** a packet filter. Its verbs are inverted relative to a normal ACL:
->  `permit` → **intercept** this traffic and redirect it to the virtual IP
->  `deny` → **let this pass freely**, no redirect
+> A redirect ACL is <strong>not</strong> a packet filter. Its verbs are inverted relative to a normal ACL:
+>  `permit` → <strong>intercept</strong> this traffic and redirect it to the virtual IP
+>  `deny` → <strong>let this pass freely</strong>, no redirect
 
 So `deny udp any any eq domain` doesn't block DNS — it *allows* DNS through without interception.
 
@@ -3754,12 +3754,12 @@ So `deny udp any any eq domain` doesn't block DNS — it *allows* DNS through wi
 | ---- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `10` | Don't redirect DNS                  | DNS must flow freely so the guest can resolve hostnames. Without it, the browser never resolves an address to connect to and the redirect flow never starts.                                    |
 | `20` | Don't redirect DHCP                 | DHCP must flow freely so the guest gets an IP. The entire redirect flow depends on the guest having a valid IP first.                                                                           |
-| `30` | Don't redirect traffic to ISE PSN 1 | After the switch issues an HTTP 302, the browser follows the redirect to the ISE portal URL. That follow-up traffic must **not** be intercepted again — exempting ISE prevents a redirect loop. |
+| `30` | Don't redirect traffic to ISE PSN 1 | After the switch issues an HTTP 302, the browser follows the redirect to the ISE portal URL. That follow-up traffic must <strong>not</strong> be intercepted again — exempting ISE prevents a redirect loop. |
 | `40` | Don't redirect traffic to ISE PSN 2 | Same reason as line 30, for the second PSN. Both nodes must be exempt so the portal reaches ISE directly regardless of which PSN handles the session.                                           |
 | `50` | Redirect HTTP                       | HTTP matches here and is intercepted by `parameter-map webauth`. The switch hijacks the connection and points the guest at the CWA portal via virtual IP `192.0.2.1`.                           |
 | `60` | Redirect HTTPS                      | Same interception as HTTP. Requires `intercept-https-enable` in the parameter map so guests starting on HTTPS URLs are still caught.                                                            |
 
-This ACL while is present locally, pushed by the DNA template, is **not** statically applied to the switch port. 
+This ACL while is present locally, pushed by the DNA template, is <strong>not</strong> statically applied to the switch port. 
 ISE pushes it dynamically per [[#Redirect_Guest_Wired]] authorization profile. 
 The Access-Accept response contains both the ACL name and a redirect URL, and the switch applies both to the port for the duration of the session.
 
@@ -3774,10 +3774,10 @@ parameter-map type webauth global
  intercept-https-enable
 ```
 
-The redirect ACL identifies **which** traffic to catch. The parameter map decides **what to do with it**.
+The redirect ACL identifies <strong>which</strong> traffic to catch. The parameter map decides <strong>what to do with it</strong>.
 
 `parameter-map type webauth global`
-The parameter map is configured **globally** on the switch. 
+The parameter map is configured <strong>globally</strong> on the switch. 
 It applies to any port that receives a redirect instruction from ISE, so it only needs to be defined once regardless of how many guest ports are active.
 
 `type webauth`
@@ -3805,7 +3805,7 @@ TCP session to the switch closes
 Without the virtual IP, the switch would have no consistent identity to send the redirect from. The TCP termination at the SVI gets the switch into the conversation; the virtual IP is what it speaks _as_ once it's there.
 
 > [!tip] Why this specific IP?
-> `192.0.2.1` comes from the **TEST-NET-1** range defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737). The `192.0.2.0/24` block is reserved and guaranteed never to be a routable destination on a real network — there is zero risk of conflict with an actual host. Using a real IP here would risk redirecting traffic to an unintended destination.
+> `192.0.2.1` comes from the <strong>TEST-NET-1</strong> range defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737). The `192.0.2.0/24` block is reserved and guaranteed never to be a routable destination on a real network — there is zero risk of conflict with an actual host. Using a real IP here would risk redirecting traffic to an unintended destination.
 
 `intercept-https-enable`
 Without this, only HTTP (port 80) is intercepted. Since modern browsers default to HTTPS, this is effectively mandatory. When enabled:
@@ -3837,7 +3837,7 @@ interface Vlan805
  no shutdown
 ```
 
-The SVI gives the switch a **Layer 3 presence on the guest subnet**, which is what makes TCP interception physically possible.
+The SVI gives the switch a <strong>Layer 3 presence on the guest subnet</strong>, which is what makes TCP interception physically possible.
 
 When a guest sends an HTTP request, the switch needs to terminate that TCP connection — it must act as an IP endpoint and send back a response. 
 
@@ -3854,7 +3854,7 @@ Guest ACK  ───────────────────────
 TCP session established with google.com
 ```
 
-With CWA, the switch intercepts the SYN and completes the handshake itself, using the SVI as its L3 endpoint — the guest ends up with a TCP session open to the **switch**, not to Google:
+With CWA, the switch intercepts the SYN and completes the handshake itself, using the SVI as its L3 endpoint — the guest ends up with a TCP session open to the <strong>switch</strong>, not to Google:
 
 ```
 Guest SYN  ───────────────────────────→  google.com (intended)
@@ -3885,9 +3885,9 @@ Guest traffic passes through unintercepted — redirect never fires
 
 |                 | SVI IP                                                     | Virtual IP (`192.0.2.1`)                                      |
 | --------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
-| **What it is**  | Real IP assigned to the switch on VLAN 805                 | Spoofed IP used in the HTTP 302 response                      |
-| **Who sees it** | Used internally for L3 processing                          | Seen by the guest's browser in the redirect                   |
-| **Purpose**     | Lets the switch terminate TCP sessions on the guest subnet | Triggers the browser to follow the redirect to the ISE portal |
+| <strong>What it is</strong>  | Real IP assigned to the switch on VLAN 805                 | Spoofed IP used in the HTTP 302 response                      |
+| <strong>Who sees it</strong> | Used internally for L3 processing                          | Seen by the guest's browser in the redirect                   |
+| <strong>Purpose</strong>     | Lets the switch terminate TCP sessions on the guest subnet | Triggers the browser to follow the redirect to the ISE portal |
 
 #### Device Tracking Policy — IP-to-MAC Binding
 
@@ -3903,9 +3903,9 @@ vlan configuration 805
  device-tracking attach-policy IPDT_POLICY
 ```
 
-Device tracking maintains a real-time table of **IP → MAC → port** bindings. It's the SISF-based (Switch Integrated Security Features) successor to the legacy `ip device tracking` global commands, and on modern IOS-XE it's the only supported model.
+Device tracking maintains a real-time table of <strong>IP → MAC → port</strong> bindings. It's the SISF-based (Switch Integrated Security Features) successor to the legacy `ip device tracking` global commands, and on modern IOS-XE it's the only supported model.
 
-MAB authenticates a session by **MAC address**, but the redirect ACL and downstream session policy operate on **IP addresses**. Device tracking is what bridges the two — it observes the guest's DHCP exchange (and ARP/ND activity), captures the binding, and lets the IP-to-session association form correctly on the port.
+MAB authenticates a session by <strong>MAC address</strong>, but the redirect ACL and downstream session policy operate on <strong>IP addresses</strong>. Device tracking is what bridges the two — it observes the guest's DHCP exchange (and ARP/ND activity), captures the binding, and lets the IP-to-session association form correctly on the port.
 
 > [!important] 
 > Without device tracking, CWA breaks silently The redirect ACL is IP-based. ISE pushes the redirect against a session keyed to the MAB-authenticated MAC. Device tracking is what links those two so the switch knows _which IP_ the redirect ACL should target. CoA also relies on this binding — after the guest authenticates, the policy change has nothing to apply against if no IP is bound to the session.
@@ -3971,30 +3971,30 @@ flowchart TD
 #### Service Templates and Control Policy for Guests
 When ISE goes down with a guest mid-redirect, the policy framework:
 
-1. **Detects** the condition precisely (`aaa-timeout` AND `Guest_Redirect` active).
-2. **Clears** the broken session.
-3. **Demotes** the port to `Critical_Access`.
-4. **Pauses** re-auth attempts until AAA recovers.
+1. <strong>Detects</strong> the condition precisely (`aaa-timeout` AND `Guest_Redirect` active).
+2. <strong>Clears</strong> the broken session.
+3. <strong>Demotes</strong> the port to `Critical_Access`.
+4. <strong>Pauses</strong> re-auth attempts until AAA recovers.
 
 This prevents two failure modes at once: guests gaining uncontrolled access during the outage, and the port flapping endlessly against a dead AAA server.
 
 > [!note] Recovery 
 > A counterpart class typically matches on `aaa-available` (or similar) and reverses the process — clearing the critical session so fresh MAB can run and ISE can re-push `Guest_Redirect` once it's back online. 
 
-**Service Template for Guest Redirect** (applied by ISE policy)
+<strong>Service Template for Guest Redirect</strong> (applied by ISE policy)
 
 ```
 service-template Guest_Redirect
 ```
 
-A **service template** is a named bundle of session attributes — ACLs, redirect URLs, VLANs, timers — that can be activated on a subscriber session.
+A <strong>service template</strong> is a named bundle of session attributes — ACLs, redirect URLs, VLANs, timers — that can be activated on a subscriber session.
 
 The local declaration above is intentionally bare. The actual content (redirect URL, redirect ACL name) is pushed by ISE in the MAB Access-Accept response and applied by activating this template on the session. The local name just needs to exist so ISE-pushed `subscriber:service-name=Guest_Redirect` attributes resolve to it.
 
 > [!tip] Why have a local declaration at all? Two reasons:
 > 
-> 1. **Default attributes** — anything defined locally inside the template acts as a fallback if ISE doesn't push the equivalent attribute.
-> 2. **Matching anchor** — other policy logic can match against _which template is active_ on a session. That's exactly how the AAA-failure detection below works.
+> 1. <strong>Default attributes</strong> — anything defined locally inside the template acts as a fallback if ISE doesn't push the equivalent attribute.
+> 2. <strong>Matching anchor</strong> — other policy logic can match against _which template is active_ on a session. That's exactly how the AAA-failure detection below works.
 
 <strong>Detecting "Guest Mid-Flow When ISE Dies"</strong>
 
@@ -4004,7 +4004,7 @@ class-map type control subscriber match-all AAA-DOWN_GUEST_USER
  match activated-service-template Guest_Redirect
 ```
 
-A `class-map type control subscriber` is an IBNS 2.0 control-plane matching rule. It evaluates **session state**, not packet contents — that's what makes it different from a regular `class-map` (which matches data-plane traffic).
+A `class-map type control subscriber` is an IBNS 2.0 control-plane matching rule. It evaluates <strong>session state</strong>, not packet contents — that's what makes it different from a regular `class-map` (which matches data-plane traffic).
 
 | Element                                           | Meaning                                                                                  |
 | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -4013,7 +4013,7 @@ A `class-map type control subscriber` is an IBNS 2.0 control-plane matching rule
 | `match result-type aaa-timeout`                   | Fires when AAA / RADIUS has timed out — the switch can't reach any configured ISE server |
 | `match activated-service-template Guest_Redirect` | Only sessions currently running the `Guest_Redirect` template qualify                    |
 
-In plain English: **"a guest who was mid-redirect when ISE became unreachable."** Authenticated employee sessions, sessions already in critical state, sessions that never reached the redirect stage — none of these match. Only guests caught in flight.
+In plain English: <strong>"a guest who was mid-redirect when ISE became unreachable."</strong> Authenticated employee sessions, sessions already in critical state, sessions that never reached the redirect stage — none of these match. Only guests caught in flight.
 
 > [!important] Precision matters 
 > The action triggered by this class-map is destructive — it clears the session. Narrowing the match to _only_ in-flight guests is what prevents collateral damage to other session types during an ISE outage.
