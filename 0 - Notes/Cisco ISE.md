@@ -1907,7 +1907,7 @@ write memory
 !
 ```
 
-#### DNA - PBA BASIC
+## DNA - PBA BASIC
 
 ```bash
 !
@@ -3372,8 +3372,7 @@ The redirect ACL identifies _which_ traffic to catch. The parameter-map decides 
  > [!note] Why `192.0.2.1`?
  > This address belongs to <strong>TEST-NET-1</strong>, defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737) as reserved for documentation and guaranteed never to be a real routable destination. Using a real IP here would risk redirecting guest traffic to an unintended host.
 
-##### Redirect Sequence
-
+Redirect Sequence:
 ```
 TCP session is open to the switch (handled at the SVI)
         ↓
@@ -3503,8 +3502,8 @@ Every switch command in this note has a counterpart on the ISE side. This table 
 |`ip dhcp snooping` binding feeding device tracking|ISE relies on the `Framed-IP-Address` and Device Sensor data; without bindings, profiling collapses to MAC OUI only.|
 |CWA portal URL pushed via `url-redirect`|<strong>Work Centers → Guest Access → Portals & Components → Guest Portals</strong> — URL composed from the portal's FQDN and ID.|
 |Redirect ACL name (`ACL_GUEST_REDIRECT`)|The ISE authorization profile must reference the <strong>exact same name</strong> as defined on the switch.|
-#### 
-### DNA - PBA NAC
+
+## DNA - PBA NAC
 
 ```bash
 ! Template to enable Cisco ISE - NAC
@@ -3898,11 +3897,7 @@ wr
 !
 ```
 
-
-
-
 # Reference 
-
 
 | Voce                                               | Topic        | Link                                                                                                      |
 | -------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------- |
