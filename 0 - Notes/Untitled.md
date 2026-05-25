@@ -657,7 +657,7 @@ show running-config | section device-sensor
 
 ### IBNS 2.0 Classification — Class-Maps
 
-_The predicates. Each class-map matches on session state, not on packet content. They are consumed by the policy-map in the next section._
+A `class-map type control subscriber` classifies subscribers based on specific <strong>conditions or events</strong> (not packet content like a regular class-map). It's used inside a <strong>policy-map type control subscriber</strong> to trigger actions when those conditions are met.
 
 <strong>Syntax:</strong>
 
@@ -699,11 +699,11 @@ class-map type control subscriber match-all DOT1X_NO_SUPPLICANT
  match result-type method dot1x agent-not-found
 ```
 
-|Class|Condition|Meaning|
-|---|---|---|
-|`DOT1X_DENIED`|dot1x ran and got an <strong>authoritative</strong> answer — ISE returned an Access-Reject.|Hard deny by the server.|
-|`DOT1X_TIMEOUT`|dot1x started but the method timer expired before completion.|Supplicant present but stalled (slow boot, EAP method hang).|
-|`DOT1X_NO_SUPPLICANT`|No EAPOL response at all — the switch's EAPOL-Identity-Request frames got no reply.|Endpoint has no supplicant (printer, IoT device, dumb camera).|
+| Class                 | Condition                                                                                   | Meaning                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `DOT1X_DENIED`        | dot1x ran and got an <strong>authoritative</strong> answer — ISE returned an Access-Reject. | Hard deny by the server.                                       |
+| `DOT1X_TIMEOUT`       | dot1x started but the method timer expired before completion.                               | Supplicant present but stalled (slow boot, EAP method hang).   |
+| `DOT1X_NO_SUPPLICANT` | No EAPOL response at all — the switch's EAPOL-Identity-Request frames got no reply.         | Endpoint has no supplicant (printer, IoT device, dumb camera). |
 
 #### MAB Failure Mode
 
@@ -733,11 +733,11 @@ class-map type control subscriber match-all AAA-DOWN_AUTH_USER
 
 These three differentiate AAA-unreachable cases by the session's <strong>prior state</strong>, which is what allows the policy to take different actions for previously-authorized users, guests-in-redirect, and never-authenticated newcomers.
 
-|Class|Prior state|Intended behaviour|
-|---|---|---|
-|`AAA-DOWN_AUTH_USER`|Already authorized|Keep them working — do not disturb the existing session.|
-|`AAA-DOWN_GUEST_USER`|In a Guest redirect state|Clear the broken redirect, drop into Critical Access.|
-|`AAA-DOWN_UNAUTH_USER`|Never authorized|Provide local Critical Access as a fallback.|
+| Class                  | Prior state               | Intended behaviour                                       |
+| ---------------------- | ------------------------- | -------------------------------------------------------- |
+| `AAA-DOWN_AUTH_USER`   | Already authorized        | Keep them working — do not disturb the existing session. |
+| `AAA-DOWN_GUEST_USER`  | In a Guest redirect state | Clear the broken redirect, drop into Critical Access.    |
+| `AAA-DOWN_UNAUTH_USER` | Never authorized          | Provide local Critical Access as a fallback.             |
 
 #### Critical-Auth State
 
@@ -776,18 +776,18 @@ When an event fires, the policy-map engine walks the classes under that event in
 
 <strong>At the event level:</strong>
 
-|Keyword|Behaviour|
-|---|---|
-|`match-all`|Every class whose conditions match has its action list executed (in order).|
-|`match-first`|Only the first matching class runs; the rest are skipped entirely.|
+| Keyword       | Behaviour                                                                   |
+| ------------- | --------------------------------------------------------------------------- |
+| `match-all`   | Every class whose conditions match has its action list executed (in order). |
+| `match-first` | Only the first matching class runs; the rest are skipped entirely.          |
 
 <strong>At the class level:</strong>
 
-|Keyword|Behaviour|
-|---|---|
-|`do-until-failure`|Run actions 10, 20, 30… in order; stop at the first failure. _(Used throughout this policy.)_|
-|`do-all`|Run every action regardless of success or failure.|
-|`do-until-success`|Run actions until one succeeds, then stop.|
+| Keyword            | Behaviour                                                                                     |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| `do-until-failure` | Run actions 10, 20, 30… in order; stop at the first failure. _(Used throughout this policy.)_ |
+| `do-all`           | Run every action regardless of success or failure.                                            |
+| `do-until-success` | Run actions until one succeeds, then stop.                                                    |
 
 The inner action numbers (`10`, `20`, `30`) are just ordering — they have no semantic meaning. Gaps allow new actions to be inserted later without renumbering.
 
@@ -809,6 +809,63 @@ The inner action numbers (`10`, `20`, `30`) are just ordering — they have no s
 #### High-Level Flow
 
 ```
+policy-map type control subscriber ISE-NAC-POLICY
+ event session-started match-all
+  10 class always do-until-failure
+    10 authenticate using dot1x priority 10
+    20 authenticate using mab priority 20
+ event authentication-failure match-first
+  5 class DOT1X_DENIED do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  10 class AAA-DOWN_GUEST_USER do-until-failure
+   10 clear-session
+   20 activate service-template Critical_Access
+   30 authorize
+   40 pause reauthentication
+  20 class AAA-DOWN_AUTH_USER do-until-failure
+   10 authorize
+   20 pause reauthentication
+  30 class AAA-DOWN_UNAUTH_USER do-until-failure
+   10 activate service-template Critical_Access
+   20 authorize
+   30 pause reauthentication
+  40 class DOT1X_TIMEOUT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20 
+  50 class MAB_DENIED do-until-failure
+   10 terminate mab
+   20 unauthorize
+  60 class DOT1X_NO_SUPPLICANT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  70 class always do-until-failure
+   10 terminate mab
+   20 terminate dot1x
+   30 authentication-restart 60  
+ event aaa-available match-all
+  10 class CRITICAL_AUTH do-until-failure
+   10 clear-session
+  20 class NOT_CRITICAL_AUTH do-until-failure
+   10 resume reauthentication
+ event agent-found match-all
+  10 class always do-until-failure
+   10 terminate mab
+   20 authenticate using dot1x priority 10
+ event inactivity-timeout match-all
+  10 class always do-until-failure
+   10 clear-session  
+ event authentication-success match-all
+  10 class DOT1X do-until-failure
+   10 authorize
+  20 class MAB do-until-failure
+   10 authorize 
+ event violation match-all
+  10 class always do-until-failure
+   10 restrict
+```
+
+```
 Device plugs in
       │
       ▼
@@ -821,7 +878,7 @@ Device plugs in
                            │
                     ┌──────┼──────────────────────┐
               ISE denied   │  ISE unreachable     │
-              → try MAB    │  → Critical Auth     │ Unknown → restart 60s
+               try MAB     │  → Critical Auth     │ Unknown → restart 60s
                            │  (3 sub-cases)
                            │
                     Supplicant detected later?
@@ -847,7 +904,7 @@ Both methods are launched, but with priorities 10 and 20 — <strong>lower numbe
 
 The brain of the policy. `match-first` means classes are evaluated in numeric order and <strong>exactly one runs</strong>. The class ordering deliberately puts the most specific conditions first and the catch-all last.
 
-##### Class 5 — `DOT1X_DENIED`
+##### Class 5 — [[#dot1x Failure Modes|DOT1X_DENIED]]
 
 ```
 10 terminate dot1x
@@ -856,7 +913,7 @@ The brain of the policy. `match-first` means classes are evaluated in numeric or
 
 ISE explicitly rejected the dot1x identity. Terminate dot1x and fall back to MAB — useful when the certificate or user credentials failed but the MAC is still allowed (e.g. an IP phone whose dot1x supplicant misbehaves).
 
-##### Class 10 — `AAA-DOWN_GUEST_USER`
+##### Class 10 — [[#AAA-Down Cases|AAA-DOWN_GUEST_USER]]
 
 ```
 10 clear-session
@@ -867,16 +924,16 @@ ISE explicitly rejected the dot1x identity. Terminate dot1x and fall back to MAB
 
 ISE went down with the endpoint mid-redirect. The redirect can't complete, so tear the session down, apply the local `Critical_Access` template, and stop hammering the dead AAA server.
 
-##### Class 20 — `AAA-DOWN_AUTH_USER`
+##### Class 20 — [[#AAA-Down Cases|AAA-DOWN_AUTH_USER]]
 
 ```
 10 authorize
 20 pause reauthentication
 ```
 
-ISE went down but the endpoint was already fully authorized. Do <strong>not</strong> disturb the session — just refresh the existing authorization and pause reauth so timers don't expire against a dead server. <strong>Zero user-visible impact.</strong>
+ISE went down but the endpoint was already fully authorized. Do <strong>not</strong> disturb the session — just refresh the existing authorization and pause re-auth so timers don't expire against a dead server. <strong>Zero user-visible impact.</strong>
 
-##### Class 30 — `AAA-DOWN_UNAUTH_USER`
+##### Class 30 — [[#AAA-Down Cases|AAA-DOWN_UNAUTH_USER]]
 
 ```
 10 activate service-template Critical_Access
@@ -886,16 +943,18 @@ ISE went down but the endpoint was already fully authorized. Do <strong>not</str
 
 ISE went down before the endpoint authenticated. There's no prior profile to keep — apply the local fallback so the device gets at least limited access.
 
-##### Class 40 — `DOT1X_TIMEOUT`
+##### Class 40 — [[#dot1x Failure Modes|DOT1X_TIMEOUT]]
 
 ```
 10 terminate dot1x
 20 authenticate using mab priority 20
 ```
 
-dot1x started but did not complete in time. Kill it, try MAB.
+The <strong>dot1x exchange started but timed out</strong> — supplicant began but didn't complete (slow machine, slow supplicant, partial response). 
 
-##### Class 50 — `MAB_DENIED`
+Kill it, try MAB.
+
+##### Class 50 — [[#MAB Failure Mode|MAB_DENIED]]
 
 ```
 10 terminate mab
@@ -904,7 +963,7 @@ dot1x started but did not complete in time. Kill it, try MAB.
 
 The MAC is explicitly rejected by ISE. There's nowhere left to go — `unauthorize` puts the session into a blocked state until something kicks the state machine (link bounce, inactivity timeout, CoA).
 
-##### Class 60 — `DOT1X_NO_SUPPLICANT`
+##### Class 60 — [[#dot1x Failure Modes||DOT1X_NO_SUPPLICANT]]
 
 ```
 10 terminate dot1x
@@ -937,7 +996,7 @@ Triggered when AAA reachability is restored.
 ```
 
 - Sessions currently in Critical Access → `clear-session` → forces a fresh `session-started` event so the endpoint re-authenticates against the now-live ISE and picks up its real policy.
-- Sessions that had reauth paused but never entered Critical → `resume reauthentication` → normal reauth resumes on schedule.
+- Sessions that had re-auth paused but never entered Critical → `resume reauthentication` → normal re-auth resumes on schedule.
 
 The two classes are logical complements, so for any given session exactly one runs. This is the "graceful restoration" pair, mirroring the "graceful degradation" handled by the AAA-DOWN classes.
 
@@ -971,7 +1030,7 @@ Idle session expires → tear it down. The next packet from the endpoint trigger
   10 authorize
 ```
 
-`authorize` is what actually commits the RADIUS-returned attributes (VLAN, dACL, redirect URL, SGT) to the session — until it runs, ISE's success message is just data. Splitting by method allows method-specific post-auth behaviour to be added later.
+`authorize` is what actually commits the RADIUS-returned attributes (VLAN, dACL, redirect URL, SGT) to the session — until it runs, ISE's success message is just data. Splitting by method allows method-specific post-auth behavior to be added later.
 
 #### Event: `violation match-all`
 
@@ -988,23 +1047,13 @@ When a host-mode constraint is violated (e.g. a second data MAC on a `multi-doma
 |`protect`|Silently drop offending traffic. No logging.|
 |`restrict`|Drop offending traffic, log it via SNMP/syslog. Selected here.|
 
-#### Verification
-
+Verification:
 ```cisco
 show policy-map type control subscriber name ISE-NAC-POLICY
 show access-session interface <int> details
 show access-session method-list all
 show access-session event-logging interface <int>
 ```
-
-#### What Breaks If Missing
-
-|Omission|Symptom|
-|---|---|
-|`event authentication-success` ... `authorize`|Endpoints authenticate but never receive their VLAN/dACL.|
-|`event session-started`|New connections never start any authentication method.|
-|`event authentication-failure` AAA-DOWN classes|ISE outages disrupt users — no critical-auth fallback fires.|
-|Missing `agent-found`|Slow-booting Windows PCs stay on MAB even after their supplicant comes up.|
 
 ---
 
@@ -1036,7 +1085,7 @@ template NAC-INT-TEMPLATE
 ```
 
 > [!note] IBNS 1.0 syntax inside an IBNS 2.0 deployment 
-> The `authentication periodic` and `authentication timer reauthenticate server` lines are IBNS 1.0 syntax. They remain valid alongside the IBNS 2.0 policy-map and continue to be supported on modern IOS-XE. They're kept because the equivalent IBNS 2.0 way of doing reauth is more verbose for no operational benefit. 
+> The `authentication periodic` and `authentication timer reauthenticate server` lines are IBNS 1.0 syntax. They remain valid alongside the IBNS 2.0 policy-map and continue to be supported on modern IOS-XE. They're kept because the equivalent IBNS 2.0 way of doing re-auth is more verbose for no operational benefit. 
 
 #### Applying the Template to Real Interfaces
 

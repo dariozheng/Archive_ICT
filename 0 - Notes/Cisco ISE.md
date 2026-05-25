@@ -2705,6 +2705,7 @@ Sends accounting records for <strong>system-level events</strong> such as switch
 #### `aaa accounting update newinfo periodic 2880`
 
 A two-part instruction that controls when <strong>interim accounting updates</strong> are sent:
+Z
 
 | Part            | Meaning                                                                                                                |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -3214,16 +3215,15 @@ The action numbers (the inner `10`, `20`, `30`) are just an ordering — they do
 
 A note on the action verbs themselves, because they show up repeatedly and aren't interchangeable:
 
-- <strong>`authenticate using <method> priority <n>`</strong> — start a method instance. Lower priority number wins when multiple succeed.
-- <strong>`terminate <method>`</strong> — destroy a specific method instance. The session itself survives; only that method's state is torn down.
+-<strong>authenticate using </strong> — start a method instance. Lower priority number wins when multiple succeed.
+- — destroy a specific method instance. The session itself survives; only that method's state is torn down.
 - <strong>`unauthorize`</strong> — remove the authorization (the dynamic VLAN, dACL, etc.) but keep the session record. The port is effectively blocked.
 - <strong>`authorize`</strong> — apply the authorization attributes returned by ISE (or by the active service-template).
 - <strong>`clear-session`</strong> — destroy the entire session. The endpoint will be treated as brand-new next time it sends a packet.
 - <strong>`pause reauthentication`</strong> — keep the session but stop the periodic reauth timer.
 - <strong>`resume reauthentication`</strong> — re-enable that timer.
-- <strong>`activate service-template <name>`</strong> — apply a locally-defined attribute bundle (typically used when no RADIUS profile is available).
-- <strong>`authentication-restart <seconds>`</strong> — kick off the full state machine again after a delay.
-- <strong>`restrict`</strong> — used in violation contexts; drop offending traffic without disabling the port.
+ — apply a locally-defined attribute bundle (typically used when no RADIUS profile is — kick off the full state machine again after a delay.
+<strong>restrict</strong> — used in violation contexts; drop offending traffic without disabling the port.
 
 ```bash
 policy-map type control subscriber ISE-NAC-POLICY
