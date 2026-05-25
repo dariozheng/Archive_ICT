@@ -82,7 +82,7 @@ MAC Addresses that must be whitelisted. Used in the MAB Access.
 ![[Pasted image 20260508110112.png]]
 
 The User Identity Group accept only Internal Users. 
-### External Identity Sources 
+### External Identity Sources #review
 External Identity Sources can leverage existing external identity store for network authentication. 
 
 ![[Pasted image 20260508100508.png]]
