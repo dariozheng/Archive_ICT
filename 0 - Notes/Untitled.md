@@ -614,13 +614,13 @@ device-sensor filter-list cdp list cdp_list
 device-sensor filter-spec cdp include list cdp_list
 ```
 
-|TLV|Why ISE Wants It|
-|---|---|
-|`device-name`|The neighbour's hostname — typically meaningful for Cisco IP phones.|
-|`address-type`|The neighbour's IP, as advertised in CDP.|
-|`capabilities-type`|Device class (switch, router, telephone, host). For an IP phone this immediately identifies it as `telephone`.|
-|`platform-type`|Exact hardware model (e.g. `Cisco IP Phone 8841`). One of the most valuable profiling signals.|
-|`version-type`|Firmware version. Useful for compliance policies (e.g. "phones below firmware X get quarantined").|
+| TLV                 | Why ISE Wants It                                                                                                                                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `device-name`       | The <strong>switch neighbor's hostnames</strong> — typically meaningful for Cisco IP phones.                                                     |
+| `address-type`      | The <strong>switch neighbor's IP addresses</strong>, as advertised in CDP.                                                                       |
+| `capabilities-type` | <strong>Device class of the neighbors</strong> (switch, router, telephone, host). For an IP phone this immediately identifies it as `telephone`. |
+| `platform-type`     | <strong>Exact hardware model</strong> of connected devices (e.g. `Cisco IP Phone 8841`).                                                         |
+| `version-type`      | <strong>Firmware version</strong> of connected devices. Useful for compliance policies (e.g. "phones below firmware X get quarantined").         |
 
 #### `device-sensor notify all-changes` 
 
@@ -646,22 +646,12 @@ access-session authentication attributes filter-spec include list sensor_list
 
 > Without these `access-session` wiring commands, Device Sensor collects data but it never leaves the switch.
 
-#### Verification
-
+Verification:
 ```cisco
 show device-sensor cache all
 show device-sensor cache interface <int>
 show running-config | section device-sensor
 ```
-
-#### What Breaks If Missing
-
-|Omission|Symptom|
-|---|---|
-|`filter-spec ... include`|Filter list is defined but unused; no attributes collected.|
-|`access-session ... filter-spec include`|Attributes collected locally but never sent to ISE — profiling fails.|
-|`cdp run` disabled|All CDP-based profiling silent; IP phones may be misclassified or invisible.|
-|`notify all-changes`|ISE never sees mid-session profile changes; CoA-driven re-classification doesn't fire.|
 
 ---
 
@@ -764,7 +754,8 @@ Complementary predicates:
 - `CRITICAL_AUTH` is true when the session is currently running under the local Critical Access fallback.
 - `NOT_CRITICAL_AUTH` uses `match-none` on the same condition, so it is true when the session is <strong>not</strong> under Critical Access.
 
-> [!note] How `match-none` works here The `match-none` keyword is part of the class-map header itself, not a separate match line. The class-map says: "match if none of the conditions below are true." Combined with the single condition that follows, it evaluates as the logical inverse of `CRITICAL_AUTH`.
+> [!note] How `match-none` works here 
+> The `match-none` keyword is part of the class-map header itself, not a separate match line. The class-map says: "match if none of the conditions below are true." Combined with the single condition that follows, it evaluates as the logical inverse of `CRITICAL_AUTH`.
 
 #### Verification
 
@@ -772,8 +763,6 @@ Complementary predicates:
 show class-map type control subscriber
 show class-map type control subscriber name <CLASS-NAME>
 ```
-
-Related: [[#IBNS 2.0 Policy Engine — `ISE-NAC-POLICY`]]
 
 ---
 
@@ -1046,7 +1035,8 @@ template NAC-INT-TEMPLATE
  service-policy type control subscriber ISE-NAC-POLICY
 ```
 
-> [!note] IBNS 1.0 syntax inside an IBNS 2.0 deployment The `authentication periodic` and `authentication timer reauthenticate server` lines are IBNS 1.0 syntax. They remain valid alongside the IBNS 2.0 policy-map and continue to be supported on modern IOS-XE. They're kept because the equivalent IBNS 2.0 way of doing reauth is more verbose for no operational benefit. This is not an inconsistency — it is a deliberate, supported mix.
+> [!note] IBNS 1.0 syntax inside an IBNS 2.0 deployment 
+> The `authentication periodic` and `authentication timer reauthenticate server` lines are IBNS 1.0 syntax. They remain valid alongside the IBNS 2.0 policy-map and continue to be supported on modern IOS-XE. They're kept because the equivalent IBNS 2.0 way of doing reauth is more verbose for no operational benefit. 
 
 #### Applying the Template to Real Interfaces
 
@@ -1075,7 +1065,7 @@ Changes to the template propagate automatically to every interface that sources 
 |`spanning-tree portfast`|Skip STP listening/learning; transition directly to forwarding. Required for end-host ports so they get DHCP before timing out.|
 |`spanning-tree bpduguard enable`|Safety partner to PortFast — if any BPDU arrives (somebody plugged in a switch), err-disable the port.|
 
-#### Reauthentication Behaviour
+#### Re-authentication Behaviour
 
 ```
 authentication periodic
@@ -1180,7 +1170,7 @@ vlan 805
 
 Layer-2 segment for unauthenticated guest traffic. All guest ports drop into this VLAN before authentication completes. The entire redirect flow happens within this VLAN.
 
-#### HTTP/HTTPS Server Configuration <strong>[Required for CWA]</strong>
+#### HTTP/HTTPS Server Configuration 
 
 |Command|Purpose|
 |---|---|
@@ -1513,5 +1503,3 @@ Every switch command in this note has a counterpart on the ISE side. This table 
 |`ip dhcp snooping` binding feeding device tracking|ISE relies on the `Framed-IP-Address` and Device Sensor data; without bindings, profiling collapses to MAC OUI only.|
 |CWA portal URL pushed via `url-redirect`|<strong>Work Centers → Guest Access → Portals & Components → Guest Portals</strong> — URL composed from the portal's FQDN and ID.|
 |Redirect ACL name (`ACL_GUEST_REDIRECT`)|The ISE authorization profile must reference the <strong>exact same name</strong> as defined on the switch.|
-
-> [!tip] Naming alignment The single most common ISE/switch desync is the redirect ACL name. ISE pushes a string; the switch looks up an ACL by that string. A typo on either side fails silently — the switch logs nothing useful, ISE shows the auth as successful. Always copy-paste names between the two sides.v
