@@ -512,7 +512,10 @@ The resulting binding table is consumed by:
 - <strong>CoA</strong> — to find the correct port when bouncing a session.
 - <strong>Downloadable ACLs</strong> — when they refer to source IPs.
 
-> [!warning] Don't mix legacy with SISF The legacy global `ip device tracking` family is deprecated on modern IOS-XE. Mixing it with `device-tracking policy` causes duplicate or stale bindings that fail silently. Use SISF exclusively.
+> [!warning] Don't mix legacy with SISF 
+> The legacy global `ip device tracking` family is deprecated on modern IOS-XE. 
+> 
+> Mixing it with `device-tracking policy` causes duplicate or stale bindings that fail silently. Use SISF exclusively.
 
 Verification:
 ```cisco
@@ -557,22 +560,23 @@ device-tracking policy Disable_DT_Trunk
 
 Applied to uplinks and inter-switch links.
 
-|Setting|Effect|
-|---|---|
-|`trusted-port`|Skip validation and inspection for bindings learned on this port — the peer switch is trusted infrastructure.|
-|`device-role switch`|Tells SISF the neighbour is a switch, not a host. The switch won't try to ARP-probe it and won't attempt to track it as an endpoint.|
+| Setting              | Effect                                                                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `trusted-port`       | Skip validation and inspection for bindings learned on this port — the peer switch is trusted infrastructure.                       |
+| `device-role switch` | Tells SISF the neighbor is a switch, not a host. The switch won't try to ARP-probe it and won't attempt to track it as an endpoint. |
 
-> [!tip] Default policy can be aggressive on modern IOS-XE, the default SISF policy probes endpoints fairly aggressively, which can cause problems with some IP phones, older Windows hosts, and certain IoT devices. Always attach an explicit policy rather than relying on defaults.
+> [!tip] 
+> Default policy can be aggressive on modern IOS-XE, the default SISF policy probes endpoints fairly aggressively, which can cause problems with some IP phones, older Windows hosts, and certain IoT devices. Always attach an explicit policy rather than relying on defaults.
 
 ---
 
 ### Device Sensor — Endpoint Profiling
 
-_Passively reads DHCP / CDP / LLDP traffic the switch already sees and forwards selected fields to ISE for profiling._
+_Passively reads DHCP / CDP traffic the switch already sees and forwards selected fields to ISE for profiling._
 
 Device Sensor is a passive sensor — it does not generate any of this traffic. It collects from what is already flowing through the switch, caches it, and forwards selected fields to ISE in RADIUS authentication and accounting messages.
 
-#### `cdp run` <strong>[Required for CDP-based profiling]</strong>
+#### `cdp run` 
 
 Enables CDP globally. Device Sensor cannot collect CDP TLVs from neighbours if CDP itself isn't running. CDP is on by default but is stated explicitly here for clarity.
 
