@@ -22,9 +22,9 @@ aliases:
 ---
 Cisco <strong>Identity Service Engine</strong> (ISE) is a <strong>Network Access Control</strong> solution that manages access to network ensuring only authenticated, authorized, and compliant users and devices can connect. 
 
-An ISE-based network access control solution has four components: <mark style="background: #FFB86CA6;"><strong>endpoints</strong></mark>, <mark style="background: #FFB8EBA6;"><strong>network access devices (NAD)</strong></mark>, <mark style="background: #ABF7F7A6;"><strong>Cisco ISE</strong></mark>, and <mark style="background: #FFF3A3A6;"><strong>external services</strong></mark>.
-<strong>Endpoints</strong> need <mark style="background: #BBFABBA6;">network access</mark> and the <strong>network access devices (NAD)</strong> provide network access to endpoints, based on instructions from <strong>ISE</strong>. 
-ISE can leverage <strong>external services</strong> to understand more about the corresponding endpoints for policy decisions.
+An ISE-based network access control solution has four general components: <mark style="background: #FFB86CA6;"><strong>endpoints</strong></mark>, <mark style="background: #FFB8EBA6;"><strong>network access devices (NAD)</strong></mark>, <mark style="background: #ABF7F7A6;"><strong>Cisco ISE</strong></mark>, and <mark style="background: #FFF3A3A6;"><strong>external services</strong></mark>.
+<strong>Endpoints</strong> need <mark style="background: #BBFABBA6;">network access</mark> and the <strong>network access devices (NAD)</strong> provides it, based on instructions from <strong>ISE</strong>. 
+ISE can leverage <strong>external services</strong> to understand more about the corresponding endpoints to make policy decisions.
 
 <mark style="background: #FFB8EBA6;">The server ISE acts as the core, it's where the policies are defined</mark>. <mark style="background: #FF5582A6;">The network devices acts as the authenticator</mark> and <strong>enforce</strong> the policies from the server ISE. <mark style="background: #FFF3A3A6;">The endpoint receives the response</mark> <mark style="background: #FFB86CA6;">given by the server ISE</mark> <mark style="background: #BBFABBA6;">from the network access device</mark>. Most of the high level host endpoint have <mark style="background: #ABF7F7A6;">supplicants that allow them to communicate with the authenticator or NAD</mark>.  <mark style="background: #D2B3FFA6;">The server ISE can use external services</mark>, such as the <strong>Microsoft Active Directory</strong>, <mark style="background: #D2B3FFA6;">to get knowledge about the users</mark>. 
 # ISE Server
@@ -2198,6 +2198,8 @@ A local account whose only purpose is to populate the RADIUS health-check probe.
 ```cisco
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
+ timeout 5
+ retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
  key 7 075F02457D0A36162421045C
 ```
@@ -2215,6 +2217,16 @@ A locally significant name for this ISE node. The label has no meaning to ISE it
 |`acct-port 1813`|UDP port for Accounting Start / Stop / Update|
 
 > 1812 and 1813 are the IANA-standard RADIUS ports. Use them unless ISE has been explicitly configured otherwise.
+
+##### `timeout 5`
+
+How long the switch waits for a single RADIUS response before declaring that attempt failed. 
+They can be configured globally or locally under radius server definition. If both are configured, the more specific win. 
+
+##### `retransmit 3`
+
+How many additional attempts the switch makes against the same server before moving to the next one in the group. 
+They can be configured globally or locally under radius server definition. If both are configured, the more specific win. 
 
 ##### `automate-tester username test-user ignore-acct-port probe-on` 
 
