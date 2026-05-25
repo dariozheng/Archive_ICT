@@ -2211,7 +2211,7 @@ With it:
 
 > ISE does not always respond on port 1813 in the same way — omitting this can cause the switch to falsely mark ISE as dead.
 
-3. **`probe-on`** — Controls _when_ probes are sent:
+3. `probe-on` — Controls _when_ probes are sent:
 
 ```
 Without probe-on:
@@ -2224,6 +2224,50 @@ With probe-on:
 ```
 
 `key 7 075F02457D0A36162421045C` The **shared secret** between the switch and ISE. This must match exactly on both sides for ISE to return a Access-Accept.
+
+---
+
+### AAA Group 
+
+```
+aaa group server radius ISESERV
+ server name ISE01
+ server name ISE02
+ deadtime 15
+ ip radius source-interface Vlan800
+```
+
+```
+aaa group server radius ISESERV
+```
+- Creates a named AAA server group called **ISESERV**
+- Groups multiple RADIUS servers together so method lists reference one group instead of individual servers
+- `radius` specifies the protocol type for this group
+
+```
+ server name ISE01
+ server name ISE02
+```
+- Adds the named RADIUS server blocks **ISE01** and **ISE02** as members of this group
+- `server name` is the **new style** keyword — references the `radius server <name>` blocks defined later in the config
+- Old style equivalent would have been `server 10.140.2.31` (IP directly, no name)
+- Order matters — **ISE01 is tried first**, ISE02 is the fallback
+
+```
+ deadtime 15
+```
+- If a RADIUS server fails, it is marked **dead** and ignored for **15 minutes**
+- After 15 minutes IOS will try it again
+- Scoped to this group only — only affects ISESERV traffic
+- Old equivalent was global: `radius-server deadtime 15`
+
+```
+ ip radius source-interface Vlan800
+```
+- Forces all RADIUS packets sent by this group to use **Vlan800** as the source IP
+- Critical for ISE because ISE uses the source IP to identify the NAD (Network Access Device)
+- Scoped to this group only
+- Old equivalent was global: `ip radius source-interface Vlan800`
 
 ---
 
@@ -2670,6 +2714,331 @@ A two-part instruction that controls when **interim accounting updates** are sen
 
 ---
 
+### DHCP Snooping
+```
+ip dhcp snooping
+ip dhcp snooping vlan 800,802,805,850
+no ip dhcp snooping information option
+```
+
+```
+ip dhcp snooping
+```
+
+- **Globally enables** DHCP snooping on the switch
+- Without this, all other DHCP snooping commands are inactive
+- Once enabled, the switch starts **inspecting DHCP messages** on all ports
+- Ports are either **trusted** or **untrusted**:
+    - **Trusted** — uplinks, DHCP server ports — DHCP messages pass freely
+    - **Untrusted** — access ports, clients — DHCP messages are inspected and filtered
+- By default **all ports are untrusted** until explicitly set otherwise
+- Builds the **DHCP snooping binding table** (IP + MAC + VLAN + port + lease time) which DAI and IPDT rely on
+
+---
+
+```
+ip dhcp snooping vlan 800,802,805,850
+```
+
+- Enables DHCP snooping **only on these specific VLANs**
+- Even though snooping is globally enabled above, it does **nothing until activated per VLAN**
+- Traffic on VLANs not listed here is **not inspected** and passes freely
+- Allows you to be selective — you would typically only enable it on **user/client VLANs**, not infrastructure VLANs
+
+---
+
+```
+no ip dhcp snooping information option
+```
+
+- Disables **DHCP Option 82** insertion
+- By default when snooping is enabled, the switch **automatically inserts Option 82** (relay agent information) into DHCP requests — adding port and VLAN info
+- This causes problems when:
+    - There is **no DHCP relay** configured
+    - The DHCP server **does not understand or expect** Option 82
+    - The DHCP server **drops** packets with Option 82 from untrusted sources
+- Disabling it lets DHCP requests pass through **unmodified**
+- Very commonly disabled in **access layer switches** that are not acting as DHCP relay agents
+
+On trunk mode interfaces put a `ip dhcp snooping trust`
+
+---
+
+### Dynamic ARP Inspection
+
+`ip arp inspection vlan 800,802,805,850`
+
+- Enables **Dynamic ARP Inspection (DAI)** on these specific VLANs
+- DAI protects against **ARP spoofing/poisoning** attacks where a malicious host sends fake ARP replies to poison other hosts' ARP caches
+- Works by **intercepting all ARP packets** on untrusted ports and validating them against the **DHCP snooping binding table**:
+    - If the ARP packet's **IP + MAC matches** an entry in the binding table → **forwarded**
+    - If the ARP packet's **IP + MAC does not match** → **dropped**
+- Like DHCP snooping, ports are either **trusted** or **untrusted**:
+    - **Trusted** — uplinks, server ports — ARP passes freely without inspection
+    - **Untrusted** — access/client ports — every ARP is validated
+- **Depends entirely on the DHCP snooping binding table** — this is why DHCP snooping must be configured first
+- Hosts with **static IPs** need manual ARP ACLs since they won't have a DHCP snooping entry
+
+---
+
+### IP Device Tracking
+
+- Enables **IP Device Tracking (IPDT)** globally on the switch
+- IPDT tracks **which IP address is on which port** by sending ARP probes to connected hosts
+- `auto-source` means the switch **automatically selects the source IP** for those ARP probes rather than requiring a manually configured IP
+    - It picks the **best available IP** on the switch to source the probe from
+    - Without `auto-source` you would need to manually specify a source IP for the probes
+- Builds and maintains its own **device tracking binding table** (IP + MAC + VLAN + port)
+- This binding table is used by:
+    - **ISE** — to know where a device is connected
+    - **802.1X** — to track session location
+    - **DAI** — as an additional validation source
+    - **CoA** — to find and bounce the right port when ISE sends a policy change
+
+---
+
+### IP Device Tracking Policies
+
+#### `device-tracking policy IPDT_POLICY`
+
+```
+device-tracking policy IPDT_POLICY
+security-level glean
+limit address-count 10
+tracking enable
+```
+
+- Creates a named device tracking policy called **IPDT_POLICY**
+- Applied to **access ports** where client devices connect
+- Defines how the switch tracks and handles IP/MAC bindings on those ports
+
+```
+ security-level glean
+```
+- Defines how aggressively the switch validates and creates binding table entries
+- Three levels exist:
+    - **glean** — passively collects IP/MAC bindings from any traffic it sees (DHCP, ARP, ND) without validating — most permissive
+    - **guard** — validates bindings against existing entries, drops packets that don't match — most strict
+    - **inspect** — middle ground, inspects but more lenient than guard
+- `glean` is used here because **ISE is doing the actual enforcement** — the switch just needs to collect the data and pass it to ISE, not enforce it locally
+
+```
+ limit address-count 10
+```
+- Limits the number of IP addresses that can be tracked **per port**
+- Prevents a single port from flooding the binding table with excessive entries
+- 10 is a reasonable limit for an access port — allows for:
+    - A PC with multiple IPs
+    - An IP phone + PC on same port
+    - VMs if a hypervisor is connected
+- Protects against **binding table exhaustion attacks**
+
+```
+ tracking enable
+```
+- Explicitly enables **active tracking** on ports using this policy
+- Switch will **send ARP probes** to hosts to verify they are still present
+- Updates the binding table when hosts leave or move
+- Without this, tracking would rely only on **passive gleaning** of traffic
+
+#### `device-tracking policy Disable_DT_Trunk`
+
+```
+device-tracking policy Disable_DT_Trunk
+ trusted-port
+ device-role switch
+```
+- Creates a named policy called **Disable_DT_Trunk**
+- Applied to **trunk ports / uplinks** where no client devices connect
+- Name makes the intent clear — effectively disables device tracking behavior on trunks
+
+```
+ trusted-port
+```
+
+- Marks the port as **trusted** for device tracking purposes
+- Bindings learned from this port are **not challenged or inspected**
+- ARP and DHCP traffic passes freely without validation
+- Applied to uplinks because the switch on the other end is already trusted infrastructure
+
+```
+ device-role switch
+```
+
+- Tells IPDT that the device connected to this port is **another switch**, not an end host
+- Changes tracking behavior — the switch will **not send ARP probes** to this port looking for hosts
+- Prevents the binding table from trying to track the upstream switch's MAC/IP as an endpoint
+- Without this, IPDT would try to track the neighboring switch as if it were a client
+
+---
+
+### Device Sensor 
+#### `cdp run`
+- **Globally enables CDP** (Cisco Discovery Protocol) on the switch
+- CDP is a Cisco proprietary Layer 2 protocol that discovers directly connected Cisco devices
+- Enabled by default on most IOS devices but explicitly stated here for clarity
+- **Device Sensor depends on CDP being running** to collect CDP TLVs from connected devices
+- Without this, the `cdp_list` filter below would collect nothing
+#### `device-sensor filter-list dhcp list dhcp_list`
+
+```bash
+device-sensor filter-list dhcp list dhcp_list
+ option name host-name
+ option name requested-address
+ option name parameter-request-list
+ option name class-identifier
+ option name client-identifier
+device-sensor filter-spec dhcp include list dhcp_list 
+```
+
+- Creates a named filter list called **dhcp_list** for **DHCP protocol**
+- Defines exactly which DHCP options the switch should **collect and forward to ISE**
+- Device Sensor passively reads DHCP messages already flowing through the switch — it does not generate them
+- Without a filter list, device sensor would collect **all** DHCP options — this scopes it to only what ISE needs
+
+```
+ option name host-name
+```
+- DHCP **Option 12** — the hostname the client sends in its DHCP request
+- Tells ISE the device's configured hostname (e.g. `LAPTOP-ABC123`)
+- Very useful for ISE profiling — helps identify the device type and owner
+
+```
+ option name requested-address
+```
+- DHCP **Option 50** — the IP address the client is requesting
+- Client sends this when renewing a lease, asking for its previous IP
+- Helps ISE correlate the device to a specific IP address
+
+```
+ option name parameter-request-list
+```
+- DHCP **Option 55** — list of DHCP options the client is requesting from the server
+- **Extremely valuable for ISE profiling** — different OS/device types request different parameters in a consistent fingerprint:
+    - Windows requests certain options
+    - Apple iOS requests different ones
+    - Android requests its own set
+- ISE uses this as a strong profiling signal to identify the OS/device type
+
+```
+ option name class-identifier
+```
+- DHCP **Option 60** — vendor class identifier sent by the client
+- Client announces what type of device it is (e.g. `MSFT 5.0` for Windows, `dhcpcd` for Linux)
+- Another strong ISE profiling signal for device type identification
+
+```
+ option name client-identifier
+```
+- DHCP **Option 61** — unique client identifier, usually the MAC address
+- Used by ISE to uniquely identify and track the device across sessions
+- More reliable than MAC alone in some cases
+
+```
+device-sensor filter-spec dhcp include list dhcp_list
+```
+- **Activates** the dhcp_list filter
+- Tells device sensor to **include** (collect and forward) only the DHCP options defined in dhcp_list
+- Without this line the filter list above is defined but **never used**
+- Think of filter-list as defining **what**, filter-spec as saying **use it**
+- This command only tell the device sensor **what to collect and store locally** on the switch
+- The data sits in the **local device sensor cache** on the switch
+
+#### `device-sensor filter-list cdp list cdp_list`
+
+```
+device-sensor filter-list cdp list cdp_list 
+ tlv name device-name
+ tlv name address-type
+ tlv name capabilities-type
+ tlv name platform-type
+ tlv name version-type
+device-sensor filter-spec cdp include list cdp_list
+```
+- Creates a named filter list called **cdp_list** for **CDP protocol**
+- Defines exactly which CDP TLVs (Type-Length-Values) to collect and forward to ISE
+- CDP TLVs are fields within CDP messages that describe the sending device
+
+```
+ tlv name device-name
+```
+
+- Collects the **hostname** of the connected Cisco device
+- For non-client ports this could be another switch or phone's name
+- Helps ISE identify Cisco IP phones by their device name
+
+```
+ tlv name address-type
+```
+
+- Collects the **IP address** of the connected device as advertised via CDP
+- ISE uses this to correlate CDP data with the device's IP in the binding table
+
+```
+ tlv name capabilities-type
+```
+
+- Collects what **type of device** the neighbor is (switch, router, phone, host)
+- Very strong ISE profiling signal — immediately tells ISE if device is a Cisco IP phone
+- Cisco IP phones advertise themselves as `telephone` in this TLV
+
+```
+ tlv name platform-type
+```
+
+- Collects the **exact hardware model** of the connected device (e.g. `Cisco IP Phone 8841`)
+- One of the most valuable profiling TLVs for ISE
+- Allows ISE to apply very specific policies based on exact phone/device model
+
+```
+ tlv name version-type
+```
+
+- Collects the **firmware/software version** running on the connected device
+- Helps ISE make compliance decisions (e.g. is the phone running an approved firmware?)
+- Can be used to profile and differentiate device types
+
+```
+device-sensor filter-spec cdp include list cdp_list
+```
+
+- **Activates** the cdp_list filter
+- Without this line the filter list above is defined but **never used**
+- Think of filter-list as defining **what**, filter-spec as saying **use it**
+- This command only tell the device sensor **what to collect and store locally** on the switch
+- The data sits in the **local device sensor cache** on the switch
+
+#### `device-sensor notify all-changes`
+- Tells device sensor to **immediately notify ISE** whenever any attribute changes
+- Without this, sensor data might only be sent at session start
+- `all-changes` means if a device sends a new DHCP request with different options, or CDP updates — ISE is notified **immediately**
+- Critical for ISE to maintain **accurate, up to date profiling** throughout the session lifetime
+- Allows ISE to **re-evaluate and change policy** mid-session if device profile changes
+
+#### `access-session attributes filter-list list sensor_list`
+
+```
+access-session attributes filter-list list sensor_list
+ cdp
+ dhcp
+```
+- Creates a named list called **sensor_list** that includes **cdp** and **dhcp** as attribute sources
+- Defines which protocol data collected by device sensor should be included in **access-session messages** sent to ISE
+- This is the bridge between **device sensor** (collects data) and **AAA/ISE** (receives data)
+- Without this, device sensor collects data locally but it never makes it into the AAA messages ISE receives
+#### `access-session accounting attributes filter-spec include list sensor_list`
+- Tells the switch to **include sensor_list attributes** in **RADIUS accounting messages** sent to ISE
+- This means CDP and DHCP profiling data is sent inside **accounting packets** to ISE
+- ISE receives this data and uses it to **profile and classify** the device
+- Without this, ISE would not receive the CDP/DHCP attributes in accounting messages
+#### `access-session authentication attributes filter-spec include list sensor_list`
+- Tells the switch to **include sensor_list attributes** in **RADIUS authentication messages** sent to ISE
+- Same data but sent during the **authentication phase** not just accounting
+- Allows ISE to make profiling-based policy decisions **at the time of authentication** not just after
+- Combined with the accounting line above — ISE gets profiling data at **both authentication and accounting**
+
+---
+
 ### Centralized Web Authentication (CWA) Guest Configuration
 
 > [!info] What this covers
@@ -2743,16 +3112,16 @@ parameter-map type webauth global
 ```
 
 The redirect ACL identifies **which** traffic to catch. The parameter map decides **what to do with it**.
-##### `parameter-map type webauth global`
+
+`parameter-map type webauth global`
 The parameter map is configured **globally** on the switch. 
-
 It applies to any port that receives a redirect instruction from ISE, so it only needs to be defined once regardless of how many guest ports are active.
-##### `type webauth`
 
+`type webauth`
 Sets the authentication mode. In CWA this tells the switch to act as a proxy interceptor for a captive portal rather than host its own login page — the switch catches the traffic and hands it off to the ISE portal URL.
 
-##### `virtual-ip ipv4 192.0.2.1`
-
+ 
+`virtual-ip ipv4 192.0.2.1`
 Sets a spoofed, non-routable IP address. When unauthenticated users try to browse the web, the Cisco device uses this IP to safely intercept their traffic and redirect them to the Cisco ISE portal page. The switch uses the virtual IP as the source IP address to send a HTTP 302 with the location of [[#cisco-av-pair|redirection url]] that is given the ISE.
 
 ```
@@ -2775,8 +3144,7 @@ Without the virtual IP, the switch would have no consistent identity to send the
 > [!tip] Why this specific IP?
 > `192.0.2.1` comes from the **TEST-NET-1** range defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737). The `192.0.2.0/24` block is reserved and guaranteed never to be a routable destination on a real network — there is zero risk of conflict with an actual host. Using a real IP here would risk redirecting traffic to an unintended destination.
 
-##### `intercept-https-enable`
-
+`intercept-https-enable`
 Without this, only HTTP (port 80) is intercepted. Since modern browsers default to HTTPS, this is effectively mandatory. When enabled:
 
 ```
@@ -2942,8 +3310,8 @@ When ISE goes down with a guest mid-redirect, the policy framework:
 
 1. **Detects** the condition precisely (`aaa-timeout` AND `Guest_Redirect` active).
 2. **Clears** the broken session.
-3. **Demotes** the port to `Critical_Access` — degraded but functional.
-4. **Pauses** reauth attempts until AAA recovers.
+3. **Demotes** the port to `Critical_Access`.
+4. **Pauses** re-auth attempts until AAA recovers.
 
 This prevents two failure modes at once: guests gaining uncontrolled access during the outage, and the port flapping endlessly against a dead AAA server.
 
@@ -3408,9 +3776,7 @@ wr
 !
 ```
 
-# Packet Flow with Cisco ISE
-Certificate authentication: 
-CLIENT send certificate, ISE CHECK if issuer is in trusted, the expiry date, CRL, proof of possession (server privat key + client public key (the certificate sent for authentication) + random data) the client need to decrypt the data with client private key and server public key. 
+
 
 
 # Reference 

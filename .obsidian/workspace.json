@@ -185,7 +185,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -206,12 +207,13 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/cisco-ise-cwa-guest.md",
-    "0 - Notes/Cisco ISE.md",
-    "0 - Notes/Site-to-Site VPN - Palo Alto.md",
+    "0 - Notes/README.md",
     "0 - Notes/Dynu DDNS.md",
+    "0 - Notes/Cisco ISE.md",
+    "0 - Notes/cisco-ise-cwa-guest.md",
+    "0 - Notes/Site-to-Site VPN - Palo Alto.md",
     "0 - Notes/Certificates - Palo Alto.md",
     "0 - Notes/App-ID™.md",
     "0 - Notes/WireGuard.md",
@@ -219,7 +221,6 @@
     "0 - Notes/homelab-setup-WEBNOVEL.md",
     "0 - Notes/homelab-setup-v5_1_7_22_old.md",
     "0 - Notes/homelab-setup-v5_1_7_20.md",
-    "0 - Notes/README.md",
     "0 - Notes/homelab-setup-v5_1_7_22.md",
     "0 - Notes/homelab-setup-v5_1_7_17.md",
     "0 - Notes/homelab-setup-v5_1_7_19.md",
