@@ -29,14 +29,13 @@
               "state": {
                 "file": "0 - Notes/Untitled.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
               "title": "Untitled"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -109,13 +108,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Untitled.md",
+                "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Untitled"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -200,7 +199,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -221,10 +221,10 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "b3a1809c73b93147",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/Cisco ISE.md",
     "0 - Notes/Untitled.md",
+    "0 - Notes/Cisco ISE.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Dynu DDNS.md",
     "0 - Notes/README.md",
