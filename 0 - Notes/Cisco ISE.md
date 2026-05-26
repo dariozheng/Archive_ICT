@@ -311,7 +311,7 @@ Common values are:
 - <strong>Ethernet (Value 15):</strong> Sent by a network switch when a user plugs directly into a physical wall port.
 - <strong>Virtual (Value 5):</strong> Typically indicates an incoming VPN connection or an administrator initiating an SSH session.
 - <strong>Async (Value 0):</strong> Used almost exclusively when an administrator connects directly to a switch via a physical Console port.
-##### Service - Type
+##### Service-Type
 
 ![[Pasted image 20260513120458.png]]
 Service-Type is a RADIUS attribute (Attribute 6) that defines the nature of the network access request being made, allowing ISE to understand how a user or device is trying to connect.
@@ -367,12 +367,12 @@ For a network switch to accept a dynamic VLAN assignment from Cisco ISE, it must
 
 ![[Pasted image 20260513152509.png]]
 
-<strong>`Tunnel-Type` (RADIUS Attribute 64)</strong> is an industry-standard IETF attribute used during the authorization phase to specify the <strong>tunneling protocol or virtualization method</strong> that a network device must apply to a user's session.
+<strong>Tunnel-Type (RADIUS Attribute 64)</strong> is an industry-standard IETF attribute used during the authorization phase to specify the <strong>tunneling protocol or virtualization method</strong> that a network device must apply to a user's session.
 <strong>VLAN (Value: 13)</strong> is  By far the most common value used in Cisco ISE. It instructs the switch to dynamically shift the physical access port into a specific VLAN ID.
 
 ![[Pasted image 20260513153658.png]]
 
-<strong>`Tunnel-Medium-Type` (RADIUS Attribute 65)</strong> is an industry-standard IETF attribute used during authorization to tell the network device the <strong>specific transport medium protocol</strong> running over the virtual tunnel.
+<strong>Tunnel-Medium-Type (RADIUS Attribute 65)</strong> is an industry-standard IETF attribute used during authorization to tell the network device the <strong>specific transport medium protocol</strong> running over the virtual tunnel.
 <strong>802 (Value: 6)</strong> is the most heavily used value in modern enterprise deployments. It indicates standard IEEE 802 networks, which includes all campus Ethernet switches (802.3) and enterprise Wireless LANs (802.11). 
 <strong>IPv4 (Value: 1):</strong> Used in Layer 3 tunneling architectures where packets travel natively over an IP backbone.
 
@@ -386,7 +386,7 @@ For a network switch to accept a dynamic VLAN assignment from Cisco ISE, it must
 
 ![[Pasted image 20260513122119.png]]
 
-In Cisco ISE, <strong>`cisco-avpair`</strong> is a Vendor-Specific Attribute (VSA) classified under the <strong>RADIUS > Cisco</strong> dictionary (Vendor ID: `9`, Sub-ID: `1`)
+In Cisco ISE, `cisco-av-pair` is a Vendor-Specific Attribute (VSA) classified under the <strong>RADIUS > Cisco</strong> dictionary (Vendor ID: `9`, Sub-ID: `1`)
 
 The syntax always follows a strict string format: `protocol:attribute=value`.
 
@@ -2352,6 +2352,13 @@ With this command:
   Switch → ISE: Access-Request (includes Class from previous session)
   ISE → Switch: Access-Accept (includes updated Class attribute)
 ```
+
+![[Pasted image 20260526141243.png]]
+- `CACS`: This stands for <strong>Cisco Access Control System</strong>, pointing back to the core engine architecture.
+- `FA00800A0000003663DD9D9B`: This is the <strong>Audit Session ID</strong>. It uniquely identifies that specific user connection across the entire network infrastructure.
+- `CISCO-ISE1`: The specific host name of the Policy Service Node (PSN) that processed the authentication request.
+- `563771444/206911`: Internal unique tracking numbers and sequence counters used by the node to map accounting updates
+
 #### Calling-Station-Id (Attribute 31)
 
 ##### `radius-server attribute 31 mac format ietf upper-case` 
@@ -2416,6 +2423,8 @@ With it:
     cisco-av-pair = method=dot1x
     cisco-av-pair = client-iif-id=xxxxx
 ```
+
+![[Pasted image 20260526141656.png]]
 
 ##### `radius-server vsa send accounting` 
 
@@ -3239,7 +3248,7 @@ authentication periodic
 authentication timer reauthenticate server
 ```
 
-Periodic reauth is enabled and the interval is taken from the RADIUS `Session-Timeout` attribute (combined with `Termination-Action = RADIUS-Request`). Centralising the timer in ISE lets you tune reauth per identity group rather than per switch.
+Periodic re-auth is enabled and the interval is taken from the RADIUS `Session-Timeout` attribute (combined with `Termination-Action = RADIUS-Request`). Centralizing the timer in ISE lets you tune re-auth per identity group rather than per switch.
 
 #### Method Enablement
 
@@ -3478,6 +3487,9 @@ show ip access-lists interface <int>     ! shows the ACL ISE pushed live
 show access-session interface <int> details
 show ip http server session-module
 ```
+
+### AAA-Down
+
 
 ### ISE-Side Configuration Reference
 
