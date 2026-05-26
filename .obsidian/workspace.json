@@ -199,8 +199,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -221,7 +220,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "310f1ddbfac8aab4",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
     "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
     "0 - Notes/Cisco ISE.md",

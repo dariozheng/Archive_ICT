@@ -2626,10 +2626,19 @@ DAI is entirely dependent on DHCP snooping — configure snooping first.
 ### IP Device Tracking — Global
 
 ```cisco
-device-tracking tracking
+device-tracking tracking auto-source
 ```
 
-Enables active device tracking (SISF — Switch Integrated Security Features) globally. Once enabled, attaching a `device-tracking policy` to an interface causes the switch to maintain IP-to-MAC bindings on that port by snooping DHCP and ARP and, optionally, sending ARP probes.
+Enables active device tracking (SISF — Switch Integrated Security Features) globally. The `auto-source` keyword instructs the switch to automatically derive a source IP for ARP probes:
+
+- If the VLAN has an <strong>SVI</strong>, the SVI's IP is used as the probe source.
+- If the VLAN has <strong>no SVI</strong>, the switch fabricates a source IP from the endpoint's subnet (learned via DHCP snooping or the binding table).
+
+This makes tracking work across <strong>all VLANs uniformly</strong> — with or without SVIs configured — which is the recommended setting for ISE deployments with mixed VLAN types (e.g., Management and Guest have SVIs; Data and IoT do not).
+
+> Without `auto-source`, probes on SVIless VLANs may silently fail, causing ISE sessions to show <strong>unknown</strong> for the endpoint IP.
+
+Once enabled, attaching a `device-tracking policy` to an interface causes the switch to maintain IP-to-MAC bindings on that port by snooping DHCP and ARP and, optionally, sending ARP probes.
 
 The resulting binding table is consumed by:
 
@@ -3515,34 +3524,34 @@ When a client connects, the switch sends a RADIUS Access-Request to ISE. If no r
 └──────────────────────────────────────────────────────┘
 ```
 
-### Class-Maps — Matching AAA-Down Conditions
+#### Class-Maps — Matching AAA-Down Conditions
 
-Three class-maps are defined to distinguish **which state** the endpoint was in when AAA went down:
+Three class-maps are defined to distinguish <strong>which state</strong> the endpoint was in when AAA went down:
 
 ```cisco
 class-map type control subscriber match-all AAA-DOWN_UNAUTH_USER
  match result-type aaa-timeout
  match authorization-status unauthorized
 ```
-> Matches: ISE unreachable **AND** endpoint was **never authorized** (fresh connection attempt)
+> Matches: ISE unreachable <strong>AND</strong> endpoint was <strong>never authorized</strong> (fresh connection attempt)
 
 ```cisco
 class-map type control subscriber match-all AAA-DOWN_GUEST_USER
  match result-type aaa-timeout
  match activated-service-template Guest_Redirect
 ```
-> Matches: ISE unreachable **AND** endpoint was in a **guest/captive-portal redirect** flow
+> Matches: ISE unreachable <strong>AND</strong> endpoint was in a <strong>guest/captive-portal redirect</strong> flow
 
 ```cisco
 class-map type control subscriber match-all AAA-DOWN_AUTH_USER
  match result-type aaa-timeout
  match authorization-status authorized
 ```
-> Matches: ISE unreachable **AND** endpoint was **already successfully authorized**
+> Matches: ISE unreachable <strong>AND</strong> endpoint was <strong>already successfully authorized</strong>
 
 ---
 
-### Policy-Map — AAA-Down Event Actions
+#### Policy-Map — AAA-Down Event Actions
 
 The `authentication-failure` event handles AAA-Down within the broader `ISE-NAC-POLICY`:
 
@@ -3565,11 +3574,11 @@ event authentication-failure match-first
 ```
 
 > [!note] `match-first`
-> The event uses **match-first**, so class evaluation stops at the first match. Order matters — `AAA-DOWN_GUEST_USER` must come before `AAA-DOWN_UNAUTH_USER` since a guest session also has `authorization-status unauthorized`.
+> The event uses <strong>match-first</strong>, so class evaluation stops at the first match. Order matters — `AAA-DOWN_GUEST_USER` must come before `AAA-DOWN_UNAUTH_USER` since a guest session also has `authorization-status unauthorized`.
 
-#### Actions
+##### Actions
 
-##### `AAA-DOWN_GUEST_USER`
+###### `AAA-DOWN_GUEST_USER`
 | Step | Action                                      | Reason                                   |
 | ---- | ------------------------------------------- | ---------------------------------------- |
 | 1    | `clear-session`                             | Destroys the broken guest/redirect state |
@@ -3577,27 +3586,27 @@ event authentication-failure match-first
 | 3    | `authorize`                                 | Pushes the template to the data plane    |
 | 4    | `pause reauthentication`                    | Stops retrying a dead ISE                |
 
-##### `AAA-DOWN_AUTH_USER`
+###### `AAA-DOWN_AUTH_USER`
 | Step | Action                   | Reason                                        |
 | ---- | ------------------------ | --------------------------------------------- |
 | 1    | `authorize`              | Re-applies the existing session authorization |
 | 2    | `pause reauthentication` | Holds the session until ISE recovers          |
 
-##### `AAA-DOWN_UNAUTH_USER`
+###### `AAA-DOWN_UNAUTH_USER`
 | Step | Action | Reason |
 |------|--------|--------|
 | 1 | `activate service-template Critical_Access` | Gives limited internet-only access |
 | 2 | `authorize` | Pushes the template to the data plane |
 | 3 | `pause reauthentication` | Stops retrying a dead ISE |
 
-### Service Templates
+#### Service Templates
 
 ```cisco
 service-template Critical_Access
  vlan 802
  access-group ACL_AAA-Down
 ```
-- Places the endpoint on **VLAN 802** (the NAC/default VLAN)
+- Places the endpoint on <strong>VLAN 802</strong> (the NAC/default VLAN)
 - Applies `ACL_AAA-Down` to restrict access
 
 ```cisco
@@ -3606,7 +3615,7 @@ service-template Guest_Redirect
 - Applied during captive-portal guest flows
 - Matched by `AAA-DOWN_GUEST_USER` class-map to detect in-progress guest sessions
 
-### ACL — ACL_AAA-Down
+#### ACL — ACL_AAA-Down
 
 ```cisco
 ip access-list extended ACL_AAA-Down
@@ -3619,9 +3628,9 @@ ip access-list extended ACL_AAA-Down
 ```
 
 > [!warning] Security Intent
-> The endpoint can reach the internet but **cannot access any internal corporate resources** during an ISE outage. This prevents unauthorized devices from pivoting internally.
+> The endpoint can reach the internet but <strong>cannot access any internal corporate resources</strong> during an ISE outage. This prevents unauthorized devices from pivoting internally.
 
-### AAA Recovery
+#### AAA Recovery
 
 When ISE comes back online, the `aaa-available` event fires:
 
@@ -3644,10 +3653,10 @@ class-map type control subscriber match-none NOT_CRITICAL_AUTH
 | Session State at Recovery | Action | Result |
 |---------------------------|--------|--------|
 | Has `Critical_Access` template | `clear-session` | Full re-authentication from scratch |
-| Does **not** have `Critical_Access` template | `resume reauthentication` | Normal reauthentication cycle resumes |
+| Does <strong>not</strong> have `Critical_Access` template | `resume reauthentication` | Normal reauthentication cycle resumes |
 
 > [!important]
-> Endpoints placed in Critical Access are **forced to re-authenticate completely** when ISE recovers — they don't silently inherit the Critical Access VLAN permanently.
+> Endpoints placed in Critical Access are <strong>forced to re-authenticate completely</strong> when ISE recovers — they don't silently inherit the Critical Access VLAN permanently.
 
 ### ISE-Side Configuration Reference
 
