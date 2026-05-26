@@ -92,7 +92,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 275.5026054382324
+    "width": 275.5026054382324,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -111,7 +112,7 @@
                 "file": "0 - Notes/Cisco ISE.md",
                 "followCursor": false,
                 "showSearch": true,
-                "searchQuery": "guest"
+                "searchQuery": ""
               },
               "icon": "lucide-list",
               "title": "Outline of Cisco ISE"
@@ -199,8 +200,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -221,7 +221,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "310f1ddbfac8aab4",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
     "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
     "0 - Notes/Cisco ISE.md",
