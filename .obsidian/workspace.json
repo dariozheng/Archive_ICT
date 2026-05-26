@@ -199,7 +199,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -222,9 +223,10 @@
   },
   "active": "310f1ddbfac8aab4",
   "lastOpenFiles": [
+    "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
+    "0 - Notes/Cisco ISE.md",
     "Pasted image 20260526141656.png",
     "Pasted image 20260526141243.png",
-    "0 - Notes/Cisco ISE.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/Untitled.md",
     "0 - Notes/homelab-setup-.md",
@@ -256,7 +258,6 @@
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "attachments/Pasted image 20260514112106.png",
     "attachments/Pasted image 20260514111525.png",
-    "attachments/Pasted image 20260514111237.png",
     "0 - Notes/homelab-setup-v5_1_7_10.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",

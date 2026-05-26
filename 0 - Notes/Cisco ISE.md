@@ -3490,6 +3490,164 @@ show ip http server session-module
 
 ### AAA-Down
 
+When a client connects, the switch sends a RADIUS Access-Request to ISE. If no reply is received within the [[#`radius-server timeout 5`|timeout]] window, the switch [[#`radius-server retransmit 3`|retransmits]] the request according to its configured retry limit. If there is still no response after these attempts, the switch marks the RADIUS server as DEAD.
+
+```
+┌──────────────────────────────────────────────────────┐
+│                     SWITCH                           │
+│                                                      │
+│  Client Auth →  RADIUS Access-Request                │
+│                        │                             │
+│                   ┌────▼────┐                        │
+│                   │  ISE ?  │  ← No Response         │
+│                   └────┬────┘                        │
+│                        │ retry × 3                   │
+│                        │ timeout × 5s each           │
+│                        ▼                             │
+│              Server marked DEAD                      │
+│              result-type = aaa-timeout               │
+│                        │                             │
+│                        ▼                             │
+│         authentication-failure event fires           │
+│                        │                             │
+│         Policy matches class-map condition           │
+│         based on current session state               │
+└──────────────────────────────────────────────────────┘
+```
+
+### Class-Maps — Matching AAA-Down Conditions
+
+Three class-maps are defined to distinguish **which state** the endpoint was in when AAA went down:
+
+```cisco
+class-map type control subscriber match-all AAA-DOWN_UNAUTH_USER
+ match result-type aaa-timeout
+ match authorization-status unauthorized
+```
+> Matches: ISE unreachable **AND** endpoint was **never authorized** (fresh connection attempt)
+
+```cisco
+class-map type control subscriber match-all AAA-DOWN_GUEST_USER
+ match result-type aaa-timeout
+ match activated-service-template Guest_Redirect
+```
+> Matches: ISE unreachable **AND** endpoint was in a **guest/captive-portal redirect** flow
+
+```cisco
+class-map type control subscriber match-all AAA-DOWN_AUTH_USER
+ match result-type aaa-timeout
+ match authorization-status authorized
+```
+> Matches: ISE unreachable **AND** endpoint was **already successfully authorized**
+
+---
+
+### Policy-Map — AAA-Down Event Actions
+
+The `authentication-failure` event handles AAA-Down within the broader `ISE-NAC-POLICY`:
+
+```cisco
+event authentication-failure match-first
+  10 class AAA-DOWN_GUEST_USER do-until-failure
+   10 clear-session
+   20 activate service-template Critical_Access
+   30 authorize
+   40 pause reauthentication
+
+  20 class AAA-DOWN_AUTH_USER do-until-failure
+   10 authorize
+   20 pause reauthentication
+
+  30 class AAA-DOWN_UNAUTH_USER do-until-failure
+   10 activate service-template Critical_Access
+   20 authorize
+   30 pause reauthentication
+```
+
+> [!note] `match-first`
+> The event uses **match-first**, so class evaluation stops at the first match. Order matters — `AAA-DOWN_GUEST_USER` must come before `AAA-DOWN_UNAUTH_USER` since a guest session also has `authorization-status unauthorized`.
+
+#### Actions
+
+##### `AAA-DOWN_GUEST_USER`
+| Step | Action                                      | Reason                                   |
+| ---- | ------------------------------------------- | ---------------------------------------- |
+| 1    | `clear-session`                             | Destroys the broken guest/redirect state |
+| 2    | `activate service-template Critical_Access` | Applies limited internet-only access     |
+| 3    | `authorize`                                 | Pushes the template to the data plane    |
+| 4    | `pause reauthentication`                    | Stops retrying a dead ISE                |
+
+##### `AAA-DOWN_AUTH_USER`
+| Step | Action                   | Reason                                        |
+| ---- | ------------------------ | --------------------------------------------- |
+| 1    | `authorize`              | Re-applies the existing session authorization |
+| 2    | `pause reauthentication` | Holds the session until ISE recovers          |
+
+##### `AAA-DOWN_UNAUTH_USER`
+| Step | Action | Reason |
+|------|--------|--------|
+| 1 | `activate service-template Critical_Access` | Gives limited internet-only access |
+| 2 | `authorize` | Pushes the template to the data plane |
+| 3 | `pause reauthentication` | Stops retrying a dead ISE |
+
+### Service Templates
+
+```cisco
+service-template Critical_Access
+ vlan 802
+ access-group ACL_AAA-Down
+```
+- Places the endpoint on **VLAN 802** (the NAC/default VLAN)
+- Applies `ACL_AAA-Down` to restrict access
+
+```cisco
+service-template Guest_Redirect
+```
+- Applied during captive-portal guest flows
+- Matched by `AAA-DOWN_GUEST_USER` class-map to detect in-progress guest sessions
+
+### ACL — ACL_AAA-Down
+
+```cisco
+ip access-list extended ACL_AAA-Down
+ 10 permit udp any any eq domain       
+ 20 permit udp any eq bootpc any eq bootps  
+ 30 deny ip any 10.0.0.0 0.255.255.255     
+ 40 deny ip any 172.16.0.0 0.0.15.255      
+ 50 deny ip any 192.168.0.0 0.0.255.255   
+ 60 permit ip any any                       
+```
+
+> [!warning] Security Intent
+> The endpoint can reach the internet but **cannot access any internal corporate resources** during an ISE outage. This prevents unauthorized devices from pivoting internally.
+
+### AAA Recovery
+
+When ISE comes back online, the `aaa-available` event fires:
+
+```cisco
+event aaa-available match-all
+  10 class CRITICAL_AUTH do-until-failure
+   10 clear-session
+  20 class NOT_CRITICAL_AUTH do-until-failure
+   10 resume reauthentication
+```
+
+```cisco
+class-map type control subscriber match-all CRITICAL_AUTH
+ match activated-service-template Critical_Access
+
+class-map type control subscriber match-none NOT_CRITICAL_AUTH
+ match activated-service-template Critical_Access
+```
+
+| Session State at Recovery | Action | Result |
+|---------------------------|--------|--------|
+| Has `Critical_Access` template | `clear-session` | Full re-authentication from scratch |
+| Does **not** have `Critical_Access` template | `resume reauthentication` | Normal reauthentication cycle resumes |
+
+> [!important]
+> Endpoints placed in Critical Access are **forced to re-authenticate completely** when ISE recovers — they don't silently inherit the Critical Access VLAN permanently.
 
 ### ISE-Side Configuration Reference
 
