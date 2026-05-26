@@ -1973,6 +1973,7 @@ aaa group server radius RADSERV
  ip radius source-interface Vlan800
 !
 !
+!
 aaa authentication login default group RADSERV local-case 
 aaa authentication login console local-case
 aaa authentication login HTTPSRV group RADSERV local-case
@@ -2077,7 +2078,7 @@ ntp server 172.20.129.65 prefer
 !
 !
 !
-no ip http server
+ip http server
 ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
@@ -3689,11 +3690,10 @@ aaa new-model
 !
 !
 !
-! enable 802.1X globally 
 dot1x system-auth-control 
-! allows the switch to send a specific EAPOL-Success message to a connecting device even if the RADIUS server is unreachable
+! 
 dot1x critical eapol 
-! allows a device (MAC address) to move from one switch port to another without being blocked
+!
 #INTERACTIVE
 no access-session mac-move deny<IQ>.*Do you wish to continue\? \[yes\]:\s*<R>yes
 #ENDS_INTERACTIVE
@@ -3720,6 +3720,7 @@ vlan 850
 !
 interface Vlan805
  description GUEST-INTERCEPT-SVI
+ ip address {{ VLAN805_IP_address }}
  no shutdown
 !
 !
@@ -3734,23 +3735,25 @@ ip radius source-interface Vlan800
 !
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
-! ignore-acct-port keyword indicates that the switch must not validate the accounting port number that the server will use. 
-! probe-on keyword indicates that the switch must send test probes only when the server is marked as Dead.
+ timeout 5
+ retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
  key 7 075F02457D0A36162421045C
 !
 radius server ISE02
  address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
+ timeout 5
+ retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
  key 7 0054300F375824153C12431E
 !
-! Global RADIUS timers and dead-server detection
+! 
 radius-server timeout 5
 radius-server retransmit 3
 radius-server dead-criteria time 5 tries 3
 radius-server deadtime 15
 !   
-! RADIUS attribute behaviour
+! 
 radius-server attribute 6 on-for-login-auth
 radius-server attribute 6 support-multiple
 radius-server attribute 8 include-in-access-req
@@ -3770,6 +3773,7 @@ aaa group server radius ISESERV
  server name ISE01
  server name ISE02
  deadtime 15
+ ip radius source-interface Vlan800
 !
 aaa authentication dot1x default group ISESERV
 aaa authorization network default group ISESERV
@@ -3788,28 +3792,18 @@ aaa server radius dynamic-author
 !
 !
 !
-! defines how the switch identifies itself when probing a device
+! 
 device-tracking tracking auto-source 
 !
-! custom policy for access ports
+! 
 device-tracking policy IPDT_POLICY 
-!
-! extracts IP/MAC bindings from packets (ARP, DHCP, ND)
  security-level glean 
-!
-! security measure that prevents a single port from claiming more than 10 different IP addresses
  limit address-count 10 
-!
-! activates the tracking logic for any port this policy is applied to
  tracking enable 
 !
-! policy for trunk ports 
+! 
 device-tracking policy Disable_DT_Trunk 
-! 
-! tells the switch that the information coming from this port is already verified
  trusted-port 
-! 
-! tells the tracking engine that the neighbor is another infrastructure device
  device-role switch 
 !
 ! 
@@ -3817,7 +3811,7 @@ device-tracking policy Disable_DT_Trunk
 ip dhcp snooping 
 ip dhcp snooping vlan 800,802,805,850
 !
-! disables the insertion of DHCP Option 82 data into DHCP request packets
+! 
 no ip dhcp snooping information option 
 !
 ip arp inspection vlan 800,802,805,850
@@ -3826,19 +3820,17 @@ ip arp inspection vlan 800,802,805,850
 !
 cdp run
 !
-! creates a named list of DHCP options that the switch will specifically "listen" for and collect from connected devices
+! 
 device-sensor filter-list dhcp list dhcp_list
  option name host-name
  option name requested-address
  option name parameter-request-list
  option name class-identifier
  option name client-identifier
-! command tells the switch to actually start using the filter list
 device-sensor filter-spec dhcp include list dhcp_list 
 !
 !
 !
-! listen and collect the following cdp information
 device-sensor filter-list cdp list cdp_list 
  tlv name device-name
  tlv name address-type
@@ -3848,19 +3840,14 @@ device-sensor filter-list cdp list cdp_list
 device-sensor filter-spec cdp include list cdp_list
 !
 !
-! command ensures that the switch sends a real-time update to ISE the moment any tracked attribute changes
 device-sensor notify all-changes 
 !
 !
-!
-! links the data that the device-sensor has collected to the actual RADIUS messages sent to ISE
 access-session attributes filter-list list sensor_list 
  cdp
  dhcp
 !
-! binds the custom list to RADIUS accounting records 
 access-session accounting attributes filter-spec include list sensor_list 
-! binds the list to RADIUS authentication (Access-Request) packets
 access-session authentication attributes filter-spec include list sensor_list 
 !
 !
@@ -4011,22 +3998,17 @@ template NAC-INT-TEMPLATE
  spanning-tree portfast
  spanning-tree bpduguard enable
 !
-! enable the feature to recheck the user credentials
  authentication periodic
 !
-! tells the switch to let the ISESERV decides how ofter a device must log in again
  authentication timer reauthenticate server
  mab
  access-session control-direction in
 !
-! this mode allows a single MAC address in each domain, the data and the voice domain, to allow more MAC address per port use multi-auth or multi-hosts
  access-session host-mode multi-domain 
  access-session closed
 !
-! the switch dynamically decides to permit or restrict traffic based on the result of the policy map
  access-session port-control auto
 !
-! tells the port to act as the Authenticator 
  dot1x pae authenticator
  dot1x timeout tx-period 7
  dot1x max-reauth-req 3
@@ -4039,12 +4021,10 @@ template NAC-INT-TEMPLATE
 {% for interface in __interface %}
 {% if interface.vlanId == 802 %}
 interface {{ interface.portName }}
-! enable the template and delete the access vlan under interface as there is already an access vlan under template 
  source template NAC-INT-TEMPLATE
  no switchport access vlan 802
 {% elif interface.portMode == 'trunk' %}
 interface {{ interface.portName }}
-! enable ip dhcp snooping trust under trunk ports 
  ip dhcp snooping trust
  ip arp inspection trust
  switchport trunk allowed vlan add 802,805,850
@@ -4057,11 +4037,6 @@ interface {{ interface.portName }}
 !
 ip http server
 ip http secure-server
-ip http secure-active-session-modules none
-ip http active-session-modules none
-ip http authentication aaa login-authentication HTTPSRV
-ip http client source-interface Vlan800
-ip forward-protocol nd
 !
 !
 !
