@@ -1628,7 +1628,7 @@ Under <strong>Scope → Security Filtering</strong> of the GPO add <strong>Domai
 ### User GPO
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Users</mark> with the [[#Domain Users Certificate]].
 
-All computer GPO must be create in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Publiacqua</strong> which is where the Domain User accounts are stored.
+All user GPOs must be created in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Publiacqua</strong> which is where the Domain User accounts are stored.
 <mark style="background: #CACFD9A6;">At each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command to apply the GPO configuration</mark>.
 
 To activate Auto-Enrollment go to <strong>User Configuration → Policies → Windows Settings → Security Settings → Public Key Policies → Certificate Services Client - Auto-Enrollment</strong> 
@@ -2123,28 +2123,9 @@ wr
 !
 ```
 
-## NAD Configuration
+## NAD Configuration 
 
 This note documents the configuration required on a Cisco IOS-XE switch — the Network Access Device, or NAD — to integrate with Cisco ISE for 802.1X / MAB authentication, dynamic authorization (CoA), endpoint profiling, and Centralized Web Authentication for guests.
-
-### Default Values Overridden
-
-Quick reference of explicit choices made in this configuration vs. the IOS defaults they override:
-
-|Setting|Default|Configured|Reason|
-|---|---|---|---|
-|`radius-server timeout`|5 s|5 s (explicit)|Explicit baseline; tune only after measuring real ISE RTT.|
-|`radius-server retransmit`|3|3 (explicit)|4 attempts total before failover, 20 s worst case.|
-|`radius-server deadtime`|0 (off)|15 min|Ignore dead servers for 15 min to prevent per-auth retries.|
-|`dot1x timeout tx-period`|30 s|7 s|Reach MAB fallback in 28 s instead of 90 s for non-supplicant devices.|
-|`dot1x max-reauth-req`|2|3|One extra retry to tolerate slow / flaky supplicants without lengthening total too much.|
-|`access-session host-mode`|single-host|multi-domain|Allow phone + PC on the same port.|
-|`access-session control-direction`|both|in|Permit Wake-on-LAN to unauthenticated endpoints.|
-|`access-session port-control`|force-auth|auto|Required for 802.1X to actually run.|
-|`access-session closed`|open|closed|Block all pre-auth traffic; full secure-by-default posture.|
-|`access-session mac-move`|deny|permit (`no ... deny`)|Allow MACs to move between ports without err-disable.|
-|IPDT default policy|aggressive|custom (`IPDT_POLICY`)|Default ARP probing breaks some endpoints.|
-|DHCP Option 82 insertion|enabled|disabled|Access switch is not a relay agent; many servers reject Option 82 from untrusted sources.|
 
 ---
 
@@ -2255,13 +2236,13 @@ aaa group server radius ISESERV
  ip radius source-interface Vlan800
 ```
 
-A server group lets method lists reference one logical name instead of individual servers, and scopes timer / source-interface behaviour to this group only.
+A server group lets method lists reference one logical name instead of individual servers, and scopes timer and source-interface behavior to this group only.
 
-|Line|Effect|
-|---|---|
-|`server name ISE01` / `ISE02`|Add the previously defined `radius server` blocks as members. Order matters — ISE01 is tried first, ISE02 is the failover.|
-|`deadtime 15`|A server marked dead is ignored for 15 minutes before being retried. Scoped to this group.|
-|`ip radius source-interface Vlan800`|All RADIUS packets from this group are sourced from VLAN 800. <strong>Critical</strong> — ISE identifies the NAD by source IP, and this must match the IP recorded in the ISE NAD configuration.|
+| Line                                 | Effect                                                                                                                                                                                           |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `server name ISE01` / `ISE02`        | Add the previously defined `radius server` blocks as members. Order matters — ISE01 is tried first, ISE02 is the failover.                                                                       |
+| `deadtime 15`                        | A server marked dead is ignored for 15 minutes before being retried. Scoped to this group.                                                                                                       |
+| `ip radius source-interface Vlan800` | All RADIUS packets from this group are sourced from VLAN 800. <strong>Critical</strong> — ISE identifies the NAD by source IP, and this must match the IP recorded in the ISE NAD configuration. |
 
 #### Global RADIUS Timers 
 
