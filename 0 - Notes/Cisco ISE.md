@@ -142,7 +142,7 @@ If you want to allow only a specific section of the submenu like showing only <s
 ![[Pasted image 20260508114835.png]]
 ##### Data Access
 The Data Access List is used to configure which data a user is allowed to see or to modify. 
-These changes impact the type of log one can see, so if you want to limit data access It's best put them in Read Only instead of No Access.
+These changes impact the type of log one can see, so if you want to limit data access It's best to put them in Read Only instead of No Access.
 
 ![[Pasted image 20260508115415.png]]
 
@@ -469,7 +469,7 @@ This condition is used if you want to get a computer certificate but you don't w
 
 ![[Pasted image 20260514113635.png]]
 ##### Client Authorizations
-Client Authorizations conditions check if the client user is [[#ID_Domain_User]] and if the EAP protocol they use is PEAP or TEAP. The domain users should use only TEAP and PEAP in rare occasions.
+Client Authorizations conditions check if the client user is [[#ID_Domain_User]] and if the EAP protocol they use is PEAP or TEAP. The domain users should use only TEAP and PEAP on rare occasions.
 
 ![[Pasted image 20260514140414.png]]
 
@@ -560,7 +560,7 @@ The Default authentication policy is a catch all type of policy, set to deny all
 It's usually used for requests that the policies before this one could not catch. 
 In this deployment it shouldn't be hit at all. 
 #### Authorization Policy
-Authorization Policies decide which [[#Authorization Profiles]] does the client get.
+Authorization Policies decide which [[#Authorization Profiles]] the client gets.
 
 ![[Pasted image 20260514115226.png]]
 
@@ -589,14 +589,14 @@ The conditions to hit this policy are [[#Client Authorizations]] and [[#Authenti
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### RDP Access
-The RDP Access authorization policy is used for computer for most of the time must be accessible through RDP but are not servers. 
+The RDP Access authorization policy is used for computers that must be accessible most of the time through RDP but are not servers. 
 The Machine Access DACL is too limited, so there is a specific policy that gives access to VLAN 802.
 
 The hit conditions are EAP-TLS machine certificate, [[#Not_TEAP]], and [[#Authentication Passed]].
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### MAB Access
-MAB Access is for computer or devices that for reasons don't have a supplicant to send 802.1X authentication packets. At the moment the authorization profiles for this access is also VLAN 802
+MAB Access is for computers or devices that, for various reasons, don't have a supplicant to send 802.1X authentication packets. At the moment the authorization profiles for this access is also VLAN 802
 
 The hit conditions are [[#Smart Conditions|Wired_MAB]], [[#PBA_Whitelist|Whitelist]] and [[#Authentication Passed]]. 
 
@@ -609,7 +609,7 @@ The Authorization Profiles is VLAN Guest which is VLAN 805. It has the same conf
 ##### Guest Redirect
 The Guest Redirect authorization policy is the catch-all for all devices and users not authorized/authenticated and for guest users. 
 
-The hit condition is all [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. 
+The hit condition is include [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. 
 The Authorization Profiles is [[#Redirect_Guest_Wired]], if the Guest Authentication is a success it will hit the default [[#UseCase|Guest Flow]] condition of [[#Guest Access]], and the client will have Internet access. 
 ### Results
 #### Policy - Results - Authentication
@@ -822,7 +822,7 @@ A client that is presented with a certificate compare <mark style="background: #
 The newly created CSR is saved in the <strong>Certificate Signing Requests</strong> section and it can be exported, it is a <strong>Base64-encoded plaintext file</strong> known as a <strong>PEM</strong> file.
 Open the CSR with a text editor, copy its content and paste it on the certificate authority web server similar to the procedure in [[#Enrollment - Windows Manual | this link]] except that the CSR is already present.
 
-Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link to the certificate to the CSR used to make this cert. 
+Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link the certificate to the CSR used to make this cert. 
 
 The new cert should appear on System Certificates list.
 #### Trusted Certificates
@@ -886,7 +886,7 @@ The selection <strong>Match Client Certificate Against Certificate In Identity S
 - <strong>Never:</strong> Choose this if you are not using an identity store at all for this profile. This would be common for Guest or BYOD setups where you just want to verify that the certificate is valid and signed by a trusted CA without checking it against an AD account.
 ### Client Certificates 
 Client Certificates are used by users, machine or both to authenticate to ISE. 
-In the server SubordinateCA, on the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 
+On the server SubordinateCA, in the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users. 
 #### Domain Users Certificate
 For Users Certificates, duplicate from the default <strong>User</strong> certificate template:
 - On the <u>General tab</u> create a logical template name. The <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the user <strong>userCertificate</strong> attribute in Active Directory. ![[Pasted image 20260424150748.png|200]]
@@ -1470,7 +1470,7 @@ Make sure the GPO with the desired configuration is winning against other GPOs a
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Computers</mark> with the [[#Domain Computer Certificate]] and enable <mark style="background: #FFB86CA6;">Wired AutoConfig</mark> on computers. 
 
 All computer GPO must be create in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> which is where the Domain Computer accounts are stored.
-<mark style="background: #FFB8EBA6;"><u>At each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command and a reboot of the client computer to apply the GPO configuration</u></mark>.
+<mark style="background: #FFB8EBA6;"><u>After each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command and a reboot of the client computer to apply the GPO configuration</u></mark>.
 
 <strong>Wired AutoConfig</strong> (<strong>DOT3SVC</strong>) is a Windows service that manages <mark style="background: #FF5582A6;">IEEE 802.1X authentication on Ethernet connections</mark>. It enables computers to authenticate themselves on secure networks, often used in corporate environments to enforce network access control. 
 <strong>Computer Configuration → Policies → Windows Settings → Security Settings → System Services → Wired AutoConfig</strong>
