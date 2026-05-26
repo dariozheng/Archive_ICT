@@ -26,11 +26,11 @@ An ISE-based network access control solution has four general components: <mark 
 <strong>Endpoints</strong> need <mark style="background: #BBFABBA6;">network access</mark> and the <strong>network access devices (NAD)</strong> provides it, based on instructions from <strong>ISE</strong>. 
 ISE can leverage <strong>external services</strong> to understand more about the corresponding endpoints to make policy decisions.
 
-<mark style="background: #FFB8EBA6;">The server ISE acts as the core, it's where the policies are defined</mark>. <mark style="background: #FF5582A6;">The network devices acts as the authenticator</mark> and <strong>enforce</strong> the policies from the server ISE. <mark style="background: #FFF3A3A6;">The endpoint receives the response</mark> <mark style="background: #FFB86CA6;">given by the server ISE</mark> <mark style="background: #BBFABBA6;">from the network access device</mark>. Most of the high level host endpoint have <mark style="background: #ABF7F7A6;">supplicants that allow them to communicate with the authenticator or NAD</mark>.  <mark style="background: #D2B3FFA6;">The server ISE can use external services</mark>, such as the <strong>Microsoft Active Directory</strong>, <mark style="background: #D2B3FFA6;">to get knowledge about the users</mark>. 
+<mark style="background: #FFB8EBA6;">The ISE server acts as the core, it's where the policies are defined</mark>. <mark style="background: #FF5582A6;">The network devices act as the authenticator</mark> and <strong>enforce</strong> the policies from the server ISE. <mark style="background: #FFF3A3A6;">The endpoint receives the response</mark> <mark style="background: #FFB86CA6;">given by the server ISE</mark> <mark style="background: #BBFABBA6;">from the network access device</mark>. Most of the high level host endpoint have <mark style="background: #ABF7F7A6;">supplicants that allow them to communicate with the authenticator or NAD</mark>.  <mark style="background: #D2B3FFA6;">The server ISE can use external services</mark>, such as the <strong>Microsoft Active Directory</strong>, <mark style="background: #D2B3FFA6;">to get knowledge about the users</mark>. 
 # ISE Server
 Cisco Identity Services Engine (ISE) is an <strong>identity-based network access control</strong> and <strong>policy enforcement system</strong>. It functions as a common policy engine that enables <mark style="background: #FFF3A3A6;">endpoint access control </mark>and <mark style="background: #BBFABBA6;">network device administration</mark> for enterprises.
 ## Identity Management
-Identity Management managed all identities for ISE, from ISE GUI admins to users that have to authenticate to ISE.
+Identity Management manages all identities for ISE, from ISE GUI admins to users that have to authenticate to ISE.
 
 ![[Pasted image 20260508100508.png]]
 ### Identities 
@@ -55,7 +55,7 @@ Endpoint and User Groups can be used as attributes in Policy Sets.
 
 ![[Pasted image 20260513164133.png]]
 
-Endpoint Identity Groups stores information about all the endpoint devices that connect to the network infrastructure or they can be filled through an CSV import.
+Endpoint Identity Groups store information about all the endpoint devices that connect to the network infrastructure or they can be filled through an CSV import.
 
 Endpoint Groups can be used as attributes in Policy Sets.
 
@@ -82,7 +82,7 @@ MAC Addresses that must be whitelisted. Used in the MAB Access.
 ![[Pasted image 20260508110112.png]]
 
 The User Identity Group accept only Internal Users. 
-### External Identity Sources #review
+### External Identity Sources
 External Identity Sources can leverage existing external identity store for network authentication. 
 
 ![[Pasted image 20260508100508.png]]
@@ -183,7 +183,7 @@ In a Cisco dominant environment the default network device profile for Cisco is 
 
 It’s possible to set the conditions for which, based on the attributes received on the header, the packet is considered a Wired, Wireless, MAB, or 802.1X connection.
 ##### Flow Type Conditions
-Enter the <strong>attributes</strong> and <strong>values</strong> that your device vendor uses for the network flows types in the <strong>Flow Type Conditions</strong>: 
+Enter the <strong>attributes</strong> and <strong>values</strong> that your device vendor uses for the network flow types in the <strong>Flow Type Conditions</strong>: 
 - Wired MAB
 - Wireless MAB
 - Wired 802.1x
@@ -285,7 +285,7 @@ The SNMP Settings section is where the SNMP community for the NAD is configured,
 
 The NADs can be imported with a CSV. 
 ## Policy 
-In Policy section are defined the Policy Sets, Dictionaries, Conditions and Results. 
+In Policy section defines the Policy Sets, Dictionaries, Conditions and Results. 
 ### Dictionaries
 Cisco ISE dictionary attributes are pre-defined or custom RADIUS and system-level parameters used to create policy conditions, such as device type, user group, or location, for authentication and authorization. 
 
@@ -497,12 +497,12 @@ These RADIUS attribute-value pairs are mapped from [[#Authentication/Authorizati
 Instead of managing one giant list of rules, policy sets allow you to organize network access by use case, such as separating Wired, Wireless, VPN, or Guest access.
 
 Each policy set functions as a "rule book" evaluated from the top down. Once a request matches a policy set's top-level conditions, ISE evaluates the internal policies in this order: 
-- <strong>Top-Level Condition</strong>: The "gatekeeper" that determines if a request belongs in that specific set. If the request is Wireless, Wired, from a specific location, time ecc.
+- <strong>Top-Level Condition</strong>: The "gatekeeper" that determines if a request belongs in that specific set. If the request is Wireless, Wired, from a specific location, time etc.
 - <strong>[[#Allowed Protocols|Allowed Protocols]]</strong>: Defines which protocols (like PAP, CHAP, or EAP-TLS) are permitted for the initial connection.
 - <strong>Authentication Policy</strong>: Verifies the identity of the user or device using identity sources like Active Directory or internal databases.
 - <strong>Authorization Policy</strong>: Grants specific permissions—such as VLAN assignment, Security Group Tags (SGTs), or Downloadable ACLs (dACLs)—based on the user's role or device posture.
 
-The Top-Level Condition in this deployment are <strong>Wired</strong>, <strong>Wired_Monitor</strong>, <strong>Wireless</strong> and <strong>DNAC</strong>, they distribute the client requests based on the type of connection (Wired or Wireless) and if the Device Type is a DNAC-server. 
+The Top-Level Condition in this deployment are <strong>Wired</strong>, <strong>Wired_Monitor</strong>, <strong>Wireless</strong> and <strong>DNAC</strong>, they distribute the client requests based on the type of connection (Wired or Wireless) and whether the Device Type is a DNAC-server. 
 
 ![[Pasted image 20260512152559.png]]
 
@@ -544,7 +544,7 @@ When a device connects to a switch port configured for 802.1X/MAB, the following
 4. <strong>ISE Decision</strong>: ISE checks the MAC address against all MAC addresses in the [[#Endpoint Identity Groups|Internal Endpoints]] database or performs <strong>Profiling</strong> to identify the device type.
 5. <strong>Authorization</strong>: Based on your configured <strong>Policy Sets</strong>, ISE sends back a RADIUS Access-Accept with specific permissions, such as a VLAN assignment or a Downloadable ACL (dACL).
 
-In the current deployment even if the MAB check fails, the server ISE allow the authentication request to continue to the authorization policies, where they will be met with [[#Guest Redirect|Guest Redirect]] Authorization Policy. 
+In the current deployment, even if the MAB check fails, the server ISE allows the authentication request to continue to the authorization policies, where they will be met with [[#Guest Redirect|Guest Redirect]] Authorization Policy. 
 
 The conditions for MAB is the [[#Flow Type Conditions|predefined Wired_Mab]].
 ##### Dot1X (802.1X)
@@ -553,18 +553,18 @@ Dot1X (802.1X) should be the most used/default authentication policy.
 It's the authentication policy where the client has a supplicant ([[#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
 
 The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it check the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]].
-If the user is found in the ISS then it is authenticated and the request is passed for authorization policy check. 
+If the user is found in the ISS, it is authenticated and the request is passed for authorization policy check. 
 If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
 ##### Default
 The Default authentication policy is a catch all type of policy, set to deny all request.
 It's usually used for requests that the policies before this one could not catch. 
-In this deployment it's shouldn't be hit at all. 
+In this deployment it shouldn't be hit at all. 
 #### Authorization Policy
-Authorization Policies decides which [[#Authorization Profiles]] does the client get.
+Authorization Policies decide which [[#Authorization Profiles]] does the client get.
 
 ![[Pasted image 20260514115226.png]]
 
-The authorization policies order is first match, the client get authorization profile of the fist authorization policy it hits.
+The authorization policies order is first match, the client get authorization profile of the first authorization policy it hits.
 ##### Deny Access
 The fist authorization policy is to check if the client computer is on the [[#PBA_Blacklist|Blacklist]], if the MAC address is found on the [[#PBA_Blacklist|Endpoint Identity Group]] they will reject the client request, if it's not found then the policy is not hit and ISE will check the following policy. 
 ##### Admin Access
@@ -574,7 +574,7 @@ The condition to hit this policy is that [[#EAPs|the client must use an EAP prot
 
 The authorization profile is configured to give only the VLAN Admin while the admin permissions are provided by the network and security configuration for VLAN Admin.
 ##### Machine Access
-The Machine Access an authorization protocol created for situations where the [[#Domain Users Certificate|User Certificate]] is not available: 
+The Machine Access is an authorization policy created for situations where the [[#Domain Users Certificate|User Certificate]] is not available: 
 - User is not logged-on the domain computer
 - New user needs to access a domain computer
 - Problems with user certificate
@@ -583,13 +583,13 @@ In these case the Machine Access policy provides the client with Internet access
 The conditions to hit Machine Access are [[#TEAP_Machine]] and [[#Authentication Passed]]. 
 The authorization profiles it provides is [[#Pre-Auth-profile]].
 ##### Client Access
-The Client Access is the default policy for Publiacqua Domain Users, when this policy is hit the user get access to VLAN 802 which is the LAN Client. 
+The Client Access is the default policy for Publiacqua Domain Users. When this policy is hit the user gets access to VLAN 802 which is the LAN Client. 
 
 The conditions to hit this policy is [[#Client Authorizations]] and [[#Authentication Passed]]. 
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### RDP Access
-The RDP Access authorization policy is used for computer that for most of the time must be accessible through RDP but are not servers. 
+The RDP Access authorization policy is used for computer for most of the time must be accessible through RDP but are not servers. 
 The Machine Access DACL is too limited, so there is a specific policy that gives access to VLAN 802.
 
 The hit conditions are EAP-TLS machine certificate, [[#Not_TEAP]], and [[#Authentication Passed]].
@@ -602,12 +602,12 @@ The hit conditions are [[#Smart Conditions|Wired_MAB]], [[#PBA_Whitelist|Whiteli
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]]. 
 ##### Guest Access
-The Guest Access is used together with [[#Guest Redirect]] and it will be hit only if the client user authenticate to [[#Guest Redirect]]. 
+The Guest Access is used together with [[#Guest Redirect]] and it will be hit only if the client user authenticates to [[#Guest Redirect]]. 
 
 The hit condition is [[#Guest_Flow]].
 The Authorization Profiles is VLAN Guest which is VLAN 805. It has the same configuration of [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
 ##### Guest Redirect
-The Guest Redirect authorization protocol is the catch all for all devices and users not authorized/authenticated and for guest users. 
+The Guest Redirect authorization policy is the catch-all for all devices and users not authorized/authenticated and for guest users. 
 
 The hit condition is all [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. 
 The Authorization Profiles is [[#Redirect_Guest_Wired]], if the Guest Authentication is a success it will hit the default [[#UseCase|Guest Flow]] condition of [[#Guest Access]], and the client will have Internet access. 
@@ -615,7 +615,7 @@ The Authorization Profiles is [[#Redirect_Guest_Wired]], if the Guest Authentica
 #### Policy - Results - Authentication
 Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
 ##### Allowed Protocols
-After the conditions are matched in a top-level rule,  ISE determines what authentication protocols are permitted for that policy set. If the user send a authentication request that is not in the allowed protocol, the request is denied.
+After the conditions are matched in a top-level rule,  ISE determines what authentication protocols are permitted for that policy set. If the user send an authentication request that is not in the allowed protocol, the request is denied.
 
 <strong>Policy > Policy Elements > Results > Authentication > Allowed Protocols</strong>
 
@@ -658,14 +658,14 @@ Authorization Profiles are reusable policy objects that define the specific acce
 
 ![[Pasted image 20260512124255.png]]
 
-The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends a ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit the computer network access to Internet, Domain Controller and Certificate Authority.
+The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends an ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit the computer network access to Internet, Domain Controller and Certificate Authority.
 
 This DACL is used for computer that have authenticated with machine certificate but not with user certificate for various reasons:
 - The user is not logged-on, so the user certificate is not available
 - There change in user happening 
 - The user does not have a certificate enrolled
 
-For these case the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+In these cases the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
 ###### Vlan_802_Lan_Client
 
 ![[Pasted image 20260512142840.png]]
@@ -703,7 +703,7 @@ This DACL is used for computer that have authenticated with machine certificate 
 - The user does not have a certificate enrolled
 - ect
 
-For these case the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+In these cases the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
 
 DC01 and DC02 = 10.140.4.250 and 10.140.4.252
 subordinateca01 and subordinateca02 = 10.140.2.198 and 10.140.2.199
@@ -762,7 +762,7 @@ deny ip any any
 ```
 
 # Microsoft Servers
-In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management to rollout the configuration to clients.  
+In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management rollout the configuration to clients.  
 ## Active Directory 
 
 ![[Pasted image 20260421124607.png]]
@@ -775,7 +775,7 @@ For the server ISE to be able to join the domain, it has to have a machine accou
 
 ![[Pasted image 20260421152119.png]]
 
-On this section it is also possible to retrieve groups from the AD to create policies around the user group identity. 
+In this section it is also possible to retrieve groups from the AD to create policies around the user group identity. 
 
 ![[Pasted image 20260421125524.png]]
 
