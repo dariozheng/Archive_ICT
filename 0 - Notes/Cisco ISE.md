@@ -74,7 +74,7 @@ MACAddress,EndPointPolicy,IdentityGroup,PortalUser.GuestType,Description,PortalU
 All MAC Address that must be denied access to the network are put in this Endpoint Group. 
 ##### PBA_Printers
 All Printers MAC Addresses, there are child groups that distribute the MAC Addresses by location. 
-The Printers MAC Addresses can be get from the ARP table in the core switches/routers, and they and be imported with the CSV.
+The Printers MAC Addresses can be obtained from the ARP table in the core switches/routers, and they can be imported with the CSV.
 ##### PBA_Whitelist
 MAC Addresses that must be whitelisted. Used in the MAB Access.
 #### User Identity Groups
@@ -124,12 +124,12 @@ Identity Source Sequences (ISS) checks a series of identity sources from top to 
 
 ![[Pasted image 20260508113927.png]]
 
-In the Publiacqua deployment the ISS is Publiacqua_ISS which have [[#External Identity Sources - Certificate Authentication Profile|EAP_PBA]] as CAP and only [[#External Identity Sources - Active Directory|Publiacqua_AD]] in its list. 
+In the Publiacqua deployment the ISS is Publiacqua_ISS which has [[#External Identity Sources - Certificate Authentication Profile|EAP_PBA]] as CAP and only [[#External Identity Sources - Active Directory|Publiacqua_AD]] in its list. 
 
 ![[Pasted image 20260508113958.png]]
 
 ## Admin Access 
-In Admin Access are configured ISE GUI permissions for each group or type of users. 
+ISE GUI permissions are configured in Admin Access for each group or type of users. 
 
 ![[Pasted image 20260508114440.png]]
 ### Admin Access - Authorization
@@ -174,7 +174,7 @@ ISE supports third-party NADs through the use of network device profiles. The NA
 
 ![[Pasted image 20260505104601.png]]
 
-In a Cisco dominant environment the default network device profile for Cisco is enough.
+Cisco dominant environment the default network device profile for Cisco is enough.
 #### Authentication/Authorization
 
 ![[Pasted image 20260505110156.png]]
@@ -281,7 +281,7 @@ Each NAD object must be configured with one or more IP addresses. Each NAD can b
 
 ![[Pasted image 20260505125842.png]]
 
-The SNMP Settings section is where the SNMP community for the NAD is configured, the ISE will use this to query the NAD for profiling attributes such as CDP and LLDP cache information. The SNMP setting should be configured only for device that do not use the device sensor to send ISE profiling data within RADIUS accounting packets.
+The SNMP Settings section is where the SNMP community for the NAD is configured, the ISE will use this to query the NAD for profiling attributes such as CDP and LLDP cache information. The SNMP setting should be configured only for devices that do not use the device sensor to send ISE profiling data within RADIUS accounting packets.
 
 The NADs can be imported with a CSV. 
 ## Policy 
@@ -460,7 +460,7 @@ Check if the AuthenticationStatus is a Failed
 
 ![[Pasted image 20260514111110.png]]
 ##### TEAP_Machine
-This condition will match if the client using TEAP protocol have the [[#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[#Domain Users Certificate|user certificate]] authentication. 
+This condition will match if the client using TEAP protocol has the [[#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[#Domain Users Certificate|user certificate]] authentication. 
 
 ![[Pasted image 20260514111237.png]]
 
@@ -474,7 +474,7 @@ Client Authorizations conditions check if the client user is [[#ID_Domain_User]]
 ![[Pasted image 20260514140414.png]]
 
 ##### Guest_Flow
-Condition is hit if the client request packet has attribute [[#UseCase|NetworkAccess:UserCase]].
+Condition is hit if the client request packet has attribute [[#UseCase|NetworkAccess:UseCase]].
 
 When this attribute evaluates to `Guest Flow` (formatted as `NetworkAccess:UseCase = GuestFlow`), it explicitly means that <strong>the endpoint has successfully completed web authentication (WebAuth) via an ISE guest portal and is now executing a post-portal network re-authorization</strong>.
 
@@ -556,7 +556,7 @@ The condition for the request to hit this authentication policy is the predefine
 If the user is found in the ISS, it is authenticated and the request is passed for authorization policy check. 
 If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
 ##### Default
-The Default authentication policy is a catch all type of policy, set to deny all request.
+The Default authentication policy is a catch all type of policy, set to deny all requests.
 It's usually used for requests that the policies before this one could not catch. 
 In this deployment it shouldn't be hit at all. 
 #### Authorization Policy
@@ -566,7 +566,7 @@ Authorization Policies decide which [[#Authorization Profiles]] does the client 
 
 The authorization policies order is first match, the client get authorization profile of the first authorization policy it hits.
 ##### Deny Access
-The fist authorization policy is to check if the client computer is on the [[#PBA_Blacklist|Blacklist]], if the MAC address is found on the [[#PBA_Blacklist|Endpoint Identity Group]] they will reject the client request, if it's not found then the policy is not hit and ISE will check the following policy. 
+The first authorization policy is to check if the client computer is on the [[#PBA_Blacklist|Blacklist]], if the MAC address is found on the [[#PBA_Blacklist|Endpoint Identity Group]] they will reject the client request, if it's not found then the policy is not hit and ISE will check the following policy. 
 ##### Admin Access
 Admin Access allows all users in the admin AD group to get the authorization profile for the VLAN Admin, which is set to VLAN 850. The authorization profile is configured in the same way as the one for [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
 
@@ -585,7 +585,7 @@ The authorization profiles it provides is [[#Pre-Auth-profile]].
 ##### Client Access
 The Client Access is the default policy for Publiacqua Domain Users. When this policy is hit the user gets access to VLAN 802 which is the LAN Client. 
 
-The conditions to hit this policy is [[#Client Authorizations]] and [[#Authentication Passed]]. 
+The conditions to hit this policy are [[#Client Authorizations]] and [[#Authentication Passed]]. 
 
 The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 ##### RDP Access
@@ -637,7 +637,7 @@ The allowed protocols definition:
 - <strong>Extensible Authentication Protocol (EAP) types</strong>: <strong>EAP</strong> is an authentication framework that provides for the transport and use of identity credentials. EAP encapsulates the usernames, passwords, and certificates that a client is sending for purposes of authentication. There are many different EAP types, each with benefits and downsides. (802.1X defines EAP over LAN.)
     - <strong>EAP-MD5</strong>: EAP-MD5 uses a Message Digest algorithm to hide the credentials in a hash. The hash is sent to the server, where it is compared to a local hash to see if the credentials are accurate. EAP-MD5 does not have a mechanism for mutual authentication. This means the server is validating the client, but the client does not authenticate the server. EAP-MD5 is common on some IP phones, and it is also possible for some switches to send MAB requests within EAP-MD5.
     - <strong>EAP-TLS</strong>: This EAP type uses TLS (Transport Layer Security) to provide secure identity transactions. EAP-TLS is considered universally supported across many different operating systems and mobile devices. EAP-TLS uses X.509 certificates and provides the ability to support mutual authentication, where the client must trust the server’s certificate and vice versa. It is considered among the most secure EAP types because password capture is not an option; the endpoint must have the private key.
-- <strong>Tunneled EAP types</strong>: The previous EAP types transmit credentials immediately. These following EAP types of form encrypted secure tunnels first and then transmit the credentials within the tunnel
+- <strong>Tunneled EAP types</strong>: The previous EAP types transmit credentials immediately. These following EAP types form encrypted secure tunnels first and then transmit the credentials within the tunnel
     - <strong>PEAP</strong>: <strong>Protected EAP</strong> (<strong>PEAP</strong>), is an EAP tunnel type. PEAP forms a potentially encrypted TLS tunnel between the clients and server using the X.509 certificate on the server in much the same way an SSL tunnel is established between a web browser and a secure website. After the tunnel has been formed, PEAP uses another EAP type as an “inner method” to authenticate the client using EAP within the outer tunnel. PEAP supports the following inner methods:
         - <strong>EAP MSCHAPv2</strong>: Using this inner method, the client’s credentials are sent to the server encrypted within an MS-CHAPv2 session. It allows for simple transmission of username and password or even computer name and computer password to the RADIUS server, which authenticates them to Active Directory.
         - <strong>EAP-GTC</strong>: <strong>EAP-Generic Token Card</strong> (<strong>GTC</strong>) is an inner method created by Cisco as an alternative to MS-CHAPv2 that allows generic authentications to virtually any identity store, including one-time-password (OTP) token servers, LDAP, Novell eDirectory, and more.
@@ -824,7 +824,7 @@ Open the CSR with a text editor, copy its content and paste it on the certificat
 
 Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link to the certificate to the CSR used to make this cert. 
 
-The new cert should show on System Certificates list.
+The new cert should appear on System Certificates list.
 #### Trusted Certificates
 Trusted certificates are used for validation. <mark style="background: #FFF3A3A6;">They are the certificates</mark> (usually Root or Intermediate CA certificates) <mark style="background: #FFF3A3A6;">that ISE uses to verify the identity of someone else</mark>. 
 
@@ -838,22 +838,22 @@ When a client presents a certificate for EAP authentication protocol, the ISE se
 
 ![[Pasted image 20260427165456.png]]
 
-If the issuing certificate authority is not present among the Trusted Certificate the authentication fails. 
+If the issuing certificate authority is not present among the <strong>Trusted Certificate</strong>, the authentication fails. 
 ##### CRL Revocation List
 In the Trusted Certificates is also set the CRL validation for the selected certificate. 
-The Certificate Revocation List is a list of the revoked certificates, it is used to check for certificates that are not expired but are not usable because they are expired. 
+The Certificate Revocation List is a list of the revoked certificates, it is used to check for certificates that have not yet reached their expiration date but have been <strong>revoked</strong> before expiration.
 
 ![[Pasted image 20260504121014.png]]
 
-The Retrieve CRL timers should be set accordingly to the CA CRL timers.
+The Retrieve CRL timers should be set according to the CA CRL timers.
 
 ![[Pasted image 20260504122151.png | 200]]
 
 - <strong>Effective date</strong> is the date the CRL will start to be valid. 
 - <strong>Next update</strong> is the time the CRL will expire.
 - <strong>Next CRL Publish</strong> is when the new CRL will be published but is still not active
-The Retrieve CRL set to 8 hours before expiration is set 8 hours before the <strong>Next update</strong> so it will retrive the <strong>Next CRL Publish</strong> CRL.
-The old CRL and the new CRL have 8 hours overlap in which both CRL are active, so the timer set to Automatically 8 hour before expire with 10 minutes of wait before retry, is correct and leave no black periods. 
+The Retrieve CRL set to 8 hours before expiration is set 8 hours before the <strong>Next update</strong> so it will retrieve the <strong>Next CRL Publish</strong> CRL.
+The old CRL and the new CRL have 8 hours overlap in which both CRL are active, so the timer set to Automatically 8 hour before expire with 10 minutes of wait before retry, is correct and leave no blackout periods. 
 
 The CRL Distribution URL can be retrieved from the Certificate Authority server
 
@@ -915,7 +915,7 @@ This is a script that enroll a non domain computer with a domain certificate if 
 
 To correctly activate this script, it must be saved with <strong>.ps1</strong> extension in the format <strong>UTF-8 with BOM</strong>.
 
-It's advised to install the 64-base <strong>certnew.p7b</strong> certificate chain, for easiest install, but the <strong>certnew.cer</strong> certificate works too.
+It's advised to install the Base64 <strong>certnew.p7b</strong> certificate chain, for easiest install, but the <strong>certnew.cer</strong> certificate works too.
 
 ```powershell
 param(
