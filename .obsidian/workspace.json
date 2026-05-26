@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -222,7 +222,7 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "310f1ddbfac8aab4",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
     "0 - Notes/Cisco ISE.md",

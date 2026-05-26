@@ -6,7 +6,9 @@
     "0 - Notes/Server Name Indication.md"
   ],
   "lockedFolders": [],
-  "strictLockedNotes": [],
+  "strictLockedNotes": [
+    "0 - Notes/Cisco ISE.md"
+  ],
   "mobileNotificationMaxLength": 18,
   "desktopNotificationMaxLength": 22,
   "showFileExplorerIcons": true,
