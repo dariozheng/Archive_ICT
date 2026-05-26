@@ -55,7 +55,7 @@ Endpoint and User Groups can be used as attributes in Policy Sets.
 
 ![[Pasted image 20260513164133.png]]
 
-Endpoint Identity Groups store information about all the endpoint devices that connect to the network infrastructure or they can be filled through an CSV import.
+Endpoint Identity Groups store information about all the endpoint devices that connect to the network infrastructure or they can be filled through a CSV import.
 
 Endpoint Groups can be used as attributes in Policy Sets.
 
@@ -91,7 +91,7 @@ External Identity Sources can leverage existing external identity store for netw
 This is an important setting for certificate based authentication. 
 See [[#Certificate Authentication Profile certificates|Link]].
 #### External Identity Sources  - Active Directory 
-Microsoft’s Active Directory (AD) is a highly available distributed database deployments. 
+Microsoft’s Active Directory (AD) is a highly available distributed database deployment. 
 
 ![[Example AD Forest.png]]
 
@@ -103,7 +103,7 @@ AD domains belong to an AD forest, which is a collection of domains with trust r
 
 ---
 
-To join Cisco ISE to an AD domain, the ISE machine account used need to have the permissions: 
+To join Cisco ISE to an AD domain, the ISE machine account used needs to have the permissions: 
 - to Search AD (to see if the ISE machine account already exists)
 - to add Workstation to Domain (if it does not already exist)
 - to set Attributes on the New Machine Account
@@ -142,7 +142,7 @@ If you want to allow only a specific section of the submenu like showing only <s
 ![[Pasted image 20260508114835.png]]
 ##### Data Access
 The Data Access List is used to configure which data a user is allowed to see or to modify. 
-These changes impact the type of log one can see, so if you want to limit data access It's best to put them in Read Only instead of No Access.
+These changes impact the type of log one can see, so if you want to limit data access it's best to put them in Read Only instead of No Access.
 
 ![[Pasted image 20260508115415.png]]
 
@@ -152,7 +152,7 @@ In this section you use the permissions set in Menu Access and Data Access to co
 ![[Pasted image 20260511145530.png]]
 ### Admin Access - Administrators
 #### Admin Access - Administrators - Admin Groups
-In Admin Groups, you can configure the groups for which you can build a RBAC Policy around. 
+In Admin Groups, you can configure the groups for which you can build an RBAC Policy around. 
 
 ![[Pasted image 20260511145958.png]]
 
@@ -564,7 +564,7 @@ Authorization Policies decide which [[#Authorization Profiles]] the client gets.
 
 ![[Pasted image 20260514115226.png]]
 
-The authorization policies order is first match, the client get authorization profile of the first authorization policy it hits.
+The authorization policies order is first match, the client gets authorization profile of the first authorization policy it hits.
 ##### Deny Access
 The first authorization policy is to check if the client computer is on the [[#PBA_Blacklist|Blacklist]], if the MAC address is found on the [[#PBA_Blacklist|Endpoint Identity Group]] they will reject the client request, if it's not found then the policy is not hit and ISE will check the following policy. 
 ##### Admin Access
@@ -658,7 +658,7 @@ Authorization Profiles are reusable policy objects that define the specific acce
 
 ![[Pasted image 20260512124255.png]]
 
-The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends an ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit the computer network access to Internet, Domain Controller and Certificate Authority.
+The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends an ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit network access to Internet, Domain Controller and Certificate Authority.
 
 This DACL is used for computer that have authenticated with machine certificate but not with user certificate for various reasons:
 - The user is not logged-on, so the user certificate is not available
@@ -701,7 +701,7 @@ This DACL is used for computer that have authenticated with machine certificate 
 - The user is not logged-on, so the user certificate is not available
 - There change in user happening 
 - The user does not have a certificate enrolled
-- ect
+- ect.
 
 In these cases the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
 
@@ -762,7 +762,7 @@ deny ip any any
 ```
 
 # Microsoft Servers
-In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management rollout the configuration to clients.  
+In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management rolls out the configuration to clients.  
 ## Active Directory 
 
 ![[Pasted image 20260421124607.png]]
@@ -1469,7 +1469,7 @@ Make sure the GPO with the desired configuration is winning against other GPOs a
 ### Computer GPO
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Computers</mark> with the [[#Domain Computer Certificate]] and enable <mark style="background: #FFB86CA6;">Wired AutoConfig</mark> on computers. 
 
-All computer GPO must be create in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> which is where the Domain Computer accounts are stored.
+All computer GPO must be created in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> which is where the Domain Computer accounts are stored.
 <mark style="background: #FFB8EBA6;"><u>After each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command and a reboot of the client computer to apply the GPO configuration</u></mark>.
 
 <strong>Wired AutoConfig</strong> (<strong>DOT3SVC</strong>) is a Windows service that manages <mark style="background: #FF5582A6;">IEEE 802.1X authentication on Ethernet connections</mark>. It enables computers to authenticate themselves on secure networks, often used in corporate environments to enforce network access control. 
