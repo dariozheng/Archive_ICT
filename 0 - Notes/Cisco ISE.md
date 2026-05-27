@@ -3334,7 +3334,8 @@ Layer-2 segment for unauthenticated guest traffic. All guest ports drop into thi
 |`ip http authentication aaa login-authentication HTTPSRV`|If anyone ever does manage to reach the web UI, authenticate via the `HTTPSRV` method list.|
 |`ip http client source-interface Vlan800`|Outbound HTTP requests from the switch itself (image downloads, etc.) are sourced from management.|
 
-> [!important] Web server enabled, web UI closed The combination above is deliberate: the HTTP/HTTPS server must be running to serve the redirect, but the management UI is locked off.
+> [!important] Web server enabled, web UI closed 
+> The combination above is deliberate: the HTTP/HTTPS server must be running to serve the redirect, but the management UI is locked off.
 
 #### Redirect ACL — `ACL_GUEST_REDIRECT`
 
@@ -3348,8 +3349,8 @@ ip access-list extended ACL_GUEST_REDIRECT
  60 permit tcp any any eq 443
 ```
 
-> [!important] Redirect-ACL verbs are inverted This is <strong>not</strong> a packet filter. In a redirect ACL:
-> 
+> [!important] Redirect-ACL verbs are inverted This is <strong>not</strong> a packet filter. 
+> In a redirect ACL:
 > - `permit` → <strong>intercept</strong> this traffic and redirect it.
 > - `deny` → <strong>let it pass freely</strong>, do not redirect.
 
