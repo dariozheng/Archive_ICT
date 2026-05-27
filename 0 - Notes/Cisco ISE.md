@@ -388,8 +388,6 @@ For a network switch to accept a dynamic VLAN assignment from Cisco ISE, it must
 
 In Cisco ISE, `cisco-av-pair` is a Vendor-Specific Attribute (VSA) classified under the <strong>RADIUS > Cisco</strong> dictionary (Vendor ID: `9`, Sub-ID: `1`)
 
-The syntax always follows a strict string format: `protocol:attribute=value`.
-
 Common uses:
 
 <strong>Central Web Authentication (CWA)</strong> and Guest Portals: When an unknown device connects to the network, ISE uses two specific AV pairs to tell the switch to intercept the user's web browser traffic and redirect them to a login portal:
@@ -406,7 +404,7 @@ Cisco DNA Center / Catalyst Center Login:
 ```cisco-av-pair = ROLE=SUPER-ADMIN-ROLE```
 
 Cisco APIC / ACI Fabric Login:
-```cisco-avpair=shell:domains=all/admin/```
+```cisco-avpair = shell:domains=all/admin/```
 
 <strong>Administrative Privilege Levels</strong> (Switch CLI via RADIUS): If you are using RADIUS (instead of TACACS+) to secure administrative command-line access to Cisco switches and firewalls, you must use an AV pair to drop the administrator directly into the privileged executive mode (`enable`):
 <strong>shell:priv-lvl</strong>: Grants immediate execution privileges.

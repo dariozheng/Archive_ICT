@@ -7,10 +7,11 @@
   ],
   "lockedFolders": [],
   "strictLockedNotes": [
-    "0 - Notes/Cisco ISE/ISE Server.md",
     "0 - Notes/Cisco ISE/Microsoft Servers.md",
     "0 - Notes/Cisco ISE/Network Access Devices.md",
-    "0 - Notes/Cisco ISE/0 - Cisco ISE.md"
+    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+    "0 - Notes/Cisco ISE/ISE Server.md",
+    "0 - Notes/Cisco ISE.md"
   ],
   "mobileNotificationMaxLength": 18,
   "desktopNotificationMaxLength": 22,
