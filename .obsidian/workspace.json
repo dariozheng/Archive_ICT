@@ -4,35 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "43ac11cef66362f1",
+        "id": "52b18dd01551eb6b",
         "type": "tabs",
         "children": [
           {
-            "id": "310f1ddbfac8aab4",
+            "id": "39af2107d9cebed8",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Cisco ISE/ISE Server.md",
-                "mode": "preview",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "ISE Server"
-            }
-          },
-          {
-            "id": "335a338d73e9996a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/Cisco ISE/ISE Server.md",
+                "file": "0 - Notes/Cisco ISE/Network Access Devices.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ISE Server"
+              "title": "Network Access Devices"
             }
           }
         ]
@@ -108,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Cisco ISE/ISE Server.md",
+                "file": "0 - Notes/Cisco ISE/Network Access Devices.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of ISE Server"
+              "title": "Outline of Network Access Devices"
             }
           },
           {
@@ -158,7 +144,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Cisco ISE/ISE Server.md",
+                "file": "0 - Notes/Cisco ISE/Network Access Devices.md",
                 "collapseAll": false,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -168,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for ISE Server"
+              "title": "Backlinks for Network Access Devices"
             }
           },
           {
@@ -177,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/Cisco ISE/ISE Server.md",
+                "file": "0 - Notes/Cisco ISE/Network Access Devices.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from ISE Server"
+              "title": "Outgoing links from Network Access Devices"
             }
           },
           {
@@ -199,7 +185,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -220,12 +207,12 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "310f1ddbfac8aab4",
+  "active": "39af2107d9cebed8",
   "lastOpenFiles": [
-    "0 - Notes/Cisco ISE/Microsoft Servers.md",
     "0 - Notes/Cisco ISE/ISE Server.md",
-    "0 - Notes/Cisco ISE/Network Access Devices.md",
+    "0 - Notes/Cisco ISE/Microsoft Servers.md",
     "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+    "0 - Notes/Cisco ISE/Network Access Devices.md",
     "0 - Notes/Cisco ISE.md",
     "0 - Notes/Cisco_ISE - ISE Server.md",
     "0 - Notes/WireGuard.md",
