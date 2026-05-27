@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+                "file": "0 - Notes/homelab-setup-.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "0 - Cisco ISE"
+              "title": "homelab-setup-"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+                "file": "0 - Notes/homelab-setup-.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 0 - Cisco ISE"
+              "title": "Outline of homelab-setup-"
             }
           },
           {
@@ -144,7 +144,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+                "file": "0 - Notes/homelab-setup-.md",
                 "collapseAll": false,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 0 - Cisco ISE"
+              "title": "Backlinks for homelab-setup-"
             }
           },
           {
@@ -163,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+                "file": "0 - Notes/homelab-setup-.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 0 - Cisco ISE"
+              "title": "Outgoing links from homelab-setup-"
             }
           },
           {
@@ -206,23 +206,23 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "39af2107d9cebed8",
   "lastOpenFiles": [
+    "0 - Notes/README.md",
+    "0 - Notes/Dynu DDNS.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+    "0 - Notes/Cisco ISE/Network Access Devices.md",
     "0 - Notes/Cisco ISE/Microsoft Servers.md",
     "0 - Notes/Cisco ISE/ISE Server.md",
-    "0 - Notes/Cisco ISE/Network Access Devices.md",
-    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
-    "0 - Notes/Cisco ISE.md",
     "0 - Notes/Cisco_ISE - ISE Server.md",
-    "0 - Notes/WireGuard.md",
-    "0 - Notes/README.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Cisco ISE",
     "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
     "Pasted image 20260526141656.png",
     "Pasted image 20260526141243.png",
     "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/Dynu DDNS.md",
     "Untitled.md",
     "Untitled 1.md",
     "0 - Notes/cisco-ise-cwa-guest.md",
