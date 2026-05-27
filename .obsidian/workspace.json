@@ -13,26 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
+                "file": "0 - Notes/Cisco ISE/ISE Server.md",
                 "mode": "preview",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "Cisco ISE"
+              "title": "ISE Server"
             }
           },
           {
-            "id": "0bf5d2f2729ddc09",
+            "id": "335a338d73e9996a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
+                "file": "0 - Notes/Cisco ISE/ISE Server.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cisco ISE"
+              "title": "ISE Server"
             }
           }
         ]
@@ -108,13 +108,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
+                "file": "0 - Notes/Cisco ISE/ISE Server.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Cisco ISE"
+              "title": "Outline of ISE Server"
             }
           },
           {
@@ -158,7 +158,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/homelab-setup-v5_1_7_11.md",
+                "file": "0 - Notes/Cisco ISE/ISE Server.md",
                 "collapseAll": false,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -168,7 +168,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for homelab-setup-v5_1_7_11"
+              "title": "Backlinks for ISE Server"
             }
           },
           {
@@ -177,12 +177,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "1 - Excalidraw/Homepage.md",
+                "file": "0 - Notes/Cisco ISE/ISE Server.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Homepage"
+              "title": "Outgoing links from ISE Server"
             }
           },
           {
@@ -217,24 +217,28 @@
       "bases:Create new base": false,
       "templater-obsidian:Templater": false,
       "table-editor-obsidian:Advanced Tables Toolbar": false,
-      "homepage:Open homepage": false,
-      "find-orphaned-images:Find orphaned images": false
+      "homepage:Open homepage": false
     }
   },
   "active": "310f1ddbfac8aab4",
   "lastOpenFiles": [
-    "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
+    "0 - Notes/Cisco ISE/Microsoft Servers.md",
+    "0 - Notes/Cisco ISE/ISE Server.md",
+    "0 - Notes/Cisco ISE/Network Access Devices.md",
+    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
     "0 - Notes/Cisco ISE.md",
+    "0 - Notes/Cisco_ISE - ISE Server.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/README.md",
+    "0 - Notes/homelab-setup-.md",
+    "0 - Notes/Cisco ISE",
+    "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
     "Pasted image 20260526141656.png",
     "Pasted image 20260526141243.png",
     "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/Untitled.md",
-    "0 - Notes/homelab-setup-.md",
     "0 - Notes/Dynu DDNS.md",
-    "0 - Notes/README.md",
     "Untitled.md",
     "Untitled 1.md",
-    "0 - Notes/WireGuard.md",
     "0 - Notes/cisco-ise-cwa-guest.md",
     "0 - Notes/Site-to-Site VPN - Palo Alto.md",
     "0 - Notes/Certificates - Palo Alto.md",
@@ -253,12 +257,8 @@
     "attachments/Pasted image 20260514115226.png",
     "attachments/Pasted image 20260514114124.png",
     "attachments/Pasted image 20260514113635.png",
-    "0 - Notes/Backhaul.md",
-    "Homepage.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "attachments/Pasted image 20260514112106.png",
     "attachments/Pasted image 20260514111525.png",
-    "0 - Notes/homelab-setup-v5_1_7_10.md",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "Script_Clean-Expired-userCertificate.ps1",
@@ -268,7 +268,6 @@
     "Excalidraw",
     "3 - Templates/Bases/Topic/Systems",
     "2 - Categories/Topics/Systems",
-    "3 - Templates/Bases/Topic/Security/Security General.base",
     "Untitled.canvas"
   ]
 }

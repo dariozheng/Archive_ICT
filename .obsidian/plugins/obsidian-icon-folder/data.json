@@ -204,5 +204,9 @@
   },
   "0 - Notes/Dynu DDNS.md": {
     "iconName": "PeDynu"
+  },
+  "0 - Notes/Cisco ISE": {
+    "iconName": "SiCisco",
+    "iconColor": "#1ba0d7"
   }
 }
