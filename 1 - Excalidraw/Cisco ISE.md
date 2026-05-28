@@ -11,13 +11,13 @@ tags: [excalidraw]
 
 ## Text Elements
 ## Element Links
-PorJk7OB: [[0 - Notes/Cisco ISE#Server Certificates]]
+PorJk7OB: [[PBA - Cisco ISE#Server Certificates]]
 
-iRgpnoPz: [[0 - Notes/Cisco ISE#Trusted Certificates]]
+iRgpnoPz: [[PBA - Cisco ISE#Trusted Certificates]]
 
-qhsZvaZI: [[0 - Notes/Cisco ISE#CRL Revocation List]]
+qhsZvaZI: [[PBA - Cisco ISE#CRL Revocation List]]
 
-wE4i9JOa: [[0 - Notes/Cisco ISE#Certificate Authentication Profile]]
+wE4i9JOa: [[PBA - Cisco ISE#Certificate Authentication Profile]]
 
 %%
 ## Drawing
