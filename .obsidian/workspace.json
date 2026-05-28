@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
-                "mode": "preview",
+                "file": "0 - Notes/Dynu DDNS.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - NAC - Microsoft Servers"
+              "title": "Dynu DDNS"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "file": "0 - Notes/Dynu DDNS.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "certifi"
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - Microsoft Servers"
+              "title": "Outline of Dynu DDNS"
             }
           },
           {
@@ -144,7 +144,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "file": "0 - Notes/Dynu DDNS.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for PBA - NAC - Microsoft Servers"
+              "title": "Backlinks for Dynu DDNS"
             }
           },
           {
@@ -163,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "file": "0 - Notes/Dynu DDNS.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from PBA - NAC - Microsoft Servers"
+              "title": "Outgoing links from Dynu DDNS"
             }
           },
           {
@@ -207,17 +207,18 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/Dynu DDNS.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "2 - Categories/Topics/Security/NAC.md",
-    "2 - Categories/Topics/Security/Network-Based Attacks.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/WireGuard.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "2 - Categories/Topics/Security/NAC.md",
+    "2 - Categories/Topics/Security/Security General.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/Dynu DDNS.md",
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "0 - Notes/PBA - Cisco ISE.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/homelab-setup-.md",
@@ -226,7 +227,6 @@
     "attachments/Pasted image 20260526141656.png",
     "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
     "3 - Templates/Bases/Topic/Security/NAC.base",
-    "2 - Categories/Topics/Security/Security General.md",
     "3 - Templates/Bases/Topic/Security/Security General.base",
     "2 - Categories/Security.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
