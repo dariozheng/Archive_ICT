@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiBrickWallFire",
+      "LiUserLock",
       "SiLinux",
       "SiUbuntu",
-      "SiMicrosoft",
-      "LiLock",
-      "SiPaloaltonetworks"
+      "SiMicrosoft"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -232,5 +232,9 @@
   "0 - Notes/Iptables.md": {
     "iconName": "SiLinux",
     "iconColor": "#000000"
+  },
+  "2 - Categories/Topics/Security/Firewall.md": {
+    "iconName": "LiBrickWallFire",
+    "iconColor": "#844c3b"
   }
 }
