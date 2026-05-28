@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiLinux",
+      "SiUbuntu",
+      "SiMicrosoft",
       "LiLock",
-      "SiPaloaltonetworks",
-      "FasUserSecret",
-      "LiUserLock",
-      "FasNetworkWired"
+      "SiPaloaltonetworks"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -220,5 +220,16 @@
   "0 - Notes/PBA - NAC - Network Access Devices.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
+  },
+  "2 - Categories/Topics/Linux/Ubuntu.md": {
+    "iconName": "SiUbuntu",
+    "iconColor": "#E34423"
+  },
+  "0 - Notes/UFW.md": {
+    "iconName": "SiUbuntu",
+    "iconColor": "#E34423"
+  },
+  "0 - Notes/Iptables.md": {
+    "iconName": "SiLinux"
   }
 }

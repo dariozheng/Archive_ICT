@@ -1,8 +1,9 @@
 ---
 categories:
-  - "[[Systems]]"
+  - "[[Linux]]"
+Distro:
 topic@linux:
 tags:
-icon: 
-iconColor: 
+icon:
+iconColor:
 ---

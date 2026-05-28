@@ -1,8 +1,7 @@
 ---
 categories:
-  - "[[Systems]]"
+  - "[[Linux]]"
 topic@linux:
 tags:
-icon:
-iconColor:
+icon: SiLinux
 ---
