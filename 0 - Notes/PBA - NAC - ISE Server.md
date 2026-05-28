@@ -91,7 +91,7 @@ External Identity Sources can leverage existing external identity store for netw
 
 #### External Identity Sources - Certificate Authentication Profile
 
-This is an important setting for certificate based authentication. See [[PBA - Microsoft Servers#Certificate Authentication Profile certificates|Link]].
+This is an important setting for certificate based authentication. See [[PBA - NAC - Microsoft Servers#Certificate Authentication Profile certificates|Link]].
 
 #### External Identity Sources - Active Directory
 
@@ -499,7 +499,7 @@ Check if the AuthenticationStatus is a Failed
 
 ##### TEAP_Machine
 
-This condition will match if the client using TEAP protocol has the [[PBA - Microsoft Servers#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[PBA - Microsoft Servers#Domain Users Certificate|user certificate]] authentication.
+This condition will match if the client using TEAP protocol has the [[PBA - NAC - Microsoft Servers#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[PBA - NAC - Microsoft Servers#Domain Users Certificate|user certificate]] authentication.
 
 ![[Pasted image 20260514111237.png]]
 
@@ -600,7 +600,7 @@ The conditions for MAB is the [[#Flow Type Conditions|predefined Wired_Mab]].
 
 Dot1X (802.1X) should be the most used/default authentication policy.
 
-It's the authentication policy where the client has a supplicant ([[PBA - Microsoft Servers#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
+It's the authentication policy where the client has a supplicant ([[PBA - NAC - Microsoft Servers#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
 
 The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it check the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]]. If the user is found in the ISS, it is authenticated and the request is passed for authorization policy check. If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
 
@@ -630,7 +630,7 @@ The authorization profile is configured to give only the VLAN Admin while the ad
 
 ##### Machine Access
 
-The Machine Access is an authorization policy created for situations where the [[PBA - Microsoft Servers#Domain Users Certificate|User Certificate]] is not available:
+The Machine Access is an authorization policy created for situations where the [[PBA - NAC - Microsoft Servers#Domain Users Certificate|User Certificate]] is not available:
 
 - User is not logged-on the domain computer
 - New user needs to access a domain computer
@@ -770,7 +770,7 @@ The Redirect_Guest_Wired is the first Authorization Profile for guest users, it 
 - <strong>Session-Timeout = 43200</strong> : The timer for the session
 - <strong>Termination-Action = Default</strong> : When the timer of Session-Timeout runs out, kick the user off and make them start over
 - <strong>Idle-Timeout = 7200</strong> : Tells the switch or WLC to disconnect the user if their device is completely silent for 2 hours
-- <strong>cisco-av-pair = subscriber:service-name=Guest_Redirect</strong> : This tells the switch to activate the local service-template [[PBA - Network Access Devices#Service Template — `Guest_Redirect`|Guest_Redirect]], in this deployment the Guest_Redirect service-template is empty. It's used to make the switch to match for <strong>class-map type control subscriber match-all AAA-DOWN_GUEST_USER</strong>.
+- <strong>cisco-av-pair = subscriber:service-name=Guest_Redirect</strong> : This tells the switch to activate the local service-template [[PBA - NAC - Network Access Devices#Service Template — `Guest_Redirect`|Guest_Redirect]], in this deployment the Guest_Redirect service-template is empty. It's used to make the switch to match for <strong>class-map type control subscriber match-all AAA-DOWN_GUEST_USER</strong>.
 
 ##### Downloadable ACLs
 

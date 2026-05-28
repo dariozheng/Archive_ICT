@@ -675,13 +675,13 @@ _Shapes what the switch puts into RADIUS packets so that ISE has the context it 
 
 ##### `radius-server attribute 6 on-for-login-auth`
 
-Includes [[PBA - ISE Server#Service-Type|Service-Type]] in Access-Request packets for login authentication.
+Includes [[PBA - NAC - ISE Server#Service-Type|Service-Type]] in Access-Request packets for login authentication.
 
 ISE policy conditions that match on `Service-Type` will not evaluate correctly without it.
 
 ##### `radius-server attribute 6 support-multiple`
 
-Allows multiple [[PBA - ISE Server#Service-Type|Service-Type]] values in the same RADIUS packet — required when 802.1X and MAB run on the same ports, because they advertise different values (`Framed` for dot1x, `Call-Check` for MAB).
+Allows multiple [[PBA - NAC - ISE Server#Service-Type|Service-Type]] values in the same RADIUS packet — required when 802.1X and MAB run on the same ports, because they advertise different values (`Framed` for dot1x, `Call-Check` for MAB).
 
 ```
 Single Service-Type:

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2 - Categories/Topics/Security/NAC.md",
-                "mode": "source",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "NAC"
+              "title": "PBA - NAC - Microsoft Servers"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2 - Categories/Topics/Security/NAC.md",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "certifi"
               },
               "icon": "lucide-list",
-              "title": "Outline of NAC"
+              "title": "Outline of PBA - NAC - Microsoft Servers"
             }
           },
           {
@@ -144,7 +144,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2 - Categories/Topics/Security/NAC.md",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for NAC"
+              "title": "Backlinks for PBA - NAC - Microsoft Servers"
             }
           },
           {
@@ -163,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2 - Categories/Topics/Security/NAC.md",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from NAC"
+              "title": "Outgoing links from PBA - NAC - Microsoft Servers"
             }
           },
           {
@@ -207,18 +207,19 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "80a87960a6125859",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/Dynu DDNS.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "2 - Categories/Topics/Security/NAC.md",
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "2 - Categories/Topics/Networking/Networking General.md",
-    "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/Dynu DDNS.md",
     "0 - Notes/PBA - Cisco ISE.md",
-    "0 - Notes/PBA - Network Access Devices.md",
-    "0 - Notes/PBA - Microsoft Servers.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/PBA - ISE Server.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/User-ID™.md",
     "attachments/Pasted image 20260526141243.png",
@@ -243,7 +244,6 @@
     "0 - Notes/Site-to-Site VPN - Palo Alto.md",
     "0 - Notes/Certificates - Palo Alto.md",
     "0 - Notes/App-ID™.md",
-    "0 - Notes/homelab-setup-v5_1_7_22_old.md",
     "attachments/Pasted image 20260514155208.png",
     "attachments/Pasted image 20260514153230.png",
     "attachments/Pasted image 20260514140414.png",

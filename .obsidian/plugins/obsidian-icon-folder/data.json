@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWindows",
+      "SiCisco",
       "LiUserLock",
       "SiPaloaltonetworks",
-      "FasNetworkWired",
-      "SiWireguard",
-      "SiWindows"
+      "FasNetworkWired"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -209,16 +209,16 @@
     "iconName": "LiUserLock",
     "iconColor": "#ff0000"
   },
-  "0 - Notes/PBA - ISE Server.md": {
+  "0 - Notes/PBA - NAC - ISE Server.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
   },
-  "0 - Notes/PBA - Network Access Devices.md": {
-    "iconName": "SiCisco",
-    "iconColor": "#1BA0D7"
-  },
-  "0 - Notes/PBA - Microsoft Servers.md": {
+  "0 - Notes/PBA - NAC - Microsoft Servers.md": {
     "iconName": "SiWindows",
     "iconColor": "#0078D4"
+  },
+  "0 - Notes/PBA - NAC - Network Access Devices.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
   }
 }
