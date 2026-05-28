@@ -13,30 +13,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
-                "mode": "source",
-                "source": false
+                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "mode": "preview",
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "WireGuard"
-            }
-          },
-          {
-            "id": "b1ecb8a579f8a891",
-            "type": "leaf",
-            "pinned": true,
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "Homepage.md"
-              },
-              "pinned": true,
-              "icon": "excalidraw-icon",
-              "title": "Homepage"
+              "title": "PBA - NAC - ISE Server"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -109,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1 - Excalidraw/Homepage.md",
+                "file": "0 - Notes/PBA - NAC - ISE Server.md",
                 "followCursor": false,
                 "showSearch": true,
-                "searchQuery": "certifi"
+                "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Homepage"
+              "title": "Outline of PBA - NAC - ISE Server"
             }
           },
           {
@@ -222,11 +207,11 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
+    "0 - Notes/WireGuard.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "Homepage.md",
-    "0 - Notes/WireGuard.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/Windows Remote Management Protocol.md",
     "1 - Excalidraw/ENCOR.md",
