@@ -3,9 +3,9 @@ categories:
   - "[[Networking]]"
   - "[[Security]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
 topic@security:
-  - "[[Security General]]"
+  - "[[NAC]]"
 tags:
   - project
   - nac

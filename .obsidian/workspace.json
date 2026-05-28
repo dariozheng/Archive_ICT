@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Cisco ISE.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -185,7 +185,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -206,18 +207,29 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "39af2107d9cebed8",
   "lastOpenFiles": [
+    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/Cisco ISE.md",
+    "3 - Templates/Bases/Topic/Security/NAC.base",
+    "2 - Categories/Topics/Security/Security General.md",
+    "3 - Templates/Bases/Topic/Security/Security General.base",
+    "2 - Categories/Security.md",
+    "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
+    "3 - Templates/Bases/Topic/Networking/Networking General.base",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
+    "3 - Templates/Bases/Networking.base",
+    "2 - Categories/Networking.md",
+    "0 - Notes/Cisco ISE/Microsoft Servers.md",
+    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
     "0 - Notes/Cisco ISE/ISE Server.md",
     "0 - Notes/Cisco ISE/Network Access Devices.md",
-    "0 - Notes/Cisco ISE/Microsoft Servers.md",
-    "0 - Notes/Cisco ISE.md",
     "0 - Notes/cool18_to_epub.py",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/README.md",
     "0 - Notes/Dynu DDNS.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
     "0 - Notes/Cisco_ISE - ISE Server.md",
     "0 - Notes/Cisco ISE",
     "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
@@ -231,12 +243,6 @@
     "0 - Notes/Certificates - Palo Alto.md",
     "0 - Notes/App-ID™.md",
     "0 - Notes/homelab-setup-v5_1_7_22_old.md",
-    "0 - Notes/homelab-setup-v5_1_7_20.md",
-    "0 - Notes/homelab-setup-v5_1_7_22.md",
-    "0 - Notes/homelab-setup-v5_1_7_17.md",
-    "0 - Notes/homelab-setup-v5_1_7_19.md",
-    "0 - Notes/homelab-setup-v5_1_7_11.md",
-    "1 - Excalidraw/Cisco ISE.md",
     "attachments/Pasted image 20260514155208.png",
     "attachments/Pasted image 20260514153230.png",
     "attachments/Pasted image 20260514140414.png",
@@ -248,11 +254,6 @@
     "3 - Templates/Bases/Topic/Microsoft/Windows Server Scripts.base",
     "3 - Templates/Bases/Topic/Microsoft/Windows Server.base",
     "Script_Clean-Expired-userCertificate.ps1",
-    "attachments/Script_Clean-Expired-userCertificate.ps1",
-    "3 - Templates/Bases/Topic/Microsoft/Microsoft General.base",
-    "attachments/Manual Enrollment of Admin Certificate.mp4",
-    "Excalidraw",
-    "3 - Templates/Bases/Topic/Systems",
     "Untitled.canvas"
   ]
 }

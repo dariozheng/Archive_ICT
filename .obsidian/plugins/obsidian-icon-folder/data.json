@@ -208,5 +208,13 @@
   "0 - Notes/Cisco ISE": {
     "iconName": "SiCisco",
     "iconColor": "#1ba0d7"
+  },
+  "2 - Categories/Topics/Networking/Cisco ISE.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
+  },
+  "2 - Categories/Topics/Security/NAC.md": {
+    "iconName": "LiLock",
+    "iconColor": "#e95a2b"
   }
 }

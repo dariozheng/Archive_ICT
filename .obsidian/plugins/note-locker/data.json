@@ -3,16 +3,10 @@
     "0 - Notes/Prisma Access.md",
     "0 - Notes/Prisma SD-WAN®.md",
     "0 - Notes/Backhaul.md",
-    "0 - Notes/Server Name Indication.md",
-    "0 - Notes/Cisco ISE/Microsoft Servers.md",
-    "0 - Notes/Cisco ISE/Network Access Devices.md",
-    "0 - Notes/Cisco ISE/ISE Server.md",
-    "0 - Notes/Cisco ISE.md"
+    "0 - Notes/Server Name Indication.md"
   ],
   "lockedFolders": [],
-  "strictLockedNotes": [
-    "0 - Notes/Cisco ISE/0 - Cisco ISE.md"
-  ],
+  "strictLockedNotes": [],
   "mobileNotificationMaxLength": 18,
   "desktopNotificationMaxLength": 22,
   "showFileExplorerIcons": true,
