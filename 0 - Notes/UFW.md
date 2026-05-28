@@ -1,7 +1,10 @@
 ---
 categories:
   - "[[Linux]]"
+  - "[[Security]]"
 Distro: "[[Ubuntu]]"
+topic@security:
+  - "[[Firewall]]"
 tags:
   - firewall
   - security

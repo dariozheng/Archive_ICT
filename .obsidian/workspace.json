@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Iptables.md",
+                "file": "2 - Categories/Topics/Security/Firewall.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Iptables"
+              "title": "Firewall"
             }
           }
         ]
@@ -209,11 +209,11 @@
   },
   "active": "baa88fa3d1ae69e4",
   "lastOpenFiles": [
-    "2 - Categories/Topics/Security/Firewall.md",
-    "0 - Notes/Iptables.md",
-    "0 - Notes/UFW.md",
-    "2 - Categories/Topics/Security/Security General.md",
     "2 - Categories/Topics/Security/NAC.md",
+    "2 - Categories/Topics/Security/Firewall.md",
+    "0 - Notes/UFW.md",
+    "0 - Notes/Iptables.md",
+    "2 - Categories/Topics/Security/Security General.md",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "2 - Categories/Topics/Security/Palo Alto Networks.md",
     "3 - Templates/Bases/Networking.base",
