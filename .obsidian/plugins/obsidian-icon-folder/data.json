@@ -229,12 +229,16 @@
     "iconName": "SiUbuntu",
     "iconColor": "#E34423"
   },
-  "0 - Notes/Iptables.md": {
-    "iconName": "SiLinux",
-    "iconColor": "#000000"
-  },
   "2 - Categories/Topics/Security/Firewall.md": {
     "iconName": "LiBrickWallFire",
     "iconColor": "#844c3b"
+  },
+  "0 - Notes/nftables.md": {
+    "iconName": "SiLinux",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/netfilter.md": {
+    "iconName": "SiLinux",
+    "iconColor": "#000000"
   }
 }
