@@ -144,8 +144,8 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
-                "collapseAll": false,
+                "file": "0 - Notes/PBA - ISE Server.md",
+                "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Cisco ISE"
+              "title": "Backlinks for PBA - ISE Server"
             }
           },
           {
@@ -163,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
+                "file": "0 - Notes/PBA - ISE Server.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Cisco ISE"
+              "title": "Outgoing links from PBA - ISE Server"
             }
           },
           {
@@ -185,8 +185,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -207,12 +206,12 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "39af2107d9cebed8",
   "lastOpenFiles": [
+    "0 - Notes/PBA - Microsoft Servers.md",
+    "0 - Notes/PBA - ISE Server.md",
     "0 - Notes/PBA - Network Access Devices.md",
     "0 - Notes/Cisco ISE.md",
-    "0 - Notes/PBA - ISE Server.md",
-    "0 - Notes/PBA - Microsoft Servers.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
