@@ -6,10 +6,10 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "SiWindows",
-      "SiCisco",
-      "LiUserLock",
+      "LiLock",
       "SiPaloaltonetworks",
+      "FasUserSecret",
+      "LiUserLock",
       "FasNetworkWired"
     ],
     "recentlyUsedIconsSize": 5,
