@@ -1698,14 +1698,14 @@ Layer-2 segment for unauthenticated guest traffic. All guest ports drop into thi
 
 #### HTTP/HTTPS Server Configuration
 
-|Command|Purpose|
-|---|---|
-|`ip http server`|Enable the HTTP server. Required — the switch needs an HTTP server to issue the redirect response.|
-|`ip http secure-server`|Enable the HTTPS server. Required when `intercept-https-enable` is used in the parameter-map.|
-|`ip http active-session-modules none`|Disable all HTTP-based web management modules. Server stays up for redirect, but UI is closed.|
-|`ip http secure-active-session-modules none`|Same lock-down for HTTPS modules.|
-|`ip http authentication aaa login-authentication HTTPSRV`|If anyone ever does manage to reach the web UI, authenticate via the `HTTPSRV` method list.|
-|`ip http client source-interface Vlan800`|Outbound HTTP requests from the switch itself (image downloads, etc.) are sourced from management.|
+| Command                                                   | Purpose                                                                                            |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `ip http server`                                          | Enable the HTTP server. Required — the switch needs an HTTP server to issue the redirect response. |
+| `ip http secure-server`                                   | Enable the HTTPS server. Required when `intercept-https-enable` is used in the parameter-map.      |
+| `ip http active-session-modules none`                     | Disable all HTTP-based web management modules. Server stays up for redirect, but UI is closed.     |
+| `ip http secure-active-session-modules none`              | Same lock-down for HTTPS modules.                                                                  |
+| `ip http authentication aaa login-authentication HTTPSRV` | Authenticate via the `HTTPSRV` method list.                                                        |
+| `ip http client source-interface Vlan800`                 | Outbound HTTP requests from the switch itself (image downloads, etc.) are sourced from management. |
 
 > [!important] Web server enabled, web UI closed 
 > The combination above is deliberate: the HTTP/HTTPS server must be running to serve the redirect, but the management UI is locked off.
