@@ -230,6 +230,7 @@
     "iconColor": "#E34423"
   },
   "0 - Notes/Iptables.md": {
-    "iconName": "SiLinux"
+    "iconName": "SiLinux",
+    "iconColor": "#000000"
   }
 }

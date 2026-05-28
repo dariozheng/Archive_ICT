@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/UFW.md",
-                "mode": "source",
+                "file": "0 - Notes/Iptables.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "UFW"
+              "title": "Iptables"
             }
           }
         ]
@@ -209,12 +209,14 @@
   },
   "active": "baa88fa3d1ae69e4",
   "lastOpenFiles": [
-    "0 - Notes/Iptables.md",
     "0 - Notes/UFW.md",
-    "0 - Notes/Autonomous Digital Experience Management.md",
-    "3 - Templates/Bases/Linux.base",
+    "0 - Notes/Iptables.md",
     "2 - Categories/Topics/Linux/Ubuntu.md",
     "2 - Categories/Linux.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/Dynu DDNS.md",
+    "0 - Notes/Autonomous Digital Experience Management.md",
+    "3 - Templates/Bases/Linux.base",
     "2 - Categories/Networking.md",
     "2 - Categories/Security.md",
     "2 - Categories/Microsoft.md",
@@ -233,9 +235,7 @@
     "2 - Categories/Cloud Computing.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/App-ID™.md",
-    "0 - Notes/Dynu DDNS.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/Good-CryptoServer.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
