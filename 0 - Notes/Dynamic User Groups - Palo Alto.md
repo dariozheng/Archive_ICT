@@ -23,6 +23,7 @@ iconColor: "#F04E23"
 DUGs enable you to create a Security policy that provides auto-remediation in response to user behavior and activity.
 
 ![[Dynamic User Group Operation.png]]
+
 In the example here, <mark style="background: #FFF3A3A6;">a user’s traffic is recorded in the firewall logs</mark>. 
 
 <mark style="background: #BBFABBA6;">These logs can be analyzed directly on the firewall</mark>, or <mark style="background: #FFB86CA6;">you can configure <strong>log forwarding</strong> to forward the logs to a third-party system for analysis</mark>. 

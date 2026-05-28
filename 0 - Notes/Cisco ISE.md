@@ -33,6 +33,7 @@ Cisco Identity Services Engine (ISE) is an <strong>identity-based network access
 Identity Management manages all identities for ISE, from ISE GUI admins to users that have to authenticate to ISE.
 
 ![[Pasted image 20260508100508.png]]
+
 ### Identities 
 Cisco ISE includes a built-in internal identity store that supports a limited number of locally defined user accounts, commonly referred to as <strong>internal users</strong> or <strong>network access users</strong>.
 
@@ -117,6 +118,7 @@ Allowed Domains set the scope for identity extraction, here it's set to everythi
 ![[Pasted image 20260508113401.png]]
 
 In this section it's possible to retrieve groups from Active Directory and use them as attributes for Policy Sets
+
 ![[Pasted image 20260508113546.png]]
 
 ### Identity Source Sequences
@@ -132,6 +134,7 @@ In the Publiacqua deployment the ISS is Publiacqua_ISS which has [[#External Ide
 ISE GUI permissions are configured in Admin Access for each group or type of users. 
 
 ![[Pasted image 20260508114440.png]]
+
 ### Admin Access - Authorization
 #### Admin Access - Authorization - Permissions
 ##### Menu Access
@@ -140,6 +143,7 @@ Menu Access List is used to set which menu section is allowed and which is not.
 If you want to allow only a specific section of the submenu like showing only <strong>Groups</strong> while hiding the <strong>Identities</strong>, <strong>External Identity Source</strong>, and others under the menu <strong>Identity Management</strong>. You have to show <strong>Identity Management</strong>, save, then go back and hide the not allowed menu section manually.
 
 ![[Pasted image 20260508114835.png]]
+
 ##### Data Access
 The Data Access List is used to configure which data a user is allowed to see or to modify. 
 These changes impact the type of log one can see, so if you want to limit data access it's best to put them in Read Only instead of No Access.
@@ -150,6 +154,7 @@ These changes impact the type of log one can see, so if you want to limit data a
 In this section you use the permissions set in Menu Access and Data Access to configure the RBAC policy for Admin Groups. 
 
 ![[Pasted image 20260511145530.png]]
+
 ### Admin Access - Administrators
 #### Admin Access - Administrators - Admin Groups
 In Admin Groups, you can configure the groups for which you can build an RBAC Policy around. 
@@ -314,6 +319,7 @@ Common values are:
 ##### Service-Type
 
 ![[Pasted image 20260513120458.png]]
+
 Service-Type is a RADIUS attribute (Attribute 6) that defines the nature of the network access request being made, allowing ISE to understand how a user or device is trying to connect.
 
 Common Service-Type values:
@@ -453,10 +459,12 @@ MAC Addresses in [[#PBA_Whitelist|PBA_Whitelist]].
 Check if the AuthenticationStatus is a Passed
 
 ![[Pasted image 20260514110848.png]]
+
 ##### Authentication Failed
 Check if the AuthenticationStatus is a Failed
 
 ![[Pasted image 20260514111110.png]]
+
 ##### TEAP_Machine
 This condition will match if the client using TEAP protocol has the [[#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[#Domain Users Certificate|user certificate]] authentication. 
 
@@ -466,6 +474,7 @@ This condition will match if the client using TEAP protocol has the [[#Domain Co
 This condition is used if you want to get a computer certificate but you don't want the computer certificate to pass from TEAP EAP protocol.
 
 ![[Pasted image 20260514113635.png]]
+
 ##### Client Authorizations
 Client Authorizations conditions check if the client user is [[#ID_Domain_User]] and if the EAP protocol they use is PEAP or TEAP. The domain users should use only TEAP and PEAP on rare occasions.
 
@@ -620,6 +629,7 @@ After the conditions are matched in a top-level rule,  ISE determines what authe
 In the current deployment:
 
 ![[Screenshot 2026-05-12 at 11-06-37 Identity Services Engine.png]]
+
 - Process Host Lookup for MAB Access
 - EAP-TLS for Admin Users who uses MacOs and for RDP Access
 - PEAP MSCHAPv2 for occasional clients
@@ -651,7 +661,9 @@ The allowed protocols definition:
 Authorization Results are the results for each authorization policy. 
 ##### Authorization Profiles
 Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy.
+
 ![[Pasted image 20260512122923.png]]
+
 ###### Pre-Auth-profile
 
 ![[Pasted image 20260512124255.png]]
@@ -801,6 +813,7 @@ This certificate will be used to establish trust and build a <mark style="backgr
 To create a certificate signed the a external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong> 
 
 ![[Pasted image 20260427150149.png]]
+
 - <strong>Common Name (CN)</strong> : The CN should be a <mark style="background: #FF5582A6;">FQDN that will resolve via DNS to the IP address of ISE node</mark>.
 - <strong>Organization(O)</strong>: The organization the certificate is meant ot represent, the org implementing ISE
 - <strong>Organizational Unit(OU)</strong>: This is the division of the organization that is controlling the device for which the certificate is being used
@@ -2355,6 +2368,7 @@ With this command:
 ```
 
 ![[Pasted image 20260526141243.png]]
+
 - `CACS`: This stands for <strong>Cisco Access Control System</strong>, pointing back to the core engine architecture.
 - `FA00800A0000003663DD9D9B`: This is the <strong>Audit Session ID</strong>. It uniquely identifies that specific user connection across the entire network infrastructure.
 - `CISCO-ISE1`: The specific host name of the Policy Service Node (PSN) that processed the authentication request.

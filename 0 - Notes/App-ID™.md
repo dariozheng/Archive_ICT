@@ -23,14 +23,19 @@ iconColor: "#F04E23"
 <mark style="background: #D2B3FFA6;">App-ID provides <strong>visibility</strong> and <strong>control</strong> over applications that can <strong>evade</strong> detection</mark> by masquerading as legitimate traffic, hopping ports or sneaking through the firewall using encryption (SSL and SSH).
 
 <mark style="background: #BBFABBA6;">App-ID can identify</mark> not only a particular application, but also <mark style="background: #BBFABBA6;">some of the specific operations of an application</mark>. <mark style="background: #ABF7F7A6;">For example, there are granular App-IDs for Dropbox that can be used to <strong>allow</strong> downloading of a file or the ability to edit a document but will <strong>block</strong> files from being uploaded</mark>.
+
 ![[App-ID dropbox.png]]
+
 When used in conjunction with User-ID™, you can see exactly who is using the application based on their identity, not just an IP address. 
 
 Example of App-ID:
+
 ![[App-ID application.png]]
+
 # App-ID Traffic Classification Technology
 
 ![[App-ID classification.png]]
+
 ## Application Signatures
 Signatures are used first to <mark style="background: #FFF3A3A6;">look for unique application properties</mark> and <mark style="background: #FFF3A3A6;">related transaction characteristics</mark> to <mark style="background: #FFB8EBA6;">correctly identify the application regardless of the protocol and port being used</mark>. 
 
@@ -64,11 +69,15 @@ If an application shift is detected, the firewall checks the Security policy aga
 ### Dependent Applications 
 <mark style="background: #BBFABBA6;">Some applications are dependent on one or more other applications</mark>. 
 Also, <mark style="background: #ABF7F7A6;">network traffic can shift from one application to another during the lifetime of a session</mark>. 
+
 ![[Dependent Applications.png]]
+
 For these reasons, when you create a policy to allow applications, you also <mark style="background: #FFB8EBA6;">ensure that the firewall allows the other applications on which the application depends</mark>.
 
 <mark style="background: #BBFABBA6;">When a policy is created with unresolved dependencies they will be reported after a commit</mark>. Then it's possible to correct the policies, adding the missing dependencies in the policy rule. 
+
 ![[Unresolved dependencies.png]]
+
 # Applipedia 
 https://applipedia.paloaltonetworks.com
 
@@ -85,7 +94,9 @@ Palo Alto Networks provides <strong>Applications and Threats</strong> <mark styl
 Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of the new and modified App-IDs that the update includes.
 
 <mark style="background: #FFB86CA6;"><strong>The Applications and Threats</strong> section lists</mark> <mark style="background: #FF5582A6;">updates to applications, threats, and other content that includes <strong>decoders</strong>, <strong>signatures</strong>, and <strong>modified or new App-IDs</strong></mark>. New App-IDs are updated once a month (every third Tuesday), while other content can be updated more frequently. You can click the hyperlink next to <strong>Schedule</strong> to set timely (weekly) updates.
+
 ![[PaloAlto Dynamic Updates.png]]
+
 # App-ID Tags 
 <mark style="background: #FFF3A3A6;">App-ID tags is a mechanisms that helps to navigate among the <strong>numerous</strong> APP-IDs</mark>. <mark style="background: #D2B3FFA6;">They are used to organize and classify applications so that they can be referenced in security policy, QoS, decryption or logging</mark>.
 
@@ -95,6 +106,7 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 <mark style="background: #BBFABBA6;">Tags allow you to easily choose all existent and future App-IDs related to <strong>one or more specific characteristics</strong></mark>.
 
 <mark style="background: #ADCCFFA6;">Palo Alto Networks takes on the task of researching <strong>applications with common attributes</strong></mark> and <mark style="background: #FFF3A3A6;">delivers the results of this research through <strong>tags</strong></mark> <mark style="background: #ABF7F7A6;">in dynamic content updates</mark>.
+
 ![[App-ID tags.png]]
 
 <mark style="background: #ADCCFFA6;">The firewall can use a <strong>tag-based application filter</strong> to dynamically enforce new and updated existing App-IDs</mark> <mark style="background: #FFB86CA6;"><strong>without</strong> requiring you to review or update policy rules whenever new applications are added</mark>.
@@ -104,21 +116,29 @@ Under <strong>Device > Dynamic Updates</strong> it's possible to view a list of 
 > The selectable attributes are <strong>Category</strong>, <strong>Subcategory</strong>, <strong>Risk</strong>, <strong>Tags</strong>, and <strong>Characteristic</strong>. 
 
 ![[Application Filter.png]]
+
 <mark style="background: #FFF3A3A6;">If you choose to exclude applications from a specific tag, new content updates will honor those exclusions</mark>.
 ## Custom tags
 You can <mark style="background: #ABF7F7A6;">create custom tags</mark> <mark style="background: #BBFABBA6;">to define application types based on your policy requirements</mark>.
+
 ![[custom tag panorama.png]]
+
 ![[custom tag panorama 2.png]]
+
 ![[custom tag panorama 3.png]]
+
 <mark style="background: #FF5582A6;">Now all new application which will have the TAI tags will be automatically added to this Application Filter.</mark>
 # App-ID Identification Operation 
 ## App-ID and TCP
 <mark style="background: #FFB86CA6;">Applications that use Transmission Control Protocol (TCP) usually require multiple packet transfers to identify an application</mark>. 
 
 HTTP web request example:
+
 ![[http connection request workflow.png]]
+
  <mark style="background: #FFF3A3A6;">The first packet is a TCP SYN packet</mark>. Though <mark style="background: #FFB8EBA6;">the first packet does contain the source and destination addresses and ports</mark>, <mark style="background: #FF5582A6;">it contains no application data</mark>. In fact, <mark style="background: #ABF7F7A6;">the next two packets just complete the required TCP three-way handshake and do not contain any application data</mark>.
  ![[TCP three-way handshake.png]]
+
   ![[TCP packet summary.png]]
 
 <mark style="background: #FFF3A3A6;">The application data could reside in either the client’s HTTP GET request or in the server’s reply</mark>. 
@@ -127,18 +147,26 @@ For this reason, <mark style="background: #BBFABBA6;">the firewall might have to
 If the traffic is encrypted, the firewall must evaluate the administrator-defined Decryption policy to determine what to do next. 
 
 Depending on the configured policy, the traffic could be allowed or blocked in either encrypted or decrypted form. 
+
 ![[App data.png]]
+
 ## App-ID and UDP
 A Palo Alto Networks firewall examining User Datagram Protocol (UDP) packets must often <mark style="background: #FF5582A6;">examine only a single UDP packet to identify the application</mark>. <mark style="background: #FFF3A3A6;">In most cases, all the information that the firewall needs is contained in the first packet</mark>: source and destination IP address, source and destination ports and the application data. 
+
 ![[udp Src and Dst Address.png]]
+
 ![[udp Src and Dst Port.png]]
+
 ![[udp Application Data.png]]
+
 # Application Labels
 <mark style="background: #FFF3A3A6;">App-ID labels traffic observed by the firewall</mark>. The label is displayed in various logs and reports as an application name.
 ## Labeling TCP Traffic 
 App-ID labels the TCP traffic seen by the firewall. 
 If enough packets are received for App-ID to identify the application, then App-ID assigns an application label such as gmail-base. 
+
 ![[APP-ID labeling TCP.png]]
+
 If App-ID cannot identify the application, then it assigns labels such as <strong>not-applicable</strong>, <strong>incomplete</strong>, <strong>insufficient-data</strong>, <strong>unknown-tcp</strong>, or <strong>unknown-p2p</strong>.
 ### not-applicable 
 App-ID labels traffic as not-applicable when <mark style="background: #FFB86CA6;">the firewall discards the traffic because the Security policy does not allow it</mark>. 
@@ -160,7 +188,9 @@ App-ID labels the UDP traffic seen by the firewall.
 It assigns an application label such as dns or call-of-duty when the application is recognized. 
 
 In cases where App-ID cannot recognize the application, labels like unknown-udp or unknown-p2p are assigned.
+
 ![[APP-ID labeling UDP.png]]
+
 ### not-applicable 
 App-ID labels the traffic as not-applicable when <mark style="background: #FFF3A3A6;">the firewall discards the traffic because the Security policy does not allow it</mark>. 
 
@@ -177,6 +207,7 @@ Applications can be divided into two main categories: <mark style="background: #
 Applications known to App-ID are labeled in the Traffic log and reports.
 
 ![[flowchart unknown APP.png]]
+
 <mark style="background: #FFB8EBA6;">Applications unknown to App-ID initially might be identified as <strong>generic ssl</strong> if HTTPS is detected</mark>. 
 
 If you have configured the firewall to decrypt the traffic, then <mark style="background: #FFF3A3A6;">App-ID might be able to further identify the decrypted traffic as a specific application</mark>. 
@@ -191,6 +222,7 @@ For example, web-browsing might be further identified as google-docs-base. 
 The firewall has at least three methods available for processing traffic identified only as unknown-tcp, unknown-udp, unknown-p2p, or web-browsing.
 
 ![[flowchart control unknown app.png]]
+
 ### Block Application 
 Control unknown applications by blocking unknown-tcp, unknown-udp, or unknown-p2p traffic in the Security policy.
 ### Custom Application 
@@ -214,12 +246,15 @@ For many applications, <mark style="background: #FFB86CA6;">the App-ID database 
 For example, enablement of web-browsing just to allow facebook-base would allow users to browse other websites.
 
 It's possible to check the implicit dependencies on the Application details or on the Applipedia. 
+
 ![[Implicitly Uses.png]]
+
 ## Implicit Permissions
 <mark style="background: #ADCCFFA6;">Implicit permissions for a parent application are processed only if you have <strong>not</strong> added an explicit Security policy rule for the parent application</mark>. 
 This implicit support also applies to administrator-defined custom applications that are based on HTTP, SSL, MS-RPC, or RTSP.
 
 ![[Implicit permission example.png]]
+
 In the example, <mark style="background: #FFF3A3A6;">the facebook-base application<strong> implicitly allows</strong> the required web-browsing application without the need for you to explicitly add a web-browsing rule to the Security policy</mark>. 
 <mark style="background: #CACFD9A6;">The facebook-chat and facebook-apps applications depend on facebook-base, so facebook-base <strong>explicitly must be added to the rules</strong> to enable users to chat or email using Facebook</mark>. 
 # Application Ports
@@ -233,14 +268,20 @@ In the example, <mark style="background: #FFF3A3A6;">the facebook-base applicati
 For example, a Security policy designed to allow web-browsing on only the application-default ports now will allow cleartext web-browsing traffic on the standard TCP port 80 and SSL-encrypted web-browsing traffic on the secure TCP port 443.
 
 <mark style="background: #D2B3FFA6;">The <strong>application-default</strong> setting for both standard and secure ports is supported for the applications web-browsing, SMTP, FTP, LDAP, POP3, and IMAP</mark>. <mark style="background: #BBFABBA6;">For any of these applications, you can view the Standard Ports and Secure Ports that Palo Alto Networks has defined for the application by navigating to <strong>Objects > Applications</strong></mark>.
+
 ![[default ports for APP-ID.png]]
+
 ## Control Applications Ports
 Malicious traffic often uses non-standard application ports to try to evade network security features. 
 <mark style="background: #FFB86CA6;">To block applications not running on standard ports, select the value <strong>application-default</strong> in the <strong>Service</strong> column in your<strong> Security policy</strong></mark>. <mark style="background: #FF5582A6;">Linking the application to their default ports defined in the Palo Alto Networks APP-ID database</mark>.
+
 ![[application-default.png]]
+
 <mark style="background: #BBFABBA6;">The <strong>any</strong> option will allow any ports to go through</mark>. 
 <mark style="background: #ADCCFFA6;">While the <strong>select</strong> option requires the creation of specific port on the <strong>Objects>Services</strong>, where it's possible to define the a number of ports which will be linked to the applications in the Policies rulebase</mark>.
+
 ![[Panorama Services.png]]
+
 # ​Identify Applications in SSL Traffic​
 When an SSL/TLS client connects to a secure web server, the application layer data is encrypted. But, if configured, the firewall can decrypt the SSL/TLS traffic. 
 
@@ -250,12 +291,16 @@ When an SSL/TLS client connects to a secure web server, the application layer da
 
 <mark style="background: #ABF7F7A6;">The second method relies on a TLS protocol extension named</mark> [[Server Name Indication]] <mark style="background: #ABF7F7A6;">(<strong>SNI</strong>) that enables multiple hostnames to be served over HTTPS from the same IP address</mark>.
 ## Encrypted SSL Traffic - Single Site
+
 ![[ssl traffic decrypt 2.png]]
+
 <mark style="background: #ADCCFFA6;">If a web server hosts only a single website, then the Common Name (or CN) is used to identify the application</mark>. <mark style="background: #FFB86CA6;">The SSL client initiates an SSL/TLS connection to the web server and requests access to the website</mark>. <mark style="background: #D2B3FFA6;">The web server responds with its certificate</mark>. <mark style="background: #FF5582A6;">The firewall uses the FQDN in the CN field to attempt to identify the application</mark>. 
 
 In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a connection to www.twitter.com. The web server certificate, which includes the Common Name www.twitter.com, is used to identify the application as Twitter</mark>.
 ## Encrypted SSL Traffic - Multiple Sites
+
 ![[ssl traffic decrypt 3.png]]
+
 The requirement that every website have its own unique FQDN and IP address is not practical, so many web servers host multiple websites. The CN field of a certificate cannot be used to identify the application, because multiple web-based applications share a common FQDN and IP address. Instead, <mark style="background: #FF5582A6;">the firewall can use</mark> <strong>[[Server Name Indication|SNI]]</strong> <mark style="background: #FF5582A6;">to attempt to identify the application</mark>. 
 
 During the TLS handshake, <mark style="background: #FFB8EBA6;">browsers and applications use</mark> <strong>[[Server Name Indication|SNI]]</strong> <mark style="background: #FFB8EBA6;">to send the web server the FQDN of the website to which they want to connect</mark>. <mark style="background: #BBFABBA6;">The firewall reads the <strong>[[Server Name Indication|SNI]]</strong> field and attempts to use the FQDN in the <strong>[[Server Name Indication|SNI]]</strong> to identify the application</mark>. <mark style="background: #ABF7F7A6;">The web server reads the SNI field to determine which certificate to send back to the client to verify the identity of the website</mark>. 

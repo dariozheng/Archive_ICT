@@ -10,10 +10,13 @@ aliases:
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 ---
+
 ![[Prisma SASE Overview.png]]
+
 <mark style="background: #FFB8EBA6;"><strong>Prisma SASE</strong> is a cloud-native architecture</mark> <mark style="background: #FF5582A6;">that unifies <strong>networking</strong> and <strong>security</strong> as a <strong>service</strong> (SaaS) functions into a single <strong>platform</strong></mark>.
 
 ![[Prisma Secure Access Service Edge.png]]
+
 ### Security as a Service 
 <mark style="background: #FFB86CA6;"><strong>Prisma Access</strong> is Palo Alto Networks cloud-delivered <strong>security</strong> platform</mark> <mark style="background: #FFF3A3A6;">that seamlessly connects and secures <strong>any user</strong> from <strong>any device</strong> accessing <strong>any app</strong></mark>.
 ### Network as a Service 
@@ -23,7 +26,9 @@ iconColor: "#F04E23"
 # Prisma SASE Components
 ## Prisma Access
 Prisma Access is the primary security component of the Prisma SASE platform, utilizing a cloud-native virtual infrastructure to protect the hybrid workforce.
+
 ![[Prisma Access.png]]
+
 ## Secure Web Gateway
 The <strong>secure web gateway</strong> functions of Prisma Access help protect the hybrid workforce against <strong>internet-sourced threats</strong> by <strong>securing end-user internet use</strong>.
 
@@ -33,7 +38,9 @@ The <strong>SWG</strong> provides the following services:
 - <strong>Data loss prevention</strong> (<strong>DLP</strong>) capabilities
 - <mark style="background: #ABF7F7A6;">Enforcement</mark> of corporate and regulatory <mark style="background: #ABF7F7A6;">policy</mark> compliance
 ## Explicit Proxy
+
 ![[Explicit Proxy.png]]
+
 <strong>Explicit Proxy</strong> uses a <strong>proxy auto-configuration</strong> (<strong>PAC</strong>) file that <mark style="background: #FFB8EBA6;">instructs a web browser to forward traffic to the web proxy server</mark> <mark style="background: #FF5582A6;">instead of the destination server</mark>, effectively <mark style="background: #FFB86CA6;">protecting your web-based internet (HTTP and HTTPS) traffic</mark>.
 
 <mark style="background: #BBFABBA6;">The Explicit Proxy provides <strong>security</strong> and <strong>visibility</strong> for internet traffic</mark> and is an ideal solution for organizations facing specific challenges:

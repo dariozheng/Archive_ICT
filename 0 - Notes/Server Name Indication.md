@@ -26,4 +26,5 @@ The SNI extension was specified in 2003 in RFC 3546
 <mark style="background: #FFB8EBA6;">This enables the server to select the correct virtual domain early and present the browser with the certificate containing the correct name</mark>. 
 
 Therefore, <mark style="background: #ADCCFFA6;">with clients and servers that implement SNI</mark>, <mark style="background: #FF5582A6;">a server with a single IP address can serve a group of domain names</mark> <mark style="background: #FFF3A3A6;">for which it is impractical to get a common certificate</mark>.
+
 ![[SNI.png]]

@@ -17,6 +17,7 @@ All of your devices and browsers should have your Root CA trusted.
 To make certificate management easier, we recommend using one Subordinate CA per firewall proxy. 
 
 This way, if a certificate needs to be revoked, you will only have to revoke a single certificate across all your firewalls. This is more efficient than having to revoke a single certificate across 20-100 firewalls.![[Certificates - Palo Alto.png]]
+
 <mark style="background: #FFB8EBA6;">When integrating with existing PKIs</mark>, it is best to use a forward trust certificate as the Subordinate CA to the Root CA. 
 
 This allows clients to implicitly trust the Root CA, providing a better user experience. 

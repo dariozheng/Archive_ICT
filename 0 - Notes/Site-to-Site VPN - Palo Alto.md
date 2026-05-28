@@ -44,16 +44,22 @@ With IKE Phase 1,<mark style="background: #FFF3A3A6;"> <u>each device is identif
 <mark style="background: #ADCCFFA6;">IKE Phase 1 provides <strong>authentication</strong> of the endpoints of the tunnel</mark> and <mark style="background: #D2B3FFA6;">creates a <strong>secure channel</strong> for the next phase of the VPN</mark>. <mark style="background: #FFB86CA6;">The IKE protocol uses the <strong>IKE-Crypto profile</strong> for negotiation</mark>.
 
 During IKE Phase 1, five pieces of information are passed between peers:
+
 ![[IKE Phase 1.png]]
+
 ### IKE Phase 2
 IKE Phase 2 creates the tunnel that will encapsulate data traffic.
 
 IKE Phase 1 is concerned with authenticating the endpoints. <mark style="background: #FFF3A3A6;">IKE Phase 2 is concerned with data traffic that crosses the tunnel</mark>. <mark style="background: #BBFABBA6;">Each side of the tunnel has a <strong>proxy ID</strong> to identify the traffic that it will send</mark> <mark style="background: #ABF7F7A6;">and what it expects to receive</mark>. <mark style="background: #ADCCFFA6;">The IDs either can be a specific network range</mark> or <mark style="background: #D2B3FFA6;">a generic network of <strong>0.0.0.0/0</strong></mark>. <mark style="background: #CACFD9A6;">In either case, both sides need to know what the other side will send for the tunnel to work</mark>.
 
 During IKE Phase 2, five pieces of information are passed between peers:
+
 ![[IKE Phase 2.png]]
+
 # Route-Based Site-to-Site VPN
+
 ![[Route-Based Site-to-Site VPN.png]]
+
 When a client that is secured by <strong>VPN Peer A</strong> needs content from a server at the other site, <mark style="background: #FFB8EBA6;"><strong>VPN Peer A</strong> initiates a connection request to <strong>VPN Peer B</strong></mark>. <mark style="background: #FFF3A3A6;">If the security policy permits the connection</mark>, <mark style="background: #BBFABBA6;"><strong>VPN Peer A</strong> uses the <strong>IKE Crypto profile parameters (IKE Phase 1)</strong> to <u>establish a secure connection</u></mark> and <mark style="background: #ABF7F7A6;"><u>authenticate</u> <strong>VPN Peer B</strong></mark>. Then, <mark style="background: #ADCCFFA6;"><strong>VPN Peer A</strong> uses the <strong>IPsec Crypto profile</strong> to <u>establish the <strong>VPN tunnel</strong></u></mark>, <mark style="background: #D2B3FFA6;">which defines the IKE phase 2 parameters to allow the secure transfer of data between the two sites</mark>.
 
 ## VPN Tunnel

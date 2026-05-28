@@ -16,10 +16,12 @@ iconColor: "#F04E23"
 <strong>Cloud Access Security Broker</strong> is a [[Cloud Computing Glossary#on premise| on premise]] or [[Cloud Computing Glossary#### cloud-based| cloud-based]] software that sits between cloud services users and cloud application, and it monitors all activity and enforces security policies.
 
 <mark style="background: #FFB8EBA6;"><strong>Cloud Access Security Broker</strong> (CASB) solutions insert <strong>inspection</strong>, <strong>threat-detection</strong>, and <strong>governance</strong> over the access</mark> <mark style="background: #ABF7F7A6;">to</mark> and <mark style="background: #BBFABBA6;">use</mark> of <mark style="background: #FFB8EBA6;">software-as-a-service (SaaS) applications</mark>, such as Microsoft 365, Google Workspace, Dropbox, and Salesforce, just to name a few.
+
 ![[CASB elements.png]]
 
  The graphic depicts how lack of visibility leaves valuable data at risk.
  
+
 ![[Data Exposure Threat.png]]
 
 # Data in Motion
@@ -44,6 +46,7 @@ The most efficient CASB solutions are based on <strong>direct gateway integratio
 
 ## CASB Integrated Architecture
 The Palo Alto Networks solution integrates <mark style="background: #FFB8EBA6;">sensor</mark> and <mark style="background: #FFB86CA6;">access-control</mark> by way of a <mark style="background: #ABF7F7A6;">shared PAN-OS-based infrastructure</mark> that <mark style="background: #BBFABBA6;">spans hardware and software firewalls</mark>, <mark style="background: #CACFD9A6;">whether on-premises or in-cloud</mark>, and <mark style="background: #FFF3A3A6;"><strong>regionally</strong> and <strong>globally</strong> distributed <strong>Prisma Access gateways</strong></mark> for mobile users and remote branches.
+
 ![[CASB solution.png]]
 
 # Data at Rest

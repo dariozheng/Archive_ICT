@@ -28,9 +28,11 @@ With data redistribution, <mark style="background: #FFB8EBA6;">you configure the
 
 <mark style="background: #ABF7F7A6;">You can connect to the source device by using either the serial number or the host and port numbers</mark>. 
 <mark style="background: #D2B3FFA6;">The type of information you select can include IP address-to-username mappings, IP address-to-tag mappings, username-to-tag mappings, Host Information Profile HIP data, or quarantined devices</mark>.
+
 ![[Redistribution Point.png]]
 
 On the Clients tab, you can look at all the other firewalls, in real time, that are receiving data from this firewall.
 
 Optionally, <mark style="background: #FFB8EBA6;">you can configure which networks you want the agent or agents to include in the data redistribution</mark> and <mark style="background: #FFF3A3A6;">which networks you want to exclude from data redistribution</mark>.
+
 ![[Redistribution Point 2.png]]

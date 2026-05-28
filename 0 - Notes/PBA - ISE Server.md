@@ -345,7 +345,9 @@ Radius Attribute that indicates the port type. Common values are:
 
 ##### Service-Type
 
-![[Pasted image 20260513120458.png]] Service-Type is a RADIUS attribute (Attribute 6) that defines the nature of the network access request being made, allowing ISE to understand how a user or device is trying to connect.
+![[Pasted image 20260513120458.png]]
+
+Service-Type is a RADIUS attribute (Attribute 6) that defines the nature of the network access request being made, allowing ISE to understand how a user or device is trying to connect.
 
 Common Service-Type values:
 

@@ -31,7 +31,9 @@ ISPs connect you to the internet through a backbone network connecting data cent
 <mark style="background: #D2B3FFA6;"><strong>Backhaul is</strong> this local <strong>RAN</strong> and its <strong>related infrastructure</strong></mark>, <mark style="background: #CACFD9A6;">which connects your mobile device to a wired backbone network and the internet</mark>.
 
 # How does backhaul work?
+
 ![[Backhaul.png]]
+
 1. <strong>Data Centre</strong>: When a customer requests a movie, the content is retrieved from Netflix’s servers in a data centre.
 2. <strong>Backbone network</strong>: The data travels through the backbone network, a high capacity network that connects regions, ISPs and data centers to the internet and cloud services.
 3. <strong>Exchange backhaul</strong>: <mark style="background: #FFB86CA6;">Backhaul connects the backbone network to your local exchange</mark>, <mark style="background: #ABF7F7A6;">ensuring the data is transported efficiently <strong>to</strong> and <strong>from</strong> the internet</mark>.

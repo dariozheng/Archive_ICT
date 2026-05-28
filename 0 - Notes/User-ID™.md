@@ -22,7 +22,9 @@ Here are the steps needed to deploy a identity-aware policy:
 - Develop IP-to-User Mapping Strategies for Visibility
 - Plan User Groups and Access Rights
 - Implement Identity-Based Policies
+
 ![[step to deploy identiy-aware policy.png]]
+
 ## Understand the Environment
 Check: 
 - Identity posture 
@@ -42,12 +44,15 @@ This is called <strong>group mapping</strong>, and it <mark style="background: #
 Administrators are also able to apply individual policy to specific users in the case where they have individual needs.
 
 ![[group mapping.png]]
+
 ## Implement Identity-Based Policies
 With identity-based security, it's possible to know who is accessing which applications regardless of location or device, and who is transferring files or introducing threats. 
 
 By allowing only the required users to access resources, you can successfully protect your organization from cyber breaches applying zero trust strategy.
 # IP-to-Username Mapping Methods
+
 ![[User-ID Mapping Recommendati.png]]
+
 ## Server Monitoring #complete 
 <mark style="background: #FFF3A3A6;">With <strong>passive</strong> server monitoring a <strong>User-ID agent</strong></mark>, <mark style="background: #FF5582A6;">either a Windows-based agent <strong>running on a domain server in your network</strong></mark>, or <mark style="background: #BBFABBA6;">the PAN-OS integrated User-ID agent <strong>running on the firewall</strong></mark>, <mark style="background: #FFF3A3A6;"><strong>monitors</strong> the security event logs for specified <strong>Microsoft Exchange Servers</strong>, <strong>Domain Controllers</strong>, or <strong>Novell eDirectory servers</strong> for <strong>login</strong> events or <strong>logout</strong> events recorded in Authentication logs</mark>.
 
@@ -57,7 +62,9 @@ By allowing only the required users to access resources, you can successfully pr
 
 <mark style="background: #BBFABBA6;">A firewall can communicate with both <strong>integrated</strong> and <strong>Windows-based</strong> agent types at the same time</mark>. 
 ### Windows User-ID Agent
+
 ![[User-ID Domain Controller Monitoring.png]]
+
 1) When the User-ID agent first starts up, <mark style="background: #FFB8EBA6;">it will parse the security event logs and record all the user login events</mark>.
 2) Afterward, <mark style="background: #ABF7F7A6;">it will check the Security logs on a regular basis only for new login or logout events</mark>.
 3) <mark style="background: #CACFD9A6;">User mappings are <strong>cached</strong> for an amount of time equal to the timeout value set in the User-ID agent interface</mark>.
@@ -67,12 +74,16 @@ By allowing only the required users to access resources, you can successfully pr
 Multiple Windows-based agents can be deployed to handle larger environments or multi forest domains.
 
 <mark style="background: #FFB8EBA6;">The Windows-based agent uses <strong>[[Microsoft Remote Procedure Call|MS-RPC]]</strong></mark>, <mark style="background: #FFF3A3A6;">which requires the full <u>Windows Security logs</u> to be sent to the agent</mark>, <mark style="background: #D2B3FFA6;">where <strong>they are filtered for the relevant User-ID information</strong></mark>.
+
 ![[indows-Based User-ID Agent.png]]
+
 -  <strong>Windows Session Monitoring</strong>
 <mark style="background: #BBFABBA6;">Clients who have connected to a <strong>shared file or print resource</strong> will have their session information stored on the domain controller</mark>. 
 
 <mark style="background: #ABF7F7A6;">An additional <strong>Windows-based method</strong> to resolve IP addresses to users is to consult the <strong>shared resource session table</strong> recorded on the domain controller</mark>.
+
 ![[User-ID Windows Session Monitoring.png]]
+
 #### Windows-Based Agent Configuration  #configuration 
 <img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
 
@@ -82,7 +93,9 @@ The Windows-based agent can be installed on machines running Windows Server 2008
 <mark style="background: #CACFD9A6;">You should install the agent in the same network site as the monitored server to optimize bandwidth use</mark>. 
 
 <mark style="background: #FFB86CA6;">You should install two agents on two member servers for redundancy in case one agent or one domain controller fails</mark>.
+
 ![[Installation Location.png]]
+
 Although an agent could be installed directly on a domain controller, that is not a best practice.
 ##### User-ID Agent Software
 Use your Palo Alto Networks support account to log in to the Support website. 
@@ -90,10 +103,14 @@ Use your Palo Alto Networks support account to log in to the Support website.
 After you are logged in, click the <strong>Updates > Software Updates</strong> link to open the page shown here. 
 
 To simplify finding the User-ID agent download links, use the <strong>Filter By menu</strong> to filter the list for <strong>User Identification Agent</strong>. Then find and download the User-ID agent version that matches your PAN-OS version.
+
 ![[User-ID Agent Software.png]]
+
 The installation can be <strong>manual</strong>, <mark style="background: #ADCCFFA6;">installing each agent individually by manually launching the downloaded MSI file</mark>, or <strong>automated</strong> where it's possible <mark style="background: #BBFABBA6;">to use endpoint management software such as <strong>Microsoft System Center Configuration Manager</strong> (or SCCM) to remotely install, configure, or upgrade multiple agents in a single operation</mark>.
 ##### Agent Setup Process
+
 ![[Agent Setup Process.png]]
+
 <mark style="background: #FFF3A3A6;">Click <strong>Setup</strong> to configure the User-ID agent, click the <strong>Edit</strong> button to open a separate tabbed window that enables you to change any of the settings shown in the Setup pane.
 Then, click <strong>Save</strong> to save your configuration changes but not activate them. Click <strong>Commit</strong> to save and activate your configuration changes. Click <strong>Exit</strong> to close the window without saving your changes</mark>.
 
@@ -114,10 +131,14 @@ However, membership in these groups provides the account with more permissions t
 
 <mark style="background: #FFF3A3A6;">Therefore, you might want to run the agent using a restricted account with minimal permissions</mark>. 
 <mark style="background: #ADCCFFA6;">The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have</mark>.
+
 ![[Authentication tab.png]]
+
 ###### Server Monitor Tab
 Use the Server Monitor tab to configure [[#Server Monitoring|server monitoring]] or to enable the optional [[#Windows Session Monitoring|session monitoring]].
+
 ![[Server Monitor Tab.png]]
+
 ###### Client Probing Tab
 <mark style="background: #FFB8EBA6;">You can use the Client Probing tab to configure the agent <u>to probe IP addresses</u> for username information</mark>. 
 
@@ -134,9 +155,13 @@ Unlike server monitoring, probing is an active method: 
 <mark style="background: #FF5582A6;">The <strong>NetBIOS probing</strong> is available primarily for backward compatibility with Windows XP and earlier and is not recommended</mark>.
 
 If you enable the optional NetBIOS client probing feature, <mark style="background: #D2B3FFA6;">then the agent requires access through the Windows firewall to port 139</mark>. <mark style="background: #D2B3FFA6;">Windows file and print services also must be enabled</mark>.
+
 ![[Client Probing Tab.png]]
+
 ##### Configure the Monitored Servers 
+
 ![[Configure the Monitore Servers.png]]
+
 Select <strong>Discovery</strong> in the left pane to configure the monitored servers and networks.
 
 <mark style="background: #FF5582A6;">The Auto Discover button works only for domain controllers</mark>. 
@@ -150,7 +175,9 @@ Communication between the firewall and a User-ID agent is secured using an encry
 If the firewall does not act as collector for other firewalls, there is no need to input Collector Name and the Pre-Shared Key.
 
 On Windows host ensure the port 5007 is not blocked by firewalls.
+
 ![[Configure the Firewall to Connect to the Agent.png]]
+
 ###### Agent Host Type
 You can add an agent using Serial Number or Host and Port. 
 -  <strong>Serial Number</strong>
@@ -177,10 +204,14 @@ To confirm connection to the User-ID agent device, browse to <strong>Device > Da
 Use the firewall’s web interface and the Windows agent to confirm connectivity between the firewall and the Windows agent. 
 
 Mappings can be displayed from the Windows agent or from the firewall CLI.
+
 ![[Confirm Connection to the User-ID Agent.png]]
+
 ###### From the Windows Agent
 Use the <strong>Monitoring</strong> tab in the Windows agent to display IP address-to-username mappings by the Windows agent.
+
 ![[From the Windows Agent.png]]
+
 ###### From the Firewall CLI
 You can display how users and IP addresses are being mapped on the firewall only by using the firewall’s CLI.
 
@@ -197,7 +228,9 @@ show user ip-user-mapping all
 ```
 show user ip-user-mapping <ip/netmask>
 ```
+
 ![[From the Firewall CLI.png]]
+
 #### Install the Windows-Based User-ID Agent #documentation  
 ![[Install the Windows-Based User-ID Agent.pdf]]
 #### Configure the Windows User-ID Agent for User Mapping #documentation 
@@ -208,7 +241,9 @@ show user ip-user-mapping <ip/netmask>
 The integrated agent is designed for small and midsize deployments such as small remote offices or lab environments.
 
 <mark style="background: #FF5582A6;">The PAN-OS integrated agent uses either the <strong>[[Windows Management Instrumentation]]</strong> (<strong>WMI</strong>) or the <strong>[[Windows Remote Management Protocol]]</strong> (<strong>WinRM</strong>)</mark>, <mark style="background: #FFB86CA6;">which enables the agent to retrieve only the relevant User-ID information from the Windows Security logs</mark>.
+
 ![[PAN-OS Integrated User-ID Agent.png]]
+
 #### Configure User Mapping Using the PAN-OS Integrated User-ID Agent #configuration #documentation 
 ![[Configure User Mapping Using the PAN-OS Integrated User-ID Agent.pdf]]
 ## Client Probing #complete 
@@ -340,9 +375,12 @@ In such cases,<mark style="background: #D2B3FFA6;"> you can configure the firewa
 # User-ID Configuration Steps
 
 ![[Enable User-ID 0.png]]
+
 ## Enable User-ID #configuration 
 Enable User-ID technology per zone on the firewall.
+
 ![[Enable User-ID 1.png]]
+
 ### Enable User Identification 
 <mark style="background: #FFF3A3A6;">For each zone you must select the <strong>Enable User Identification</strong> check box to permit User-ID to probe for users on the zone</mark>. 
 
@@ -369,19 +407,24 @@ Use the <strong>Exclude List</strong> only to exclude user mapping information f
 
 ## Configure Group Mapping #configuration 
 <mark style="background: #FFB8EBA6;">A <strong>Server Profile</strong> specifies which <strong>LDAP servers</strong> will be contacted, the <strong>order</strong> in which they are contacted, and <strong>how</strong> and <strong>where</strong> to search the <strong>LDAP directory tree</strong></mark>. 
+
 ![[Configure Group Mapping.png]]
+
 - Base DN is the point in LDAP tree where the firewall will begin its search for users and groups.
 - <mark style="background: #D2B3FFA6;">Bind DN (<strong>cn=paloalto,ou=Users,ou=IT_Services,DC=publiacqua,DC=it</strong>) and password field contains the AD username and its attributes with its password</mark>. <mark style="background: #BBFABBA6;">It's an account that only the firewall will use</mark>. 
 - For SSL connection, in the <strong>Server List</strong> use the port <strong>636</strong> and check <strong>SSL secured connection</strong> in the <strong>Server Settings</strong>. 
 
 ![[Group Mapping Settings.png]]
+
 Here is where it's possible to configure the Group Mapping settings. 
 <mark style="background: #FFB8EBA6;">The group and user objects lists are dynamically populated from the firewall LDAP server profile</mark>. <mark style="background: #BBFABBA6;">By modifying the options in these fields it's possible to search for groups or users in non standard LDAP tree</mark>.
 
 ![[User and Group Attributes.png]]
+
 The User and Group Attributes tab is how the firewall identifies the Users and Groups. 
 
 ![[Group Include List.png]]
+
 In this tab it's possible to narrow down the list of necessary groups from the LDAP tree.
 
 In the custom group tap it's possible to create custom group based on LDAP filter, it's used when there isn't a AD security group.

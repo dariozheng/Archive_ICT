@@ -38,10 +38,14 @@ Depending on where the ION device will be deployed, you must purchase a bandwidt
 - Branch site: For ION devices being deployed at branch sites, the options for bandwidth-based subscriptions range from 25Mbps to 2.5Gbps.
 - Data-center site: For ION devices being deployed at data-center sites, there is one data-center subscription option.
 ##### ION Hardware Models
+
 ![[ION Hardware Models.png]]
+
 ##### ION Software Models
 Prisma SD-WAN ION software models can be deployed on ESXi, KVM, and Hyper-V. Additionally, the 7108V can be deployed on Azure, AWS, and GCP cloud platforms.
+
 ![[ION Software Models.png]]
+
 ##### Manufacturer Installed Certificate
 When an ION device is purchased, and prior to shipping to an end customer, <mark style="background: #FFB8EBA6;">a device-specific <strong>manufacturer installed certificate</strong> (MIC) is installed on the device and registered to the customer</mark>. <mark style="background: #FF5582A6;">The uniqueness of the MIC is based on the serial number of the device</mark>. At this point, the device is both <strong>unclaimed</strong> and <strong>untrusted</strong> with no ability to join a customer network.
 
@@ -172,7 +176,9 @@ Internet cable <strong>broadband</strong>, metered internet <strong>LTE</strong>
 <mark style="background: #FFF3A3A6;">Each <strong>circuit category</strong> has a unique <strong>circuit Label</strong></mark>. <mark style="background: #BBFABBA6;">The <strong>Label</strong> is used by path policies as a unique identifier</mark>. <mark style="background: #ABF7F7A6;">During the initial site setup, you must define <strong>circuits</strong> and <strong>circuit categories</strong>, but you can edit or change them at any time</mark>. <mark style="background: #ADCCFFA6;">Circuit category settings determine how the circuit will be used</mark>. 
 ### Circuit Category #configuration 
 #### Use For Controller Connections
+
 ![[Use For Controller Connections.png]]
+
 <mark style="background: #FFB8EBA6;">This is a <strong>tenant-wide</strong> setting for the <strong>circuit</strong> to be used for <strong>controller connections</strong></mark>.
 
 <mark style="background: #FF5582A6;">Expensive <strong>circuits</strong> can be <strong>excluded</strong> to meet business intent</mark>. <mark style="background: #FFB86CA6;">Deselect this check box to <strong>exclude</strong> this circuit category from connecting to the controller for <strong>device related services</strong></mark>. For example, you can deselect for metered LTE circuits, which are more costly.
@@ -180,24 +186,32 @@ Internet cable <strong>broadband</strong>, metered internet <strong>LTE</strong>
 <mark style="background: #FFF3A3A6;">If a circuit is excluded for controller connectivity, then in the absence of any viable link, the excluded circuit can be used for minimum controller connectivity</mark> - <strong>Message Routing Layer</strong> (MRL) and <strong>Remote Access</strong>. <mark style="background: #BBFABBA6;">Statistics and logs will be written to the disk and not exported to the controller</mark>.
 <mark style="background: #ABF7F7A6;">Once an allowed circuit comes up, statistics and logs will be exported to controller</mark>.
 #### Application Reachability Probes and QoS
+
 ![[Application Reachability Probes and QoS.png]]
+
 - <strong>Use For Application Reachability Probes:</strong> This allows the circuit category to check the reachability of an application on a given path.
 - <strong>QoS:</strong> Select QoS to enable shaping and queuing of traffic as defined in your application policy rules.
 #### Link Quality Monitoring (LQM)
+
 ![[Link Quality Monitoring (LQM).png]]
+
 <mark style="background: #ADCCFFA6;">Select <strong>LQ Monitoring</strong> to enable link quality measurements such as <strong>latency</strong>, <strong>loss</strong>, and <strong>jitter</strong></mark>.
 
 You can optionally check the box to use LQM for all paths.
 
 LQM is enabled by default on branch to data center paths.
 #### VPN Keep-Alive
+
 ![[VPN Keep-Alive.png]]
+
   
 <mark style="background: #FFB8EBA6;">The <strong>Keep-Alive Failure Count</strong> indicates the number of consecutive missed keep-alive packets before a link is declared as <strong>down</strong></mark>. The default value is 3.
 
 <mark style="background: #FF5582A6;">The <strong>Keep-Alive Interval</strong> indicates the time interval in milliseconds between two VPN Keep-Alive packets</mark>. The default value is 1000 ms.
 #### L3 Reachability
+
 ![[L3 Reachability.png]]
+
 <mark style="background: #FFB86CA6;">Prisma SD-WAN supports <strong>always-on probing</strong>, enabling measurement of key metrics such as round trip latency, packet loss, jitter and other metrics to any ICMP/DNS/HTTP/HTTPS service across all transports (Direct, Fabric, Standard VPN)</mark>. 
 
 <mark style="background: #FFF3A3A6;">The system can utilize application health probes to determine L3 Reachability. These probes determine whether a circuit is available and usable</mark>.
@@ -211,22 +225,31 @@ Probe Profiles consist of one or more Probe Configs.
 The Circuit Information page provides a site-level configuration that can be used for more granular control. This takes precedence over the circuit category setting.
 ### Circuit Information #configuration 
 #### Controller Connections
+
 ![[Circuit Information.png]]
+
 - <strong>Use Circuit Category Setting</strong>: The circuit inherits the setting from the globally defined circuit category. This is the default.
 - <strong>Yes</strong>: The circuit is eligible for all controller communications.
 - <strong>No</strong>: The circuit will only be used for device configuration communication if no other methods are available.
 #### Name
+
 ![[Circuit Information Name.png]]
+
 When configuring the site-level circuit details, it is recommended that you provide a meaningful circuit name, which will help troubleshoot path-related flow details.
 Use abbreviations that include Site Name, Circuit Type, and Circuit Provider.
 #### Tags
+
 ![[Circuit Information Tags.png]]Users can add comments to configure a device, such as a site description, port labeling, and tags. 
 The tags and descriptions help identify what the port is used for, and <mark style="background: #FFF3A3A6;">tags can also be used for automation purposes</mark>.
 #### BFB Mode
+
 ![[Circuit Information BFD Mode.png]]
+
 Aggressive mode is the default mode and is recommended by Prisma SD-WAN for fast failure detection of links.
 #### Speed
+
 ![[Circuit Information Speed.png]]
+
 <mark style="background: #FFB8EBA6;">Circuit speed hardcoding is required for proper QoS operations on the ION</mark>. 
 
 The WAN circuit speeds must be matched with carrier-provided specifications and specifically configured. <mark style="background: #FF5582A6;">The default values should not be trusted</mark>.
@@ -235,12 +258,16 @@ The WAN circuit speeds must be matched with carrier-provided specifications and 
 
 <mark style="background: #FFF3A3A6;">This is to ensure that the ION QoS kicks in slightly before the circuit limit is reached, to ensure prioritization of the critical applications</mark>. For example, <mark style="background: #BBFABBA6;">if the circuit is rated for <strong>100Mbps</strong> down and <strong>50Mbps</strong> up</mark>, <mark style="background: #ABF7F7A6;">you can configure the circuit settings for <strong>99Mbps</strong> down, <strong>49Mbps</strong> up</mark>. This ensures that the ION QoS starts kicking in at 99Mbps down, and 49Mbps up, and starts prioritizing applications according to the configured QoS policies.
 #### Minimize Cellular Usage
+
 ![[Minimize Cellular Usage.png]]
+
 <mark style="background: #FFB8EBA6;">Minimize the data usage of <strong>metered 5G/LTE backup links</strong> when other active paths are unavailable</mark>. With this best practice, <mark style="background: #FF5582A6;">you send data over metered links</mark> <mark style="background: #FFB86CA6;">for business continuity only when the primary connection is unavailable</mark>, ensuring flexibility and agility at a lower cost.
 
 <mark style="background: #FFF3A3A6;">Extending the <strong>VPN keep-alive timer</strong> will reduce the amount of data used on this cellular carrier</mark>, but by <mark style="background: #BBFABBA6;">extending this timer it can reduce the failover time if the ION moves from using one DC ION to another DC ION in the DC cluster</mark>.
 #### Internet Circuits
+
 ![[Internet Circuits.png]]
+
 <mark style="background: #FFB8EBA6;">When creating a circuit, you must select a circuit category and a <strong>WAN (carrier)</strong></mark>. <mark style="background: #FF5582A6;">You cannot use the same <strong>category</strong> twice at a site</mark>.
 
 For example, you cannot designate two Internet Cable circuits at a site even if they are from different carriers. 
@@ -249,7 +276,9 @@ For example, you cannot designate two Internet Cable circuits at a site even if 
 There are 30 Internet categories and 30 public categories, including about 20 named public or private. 
 These names can be changed,  so often, two or more circuit categories may be modified to a naming convention, such as ACME-INTERNET-1 and ACME-INTERNET-2.
 #### Private WAN Circuits
+
 ![[Private WAN Circuits.png]]
+
 <mark style="background: #BBFABBA6;">If a path policy requires the use of the overlay over a private path (e.g., MPLS)</mark>, <strong>make sure</strong> <mark style="background: #ABF7F7A6;">the WAN network matches at the branch site and data center</mark>. 
 
 <mark style="background: #ADCCFFA6;">On the data center side, there could be multiple MPLS circuits from different carriers</mark>. 
@@ -262,13 +291,17 @@ There are two categories of interfaces in Prisma SD-WAN: <strong>ports</strong> 
 
 <mark style="background: #FFB86CA6;">Logical interfaces are simply referred to as "interfaces" on an ION device</mark>: <strong>Loopback interface</strong>, <strong>Bypass pair</strong>, <strong>Sub-interface</strong>, <strong>Standard VPN</strong>, <strong>Virtual Interface</strong>, <strong>PPPoE Interface</strong>, and <strong>L3 LAN Interface</strong>.
 ## Port
+
 ![[Interface type port.png]]
+
 <mark style="background: #BBFABBA6;">A Port interface type is like an IP interface on a traditional L3 device</mark>.
 
 <mark style="background: #ABF7F7A6;">An interface type of <strong>Port</strong> can be used for <strong>Internet</strong>, <strong>Private WAN</strong>, <strong>LAN</strong>, and <strong>Virtual interfaces</strong></mark>.
 ### LAN PORTS
 The ION 3200 and 1200-S series provide integrated L2 switch ports.
+
 ![[Interface type Layer 2.png]]
+
 <strong>L2 LAN switch ports</strong> allow <mark style="background: #BBFABBA6;">per port configuration of <strong>access</strong> or <strong>trunk</strong> ports</mark> and <mark style="background: #ABF7F7A6;">Virtual LAN (<strong>VLAN</strong>)/Switch Virtual Interface (<strong>SVI</strong>) configuration</mark>. 
 These ports are supported on ION 3200, ION 1200-S, ION 1200-S-C-NA/ROW, and ION 1200-S-C5G-WW on ports 5 -10.
 L2 Switch ports require a minimum ION device version of 6.0.2 for the ION 1200-S series and 6.3.1 for the ION 3200. 
@@ -313,6 +346,7 @@ Other uses for the controller port:
 <mark style="background: #ADCCFFA6;">Sub-interfaces are used to <strong>divide</strong> one <strong>physical</strong> or <strong>virtual</strong> <strong>parent interface</strong> into multiple virtual interfaces, thereby implementing VLANs</mark>.
 
 ![[Interface type Sub-Interface.png]]
+
 <mark style="background: #D2B3FFA6;">The parent interface can be an Ethernet port, a virtual port, or a bypass pair that does not contain any configuration</mark>. 
 <mark style="background: #CACFD9A6;">You cannot configure a sub-interface on the controller port or any interfaces or bypass pairs already configured with loopback as a member with PPPoE or standard VPNs</mark>.
 
@@ -331,7 +365,9 @@ Other uses for the controller port:
 - <mark style="background: #CACFD9A6;">A port or a bypass pair can be assigned as an Internet port</mark>.
 ## Interface
 ### Bypass Pair
+
 ![[Interface type Bypass Pair.png]]
+
 <mark style="background: #FFB8EBA6;">A bypass pair is a <strong>hardware relay circuit</strong> that is formed by a pair of interfaces for inline fail-to-wire</mark>.
 
 <mark style="background: #FF5582A6;">If a device that physically terminates the WAN connection fails</mark>, <mark style="background: #FFB86CA6;">the <strong>hardware bypass pair</strong> enables the ION <strong>to continue to bridge</strong> traffic even if <u>it's physically powered off</u></mark>. 
@@ -354,8 +390,11 @@ Commonly deployed standard VPN endpoints are:
 - Azure
 - Google Cloud Platform
 #### Standard VPN #configuration 
+
 ![[Interface typeStandard VPN configuration.png]]
+
 ![[Interface typeStandard VPN configuration2.png]]
+
 The following are configuration parameters for standard VPNs:
 - Name and Description
 - <strong>Parent Interface</strong>: All standard VPN tunnels must be attached to a parent Interface (internet or private WAN).
@@ -384,7 +423,9 @@ Loopback Interfaces are not the traditional loopbacks that are used in customer 
 
 <mark style="background: #FFB8EBA6;">The loopback interfaces in a Prisma SD-WAN ION device</mark> <mark style="background: #FF5582A6;">combine the ports on a physical ION 2000 to form a <strong>bypass pair</strong></mark>. 
 <mark style="background: #FFB86CA6;">The primary use case for this interface is to conserve ports in an ION 2000 for <strong>private L2 interface use</strong></mark>.
+
 ![[Interface type loopback.png]]
+
 ### Private WAN
 The private WAN interface is used for the following purposes:
 - <mark style="background: #FFB8EBA6;">Communication with MPLS or across a point-to-point link</mark>
@@ -421,6 +462,7 @@ A Private L2 interface is used:
 <mark style="background: #FF5582A6;">Virtual interfaces provide increased redundancy in areas of the network where uptime is critical and additional design flexibility is needed</mark>.
 
 A virtual interface can be created, updated, or deleted. A virtual interface will be shown as down only if both the member interfaces are operationally down. If at least one member is operationally up, the virtual interface is shown as up.
+
 ![[Virtual Interface.png]]
 
 <mark style="background: #FFB86CA6;">A virtual interface can contain a maximum of two member interfaces</mark>. <mark style="background: #FFF3A3A6;">A virtual interface ensures redundant physical connectivity from a device to one or more switches, routers, or firewalls</mark>. For example, two controller ports can be connected to two L2 switches for physical redundancy of controller port connectivity.
@@ -447,13 +489,19 @@ In this scenario, <mark style="background: #ABF7F7A6;">the virtual interface pro
 
 <mark style="background: #D2B3FFA6;"><strong>Each controller port of the ION device is physically connected to a separate switch</strong></mark>. <mark style="background: #CACFD9A6;">A new virtual interface is configured with the two member interfaces</mark>, controller ports 1 and 2. 
 <mark style="background: #FFB8EBA6;">IP address information is configured on the virtual interface controller port</mark>. If a switch or controller port is lost, controller connectivity remains uninterrupted.
+
 ![[Controller Port Redundancy.png]]
+
 ##### Two Core Peers In The Same Subnet
 In this scenario, <mark style="background: #FF5582A6;">a virtual interface is used to provide redundant physical connections to a pair of Layer 3 core switches</mark>. The ION device is peering via BGP with both switches in the same IP network.
+
 ![[Two Core Peers In The Same Subnet.png]]
+
 ##### Internet Circuits To Firewall
 In this scenario, <mark style="background: #FFB86CA6;">a virtual interface is used to provide redundant physical connections to a pair of Layer 2 switches that are connected to an internet-facing firewall pair</mark>. The ION device uses the firewall for the default gateway for the redundant internet-facing ports.
+
 ![[Internet Circuits To Firewall.png]]
+
 # IP Directed Broadcast
 The IP Directed Broadcast feature was introduced in 5.4.1 to <mark style="background: #FFB8EBA6;">help with scenarios</mark> (such as WakeOnLAN) <mark style="background: #FFB8EBA6;">where traffic needs to be broadcast to all devices in a LAN subnet</mark>. This IP Directed Broadcast feature can be used in some branch scenarios instead of multicast. 
 
@@ -463,7 +511,9 @@ The IP Directed Broadcast feature was introduced in 5.4.1 to <mark style="backgr
 <mark style="background: #ADCCFFA6;">LAN-to-LAN directed broadcast at a branch site is supported</mark>. <mark style="background: #D2B3FFA6;">WAN-to-LAN directed broadcast will be supported only if these packets are received on a Prisma SD-WAN-VPN path (from another ION device)</mark>. <mark style="background: #CACFD9A6;">Any response unicast traffic generated by end-hosts will be treated as a new/unique flow that goes through a Zone-Based Policy Firewall (ZBFW), Path, QoS, NAT policy independently</mark>.
 ## IP Directed Broadcast #configuration 
 The IP Directed Broadcast configuration is at an interface-level. 
+
 ![[Enable Layer 3 LAN Interfaces.png]]
+
 To use the IP Directed Broadcast feature, the branch ION device needs to have <mark style="background: #FFB8EBA6;">both L3 LAN Forwarding</mark> and <mark style="background: #FFB8EBA6;">L3 WAN Forwarding enabled</mark> in the Device Basic Info tab.
 
 <mark style="background: #FF5582A6;">The IP Directed Broadcast is disabled by default. Select <strong>Yes</strong> to enable it on any L3 LAN interface or sub-interface on the device</mark>.
@@ -529,10 +579,14 @@ Each <strong>QoS policy set</strong> has one or more <strong>rules</strong> that
 With explicit ordering, <mark style="background: #D2B3FFA6;">the Order Numbers are evaluated for a match</mark>. 
 
 <mark style="background: #CACFD9A6;">The first match in the lowest numerical (highest priority) rule will be used</mark>, <mark style="background: #FFB8EBA6;">regardless of whether a more-specific match can be found further in the rulesets</mark>.
+
 ![[Explicit Ordering.png]]
+
 #### Implicit Ordering
 With implicit ordering, <mark style="background: #FF5582A6;">the Order Numbers are all the same</mark>. T<mark style="background: #FFB86CA6;">he policy that has the <strong>most specific match</strong> will be used</mark>, <mark style="background: #FFF3A3A6;">if all of the rules in the policy have the same Order (Priority) number</mark>.
+
 ![[Implicit Ordering.png]]
+
 ### Simple Stacked Policy
 <mark style="background: #D2B3FFA6;">A Simple Stack is a collection of <strong>policy rules</strong> in a <strong>single policy set</strong></mark>. <mark style="background: #CACFD9A6;">Organizations can create <strong>customized policy rules</strong>, which then will be merged with the <strong>default policy set</strong></mark>.
 At a minimum, a Simple Path or QoS Stack will consist of two policy rules:
@@ -544,52 +598,72 @@ From the <strong>Controller</strong> web interface, a Simple Path Stack can be c
 Under <strong>Manage > Prisma SD-WAN > Policies > Path</strong>, then select <strong>Path Stacks</strong>. Click <strong>Simple</strong>, then click <strong>Add Stack</strong>.
 
 Path prefixes can be configured and used in path policies. From release 6.2.1, both IPv4 and IPv6 path prefixes are supported.
+
 ![[Add Path Stack.png]]
 
 ##### Add QoS Stack
 Under <strong>Manage > Prisma SD-WAN > Policies > QoS</strong>, then select <strong>QoS Stacks</strong>. Click <strong>Simple</strong>, then click <strong>Add Stack</strong>.
 
 QoS prefixes can be configured and used in QoS policies. From release 6.2.1, both IPv4 and IPv6 QoS prefixes are supported.
+
 ![[Add QoS Stack.png]]
+
 ##### Define Policy Rule
 ###### Path Policy Rule
 Within a simple Path policy rule, <mark style="background: #ABF7F7A6;">applications and their desired path and policy behaviors are configured as shown</mark>. Prisma SD-WAN supports unified App-IDs to provide application detection services for Prisma SD-WAN and Palo Alto Network applications. Sites must have their ION devices updated to 6.0.1 to take advantage of the new applications. To filter applications based on the ION device version, use the options at the top of the page.
+
 ![[Path Policy Rule.png]]
+
 ###### QoS Policy Rule
 Within a simple QoS policy rule, applications and their desired priority are configured. Optionally, the applications defined have their DSCP values re-marked.
+
 ![[QoS Policy Rule.png]]
+
 ##### User-ID in Path and QoS Policy Rules
 <mark style="background: #ADCCFFA6;">Users and/or groups can be specified in the Users tab's path and QoS policy rules</mark>. <mark style="background: #D2B3FFA6;">The Cloud Identity Engine (CIE) and the user agent must have been previously configured to enable the Users tab, allowing one or more users and/or groups to be specified in policy rules</mark>.
 ### Advanced Stacked Policy
 <mark style="background: #CACFD9A6;"><strong>Advanced Stacked Policy</strong> is a collection of <strong>Path</strong> or <strong>QoS</strong> <strong>policy sets</strong> that are stacked</mark>, <mark style="background: #FFB8EBA6;">stack maximum of <strong>four policy sets</strong> and <strong>one default rule policy set</strong></mark> and they are ordered from left to right, with the left-most as highest priority. 
+
 ![[Advanced Stacked Policy.png]]
+
 #### Advanced Stacked Policy #configuration 
 Select <strong>Stacked Policies</strong>, <strong>Path</strong> or <strong>QoS</strong>. Depending on which stacked policy you selected, you can select <strong>Path Stacks</strong> or <strong>QoS Stacks</strong> and create a new policy set. Then add a Path or QoS Stack that references the new/modified policy set.
 
 The policies will be evaluated from left to right until a match is found. If no match is found in the defined policy sets 1 through 4, the default rule policy set then will be used.
+
 ![[Advanced Stacked Policy config.png]]
+
 ## Performance Policy
 <mark style="background: #FFB8EBA6;">Measuring application and system health performance and delivering App SLAs is a core component of Prisma SD-WAN</mark>.
 
 <mark style="background: #FF5582A6;">Performance Policy builds upon the existing App SLA configuration to provide a policy framework for measuring, enforcing, and alerting for application SLAs</mark>.
 ### Performance Policy Stack
 The Performance Policy Stacks is a collection of performance sets containing the performance policy rules. <mark style="background: #FFB86CA6;">Performance policy sets specify traffic engineering</mark> and can accommodate a maximum of <strong>four policy sets</strong> and <strong>one default rule policy set</strong> for each policy stack.
+
 ![[Performance Policy Stack.png]]
+
 ### Performance Policy Set
 The Performance Sets tab contains policy rules and are a part of the policy set stacks. <mark style="background: #FFF3A3A6;">A policy set has <strong>default policy rules</strong> which cannot be changed, removed, or deleted</mark>. <mark style="background: #BBFABBA6;">User can create custom policy rules to take precedence over the default policy rules</mark>.
+
 ![[Performance Policy Set.png]]
+
 ### Performance Policy Rule
 <mark style="background: #ABF7F7A6;">Performance Policy rules can be defined with <strong>Link Quality</strong> and <strong>Application metrics</strong> thresholds</mark>. <mark style="background: #ADCCFFA6;">Users can apply the rule at an <strong>application</strong> or <strong>transfer type</strong> level</mark>, select path types, path filters and path category, select Path Filters, Circuit labels, Path types, and Data center groups.
+
 ![[Performance Policy Rule.png]]
+
 #### General
 When creating a rule, <mark style="background: #D2B3FFA6;">the <strong>rule type</strong> specifies if the rule applies to the <strong>Application SLA</strong> or the <strong>System Health</strong></mark>.
  ![[Performance Policy Rule1.png]]
+
 #### Action
 - <mark style="background: #CACFD9A6;">The <strong>Create Incident</strong> action generates incidents for Applications and System Health events based on Performance SLA criteria</mark>.
 - <mark style="background: #FFB8EBA6;">The <strong>Move Flows</strong> action moves existing flows</mark> and <mark style="background: #FF5582A6;">excludes paths for new flows that violate a performance SLA</mark>. These include both <strong>Link Quality</strong> and <strong>Application Metrics</strong>. <mark style="background: #FFB86CA6;">When the <strong>Move Flows</strong> field is empty in a rule, the datapath won't consider LQM measurements during path selection</mark>. 
 - The <strong>Visibility</strong> action affects the <strong>secure fabric link</strong> time series while projecting the performance SLA indicators. The visibility action relies on <strong>Link Quality Metrics</strong>. 
 - The <strong>Packet Duplication</strong> and <strong>FEC</strong> (<strong>Forward Error Correction</strong>) actions <mark style="background: #FFF3A3A6;">are mutually exclusive and must be enabled along with the Move Flows action</mark>. <mark style="background: #BBFABBA6;"><strong>FEC</strong> only relies on the loss and latency Link Quality Metrics</mark> and does not use Application metrics. <mark style="background: #ABF7F7A6;">FEC takes effect only on Prisma SD-WAN VPNs</mark>.
+
 ![[Performance Policy Rule2.png]]
+
 #### Match Criteria (Application SLA)
 - <strong>App Filters</strong> : to select an Application(s) to apply the policy rule. You can select 256 applications for one policy rule. 
 - <strong>Application by Transfer Type</strong> : Bulk, Audio, Video, or Transactional. 
@@ -597,16 +671,22 @@ When creating a rule, <mark style="background: #D2B3FFA6;">the <strong>rule type
     - Path Category - an overlay and a Circuit Category for a path. 
     - Path Type as Direct, Prisma SD-WAN VPN, or Standard VPN. 
 - (Optional) Select the DC Group value from the drop-down. By default, all DC Groups are included.
+
 ![[Performance Policy Rule 3.png]]
+
 #### Match Criteria (System Health)
 - System Health Metrics: CPU, Memory, or Disk utilization and the thresholds required for generating an incident. 
 - Flow Metrics: Concurrent flow utilization. 
 - Circuit Utilization: Circuit Utilization.
+
 ![[Performance Policy Rule4.png]]
+
 ## Policy Use Cases
 ### Active/Active Path Policy
 A common use case for organizations is to have <mark style="background: #FFB8EBA6;">both an <strong>internet path</strong> and <strong>a private WAN</strong> (MPLS) for a given branch</mark> making a Hybrid WAN.
+
 ![[Active-Active Path Policy.png]]
+
 <strong>VPN on Any Public</strong>
 Any circuit labeled as “To internet” with a Secure Fabric established
 <strong>Direct on Any Private</strong>
@@ -622,6 +702,7 @@ Under normal conditions with no application brownouts/congestion detected at the
 <mark style="background: #FFB8EBA6;">If an application (such as voice) has a <strong>brownout</strong></mark> (e.g., <mark style="background: #FF5582A6;">the application is not sustainable over the active path</mark>), <mark style="background: #FFB86CA6;">the backup path then will be used for the session</mark>. <mark style="background: #FFF3A3A6;">A backup path chosen for an application such as voice does not preclude the next session or application from using the active path</mark> (e.g., FTP and web browsing).
 
 ![[Active-Backup Path Policy.png]]
+
 <strong>Active Path VPN on Any Public</strong>
 Any circuit labeled as “To internet” with a the Prisma SD-WAN secure environment established.
 <strong>Backup Path VPN on Any Private</strong>
@@ -633,8 +714,11 @@ In addition to the <mark style="background: #BBFABBA6;">two active paths</mark>,
 The organization prefers to have encrypted traffic where possible, <mark style="background: #ABF7F7A6;">but as a backup path, it will forgo encryption and send directly on the MPLS/private WAN</mark>. <mark style="background: #ADCCFFA6;">Remember that Dynamic Path Selection will evaluate the two active paths for the viability of carrying an application session</mark>. If not, it will utilize the backup path for a new session.
 
 Lastly, <mark style="background: #D2B3FFA6;">the organization wants to have a policy path of last resort. This goal is accomplished through an <strong>L3 failure path</strong> in its policy</mark>. The organization has now added a backup path to its policy: <strong>Prisma SD-WAN VPN on Metered 3G/4G/LTE</strong>.
+
 ![[Dual Active-Single Backup Path Policy.png]]
+
 ![[Dual Active--Single Backup Path Policy.png]]
+
 ### Policy for Trusted SaaS Applications
 <mark style="background: #BBFABBA6;">Certain applications such as <strong>SaaS applications</strong> are encrypted</mark> and <mark style="background: #ABF7F7A6;">have their security controls applied through other mechanisms</mark>, if needed. Enterprise organizations can elect <mark style="background: #ADCCFFA6;">to trust theses applications</mark> and <mark style="background: #D2B3FFA6;">send them directly on an internet path</mark> without going through a data center or third-party service:
 <strong>Active Policy</strong>
@@ -644,14 +728,20 @@ The backup policy will be used when the application <mark style="background: #CA
 #### Policy for Trusted SaaS Applications #configuration 
 ##### Direct Internet Access
 Here we define <mark style="background: #FF5582A6;">the applications that are part of our Trusted SaaS</mark>, and <mark style="background: #FFB86CA6;">our Active Path is defined as Direct on “Any Public”</mark>. This will send<mark style="background: #FFF3A3A6;"> any of the identified Trusted SaaS applications across any public interface labeled as “To Internet”</mark>.
+
 ![[Direct Internet Access.png]]
+
 ##### General Web Browsing - Back to Data Center
 <mark style="background: #BBFABBA6;">With any other applications</mark>,<mark style="background: #ABF7F7A6;"> we want to send them to our data center for policy inspection/enforcement</mark>. In this example, <mark style="background: #ADCCFFA6;">SSL and HTTP are not trusted natively</mark>, <mark style="background: #D2B3FFA6;">so they will be sent via VPN</mark> (Prisma SD-WAN Secure Fabric) <mark style="background: #CACFD9A6;">to the Primary data center and/or Backup data center for inspection</mark>.
+
 ![[General Web Browsing - Back to Data Center.png]]
+
 ### Policy Control Based on Network Context
 Network context such as Guest Traffic can be identified.
 For example, the Guest Traffic can be configured to be only allowed to go direct on any public interface.
+
 ![[Policy Control Based on Network Context.png]]
+
 # Dynamic Path Selection 
 The goal of the Prisma SD-WAN architecture is <mark style="background: #ABF7F7A6;">to intelligently make application path decisions</mark>. 
 
@@ -693,23 +783,31 @@ For example, <mark style="background: #FFF3A3A6;">if a <strong>branch</strong> h
 <strong>Service and DC groups</strong> can be used to create <mark style="background: #ADCCFFA6;">geographic groupings for resources</mark> to best suit an organization’s business needs. For example, <mark style="background: #D2B3FFA6;">European traffic would have a primary data center in EMEA</mark> and <mark style="background: #D2B3FFA6;">a backup location in New York</mark>.  
 
 <mark style="background: #CACFD9A6;">These transit locations can be made optional or mandatory. For mandatory transit, traffic must go to that service or DC group for policy inspection</mark>.
+
 ![[Service and Data-Center Groups.png]]
+
 ##### Service and Data-Center Groups #configuration 
 <mark style="background: #FFB8EBA6;">Service and data-center groups are created and mapped by an organization to meet its requirements</mark>. After sites are created, <mark style="background: #FF5582A6;">they then are mapped to their respective domain, service, or data-center groups</mark>. Within the policy, <mark style="background: #FFB86CA6;">the service or data-center group then is configured for the given application or traffic flow</mark>. <mark style="background: #FFF3A3A6;">If the service or data-center group is required to flow through a given instance for inspection, then the <strong>Required</strong> checkbox would be enabled</mark>.
 
 <mark style="background: #BBFABBA6;">Define primary and backup Prisma SD-WAN data-centers groups per domain for simplified policy management</mark>.
+
 ![[Service & DC Groups.png]]
 
 <mark style="background: #ABF7F7A6;">Reference the data-center group in policy rules</mark>; <mark style="background: #ADCCFFA6;">the branch site to which the domain is bound will determine the definition of the group</mark>. As an example, <mark style="background: #D2B3FFA6;">all internet-bound web traffic should transit through the primary DC over any transport</mark>, <mark style="background: #CACFD9A6;">and if not available or meeting service-level agreements (SLAs), use the backup DC</mark>.
+
 ![[Service & DC Groups 2.png]]
 
 Setting the <strong>Required</strong> check box <mark style="background: #FFB8EBA6;">forces traffic to use the <strong>service</strong> or <strong>DC group</strong> referenced even if a direct path is available</mark>. <mark style="background: #FFB86CA6;">If the box is left unchecked and there is a direct path allowed and available, the system will optionally use the transit path with preference given to the direct path if the SLA is met</mark>.
+
 ![[Service & DC Groups 3.png]]
+
 ## Standard VPN Service Groups
 The process of configuring <strong>standard virtual private network (VPN) service groups</strong> is identical to configuring <strong>data-center groups</strong>. <mark style="background: #FFB8EBA6;">The groups are added and used in the same way as a data-center group</mark>.
 
 Prisma SD-WAN uses mapping of <strong>standard VPN services</strong> and <strong>Prisma SD-WAN data centers</strong> to allow flexibility when policy rules are created, while accounting for uniqueness across sites. <mark style="background: #FF5582A6;"><strong>Service</strong> and <strong>DC group</strong> labels can be used in Path policy rules</mark> <mark style="background: #FFB86CA6;">to express intent to allow or require traffic to transit through a <strong>Prisma SD-WAN data center</strong> or a <strong>cloud security service</strong> such as <strong>Palo Alto Networks Prisma Access</strong> for Networks</mark>.
+
 ![[Standard VPN Service Groups.png]]
+
 # Transport Quality Metrics
 <mark style="background: #FFB8EBA6;"><strong>Link quality metrics (LQM)</strong> probes are sent periodically between <strong>Instant-On Network (ION) devices</strong></mark> and measure the [[Networking Glossary#loss|loss]], [[Networking Glossary#latency|latency]], and [[Networking Glossary#jitter|jitter]] on that path. <mark style="background: #FF5582A6;">These probes are sent from branch  IONs to hub IONs</mark>. <mark style="background: #FFB86CA6;">The probes are sent on all the overlay <strong>virtual private network (VPN) tunnels</strong> (public and private) and on <strong>the private WAN underlay path</strong></mark>.
 
@@ -718,14 +816,19 @@ Prisma SD-WAN uses mapping of <strong>standard VPN services</strong> and <strong
 <mark style="background: #ABF7F7A6;">For the <strong>overlay</strong>, the probes are between the <strong>tunnel endpoints</strong>, through the tunnel</mark>. <mark style="background: #ADCCFFA6;">The probes for the <strong>MPLS underlay</strong> are sent from the branch ION <strong>controller port</strong> or <strong>WAN (MPLS) port</strong>, depending on whether the ION is in L2 or L3 mode configuration</mark>.
 
 <strong>Bidirectional forwarding detection (BFD)</strong> probes are also <mark style="background: #D2B3FFA6;">sent between the IONs on the overlay (public and private)</mark> and <mark style="background: #CACFD9A6;">the underlay (private) paths</mark> <mark style="background: #FFB8EBA6;">as heartbeats for detecting the liveliness of the paths</mark>. <mark style="background: #FF5582A6;">These <strong>BFD probes</strong> are sourced and sent in the same way as the LQM probes</mark>.
+
 ![[Transport Quality Metrics.png]]
+
 ## LQM Measurement on Underlay
 The probes for the MPLS underlay are sent from the <strong>branch ION controller port</strong> or <strong>WAN (MPLS) port</strong>, depending on whether the ION is in <strong>L2</strong> or <strong>L3</strong> mode configuration.
 ### Branch ION 3K in L2 mode
+
 ![[Branch ION 3K in L2 mode.png]]The following diagram shows an ION 3K in <mark style="background: #FFB86CA6;">L2 mode configuration</mark>. <mark style="background: #FFF3A3A6;">The WAN/LAN ports are set up as an L2 bypass pair</mark>. In this case, <mark style="background: #BBFABBA6;">LQM probes originate from the ION 3K <strong>controller port</strong></mark>, <mark style="background: #ABF7F7A6;">pass through the LAN, and continue out to the WAN via the L2 private bypass port</mark>.
 <mark style="background: #ADCCFFA6;">The destination is the WAN port on the hub ION 9K</mark>.
 ### Branch ION 3K in L3 mode
+
 ![[Branch ION 3K in L3 mode.png]]
+
 The following diagram shows an ION 3K in <mark style="background: #FF5582A6;">L3 mode configuration</mark>. <mark style="background: #FFB86CA6;">In this case, the <strong>WAN port</strong> on the ION 3K is being used as an <strong>individual port</strong></mark> (with L3 WAN Forwarding enabled),<mark style="background: #FFF3A3A6;"> and the LQM probes originate directly from the <strong>WAN interface</strong></mark>.
 <mark style="background: #BBFABBA6;">The destination is the WAN port on the hub ION 9K</mark>.
 # Application Performance Measurement
@@ -735,7 +838,9 @@ Given that the IONs perform real time measurement and analysis from Layers 3 to 
 - <strong>Good</strong> (70-100)
 - <strong>Fair</strong> (30-69)
 - <strong>Poor</strong> (0-29)
+
 ![[Application Health Distribution.png]]
+
 ## Application Initialization and Transaction Failures
 <mark style="background: #BBFABBA6;"><strong>Application initialization</strong> and <strong>transaction failures</strong> are tracked on a <strong>per-destination/application/path basis</strong></mark>, allowing for granular and specific path changes to be made based on each destination IP within a specific application.
 
@@ -751,7 +856,9 @@ Concurrent flows are the currently active flows, including all new flows and mat
 The Concurrent Flows charts are used to:
 - <mark style="background: #FFB8EBA6;">Analyze a site in terms of connections per second</mark>.
 - <mark style="background: #FFB86CA6;">Monitor any unlikely increase in the number of flows for a particular application, such as DNS or any critical application, which could be a sign of malicious activity</mark>.
+
 ![[Concurrent Flows.png]]
+
 # Monitoring and logging
 Monitor and generate reports of the application and link health status in your VPN clusters to identify and resolve issues. 
 
