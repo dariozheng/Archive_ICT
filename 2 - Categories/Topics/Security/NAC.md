@@ -2,7 +2,8 @@
 tags:
   - security
   - topic
-icon: LiLock
-iconColor: "#e95a2b"
+icon: LiUserLock
+iconColor: "#ff0000"
 ---
 ![[NAC.base]]
+

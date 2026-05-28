@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
+                "file": "2 - Categories/Topics/Security/NAC.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cisco ISE"
+              "title": "NAC"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
+                "file": "2 - Categories/Topics/Security/NAC.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "certifi"
               },
               "icon": "lucide-list",
-              "title": "Outline of Cisco ISE"
+              "title": "Outline of NAC"
             }
           },
           {
@@ -144,7 +144,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
+                "file": "2 - Categories/Topics/Security/NAC.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Cisco ISE"
+              "title": "Backlinks for NAC"
             }
           },
           {
@@ -163,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
+                "file": "2 - Categories/Topics/Security/NAC.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Cisco ISE"
+              "title": "Outgoing links from NAC"
             }
           },
           {
@@ -209,10 +209,11 @@
   },
   "active": "80a87960a6125859",
   "lastOpenFiles": [
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
     "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/Dynu DDNS.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "0 - Notes/PBA - Cisco ISE.md",
     "0 - Notes/PBA - Network Access Devices.md",
     "0 - Notes/PBA - Microsoft Servers.md",
@@ -229,7 +230,6 @@
     "2 - Categories/Security.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
-    "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Bases/Networking.base",
     "2 - Categories/Networking.md",
     "0 - Notes/cool18_to_epub.py",

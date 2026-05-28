@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiUserLock",
       "SiPaloaltonetworks",
       "FasNetworkWired",
       "SiWireguard",
-      "SiWindows",
-      "SiCisco"
+      "SiWindows"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -206,8 +206,8 @@
     "iconColor": "#1BA0D7"
   },
   "2 - Categories/Topics/Security/NAC.md": {
-    "iconName": "LiLock",
-    "iconColor": "#e95a2b"
+    "iconName": "LiUserLock",
+    "iconColor": "#ff0000"
   },
   "0 - Notes/PBA - ISE Server.md": {
     "iconName": "SiCisco",
