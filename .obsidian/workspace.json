@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "WireGuard"
+              "title": "Cisco ISE"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "certifi"
               },
               "icon": "lucide-list",
-              "title": "Outline of WireGuard"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -144,7 +144,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for WireGuard"
+              "title": "Backlinks for Cisco ISE"
             }
           },
           {
@@ -163,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from WireGuard"
+              "title": "Outgoing links from Cisco ISE"
             }
           },
           {
@@ -209,6 +209,8 @@
   },
   "active": "80a87960a6125859",
   "lastOpenFiles": [
+    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/WireGuard.md",
     "0 - Notes/Dynu DDNS.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "0 - Notes/PBA - Cisco ISE.md",
@@ -217,11 +219,9 @@
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/PBA - ISE Server.md",
     "0 - Notes/homelab-setup-.md",
-    "0 - Notes/WireGuard.md",
     "0 - Notes/User-ID™.md",
     "attachments/Pasted image 20260526141243.png",
     "attachments/Pasted image 20260526141656.png",
-    "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
     "3 - Templates/Bases/Topic/Security/NAC.base",
     "2 - Categories/Topics/Security/Security General.md",
