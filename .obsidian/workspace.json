@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - ISE Server.md",
+                "file": "0 - Notes/PBA - Network Access Devices.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - ISE Server"
+              "title": "PBA - Network Access Devices"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - ISE Server.md",
+                "file": "0 - Notes/PBA - Network Access Devices.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "certifi"
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - ISE Server"
+              "title": "Outline of PBA - Network Access Devices"
             }
           },
           {
@@ -144,7 +144,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/PBA - ISE Server.md",
+                "file": "0 - Notes/PBA - Network Access Devices.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +154,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for PBA - ISE Server"
+              "title": "Backlinks for PBA - Network Access Devices"
             }
           },
           {
@@ -163,12 +163,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/PBA - ISE Server.md",
+                "file": "0 - Notes/PBA - Network Access Devices.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from PBA - ISE Server"
+              "title": "Outgoing links from PBA - Network Access Devices"
             }
           },
           {
@@ -209,11 +209,11 @@
   },
   "active": "80a87960a6125859",
   "lastOpenFiles": [
-    "0 - Notes/PBA - Network Access Devices.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/PBA - ISE Server.md",
+    "0 - Notes/PBA - Network Access Devices.md",
     "0 - Notes/PBA - Microsoft Servers.md",
     "0 - Notes/Dynu DDNS.md",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/User-ID™.md",
