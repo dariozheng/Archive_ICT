@@ -4,21 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "bbeafa22818bc5ab",
+        "id": "cee8e0b52e0c6c61",
         "type": "tabs",
         "children": [
           {
-            "id": "80a87960a6125859",
+            "id": "96d21cb5ea9c8cac",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "excalidraw",
               "state": {
-                "file": "0 - Notes/Dynu DDNS.md",
-                "mode": "source",
-                "source": false
+                "file": "1 - Excalidraw/Homepage.md"
               },
-              "icon": "lucide-file",
-              "title": "Dynu DDNS"
+              "icon": "excalidraw-icon",
+              "title": "Homepage"
             }
           }
         ]
@@ -94,13 +92,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Dynu DDNS.md",
+                "file": "1 - Excalidraw/Homepage.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "certifi"
               },
               "icon": "lucide-list",
-              "title": "Outline of Dynu DDNS"
+              "title": "Outline of Homepage"
             }
           },
           {
@@ -144,7 +142,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Dynu DDNS.md",
+                "file": "1 - Excalidraw/Homepage.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -154,7 +152,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Dynu DDNS"
+              "title": "Backlinks for Homepage"
             }
           },
           {
@@ -163,12 +161,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/Dynu DDNS.md",
+                "file": "1 - Excalidraw/Homepage.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Dynu DDNS"
+              "title": "Outgoing links from Homepage"
             }
           },
           {
@@ -207,20 +205,26 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
-    "0 - Notes/WireGuard.md",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "1 - Excalidraw/Homepage.md",
+    "1 - Excalidraw/ENCOR.md",
+    "0 - Notes/OSI Model.md",
+    "1 - Excalidraw/Cisco ISE.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
+    "2 - Categories/Networking.md",
+    "0 - Notes/Dynu DDNS.md",
+    "0 - Notes/WireGuard.md",
     "2 - Categories/Topics/Security/NAC.md",
     "2 - Categories/Topics/Security/Security General.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "0 - Notes/Dynu DDNS.md",
     "2 - Categories/Topics/Security/Network-Based Attacks.md",
     "0 - Notes/PBA - Cisco ISE.md",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/User-ID™.md",
     "attachments/Pasted image 20260526141243.png",
@@ -232,18 +236,12 @@
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
     "3 - Templates/Bases/Networking.base",
-    "2 - Categories/Networking.md",
     "0 - Notes/cool18_to_epub.py",
     "0 - Notes/README.md",
     "0 - Notes/Cisco_ISE - ISE Server.md",
     "0 - Notes/Cisco ISE",
     "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
     "Untitled.md",
-    "Untitled 1.md",
-    "0 - Notes/cisco-ise-cwa-guest.md",
-    "0 - Notes/Site-to-Site VPN - Palo Alto.md",
-    "0 - Notes/Certificates - Palo Alto.md",
-    "0 - Notes/App-ID™.md",
     "attachments/Pasted image 20260514155208.png",
     "attachments/Pasted image 20260514153230.png",
     "attachments/Pasted image 20260514140414.png",
