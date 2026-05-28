@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/PBA - ISE Server.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -208,9 +208,9 @@
   },
   "active": "39af2107d9cebed8",
   "lastOpenFiles": [
-    "0 - Notes/PBA - Microsoft Servers.md",
-    "0 - Notes/PBA - ISE Server.md",
     "0 - Notes/PBA - Network Access Devices.md",
+    "0 - Notes/PBA - ISE Server.md",
+    "0 - Notes/PBA - Microsoft Servers.md",
     "0 - Notes/Cisco ISE.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
