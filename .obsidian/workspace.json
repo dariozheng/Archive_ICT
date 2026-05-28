@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
+                "file": "0 - Notes/PBA - ISE Server.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cisco ISE"
+              "title": "PBA - ISE Server"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Cisco ISE.md",
+                "file": "0 - Notes/PBA - ISE Server.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "certifi"
               },
               "icon": "lucide-list",
-              "title": "Outline of Cisco ISE"
+              "title": "Outline of PBA - ISE Server"
             }
           },
           {
@@ -207,24 +207,25 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "39af2107d9cebed8",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
-    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/PBA - Network Access Devices.md",
     "0 - Notes/Cisco ISE.md",
+    "0 - Notes/PBA - ISE Server.md",
+    "0 - Notes/PBA - Microsoft Servers.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
+    "2 - Categories/Topics/Security/NAC.md",
     "3 - Templates/Bases/Topic/Security/NAC.base",
     "2 - Categories/Topics/Security/Security General.md",
     "3 - Templates/Bases/Topic/Security/Security General.base",
     "2 - Categories/Security.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Bases/Networking.base",
     "2 - Categories/Networking.md",
-    "0 - Notes/Cisco ISE/Microsoft Servers.md",
-    "0 - Notes/Cisco ISE/0 - Cisco ISE.md",
-    "0 - Notes/Cisco ISE/ISE Server.md",
-    "0 - Notes/Cisco ISE/Network Access Devices.md",
     "0 - Notes/cool18_to_epub.py",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/README.md",
@@ -235,7 +236,6 @@
     "0 - Notes/ISE-NAC-AAA-Down-Documentation.md",
     "Pasted image 20260526141656.png",
     "Pasted image 20260526141243.png",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
     "Untitled.md",
     "Untitled 1.md",
     "0 - Notes/cisco-ise-cwa-guest.md",

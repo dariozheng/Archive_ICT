@@ -1,3 +1,22 @@
+---
+categories:
+  - "[[Networking]]"
+  - "[[Security]]"
+topic@networking:
+  - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
+topic@security:
+  - "[[NAC]]"
+tags:
+  - project
+  - nac
+  - cisco
+  - scor/sise
+  - ccnp
+  - tech_doc
+  - PBA
+icon: SiCisco
+iconColor: "#1BA0D7"
+---
 Cisco Identity Services Engine (ISE) is an <strong>identity-based network access control</strong> and <strong>policy enforcement system</strong>. It functions as a common policy engine that enables <mark style="background: #FFF3A3A6;">endpoint access control </mark>and <mark style="background: #BBFABBA6;">network device administration</mark> for enterprises.
 
 ## Identity Management
@@ -478,7 +497,7 @@ Check if the AuthenticationStatus is a Failed
 
 ##### TEAP_Machine
 
-This condition will match if the client using TEAP protocol has the [[Microsoft Servers#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[Microsoft Servers#Domain Users Certificate|user certificate]] authentication.
+This condition will match if the client using TEAP protocol has the [[PBA - Microsoft Servers#Domain Computer Certificate|machine certificate]] pass the authentication but fail the [[PBA - Microsoft Servers#Domain Users Certificate|user certificate]] authentication.
 
 ![[Pasted image 20260514111237.png]]
 
@@ -579,7 +598,7 @@ The conditions for MAB is the [[#Flow Type Conditions|predefined Wired_Mab]].
 
 Dot1X (802.1X) should be the most used/default authentication policy.
 
-It's the authentication policy where the client has a supplicant ([[Microsoft Servers#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
+It's the authentication policy where the client has a supplicant ([[PBA - Microsoft Servers#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
 
 The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it check the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]]. If the user is found in the ISS, it is authenticated and the request is passed for authorization policy check. If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
 
@@ -609,7 +628,7 @@ The authorization profile is configured to give only the VLAN Admin while the ad
 
 ##### Machine Access
 
-The Machine Access is an authorization policy created for situations where the [[Microsoft Servers#Domain Users Certificate|User Certificate]] is not available:
+The Machine Access is an authorization policy created for situations where the [[PBA - Microsoft Servers#Domain Users Certificate|User Certificate]] is not available:
 
 - User is not logged-on the domain computer
 - New user needs to access a domain computer

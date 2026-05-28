@@ -1,3 +1,25 @@
+---
+categories:
+  - "[[Networking]]"
+  - "[[Security]]"
+  - "[[Microsoft]]"
+topic@networking:
+  - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
+topic@security:
+  - "[[NAC]]"
+product:
+  - "[[Windows Server]]"
+tags:
+  - project
+  - nac
+  - cisco
+  - scor/sise
+  - ccnp
+  - tech_doc
+  - PBA
+icon: SiWindows
+iconColor: "#0078D4"
+---
 In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management rolls out the configuration to clients.
 
 ## Active Directory

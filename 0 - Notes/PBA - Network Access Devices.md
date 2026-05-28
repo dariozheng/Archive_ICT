@@ -1,3 +1,22 @@
+---
+categories:
+  - "[[Networking]]"
+  - "[[Security]]"
+topic@networking:
+  - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
+topic@security:
+  - "[[NAC]]"
+tags:
+  - project
+  - nac
+  - cisco
+  - scor/sise
+  - ccnp
+  - tech_doc
+  - PBA
+icon: SiCisco
+iconColor: "#1BA0D7"
+---
 Network Access Devices are the point of access for an endpoint and the main enforcement point of policies set by the server ISE.
 
 NAD types include the following:
@@ -656,13 +675,13 @@ _Shapes what the switch puts into RADIUS packets so that ISE has the context it 
 
 ##### `radius-server attribute 6 on-for-login-auth`
 
-Includes [[ISE Server#Service-Type|Service-Type]] in Access-Request packets for login authentication.
+Includes [[PBA - ISE Server#Service-Type|Service-Type]] in Access-Request packets for login authentication.
 
 ISE policy conditions that match on `Service-Type` will not evaluate correctly without it.
 
 ##### `radius-server attribute 6 support-multiple`
 
-Allows multiple [[ISE Server#Service-Type|Service-Type]] values in the same RADIUS packet — required when 802.1X and MAB run on the same ports, because they advertise different values (`Framed` for dot1x, `Call-Check` for MAB).
+Allows multiple [[PBA - ISE Server#Service-Type|Service-Type]] values in the same RADIUS packet — required when 802.1X and MAB run on the same ports, because they advertise different values (`Framed` for dot1x, `Call-Check` for MAB).
 
 ```
 Single Service-Type:

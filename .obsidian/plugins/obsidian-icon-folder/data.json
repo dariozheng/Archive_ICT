@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWindows",
       "SiCisco",
       "LiLock",
       "SiPaloaltonetworks",
-      "FasUserSecret",
-      "FasNetworkWired"
+      "FasUserSecret"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -205,10 +205,6 @@
   "0 - Notes/Dynu DDNS.md": {
     "iconName": "PeDynu"
   },
-  "0 - Notes/Cisco ISE": {
-    "iconName": "SiCisco",
-    "iconColor": "#1ba0d7"
-  },
   "2 - Categories/Topics/Networking/Cisco ISE.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
@@ -216,5 +212,17 @@
   "2 - Categories/Topics/Security/NAC.md": {
     "iconName": "LiLock",
     "iconColor": "#e95a2b"
+  },
+  "0 - Notes/PBA - ISE Server.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/PBA - Network Access Devices.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/PBA - Microsoft Servers.md": {
+    "iconName": "SiWindows",
+    "iconColor": "#0078D4"
   }
 }
