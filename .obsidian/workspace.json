@@ -92,13 +92,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - Configuration Flow"
+              "title": "Outline of PBA - NAC - Configuration Flow 1"
             }
           },
           {
@@ -183,8 +183,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -239,6 +238,37 @@
         "y": 179,
         "width": 1512,
         "height": 949,
+        "maximize": true,
+        "zoom": 1
+      },
+      {
+        "id": "f6af3a9d7ca84c51",
+        "type": "window",
+        "children": [
+          {
+            "id": "c6f8fa1b2cbcef8d",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "20fce3a7a6968668",
+                "type": "leaf",
+                "state": {
+                  "type": "excalidraw",
+                  "state": {
+                    "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md"
+                  },
+                  "icon": "excalidraw-icon",
+                  "title": "PBA - NAC - Configuration Flow"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 504,
+        "y": -1129,
+        "width": 1012.6692504882812,
+        "height": 920,
         "maximize": false,
         "zoom": 1
       }
@@ -246,10 +276,10 @@
   },
   "active": "b17145c94b1991fb",
   "lastOpenFiles": [
-    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
-    "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
+    "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
+    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
     "0 - Notes/PBA - NAC - Configuration Flow 1.md",
     "0 - Notes/Untitled.md",
