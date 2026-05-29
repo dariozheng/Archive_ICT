@@ -21,8 +21,8 @@ const BOX_WIDTH = 400;
 const BOX_PADDING_X = 18;
 const BOX_PADDING_Y = 14;
 const PREVIEW_FONT_SIZE = 13;
-const LINE_HEIGHT = PREVIEW_FONT_SIZE * 1.2;  // tighter line height
-const TEXT_BASELINE_OFFSET = 2;               // compensate for Excalidraw top padding
+const LINE_HEIGHT = PREVIEW_FONT_SIZE * 1.2;
+const TEXT_BASELINE_OFFSET = 4;
 const CHAR_WIDTH = PREVIEW_FONT_SIZE * 0.52;
 const MAX_TEXT_WIDTH = BOX_WIDTH - BOX_PADDING_X * 2;
 const CHARS_PER_LINE = Math.floor(MAX_TEXT_WIDTH / CHAR_WIDTH);
@@ -62,6 +62,37 @@ function wrapText(text, maxChars) {
   return wrappedLines;
 }
 
+function drawBox(indent, y, previewText, strokeColor, bgColor, headingId) {
+  const wrappedLines = wrapText(previewText, CHARS_PER_LINE);
+  const textBlockHeight = wrappedLines.length * LINE_HEIGHT;
+  const boxHeight = textBlockHeight + BOX_PADDING_Y * 2;
+  const wrappedText = wrappedLines.join('\n');
+
+  ea.style.strokeColor = strokeColor;
+  ea.style.backgroundColor = bgColor;
+  ea.style.fillStyle = "solid";
+  ea.style.strokeWidth = 1;
+  ea.style.roughness = 0;
+  ea.style.roundness = { type: 3 };
+
+  const rectId = ea.addRect(indent, y, BOX_WIDTH, boxHeight);
+  ea.style.roundness = null;
+
+  ea.style.fontSize = PREVIEW_FONT_SIZE;
+  ea.style.strokeColor = "#444444";
+  ea.style.backgroundColor = "transparent";
+
+  const previewId = ea.addText(
+    indent + BOX_PADDING_X,
+    y + BOX_PADDING_Y - TEXT_BASELINE_OFFSET,
+    wrappedText
+  );
+
+  ea.addToGroup([headingId, rectId, previewId]);
+
+  return boxHeight;
+}
+
 for (let i = 0; i < cache.headings.length; i++) {
   const heading = cache.headings[i];
   const level = heading.level;
@@ -70,13 +101,19 @@ for (let i = 0; i < cache.headings.length; i++) {
   const fontSize = Math.max(36 - (level - 1) * 6, 16);
   const indent = (level - 1) * 30;
 
-  // --- Heading text ---
-  ea.style.fontSize = fontSize;
-  ea.style.fontFamily = 1;
-  ea.style.strokeColor =
+  const strokeColor =
     level === 1 ? "#1e1e1e" :
     level === 2 ? "#364fc7" :
     "#5c7cfa";
+  const bgColor =
+    level === 1 ? "#f8f9fa" :
+    level === 2 ? "#e8f4ff" :
+    "#eef2ff";
+
+  // --- Heading text ---
+  ea.style.fontSize = fontSize;
+  ea.style.fontFamily = 1;
+  ea.style.strokeColor = strokeColor;
   ea.style.backgroundColor = "transparent";
   ea.style.fillStyle = "solid";
   ea.style.roundness = null;
@@ -105,40 +142,14 @@ for (let i = 0; i < cache.headings.length; i++) {
   const sectionText = cleanText(rawSection);
 
   if (sectionText.length > 0) {
+    // Box with section preview
     const preview = firstTwoSentences(sectionText);
-
-    const wrappedLines = wrapText(preview, CHARS_PER_LINE);
-    const textBlockHeight = wrappedLines.length * LINE_HEIGHT;
-    const boxHeight = textBlockHeight + BOX_PADDING_Y * 2;
-    const wrappedText = wrappedLines.join('\n');
-
-    // --- Background rectangle ---
-    ea.style.strokeColor = level === 1 ? "#1e1e1e" : level === 2 ? "#364fc7" : "#5c7cfa";
-    ea.style.backgroundColor = level === 1 ? "#f8f9fa" : level === 2 ? "#e8f4ff" : "#eef2ff";
-    ea.style.fillStyle = "solid";
-    ea.style.strokeWidth = 1;
-    ea.style.roughness = 0;
-    ea.style.roundness = { type: 3 };
-
-    const rectId = ea.addRect(indent, y, BOX_WIDTH, boxHeight);
-    ea.style.roundness = null;
-
-    // --- Preview text inside the box ---
-    ea.style.fontSize = PREVIEW_FONT_SIZE;
-    ea.style.strokeColor = "#444444";
-    ea.style.backgroundColor = "transparent";
-
-    const previewId = ea.addText(
-      indent + BOX_PADDING_X,
-      y + BOX_PADDING_Y - TEXT_BASELINE_OFFSET,
-      wrappedText
-    );
-
-    ea.addToGroup([headingId, rectId, previewId]);
-
+    const boxHeight = drawBox(indent, y, preview, strokeColor, bgColor, headingId);
     y += boxHeight + 24;
   } else {
-    y += 16;
+    // No body text — box with heading text itself as content
+    const boxHeight = drawBox(indent, y, displayText, strokeColor, bgColor, headingId);
+    y += boxHeight + 24;
   }
 }
 
