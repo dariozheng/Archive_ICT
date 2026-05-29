@@ -224,7 +224,7 @@
                   "type": "markdown",
                   "state": {
                     "file": "0 - Notes/PBA - NAC - ISE Server.md",
-                    "mode": "preview",
+                    "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
@@ -248,6 +248,8 @@
   "lastOpenFiles": [
     "0 - Notes/PBA - NAC - ISE Server.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+    "Pasted image 20260529141544.png",
+    "Pasted image 20260529141341.png",
     "Pasted image 20260529114616.png",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "attachments/Pasted image 20260505125643.png",
@@ -289,8 +291,6 @@
     "attachments/Pasted image 20260514155208.png",
     "attachments/Pasted image 20260514153230.png",
     "attachments/Pasted image 20260514140414.png",
-    "attachments/Pasted image 20260514115226.png",
-    "attachments/Pasted image 20260514114124.png",
     "Untitled.canvas"
   ]
 }

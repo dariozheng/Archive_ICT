@@ -740,7 +740,9 @@ Authorization Profiles are reusable policy objects that define the specific acce
 
 ![[Pasted image 20260512124255.png]]
 
-The Pre-Auth-Profile is used by the Authorization Policy Machine Access and it sends an ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit network access to Internet, Domain Controller and Certificate Authority.
+The Pre-Auth-Profile is used by the Authorization Policy Machine Access. 
+
+It sends an ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit network access to Internet, Domain Controller and Certificate Authority.
 
 This DACL is used for computer that have authenticated with machine certificate but not with user certificate for various reasons:
 
@@ -749,15 +751,36 @@ This DACL is used for computer that have authenticated with machine certificate 
 - The user does not have a certificate enrolled
 
 In these cases the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+###### Vlan_850_Lan_Admin
+
+![[Pasted image 20260529141341.png]]
+
+Vlan_850_Lan_Admin is the Authorization Policy for most of admin users. It sends the admin VLAN and the re-authentication timer.
+
+- <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:850 : VLAN 850
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
 
 ###### Vlan_802_Lan_Client
 
 ![[Pasted image 20260512142840.png]]
 
-Vlan_802_Lan_Client should be the default Authorization Policy for most of domain users. It sends the VLAN for clients and the re-authentication timer.
+Vlan_802_Lan_Client should be the default Authorization Profile for most of domain users. It sends the VLAN for clients and the re-authentication timer.
 
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:802 : VLAN 802
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
+
+###### Vlan_805_WiFi_Guest
+
+![[Pasted image 20260529141544.png]]
+
+Vlan_805_WiFi_Guest is the Authorization Profile for guest users. It sends the VLAN for clients and the re-authentication timer.
+
+- <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
+- [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:805 : VLAN 805
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
 
