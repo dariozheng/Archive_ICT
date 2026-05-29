@@ -4,39 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "24e35ebff6c093a9",
+        "id": "3c75d5ba2a56ee2c",
         "type": "tabs",
         "children": [
           {
-            "id": "baa88fa3d1ae69e4",
+            "id": "6616a9b83bb7ba71",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "excalidraw",
               "state": {
-                "file": "0 - Notes/nftables.md",
-                "mode": "source",
-                "source": false
+                "file": "1 - Excalidraw/Cisco ISE.md"
               },
-              "icon": "lucide-file",
-              "title": "nftables"
-            }
-          },
-          {
-            "id": "1d08af8208a5051c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/netfilter.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "netfilter"
+              "icon": "excalidraw-icon",
+              "title": "Cisco ISE"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -109,13 +92,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "1 - Excalidraw/Cisco ISE.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of netfilter"
+              "title": "Outline of Cisco ISE"
             }
           },
           {
@@ -200,7 +183,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -221,12 +205,24 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "1d08af8208a5051c",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
+    "1 - Excalidraw/Scripts/Import_Headers_as_Links.md",
+    "1 - Excalidraw/Cisco ISE.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "0 - Notes/nftables.md",
+    "1 - Excalidraw/ENCOR.md",
+    "0 - Notes/OSI Model.md",
+    "1 - Excalidraw/Scripts/Import_Headers_as_Embedded.md",
+    "Pasted Image 20260529092312_229.png",
+    "1 - Excalidraw/Scripts",
     "0 - Notes/netfilter.md",
-    "0 - Notes/homelab-setup-.md",
+    "0 - Notes/Glossaries/Security Glossary.md",
     "0 - Notes/UFW.md",
+    "0 - Notes/homelab-setup-.md",
     "0 - Notes/Dynu DDNS.md",
     "2 - Categories/Topics/Security/Firewall.md",
     "2 - Categories/Topics/Security/NAC.md",
@@ -236,31 +232,20 @@
     "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "2 - Categories/Topics/Networking/Networking General.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "2 - Categories/Topics/Linux/Ubuntu.md",
     "2 - Categories/Linux.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/Autonomous Digital Experience Management.md",
     "3 - Templates/Bases/Linux.base",
     "2 - Categories/Networking.md",
     "2 - Categories/Security.md",
     "2 - Categories/Microsoft.md",
-    "2 - Categories/Systems.md",
-    "3 - Templates/Notes/Linux Template.md",
-    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
-    "2 - Categories/Topics/Microsoft/Windows Server.md",
-    "3 - Templates/Notes/Systems Template.md",
     "3 - Templates/Bases/Systems.base",
     "2 - Categories/Topics/Linux",
     "3 - Templates/Bases/Security.base",
-    "3 - Templates/Notes/Microsoft Template.md",
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
     "3 - Templates/Bases/Topic/Linux",
-    "2 - Categories/Cloud Computing.md",
-    "0 - Notes/App-ID™.md",
     "attachments/Pasted image 20260526141243.png",
     "attachments/Pasted image 20260526141656.png",
-    "3 - Templates/Bases/Topic/Security/NAC.base",
     "attachments/Pasted image 20260514155208.png",
     "attachments/Pasted image 20260514153230.png",
     "attachments/Pasted image 20260514140414.png",
@@ -268,7 +253,6 @@
     "attachments/Pasted image 20260514114124.png",
     "attachments/Pasted image 20260514113635.png",
     "attachments/Pasted image 20260514112106.png",
-    "attachments/Pasted image 20260514111525.png",
     "Untitled.canvas"
   ]
 }

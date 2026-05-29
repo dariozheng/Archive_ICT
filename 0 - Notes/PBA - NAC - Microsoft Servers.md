@@ -38,13 +38,13 @@ In this section it is also possible to retrieve groups from the AD to create pol
 
 ![[Pasted image 20260421125524.png]]
 
-## Certificate Authority #certificates
+## Certificate Authority 
 
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication.
 
 ### Server Certificates
 
-The ISE server has two types of certificates, system certificates that are used to identify itself, and trusted certificates that are used to validate clients.
+The ISE server has two types of certificates, system certificates that are used to identify itself, and trusted certificates that are used to validate clients. 
 
 #### System Certificates
 
@@ -74,7 +74,7 @@ This certificate will be used to establish trust and build a <mark style="backgr
 
 #### Certificate Signing Request
 
-To create a certificate signed the a external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong>
+To create a certificate signed the a external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong>.
 
 ![[Pasted image 20260427150149.png]]
 
@@ -142,7 +142,7 @@ When a certificate is revoked outside of the automated cycle, you must trigger a
 
 When doing a manual CRL publication do a manual download of the CRL in ISE server too, by setting the Retrieve CRL download to every 1 minute and then change back.
 
-#### Certificate Authentication Profile #certificates
+#### Certificate Authentication Profile 
 
 ![[Pasted image 20260424144802.png]]
 

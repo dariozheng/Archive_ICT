@@ -25,3 +25,6 @@ In cryptography, a nonce is an arbitrary number that can be used just once in a 
 It is often a random or pseudo-random number issued in an authentication protocol to ensure that each communication session is unique, and therefore that old communications cannot be reused in replay attacks.
 #### flow symmetry
 Flow symmetry is traffic returning via the same firewall it entered.
+
+#### packet mangling
+Packet mangling refers to the intentional alteration of packet header data for various purposes, such as network address translation (NAT) and packet filtering. It is a standard practice in network security and is not inherently malicious.
