@@ -509,6 +509,12 @@ This condition is used if you want to get a computer certificate but you don't w
 
 ![[Pasted image 20260514113635.png]]
 
+##### Admin Authorizations
+
+Admin Authorizations conditions check if the client user is [[#ID_Admin_User]] and if the EAP protocol they satisfy [[#EAPs]] conditions. 
+
+![[Pasted image 20260529114616.png]]
+
 ##### Client Authorizations
 
 Client Authorizations conditions check if the client user is [[#ID_Domain_User]] and if the EAP protocol they use is PEAP or TEAP. The domain users should use only TEAP and PEAP on rare occasions.

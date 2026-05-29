@@ -18,33 +18,8 @@
               "icon": "excalidraw-icon",
               "title": "PBA - NAC - Configuration Flow"
             }
-          },
-          {
-            "id": "037d41c9baf01b37",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "attachments/Pasted image 20260505125643.png"
-              },
-              "icon": "lucide-image",
-              "title": "Pasted image 20260505125643"
-            }
-          },
-          {
-            "id": "05b622bfb2695ed4",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "attachments/Pasted image 20260505125643.png"
-              },
-              "icon": "lucide-image",
-              "title": "Pasted image 20260505125643"
-            }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -117,13 +92,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "attachments/Pasted image 20260505125643.png",
+                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Pasted image 20260505125643"
+              "title": "Outline of PBA - NAC - Configuration Flow"
             }
           },
           {
@@ -230,14 +205,55 @@
       "homepage:Open homepage": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "floating": {
+    "id": "0ab2f7b3a4068511",
+    "type": "floating",
+    "children": [
+      {
+        "id": "ca0fd3f706e840be",
+        "type": "window",
+        "children": [
+          {
+            "id": "184a60f15037fce0",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "f4c31eae32b48503",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                    "mode": "preview",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "PBA - NAC - ISE Server"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 492,
+        "y": -1128,
+        "width": 1012.6692504882812,
+        "height": 920,
+        "maximize": false,
+        "zoom": 1
+      }
+    ]
+  },
+  "active": "61350006dd63ae15",
   "lastOpenFiles": [
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+    "Pasted image 20260529114616.png",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "attachments/Pasted image 20260505125643.png",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links.md",
     "0 - Notes/nftables.md",
@@ -263,7 +279,6 @@
     "0 - Notes/Autonomous Digital Experience Management.md",
     "3 - Templates/Bases/Linux.base",
     "2 - Categories/Networking.md",
-    "2 - Categories/Security.md",
     "3 - Templates/Bases/Systems.base",
     "2 - Categories/Topics/Linux",
     "3 - Templates/Bases/Security.base",
@@ -276,8 +291,6 @@
     "attachments/Pasted image 20260514140414.png",
     "attachments/Pasted image 20260514115226.png",
     "attachments/Pasted image 20260514114124.png",
-    "attachments/Pasted image 20260514113635.png",
-    "attachments/Pasted image 20260514112106.png",
     "Untitled.canvas"
   ]
 }

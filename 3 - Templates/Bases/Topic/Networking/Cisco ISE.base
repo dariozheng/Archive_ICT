@@ -1,6 +1,12 @@
+properties:
+  file.name:
+    displayName: Note
 views:
   - type: table
     name: Table
     filters:
       and:
         - note["topic@networking"].contains(link("2 - Categories/Topics/Networking/Cisco ISE", "Cisco ISE"))
+    sort:
+      - property: file.name
+        direction: ASC
