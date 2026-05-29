@@ -183,7 +183,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -235,10 +236,10 @@
         ],
         "direction": "vertical",
         "x": 492,
-        "y": -1128,
-        "width": 1012.6692504882812,
+        "y": -1122,
+        "width": 1012,
         "height": 920,
-        "maximize": false,
+        "maximize": true,
         "zoom": 1
       }
     ]
