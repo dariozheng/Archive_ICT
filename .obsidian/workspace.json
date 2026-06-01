@@ -18,6 +18,20 @@
               "icon": "excalidraw-icon",
               "title": "PBA - NAC - Configuration Flow"
             }
+          },
+          {
+            "id": "d8068575e9712178",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "PBA - NAC - Microsoft Servers"
+            }
           }
         ]
       }
@@ -183,8 +197,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -205,12 +218,67 @@
       "homepage:Open homepage": false
     }
   },
+  "floating": {
+    "id": "0ab2f7b3a4068511",
+    "type": "floating",
+    "children": [
+      {
+        "id": "27897cf5efc975d6",
+        "type": "window",
+        "children": [
+          {
+            "id": "cefeb115e14ba684",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "cc6b3c78c5637178",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                    "mode": "preview",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "PBA - NAC - ISE Server"
+                }
+              },
+              {
+                "id": "10b02e2cad3c0b52",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                    "mode": "preview",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "PBA - NAC - Microsoft Servers"
+                }
+              }
+            ],
+            "currentTab": 1
+          }
+        ],
+        "direction": "vertical",
+        "x": 483,
+        "y": -1120,
+        "width": 1012.6692504882812,
+        "height": 920,
+        "maximize": false,
+        "zoom": 1
+      }
+    ]
+  },
   "active": "b17145c94b1991fb",
   "lastOpenFiles": [
-    "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
-    "1 - Excalidraw/Drawing 2026-05-29 17.excalidraw.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
+    "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
+    "1 - Excalidraw/Drawing 2026-05-29 17.excalidraw.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
     "0 - Notes/PBA - NAC - Configuration Flow 1.md",
@@ -223,7 +291,6 @@
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "attachments/Pasted image 20260505125643.png",
     "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "0 - Notes/nftables.md",
