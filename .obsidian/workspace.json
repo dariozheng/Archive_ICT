@@ -11,14 +11,12 @@
             "id": "b17145c94b1991fb",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "excalidraw",
               "state": {
-                "file": "0 - Notes/PBA - NAC - ISE Server.md",
-                "mode": "preview",
-                "source": false
+                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md"
               },
-              "icon": "lucide-file",
-              "title": "PBA - NAC - ISE Server"
+              "icon": "excalidraw-icon",
+              "title": "PBA - NAC - Configuration Flow"
             }
           }
         ]
@@ -94,13 +92,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - ISE Server"
+              "title": "Outline of PBA - NAC - Configuration Flow"
             }
           },
           {
@@ -209,9 +207,9 @@
   },
   "active": "b17145c94b1991fb",
   "lastOpenFiles": [
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "1 - Excalidraw/Drawing 2026-05-29 17.excalidraw.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
