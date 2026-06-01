@@ -91,7 +91,7 @@ External Identity Sources can leverage existing external identity store for netw
 
 #### External Identity Sources - Certificate Authentication Profile
 
-This is an important setting for certificate based authentication. See [[PBA - NAC - Microsoft Servers#Certificate Authentication Profile certificates|Link]].
+This is an important setting for certificate based authentication. See [[PBA - NAC - Microsoft Servers#Certificate Authentication Profile|Link]].
 
 #### External Identity Sources - Active Directory
 
