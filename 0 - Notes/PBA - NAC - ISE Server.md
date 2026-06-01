@@ -734,7 +734,9 @@ Authorization Results are the results for each authorization policy.
 
 ##### Authorization Profiles
 
-Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy. ![[Pasted image 20260512122923.png]]
+Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy. 
+
+![[Pasted image 20260512122923.png]]
 
 ###### Pre-Auth-profile
 

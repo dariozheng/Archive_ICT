@@ -11,12 +11,14 @@
             "id": "b17145c94b1991fb",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
+              "type": "markdown",
               "state": {
-                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md"
+                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "mode": "preview",
+                "source": false
               },
-              "icon": "excalidraw-icon",
-              "title": "PBA - NAC - Configuration Flow 1"
+              "icon": "lucide-file",
+              "title": "PBA - NAC - ISE Server"
             }
           }
         ]
@@ -92,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
+                "file": "0 - Notes/PBA - NAC - ISE Server.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - Configuration Flow 1"
+              "title": "Outline of PBA - NAC - ISE Server"
             }
           },
           {
@@ -183,7 +185,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -204,82 +207,13 @@
       "homepage:Open homepage": false
     }
   },
-  "floating": {
-    "id": "0ab2f7b3a4068511",
-    "type": "floating",
-    "children": [
-      {
-        "id": "ca0fd3f706e840be",
-        "type": "window",
-        "children": [
-          {
-            "id": "184a60f15037fce0",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "f4c31eae32b48503",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "0 - Notes/PBA - NAC - ISE Server.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "PBA - NAC - ISE Server"
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": -222,
-        "y": 179,
-        "width": 1512,
-        "height": 949,
-        "maximize": true,
-        "zoom": 1
-      },
-      {
-        "id": "f6af3a9d7ca84c51",
-        "type": "window",
-        "children": [
-          {
-            "id": "c6f8fa1b2cbcef8d",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "20fce3a7a6968668",
-                "type": "leaf",
-                "state": {
-                  "type": "excalidraw",
-                  "state": {
-                    "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md"
-                  },
-                  "icon": "excalidraw-icon",
-                  "title": "PBA - NAC - Configuration Flow"
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 504,
-        "y": -1129,
-        "width": 1012.6692504882812,
-        "height": 920,
-        "maximize": false,
-        "zoom": 1
-      }
-    ]
-  },
   "active": "b17145c94b1991fb",
   "lastOpenFiles": [
-    "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
-    "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+    "1 - Excalidraw/Drawing 2026-05-29 17.excalidraw.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
+    "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
+    "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
     "0 - Notes/PBA - NAC - Configuration Flow 1.md",
     "0 - Notes/Untitled.md",
@@ -307,7 +241,6 @@
     "0 - Notes/Dynu DDNS.md",
     "2 - Categories/Topics/Security/Firewall.md",
     "2 - Categories/Topics/Security/NAC.md",
-    "2 - Categories/Topics/Security/Security General.md",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
