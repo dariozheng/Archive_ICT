@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "0 - Notes/homelab-setup-.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "netfilter"
+              "title": "homelab-setup-"
             }
           }
         ],
@@ -224,9 +224,9 @@
   },
   "active": "d8068575e9712178",
   "lastOpenFiles": [
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/nftables.md",
     "0 - Notes/netfilter.md",
+    "0 - Notes/nftables.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "0 - Notes/Dynu DDNS.md",
