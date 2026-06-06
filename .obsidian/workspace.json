@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/netfilter.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -224,9 +224,10 @@
   },
   "active": "d8068575e9712178",
   "lastOpenFiles": [
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/netfilter.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/nftables.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "0 - Notes/Dynu DDNS.md",
     "1 - Excalidraw/ENCOR.md",
@@ -234,7 +235,6 @@
     "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
     "2 - Categories/Topics/Security/NAC.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
