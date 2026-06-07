@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/CASA.md",
+                "file": "0 - Notes/Microsoft Remote Procedure Call.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CASA"
+              "title": "Microsoft Remote Procedure Call"
             }
           }
         ],
@@ -118,7 +118,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 249.50260543823242
+    "width": 409.5026054382324
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -134,13 +134,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "0 - Notes/Microsoft Remote Procedure Call.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of netfilter"
+              "title": "Outline of Microsoft Remote Procedure Call"
             }
           },
           {
@@ -248,24 +248,30 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "2ff561d3a76e9cdc",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/homelab-setup-.md",
+    "2 - Categories/Microsoft.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "0 - Notes/Windows Management Instrumentation.md",
+    "2 - Categories/Topics/Microsoft/Windows Server.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
+    "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
+    "2 - Categories/Security.md",
+    "2 - Categories/Systems.md",
+    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "0 - Notes/CASA.md",
+    "0 - Notes/homelab-setup-.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/nftables.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "0 - Notes/Dynu DDNS.md",
     "1 - Excalidraw/ENCOR.md",
     "0 - Notes/OSI Model.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "2 - Categories/Topics/Security/NAC.md",
-    "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
-    "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
     "1 - Excalidraw/Drawing 2026-05-29 17.excalidraw.md",
     "0 - Notes/PBA - NAC - Configuration Flow 1.md",
     "3 - Templates/Notes/Codes/ChangeHeaders.md",
@@ -274,14 +280,8 @@
     "attachments/Pasted image 20260529141341.png",
     "attachments/Pasted image 20260529114616.png",
     "attachments/Pasted image 20260505125643.png",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
-    "1 - Excalidraw/Scripts/Import_Headers_as_Embedded.md",
     "Pasted Image 20260529092312_229.png",
     "1 - Excalidraw/Scripts",
-    "0 - Notes/Glossaries/Security Glossary.md",
-    "0 - Notes/UFW.md",
-    "2 - Categories/Topics/Security/Firewall.md",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
