@@ -105,3 +105,4 @@ Let’s try to visualize what this looks like.
 
 ![[Pasted image 20260622123957.png]]
 
+# Netfilter Conntrack
