@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/netfilter.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -236,9 +236,10 @@
   },
   "active": "094d4d300dd3c48e",
   "lastOpenFiles": [
+    "0 - Notes/Glossaries/Security Glossary.md",
+    "0 - Notes/netfilter.md",
     "0 - Notes/iptables.md",
     "0 - Notes/nftables.md",
-    "0 - Notes/netfilter.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
@@ -261,7 +262,6 @@
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Topics/Security/NAC.md",
     "1 - Excalidraw/Drawing 2026-05-29 17.excalidraw.md",
-    "0 - Notes/PBA - NAC - Configuration Flow 1.md",
     "attachments/Pasted image 20260529141544.png",
     "attachments/Pasted image 20260529141341.png",
     "attachments/Pasted image 20260529114616.png",

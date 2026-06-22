@@ -17,6 +17,35 @@ The <strong>netfilter</strong> project is a community-driven collaborative FOSS 
 [[iptables]] is a generic firewalling software that allows you to define rulesets. Each rule within an IP table consists of a number of classifiers (iptables matches) and one connected action (iptables target).
 
 [[nftables]] is the successor of iptables, it allows for much more flexible, scalable and performance packet classification. This is where all the fancy new features are developed. 
+
+## Main Features
+- stateless packet filtering (IPv4 and IPv6)
+- stateful packet filtering (IPv4 and IPv6)
+- all kinds of network address and port translation, e.g. NAT/NAPT (IPv4 and IPv6)
+- flexible and extensible infrastructure
+- multiple layers of API's for 3rd party extensions
+## What can I do with netfilter?
+- build internet firewalls based on stateless and stateful packet filtering
+- deploy highly available stateless and stateful firewall clusters
+- use NAT and masquerading for sharing internet access if you don't have enough public IP addresses
+- use NAT to implement transparent proxies
+- aid the <strong>tc</strong> and <strong>iproute2</strong> systems used to build sophisticated QoS and policy routers
+- do further packet manipulation (mangling) like altering the TOS/DSCP/ECN bits of the IP header
+## What value does nftables provide?
+- a single tool with consistent syntax as opposed to the fragmented {ip,ip6,eb,arp}tables and ipset
+- faster kernel-side transactional ruleset updates, no need for user-space locking
+- sets are more flexible and powerful than ipset, maps push the concept even further
+- full ruleset flexibility:
+    
+    - no pre-defined tables and chains
+    - arbitrary number of user-defined tables to separate the ruleset into "namespaces"
+    - base chain's hook and priority are configurable
+    
+- more flexible rules: No mandatory parts (like counters), multiple actions allowed (e.g. log and drop)
+- ingress hook attaching a chain to an interface for early filtering right after TC
+- egress hook attaching a chain to an interface for transmit path filtering right before TC
+- flowtables provide a software fast path and hardware acceleration
+- some limited scripting ability embedded in the syntax (define variables, include other files), support for extensive scripting via JSON input and output
 # Netfilter Hooks
 There are five `netfilter` hooks that programs can register with. 
 
