@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/netfilter.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -234,7 +234,7 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "094d4d300dd3c48e",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "0 - Notes/Glossaries/Security Glossary.md",
     "0 - Notes/netfilter.md",

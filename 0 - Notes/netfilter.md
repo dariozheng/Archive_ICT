@@ -10,7 +10,7 @@ The <strong>netfilter</strong> project is a community-driven collaborative FOSS 
 
 <mark style="background: #FFF3A3A6;">The netfilter project enables packet filtering, network address and port translation (NAT), packet logging, userspace packet queueing and other [[security glossary#packet mangling|packet mangling]]</mark>.
 
- The <strong>netfilter hooks</strong> are a framework inside the Linux kernel that allows kernel modules to register callback functions at different locations of the Linux network stack. 
+ The [[#netfilter hooks]] are a framework inside the Linux kernel that allows kernel modules to register callback functions at different locations of the Linux network stack. 
  
  The registered callback function is then called back for every packet that traverses the respective hook within the Linux network stack.
 
@@ -49,29 +49,31 @@ The <strong>netfilter</strong> project is a community-driven collaborative FOSS 
 # Netfilter Hooks
 There are five `netfilter` hooks that programs can register with. 
 
-As packets progress through the stack, they will trigger the kernel modules that have registered with these hooks. 
+<mark style="background: #BBFABBA6;">As packets progress through the stack, they will trigger the kernel modules that have registered with these hooks</mark>. 
 
 The hooks that a packet will trigger depends on whether the packet is incoming or outgoing, the packet’s destination, and whether the packet was dropped or rejected at a previous point.
 
 The following hooks represent these well-defined points in the networking stack:
 
 ## `NF_IP_PRE_ROUTING`
- This hook will be triggered by any incoming traffic very soon after entering the network stack. This hook is processed before any routing decisions have been made regarding where to send the packet.
+ This hook will be triggered by <mark style="background: #FF5582A6;">any incoming traffic</mark> very soon after entering the network stack. This hook is processed before any routing decisions have been made regarding where to send the packet.
 
 ## `NF_IP_LOCAL_IN`
-This hook is triggered after an incoming packet has been routed if the packet is destined for the local system.
+This hook is triggered <mark style="background: #FFB86CA6;">after an incoming packet has been routed</mark> <mark style="background: #FFF3A3A6;">if the packet is destined for the local system</mark>.
 
 ## `NF_IP_FORWARD`
-This hook is triggered after an incoming packet has been routed if the packet is to be forwarded to another host.
+This hook is triggered <mark style="background: #BBFABBA6;">after an incoming packet has been routed</mark> <mark style="background: #ABF7F7A6;">if the packet is to be forwarded to another host</mark>.
 
 ## `NF_IP_LOCAL_OUT`
-This hook is triggered by any locally created outbound traffic as soon as it hits the network stack.
+This hook is triggered by <mark style="background: #ADCCFFA6;">any locally created outbound traffic</mark> <mark style="background: #FFB86CA6;">as soon as it hits the network stack</mark>.
 
 ## `NF_IP_POST_ROUTING`
-This hook is triggered by any outgoing or forwarded traffic after routing has taken place and just before being sent out on the wire.
+This hook is triggered by <mark style="background: #FFB8EBA6;">any outgoing or forwarded traffic</mark> <mark style="background: #FF5582A6;">after routing has taken place and just before being sent out on the wire</mark>.
 
-Kernel modules that need to register at these hooks must also provide a priority number to help determine the order in which they will be called when the hook is triggered. 
+--- 
+# 
+<mark style="background: #FFF3A3A6;">Kernel modules that need to register at these hooks must also provide a <strong>priority number</strong></mark> <mark style="background: #BBFABBA6;">to help determine the order in which they will be called when the hook is triggered</mark>. 
 
-This provides the means for multiple modules (or multiple instances of the same module) to be connected to each of the hooks with deterministic ordering. 
+<mark style="background: #ADCCFFA6;">This provides the means for multiple modules</mark> (or multiple instances of the same module) <mark style="background: #D2B3FFA6;">to be connected to each of the hooks with deterministic ordering</mark>. 
 
-Each module will be called in turn and will return a decision to the `netfilter` framework after processing that indicates what should be done with the packet.
+<mark style="background: #ABF7F7A6;">Each module will be called in turn</mark> and <mark style="background: #ADCCFFA6;">will return a decision to the</mark> `netfilter` <strong>framework</strong> after processing that indicates what should be done with the packet.
