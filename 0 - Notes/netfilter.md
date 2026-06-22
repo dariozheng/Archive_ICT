@@ -22,15 +22,21 @@ The hooks that a packet will trigger depends on whether the packet is incoming o
 
 The following hooks represent these well-defined points in the networking stack:
 
-- `NF_IP_PRE_ROUTING`: This hook will be triggered by any incoming traffic very soon after entering the network stack. This hook is processed before any routing decisions have been made regarding where to send the packet.
+## `NF_IP_PRE_ROUTING`
+ This hook will be triggered by any incoming traffic very soon after entering the network stack. This hook is processed before any routing decisions have been made regarding where to send the packet.
 
-- `NF_IP_LOCAL_IN`: This hook is triggered after an incoming packet has been routed if the packet is destined for the local system.
+## `NF_IP_LOCAL_IN`
+This hook is triggered after an incoming packet has been routed if the packet is destined for the local system.
 
-- `NF_IP_FORWARD`: This hook is triggered after an incoming packet has been routed if the packet is to be forwarded to another host.
+## `NF_IP_FORWARD`
+This hook is triggered after an incoming packet has been routed if the packet is to be forwarded to another host.
 
-- `NF_IP_LOCAL_OUT`: This hook is triggered by any locally created outbound traffic as soon as it hits the network stack.
+## `NF_IP_LOCAL_OUT`
+This hook is triggered by any locally created outbound traffic as soon as it hits the network stack.
 
-- `NF_IP_POST_ROUTING`: This hook is triggered by any outgoing or forwarded traffic after routing has taken place and just before being sent out on the wire.
+## `NF_IP_POST_ROUTING`
+This hook is triggered by any outgoing or forwarded traffic after routing has taken place and just before being sent out on the wire.
+
 
 Kernel modules that need to register at these hooks must also provide a priority number to help determine the order in which they will be called when the hook is triggered. 
 

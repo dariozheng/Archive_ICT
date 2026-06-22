@@ -84,12 +84,11 @@
               "title": "Notebook Navigator"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300.5026054382324
+    "width": 281.5026054382324
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -105,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+                "file": "0 - Notes/netfilter.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - Configuration Flow"
+              "title": "Outline of netfilter"
             }
           },
           {
@@ -220,18 +219,19 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "b17145c94b1991fb",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/nftables.md",
-    "0 - Notes/netfilter.md",
-    "0 - Notes/Dynu DDNS.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
-    "0 - Notes/CASA.md",
+    "0 - Notes/homelab-setup-.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "0 - Notes/Dynu DDNS.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/nftables.md",
+    "0 - Notes/CASA.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "2 - Categories/Microsoft.md",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/Windows Management Instrumentation.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
@@ -239,7 +239,6 @@
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
     "2 - Categories/Security.md",
     "2 - Categories/Systems.md",
-    "0 - Notes/homelab-setup-.md",
     "1 - Excalidraw/ENCOR.md",
     "0 - Notes/OSI Model.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
