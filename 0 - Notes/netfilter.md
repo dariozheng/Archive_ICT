@@ -76,7 +76,7 @@ This hook is triggered by <mark style="background: #FFB8EBA6;">any outgoing or f
 #
 Each hook point corresponds to a different stage of packet processing, as shown in the diagram below:
 
-![[Pasted image 20260622123654.png]]
+![[nf-hooks.png]]
 
 When a packet arrives at or leaves a network interface, it passes through each of these hook points in order. 
 
@@ -92,3 +92,17 @@ Netfilter [[linux glossary#kernel modules|kernel modules]] <mark style="backgrou
 <mark style="background: #ADCCFFA6;">This provides the means for multiple modules</mark> (or multiple instances of the same module) <mark style="background: #D2B3FFA6;">to be connected to each of the hooks (multiple modules can be connected to a single host) with deterministic ordering</mark>. 
 
 <mark style="background: #ABF7F7A6;">Each module will be called in turn</mark> and <mark style="background: #ADCCFFA6;">will return a decision to the</mark> `netfilter` <strong>framework</strong> after <strong>a processing</strong> <mark style="background: #CACFD9A6;">that indicates what should be done with the packet</mark>.
+
+# Netfilter APIs
+
+One needs to call _nf_register_net_hook()_ with a pointer to a net structure (usually _&init_net_) and a pointer to the _nf_hook_ops_ structure. This will register the netfilter hook function with the kernel and make it active.
+
+To unregister a netfilter hook function, one needs to call _nf_unregister_net_hook()_ with the same parameters.
+
+One can attach multiple callback functions to the same hooks and perform different operations based on the requirement. 
+
+Let’s try to visualize what this looks like.
+
+![[Pasted image 20260622123957.png]]
+
+#
