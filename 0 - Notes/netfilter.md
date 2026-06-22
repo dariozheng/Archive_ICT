@@ -78,13 +78,15 @@ Each hook point corresponds to a different stage of packet processing, as shown 
 
 ![[Pasted image 20260622123654.png]]
 
-When a packet arrives at or leaves a network interface, it passes through each of these hook points in order. At each hook point, the kernel calls all the registered netfilter hook functions for that hook point. Each netfilter hook function can inspect the packet and decide what to do with it. The possible actions are:
+When a packet arrives at or leaves a network interface, it passes through each of these hook points in order. 
 
-- Accept: The packet is allowed to continue to the next hook point or the destination.
-- Drop: The packet is silently discarded and no further processing is done.
-- Queue: The packet is queued for userspace processing by a daemon such as iptables or nftables.
-- Repeat: The packet is re-injected at the same hook point for another round of processing.
-- Stop: The packet is accepted and no further processing is done.
+<mark style="background: #D2B3FFA6;">At each hook point</mark>, the kernel calls <mark style="background: #ABF7F7A6;">all the registered netfilter hook functions</mark> for that hook point. <mark style="background: #FFB86CA6;">Each netfilter hook function</mark> <mark style="background: #BBFABBA6;">can inspect the packet</mark> and<mark style="background: #ADCCFFA6;"> decide what to do with it</mark>. The possible actions are:
+
+- <strong>Accept</strong>: The packet is allowed to continue to the next hook point or the destination.
+- <strong>Drop</strong>: The packet is silently discarded and no further processing is done.
+- <strong>Queue</strong>: The packet is queued for userspace processing by a daemon such as iptables or nftables.
+- <strong>Repeat</strong>: The packet is re-injected at the same hook point for another round of processing.
+- <strong>Stop</strong>: The packet is accepted and no further processing is done.
 
 Netfilter [[linux glossary#kernel modules|kernel modules]] <mark style="background: #ABF7F7A6;">that need to register at these hooks</mark> must also provide a <strong>priority number</strong> <mark style="background: #BBFABBA6;">to help determine the order in which the <strong>kernel modules</strong> will be called when the hook is triggered</mark>. 
 <mark style="background: #ADCCFFA6;">This provides the means for multiple modules</mark> (or multiple instances of the same module) <mark style="background: #D2B3FFA6;">to be connected to each of the hooks (multiple modules can be connected to a single host) with deterministic ordering</mark>. 
