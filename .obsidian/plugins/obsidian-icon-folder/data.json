@@ -244,5 +244,9 @@
   "1 - Excalidraw/PBA - NAC - Configuration Flow.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/iptables.md": {
+    "iconName": "SiLinux",
+    "iconColor": "#000000"
   }
 }

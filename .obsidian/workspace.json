@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/iptables.md",
+                "file": "0 - Notes/netfilter.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "iptables"
+              "title": "netfilter"
             }
           }
         ],
@@ -119,13 +119,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/iptables.md",
+                "file": "0 - Notes/netfilter.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of iptables"
+              "title": "Outline of netfilter"
             }
           },
           {
@@ -234,11 +234,11 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "094d4d300dd3c48e",
   "lastOpenFiles": [
-    "0 - Notes/netfilter.md",
     "0 - Notes/iptables.md",
     "0 - Notes/nftables.md",
+    "0 - Notes/netfilter.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
