@@ -76,7 +76,7 @@ This hook is triggered by <mark style="background: #FFB8EBA6;">any outgoing or f
 #
 Each hook point corresponds to a different stage of packet processing, as shown in the diagram below:
 
-![[nf-hooks.png]]
+![[linux_netfilter_packet_flow.png]]
 
 When a packet arrives at or leaves a network interface, it passes through each of these hook points in order. 
 
@@ -105,4 +105,3 @@ Let’s try to visualize what this looks like.
 
 ![[Pasted image 20260622123957.png]]
 
-#
