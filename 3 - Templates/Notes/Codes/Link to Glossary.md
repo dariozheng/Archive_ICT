@@ -3,7 +3,7 @@ const glossary = [
     { name: "cloud computing" },
     { name: "networking" },
     { name: "security" },
-    { name: "hardware" }
+    { name: "linux" }
 ];
 
 // Get selected text or prompt for alias
