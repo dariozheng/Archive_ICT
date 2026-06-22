@@ -210,8 +210,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -234,10 +233,11 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "094d4d300dd3c48e",
   "lastOpenFiles": [
-    "0 - Notes/Glossaries/Security Glossary.md",
+    "0 - Notes/Glossaries/Linux Glossary.md",
     "0 - Notes/netfilter.md",
+    "0 - Notes/Glossaries/Security Glossary.md",
     "0 - Notes/iptables.md",
     "0 - Notes/nftables.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
@@ -261,7 +261,6 @@
     "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Topics/Security/NAC.md",
-    "1 - Excalidraw/Drawing 2026-05-29 17.excalidraw.md",
     "attachments/Pasted image 20260529141544.png",
     "attachments/Pasted image 20260529141341.png",
     "attachments/Pasted image 20260529114616.png",

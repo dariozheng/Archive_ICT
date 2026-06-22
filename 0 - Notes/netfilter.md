@@ -72,7 +72,7 @@ This hook is triggered by <mark style="background: #FFB8EBA6;">any outgoing or f
 
 --- 
 # 
-<mark style="background: #FFF3A3A6;">Kernel modules that need to register at these hooks must also provide a <strong>priority number</strong></mark> <mark style="background: #BBFABBA6;">to help determine the order in which they will be called when the hook is triggered</mark>. 
+<mark style="background: #FFF3A3A6;">Kernel modules that need to register at these hooks</mark> must also provide a <strong>priority number</strong> <mark style="background: #BBFABBA6;">to help determine the order in which they will be called when the hook is triggered</mark>. 
 
 <mark style="background: #ADCCFFA6;">This provides the means for multiple modules</mark> (or multiple instances of the same module) <mark style="background: #D2B3FFA6;">to be connected to each of the hooks with deterministic ordering</mark>. 
 
