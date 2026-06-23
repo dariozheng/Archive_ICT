@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiWifi",
+      "FasNetworkWired",
+      "SiCisco",
       "LiLock",
-      "SiPaloaltonetworks",
-      "FasUserSecret",
-      "LiUserLock",
-      "LiBrickWallFire"
+      "SiPaloaltonetworks"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -248,5 +248,13 @@
   "0 - Notes/iptables.md": {
     "iconName": "SiLinux",
     "iconColor": "#000000"
+  },
+  "0 - Notes/WLC 9800.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
+  },
+  "2 - Categories/Topics/Networking/WLAN.md": {
+    "iconName": "LiWifi",
+    "iconColor": "#003780"
   }
 }

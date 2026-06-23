@@ -22,6 +22,20 @@
             }
           },
           {
+            "id": "b96c91a5a325e88b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/netfilter.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "netfilter"
+            }
+          },
+          {
             "id": "094d4d300dd3c48e",
             "type": "leaf",
             "state": {
@@ -35,7 +49,8 @@
               "title": "Link to Glossary"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -233,18 +248,31 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "b17145c94b1991fb",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
+    "0 - Notes/iptables.md",
+    "0 - Notes/WLC 9800.md",
+    "2 - Categories/Topics/Networking/WLAN.md",
+    "2 - Categories/Topics/Networking/Networking General.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "3 - Templates/Bases/Topic/Networking/WLAN.base",
+    "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
+    "3 - Templates/Bases/Topic/Networking/Networking General.base",
+    "3 - Templates/Bases/Topic/Networking/WLAN.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "2 - Categories/Networking.md",
+    "0 - Notes/netfilter.md",
+    "attachments/netfilter-packet-flow.png",
+    "attachments/Pasted image 20260623152533.png",
+    "attachments/conntrack_packet_flow.png",
     "attachments/Pasted image 20260623101434.png",
     "attachments/linux_netfilter_packet_flow.png",
     "attachments/nf-hooks.png",
     "attachments/Pasted image 20260622123957.png",
     "attachments/Pasted image 20260622123654.png",
     "0 - Notes/Glossaries/Linux Glossary.md",
-    "0 - Notes/netfilter.md",
     "3 - Templates/Notes/Codes/Link to Glossary.md",
     "0 - Notes/Glossaries/Security Glossary.md",
-    "0 - Notes/iptables.md",
     "0 - Notes/nftables.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "0 - Notes/homelab-setup-.md",
@@ -257,30 +285,16 @@
     "2 - Categories/Microsoft.md",
     "0 - Notes/Windows Management Instrumentation.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "1 - Excalidraw/Scripts/Import_Headers_as_Links_without_Preview.md",
-    "1 - Excalidraw/Scripts/Import_Headers_as_Links_with_Preview.md",
-    "2 - Categories/Security.md",
-    "2 - Categories/Systems.md",
-    "1 - Excalidraw/ENCOR.md",
-    "0 - Notes/OSI Model.md",
-    "1 - Excalidraw/PBA - NAC - Configuration Flow 1.md",
     "attachments/Pasted image 20260529141544.png",
     "attachments/Pasted image 20260529141341.png",
-    "attachments/Pasted image 20260529114616.png",
-    "attachments/Pasted image 20260505125643.png",
-    "Pasted Image 20260529092312_229.png",
     "1 - Excalidraw/Scripts",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Networking.base",
-    "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Linux.base",
     "3 - Templates/Bases/Systems.base",
     "2 - Categories/Topics/Linux",
     "3 - Templates/Bases/Security.base",
-    "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
-    "3 - Templates/Bases/Topic/Linux",
-    "attachments/Pasted image 20260526141243.png",
     "Untitled.canvas"
   ]
 }
