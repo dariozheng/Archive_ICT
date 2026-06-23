@@ -209,7 +209,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -232,8 +233,9 @@
       "notebook-navigator:Notebook Navigator": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "b17145c94b1991fb",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260623101434.png",
     "attachments/linux_netfilter_packet_flow.png",
     "attachments/nf-hooks.png",
     "attachments/Pasted image 20260622123957.png",
@@ -279,7 +281,6 @@
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
     "3 - Templates/Bases/Topic/Linux",
     "attachments/Pasted image 20260526141243.png",
-    "attachments/Pasted image 20260526141656.png",
     "Untitled.canvas"
   ]
 }
