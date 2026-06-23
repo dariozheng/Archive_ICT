@@ -249,12 +249,12 @@
     "iconName": "SiLinux",
     "iconColor": "#000000"
   },
-  "0 - Notes/WLC 9800.md": {
-    "iconName": "SiCisco",
-    "iconColor": "#1BA0D7"
-  },
   "2 - Categories/Topics/Networking/WLAN.md": {
     "iconName": "LiWifi",
     "iconColor": "#003780"
+  },
+  "0 - Notes/Cisco Catalyst 9800 Series WLC.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
   }
 }
