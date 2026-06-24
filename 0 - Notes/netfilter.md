@@ -22,7 +22,7 @@ nftables replaces the older iptables, ip6tables, arptables and ebtables tools, u
 
 _The fixed points in the kernel where Netfilter hands each packet to your rules._
 
-<mark style="background: #FFB8EBA6;">For the IP layer (IPv4 and IPv6) there are five hooks</mark>, named `NF_INET_*` <mark style="background: #FFB8EBA6;">in the kernel</mark>. Every base chain you create attaches to exactly one of them.
+<mark style="background: #FFB8EBA6;">For the IP layer (IPv4 and IPv6) there are five hooks</mark>, named `NF_INET_*` <mark style="background: #FFB8EBA6;">in the kernel</mark>. Every [[#Base Chains|base chain]] you create attaches to exactly one of them.
 
 | Hook        | Kernel constant       | Triggered for                                      |
 | ----------- | --------------------- | -------------------------------------------------- |
@@ -44,7 +44,8 @@ Reached only after the routing decision concludes the <mark style="background: #
 
 Reached when routing determines the <mark style="background: #FFB8EBA6;">packet must be passed on to another host</mark>, <mark style="background: #FF5582A6;">i.e. the box is acting as a router</mark>. Filtering for traffic passing through belongs here.
 
-> [!warning] IP forwarding must be enabled The Forward hook is only meaningfully traversed when the kernel is allowed to route between interfaces: `net.ipv4.ip_forward = 1` and `net.ipv6.conf.all.forwarding = 1`.
+> [!warning] IP forwarding must be enabled 
+> The Forward hook is only meaningfully traversed when the kernel is allowed to route between interfaces: `net.ipv4.ip_forward = 1` and `net.ipv6.conf.all.forwarding = 1`.
 
 ## Output
 
@@ -72,11 +73,11 @@ nftables exposes the common values as named <strong>keywords</strong> so you rar
 |`srcnat`|100|source NAT (postrouting)|
 
 > [!note] 
-> Built-in stages run around your rules Connection tracking registers at -200 and defragmentation at -400, so both always run before anything you write at `filter` priority.
+> Built-in stages run around your rules, Connection tracking registers at -200 and defragmentation at -400, so both always run before anything you write at `filter` priority.
 
 The bridge family uses a different default scale (`dstnat` -300, `filter` -200, `srcnat` 300), so the same keyword maps to a different number depending on family.
 
----
+![[netfilter-hook-priority.png]]
 
 # Packet Traversal
 
@@ -96,8 +97,8 @@ Outbound from this host:
 ```
 
 NAT positioning falls out of this naturally: change the destination before routing (DNAT in prerouting) and the source after routing (SNAT in postrouting).
+
 ![[netfilter-packet-flow 1.png]]
----
 
 # Address Families
 
@@ -116,13 +117,12 @@ Every nftables table belongs to an address family.
 
 The inet family is preferred for host and router firewalls because one rule can cover both IP versions, while protocol-specific matches (`ip saddr` vs `ip6 saddr`) still work inside it.
 
-> [!note] netdev / ingress The netdev family attaches a chain to a specific interface and runs at the `ingress` hook, before the normal prerouting path and before conntrack. It suits very high-performance early drops (anti-spoofing, DDoS scrubbing) because rejected packets never enter the rest of the stack.
-
----
+> [!note] netdev / ingress 
+> The netdev family attaches a chain to a specific interface and runs at the `ingress` hook, before the normal prerouting path and before conntrack. It suits very high-performance early drops (anti-spoofing, DDoS scrubbing) because rejected packets never enter the rest of the stack.
 
 # Tables
 
-_Top-level containers; in nftables they carry no behaviour of their own._
+_Top-level containers; in nftables they carry no behavior of their own._
 
 A table holds chains, sets, maps and other objects, and is identified by its family plus a name you choose.
 
@@ -131,9 +131,8 @@ nft add table inet filter      # create a dual-stack table
 nft list ruleset               # show everything currently loaded
 ```
 
-> [!important] Different from iptables In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its type and hook, not by the table's name. An empty table simply does nothing.
-
----
+> [!important] Different from iptables
+> In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its type and hook, not by the table's name. An empty table simply does nothing.
 
 # Chains
 
@@ -182,7 +181,8 @@ nft add chain inet nat postrouting \
 
 The policy is the verdict applied to a packet that reaches the end of a base chain without hitting a terminating rule. It can only be `accept` or `drop`.
 
-> [!warning] Default-drop and lockout A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
+> [!warning] Default-drop and lockout 
+> A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
 
 ```bash
 nft add rule inet filter input iif lo accept
@@ -218,18 +218,20 @@ Match statements (expressions) test packet fields. If any test fails, the rest o
 
 Verdict statements decide what happens to the packet.
 
-|Verdict|Terminal?|Effect|
-|---|---|---|
-|`accept`|yes (this chain)|let the packet pass this hook|
-|`drop`|yes|discard silently, no reply|
-|`reject`|yes|discard and send an error (ICMP / TCP RST)|
-|`queue`|yes|hand the packet to userspace via NFQUEUE|
-|`continue`|no|keep evaluating the next rule|
-|`return`|no|leave the current chain (base chain then applies its policy)|
-|`jump <chain>`|no|enter a chain; `return` comes back here|
-|`goto <chain>`|no|enter a chain; does not return — the caller's context is replaced|
+| Verdict        | Terminal?        | Effect                                                            |
+| -------------- | ---------------- | ----------------------------------------------------------------- |
+| `accept`       | yes (this chain) | let the packet pass this hook                                     |
+| `drop`         | yes              | discard silently, no reply                                        |
+| `reject`       | yes              | discard and send an error (ICMP / TCP RST)                        |
+| `queue`        | yes              | hand the packet to userspace via NFQUEUE                          |
+| `continue`     | no               | keep evaluating the next rule                                     |
+| `return`       | no               | leave the current chain (base chain then applies its policy)      |
+| `jump <chain>` | no               | enter a chain; `return` comes back here                           |
+| `goto <chain>` | no               | enter a chain; does not return — the caller's context is replaced |
+|                |                  |                                                                   |
 
-> [!note] reject is technically separate The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice.
+> [!note] reject is technically separate 
+> The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice.
 
 `accept` is only final for the current base chain. A packet accepted in a prerouting chain still continues to the next hook; it is not a global pass.
 
@@ -265,7 +267,8 @@ nft add rule inet filter input ct state established,related accept
 nft add rule inet filter input ct state invalid drop
 ```
 
-> [!note] Helpers for dynamic-port protocols Protocols like FTP, SIP and TFTP open secondary connections on dynamic ports. Conntrack helpers parse the control channel and create an expectation so the data connection matches `ct state related`. On modern kernels automatic helper assignment is disabled for security; you attach a helper explicitly with a `ct helper` object and a rule that assigns it to the control traffic.
+> [!note] Helpers for dynamic-port protocols 
+> Protocols like FTP, SIP and TFTP open secondary connections on dynamic ports. Conntrack helpers parse the control channel and create an expectation so the data connection matches `ct state related`. On modern kernels automatic helper assignment is disabled for security; you attach a helper explicitly with a `ct helper` object and a rule that assigns it to the control traffic.
 
 ---
 
@@ -307,7 +310,8 @@ A special DNAT that sends the packet to the local machine itself (the incoming i
 nft add rule inet nat prerouting tcp dport 80 redirect to :3128
 ```
 
-> [!note] NAT chain placement Because NAT is conntrack-driven, keep one nat-type base chain per relevant hook — a prerouting chain at `dstnat` priority for DNAT and a postrouting chain at `srcnat` priority for SNAT — and leave general filtering in separate filter chains.
+> [!note] NAT chain placement 
+> Because NAT is conntrack-driven, keep one nat-type base chain per relevant hook — a prerouting chain at `dstnat` priority for DNAT and a postrouting chain at `srcnat` priority for SNAT — and leave general filtering in separate filter chains.
 
 ---
 
@@ -344,7 +348,8 @@ nft add rule inet filter input ct state new \
     meter ssh-flood { ip saddr limit rate 10/minute } accept
 ```
 
-> [!note] `meter` is the legacy form Current nftables expresses the same idea with a named dynamic set updated from the rule, e.g. `update @set { ip saddr limit rate 10/minute }`.
+> [!note] `meter` is the legacy form 
+> Current nftables expresses the same idea with a named dynamic set updated from the rule, e.g. `update @set { ip saddr limit rate 10/minute }`.
 
 ---
 
@@ -453,4 +458,5 @@ table inet filter {
 }
 ```
 
-> [!info] Reading order recap A packet hits a hook, the base chains on that hook run in priority order, rules are evaluated top to bottom, and the first terminal verdict wins. If no rule terminates, the chain policy applies. If the packet is accepted, it continues to the next hook along the traversal path.
+> [!info] Reading order recap 
+> A packet hits a hook, the base chains on that hook run in priority order, rules are evaluated top to bottom, and the first terminal verdict wins. If no rule terminates, the chain policy applies. If the packet is accepted, it continues to the next hook along the traversal path.
