@@ -1,11 +1,10 @@
 ---
 categories:
   - "[[Linux]]"
-Distro:
 topic@linux:
 tags:
 icon: SiLinux
-iconColor:
+iconColor: "#000000"
 ---
 <strong>Netfilter</strong> is a framework inside the <strong>Linux kernel</strong> that lets kernel code <mark style="background: #FFB8EBA6;">register callback functions at fixed points of the network stack</mark>, so packets can be inspected, modified, dropped, queued, or rerouted as they pass through. <strong>nftables</strong> is the userspace tool and ruleset language (`nft`) that programs this framework; everything you write with `nft` ends up controlling Netfilter at one of those points.
 

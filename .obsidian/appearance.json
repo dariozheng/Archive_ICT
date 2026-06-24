@@ -1,6 +1,3 @@
 {
-  "cssTheme": "Minimal",
-  "enabledCssSnippets": [
-    "headers"
-  ]
+  "cssTheme": "Minimal"
 }
