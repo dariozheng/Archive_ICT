@@ -14,125 +14,152 @@ The <strong>netfilter</strong> project is a community-driven collaborative FOSS 
 
 The netfilter project provides a framework that enables packet filtering, network address and port translation (NAT), packet logging, connection tracking, userspace packet queueing and other [[security glossary#packet mangling|packet mangling]].
 
-The netfilter framework provides a powerful mechanism for intercepting and manipulating network packets in the Linux kernel. This framework has 2 components to it – <strong>Netfilter hooks</strong> and <strong>conntrack</strong>.
+The netfilter framework provides a powerful mechanism for intercepting and manipulating network packets in the Linux kernel. The two main components covered in this document are <strong>Netfilter hooks</strong> and <strong>conntrack</strong>.
 
-The [[#netfilter hooks]] are a framework inside the Linux kernel that allows kernel modules to register callback functions at different locations of the Linux network stack. 
-The registered callback function is then called back for every packet that traverses the respective hook within the Linux network stack.
+The [[#netfilter hooks]] are a framework inside the Linux kernel that allows kernel modules to register callback functions at different locations of the Linux network stack. The registered callback function is then called back for every packet that traverses the respective hook within the Linux network stack.
 
 [[iptables]] is a generic firewalling software that allows you to define rulesets. Each rule within an IP table consists of a number of classifiers (iptables matches) and one connected action (iptables target).
 
-[[nftables]] is the successor of iptables, it allows for much more flexible, scalable and performance packet classification. This is where all the fancy new features are developed. 
+[[nftables]] is the successor of iptables, it allows for much more flexible, scalable and performance packet classification. This is where all the fancy new features are developed.
 
 ## Main Features
+
 - stateless packet filtering (IPv4 and IPv6)
 - stateful packet filtering (IPv4 and IPv6)
 - all kinds of network address and port translation, e.g. NAT/NAPT (IPv4 and IPv6)
 - flexible and extensible infrastructure
 - multiple layers of API's for 3rd party extensions
+
 ## What can I do with netfilter?
+
 - build internet firewalls based on stateless and stateful packet filtering
 - deploy highly available stateless and stateful firewall clusters
 - use NAT and masquerading for sharing internet access if you don't have enough public IP addresses
 - use NAT to implement transparent proxies
 - aid the <strong>tc</strong> and <strong>iproute2</strong> systems used to build sophisticated QoS and policy routers
 - do further packet manipulation (mangling) like altering the TOS/DSCP/ECN bits of the IP header
+
 ## What value does nftables provide?
+
 - a single tool with consistent syntax as opposed to the fragmented {ip,ip6,eb,arp}tables and ipset
+    
 - faster kernel-side transactional ruleset updates, no need for user-space locking
+    
 - sets are more flexible and powerful than ipset, maps push the concept even further
+    
 - full ruleset flexibility:
     
     - no pre-defined tables and chains
     - arbitrary number of user-defined tables to separate the ruleset into "namespaces"
     - base chain's hook and priority are configurable
-    
 - more flexible rules: No mandatory parts (like counters), multiple actions allowed (e.g. log and drop)
+    
 - ingress hook attaching a chain to an interface for early filtering right after TC
+    
 - egress hook attaching a chain to an interface for transmit path filtering right before TC
+    
 - flowtables provide a software fast path and hardware acceleration
+    
 - some limited scripting ability embedded in the syntax (define variables, include other files), support for extensive scripting via JSON input and output
+    
+
 # Netfilter Hooks
-There are five `netfilter` hooks that programs can register with. 
 
-<mark style="background: #BBFABBA6;">As packets progress through the stack, they will trigger the kernel modules that have registered with these hooks</mark>. 
+There are five `netfilter` hooks that programs can register with.
 
-The hooks that a packet will trigger depends on whether the packet is incoming or outgoing, the packet’s destination, and whether the packet was dropped or rejected at a previous point.
+<mark style="background: #BBFABBA6;">As packets progress through the stack, they will trigger the kernel modules that have registered with these hooks</mark>.
 
-<strong>Netfilter hooks</strong> allow the kernel modules to implement custom firewall rules, network address translation, packet filtering, logging, and more. 
-Pre-defined functions that are performing tasks such as filtering and logging can be hot-plugged into the kernel, which makes them easier to use.
+The hooks that a packet will trigger depends on whether the packet is incoming or outgoing, the packet's destination, and whether the packet was dropped or rejected at a previous point.
+
+<strong>Netfilter hooks</strong> allow the kernel modules to implement custom firewall rules, network address translation, packet filtering, logging, and more. Pre-defined functions that are performing tasks such as filtering and logging can be hot-plugged into the kernel, which makes them easier to use.
 
 There are five predefined netfilter hook points:
 
-## `NF_IP_PRE_ROUTING`
-This hook will be triggered by <mark style="background: #FF5582A6;">any incoming traffic</mark> very soon after entering the network stack. This hook is processed before any routing decisions have been made regarding where to send the packet i.e. <mark style="background: #FFB8EBA6;">to check if this packet is destined for another interface</mark>, or <mark style="background: #FFB86CA6;">a local process</mark>. The routing code may drop packets that are unrouteable.
+> [!note] 
+> Hook naming The canonical names are `NF_INET_*`, defined in `<linux/netfilter.h>`. The older `NF_IP_*` aliases still exist in `<linux/netfilter_ipv4.h>` but `NF_INET_*` is the preferred form for kernel programming.
+
+## `NF_INET_PRE_ROUTING`
+
+This hook will be triggered by <mark style="background: #FF5582A6;">any incoming traffic</mark> very soon after entering the network stack. This hook is processed before any routing decisions have been made regarding where to send the packet i.e. <mark style="background: #FFB8EBA6;">to check if this packet is destined for another interface</mark>, or <mark style="background: #FFB86CA6;">a local process</mark>. The routing code may drop packets that are unrouteable.
 
 Port Address Translation (NAPT) and Redirections, that is, Destination Network Translation (DNAT), are implemented in this hook.
 
-## `NF_IP_LOCAL_IN`
+## `NF_INET_LOCAL_IN`
+
 This hook is triggered <mark style="background: #FFB86CA6;">after an incoming packet has been routed</mark> <mark style="background: #FFF3A3A6;">if the packet is destined for the local system</mark>. This is the last hook in the incoming path for the local machine traffic.
 
-## `NF_IP_FORWARD`
+## `NF_INET_FORWARD`
+
 This hook is triggered <mark style="background: #BBFABBA6;">after an incoming packet has been routed</mark> <mark style="background: #ABF7F7A6;">if the packet is to be forwarded to another host</mark> (e.g., packets going through the firewall).
 
-## `NF_IP_LOCAL_OUT`
-This hook is triggered by <mark style="background: #ADCCFFA6;">any locally created outbound traffic</mark> <mark style="background: #FFB86CA6;">as soon as it hits the network stack</mark>.  This is the first hook in the outgoing packet path. Packets leaving the local machine always hit this hook.
+## `NF_INET_LOCAL_OUT`
 
-## `NF_IP_POST_ROUTING`
-This hook is triggered by <mark style="background: #FFB8EBA6;">any outgoing or forwarded traffic</mark> <mark style="background: #FF5582A6;">after routing has taken place and just before being sent out on the wire</mark>.
-Source Network Address Translation (SNAT) is registered to this hook. 
-All the packets that leave the local machine reach this hook.
-#
+This hook is triggered by <mark style="background: #ADCCFFA6;">any locally created outbound traffic</mark> <mark style="background: #FFB86CA6;">as soon as it hits the network stack</mark>. This is the first hook in the outgoing packet path. Packets leaving the local machine always hit this hook.
+
+## `NF_INET_POST_ROUTING`
+
+This hook is triggered by <mark style="background: #FFB8EBA6;">any outgoing or forwarded traffic</mark> <mark style="background: #FF5582A6;">after routing has taken place and just before being sent out on the wire</mark>. Source Network Address Translation (SNAT) is registered to this hook. All the packets that leave the local machine reach this hook.
+
+> [!note] 
+> Additional hook points nftables adds two further hook points not covered above: `NF_NETDEV_INGRESS` and `NF_NETDEV_EGRESS`. These attach directly to a network interface for very early (ingress) and very late (egress) packet processing, right around the TC layer. They are only accessible via nftables, not through the plain `nf_hook_ops` API.
+
 Each hook point corresponds to a different stage of packet processing, as shown in the diagram below:
-
-![[Pasted image 20260623101434.png]]
 
 ![[linux_netfilter_packet_flow.png]]
 
 Therefore we can model three kind of traffic flows, depending on the destination:
+
 - Traffic going through the firewall, in other words, traffic not going to the local machine. Such traffic follows the path: <mark style="background: #BBFABBA6;">PREROUTING</mark> <mark style="background: #ADCCFFA6;">FORWARD</mark> <mark style="background: #BBFABBA6;">POSTROUTING</mark>.
 - Incoming traffic to the firewall, for example, traffic for the local machine. Such traffic follows the path: <mark style="background: #BBFABBA6;">PREROUTING</mark> <mark style="background: #D2B3FFA6;">INPUT</mark>.
 - Outgoing traffic from the firewall: <mark style="background: #D2B3FFA6;">OUTPUT</mark> <mark style="background: #BBFABBA6;">POSTROUTING</mark>
 
-When a packet arrives at or leaves a network interface, it passes through each of these hook points in order. 
+> [!note] 
+> Chain names vs. hook points `PREROUTING`, `INPUT`, `FORWARD`, `OUTPUT`, and `POSTROUTING` are <strong>iptables chain names</strong>, not netfilter hook point names. They map onto the `NF_INET_*` hook points, but the two concepts are distinct. When writing kernel modules you work with hook points; when writing firewall rules you work with chains.
+
+When a packet arrives at or leaves a network interface, it passes through each of these hook points in order.
 
 <mark style="background: #D2B3FFA6;">At each hook point</mark>, the kernel calls <mark style="background: #ABF7F7A6;">all the registered netfilter hook functions</mark> for that hook point. <mark style="background: #FFB86CA6;">Each netfilter hook function</mark> <mark style="background: #BBFABBA6;">can inspect the packet</mark> and<mark style="background: #ADCCFFA6;"> decide what to do with it</mark>. The possible actions are:
 
 - <strong>Accept</strong>: The packet is allowed to continue to the next hook point or the destination.
 - <strong>Drop</strong>: The packet is silently discarded and no further processing is done.
-- <strong>Queue</strong>: The packet is queued for userspace processing by a daemon such as iptables or nftables.
+- <strong>Queue</strong>: The packet is queued for userspace processing via the `nfnetlink_queue` subsystem (consumed by programs using `libnetfilter_queue`).
 - <strong>Repeat</strong>: The packet is re-injected at the same hook point for another round of processing.
-- <strong>Stolen</strong>:  Silently holds the packet until something happens, so that it temporarily does not continue to travel through the stack. This is usually used to collect defragmented IP packets.
+- <strong>Stolen</strong>: Silently holds the packet until something happens, so that it temporarily does not continue to travel through the stack. This is usually used to collect defragmented IP packets.
 
-Netfilter [[linux glossary#kernel modules|kernel modules]] <mark style="background: #ABF7F7A6;">that need to register at these hooks</mark> must also provide a <strong>priority number</strong> <mark style="background: #BBFABBA6;">to help determine the order in which the <strong>kernel modules</strong> will be called when the hook is triggered</mark>. 
-<mark style="background: #ADCCFFA6;">This provides the means for multiple modules</mark> (or multiple instances of the same module) <mark style="background: #D2B3FFA6;">to be connected to each of the hooks (multiple modules can be connected to a single host) with deterministic ordering</mark>. 
+Netfilter [[linux glossary#kernel modules|kernel modules]] <mark style="background: #ABF7F7A6;">that need to register at these hooks</mark> must also provide a <strong>priority number</strong> <mark style="background: #BBFABBA6;">to help determine the order in which the <strong>kernel modules</strong> will be called when the hook is triggered</mark>. <mark style="background: #ADCCFFA6;">This provides the means for multiple modules</mark> (or multiple instances of the same module) <mark style="background: #D2B3FFA6;">to be connected to each of the hooks (multiple modules can be connected to a single host) with deterministic ordering</mark>.
 
 <mark style="background: #ABF7F7A6;">Each module will be called in turn</mark> and <mark style="background: #ADCCFFA6;">will return a decision to the</mark> `netfilter` <strong>framework</strong> after <strong>a processing</strong> <mark style="background: #CACFD9A6;">that indicates what should be done with the packet</mark>.
 
 # Netfilter APIs
 
-The prototype of the callback function is defined in the structure <strong>nf_hook_ops</strong> in <strong>netfilter.h</strong>. This structure contains the information about the hook to which the callback will be registered, together with the priority. 
+The callback function must match the <strong>nf_hookfn</strong> prototype, defined in <strong>netfilter.h</strong>:
+
+```c
+typedef unsigned int nf_hookfn(void *priv,
+                                struct sk_buff *skb,
+                                const struct nf_hook_state *state);
+```
+
+To register a hook, fill in an <strong>nf_hook_ops</strong> structure and pass it to the kernel. The structure contains all the information needed to describe the hook:
+
+```c
+struct nf_hook_ops {
+    nf_hookfn           *hook;      /* your callback function */
+    struct net_device   *dev;       /* optional: restrict to one interface */
+    void                *priv;      /* optional: passed back to your callback */
+    u_int8_t             pf;        /* protocol family, e.g. NFPROTO_IPV4 */
+    unsigned int         hooknum;   /* hook point, e.g. NF_INET_PRE_ROUTING */
+    int                  priority;  /* execution order — lower value runs first */
+};
+```
 
 One needs to call <strong>nf_register_net_hook()</strong> with a pointer to a net structure (usually _&init_net_) and a pointer to the <strong>nf_hook_ops</strong> structure. This will register the netfilter hook function with the kernel and make it active.
 
 To unregister a netfilter hook function, one needs to call <strong>nf_unregister_net_hook()</strong> with the same parameters.
 
-One can attach multiple callback functions to the same hooks and perform different operations based on the requirement. 
+One can attach multiple callback functions to the same hooks and perform different operations based on the requirement.
 
-Let’s try to visualize what this looks like.
-
-![[Pasted image 20260622123957.png]]
-
----
-
-tags:
-
-- linux
-- networking
-- kernel
-- firewall
-- netfilter created: 2026-06-23
-
----
+Let's try to visualize what this looks like.
 
 # Netfilter Conntrack — Connection Tracking
 

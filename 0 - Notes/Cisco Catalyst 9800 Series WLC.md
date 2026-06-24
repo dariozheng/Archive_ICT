@@ -18,7 +18,18 @@ iconColor: "#1BA0D7"
 
 ![[Screenshot 2026-06-23 at 16.14.37.png]]
 
-### 2. Network Architecture & Topology
+### Access & Credentials
+
+GUI Portal 
+- https://10.140.1.10/webui/#/acl
+- https://pba-wlc01.publiacqua.it/webui/
+SSH
+- Host: 10.140.1.10 / Port: 22
+- Host: pba-wlc01 / Port: 22
+
+Credentials
+- RADIUS credentials
+### Network Architecture & Topology
 
 - **Logical diagram** showing the WLC position (DMZ, core, distribution)
 - **Physical interfaces used** (management, redundancy, service ports) with IP addresses, VLANs, and uplink switch ports
@@ -27,49 +38,33 @@ iconColor: "#1BA0D7"
 - **CAPWAP/DTLS settings** — any non-default ports or DTLS encryption status
 - **Mobility domain** — if multiple WLCs exist, which is the anchor and which is the foreign
 
----
+### WLAN / SSID Configuration
 
-### 3. Access & Credentials
+| Parameter                         | Value       |
+| --------------------------------- | ----------- |
+| SSID name                         | PBA         |
+| Security (WPA3/WPA2, 802.1X, PSK) | WPA2 + WPA3 |
+| RADIUS server(s) for auth         | ISE         |
+| Policy profile assigned           | PP_VM90     |
+| VLAN / mapped interface           | 804         |
 
-- **GUI access** URL and port (default `https://<mgmt-ip>`, port 443)
-- **CLI access** — SSH address, username/privilege level structure (level 15 vs. read-only accounts)
-- **TACACS+/RADIUS** for AAA — server IPs, which server group is used for device management
-- **Out-of-band access** — console server port, IP, or management network details
-- **Credential rotation policy** — how often passwords change and where they are stored (e.g. vault, password manager)
-- **Certificate** in use for the GUI — self-signed or CA-signed, expiry date
+| Parameter                         | Value         |
+| --------------------------------- | ------------- |
+| SSID name                         | PBA-guests    |
+| Security (WPA3/WPA2, 802.1X, PSK) | CWA           |
+| RADIUS server(s) for auth         | ISE           |
+| Policy profile assigned           | PP_WLAN-GUEST |
+| VLAN / mapped interface           | 805           |
 
----
+| Parameter                         | Value        |
+| --------------------------------- | ------------ |
+| SSID name                         | PBA-Helpdesk |
+| Security (WPA3/WPA2, 802.1X, PSK) | WPA + WPA2   |
+| RADIUS server(s) for auth         | ISE          |
+| Policy profile assigned           | PP_VM90HD    |
+| VLAN / mapped interface           | 807          |
 
-### 4. RF & Wireless Design Decisions
-
-- **Radio Resource Management (RRM)** — is it enabled globally, per band, or overridden per AP?
-- **Channel plan** — DCA or static? Allowed channel list, channel width
-- **Tx power** — TPC enabled or fixed?
-- **CleanAir / EDRRM** — enabled or not, and sensitivity settings
-- **Band steering and load balancing** settings
-- **Why** specific design choices were made (document the rationale, not just the config)
-
----
-
-### 5. WLAN / SSID Configuration
-
-For **each SSID**, document:
-
-| Parameter                         | Value            |
-| --------------------------------- | ---------------- |
-| SSID name                         | e.g. `Corp-WiFi` |
-| Security (WPA3/WPA2, 802.1X, PSK) |                  |
-| RADIUS server(s) for auth         |                  |
-| Policy profile assigned           |                  |
-| VLAN / mapped interface           |                  |
-| QoS policy                        |                  |
-| Client exclusion timers           |                  |
-| Band restrictions                 |                  |
-| Any SSID-level ACLs               |                  |
-
----
-
-### 6. Policy Tags, Site Tags & RF Tags (the "Tag" Architecture)
+### Policy Tags, Site Tags & RF Tags (the "Tag" Architecture)
 
 The 9800 uses a tag-based model that differs from older WLC platforms — this is often the most confusing part for newcomers. Include:
 
