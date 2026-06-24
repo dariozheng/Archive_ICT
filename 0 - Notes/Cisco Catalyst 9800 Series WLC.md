@@ -33,7 +33,7 @@ Credentials
 
 - **Logical diagram** showing the WLC position (DMZ, core, distribution)
 - **Physical interfaces used** (management, redundancy, service ports) with IP addresses, VLANs, and uplink switch ports
-- **HA/SSO configuration** — which unit is active/standby, RP keepalive/redundancy port IPs
+- **HA/SSO configuration** — PBA-WLC01 is active with PBA-WLC02 (10.139.108.135) in standby 
 - **AP join mode** — FlexConnect, Local mode, or SD-Access fabric mode
 - **CAPWAP/DTLS settings** — any non-default ports or DTLS encryption status
 - **Mobility domain** — if multiple WLCs exist, which is the anchor and which is the foreign
@@ -66,14 +66,17 @@ Credentials
 
 ### Policy Tags, Site Tags & RF Tags (the "Tag" Architecture)
 
-The 9800 uses a tag-based model that differs from older WLC platforms — this is often the most confusing part for newcomers. Include:
+The 9800 uses a tag-based model that differs from older WLC platforms.
 
-- Explanation of the **Policy Tag → WLAN Profile + Policy Profile** relationship
-- **Site Tag** — local switching vs. central switching, flex profile name
-- **RF Tag** — which RF profile is applied per site/AP group
-- A table mapping which tags are applied to which APs or AP groups
+![[Pasted image 20260624122803.png | 5000]]
 
----
+
+
+
+
+
+
+
 
 ### 7. AP Inventory
 
