@@ -189,16 +189,30 @@ NAT positioning falls out of this naturally: change the destination before routi
 
 _The subsystem that remembers connections, making stateful filtering and NAT possible._
 
-Connection tracking — conntrack, the `nf_conntrack` module — records each connection passing through the host so that later packets can be associated with earlier ones. It runs early ([[#Hook Priorities|priority]] -200, before filtering) and is the prerequisite for [[#Network Address Translation|NAT]]. Without it you would have to allow the return traffic of every connection by hand. From [[nftables]] it is read and set through the `ct` expression; see [[nftables#Other Statements]].
+Connection tracking — <strong>conntrack</strong>, the `nf_conntrack` module — <mark style="background: #ABF7F7A6;">records each connection passing through the host</mark> <mark style="background: #ADCCFFA6;">so that later packets can be associated with earlier ones</mark>. <mark style="background: #D2B3FFA6;">It runs early</mark> ([[#Hook Priorities|priority]] -200, before filtering) <mark style="background: #CACFD9A6;">and is the prerequisite for</mark> [[#Network Address Translation|NAT]]. Without it you would have to allow the return traffic of every connection by hand. From [[nftables]] it is read and set through the `ct` expression; see [[nftables#Other Statements]].
 
 ## The Conntrack Table
 
-A connection is identified by a tuple — source and destination address, layer-4 protocol, and (for TCP/UDP) source and destination ports — recorded for both the original direction and the expected reply. The kernel stores these entries in a hash table whose size is governed by two tunables:
+A connection is identified by a **tuple** — a fixed set of fields the kernel uses as a unique key to recognise which connection a packet belongs to:
 
-- `nf_conntrack_max` — the maximum number of tracked connections.
-- `nf_conntrack_buckets` — the number of hash buckets.
+- source and destination IP address
+- layer-4 protocol (TCP, UDP, ICMP, …)
+- for TCP/UDP: source and destination ports
+- for ICMP: type, code, and ID — which take the place of ports
 
-When the table is full the kernel drops new connections and logs `nf_conntrack: table full, dropping packet`. On busy forwarders, raising `nf_conntrack_max` is a routine tuning step.
+For every connection the kernel records two copies of this tuple. The **original direction** is the tuple as the first packet arrived — the client's address, the server's address, and the ports exactly as seen. 
+The **expected reply** is the same connection viewed from the other side: addresses and ports reversed, representing the traffic the server will send back. 
+Where NAT is involved, the reply tuple carries the translated addresses rather than the original ones — that is how the kernel knows how to rewrite return traffic back to the correct sender without you writing an explicit rule for it. 
+
+These entries are stored in an in-kernel hash table. The size of that table is controlled by two **tunables** — kernel parameters you can read and write at runtime via `sysctl` to adjust behavior without recompiling or rebooting:
+
+- `net.netfilter.nf_conntrack_max` — the maximum number of connections the table can hold at any one time.
+- `net.netfilter.nf_conntrack_buckets` — the number of slots in the hash table; each slot holds a chained list of entries that happen to hash to the same slot.
+
+The two must be tuned together. The default ratio is one bucket per four entries, so raising `nf_conntrack_max` without also raising `nf_conntrack_buckets` makes the chains longer and slows down lookups under load.
+
+When the table is full the kernel first tries to evict timed-out entries; only if that fails does it drop the incoming packet and log `nf_conntrack: table full, dropping packet`. 
+Raising `nf_conntrack_max` on a busy forwarder is a routine fix — but each entry costs roughly 300–400 bytes of kernel memory, so raising it aggressively on a memory-constrained machine can create pressure elsewhere.
 
 ## Connection States
 
@@ -214,7 +228,8 @@ Conntrack classifies each packet into a state, matched in [[nftables]] with `ct 
 
 ![[netfilter-conntrack-states.png]]
 
-> [!note] State versus status `ct state` is the value above and is what firewall rules test. Separately, each entry carries internal status flags (`ct status`) such as `confirmed`, `assured`, `snat` and `dnat`, which record how the entry has been processed rather than the packet's filtering state.
+> [!note] State versus status 
+> `ct state` is the value above and is what firewall rules test. Separately, each entry carries internal status flags (`ct status`) such as `confirmed`, `assured`, `snat` and `dnat`, which record how the entry has been processed rather than the packet's filtering state.
 
 ## Timeouts and Limits
 
