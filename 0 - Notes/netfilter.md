@@ -73,35 +73,37 @@ _The five hooks on the IPv4 and IPv6 path, where most firewalling happens._
 
 For IPv4 and IPv6 there are five hooks, named `NF_INET_*`. Every [[nftables#Base Chains|base chain]] attaches to exactly one of them, and the [[nftables#Address Families|family]] you pick decides which hooks are available.
 
-|Hook|Kernel constant|Triggered for|
-|---|---|---|
-|Prerouting|`NF_INET_PREROUTING`|every incoming packet, before the routing decision|
-|Input|`NF_INET_LOCAL_IN`|packets destined to the local host|
-|Forward|`NF_INET_FORWARD`|packets being routed through the host|
-|Output|`NF_INET_LOCAL_OUT`|packets generated locally, leaving the host|
-|Postrouting|`NF_INET_POSTROUTING`|every outgoing packet, after the routing decision|
+| Hook        | Kernel constant       | Triggered for                                      |
+| ----------- | --------------------- | -------------------------------------------------- |
+| Prerouting  | `NF_INET_PREROUTING`  | every incoming packet, before the routing decision |
+| Input       | `NF_INET_LOCAL_IN`    | packets destined to the local host                 |
+| Forward     | `NF_INET_FORWARD`     | packets being routed through the host              |
+| Output      | `NF_INET_LOCAL_OUT`   | packets generated locally, leaving the host        |
+| Postrouting | `NF_INET_POSTROUTING` | every outgoing packet, after the routing decision  |
 
+![[netfilter-packet-flow-1.png]]
 ### Prerouting
 
-The first hook every incoming packet hits, right after basic sanity checks but before the kernel decides where the packet should go. Because it runs before routing, it is the only place you can change a packet's destination and still have it routed accordingly, which is why [[#DNAT|DNAT]] lives here.
+<mark style="background: #ABF7F7A6;">The first hook every incoming packet hits</mark>, right after basic sanity checks but before the kernel decides where the packet should go. Because it runs before routing, it is the only place you can change a packet's destination and still have it routed accordingly, <mark style="background: #ADCCFFA6;">which is why</mark> [[#DNAT|DNAT]] <mark style="background: #ADCCFFA6;">lives here</mark>.
 
 ### Input
 
-Reached only after the routing decision concludes the packet is addressed to this machine. This is where you filter traffic that terminates on the host itself (SSH to the box, a local web server).
+Reached only after the routing decision concludes the packet is addressed to this machine. <mark style="background: #D2B3FFA6;">This is where you filter traffic that terminates on the host itself</mark> (SSH to the box, a local web server).
 
 ### Forward
 
-Reached when routing determines the packet must be passed on to another host, i.e. the box is acting as a router. Filtering for traffic passing through belongs here.
+Reached when <mark style="background: #CACFD9A6;">routing determines the packet must be passed on to another host</mark>, i.e. <mark style="background: #FFB8EBA6;">the box is acting as a router</mark>. Filtering for traffic passing through belongs here.
 
-> [!warning] IP forwarding must be enabled The Forward hook is only meaningfully traversed when the kernel is allowed to route between interfaces: `net.ipv4.ip_forward = 1` and `net.ipv6.conf.all.forwarding = 1`.
+> [!warning] IP forwarding must be enabled 
+> The Forward hook is only meaningfully traversed when the kernel is allowed to route between interfaces: `net.ipv4.ip_forward = 1` and `net.ipv6.conf.all.forwarding = 1`.
 
 ### Output
 
-The first hook for packets created by local processes (a reply from your web server, a DNS query from the host). It runs after an initial routing lookup the kernel needs in order to fill in source address and outgoing interface.
+<mark style="background: #FFB86CA6;">The first hook for packets created by <strong>local processes</strong></mark> (a reply from your web server, a DNS query from the host). <mark style="background: #FFF3A3A6;">It runs</mark> <strong>after</strong> <mark style="background: #BBFABBA6;">an initial routing lookup the kernel needs in order to fill in source address and outgoing interface</mark>.
 
 ### Postrouting
 
-The last hook before a packet leaves the machine, after routing is finalized. Since the destination is already chosen, this is where [[#SNAT|SNAT]] and [[#Masquerade|masquerade]] are applied.
+<mark style="background: #ABF7F7A6;">The last hook before a packet leaves the machine</mark>, <mark style="background: #ADCCFFA6;">after routing is finalized</mark>. Since the <mark style="background: #D2B3FFA6;">destination is already chosen</mark>, this is where [[#SNAT|SNAT]] and [[#Masquerade|masquerade]] are applied.
 
 ## Layer 2, ARP and Per-Device Hooks
 
@@ -153,7 +155,7 @@ _How a packet threads through the hooks, with the routing decision splitting the
 
 The single most important fact: the routing decision sends a packet down one of two paths. It is either delivered locally ([[#Input|Input]]) or forwarded ([[#Forward|Forward]]), never both.
 
-![[netfilter-packet-flow.png]]
+![[netfilter-packet-flow-1.png]]
 
 The same three journeys as quick text reference:
 
@@ -169,8 +171,6 @@ Outbound from this host:
 ```
 
 NAT positioning falls out of this naturally: change the destination before routing ([[#DNAT|DNAT]] in [[#Prerouting|prerouting]]) and the source after routing ([[#SNAT|SNAT]] in [[#Postrouting|postrouting]]).
-
----
 
 # Connection Tracking
 
