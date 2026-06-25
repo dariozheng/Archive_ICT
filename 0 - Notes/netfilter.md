@@ -193,21 +193,22 @@ Connection tracking — <strong>conntrack</strong>, the `nf_conntrack` module �
 
 ## The Conntrack Table
 
-A connection is identified by a **tuple** — a fixed set of fields the kernel uses as a unique key to recognise which connection a packet belongs to:
+<mark style="background: #CACFD9A6;">A connection is identified by a <strong>tuple</strong></mark> — a fixed set of fields the kernel uses as a unique key to recognize which connection a packet belongs to:
 
 - source and destination IP address
 - layer-4 protocol (TCP, UDP, ICMP, …)
 - for TCP/UDP: source and destination ports
 - for ICMP: type, code, and ID — which take the place of ports
 
-For every connection the kernel records two copies of this tuple. The **original direction** is the tuple as the first packet arrived — the client's address, the server's address, and the ports exactly as seen. 
-The **expected reply** is the same connection viewed from the other side: addresses and ports reversed, representing the traffic the server will send back. 
-Where NAT is involved, the reply tuple carries the translated addresses rather than the original ones — that is how the kernel knows how to rewrite return traffic back to the correct sender without you writing an explicit rule for it. 
+<mark style="background: #FFB8EBA6;">For every connection the kernel records <strong>two copies</strong> of this tuple</mark>. 
+The <strong>original direction</strong> <mark style="background: #FF5582A6;">is the tuple as the first packet arrived</mark> — the client's address, the server's address, and the ports exactly as seen. 
+The <strong>expected reply</strong> <mark style="background: #FFB86CA6;">is the same connection viewed from the other side</mark>: addresses and ports reversed, <mark style="background: #FFF3A3A6;">representing the traffic the server will send back</mark>. 
+<mark style="background: #BBFABBA6;">Where NAT is involved, the reply tuple carries the translated addresses</mark> rather than the original ones — <mark style="background: #ABF7F7A6;">that is how the kernel knows how to rewrite return traffic back to the correct sender without you writing an explicit rule for it</mark>. 
 
-These entries are stored in an in-kernel hash table. The size of that table is controlled by two **tunables** — kernel parameters you can read and write at runtime via `sysctl` to adjust behavior without recompiling or rebooting:
+These entries are stored in an in-kernel hash table. <mark style="background: #ADCCFFA6;">The size of that table is controlled by two</mark> <strong>tunables</strong> — <mark style="background: #ADCCFFA6;">kernel parameters you can read and write at runtime via</mark> `sysctl` <mark style="background: #ADCCFFA6;">to adjust behavior without recompiling or rebooting</mark>:
 
-- `net.netfilter.nf_conntrack_max` — the maximum number of connections the table can hold at any one time.
-- `net.netfilter.nf_conntrack_buckets` — the number of slots in the hash table; each slot holds a chained list of entries that happen to hash to the same slot.
+- `net.netfilter.nf_conntrack_max` — <mark style="background: #D2B3FFA6;">the maximum number of connections the table can hold at any one time</mark>.
+- `net.netfilter.nf_conntrack_buckets` — <mark style="background: #CACFD9A6;">the number of slots in the hash table</mark>; <mark style="background: #FFB8EBA6;">each slot holds a chained list of entries that happen to hash to the same slot</mark>.
 
 The two must be tuned together. The default ratio is one bucket per four entries, so raising `nf_conntrack_max` without also raising `nf_conntrack_buckets` makes the chains longer and slows down lookups under load.
 
