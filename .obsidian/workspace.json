@@ -215,7 +215,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 374.5
+    "width": 306.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -237,14 +237,18 @@
   },
   "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
+    "attachments/nftables-jump-vs-goto.png",
+    "attachments/netfilter-conntrack-states.png",
+    "attachments/netfilter-hook-priority.png",
+    "attachments/nftables-chain-evaluation.png",
+    "attachments/netfilter-packet-flow-1.png",
+    "0 - Notes/netfilter.md",
+    "attachments/netfilter-packet-flow 1.png",
     "attachments/netfilter-packet-flow.png",
     "0 - Notes/netfilter - tech.md",
     "0 - Notes/Cisco Catalyst 9800 Series WLC.md",
-    "0 - Notes/netfilter.md",
     "0 - Notes/nftables.md",
     "0 - Notes/iptables.md",
-    "attachments/netfilter-hook-priority.png",
-    "attachments/netfilter-packet-flow 1.png",
     "attachments/Pasted image 20260624122803.png",
     "attachments/Screenshot 2026-06-23 at 16.14.37.png",
     "attachments/linux_netfilter_packet_flow.png",
@@ -252,8 +256,6 @@
     "0 - Notes/App-ID™.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "3 - Templates/Notes/Codes/Link to Glossary.md",
-    "attachments/Pasted image 20260623161407.png",
-    "attachments/Pasted image 20260623161328.png",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "2 - Categories/Topics/Networking/WLAN.md",
     "2 - Categories/Topics/Networking/Networking General.md",
@@ -264,7 +266,6 @@
     "3 - Templates/Bases/Topic/Networking/WLAN.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Networking.md",
-    "attachments/Pasted image 20260623152533.png",
     "0 - Notes/Glossaries/Linux Glossary.md",
     "0 - Notes/Glossaries/Security Glossary.md",
     "0 - Notes/homelab-setup-.md",
