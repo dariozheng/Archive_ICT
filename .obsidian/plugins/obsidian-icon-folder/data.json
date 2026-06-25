@@ -249,15 +249,15 @@
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
   },
-  "0 - Notes/netfilter - tech.md": {
-    "iconName": "SiLinux",
-    "iconColor": "#000000"
-  },
   "0 - Notes/nftables.md": {
     "iconName": "SiLinux",
     "iconColor": "#000000"
   },
   "0 - Notes/netfilter.md": {
+    "iconName": "SiLinux",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md": {
     "iconName": "SiLinux",
     "iconColor": "#000000"
   }
