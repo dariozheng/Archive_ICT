@@ -147,7 +147,7 @@ The module works in both directions: it not only pushes bridged IP packets up in
 
 _How the kernel orders multiple functions that sit on the same hook._
 
-When several functions register on the same hook they run in ascending integer priority — lower numbers first, negatives allowed. The kernel relies on this to guarantee ordering: defragmentation and [[#Connection Tracking|connection tracking]] run before filtering, and source [[#Network Address Translation|NAT]] runs after it.
+<mark style="background: #FFF3A3A6;">When several functions register on the same hook they run in ascending integer priority</mark> — <mark style="background: #FFF3A3A6;">lower numbers first, negatives allowed</mark>. <mark style="background: #BBFABBA6;">The kernel relies on this to guarantee ordering</mark>: defragmentation and [[#Connection Tracking|connection tracking]] run before filtering, and source [[#Network Address Translation|NAT]] runs after it.
 
 Some priorities are occupied by built-in stages regardless of what you write:
 
