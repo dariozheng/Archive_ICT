@@ -109,11 +109,13 @@ Reached when <mark style="background: #CACFD9A6;">routing determines the packet 
 
 _Hooks outside the IP path: bridging, ARP and per-interface._
 
-Beyond the IP hooks, Netfilter registers hooks at other points, each surfaced by the matching [[nftables#Address Families|address family]]:
+![[netfilter-packet-flow.png]]
 
-- Bridge hooks (`NF_BR_*`) — the same five names (prerouting, input, forward, output, postrouting) but on Ethernet frames traversing a software bridge. Used by the [[nftables#bridge|bridge family]], and historically by ebtables.
-- ARP hooks (`NF_ARP_*`) — input and output, for ARP packets. Used by the [[nftables#arp|arp family]], historically by arptables.
-- Netdev hooks (`NF_NETDEV_*`) — bound to a single interface and firing earlier than the IP hooks. Ingress has existed since kernel 4.2, egress since 5.16. Used by the [[nftables#netdev (per-interface)|netdev family]].
+Beyond the IP hooks, <mark style="background: #CACFD9A6;">Netfilter registers hooks at other points</mark>, <mark style="background: #FFB8EBA6;">each surfaced by the matching</mark> [[nftables#Address Families|address family]]:
+
+- <strong>Bridge hooks</strong> (`NF_BR_*`) — the same five names (prerouting, input, forward, output, postrouting) <mark style="background: #FF5582A6;">but on Ethernet frames traversing a software bridge</mark>. Used by the [[nftables#bridge|bridge family]], and historically by <strong>ebtables</strong>.
+- <mark style="background: #FFB86CA6;">ARP hooks</mark> (`NF_ARP_*`) — input and output, for ARP packets. Used by the [[nftables#arp|arp family]], historically by arptables.
+- <strong>Netdev hooks</strong> (`NF_NETDEV_*`) — <mark style="background: #FFF3A3A6;">bound to a single interface</mark> and<mark style="background: #BBFABBA6;"> firing earlier than the IP hooks</mark>. Ingress has existed since kernel 4.2, egress since 5.16. Used by the [[nftables#netdev (per-interface)|netdev family]].
 
 ## Bridged Traffic and br_netfilter
 

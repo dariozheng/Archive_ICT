@@ -53,7 +53,7 @@ The `arp` family filters ARP packets — the protocol that maps IPv4 addresses t
 
 ### bridge
 
-The `bridge` family operates at Layer 2, on Ethernet frames passing through a Linux software bridge — a virtual switch (for example `br0`) that joins several interfaces into one segment, the kind hypervisors and container runtimes create to connect VMs and containers. It replaces the old ebtables tool. The bridge normally lives in the host's initial [[Netfilter#Network Namespaces|namespace]], so its bridge-family rules are evaluated there rather than inside each container.
+The `bridge` family <strong>operates at Layer 2</strong>, on Ethernet frames passing through a Linux software bridge — a virtual switch (for example `br0`) that joins several interfaces into one segment, the kind hypervisors and container runtimes create to connect VMs and containers. It replaces the old ebtables tool. The bridge normally lives in the host's initial [[Netfilter#Network Namespaces|namespace]], so its bridge-family rules are evaluated there rather than inside each container.
 
 Because bridging happens below IP, a bridge chain can match on MAC addresses, VLAN tags and EtherType, and can filter traffic flowing between bridge ports that may never reach the IP layer at all. It exposes the same five hook names as IP, but they fire on the bridge's L2 path — the `forward` hook, for instance, sees a frame moving from one bridge port to another.
 
@@ -70,7 +70,7 @@ This is why `priority filter` resolves to a different number depending on family
 
 ### netdev (per-interface)
 
-A `netdev` chain is bound to one specific interface and runs at the `ingress` hook — the earliest point in the stack, before [[Netfilter#Prerouting|prerouting]] and before [[Netfilter#Connection Tracking|conntrack]], roughly where tc ingress sits. Kernels 5.16 and later also offer an `egress` hook.
+A `netdev` chain <strong>is bound to one specific interface</strong> and runs at the `ingress` hook — the earliest point in the stack, before [[Netfilter#Prerouting|prerouting]] and before [[Netfilter#Connection Tracking|conntrack]], roughly where tc ingress sits. Kernels 5.16 and later also offer an `egress` hook.
 
 Because packets dropped here never enter the rest of the stack, netdev is the place for high-volume early filtering: anti-spoofing, basic DDoS scrubbing, and dropping obvious garbage before it costs the kernel anything. A netdev base chain must name its device:
 
