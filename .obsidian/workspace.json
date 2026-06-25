@@ -27,12 +27,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Cisco Catalyst 9800 Series WLC.md",
+                "file": "0 - Notes/netfilter.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cisco Catalyst 9800 Series WLC"
+              "title": "netfilter"
+            }
+          },
+          {
+            "id": "2920a69c85f899aa",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "attachments/netfilter-packet-flow.png"
+              },
+              "icon": "lucide-image",
+              "title": "netfilter-packet-flow"
             }
           }
         ],
@@ -119,13 +131,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Cisco Catalyst 9800 Series WLC.md",
+                "file": "0 - Notes/netfilter.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Cisco Catalyst 9800 Series WLC"
+              "title": "Outline of netfilter"
             }
           },
           {
@@ -236,11 +248,15 @@
   },
   "active": "2d95b11448712956",
   "lastOpenFiles": [
+    "0 - Notes/WLC 9800.md",
     "0 - Notes/netfilter.md",
-    "0 - Notes/Cisco Catalyst 9800 Series WLC.md",
     "0 - Notes/nftables.md",
-    "0 - Notes/iptables.md",
+    "attachments/netfilter-packet-flow.png",
     "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/iptables.md",
     "Netfilter Conntrack — Connection Tracking.md",
     "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
@@ -252,12 +268,10 @@
     "attachments/nftables-chain-evaluation.png",
     "attachments/netfilter-packet-flow-1.png",
     "attachments/netfilter-packet-flow 1.png",
-    "attachments/netfilter-packet-flow.png",
     "attachments/Pasted image 20260624122803.png",
     "attachments/Screenshot 2026-06-23 at 16.14.37.png",
     "attachments/linux_netfilter_packet_flow.png",
     "0 - Notes/App-ID™.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
     "3 - Templates/Notes/Codes/Link to Glossary.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "2 - Categories/Topics/Networking/WLAN.md",
@@ -267,14 +281,11 @@
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
     "3 - Templates/Bases/Topic/Networking/WLAN.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Networking.md",
     "0 - Notes/Glossaries/Linux Glossary.md",
     "0 - Notes/Glossaries/Security Glossary.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/Dynu DDNS.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "1 - Excalidraw/Scripts",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Networking.base",

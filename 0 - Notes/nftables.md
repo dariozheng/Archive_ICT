@@ -41,6 +41,8 @@ Inside an `inet` chain you can still narrow to one protocol when needed:
 - shared matches like `tcp dport`, `ct state` or `meta l4proto` apply to both versions at once.
 - a protocol-specific header match (`ip saddr`, `ip6 daddr`) implicitly restricts that rule to the matching version.
 
+A dual-stack ruleset still has to honour a few IPv6-specific requirements — permitting ICMPv6, the no-NAT model, and `fib`-based anti-spoofing; these are covered in [[Netfilter#IPv6 and Netfilter]].
+
 ### ip and ip6
 
 Single-protocol families that see only IPv4 (`ip`) or only IPv6 (`ip6`) traffic, each with all five IP hooks. Reach for them only when a rule genuinely applies to one protocol alone; otherwise prefer [[#inet (dual-stack)|inet]].
@@ -231,6 +233,19 @@ Connection tracking (see [[Netfilter#Connection Tracking|conntrack]]):
 |`ct mark`|the connection mark (persists for the flow)|
 |`ct count`|number of concurrent connections (with a limit)|
 
+Two further expressions query kernel state rather than fields in the packet:
+
+|Expression|Matches|
+|---|---|
+|`fib <keys> <result>`|the result of a routing-table lookup, used for reverse-path / anti-spoofing checks (see [[Netfilter#Anti-Spoofing with fib]])|
+|`socket`|properties of the local socket a packet belongs to, e.g. `socket transparent 1` for [[Netfilter#Transparent Proxying (TPROXY)|
+
+Strict reverse-path filtering, working for IPv4 and IPv6 alike, is a single `fib` rule:
+
+```bash
+nft add rule inet filter prerouting fib saddr . iif oif missing drop
+```
+
 ## Verdict Statements
 
 Verdict statements decide what happens to the packet. The terminal ones map to [[Netfilter#Kernel Verdicts|kernel verdicts]]; the rest steer evaluation.
@@ -265,11 +280,13 @@ Besides verdicts, a rule can carry non-terminal action statements that change st
 |`limit rate …`|match only while under a rate (rate limiting)|—|
 |`dnat to` / `snat to`|rewrite destination / source|[[Netfilter#Network Address Translation|
 |`masquerade` / `redirect`|dynamic SNAT / DNAT-to-local|[[Netfilter#Masquerade|
+|`tproxy to`|deliver to a local socket without rewriting the destination|[[Netfilter#Transparent Proxying (TPROXY)|
 |`meta mark set` / `ct mark set`|tag the packet / the connection|conntrack|
 |`notrack`|skip [[Netfilter#Connection Tracking|conntrack]] for this packet (use at `raw`)|
 |`flow add @ft`|offload an established flow to a [[#Flowtables|flowtable]]|
 |`dup to`|send a copy of the packet elsewhere|—|
 |`fwd to`|forward the frame to another interface (netdev only)|—|
+|`synproxy`|answer TCP handshakes with SYN cookies to absorb SYN floods|[[Netfilter#Mitigating Floods|
 
 ```bash
 # log new SSH connections, count them, then accept
@@ -285,7 +302,7 @@ nft add rule ip nat prerouting tcp dport 80 dnat to 192.168.1.10:8080
 nft add rule ip nat postrouting oif "eth0" masquerade
 ```
 
-The NAT statements above only take effect in a [[#Chain Types|nat-type]] chain at the right hook; the mechanics are described in [[Netfilter#Network Address Translation]].
+The NAT statements above only take effect in a [[#Chain Types|nat-type]] chain at the right hook; the mechanics are described in [[Netfilter#Network Address Translation]]. The `tproxy` statement additionally needs a policy-routing rule that delivers marked packets to the loopback — the full recipe is in [[Netfilter#Transparent Proxying (TPROXY)]].
 
 ---
 

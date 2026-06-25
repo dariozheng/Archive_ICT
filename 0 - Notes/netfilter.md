@@ -6,11 +6,13 @@ tags:
 icon: SiLinux
 iconColor: "#000000"
 ---
-Netfilter is the packet-processing framework built into the Linux kernel. It exposes a set of fixed points — hooks — in the network stack where kernel code can register callbacks to inspect, modify, drop, queue or reroute packets. The subsystems most administrators care about ([[#Connection Tracking|connection tracking]], [[#Network Address Translation|NAT]], [[#Logging, Queueing and Accounting|logging and queueing]]) are all built on these hooks. You rarely program Netfilter directly; you drive it through a frontend, and the modern one is [[nftables]].
+Netfilter is the <mark style="background: #FFB8EBA6;">packet-processing framework</mark> <mark style="background: #FF5582A6;">built into the Linux kernel</mark>. It exposes a set of fixed points — hooks — in the network stack where kernel code can register callbacks to inspect, modify, drop, queue or reroute packets. 
+The subsystems most administrators care about ([[#Connection Tracking|connection tracking]], [[#Network Address Translation|NAT]], [[#Logging, Queueing and Accounting|logging and queueing]]) are all built on these hooks. You rarely program <strong>Netfilter</strong> directly; you drive it through a frontend, and the modern one is [[nftables]].
 
-> [!info] Netfilter is the engine, not the tool Netfilter lives in the kernel and defines the hooks and subsystems. [[nftables]] — the `nft` command plus the `nf_tables` kernel module — is the userspace tool that tells Netfilter what to do. Older tools (iptables, ip6tables, arptables, ebtables) are alternative frontends to the same framework; see [[#Frontends and Related Tools]].
-
----
+> [!info] Netfilter is the engine, not the tool 
+> Netfilter lives in the kernel and defines the hooks and subsystems. 
+> 
+> [[nftables]] — the `nft` command plus the `nf_tables` kernel module — is the userspace tool that tells Netfilter what to do. Older tools (iptables, ip6tables, arptables, ebtables) are alternative frontends to the same framework; see [[#Frontends and Related Tools]].
 
 # The Netfilter Framework
 
@@ -18,13 +20,18 @@ _What the kernel provides and how it fits into packet processing._
 
 ## What Netfilter Is
 
-Netfilter is a framework, not a program. The kernel calls every registered hook function as a packet reaches the corresponding point in the stack, passing it the packet and expecting a [[#Kernel Verdicts|verdict]] back. Modules build features on top: `nf_conntrack` implements [[#Connection Tracking|connection tracking]], `nf_nat` implements [[#Network Address Translation|NAT]], `nf_tables` implements the [[nftables]] rule engine. Because they all attach at the same [[#Hooks and Packet Flow|hooks]], the features compose — conntrack runs, then your filtering, then NAT, all on the same packet.
+Netfilter is a <strong>framework</strong>, not a program. The kernel calls every <mark style="background: #FFB86CA6;">registered hook function</mark> as a packet <mark style="background: #FFF3A3A6;">reaches the corresponding point in the stack</mark>, passing <mark style="background: #FFB86CA6;">it</mark> the packet and expecting a [[#Kernel Verdicts|verdict]] back. 
+Modules build features on top: `nf_conntrack` implements [[#Connection Tracking|connection tracking]], `nf_nat` implements [[#Network Address Translation|NAT]], `nf_tables` implements the [[nftables]] rule engine. 
+Because they all attach at the same [[#Hooks and Packet Flow|hooks]], the features compose — conntrack runs, then your filtering, then NAT, all on the same packet.
 
-> [!note] The subsystems are kernel modules Netfilter's pieces load on demand: `nf_tables` for the [[nftables]] engine, `nf_conntrack` for [[#Connection Tracking|conntrack]], `nf_nat` for [[#Network Address Translation|NAT]], plus per-protocol helpers. They autoload the first time a rule needs them, so `lsmod | grep -E 'nf_|nft'` is a quick way to see what is currently active.
+> [!note] The subsystems are kernel modules 
+> Netfilter's pieces load on demand: `nf_tables` for the [[nftables]] engine, `nf_conntrack` for [[#Connection Tracking|conntrack]], `nf_nat` for [[#Network Address Translation|NAT]], plus per-protocol helpers. They autoload the first time a rule needs them, so `lsmod | grep -E 'nf_|nft'` is a quick way to see what is currently active.
 
 ## Where Netfilter Sits in the Stack
 
 A packet passes through several stages before and after the Netfilter hooks. Knowing the order explains why some tools see a packet before others.
+
+![[netfilter-packet-flow.png]]
 
 On receive:
 
@@ -37,7 +44,8 @@ On receive:
 
 On transmit the order reverses: [[#Output|output]] or [[#Forward|forward]] → [[#Postrouting|postrouting]] → tc egress → netdev egress → driver → wire.
 
-> [!note] Netfilter is not the only hook layer XDP and tc sit below Netfilter and are used mainly for very high-rate drop or for traffic shaping. Netfilter is where stateful filtering and NAT live. See [[#tc and XDP]].
+> [!note] Netfilter is not the only hook layer 
+> XDP and tc sit below Netfilter and are used mainly for very high-rate drop or for traffic shaping. Netfilter is where stateful filtering and NAT live. See [[#tc and XDP]].
 
 ## Kernel Verdicts
 
@@ -60,6 +68,8 @@ In [[nftables]] terms, `accept` maps to `NF_ACCEPT`, `drop` to `NF_DROP`, and `q
 _The fixed points where Netfilter intercepts packets, and the order in which they fire._
 
 ## IP Hooks
+
+_The five hooks on the IPv4 and IPv6 path, where most firewalling happens._
 
 For IPv4 and IPv6 there are five hooks, named `NF_INET_*`. Every [[nftables#Base Chains|base chain]] attaches to exactly one of them, and the [[nftables#Address Families|family]] you pick decides which hooks are available.
 
@@ -242,7 +252,7 @@ _Rewriting source or destination addresses and ports, layered on conntrack._
 
 ## How NAT Uses Conntrack
 
-NAT is not a separate packet-mangling pass on every packet. The translation is decided once, on the first packet of a flow, and recorded in that flow's [[#Connection Tracking|conntrack]] entry; the kernel then applies it to every subsequent packet in both directions automatically. This is why a [[nftables#Chain Types|nat-type]] chain only ever sees the first packet of a connection, and why NAT requires conntrack to be active.
+NAT is not a separate packet-mangling pass on every packet. The translation is decided once, on the first packet of a flow, and recorded in that flow's [[#Connection Tracking|conntrack]] entry; the kernel then applies it to every subsequent packet in both directions automatically. This is why a [[nftables#Chain Types|nat-type]] chain only ever sees the first packet of a connection, and why NAT requires conntrack to be active. IPv6, by contrast, is normally routed end to end without NAT at all; see [[#No NAT by Default]].
 
 ## DNAT
 
@@ -258,7 +268,7 @@ Masquerade is a dynamic form of [[#SNAT|SNAT]] that uses the outgoing interface'
 
 ## Redirect
 
-Redirect is a special [[#DNAT|DNAT]] that sends the packet to the local machine itself (the address of the interface it arrived on). It is the usual way to transparently divert traffic into a local proxy.
+Redirect is a special [[#DNAT|DNAT]] that sends the packet to the local machine itself (the address of the interface it arrived on). It is the usual way to transparently divert traffic into a local proxy. When the proxy needs to see the original destination rather than the rewritten local one, use [[#Transparent Proxying (TPROXY)|TPROXY]] instead, which delivers to a local socket without translating the address.
 
 ## Hairpin NAT
 
@@ -299,6 +309,41 @@ ip route add default via 203.0.113.1 table 100
 
 The same mark can drive tc, which classifies packets into shaping queues by fwmark — so a single mark set in the firewall can steer both which link a packet leaves by and how it is queued.
 
+## Transparent Proxying (TPROXY)
+
+_Diverting traffic to a local proxy without rewriting its destination._
+
+A transparent proxy — or a service-mesh sidecar such as Envoy — must receive connections that were aimed at some other host while still seeing the original destination, so it can relay them upstream. A plain [[#Redirect|redirect]] cannot do this: being a DNAT, it overwrites the destination with the local address, and the proxy can only partially recover it (IPv4 TCP only, via `SO_ORIGINAL_DST`).
+
+TPROXY instead delivers the packet to a local socket while leaving its destination address untouched, and it works for TCP and UDP over both IPv4 and IPv6. It runs in a [[#Prerouting|prerouting]] chain and is built directly on the [[#Packet and Connection Marks|marks]] and [[#Marks and Policy Routing|policy routing]] above — three pieces have to line up:
+
+1. The proxy opens its listening socket with the `IP_TRANSPARENT` option, so it may bind foreign addresses and accept redirected traffic.
+2. A prerouting rule matches the traffic, marks it, and hands it to the proxy's port with `tproxy`.
+3. A policy-routing rule sends marked packets to the loopback, so the local transparent socket receives them.
+
+```bash
+table ip mangle {
+    chain prerouting {
+        type filter hook prerouting priority mangle; policy accept;
+        # keep packets of already-established proxied flows going to the socket
+        meta l4proto tcp socket transparent 1 meta mark set 1 accept
+        # divert new web traffic to the proxy on port 50080, marking it
+        tcp dport { 80, 443 } tproxy to :50080 meta mark set 1
+    }
+}
+```
+
+```bash
+# route marked packets to the local transparent socket via loopback
+ip rule add fwmark 1 lookup 100
+ip route add local 0.0.0.0/0 dev lo table 100
+# the IPv6 equivalents, since TPROXY handles both families
+ip -6 rule add fwmark 1 lookup 100
+ip -6 route add local ::/0 dev lo table 100
+```
+
+Because it only attaches at prerouting, TPROXY acts on traffic the host forwards or terminates locally; it is the mechanism behind transparent proxies such as Squid, and one of the interception modes a [[#Containers and Namespaces|service-mesh]] sidecar can use in place of redirect-based capture.
+
 ## Rewriting Header Fields
 
 Netfilter can also overwrite selected header fields in flight: normalising the DSCP / TOS bits for QoS, or adjusting the IPv4 TTL and IPv6 hop limit. These are ordinary statements applied at a hook, and the rewritten value (DSCP, for example) survives onto the wire to be honoured by downstream routers.
@@ -311,6 +356,49 @@ On links with a reduced MTU — PPPoE, GRE, IPsec and other tunnels — large TC
 # clamp the MSS of forwarded SYNs down to the path MTU
 nft add rule inet filter forward tcp flags syn tcp option maxseg size set rt mtu
 ```
+
+---
+
+# IPv6 and Netfilter
+
+_The things that differ enough to break an IPv4 ruleset ported as-is._
+
+IPv6 uses the very same [[#Hooks and Packet Flow|hooks]], families (`ip6`, or `inet` for dual-stack) and [[#Connection Tracking|conntrack]] as IPv4, so stateful filtering works identically. What trips people up is what is different: ICMPv6 cannot be filtered away, there is normally no [[#Network Address Translation|NAT]], and anti-spoofing is done differently.
+
+## ICMPv6 Is Mandatory
+
+Where ICMPv4 can be blocked with little consequence, large parts of IPv6 ride on ICMPv6 and stop working if it is dropped:
+
+- Neighbor Discovery (NDP) replaces ARP. Neighbor Solicitation and Advertisement resolve link-layer addresses, while Router Solicitation and Advertisement drive prefix discovery and SLAAC. These use link-local (`fe80::/10`) addresses; block them and the host cannot resolve neighbors or autoconfigure.
+- Path MTU Discovery depends on the ICMPv6 "packet too big" message. IPv6 routers never fragment, so a source learns the path limit only from these — drop them and large transfers black-hole exactly as with broken [[#MSS Clamping|MSS clamping]].
+
+An input chain must therefore accept the essential ICMPv6 types:
+
+```bash
+nft add rule inet filter input icmpv6 type { \
+    destination-unreachable, packet-too-big, time-exceeded, parameter-problem, \
+    echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-advert } accept
+```
+
+> [!note] Harden Neighbor Discovery with the hop limit Genuine ND messages always arrive with a hop limit of 255 — routers decrement it, so a value of 255 proves the packet was not forwarded. Matching `ip6 hoplimit 255` on the ND types rejects spoofed Neighbor Discovery injected from off-link.
+
+## No NAT by Default
+
+IPv6 hands every host a globally routable address and routes traffic end to end; NAT66 and NPTv6 exist but are discouraged and rarely needed. This flips the security model. With IPv4 behind [[#Masquerade|masquerade]], unsolicited inbound traffic is blocked almost by accident, because no NAT mapping exists for it. IPv6 has no such accident, so every host is potentially reachable from the internet and inbound protection becomes entirely the job of the [[#Forward|forward]] chain. A default-drop forward policy that accepts only `established,related` plus the services you intend to expose is essential here, not optional.
+
+## Anti-Spoofing with fib
+
+The [[#Reverse Path Filtering|rp_filter]] sysctl is IPv4-only, so it does nothing for IPv6. The portable replacement — and the only reverse-path option for IPv6 — is the [[nftables#Match Statements|fib expression]], which asks the routing table whether a packet's source is reachable back through the interface it arrived on:
+
+```bash
+nft add rule inet filter prerouting fib saddr . iif oif missing drop
+```
+
+Because `fib` works for any family, it is worth using in place of `rp_filter` even on dual-stack hosts, so both protocols are covered by a single rule.
+
+## Extension Headers and Fragments
+
+IPv6 replaces the IPv4 options field with a chain of extension headers (Hop-by-Hop, Routing, Fragment, Destination). The real upper-layer protocol sits after them, so match it with `meta l4proto`, which walks the chain, rather than assuming a fixed offset. Fragmentation is carried in a Fragment extension header and is reassembled by [[#Connection Tracking|conntrack]] before inspection, just as in IPv4. Some extension headers are abused — the Type 0 Routing Header (RH0) enabled traffic amplification and is dropped by modern kernels — so dropping unwanted extension headers explicitly is a reasonable hardening step.
 
 ---
 
@@ -400,7 +488,7 @@ Reverse path filtering is a kernel anti-spoofing check that lives in the IP inpu
 - `2` — loose mode: the source need only be routable out of some interface.
 - `0` — off.
 
-On hosts with asymmetric or multi-homed routing, strict mode silently drops legitimate traffic; loose mode, or turning it off, is the usual fix.
+On hosts with asymmetric or multi-homed routing, strict mode silently drops legitimate traffic; loose mode, or turning it off, is the usual fix. Note that `rp_filter` is IPv4-only; for IPv6, and portably for both families, use the `fib` expression instead — see [[#Anti-Spoofing with fib]].
 
 ## Mitigating Floods
 
