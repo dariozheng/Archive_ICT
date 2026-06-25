@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/netfilter.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -222,7 +222,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",

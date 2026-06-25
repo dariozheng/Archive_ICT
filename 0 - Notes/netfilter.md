@@ -121,7 +121,9 @@ Beyond the IP hooks, <mark style="background: #CACFD9A6;">Netfilter registers ho
 
 _Making bridged IP packets traverse the IP hooks._
 
-By default a frame bridged between ports is handled only at Layer 2 — it never reaches the [[#IP Hooks|IP hooks]], so your `ip` / `inet` rules never see it. The optional `br_netfilter` module changes that: when loaded, IP packets crossing a bridge are also pushed through the IP prerouting, forward and postrouting hooks, so the same rules can filter them. Three sysctls gate it, one per protocol:
+By default <mark style="background: #ABF7F7A6;">a <strong>frame</strong> bridged between ports</mark> is handled only at Layer 2 — <mark style="background: #ADCCFFA6;">it never reaches the</mark> [[#IP Hooks|IP hooks]], so your `ip` / `inet` rules never see it. 
+
+The optional `br_netfilter` module changes that: <mark style="background: #ADCCFFA6;">when loaded, the IP packets carried inside bridged frames are injected into the IP</mark> `PREROUTING`, `FORWARD`, and `POSTROUTING` <mark style="background: #ADCCFFA6;">hooks</mark>, so the same ruleset can filter both <mark style="background: #FF5582A6;">routed</mark> and <mark style="background: #FFB8EBA6;">bridged</mark> traffic. Three <strong>sysctls</strong> gate the behaviour, one per protocol — and they only exist once the module is loaded:
 
 ```bash
 modprobe br_netfilter
@@ -130,7 +132,16 @@ sysctl net.bridge.bridge-nf-call-ip6tables=1  # bridged IPv6 -> ip6/inet hooks
 sysctl net.bridge.bridge-nf-call-arptables=1  # bridged ARP  -> arp hooks
 ```
 
-> [!important] Containers depend on this Kubernetes and similar container networking require `bridge-nf-call-iptables = 1` so that Service and NAT rules apply to pod traffic crossing the node's [[nftables#bridge|bridge]]. It is a frequent cause of "the rules look right but traffic still isn't filtered or redirected" in bridged and [[#Containers and Namespaces|containerised]] setups. The trade-off is that it routes bridged traffic through the full IP path, which adds cost and can surprise you, so leave it off where you genuinely only bridge.
+In practice this means <mark style="background: #D2B3FFA6;">that traffic crossing the bridge is no longer invisible to the firewall</mark>: <mark style="background: #CACFD9A6;">the module unwraps each Ethernet frame</mark> <mark style="background: #FFB8EBA6;">and injects the IP packet inside it</mark> <mark style="background: #FF5582A6;">into the normal IP hook path</mark>, <mark style="background: #FFB86CA6;">where your firewall rules can inspect and act on it just as they would for any routed packet</mark>.
+
+The module works in both directions: it not only pushes bridged IP packets up into the IP hook path, it also lets `ebtables` act on L3 content from the bridge layer, giving you visibility across both L2 and L3 in the same flow.
+
+> [!important] Containers depend on this 
+> iptables-based Kubernetes setups require `bridge-nf-call-iptables=1` so that kube-proxy's Service and NAT rules apply to pod traffic crossing the node's [[nftables#bridge|bridge]]. It is a frequent cause of "the rules look right but traffic still isn't filtered or redirected" in bridged and [[#Containers and Namespaces|containerised]] setups. 
+> 
+> That said, this is not a universal requirement. <strong>eBPF-based CNI plugins</strong> — such as Cilium in full kube-proxy replacement mode — attach directly to the kernel's eBPF hooks and do not rely on iptables at all, so `bridge-nf-call-iptables=1` is unnecessary and can safely remain off.
+> 
+> Pushing bridged traffic through the full IP stack adds processing overhead on every bridged packet. Enable it where you need unified filtering or container networking demands it; leave it off where you are genuinely only bridging and the extra cost buys you nothing.
 
 ## Hook Priorities
 
