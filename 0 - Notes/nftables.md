@@ -88,7 +88,7 @@ nft add chain netdev filter ingress-eth0 \
 
 ## Tables
 
-_Top-level containers; in nftables they carry no behaviour of their own._
+_Top-level containers; in nftables they carry no behavior of their own._
 
 A table holds [[#Chains|chains]], [[#Sets|sets]], [[#Maps|maps]] and other objects, and is identified by its [[#Address Families|family]] plus a name you choose.
 
@@ -97,7 +97,8 @@ nft add table inet filter      # create a dual-stack table
 nft list ruleset               # show everything currently loaded
 ```
 
-> [!important] Different from iptables In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
+> [!important] Different from iptables 
+> In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
 
 ## Chains
 
