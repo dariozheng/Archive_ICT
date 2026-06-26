@@ -85,7 +85,8 @@ For IPv4 and IPv6 there are five hooks, named `NF_INET_*`. Every [[nftables#Base
 | Output      | `NF_INET_LOCAL_OUT`   | packets generated locally, leaving the host        |
 | Postrouting | `NF_INET_POSTROUTING` | every outgoing packet, after the routing decision  |
 
-![[netfilter-packet-flow-1.png]]
+![[nf-hooks.png]]
+
 ### Prerouting
 
 <mark style="background: #ABF7F7A6;">The first hook every incoming packet hits</mark>, right after basic sanity checks but before the kernel decides where the packet should go. Because it runs before routing, it is the only place you can change a packet's destination and still have it routed accordingly, <mark style="background: #ADCCFFA6;">which is why</mark> [[#DNAT|DNAT]] <mark style="background: #ADCCFFA6;">lives here</mark>.
@@ -172,7 +173,7 @@ _How a packet threads through the hooks, with the routing decision splitting the
 
 The single most important fact: the routing decision sends a packet down one of two paths. It is either delivered locally ([[#Input|Input]]) or forwarded ([[#Forward|Forward]]), never both.
 
-![[netfilter-packet-flow-1.png]]
+![[nf-hooks.png]]
 
 The same three journeys as quick text reference:
 

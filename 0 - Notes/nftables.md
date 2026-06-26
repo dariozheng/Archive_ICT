@@ -1,8 +1,10 @@
 ---
 categories:
   - "[[Linux]]"
-topic@linux:
+topic@linux: "[[Linux General]]"
 tags:
+  - firewall
+  - networking
 icon: SiLinux
 iconColor: "#000000"
 ---
