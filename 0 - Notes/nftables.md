@@ -211,29 +211,29 @@ Match statements test packet fields. They come from three main sources: `meta` (
 
 Metadata (`meta`, the keyword is often optional):
 
-|Selector|Matches|
+|Selector| Matches                                                         |
 |---|---|
-|`iif` / `oif`|input / output interface by index (fast)|
-|`iifname` / `oifname`|interface by name, with wildcards like `eth*`|
-|`meta nfproto`|IP version (`ipv4` / `ipv6`), useful in [[#inet (dual-stack)|
-|`meta l4proto`|layer-4 protocol, IP-version-agnostic|
-|`meta mark`|the packet's firewall mark|
-|`meta length`|total packet size in bytes|
-|`meta hour` / `meta day`|wall-clock time of day and day of week, for time-windowed rules|
-|`meta skuid` / `meta skgid`|owning socket's user / group (output only)|
+|`iif` / `oif`| input / output interface by index (fast)                        |
+|`iifname` / `oifname`| interface by name, with wildcards like `eth*`                   |
+|`meta nfproto`| IP version (`ipv4` / `ipv6`), useful in [[#inet (dual-stack]]   |
+|`meta l4proto`| layer-4 protocol, IP-version-agnostic                           |
+|`meta mark`| the packet's firewall mark                                      |
+|`meta length`| total packet size in bytes                                      |
+|`meta hour` / `meta day`| wall-clock time of day and day of week, for time-windowed rules |
+|`meta skuid` / `meta skgid`| owning socket's user / group (output only)                      |
 
 Header fields:
 
-|Selector|Matches|
-|---|---|
-|`ip saddr` / `ip daddr`|IPv4 source / destination address|
-|`ip6 saddr` / `ip6 daddr`|IPv6 source / destination address|
-|`ip protocol` / `ip6 nexthdr`|upper-layer protocol|
-|`tcp dport` / `udp dport`|transport destination port|
-|`tcp flags`|TCP flags (e.g. `syn`, `rst`)|
-|`icmp type` / `icmpv6 type`|ICMP message type|
-|`ether saddr` / `ether type`|source MAC / EtherType ([[#bridge|
-|`vlan id`|802.1Q VLAN tag|
+| Selector                      | Matches                              |
+| ----------------------------- | ------------------------------------ |
+| `ip saddr` / `ip daddr`       | IPv4 source / destination address    |
+| `ip6 saddr` / `ip6 daddr`     | IPv6 source / destination address    |
+| `ip protocol` / `ip6 nexthdr` | upper-layer protocol                 |
+| `tcp dport` / `udp dport`     | transport destination port           |
+| `tcp flags`                   | TCP flags (e.g. `syn`, `rst`)        |
+| `icmp type` / `icmpv6 type`   | ICMP message type                    |
+| `ether saddr` / `ether type`  | source MAC / EtherType ([[#bridge]]) |
+| `vlan id`                     | 802.1Q VLAN tag                      |
 
 Connection tracking (see [[Netfilter#Connection Tracking|conntrack]]):
 
@@ -247,10 +247,10 @@ Connection tracking (see [[Netfilter#Connection Tracking|conntrack]]):
 
 Two further expressions query kernel state rather than fields in the packet:
 
-|Expression|Matches|
-|---|---|
-|`fib <keys> <result>`|the result of a routing-table lookup, used for reverse-path / anti-spoofing checks (see [[Netfilter#Anti-Spoofing with fib]])|
-|`socket`|properties of the local socket a packet belongs to, e.g. `socket transparent 1` for [[Netfilter#Transparent Proxying (TPROXY)|
+| Expression            | Matches                                                                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `fib <keys> <result>` | the result of a routing-table lookup, used for reverse-path / anti-spoofing checks (see [[Netfilter#Anti-Spoofing with fib]])   |
+| `socket`              | properties of the local socket a packet belongs to, e.g. `socket transparent 1` for [[Netfilter#Transparent Proxying (TPROXY)]] |
 
 Strict reverse-path filtering, working for IPv4 and IPv6 alike, is a single `fib` rule:
 
@@ -262,16 +262,16 @@ nft add rule inet filter prerouting fib saddr . iif oif missing drop
 
 Verdict statements decide what happens to the packet. The terminal ones map to [[Netfilter#Kernel Verdicts|kernel verdicts]]; the rest steer evaluation.
 
-|Verdict|Terminal?|Effect|
-|---|---|---|
-|`accept`|yes (this chain)|let the packet pass this hook|
-|`drop`|yes|discard silently, no reply|
-|`reject`|yes|discard and send an error (ICMP / TCP RST)|
-|`queue`|yes|hand the packet to userspace via [[Netfilter#NFQUEUE|
-|`continue`|no|keep evaluating the next rule|
-|`return`|no|leave the current chain (a [[#Base Chains|
-|`jump <chain>`|no|enter a chain; `return` comes back here|
-|`goto <chain>`|no|enter a chain; does not return — the caller's context is replaced|
+| Verdict        | Terminal?        | Effect                                                            |
+| -------------- | ---------------- | ----------------------------------------------------------------- |
+| `accept`       | yes (this chain) | let the packet pass this hook                                     |
+| `drop`         | yes              | discard silently, no reply                                        |
+| `reject`       | yes              | discard and send an error (ICMP / TCP RST)                        |
+| `queue`        | yes              | hand the packet to userspace via [[Netfilter#NFQUEUE]]            |
+| `continue`     | no               | keep evaluating the next rule                                     |
+| `return`       | no               | leave the current chain (a [[#Base Chains]])                      |
+| `jump <chain>` | no               | enter a chain; `return` comes back here                           |
+| `goto <chain>` | no               | enter a chain; does not return — the caller's context is replaced |
 
 > [!note] reject is technically separate The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice.
 
@@ -285,20 +285,20 @@ The difference between `jump` and `goto` is the return path. After a `jump`, a `
 
 Besides verdicts, a rule can carry non-terminal action statements that change state or hand the packet elsewhere, then continue. Most are thin wrappers over a [[Netfilter]] subsystem.
 
-|Statement|Does|Subsystem|
-|---|---|---|
-|`counter`|count packets and bytes|[[Netfilter#Counters and Quotas|
-|`log`|log to kernel ring buffer, or `log group N` to NFLOG|[[Netfilter#Kernel Logging|
-|`limit rate …`|match only while under a rate (rate limiting)|—|
-|`dnat to` / `snat to`|rewrite destination / source|[[Netfilter#Network Address Translation|
-|`masquerade` / `redirect`|dynamic SNAT / DNAT-to-local|[[Netfilter#Masquerade|
-|`tproxy to`|deliver to a local socket without rewriting the destination|[[Netfilter#Transparent Proxying (TPROXY)|
-|`meta mark set` / `ct mark set`|tag the packet / the connection|[[Netfilter#Packet and Connection Marks|
-|`notrack`|skip [[Netfilter#Connection Tracking|conntrack]] for this packet (use at `raw`)|
-|`flow add @ft`|offload an established flow to a [[#Flowtables|flowtable]]|
-|`dup to`|send a copy of the packet elsewhere|—|
-|`fwd to`|forward the frame to another interface (netdev only)|—|
-|`synproxy`|answer TCP handshakes with SYN cookies to absorb SYN floods|[[Netfilter#Mitigating Floods|
+| Statement                       | Does                                                        | Subsystem                                                                   |
+| ------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `counter`                       | count packets and bytes                                     | [[Netfilter#Counters and Quotas]]                                           |
+| `log`                           | log to kernel ring buffer, or `log group N` to NFLOG        | [[Netfilter#Kernel Logging]]                                                |
+| `limit rate …`                  | match only while under a rate (rate limiting)               | —                                                                           |
+| `dnat to` / `snat to`           | rewrite destination / source                                | [[Netfilter#Network Address Translation]]                                   |
+| `masquerade` / `redirect`       | dynamic SNAT / DNAT-to-local                                | [[Netfilter#Masquerade]]                                                    |
+| `tproxy to`                     | deliver to a local socket without rewriting the destination | [[Netfilter#Transparent Proxying (TPROXY)]]                                 |
+| `meta mark set` / `ct mark set` | tag the packet / the connection                             | [[Netfilter#Packet and Connection Marks]]                                   |
+| `notrack`                       | skip [[Netfilter#Connection Tracking\|conntrack]]           | [[netfilter#Connection Tracking\|conntrack]] for this packet (use at `raw`) |
+| `flow add @ft`                  | offload an established flow to a [[#Flowtables]]            | [[#Flowtables]]                                                             |
+| `dup to`                        | send a copy of the packet elsewhere                         | —                                                                           |
+| `fwd to`                        | forward the frame to another interface (netdev only)        | —                                                                           |
+| `synproxy`                      | answer TCP handshakes with SYN cookies to absorb SYN floods | [[Netfilter#Mitigating Floods]]                                             |
 
 ```bash
 # log new SSH connections, count them, then accept

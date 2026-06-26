@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/netfilter.md",
-                "mode": "preview",
+                "file": "0 - Notes/nftables.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "netfilter"
+              "title": "nftables"
             }
           }
         ]
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "0 - Notes/nftables.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of netfilter"
+              "title": "Outline of nftables"
             }
           },
           {
@@ -154,7 +154,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "0 - Notes/nftables.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -164,7 +164,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for netfilter"
+              "title": "Backlinks for nftables"
             }
           },
           {
@@ -173,12 +173,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "0 - Notes/nftables.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from netfilter"
+              "title": "Outgoing links from nftables"
             }
           },
           {
@@ -195,7 +195,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -221,8 +222,8 @@
   },
   "active": "04122f76fb55fec6",
   "lastOpenFiles": [
-    "0 - Notes/nftables.md",
     "0 - Notes/netfilter.md",
+    "0 - Notes/nftables.md",
     "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
     "0 - Notes/Untitled.md",
     "0 - Notes/WLC 9800.md",
