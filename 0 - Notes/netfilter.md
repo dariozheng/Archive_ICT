@@ -200,6 +200,8 @@ Connection tracking — <strong>conntrack</strong>, the `nf_conntrack` module �
 - for TCP/UDP: source and destination ports
 - for ICMP: type, code, and ID — which take the place of ports
 
+![[netfilter-conntrack-tuple.png]]
+
 <mark style="background: #FFB8EBA6;">For every connection the kernel records <strong>two copies</strong> of this tuple</mark>. 
 The <strong>original direction</strong> <mark style="background: #FF5582A6;">is the tuple as the first packet arrived</mark> — the client's address, the server's address, and the ports exactly as seen. 
 The <strong>expected reply</strong> <mark style="background: #FFB86CA6;">is the same connection viewed from the other side</mark>: addresses and ports reversed, <mark style="background: #FFF3A3A6;">representing the traffic the server will send back</mark>. 
@@ -245,7 +247,8 @@ Shortening the established-TCP timeout is a common way to relieve pressure on a 
 
 Protocols like FTP, SIP and TFTP negotiate a second connection on a dynamically chosen port. A conntrack helper parses the control channel and registers an expectation, so the data connection is recognised as `related` rather than `new`.
 
-> [!warning] Helpers are not automatic on modern kernels Automatic helper assignment was disabled for security (`nf_conntrack_helper = 0`), because blindly parsing payloads is risky. Assign a helper explicitly with a `ct helper` object plus a rule that attaches it to the control traffic; see [[nftables#Connection-Tracking Objects]].
+> [!warning] Helpers are not automatic on modern kernels 
+> Automatic helper assignment was disabled for security (`nf_conntrack_helper = 0`), because blindly parsing payloads is risky. Assign a helper explicitly with a `ct helper` object plus a rule that attaches it to the control traffic; see [[nftables#Connection-Tracking Objects]].
 
 ## Conntrack Zones
 
@@ -282,6 +285,8 @@ _Rewriting source or destination addresses and ports, layered on conntrack._
 ## How NAT Uses Conntrack
 
 NAT is not a separate packet-mangling pass on every packet. The translation is decided once, on the first packet of a flow, and recorded in that flow's [[#Connection Tracking|conntrack]] entry; the kernel then applies it to every subsequent packet in both directions automatically. This is why a [[nftables#Chain Types|nat-type]] chain only ever sees the first packet of a connection, and why NAT requires conntrack to be active. IPv6, by contrast, is normally routed end to end without NAT at all; see [[#No NAT by Default]].
+
+![[netfilter-conntrack-nat.png]]
 
 ## DNAT
 
