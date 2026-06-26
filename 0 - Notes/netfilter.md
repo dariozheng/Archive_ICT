@@ -1,8 +1,12 @@
 ---
 categories:
   - "[[Linux]]"
-topic@linux:
+topic@linux: "[[Linux General]]"
 tags:
+  - networking
+  - documentation
+  - firewall
+  - framework
 icon: SiLinux
 iconColor: "#000000"
 ---
@@ -396,8 +400,6 @@ On links with a reduced MTU — PPPoE, GRE, IPsec and other tunnels — large TC
 # clamp the MSS of forwarded SYNs down to the path MTU
 nft add rule inet filter forward tcp flags syn tcp option maxseg size set rt mtu
 ```
-
----
 
 # IPv6 and Netfilter
 
