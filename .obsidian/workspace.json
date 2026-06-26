@@ -223,8 +223,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -248,7 +247,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
     "0 - Notes/Untitled.md",
     "0 - Notes/netfilter.md",

@@ -455,31 +455,31 @@ Beyond filtering and NAT, Netfilter can modify packets and attach metadata to th
 
 ## Packet and Connection Marks
 
-A mark is a 32-bit integer the kernel attaches to a packet or a connection and reads internally to make decisions; it is never written into a header or sent on the wire. Two separate marks exist, and what distinguishes them is how long they live.
+A <strong>mark</strong> is a <mark style="background: #FFB8EBA6;">32-bit integer</mark> <mark style="background: #FF5582A6;">the kernel attaches to a packet</mark> or <mark style="background: #FF5582A6;">a connection</mark> and <mark style="background: #FFB86CA6;">reads internally to make decisions</mark>; <mark style="background: #FFF3A3A6;">it is never written into a header or sent on the wire</mark>. <mark style="background: #BBFABBA6;">Two separate marks exist, and what distinguishes them is how long they live</mark>.
 
-The packet mark is a field on the in-kernel packet buffer (`skb->mark`), and it exists only for that single packet's journey through the stack — once the packet is transmitted or dropped the value is gone, and the matching reply arrives carrying its own mark of zero. The names fwmark and nfmark are two labels for this same field, inherited from two different worlds: nfmark is netfilter's name for it (`meta mark` in nftables, the `MARK` target in iptables), while fwmark — "firewall mark" — is what the routing and traffic-control tools call it (`ip rule … fwmark`, tc's `fw` classifier). Setting `meta mark` and matching on `fwmark` therefore act on exactly the same value. It is read by [[#Marks and Policy Routing|policy routing]] to pick a routing table and by tc to pick a shaping queue, it can be matched by other netfilter rules, and a local process can stamp it on its own outgoing packets through the `SO_MARK` socket option.
+The <strong>packet mark</strong> <mark style="background: #ABF7F7A6;">is a field on the in-kernel packet buffer</mark> (`skb->mark`), and <mark style="background: #ADCCFFA6;">it exists only for that single packet's journey through the stack</mark> — <mark style="background: #D2B3FFA6;">once the packet is transmitted or dropped the value is gone</mark>, and the matching reply arrives carrying its own mark of zero. The names <strong>fwmark</strong> and <strong>nfmark</strong> <mark style="background: #CACFD9A6;">are two labels for this same field</mark>, inherited from two different worlds: <strong>nfmark</strong> is netfilter's name for it (`meta mark` in nftables, the `MARK` target in iptables), while <strong>fwmark</strong> — "firewall mark" — is what the routing and traffic-control tools call it (`ip rule … fwmark`, tc's `fw` classifier). <mark style="background: #FFB8EBA6;">Setting `meta mark` and matching on `fwmark` therefore act on exactly the same value</mark>. <mark style="background: #FFB86CA6;">It is read by [[#Marks and Policy Routing|policy routing]] to <strong>pick a routing table</strong></mark> and <mark style="background: #FFF3A3A6;">by <strong>tc</strong> to pick a shaping queue</mark>, it can be matched by other netfilter rules, and a local process can stamp it on its own outgoing packets through the `SO_MARK` socket option.
 
-The connection mark (ctmark) is stored on the [[#Connection Tracking|conntrack]] entry instead of the packet, so it persists for the entire connection — every packet, both directions, for as long as the flow lives in the table. It is the durable counterpart to the ephemeral packet mark.
+<mark style="background: #FFB8EBA6;">The <strong>connection mark</strong> (<strong>ctmark</strong>) is stored on the [[#Connection Tracking|conntrack]] entry</mark> instead of the packet, <mark style="background: #FF5582A6;">so it persists for the entire connection</mark> — every packet, both directions, for as long as the flow lives in the table. It is the durable counterpart to the ephemeral packet mark.
 
-The two are normally used together, because the packet mark forgets and the connection mark remembers. The decision you want to act on can usually only be made on the first packet of a flow — which interface it entered on, which socket or user it came from — and the reply, handled later and separately, no longer has that context. So the idiom is to decide once, save the result on the connection, then restore it onto every subsequent packet, using the `ct mark set` and `meta mark set` statements from [[nftables#Other Statements]]:
+<mark style="background: #FFB86CA6;">The two are normally used together, because the packet mark forgets and the connection mark remembers</mark>. The decision you want to act on <mark style="background: #FFF3A3A6;">can usually only be made <strong>on the first packet</strong> of a flow</mark> — which interface it entered on, which socket or user it came from — and <mark style="background: #BBFABBA6;">the reply, handled later and separately, no longer has that context</mark>. So the idiom is to decide once, save the result on the connection, then restore it onto every subsequent packet, using the `ct mark set` and `meta mark set` statements from [[nftables#Other Statements]]:
 
 ```bash
 ct mark set 0x1            # first packet: record the decision on the connection
 meta mark set ct mark      # every packet: copy it back onto the packet for routing and tc
 ```
 
-The restore has to run before the [[#Packet Traversal|routing decision]] consults `skb->mark`, so it belongs in a prerouting or output chain. Both marks are 32 bits wide and are often handled with bitmasks, letting independent subsystems each own a slice of the bits without clobbering one another (`meta mark set mark and 0xffff0000 or 0x1`).
+<mark style="background: #ABF7F7A6;">The restore has to run before the [[#Packet Traversal|routing decision]] consults `skb->mark`</mark>, <mark style="background: #ADCCFFA6;">so it belongs in a prerouting or output chain</mark>. Both marks are 32 bits wide and are often handled with bitmasks, letting independent subsystems each own a slice of the bits without clobbering one another (`meta mark set mark and 0xffff0000 or 0x1`).
 
 ## Marks and Policy Routing
 
-The packet mark is the bridge between the firewall and policy routing. The routing subsystem can choose a routing table based on the mark, which is how multi-WAN, VPN split-tunnelling and source-based routing are built: nftables sets the mark, `ip rule` matches it.
+The <strong>packet mark</strong> <mark style="background: #FFB8EBA6;">is the bridge between the firewall and policy routing</mark>. <mark style="background: #FF5582A6;">The routing subsystem can choose a routing table based on the mark</mark>, which is how multi-WAN, VPN split-tunnelling and source-based routing are built: nftables sets the mark, `ip rule` matches it.
 
 ```bash
 ip rule add fwmark 0x1 table 100        # marked packets consult table 100
 ip route add default via 203.0.113.1 table 100
 ```
 
-The same mark can drive tc, which classifies packets into shaping queues by fwmark — so a single mark set in the firewall can steer both which link a packet leaves by and how it is queued.
+The same mark can drive <strong>tc</strong>, which classifies packets into shaping queues by fwmark — so a single mark set in the firewall can steer both which link a packet leaves by and how it is queued.
 
 ## Transparent Proxying (TPROXY)
 
