@@ -6,7 +6,10 @@ tags:
 icon: SiLinux
 iconColor: "#000000"
 ---
-**Netfilter** is the packet filtering and manipulation framework built into the Linux kernel. It defines a series of **hooks** at strategic points in the network stack where modules can register callbacks to inspect, modify, or drop packets. Every stateful firewall, NAT engine, connection tracker, and packet logger in Linux is built as a Netfilter subsystem. Userspace tools — `iptables`, `nftables`, `ipset`, `conntrack` — interact with these subsystems through well-defined kernel interfaces.
+
+
+> [!abstract] Summary 
+> **Netfilter** is the packet filtering and manipulation framework built into the Linux kernel. It defines a series of **hooks** at strategic points in the network stack where modules can register callbacks to inspect, modify, or drop packets. Every stateful firewall, NAT engine, connection tracker, and packet logger in Linux is built as a Netfilter subsystem. Userspace tools — `iptables`, `nftables`, `ipset`, `conntrack` — interact with these subsystems through well-defined kernel interfaces.
 
 ---
 
@@ -599,7 +602,7 @@ NF_BR_POST_ROUTING               ← ebtables POSTROUTING
 Frame exits bridge port
 ```
 
-> [!warning] Double-processing With `br_netfilter`, the same IP packet passes through both `ebtables` (L2) and `iptables`/`nftables` (L3) hooks. Traffic that crosses a bridge and is then routed (common on Docker hosts) can trigger conntrack twice, causing INVALID states or double-NAT. Use conntrack zones to isolate bridge and routing domains. See [[Netfilter Conntrack — Connection Tracking#Bridge Networking and nf_conntrack_bridge]].
+> [!warning] Double-processing With `br_netfilter`, the same IP packet passes through both `ebtables` (L2) and `iptables`/`nftables` (L3) hooks. Traffic that crosses a bridge and is then routed (common on Docker hosts) can trigger conntrack twice, causing INVALID states or double-NAT. Use conntrack zones to isolate bridge and routing domains. 
 
 ---
 

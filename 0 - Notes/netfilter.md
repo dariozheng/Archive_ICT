@@ -126,7 +126,7 @@ _Making bridged IP packets traverse the IP hooks._
 
 By default <mark style="background: #ABF7F7A6;">a <strong>frame</strong> bridged between ports</mark> is handled only at Layer 2 — <mark style="background: #ADCCFFA6;">it never reaches the</mark> [[#IP Hooks|IP hooks]], so your `ip` / `inet` rules never see it. 
 
-The optional `br_netfilter` module changes that: <mark style="background: #ADCCFFA6;">when loaded, the IP packets carried inside bridged frames are injected into the IP</mark> `PREROUTING`, `FORWARD`, and `POSTROUTING` <mark style="background: #ADCCFFA6;">hooks</mark>, so the same ruleset can filter both <mark style="background: #FF5582A6;">routed</mark> and <mark style="background: #FFB8EBA6;">bridged</mark> traffic. Three <strong>sysctls</strong> gate the behaviour, one per protocol — and they only exist once the module is loaded:
+The optional `br_netfilter` module changes that: <mark style="background: #ADCCFFA6;">when loaded, the IP packets carried inside bridged frames are injected into the IP</mark> `PREROUTING`, `FORWARD`, and `POSTROUTING` <mark style="background: #ADCCFFA6;">hooks</mark>, so the same ruleset can filter both <mark style="background: #FF5582A6;">routed</mark> and <mark style="background: #FFB8EBA6;">bridged</mark> traffic. Three <strong>sysctls</strong> gate the behavior, one per protocol — and they only exist once the module is loaded:
 
 ```bash
 modprobe br_netfilter
@@ -187,6 +187,111 @@ Outbound from this host:
 ```
 
 NAT positioning falls out of this naturally: change the destination before routing ([[#DNAT|DNAT]] in [[#Prerouting|prerouting]]) and the source after routing ([[#SNAT|SNAT]] in [[#Postrouting|postrouting]]).
+
+### Forwarded Packet Path
+
+Complete traversal of an <strong>incoming forwarded IPv4 packet</strong> through all tables and subsystems:
+
+```
+NIC receives packet
+        │
+        ▼
+NF_INET_PRE_ROUTING
+  ├── raw::PREROUTING       (−300)   NOTRACK / CT helper assignment
+  ├── nf_conntrack          (−200)   tuple lookup / new entry creation
+  ├── mangle::PREROUTING    (−150)   TOS, TTL, MARK modification
+  └── nat::PREROUTING       (−100)   DNAT / port forwarding
+        │
+   Routing decision
+        │
+        ▼ (forward)
+NF_INET_FORWARD
+  ├── mangle::FORWARD       (−150)
+  ├── filter::FORWARD       (   0)   ← main forwarding filter
+  └── security::FORWARD     (  50)
+        │
+        ▼
+NF_INET_POST_ROUTING
+  ├── mangle::POSTROUTING   (−150)
+  ├── nat::POSTROUTING      ( 100)   SNAT / Masquerade
+  └── conntrack confirm     (INT_MAX) insert entry into hash table
+        │
+        ▼
+     NIC transmit
+```
+
+### Locally Generated Packet Path
+
+```
+Socket write()
+        │
+        ▼
+NF_INET_LOCAL_OUT
+  ├── raw::OUTPUT           (−300)
+  ├── nf_conntrack          (−200)
+  ├── mangle::OUTPUT        (−150)
+  ├── nat::OUTPUT           (−100)   DNAT for locally-generated traffic
+  └── filter::OUTPUT        (   0)
+        │
+   Routing decision
+        │
+        ▼
+NF_INET_POST_ROUTING
+  ├── mangle::POSTROUTING   (−150)
+  ├── nat::POSTROUTING      ( 100)   SNAT
+  └── conntrack confirm     (INT_MAX)
+        │
+        ▼
+     NIC transmit
+```
+
+### Incoming-to-Local Packet Path
+
+```
+NF_INET_PRE_ROUTING        (same pipeline as forwarded path)
+        │
+   Routing decision → local process
+        │
+        ▼
+NF_INET_LOCAL_IN
+  ├── mangle::INPUT         (−150)
+  ├── filter::INPUT         (   0)   ← main input filter
+  ├── security::INPUT       (  50)
+  └── conntrack confirm     (INT_MAX)
+        │
+        ▼
+   Local socket
+```
+
+### Bridge Packet Traversal
+
+Without [[#Bridged Traffic and br_netfilter|br_netfilter,]] bridged frames stay entirely within ebtables hooks and never reach iptables or conntrack. With `br_netfilter` loaded, bridged IP frames additionally traverse the INET hooks:
+
+```
+Frame arrives on bridge port
+        │
+        ▼
+NF_BR_PRE_ROUTING                ← ebtables PREROUTING (L2 filtering)
+        │
+   Forwarding decision (MAC table)
+        │
+        ├─── destined for bridge IP ──────────────┐
+        │                                          │
+        ▼ (forward to another port)                ▼
+  [br_netfilter injects into INET hooks:]   NF_BR_LOCAL_IN
+  NF_INET_PRE_ROUTING  ← conntrack, DNAT          │
+  NF_INET_FORWARD      ← iptables/nftables         ▼
+  NF_INET_POST_ROUTING ← SNAT                Bridge IP stack
+        │
+        ▼
+NF_BR_POST_ROUTING               ← ebtables POSTROUTING
+        │
+        ▼
+Frame exits bridge port
+```
+
+> [!warning] Double-processing 
+> With `br_netfilter`, the same IP packet passes through both `ebtables` (L2) and `iptables`/`nftables` (L3) hooks. Traffic that crosses a bridge and is then routed (common on Docker hosts) can trigger conntrack twice, causing INVALID states or double-NAT. Use conntrack zones to isolate bridge and routing domains. 
 
 # Connection Tracking
 
@@ -285,19 +390,19 @@ _Rewriting source or destination addresses and ports, layered on conntrack._
 
 ## How NAT Uses Conntrack
 
-NAT is not a separate packet-mangling pass on every packet. The translation is decided once, on the first packet of a flow, and recorded in that flow's [[#Connection Tracking|conntrack]] entry; the kernel then applies it to every subsequent packet in both directions automatically. This is why a [[nftables#Chain Types|nat-type]] chain only ever sees the first packet of a connection, and why NAT requires conntrack to be active. IPv6, by contrast, is normally routed end to end without NAT at all; see [[#No NAT by Default]].
+NAT is not a separate packet-mangling pass on every packet. <mark style="background: #FFB8EBA6;">The translation is decided once</mark>, <mark style="background: #FF5582A6;">on the first packet of a flow</mark>, <mark style="background: #FFB86CA6;">and recorded in that flow's [[#Connection Tracking|conntrack]] entry</mark>; <mark style="background: #FFF3A3A6;">the kernel then applies it to every subsequent packet in both directions automatically</mark>. This is why a [[nftables#Chain Types|nat-type]] chain only ever sees the first packet of a connection, and why NAT requires conntrack to be active. IPv6, by contrast, is normally routed end to end without NAT at all; see [[#No NAT by Default]].
 
 ![[netfilter-conntrack-nat.png]]
 
 ## DNAT
 
-Destination NAT is the mechanism behind <strong>port forwarding</strong> and publishing an internal server: it rewrites the destination address, and optionally the port, to a target you name explicitly in the rule (`dnat to 192.168.1.10:443`) — the kernel does not infer the real server, you specify it. 
+Destination NAT is the mechanism behind <strong>port forwarding</strong> and publishing an internal server: <mark style="background: #FFB8EBA6;">it rewrites the destination address</mark>, and optionally the port, <mark style="background: #FF5582A6;">to a target you name explicitly in the rule</mark> (`dnat to 192.168.1.10:443`) — the kernel does not infer the real server, you specify it. 
 
-The rule runs at [[#Prerouting|prerouting]] (or [[#Output|output]] for locally generated traffic) at `dstnat` priority, before the [[#Packet Traversal|routing decision]], and that ordering is the whole point: with the destination already changed, the routing lookup sees the internal address and forwards the packet to the real server instead of delivering it locally to the gateway. 
+<mark style="background: #FFB86CA6;">The rule runs at [[#Prerouting|prerouting]] (or [[#Output|output]] for locally generated traffic) at `dstnat` priority</mark>, before the [[#Packet Traversal|routing decision]], and that ordering is the whole point: with the destination already changed, the routing lookup sees the internal address and forwards the packet to the real server instead of delivering it locally to the gateway. 
 
-The first packet also creates the [[#Connection Tracking|conntrack]] entry, whose reply tuple takes the new destination as its source; from then on the stored entry does the translating, not the rule.
+<mark style="background: #FFF3A3A6;">The first packet also creates the [[#Connection Tracking|conntrack]] entry</mark>, whose <strong>reply tuple</strong> takes the <mark style="background: #BBFABBA6;">new destination</mark> as its source; <mark style="background: #ABF7F7A6;">from then on <strong>the stored entry</strong> does the translating</mark>, not the rule.
 
-The reply is un-translated automatically: a returning packet matches that reply tuple, so the kernel rewrites its source back to the address the client first contacted, with no second rule. This holds only if replies come back through the same box — if the internal server has its own route to the client and answers directly, the reply never meets the conntrack entry and the client discards it, the classic reason a port forward appears to "half work".
+<mark style="background: #ADCCFFA6;">The <strong>reply</strong> is un-translated automatically</mark>: <mark style="background: #D2B3FFA6;">a returning packet matches that <strong>reply tuple</strong></mark>, so <mark style="background: #CACFD9A6;">the kernel rewrites its source back to the address the client first contacted</mark>, with no second rule. This holds only <mark style="background: #FFB8EBA6;">if replies come back through the same box</mark> — if the internal server has its own route to the client and answers directly, the reply never meets the conntrack entry and the client discards it, the classic reason a port forward appears to "half work".
 
 ## SNAT
 
@@ -496,6 +601,16 @@ From [[nftables]] the `log` statement selects between them (a plain `log`, or `l
 ## NFQUEUE
 
 NFQUEUE hands a packet to a userspace program over `libnetfilter_queue`; the program inspects it and returns a verdict, so the packet's fate is decided outside the kernel. This is how inline intrusion-prevention systems such as Suricata operate. In [[nftables]] it is the `queue` [[nftables#Verdict Statements|verdict]], which corresponds to the kernel's `NF_QUEUE`.
+
+```
+Kernel                           Userspace
+  │                                  │
+  │  rule: -j NFQUEUE --queue-num 0  │
+  ├─── NF_QUEUE verdict ────────────►│  libnetfilter_queue
+  │                                  │  inspects / optionally modifies
+  │◄── verdict (ACCEPT or DROP) ─────│
+  └─ packet continues or is freed
+```
 
 ## Counters and Quotas
 

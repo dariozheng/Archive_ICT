@@ -13,15 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/netfilter.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "nftables"
+              "title": "netfilter"
+            }
+          },
+          {
+            "id": "04122f76fb55fec6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/netfilter.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "netfilter"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -104,13 +119,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/netfilter.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of nftables"
+              "title": "Outline of netfilter"
             }
           },
           {
@@ -154,7 +169,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/netfilter.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -164,7 +179,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for nftables"
+              "title": "Backlinks for netfilter"
             }
           },
           {
@@ -173,12 +188,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/netfilter.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from nftables"
+              "title": "Outgoing links from netfilter"
             }
           },
           {
@@ -219,11 +234,13 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "2d95b11448712956",
+  "active": "04122f76fb55fec6",
   "lastOpenFiles": [
-    "0 - Notes/netfilter.md",
     "0 - Notes/nftables.md",
     "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/WLC 9800.md",
     "attachments/netfilter-packet-flow-1.png",
     "attachments/nf-hooks.png",
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
@@ -233,7 +250,6 @@
     "2 - Categories/Linux.md",
     "2 - Categories/Topics/Linux/Ubuntu.md",
     "0 - Notes/UFW.md",
-    "0 - Notes/WLC 9800.md",
     "2 - Categories/Topics/Linux/General.md",
     "0 - Notes/Untitled.md",
     "attachments/netfilter-packet-flow.png",
