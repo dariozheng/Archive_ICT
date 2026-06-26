@@ -49,8 +49,7 @@
               "title": "Untitled"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -133,13 +132,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Untitled.md",
+                "file": "0 - Notes/netfilter.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Untitled"
+              "title": "Outline of netfilter"
             }
           },
           {
@@ -183,7 +182,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Untitled.md",
+                "file": "0 - Notes/netfilter.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -193,7 +192,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Untitled"
+              "title": "Backlinks for netfilter"
             }
           },
           {
@@ -202,12 +201,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/Untitled.md",
+                "file": "0 - Notes/netfilter.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Untitled"
+              "title": "Outgoing links from netfilter"
             }
           },
           {
@@ -224,7 +223,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -248,10 +248,10 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "e614a2be3fc28fa2",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/netfilter.md",
     "0 - Notes/Untitled.md",
+    "0 - Notes/netfilter.md",
     "0 - Notes/WLC 9800.md",
     "0 - Notes/nftables.md",
     "attachments/netfilter-masquerade.png",

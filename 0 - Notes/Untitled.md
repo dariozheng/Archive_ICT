@@ -154,8 +154,6 @@ Outbound from this host:
 
 NAT positioning falls out of this naturally: change the destination before routing ([[#DNAT|DNAT]] in [[#Prerouting|prerouting]]) and the source after routing ([[#SNAT|SNAT]] in [[#Postrouting|postrouting]]).
 
----
-
 # Connection Tracking
 
 _The subsystem that remembers connections, making stateful filtering and NAT possible._
