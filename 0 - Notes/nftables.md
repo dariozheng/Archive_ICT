@@ -747,4 +747,5 @@ table inet filter {
 
 A source that exceeds the rate is dropped until its set entry times out; everyone else is accepted by the following rule.
 
-> [!info] Reading order recap A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].
+> [!info] Reading order recap 
+> A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].

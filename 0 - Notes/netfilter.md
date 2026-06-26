@@ -154,12 +154,28 @@ _How the kernel orders multiple functions that sit on the same hook._
 
 Some priorities are occupied by built-in stages regardless of what you write:
 
-|Stage|Priority|Runs|
-|---|---|---|
-|defragmentation|-400|reassembles fragments before anything inspects them|
-|connection tracking|-200|classifies the packet's [[#Connection States|
-|destination NAT|-100|DNAT, in prerouting / output|
-|source NAT|100|SNAT, in postrouting / input|
+| nftables [[nftables#Address Families\|Families]] | Typical hooks      | _nft_Keyword | Value   | Netfilter Internal Priority | Description                                                                                                                |
+| ------------------------------------------------ | ------------------ | ------------ | ------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+|                                                  | prerouting         |              | -450    | NF_IP_PRI_RAW_BEFORE_DEFRAG |                                                                                                                            |
+| inet, ip, ip6                                    | prerouting         |              | -400    | NF_IP_PRI_CONNTRACK_DEFRAG  | Packet defragmentation / datagram reassembly                                                                               |
+| inet, ip, ip6                                    | all                | **raw**      | -300    | NF_IP_PRI_RAW               | Traditional priority of the raw table placed before connection tracking operation                                          |
+|                                                  |                    |              | -225    | NF_IP_PRI_SELINUX_FIRST     | SELinux operations                                                                                                         |
+| inet, ip, ip6                                    | prerouting, output |              | -200    | NF_IP_PRI_CONNTRACK         | [[#Connection tracking]] processes run early in prerouting and output hooks to associate packets with tracked connections. |
+| inet, ip, ip6                                    | all                | **mangle**   | -150    | NF_IP_PRI_MANGLE            | Mangle operation                                                                                                           |
+| inet, ip, ip6                                    | prerouting         | **dstnat**   | -100    | NF_IP_PRI_NAT_DST           | Destination NAT                                                                                                            |
+| inet, ip, ip6, arp, netdev                       | all                | **filter**   | 0       | NF_IP_PRI_FILTER            | Filtering operation, the filter table                                                                                      |
+| inet, ip, ip6                                    | all                | **security** | 50      | NF_IP_PRI_SECURITY          | Place of security table, where secmark can be set for example                                                              |
+| inet, ip, ip6                                    | postrouting        | **srcnat**   | 100     | NF_IP_PRI_NAT_SRC           | Source NAT                                                                                                                 |
+|                                                  | postrouting        |              | 225     | NF_IP_PRI_SELINUX_LAST      | SELinux at packet exit                                                                                                     |
+| inet, ip, ip6                                    | postrouting        |              | 300     | NF_IP_PRI_CONNTRACK_HELPER  | Connection tracking helpers, which identify expected and related packets.                                                  |
+| inet, ip, ip6                                    | input, postrouting |              | INT_MAX | NF_IP_PRI_CONNTRACK_CONFIRM | Connection tracking adds new tracked connections at final step in input & postrouting hooks.                               |
+|                                                  |                    |              |         |                             |                                                                                                                            |
+| bridge                                           | prerouting         | **dstnat**   | -300    | NF_BR_PRI_NAT_DST_BRIDGED   |                                                                                                                            |
+| bridge                                           | all                | **filter**   | -200    | NF_BR_PRI_FILTER_BRIDGED    |                                                                                                                            |
+| bridge                                           |                    |              | 0       | NF_BR_PRI_BRNF              |                                                                                                                            |
+| bridge                                           | output             | **out**      | 100     | NF_BR_PRI_NAT_DST_OTHER     |                                                                                                                            |
+| bridge                                           |                    |              | 200     | NF_BR_PRI_FILTER_OTHER      |                                                                                                                            |
+| bridge                                           | postrouting        | **srcnat**   | 300     | NF_BR_PRI_NAT_SRC           |                                                                                                                            |
 
 [[nftables]] gives the common values keyword names (`raw`, `mangle`, `dstnat`, `filter`, `security`, `srcnat`); see [[nftables#Hook and Priority]]. The numbers are defined per family, so the [[nftables#bridge|bridge family]] uses a different scale.
 
@@ -265,7 +281,7 @@ NF_INET_LOCAL_IN
 
 ### Bridge Packet Traversal
 
-Without [[#Bridged Traffic and br_netfilter|br_netfilter,]] bridged frames stay entirely within ebtables hooks and never reach iptables or conntrack. With `br_netfilter` loaded, bridged IP frames additionally traverse the INET hooks:
+Without [[#Bridged Traffic and br_netfilter|br_netfilter]], bridged frames stay entirely within ebtables hooks and never reach iptables or conntrack. With `br_netfilter` loaded, bridged IP frames additionally traverse the INET hooks:
 
 ```
 Frame arrives on bridge port
@@ -550,7 +566,7 @@ nft add rule inet filter input icmpv6 type { \
     echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-advert } accept
 ```
 
-> [!note] Harden Neighbor 
+> [!note] Harden Neighbor
 > Discovery with the hop limit Genuine ND messages always arrive with a hop limit of 255 — routers decrement it, so a value of 255 proves the packet was not forwarded. Matching `ip6 hoplimit 255` on the ND types rejects spoofed Neighbor Discovery injected from off-link.
 
 ## No NAT by Default
