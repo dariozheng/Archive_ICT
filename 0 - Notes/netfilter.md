@@ -404,25 +404,46 @@ Destination NAT is the mechanism behind <strong>port forwarding</strong> and pub
 
 <mark style="background: #ADCCFFA6;">The <strong>reply</strong> is un-translated automatically</mark>: <mark style="background: #D2B3FFA6;">a returning packet matches that <strong>reply tuple</strong></mark>, so <mark style="background: #CACFD9A6;">the kernel rewrites its source back to the address the client first contacted</mark>, with no second rule. This holds only <mark style="background: #FFB8EBA6;">if replies come back through the same box</mark> — if the internal server has its own route to the client and answers directly, the reply never meets the conntrack entry and the client discards it, the classic reason a port forward appears to "half work".
 
+### Port Forwarding
+
+To publish an internal web server at `192.168.1.10:443` on the firewall's public `203.0.113.7:443`:
+
+1. Enable forwarding, since the firewall must route the packet onward rather than deliver it locally: `net.ipv4.ip_forward = 1` (and `net.ipv6.conf.all.forwarding = 1` for IPv6).
+2. Add the DNAT rule in a [[nftables#Chain Types|nat-type]] chain on [[#Prerouting|prerouting]], so it runs before routing: `iifname "eth0" tcp dport 443 dnat to 192.168.1.10:443`. This is the only rule that names the target; the public address is just the one clients reach the firewall on.
+3. On the first packet the destination becomes `192.168.1.10:443`, so the [[#Packet Traversal|routing decision]] forwards it toward the LAN instead of delivering it to the firewall, and [[#Connection Tracking|conntrack]] records the flow with the reply tuple's source set to `192.168.1.10:443`.
+4. Permit the forwarded traffic in the filter `forward` chain when its policy is drop, matching the post-DNAT destination: `ip daddr 192.168.1.10 tcp dport 443 ct state new accept`. Return traffic is already handled by the usual `ct state established,related accept`.
+5. The server replies from `192.168.1.10:443`; that reply matches the stored reply tuple, so the kernel restores the source to `203.0.113.7:443` on its own — no return rule — and the client sees the answer from the address it contacted.
+6. If inside hosts must also reach the service through the public address, add the [[#Hairpin NAT|hairpin]] SNAT. Confirm the live mapping at any time with `conntrack -L`.
+
+The complete, copy-ready ruleset is the [[nftables#Port Forwarding|port-forwarding recipe]] in the nftables note.
+
 ## SNAT
 
 Source NAT rewrites the source address, so it must run in [[#Postrouting|postrouting]], after routing has chosen the outgoing interface. It is how many private hosts share one public address.
 
 ## Masquerade
 
-Masquerade is a dynamic form of [[#SNAT|SNAT]]: instead of a fixed source written into the rule, it rewrites the source to the address currently configured on the outgoing interface, looked up when the flow's first packet is translated. 
+<mark style="background: #FFB8EBA6;">Masquerade is a dynamic form of [[#SNAT|SNAT]]</mark>. Rather than <strong>a fixed source</strong> <mark style="background: #FFF3A3A6;">written into the rule</mark>, <mark style="background: #FF5582A6;">it rewrites the source to whatever address is</mark> <mark style="background: #FFB86CA6;">on the outgoing interface</mark> when the flow's first packet is translated — so `oifname "eth0" masquerade` is the natural choice for an uplink addressed by DHCP or PPP, following the interface across address changes where a static `snat to` would be wrong until rewritten.
 
-That makes it the right choice for an uplink whose address comes from DHCP or PPP and is not known when the ruleset is written — `oifname "eth0" masquerade` keeps working across address changes, where a static `snat to` would have to be rewritten each time.
+![[netfilter-masquerade.png]]
 
-The convenience has two costs. It does the interface-address lookup per new connection rather than using a constant, so it is marginally more work than static [[#SNAT|SNAT]]. More importantly, it hooks interface state: when the outgoing interface goes down, the kernel flushes the [[#Connection Tracking|conntrack]] entries that were masqueraded through it, so flows over a link that drops are cleared instead of lingering against an address that may have changed on the way back up. On a stable uplink with a known fixed address, plain SNAT is slightly cheaper and equally correct.
+That dynamism carries two consequences. <mark style="background: #FFF3A3A6;">It costs a per-connection lookup of the interface address instead of reusing a constant</mark>, so it is marginally heavier than static [[#SNAT|SNAT]]. And it is tied to interface state: <mark style="background: #BBFABBA6;">when the outgoing interface goes down</mark>, <mark style="background: #ABF7F7A6;">the kernel flushes the [[#Connection Tracking|conntrack]] entries masqueraded through it</mark>, <mark style="background: #ADCCFFA6;">clearing flows over a dropped link</mark> rather than leaving them stranded against an address that may differ when the link returns. On a stable uplink with a fixed address, plain SNAT is slightly cheaper and just as correct.
 
 ## Redirect
 
-Redirect is a special [[#DNAT|DNAT]] that sends the packet to the local machine itself (the address of the interface it arrived on). It is the usual way to transparently divert traffic into a local proxy. When the proxy needs to see the original destination rather than the rewritten local one, use [[#Transparent Proxying (TPROXY)|TPROXY]] instead, which delivers to a local socket without translating the address.
+Redirect is [[#DNAT|DNAT]] <mark style="background: #FFB8EBA6;">aimed at the local host</mark>: <mark style="background: #FF5582A6;">it rewrites the destination</mark> <mark style="background: #FFB86CA6;">to the primary address of the interface the packet arrived on</mark>, <mark style="background: #FFF3A3A6;">keeping the original port or taking one you give it</mark> (`redirect to :3128`). 
+
+Running at [[#Prerouting|prerouting]] like any DNAT, it is the standard way <mark style="background: #BBFABBA6;">to pull traffic into a local proxy</mark> — for instance sending outbound port 80 to a Squid listening on 3128 — and the reply is un-translated automatically.
+
+Its limitation is that the proxy now sees a connection addressed to the local machine, so the original destination is gone from the packet; the proxy has to recover it from conntrack via the `SO_ORIGINAL_DST` socket option. 
+
+When the original destination must stay on the packet, or the host needs to intercept traffic that is merely passing through rather than addressed to it, use [[#Transparent Proxying (TPROXY)|TPROXY]] instead, which delivers to a local socket without translating the address.
 
 ## Hairpin NAT
 
-When a host on the inside reaches another inside host through the firewall's public address, the packet needs both [[#DNAT|DNAT]] (to reach the real server) and [[#SNAT|SNAT]] (so the server replies back through the firewall rather than directly). This combination is called hairpin NAT or NAT reflection, and forgetting the SNAT half is a classic cause of "works from outside, fails from inside".
+<mark style="background: #FFB8EBA6;">When an inside host reaches another inside host through the firewall's public address</mark>, the traffic "hairpins" — in and back out the same interface — <mark style="background: #FF5582A6;">and needs two translations, not one</mark>. [[#DNAT|DNAT]] <mark style="background: #FFB86CA6;">sends the request on to the real server as usual</mark>, <mark style="background: #FFF3A3A6;">but on its own</mark> <mark style="background: #BBFABBA6;">it leaves the server seeing the original inside client as the source</mark>. <mark style="background: #ABF7F7A6;">Because the two share a subnet, the server then replies straight to the client</mark>; <mark style="background: #ADCCFFA6;">the client, which addressed its request to the public IP</mark>, <mark style="background: #D2B3FFA6;">gets a reply from an unexpected private address and discards it</mark>.
+
+<mark style="background: #CACFD9A6;">Adding [[#SNAT|SNAT]] (or [[#Masquerade|masquerade]]) on that path fixes it by rewriting the source to the firewall's inside address</mark>, <mark style="background: #FFB8EBA6;">so the server replies to the firewall, which reverses both translations and returns the packet from the public address the client expects</mark>. This combination is hairpin NAT, or NAT reflection; forgetting the SNAT half is the classic cause of "works from outside, fails from inside".
 
 The [[nftables]] statements that perform these operations (`dnat`, `snat`, `masquerade`, `redirect`) are covered in [[nftables#Other Statements]].
 
@@ -434,28 +455,31 @@ Beyond filtering and NAT, Netfilter can modify packets and attach metadata to th
 
 ## Packet and Connection Marks
 
-Two distinct marks exist:
+A mark is a 32-bit integer the kernel attaches to a packet or a connection and reads internally to make decisions; it is never written into a header or sent on the wire. Two separate marks exist, and what distinguishes them is how long they live.
 
-- The packet mark (also called <strong>fwmark</strong> or <strong>nfmark</strong>) is a 32-bit value attached to a packet for the duration of its trip through the kernel. It is never transmitted; it lives only in memory and is read by routing and <strong>tc</strong>.
-- The connection mark (<strong>ctmark</strong>) is stored on the [[#Connection Tracking|conntrack]] entry, so it persists for the whole connection, across every packet in both directions.
+The packet mark is a field on the in-kernel packet buffer (`skb->mark`), and it exists only for that single packet's journey through the stack — once the packet is transmitted or dropped the value is gone, and the matching reply arrives carrying its own mark of zero. The names fwmark and nfmark are two labels for this same field, inherited from two different worlds: nfmark is netfilter's name for it (`meta mark` in nftables, the `MARK` target in iptables), while fwmark — "firewall mark" — is what the routing and traffic-control tools call it (`ip rule … fwmark`, tc's `fw` classifier). Setting `meta mark` and matching on `fwmark` therefore act on exactly the same value. It is read by [[#Marks and Policy Routing|policy routing]] to pick a routing table and by tc to pick a shaping queue, it can be matched by other netfilter rules, and a local process can stamp it on its own outgoing packets through the `SO_MARK` socket option.
 
-Both are set from [[nftables]] with `meta mark set` and `ct mark set` (see [[nftables#Other Statements]]). The usual idiom is to decide once and remember it: on the first packet, compute a packet mark and copy it to the connection mark; on every later packet, copy the connection mark back to the packet mark so the whole flow is treated consistently.
+The connection mark (ctmark) is stored on the [[#Connection Tracking|conntrack]] entry instead of the packet, so it persists for the entire connection — every packet, both directions, for as long as the flow lives in the table. It is the durable counterpart to the ephemeral packet mark.
+
+The two are normally used together, because the packet mark forgets and the connection mark remembers. The decision you want to act on can usually only be made on the first packet of a flow — which interface it entered on, which socket or user it came from — and the reply, handled later and separately, no longer has that context. So the idiom is to decide once, save the result on the connection, then restore it onto every subsequent packet, using the `ct mark set` and `meta mark set` statements from [[nftables#Other Statements]]:
 
 ```bash
-ct mark set 0x1            # first packet of a flow: tag the connection
-meta mark set ct mark      # every packet: restore the packet mark from the connection
+ct mark set 0x1            # first packet: record the decision on the connection
+meta mark set ct mark      # every packet: copy it back onto the packet for routing and tc
 ```
+
+The restore has to run before the [[#Packet Traversal|routing decision]] consults `skb->mark`, so it belongs in a prerouting or output chain. Both marks are 32 bits wide and are often handled with bitmasks, letting independent subsystems each own a slice of the bits without clobbering one another (`meta mark set mark and 0xffff0000 or 0x1`).
 
 ## Marks and Policy Routing
 
-The packet mark is the bridge between the firewall and policy routing. The routing subsystem can choose a routing table based on the mark, which is how multi-WAN, <strong>VPN split-tunnelling</strong> and source-based routing are built: nftables sets the mark, `ip rule` matches it.
+The packet mark is the bridge between the firewall and policy routing. The routing subsystem can choose a routing table based on the mark, which is how multi-WAN, VPN split-tunnelling and source-based routing are built: nftables sets the mark, `ip rule` matches it.
 
 ```bash
 ip rule add fwmark 0x1 table 100        # marked packets consult table 100
 ip route add default via 203.0.113.1 table 100
 ```
 
-The same mark can drive <strong>tc</strong>, which classifies packets into shaping queues by <strong>fwmark</strong> — so a single mark set in the firewall can steer both which link a packet leaves by and how it is queued.
+The same mark can drive tc, which classifies packets into shaping queues by fwmark — so a single mark set in the firewall can steer both which link a packet leaves by and how it is queued.
 
 ## Transparent Proxying (TPROXY)
 
