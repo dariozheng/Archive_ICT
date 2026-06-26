@@ -8,15 +8,16 @@ tags:
 icon: SiLinux
 iconColor: "#000000"
 ---
-nftables is the modern packet-filtering framework for Linux: a single command, `nft`, and one in-kernel engine, `nf_tables`, that together replace iptables, ip6tables, arptables and ebtables. It does not process packets itself — it compiles your ruleset into the kernel and programs [[Netfilter]], the framework that provides the hooks and subsystems the rules actually act on.
+nftables is the modern packet-filtering framework for Linux: a single command, `nft`, and one in-kernel engine, `nf_tables`, that together replace iptables, ip6tables, arptables and ebtables. It does not process packets itself —<mark style="background: #FFB8EBA6;"> it compiles your ruleset into the kernel</mark> and <mark style="background: #FFB86CA6;">programs [[Netfilter]], the framework that provides the hooks and subsystems the rules actually act on</mark>.
 
-> [!info] nftables drives Netfilter `nft` (userspace) writes rules into `nf_tables` (kernel), which registers them at [[Netfilter#Hooks and Packet Flow|Netfilter hooks]]. The hooks, [[Netfilter#Hook Priorities|priorities]], [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] are defined by Netfilter and documented in [[Netfilter]]; this note covers how to express and operate the rules that use them.
+> [!info] nftables drives 
+> Netfilter `nft` (userspace) writes rules into `nf_tables` (kernel), which registers them at [[Netfilter#Hooks and Packet Flow|Netfilter hooks]]. The hooks, [[Netfilter#Hook Priorities|priorities]], [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] are defined by Netfilter and documented in [[Netfilter]]; this note covers how to express and operate the rules that use them.
 
 ---
 
 # The nftables Object Model
 
-_How rules are organised: a family holds tables, a table holds chains, a chain holds rules, and sets and maps keep those rules compact._
+_How rules are organized: a family holds tables, a table holds chains, a chain holds rules, and sets and maps keep those rules compact._
 
 ![[nftables-object-model.png]]
 
@@ -24,20 +25,22 @@ _How rules are organised: a family holds tables, a table holds chains, a chain h
 
 _Which protocol's packets a [[#Tables|table]] sees, and which [[Netfilter#Hooks and Packet Flow|hooks]] are available to it._
 
-Every table belongs to an address family. The family is the first thing you pick, because it determines what layer of the stack the rules can see (IP, ARP, raw Ethernet) and which Netfilter hooks exist there.
+<mark style="background: #FFF3A3A6;">Every table belongs to an address family</mark>. The family is the first thing you pick, because <mark style="background: #BBFABBA6;">it determines what layer of the stack the rules can see (IP, ARP, raw Ethernet)</mark> and which <mark style="background: #ABF7F7A6;">Netfilter hooks exist there</mark>.
 
-|Family|Layer / scope|Hooks available|
-|---|---|---|
-|`ip`|IPv4 only|all five IP hooks|
-|`ip6`|IPv6 only|all five IP hooks|
-|`inet`|IPv4 and IPv6 together|all five IP hooks|
-|`arp`|ARP packets|input, output|
-|`bridge`|bridged Ethernet frames (L2)|prerouting, input, forward, output, postrouting|
-|`netdev`|raw packets on one interface|ingress (and egress)|
+| Family   | Layer / scope                | Hooks available                                 |
+| -------- | ---------------------------- | ----------------------------------------------- |
+| `ip`     | IPv4 only                    | all five IP hooks                               |
+| `ip6`    | IPv6 only                    | all five IP hooks                               |
+| `inet`   | IPv4 and IPv6 together       | all five IP hooks                               |
+| `arp`    | ARP packets                  | input, output                                   |
+| `bridge` | bridged Ethernet frames (L2) | prerouting, input, forward, output, postrouting |
+| `netdev` | raw packets on one interface | ingress (and egress)                            |
+
+![[netfilter-packet-flow.png]]
 
 ### inet (dual-stack)
 
-A virtual family that attaches to the IP hooks for both IPv4 and IPv6 at once, so a single ruleset covers both protocols. This is the recommended default for host and router firewalls — it removes the need to maintain parallel `ip` and `ip6` rulesets.
+<mark style="background: #FFB8EBA6;">A virtual family that attaches to the IP hooks for both IPv4 and IPv6 at once</mark>, so a single ruleset covers both protocols. This is the <mark style="background: #FF5582A6;">recommended default for host and router firewalls</mark> — it removes the need to maintain parallel `ip` and `ip6` rulesets.
 
 Inside an `inet` chain you can still narrow to one protocol when needed:
 
@@ -45,21 +48,21 @@ Inside an `inet` chain you can still narrow to one protocol when needed:
 - shared matches like `tcp dport`, `ct state` or `meta l4proto` apply to both versions at once.
 - a protocol-specific header match (`ip saddr`, `ip6 daddr`) implicitly restricts that rule to the matching version.
 
-A dual-stack ruleset still has to honour a few IPv6-specific requirements — permitting ICMPv6, the no-NAT model, and `fib`-based anti-spoofing; these are covered in [[Netfilter#IPv6 and Netfilter]].
+A dual-stack ruleset still has to honor a few IPv6-specific requirements — permitting ICMPv6, the no-NAT model, and `fib`-based anti-spoofing; these are covered in [[Netfilter#IPv6 and Netfilter]].
 
 ### ip and ip6
 
-Single-protocol families that see only IPv4 (`ip`) or only IPv6 (`ip6`) traffic, each with all five IP hooks. Reach for them only when a rule genuinely applies to one protocol alone; otherwise prefer [[#inet (dual-stack)|inet]].
+<mark style="background: #FFB86CA6;">Single-protocol families</mark> <mark style="background: #BBFABBA6;">that see only IPv4</mark> (`ip`) <mark style="background: #BBFABBA6;">or only IPv6</mark> (`ip6`) <mark style="background: #BBFABBA6;">traffic</mark>, each with all five IP hooks. Reach for them only when a rule genuinely applies to one protocol alone; otherwise prefer [[#inet (dual-stack)|inet]].
 
 ### arp
 
-The `arp` family filters ARP packets — the protocol that maps IPv4 addresses to MAC addresses on a local segment. It supports only the input and output hooks and replaces the old arptables tool. Typical uses are blocking or rate-limiting ARP to mitigate spoofing, or enforcing expected MAC/IP pairings.
+The `arp` family <mark style="background: #ABF7F7A6;">filters ARP packets</mark> — the protocol that maps IPv4 addresses to MAC addresses on a local segment. <mark style="background: #ADCCFFA6;">It supports only the input and output hooks</mark> and replaces the old <strong>arptables</strong> tool. Typical uses are blocking or rate-limiting ARP to mitigate spoofing, or enforcing expected MAC/IP pairings.
 
 ### bridge
 
-The `bridge` family operates at Layer 2, on Ethernet frames passing through a Linux software bridge — a virtual switch (for example `br0`) that joins several interfaces into one segment, the kind hypervisors and container runtimes create to connect VMs and containers. It replaces the old ebtables tool. The bridge normally lives in the host's initial [[Netfilter#Network Namespaces|namespace]], so its bridge-family rules are evaluated there rather than inside each container.
+The `bridge` family <mark style="background: #D2B3FFA6;">operates at Layer 2</mark>, <mark style="background: #D2B3FFA6;">on Ethernet frames passing through a Linux software bridge</mark> — <mark style="background: #CACFD9A6;">a virtual switch</mark> (for example `br0`) <mark style="background: #CACFD9A6;">that joins several interfaces into one segment</mark>, the <mark style="background: #FFB8EBA6;">kind</mark> <mark style="background: #FF5582A6;">hypervisors and container runtimes</mark> <mark style="background: #FFB8EBA6;">create</mark> <mark style="background: #FFB86CA6;">to connect VMs and containers</mark>. <strong>It replaces the old ebtables tool</strong>. <mark style="background: #FFF3A3A6;">The bridge normally lives in the host's initial [[Netfilter#Network Namespaces|namespace]]</mark>, <mark style="background: #BBFABBA6;">so its bridge-family rules are evaluated there</mark> rather than inside each container.
 
-Because bridging happens below IP, a bridge chain can match on MAC addresses, VLAN tags and EtherType, and can filter traffic flowing between bridge ports that may never reach the IP layer at all. It exposes the same five hook names as IP, but they fire on the bridge's L2 path — the `forward` hook, for instance, sees a frame moving from one bridge port to another.
+<mark style="background: #ABF7F7A6;">Because bridging happens below IP</mark>, <mark style="background: #ADCCFFA6;">a bridge chain can match on MAC addresses, VLAN tags and EtherType</mark>, and <mark style="background: #D2B3FFA6;">can filter traffic flowing between bridge ports that may never reach the IP layer at all</mark>. It exposes the same five hook names as IP, but they fire on the bridge's L2 path — the `forward` hook, for instance, sees a frame moving from one bridge port to another.
 
 The bridge family defines its own [[Netfilter#Hook Priorities|priority]] scale, so the standard keywords map to different numbers than in `ip` / `ip6` / `inet`:
 
