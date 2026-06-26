@@ -164,7 +164,8 @@ More than one base chain may sit on the same hook; they run in ascending priorit
 
 The policy is the [[#Verdict Statements|verdict]] applied to a packet that reaches the end of a base chain without hitting a terminating rule. It can only be `accept` or `drop`. A base chain created without an explicit policy defaults to `accept`.
 
-> [!warning] Default-drop and lockout A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
+> [!warning] Default-drop and lockout 
+> A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
 
 ```bash
 nft add rule inet filter input iif lo accept

@@ -65,8 +65,6 @@ At the lowest level a hook function returns one of a small set of verdicts. Fron
 
 In [[nftables]] terms, `accept` maps to `NF_ACCEPT`, `drop` to `NF_DROP`, and `queue` to `NF_QUEUE`. The control-flow verdicts `continue`, `return`, `jump` and `goto` are handled inside the rule engine and do not correspond to distinct kernel verdicts; see [[nftables#Verdict Statements]].
 
----
-
 # Hooks and Packet Flow
 
 _The fixed points where Netfilter intercepts packets, and the order in which they fire._

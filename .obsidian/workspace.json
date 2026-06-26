@@ -195,8 +195,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -220,11 +219,11 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "2d95b11448712956",
   "lastOpenFiles": [
     "0 - Notes/netfilter.md",
-    "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
     "0 - Notes/nftables.md",
+    "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
     "attachments/netfilter-packet-flow-1.png",
     "attachments/nf-hooks.png",
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
