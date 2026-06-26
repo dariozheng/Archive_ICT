@@ -550,7 +550,8 @@ nft add rule inet filter input icmpv6 type { \
     echo-request, nd-neighbor-solicit, nd-neighbor-advert, nd-router-advert } accept
 ```
 
-> [!note] Harden Neighbor Discovery with the hop limit Genuine ND messages always arrive with a hop limit of 255 — routers decrement it, so a value of 255 proves the packet was not forwarded. Matching `ip6 hoplimit 255` on the ND types rejects spoofed Neighbor Discovery injected from off-link.
+> [!note] Harden Neighbor 
+> Discovery with the hop limit Genuine ND messages always arrive with a hop limit of 255 — routers decrement it, so a value of 255 proves the packet was not forwarded. Matching `ip6 hoplimit 255` on the ND types rejects spoofed Neighbor Discovery injected from off-link.
 
 ## No NAT by Default
 
