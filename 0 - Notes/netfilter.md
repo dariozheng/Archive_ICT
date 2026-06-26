@@ -276,8 +276,6 @@ conntrack -D -s 10.0.0.5     # delete entries from a source
 conntrack -F                 # flush the whole table
 ```
 
----
-
 # Network Address Translation
 
 _Rewriting source or destination addresses and ports, layered on conntrack._
@@ -290,7 +288,13 @@ NAT is not a separate packet-mangling pass on every packet. The translation is d
 
 ## DNAT
 
-Destination NAT rewrites the destination address (and optionally port), so it must run in [[#Prerouting|prerouting]] — or [[#Output|output]] for locally generated traffic — where the new destination still affects the [[#Packet Traversal|routing decision]]. It is the mechanism behind port forwarding and publishing an internal server. The matching reply traffic is un-translated automatically.
+Destination NAT is the mechanism behind <strong>port forwarding</strong> and publishing an internal server: it rewrites the destination address, and optionally the port, to a target you name explicitly in the rule (`dnat to 192.168.1.10:443`) — the kernel does not infer the real server, you specify it. 
+
+The rule runs at [[#Prerouting|prerouting]] (or [[#Output|output]] for locally generated traffic) at `dstnat` priority, before the [[#Packet Traversal|routing decision]], and that ordering is the whole point: with the destination already changed, the routing lookup sees the internal address and forwards the packet to the real server instead of delivering it locally to the gateway. 
+
+The first packet also creates the [[#Connection Tracking|conntrack]] entry, whose reply tuple takes the new destination as its source; from then on the stored entry does the translating, not the rule.
+
+The reply is un-translated automatically: a returning packet matches that reply tuple, so the kernel rewrites its source back to the address the client first contacted, with no second rule. This holds only if replies come back through the same box — if the internal server has its own route to the client and answers directly, the reply never meets the conntrack entry and the client discards it, the classic reason a port forward appears to "half work".
 
 ## SNAT
 
@@ -298,7 +302,11 @@ Source NAT rewrites the source address, so it must run in [[#Postrouting|postrou
 
 ## Masquerade
 
-Masquerade is a dynamic form of [[#SNAT|SNAT]] that uses the outgoing interface's current address, chosen per packet. It is ideal when that address is assigned by DHCP or PPP and not known in advance; the cost is a small per-packet lookup compared with static SNAT.
+Masquerade is a dynamic form of [[#SNAT|SNAT]]: instead of a fixed source written into the rule, it rewrites the source to the address currently configured on the outgoing interface, looked up when the flow's first packet is translated. 
+
+That makes it the right choice for an uplink whose address comes from DHCP or PPP and is not known when the ruleset is written — `oifname "eth0" masquerade` keeps working across address changes, where a static `snat to` would have to be rewritten each time.
+
+The convenience has two costs. It does the interface-address lookup per new connection rather than using a constant, so it is marginally more work than static [[#SNAT|SNAT]]. More importantly, it hooks interface state: when the outgoing interface goes down, the kernel flushes the [[#Connection Tracking|conntrack]] entries that were masqueraded through it, so flows over a link that drops are cleared instead of lingering against an address that may have changed on the way back up. On a stable uplink with a known fixed address, plain SNAT is slightly cheaper and equally correct.
 
 ## Redirect
 
@@ -310,8 +318,6 @@ When a host on the inside reaches another inside host through the firewall's pub
 
 The [[nftables]] statements that perform these operations (`dnat`, `snat`, `masquerade`, `redirect`) are covered in [[nftables#Other Statements]].
 
----
-
 # Packet Mangling and Marking
 
 _Rewriting and tagging packets in flight, and steering routing with the result._
@@ -322,8 +328,8 @@ Beyond filtering and NAT, Netfilter can modify packets and attach metadata to th
 
 Two distinct marks exist:
 
-- The packet mark (also called fwmark or nfmark) is a 32-bit value attached to a packet for the duration of its trip through the kernel. It is never transmitted; it lives only in memory and is read by routing and tc.
-- The connection mark (ctmark) is stored on the [[#Connection Tracking|conntrack]] entry, so it persists for the whole connection, across every packet in both directions.
+- The packet mark (also called <strong>fwmark</strong> or <strong>nfmark</strong>) is a 32-bit value attached to a packet for the duration of its trip through the kernel. It is never transmitted; it lives only in memory and is read by routing and <strong>tc</strong>.
+- The connection mark (<strong>ctmark</strong>) is stored on the [[#Connection Tracking|conntrack]] entry, so it persists for the whole connection, across every packet in both directions.
 
 Both are set from [[nftables]] with `meta mark set` and `ct mark set` (see [[nftables#Other Statements]]). The usual idiom is to decide once and remember it: on the first packet, compute a packet mark and copy it to the connection mark; on every later packet, copy the connection mark back to the packet mark so the whole flow is treated consistently.
 
@@ -334,22 +340,22 @@ meta mark set ct mark      # every packet: restore the packet mark from the conn
 
 ## Marks and Policy Routing
 
-The packet mark is the bridge between the firewall and policy routing. The routing subsystem can choose a routing table based on the mark, which is how multi-WAN, VPN split-tunnelling and source-based routing are built: nftables sets the mark, `ip rule` matches it.
+The packet mark is the bridge between the firewall and policy routing. The routing subsystem can choose a routing table based on the mark, which is how multi-WAN, <strong>VPN split-tunnelling</strong> and source-based routing are built: nftables sets the mark, `ip rule` matches it.
 
 ```bash
 ip rule add fwmark 0x1 table 100        # marked packets consult table 100
 ip route add default via 203.0.113.1 table 100
 ```
 
-The same mark can drive tc, which classifies packets into shaping queues by fwmark — so a single mark set in the firewall can steer both which link a packet leaves by and how it is queued.
+The same mark can drive <strong>tc</strong>, which classifies packets into shaping queues by <strong>fwmark</strong> — so a single mark set in the firewall can steer both which link a packet leaves by and how it is queued.
 
 ## Transparent Proxying (TPROXY)
 
 _Diverting traffic to a local proxy without rewriting its destination._
 
-A transparent proxy — or a service-mesh sidecar such as Envoy — must receive connections that were aimed at some other host while still seeing the original destination, so it can relay them upstream. A plain [[#Redirect|redirect]] cannot do this: being a DNAT, it overwrites the destination with the local address, and the proxy can only partially recover it (IPv4 TCP only, via `SO_ORIGINAL_DST`).
+<mark style="background: #FFB8EBA6;">A transparent proxy</mark> — or a service-mesh sidecar such as Envoy — <mark style="background: #FFB8EBA6;">must receive connections</mark> <mark style="background: #FF5582A6;">that were aimed at some other host</mark> <mark style="background: #FFB8EBA6;">while still seeing the original destination</mark>, <mark style="background: #FFB86CA6;">so it can relay them upstream</mark>. A plain [[#Redirect|redirect]] cannot do this: being a DNAT, it overwrites the destination with the local address, and the proxy can only partially recover it (IPv4 TCP only, via `SO_ORIGINAL_DST`).
 
-TPROXY instead delivers the packet to a local socket while leaving its destination address untouched, and it works for TCP and UDP over both IPv4 and IPv6. It runs in a [[#Prerouting|prerouting]] chain and is built directly on the [[#Packet and Connection Marks|marks]] and [[#Marks and Policy Routing|policy routing]] above — three pieces have to line up:
+<strong>TPROXY</strong> instead <mark style="background: #FFF3A3A6;">delivers the packet to a local socket</mark> <mark style="background: #BBFABBA6;">while leaving its destination address untouched</mark>, and it works for TCP and UDP over both IPv4 and IPv6. <mark style="background: #ADCCFFA6;">It runs in a</mark> [[#Prerouting|prerouting]] <mark style="background: #ADCCFFA6;">chain</mark> and <mark style="background: #D2B3FFA6;">is built directly on the</mark> [[#Packet and Connection Marks|marks]] and [[#Marks and Policy Routing|policy routing]] <mark style="background: #D2B3FFA6;">above</mark> — three pieces have to line up:
 
 1. The proxy opens its listening socket with the `IP_TRANSPARENT` option, so it may bind foreign addresses and accept redirected traffic.
 2. A prerouting rule matches the traffic, marks it, and hands it to the proxy's port with `tproxy`.
@@ -380,11 +386,11 @@ Because it only attaches at prerouting, TPROXY acts on traffic the host forwards
 
 ## Rewriting Header Fields
 
-Netfilter can also overwrite selected header fields in flight: normalising the DSCP / TOS bits for QoS, or adjusting the IPv4 TTL and IPv6 hop limit. These are ordinary statements applied at a hook, and the rewritten value (DSCP, for example) survives onto the wire to be honoured by downstream routers.
+Netfilter can also overwrite selected header fields in flight: normalizing the DSCP / TOS bits for QoS, or adjusting the IPv4 TTL and IPv6 hop limit. These are ordinary statements applied at a hook, and the rewritten value (DSCP, for example) survives onto the wire to be honored by downstream routers.
 
 ## MSS Clamping
 
-On links with a reduced MTU — PPPoE, GRE, IPsec and other tunnels — large TCP segments carrying the Don't-Fragment bit can be silently dropped when Path MTU Discovery is broken, giving the classic "small requests work, large transfers hang" symptom. MSS clamping fixes this by rewriting the TCP maximum-segment-size option on SYN packets as they are forwarded, so both endpoints agree on a segment size that fits. It is applied to SYNs in the [[#Forward|forward]] path:
+On links with a reduced MTU — PPPoE, GRE, IPsec and other tunnels — large TCP segments carrying the <strong>Don't-Fragment</strong> bit can be silently dropped when Path MTU Discovery is broken, giving the classic "small requests work, large transfers hang" symptom. MSS clamping fixes this by rewriting the TCP maximum-segment-size option on SYN packets as they are forwarded, so both endpoints agree on a segment size that fits. It is applied to SYNs in the [[#Forward|forward]] path:
 
 ```bash
 # clamp the MSS of forwarded SYNs down to the path MTU
@@ -434,21 +440,19 @@ Because `fib` works for any family, it is worth using in place of `rp_filter` ev
 
 IPv6 replaces the IPv4 options field with a chain of extension headers (Hop-by-Hop, Routing, Fragment, Destination). The real upper-layer protocol sits after them, so match it with `meta l4proto`, which walks the chain, rather than assuming a fixed offset. Fragmentation is carried in a Fragment extension header and is reassembled by [[#Connection Tracking|conntrack]] before inspection, just as in IPv4. Some extension headers are abused — the Type 0 Routing Header (RH0) enabled traffic amplification and is dropped by modern kernels — so dropping unwanted extension headers explicitly is a reasonable hardening step.
 
----
-
 # Network Namespaces
 
 _Every Netfilter ruleset, set of hooks and conntrack table exists once per network namespace._
 
-A network namespace partitions the entire network stack — interfaces, routing tables, the ARP and [[#Connection Tracking|conntrack]] tables, and the full [[nftables]] ruleset are all private to it. The machine boots with one initial namespace (the host), and further namespaces can be created on demand; each container normally gets its own. Nothing in Netfilter is global: the [[#Hooks and Packet Flow|hooks]], their [[#Hook Priorities|priorities]], and the conntrack state table all exist once per namespace, fully independent of every other namespace's copy.
+A <strong>network namespace</strong> <mark style="background: #FFB8EBA6;">partitions</mark> <mark style="background: #FF5582A6;">the entire network stack</mark> — <mark style="background: #FFB86CA6;">interfaces, routing tables, the ARP and [[#Connection Tracking|conntrack]] tables, and the full [[nftables]] ruleset are all private to it</mark>. <mark style="background: #FFF3A3A6;">The machine boots with one initial namespace (the host)</mark>, and <mark style="background: #BBFABBA6;">further namespaces can be created on demand; each container normally gets its own</mark>. <mark style="background: #ABF7F7A6;">Nothing in Netfilter is global</mark>: the [[#Hooks and Packet Flow|hooks]], their [[#Hook Priorities|priorities]], and the conntrack state table <mark style="background: #ADCCFFA6;">all exist once per namespace, fully independent of every other namespace's copy</mark>.
 
 The practical consequences:
 
-- Rules are not shared. A ruleset loaded in the host has no effect inside a container, and the reverse is equally true.
-- A flow is tracked separately in each namespace it passes through, so the same connection can be `established` on one side of a link and `new` on the other.
+- <mark style="background: #D2B3FFA6;">Rules are not shared</mark>. A ruleset loaded in the host has no effect inside a container, and the reverse is equally true.
+- <mark style="background: #D2B3FFA6;">A flow is tracked separately in each namespace it passes through</mark>, so the same connection can be `established` on one side of a link and `new` on the other.
 - A [[nftables#netdev (per-interface)|netdev]] chain follows its device: an interface lives in exactly one namespace at a time, so the chain only sees traffic while that interface sits in the same namespace.
 
-Namespaces do not share a packet path. Traffic crosses between them only over a link that spans the boundary — typically a veth pair with one end in each namespace, or a physical interface moved across — and each side runs its own hooks and rules on the packet independently as it arrives. If you only need conntrack separation without full isolation, a [[#Conntrack Zones|conntrack zone]] is the lighter option.
+<mark style="background: #CACFD9A6;">Namespaces do not share a packet path</mark>. Traffic crosses between them only over a link that spans the boundary — typically a <strong>veth pair</strong> with one end in each namespace, or a physical interface moved across — and each side runs its own hooks and rules on the packet independently as it arrives. If you only need conntrack separation without full isolation, a [[#Conntrack Zones|conntrack zone]] is the lighter option.
 
 ## Working Across Namespaces
 
@@ -463,15 +467,14 @@ ip netns exec testns nft list ruleset           # run nft inside a named namespa
 nsenter -t <pid> -n nft list ruleset            # enter the namespace of a running process
 ```
 
-> [!note] `ip netns` only sees named namespaces `ip netns list` shows namespaces registered under `/run/netns` — those created with `ip netns add`. Container runtimes usually create anonymous namespaces that are not registered there, so they will not appear. Use `lsns -t net` to enumerate every network namespace on the host, and reach a container's namespace through a process inside it with `nsenter -t <pid> -n …`.
+> [!note] `ip netns` only sees named namespaces 
+> `ip netns list` shows namespaces registered under `/run/netns` — those created with `ip netns add`. Container runtimes usually create anonymous namespaces that are not registered there, so they will not appear. Use `lsns -t net` to enumerate every network namespace on the host, and reach a container's namespace through a process inside it with `nsenter -t <pid> -n …`.
 
 ## Containers and Namespaces
 
 A container runtime — Docker, Podman, Kubernetes — gives each container its own namespace and links it to the host with a veth pair, usually attached to a [[nftables#bridge|bridge]] such as `docker0` that lives in the host namespace. The rules that publish ports and masquerade outbound traffic ([[#DNAT|DNAT]] and [[#Masquerade|masquerade]]) are written into the host namespace by the runtime, while the container's own namespace typically starts almost empty.
 
 When container connectivity misbehaves, check both sides: the host ruleset for the runtime's [[#Network Address Translation|NAT]] and forward rules, and the container's namespace (reached with `nsenter`) for anything the workload loaded itself. Rules you load inside a container's namespace also vanish when the container is recreated, unless the image or an init step reloads them. And because containers are usually attached through a bridge, bridged IP traffic only reaches your `ip` / `inet` rules when [[#Bridged Traffic and br_netfilter|br_netfilter]] is enabled.
-
----
 
 # Logging, Queueing and Accounting
 

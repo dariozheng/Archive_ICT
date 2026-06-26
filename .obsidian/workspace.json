@@ -119,13 +119,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Untitled.md",
+                "file": "0 - Notes/netfilter.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Untitled"
+              "title": "Outline of netfilter"
             }
           },
           {
@@ -210,7 +210,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -234,14 +235,14 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
+    "0 - Notes/Untitled.md",
     "attachments/netfilter-packet-flow.png",
     "0 - Notes/netfilter.md",
     "0 - Notes/nftables.md",
     "attachments/netfilter-conntrack-nat.png",
     "attachments/netfilter-conntrack-tuple.png",
-    "0 - Notes/Untitled.md",
     "attachments/netfilter-conntrack-tuple.png",
     "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
     "attachments/conntrack_tuple_structure.png",
