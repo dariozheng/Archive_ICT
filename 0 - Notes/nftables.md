@@ -77,9 +77,9 @@ This is why `priority filter` resolves to a different number depending on family
 
 ### netdev (per-interface)
 
-A `netdev` chain is bound to one specific interface and runs at the `ingress` hook — the earliest point in the stack, before [[Netfilter#Prerouting|prerouting]] and before [[Netfilter#Connection Tracking|conntrack]], roughly where tc ingress sits. Kernels 5.16 and later also offer an `egress` hook.
+<mark style="background: #FFB8EBA6;">A `netdev` chain is bound to one specific interface</mark> and <mark style="background: #FF5582A6;">runs at the `ingress` hook</mark> — <mark style="background: #FF5582A6;">the earliest point in the stack</mark>, <mark style="background: #FFB86CA6;">before [[Netfilter#Prerouting|prerouting]] and before [[Netfilter#Connection Tracking|conntrack]]</mark>, roughly where <strong>tc</strong> ingress sits. Kernels 5.16 and later also offer an `egress` hook.
 
-Because packets dropped here never enter the rest of the stack, netdev is the place for high-volume early filtering: anti-spoofing, basic DDoS scrubbing, and dropping obvious garbage before it costs the kernel anything. A netdev base chain must name its device:
+Because packets dropped here never enter the rest of the stack, <mark style="background: #FFF3A3A6;"><strong>netdev</strong> is the place for high-volume early filtering</mark>: <strong>anti-spoofing</strong>, <strong>basic DDoS scrubbing</strong>, and <strong>dropping obvious garbage</strong> before it costs the kernel anything. A <strong>netdev</strong> base chain must name its device:
 
 ```bash
 nft add chain netdev filter ingress-eth0 \
