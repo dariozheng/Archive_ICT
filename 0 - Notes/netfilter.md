@@ -489,7 +489,8 @@ Netfilter can log packet metadata in two ways:
 
 From [[nftables]] the `log` statement selects between them (a plain `log`, or `log group N` for NFLOG); see [[nftables#Other Statements]].
 
-> [!warning] Rate-limit logging A `log` rule on a busy path can flood the kernel log and crowd out everything else. Pair it with a rate limit (a `limit` statement in [[nftables]]) so only a sample of matching packets is recorded.
+> [!warning] Rate-limit logging 
+> A `log` rule on a busy path can flood the kernel log and crowd out everything else. Pair it with a rate limit (a `limit` statement in [[nftables]]) so only a sample of matching packets is recorded.
 
 ## NFQUEUE
 
@@ -498,8 +499,6 @@ NFQUEUE hands a packet to a userspace program over `libnetfilter_queue`; the pro
 ## Counters and Quotas
 
 Netfilter can attach counters (packets and bytes) and quotas (a one-shot byte threshold) to rules, providing per-rule accounting and usage caps. In [[nftables]] these are the `counter` and `quota` objects and statements; see [[nftables#Counters and Quotas]].
-
----
 
 # Troubleshooting and Observability
 
@@ -530,8 +529,6 @@ On hosts with asymmetric or multi-homed routing, strict mode silently drops legi
 ## Mitigating Floods
 
 For internet-facing services, two Netfilter features blunt common floods. A [[#Connection Tracking|conntrack]]-based limit (`ct count` in [[nftables]]) caps concurrent connections per source. For SYN floods specifically, synproxy answers the handshake with SYN cookies and only creates a conntrack entry once a connection is proven real, keeping spoofed SYNs out of the state table entirely.
-
----
 
 # Frontends and Related Tools
 
