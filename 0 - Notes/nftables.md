@@ -98,7 +98,8 @@ nft add table inet filter      # create a dual-stack table
 nft list ruleset               # show everything currently loaded
 ```
 
-> [!important] Different from iptables In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
+> [!important] Different from iptables 
+> In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
 
 ## Chains
 
@@ -164,7 +165,8 @@ More than one base chain may sit on the same hook; they run in ascending priorit
 
 The policy is the [[#Verdict Statements|verdict]] applied to a packet that reaches the end of a base chain without hitting a terminating rule. It can only be `accept` or `drop`. A base chain created without an explicit policy defaults to `accept`.
 
-> [!warning] Default-drop and lockout A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
+> [!warning] Default-drop and lockout 
+> A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
 
 ```bash
 nft add rule inet filter input iif lo accept
@@ -276,7 +278,8 @@ Verdict statements decide what happens to the packet. The terminal ones map to [
 |`jump <chain>`|no|enter a chain; `return` comes back here|
 |`goto <chain>`|no|enter a chain; does not return — the caller's context is replaced|
 
-> [!note] reject is technically separate The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice. The reply type is selectable with `reject with` — `reject with tcp reset` sends a TCP RST, and `reject with icmpx type admin-prohibited` sends a family-independent ICMP/ICMPv6 error.
+> [!note] reject is technically separate 
+> The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice. The reply type is selectable with `reject with` — `reject with tcp reset` sends a TCP RST, and `reject with icmpx type admin-prohibited` sends a family-independent ICMP/ICMPv6 error.
 
 The `queue` verdict can target a specific queue or a range — `queue num 0-3` spreads packets across several userspace readers (add `flags fanout` to keep each flow on one queue), and `queue flags bypass` lets a packet be accepted instead of dropped when no program is listening.
 
@@ -331,7 +334,8 @@ The NAT statements above only take effect in a [[#Chain Types|nat-type]] chain a
 
 _Native data structures that keep rulesets short and lookups fast._
 
-> [!note] Prefer sets and maps to long rule lists A chain of rules is evaluated one after another, while a set or map is a single hash lookup. Matching many addresses or ports against a [[#Sets|set]], or dispatching with a verdict [[#Maps|map]], is both faster and shorter than writing a rule per value — reach for them whenever a list starts to grow.
+> [!note] Prefer sets and maps to long rule lists 
+> A chain of rules is evaluated one after another, while a set or map is a single hash lookup. Matching many addresses or ports against a [[#Sets|set]], or dispatching with a verdict [[#Maps|map]], is both faster and shorter than writing a rule per value — reach for them whenever a list starts to grow.
 
 ## Sets
 
@@ -374,7 +378,8 @@ nft add rule inet filter input ct state new \
     add @flooders { ip saddr limit rate over 10/minute } drop
 ```
 
-> [!note] `meter` is the legacy spelling Older rulesets used a `meter { … }` wrapper; current nftables expresses the same idea by updating a named dynamic set from the rule, as above.
+> [!note] `meter` is the legacy spelling 
+> Older rulesets used a `meter { … }` wrapper; current nftables expresses the same idea by updating a named dynamic set from the rule, as above.
 
 ---
 
@@ -498,7 +503,8 @@ nft -f /etc/nftables.conf      # apply the whole file as one transaction
 nft -c -f /etc/nftables.conf   # check syntax only, change nothing
 ```
 
-> [!important] `nft -f` is additive, not a reset A file is layered on top of whatever is already loaded; it does not clear the existing ruleset first. To make a file fully replace the running configuration — the usual intent for `/etc/nftables.conf` — begin it with `flush ruleset`, which is why every config in this note opens with that line.
+> [!important] `nft -f` is additive, not a reset 
+> A file is layered on top of whatever is already loaded; it does not clear the existing ruleset first. To make a file fully replace the running configuration — the usual intent for `/etc/nftables.conf` — begin it with `flush ruleset`, which is why every config in this note opens with that line.
 
 ### Inspecting
 
@@ -575,7 +581,8 @@ iptables-translate -A INPUT -p tcp --dport 22 -j ACCEPT
 iptables-save | iptables-restore-translate -f /dev/stdin
 ```
 
-> [!warning] Do not mix engines on one host Legacy `iptables` and `nft` rules can attach at the same [[Netfilter#Hooks and Packet Flow|hooks]] without being aware of each other, producing confusing results. Pick one engine and stay on it.
+> [!warning] Do not mix engines on one host 
+> Legacy `iptables` and `nft` rules can attach at the same [[Netfilter#Hooks and Packet Flow|hooks]] without being aware of each other, producing confusing results. Pick one engine and stay on it.
 
 The biggest conceptual change is that iptables' fixed tables (`filter`, `nat`, `mangle`, `raw`) become ordinary [[#Tables|tables]] and [[#Chains|chains]] that you create yourself, with the old table semantics expressed through [[#Chain Types|chain types]] and [[#Hook and Priority|priorities]].
 
@@ -756,4 +763,5 @@ table inet filter {
 
 A source that exceeds the rate is dropped until its set entry times out; everyone else is accepted by the following rule.
 
-> [!info] Reading order recap A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].
+> [!info] Reading order recap 
+> A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].
