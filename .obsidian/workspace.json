@@ -195,8 +195,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -220,15 +219,15 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "04122f76fb55fec6",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
+    "0 - Notes/nftables.md",
     "0 - Notes/WireGuard.md",
+    "0 - Notes/WLC 9800.md",
     "2 - Categories/Topics/Security/VPN.md",
     "0 - Notes/Distributed Denial-of-Service (DDoS).md",
     "3 - Templates/Bases/Topic/Security/VPN.base",
     "2 - Categories/Topics/Security/Firewall.md",
-    "0 - Notes/WLC 9800.md",
-    "0 - Notes/nftables.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/iptables.md",
     "attachments/wlc9800-tag-architecture.png",
