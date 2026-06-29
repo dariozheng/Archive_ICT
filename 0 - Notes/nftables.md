@@ -11,7 +11,8 @@ iconColor: "#000000"
 ---
 nftables is the modern packet-filtering framework for Linux: a single command, `nft`, and one in-kernel engine, `nf_tables`, that together replace iptables, ip6tables, arptables and ebtables. It does not process packets itself —<mark style="background: #FFB8EBA6;"> it compiles your ruleset into the kernel</mark> and <mark style="background: #FFB86CA6;">programs [[Netfilter]], the framework that provides the hooks and subsystems the rules actually act on</mark>.
 
-> [!info] nftables drives Netfilter `nft` (userspace) writes rules into `nf_tables` (kernel), which registers them at [[Netfilter#Hooks and Packet Flow|Netfilter hooks]]. The hooks, [[Netfilter#Hook Priorities|priorities]], [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] are defined by Netfilter and documented in [[Netfilter]]; this note covers how to express and operate the rules that use them.
+> [!info] nftables drives 
+> Netfilter `nft` (userspace) writes rules into `nf_tables` (kernel), which registers them at [[Netfilter#Hooks and Packet Flow|Netfilter hooks]]. The hooks, [[Netfilter#Hook Priorities|priorities]], [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] are defined by Netfilter and documented in [[Netfilter]]; this note covers how to express and operate the rules that use them.
 
 ---
 
@@ -228,6 +229,9 @@ Header fields:
 |`ip saddr` / `ip daddr`|IPv4 source / destination address|
 |`ip6 saddr` / `ip6 daddr`|IPv6 source / destination address|
 |`ip protocol` / `ip6 nexthdr`|upper-layer protocol|
+|`ip dscp` / `ip6 dscp`|DSCP / traffic-class field (QoS)|
+|`ip ttl` / `ip6 hoplimit`|IPv4 TTL / IPv6 hop limit|
+|`ip frag-off` / `frag`|IPv4 fragment offset / IPv6 fragment header|
 |`tcp dport` / `udp dport`|transport destination port|
 |`tcp flags`|TCP flags (e.g. `syn`, `rst`)|
 |`icmp type` / `icmpv6 type`|ICMP message type|
@@ -274,6 +278,8 @@ Verdict statements decide what happens to the packet. The terminal ones map to [
 
 > [!note] reject is technically separate The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice. The reply type is selectable with `reject with` — `reject with tcp reset` sends a TCP RST, and `reject with icmpx type admin-prohibited` sends a family-independent ICMP/ICMPv6 error.
 
+The `queue` verdict can target a specific queue or a range — `queue num 0-3` spreads packets across several userspace readers (add `flags fanout` to keep each flow on one queue), and `queue flags bypass` lets a packet be accepted instead of dropped when no program is listening.
+
 `accept` is only final for the current base chain. A packet accepted in a [[Netfilter#Prerouting|prerouting]] chain still continues to the next hook; it is not a global pass.
 
 The difference between `jump` and `goto` is the return path. After a `jump`, a `return` (or the chain ending) brings you back to the statement after the jump. After a `goto`, a `return` does not come back; it behaves as if you had been in the target chain all along.
@@ -293,6 +299,8 @@ Besides verdicts, a rule can carry non-terminal action statements that change st
 |`masquerade` / `redirect`|dynamic SNAT / DNAT-to-local|[[Netfilter#Masquerade]]|
 |`tproxy to`|deliver to a local socket without rewriting the destination|[[Netfilter#Transparent Proxying (TPROXY)]]|
 |`meta mark set` / `ct mark set`|tag the packet / the connection|[[Netfilter#Packet and Connection Marks]]|
+|`ip dscp set` / `ip ttl set` / `ip6 hoplimit set`|rewrite header fields in place (QoS class, TTL / hop limit)|[[Netfilter#Rewriting Header Fields\|mangling]]|
+|`tcp option maxseg size set`|clamp the TCP MSS (e.g. `… set rt mtu`)|[[Netfilter#MSS Clamping\|MSS clamping]]|
 |`notrack`|skip [[Netfilter#Connection Tracking\|conntrack]] for this packet (use at `raw`)|conntrack|
 |`flow add @ft`|offload an established flow to a [[#Flowtables]]|[[#Flowtables]]|
 |`dup to`|send a copy of the packet elsewhere|—|
@@ -312,6 +320,8 @@ nft add rule inet filter input ct state new drop
 nft add rule ip nat prerouting tcp dport 80 dnat to 192.168.1.10:8080
 nft add rule ip nat postrouting oif "eth0" masquerade
 ```
+
+A `limit` can also permit short bursts above the average rate — `limit rate 20/second burst 50 packets` — so brief legitimate spikes are not dropped.
 
 The NAT statements above only take effect in a [[#Chain Types|nat-type]] chain at the right hook; the mechanics are described in [[Netfilter#Network Address Translation]]. The `tproxy` statement additionally needs a policy-routing rule that delivers marked packets to the loopback — the full recipe is in [[Netfilter#Transparent Proxying (TPROXY)]].
 
