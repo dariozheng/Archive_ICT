@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/WireGuard.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "nftables"
+              "title": "WireGuard"
             }
           }
         ]
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/WireGuard.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of nftables"
+              "title": "Outline of WireGuard"
             }
           },
           {
@@ -154,7 +154,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/WireGuard.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -164,7 +164,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for nftables"
+              "title": "Backlinks for WireGuard"
             }
           },
           {
@@ -173,12 +173,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/WireGuard.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from nftables"
+              "title": "Outgoing links from WireGuard"
             }
           },
           {
@@ -195,8 +195,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
@@ -222,43 +221,45 @@
   },
   "active": "04122f76fb55fec6",
   "lastOpenFiles": [
-    "0 - Notes/netfilter.md",
+    "2 - Categories/Topics/Security/VPN.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/Distributed Denial-of-Service (DDoS).md",
+    "3 - Templates/Bases/Topic/Security/VPN.base",
+    "2 - Categories/Topics/Security/Firewall.md",
+    "0 - Notes/WLC 9800.md",
     "0 - Notes/nftables.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/iptables.md",
+    "attachments/wlc9800-tag-architecture.png",
+    "attachments/wireguard-full-tunnel-routing.png",
+    "attachments/wireguard-cryptokey-routing.png",
+    "2 - Categories/Topics/Linux/Linux General.md",
+    "0 - Notes/Microsoft Remote Procedure Call.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/UFW.md",
     "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
     "0 - Notes/Untitled.md",
-    "0 - Notes/WLC 9800.md",
     "attachments/netfilter-masquerade.png",
-    "0 - Notes/WireGuard.md",
     "attachments/netfilter-packet-flow-1.png",
     "attachments/nf-hooks.png",
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
-    "2 - Categories/Topics/Linux/Linux General.md",
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
     "2 - Categories/Systems.md",
     "2 - Categories/Linux.md",
     "2 - Categories/Topics/Linux/Ubuntu.md",
-    "0 - Notes/UFW.md",
     "2 - Categories/Topics/Linux/General.md",
     "attachments/netfilter-packet-flow.png",
     "attachments/netfilter-conntrack-nat.png",
     "attachments/netfilter-conntrack-tuple.png",
     "attachments/netfilter-conntrack-tuple.png",
-    "attachments/conntrack_tuple_structure.png",
-    "attachments/conntrack_tuple_complete.png",
-    "attachments/nftables-object-model.png",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Topics/Security/NAC.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/iptables.md",
     "Netfilter Conntrack — Connection Tracking.md",
     "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "README.md",
     "Untitled.md",
-    "0 - Notes/App-ID™.md",
-    "3 - Templates/Notes/Codes/Link to Glossary.md",
-    "0 - Notes/Microsoft Remote Procedure Call.md",
-    "2 - Categories/Topics/Networking/WLAN.md",
     "3 - Templates/Bases/Topic/Networking/WLAN.base",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
@@ -266,7 +267,6 @@
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Linux.base",
-    "3 - Templates/Bases/Systems.base",
     "Untitled.canvas"
   ]
 }

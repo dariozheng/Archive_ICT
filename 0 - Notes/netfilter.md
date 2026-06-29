@@ -7,6 +7,7 @@ tags:
   - documentation
   - firewall
   - framework
+  - claude
 icon: SiLinux
 iconColor: "#000000"
 ---

@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "SiUbuntu",
-      "SiLinux",
-      "LiWifi",
-      "FasNetworkWired",
-      "SiCisco"
+      "FasGlobe",
+      "LiBrickWallFire",
+      "SiCisco",
+      "SiWireguard",
+      "SiUbuntu"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -260,5 +260,9 @@
   "2 - Categories/Topics/Linux/Linux General.md": {
     "iconName": "SiLinux",
     "iconColor": "#000000"
+  },
+  "2 - Categories/Topics/Security/VPN.md": {
+    "iconName": "FasGlobe",
+    "iconColor": "#844c3b"
   }
 }

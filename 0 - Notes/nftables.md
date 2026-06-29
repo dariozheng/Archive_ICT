@@ -5,13 +5,13 @@ topic@linux: "[[Linux General]]"
 tags:
   - firewall
   - networking
+  - claude
 icon: SiLinux
 iconColor: "#000000"
 ---
 nftables is the modern packet-filtering framework for Linux: a single command, `nft`, and one in-kernel engine, `nf_tables`, that together replace iptables, ip6tables, arptables and ebtables. It does not process packets itself —<mark style="background: #FFB8EBA6;"> it compiles your ruleset into the kernel</mark> and <mark style="background: #FFB86CA6;">programs [[Netfilter]], the framework that provides the hooks and subsystems the rules actually act on</mark>.
 
-> [!info] nftables drives 
-> Netfilter `nft` (userspace) writes rules into `nf_tables` (kernel), which registers them at [[Netfilter#Hooks and Packet Flow|Netfilter hooks]]. The hooks, [[Netfilter#Hook Priorities|priorities]], [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] are defined by Netfilter and documented in [[Netfilter]]; this note covers how to express and operate the rules that use them.
+> [!info] nftables drives Netfilter `nft` (userspace) writes rules into `nf_tables` (kernel), which registers them at [[Netfilter#Hooks and Packet Flow|Netfilter hooks]]. The hooks, [[Netfilter#Hook Priorities|priorities]], [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] are defined by Netfilter and documented in [[Netfilter]]; this note covers how to express and operate the rules that use them.
 
 ---
 
@@ -27,14 +27,14 @@ _Which protocol's packets a [[#Tables|table]] sees, and which [[Netfilter#Hooks 
 
 <mark style="background: #FFF3A3A6;">Every table belongs to an address family</mark>. The family is the first thing you pick, because <mark style="background: #BBFABBA6;">it determines what layer of the stack the rules can see (IP, ARP, raw Ethernet)</mark> and which <mark style="background: #ABF7F7A6;">Netfilter hooks exist there</mark>.
 
-| Family   | Layer / scope                | Hooks available                                 |
-| -------- | ---------------------------- | ----------------------------------------------- |
-| `ip`     | IPv4 only                    | all five IP hooks                               |
-| `ip6`    | IPv6 only                    | all five IP hooks                               |
-| `inet`   | IPv4 and IPv6 together       | all five IP hooks                               |
-| `arp`    | ARP packets                  | input, output                                   |
-| `bridge` | bridged Ethernet frames (L2) | prerouting, input, forward, output, postrouting |
-| `netdev` | raw packets on one interface | ingress (and egress)                            |
+|Family|Layer / scope|Hooks available|
+|---|---|---|
+|`ip`|IPv4 only|all five IP hooks|
+|`ip6`|IPv6 only|all five IP hooks|
+|`inet`|IPv4 and IPv6 together|all five IP hooks|
+|`arp`|ARP packets|input, output|
+|`bridge`|bridged Ethernet frames (L2)|prerouting, input, forward, output, postrouting|
+|`netdev`|raw packets on one interface|ingress (and egress)|
 
 ![[netfilter-packet-flow.png]]
 
@@ -97,8 +97,7 @@ nft add table inet filter      # create a dual-stack table
 nft list ruleset               # show everything currently loaded
 ```
 
-> [!important] Different from iptables 
-> In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
+> [!important] Different from iptables In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
 
 ## Chains
 
@@ -164,8 +163,7 @@ More than one base chain may sit on the same hook; they run in ascending priorit
 
 The policy is the [[#Verdict Statements|verdict]] applied to a packet that reaches the end of a base chain without hitting a terminating rule. It can only be `accept` or `drop`. A base chain created without an explicit policy defaults to `accept`.
 
-> [!warning] Default-drop and lockout 
-> A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
+> [!warning] Default-drop and lockout A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
 
 ```bash
 nft add rule inet filter input iif lo accept
@@ -211,29 +209,30 @@ Match statements test packet fields. They come from three main sources: `meta` (
 
 Metadata (`meta`, the keyword is often optional):
 
-|Selector| Matches                                                         |
+|Selector|Matches|
 |---|---|
-|`iif` / `oif`| input / output interface by index (fast)                        |
-|`iifname` / `oifname`| interface by name, with wildcards like `eth*`                   |
-|`meta nfproto`| IP version (`ipv4` / `ipv6`), useful in [[#inet (dual-stack]]   |
-|`meta l4proto`| layer-4 protocol, IP-version-agnostic                           |
-|`meta mark`| the packet's firewall mark                                      |
-|`meta length`| total packet size in bytes                                      |
-|`meta hour` / `meta day`| wall-clock time of day and day of week, for time-windowed rules |
-|`meta skuid` / `meta skgid`| owning socket's user / group (output only)                      |
+|`iif` / `oif`|input / output interface by index (fast)|
+|`iifname` / `oifname`|interface by name, with wildcards like `eth*`|
+|`meta nfproto`|IP version (`ipv4` / `ipv6`), useful in [[#inet (dual-stack)|
+|`meta l4proto`|layer-4 protocol, IP-version-agnostic|
+|`meta mark`|the packet's firewall mark|
+|`meta length`|total packet size in bytes|
+|`meta pkttype`|link-layer class: `host`, `broadcast`, `multicast` — useful for dropping broadcast/multicast noise|
+|`meta hour` / `meta day`|wall-clock time of day and day of week, for time-windowed rules|
+|`meta skuid` / `meta skgid`|owning socket's user / group (output only)|
 
 Header fields:
 
-| Selector                      | Matches                              |
-| ----------------------------- | ------------------------------------ |
-| `ip saddr` / `ip daddr`       | IPv4 source / destination address    |
-| `ip6 saddr` / `ip6 daddr`     | IPv6 source / destination address    |
-| `ip protocol` / `ip6 nexthdr` | upper-layer protocol                 |
-| `tcp dport` / `udp dport`     | transport destination port           |
-| `tcp flags`                   | TCP flags (e.g. `syn`, `rst`)        |
-| `icmp type` / `icmpv6 type`   | ICMP message type                    |
-| `ether saddr` / `ether type`  | source MAC / EtherType ([[#bridge]]) |
-| `vlan id`                     | 802.1Q VLAN tag                      |
+|Selector|Matches|
+|---|---|
+|`ip saddr` / `ip daddr`|IPv4 source / destination address|
+|`ip6 saddr` / `ip6 daddr`|IPv6 source / destination address|
+|`ip protocol` / `ip6 nexthdr`|upper-layer protocol|
+|`tcp dport` / `udp dport`|transport destination port|
+|`tcp flags`|TCP flags (e.g. `syn`, `rst`)|
+|`icmp type` / `icmpv6 type`|ICMP message type|
+|`ether saddr` / `ether type`|source MAC / EtherType ([[#bridge]])|
+|`vlan id`|802.1Q VLAN tag|
 
 Connection tracking (see [[Netfilter#Connection Tracking|conntrack]]):
 
@@ -247,10 +246,10 @@ Connection tracking (see [[Netfilter#Connection Tracking|conntrack]]):
 
 Two further expressions query kernel state rather than fields in the packet:
 
-| Expression            | Matches                                                                                                                         |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `fib <keys> <result>` | the result of a routing-table lookup, used for reverse-path / anti-spoofing checks (see [[Netfilter#Anti-Spoofing with fib]])   |
-| `socket`              | properties of the local socket a packet belongs to, e.g. `socket transparent 1` for [[Netfilter#Transparent Proxying (TPROXY)]] |
+|Expression|Matches|
+|---|---|
+|`fib <keys> <result>`|the result of a routing-table lookup, used for reverse-path / anti-spoofing checks (see [[Netfilter#Anti-Spoofing with fib]])|
+|`socket`|properties of the local socket a packet belongs to, e.g. `socket transparent 1` for [[Netfilter#Transparent Proxying (TPROXY)]]|
 
 Strict reverse-path filtering, working for IPv4 and IPv6 alike, is a single `fib` rule:
 
@@ -262,18 +261,18 @@ nft add rule inet filter prerouting fib saddr . iif oif missing drop
 
 Verdict statements decide what happens to the packet. The terminal ones map to [[Netfilter#Kernel Verdicts|kernel verdicts]]; the rest steer evaluation.
 
-| Verdict        | Terminal?        | Effect                                                            |
-| -------------- | ---------------- | ----------------------------------------------------------------- |
-| `accept`       | yes (this chain) | let the packet pass this hook                                     |
-| `drop`         | yes              | discard silently, no reply                                        |
-| `reject`       | yes              | discard and send an error (ICMP / TCP RST)                        |
-| `queue`        | yes              | hand the packet to userspace via [[Netfilter#NFQUEUE]]            |
-| `continue`     | no               | keep evaluating the next rule                                     |
-| `return`       | no               | leave the current chain (a [[#Base Chains]])                      |
-| `jump <chain>` | no               | enter a chain; `return` comes back here                           |
-| `goto <chain>` | no               | enter a chain; does not return — the caller's context is replaced |
+|Verdict|Terminal?|Effect|
+|---|---|---|
+|`accept`|yes (this chain)|let the packet pass this hook|
+|`drop`|yes|discard silently, no reply|
+|`reject`|yes|discard and send an error (ICMP / TCP RST)|
+|`queue`|yes|hand the packet to userspace via [[Netfilter#NFQUEUE]]|
+|`continue`|no|keep evaluating the next rule|
+|`return`|no|leave the current chain (a [[#Base Chains]])|
+|`jump <chain>`|no|enter a chain; `return` comes back here|
+|`goto <chain>`|no|enter a chain; does not return — the caller's context is replaced|
 
-> [!note] reject is technically separate The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice.
+> [!note] reject is technically separate The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice. The reply type is selectable with `reject with` — `reject with tcp reset` sends a TCP RST, and `reject with icmpx type admin-prohibited` sends a family-independent ICMP/ICMPv6 error.
 
 `accept` is only final for the current base chain. A packet accepted in a [[Netfilter#Prerouting|prerouting]] chain still continues to the next hook; it is not a global pass.
 
@@ -285,20 +284,20 @@ The difference between `jump` and `goto` is the return path. After a `jump`, a `
 
 Besides verdicts, a rule can carry non-terminal action statements that change state or hand the packet elsewhere, then continue. Most are thin wrappers over a [[Netfilter]] subsystem.
 
-| Statement                       | Does                                                        | Subsystem                                                                   |
-| ------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `counter`                       | count packets and bytes                                     | [[Netfilter#Counters and Quotas]]                                           |
-| `log`                           | log to kernel ring buffer, or `log group N` to NFLOG        | [[Netfilter#Kernel Logging]]                                                |
-| `limit rate …`                  | match only while under a rate (rate limiting)               | —                                                                           |
-| `dnat to` / `snat to`           | rewrite destination / source                                | [[Netfilter#Network Address Translation]]                                   |
-| `masquerade` / `redirect`       | dynamic SNAT / DNAT-to-local                                | [[Netfilter#Masquerade]]                                                    |
-| `tproxy to`                     | deliver to a local socket without rewriting the destination | [[Netfilter#Transparent Proxying (TPROXY)]]                                 |
-| `meta mark set` / `ct mark set` | tag the packet / the connection                             | [[Netfilter#Packet and Connection Marks]]                                   |
-| `notrack`                       | skip [[Netfilter#Connection Tracking\|conntrack]]           | [[netfilter#Connection Tracking\|conntrack]] for this packet (use at `raw`) |
-| `flow add @ft`                  | offload an established flow to a [[#Flowtables]]            | [[#Flowtables]]                                                             |
-| `dup to`                        | send a copy of the packet elsewhere                         | —                                                                           |
-| `fwd to`                        | forward the frame to another interface (netdev only)        | —                                                                           |
-| `synproxy`                      | answer TCP handshakes with SYN cookies to absorb SYN floods | [[Netfilter#Mitigating Floods]]                                             |
+|Statement|Does|Subsystem|
+|---|---|---|
+|`counter`|count packets and bytes|[[Netfilter#Counters and Quotas]]|
+|`log`|log to kernel ring buffer, or `log group N` to NFLOG|[[Netfilter#Kernel Logging]]|
+|`limit rate …`|match only while under a rate (rate limiting)|—|
+|`dnat to` / `snat to`|rewrite destination / source|[[Netfilter#Network Address Translation]]|
+|`masquerade` / `redirect`|dynamic SNAT / DNAT-to-local|[[Netfilter#Masquerade]]|
+|`tproxy to`|deliver to a local socket without rewriting the destination|[[Netfilter#Transparent Proxying (TPROXY)]]|
+|`meta mark set` / `ct mark set`|tag the packet / the connection|[[Netfilter#Packet and Connection Marks]]|
+|`notrack`|skip [[Netfilter#Connection Tracking\|conntrack]] for this packet (use at `raw`)|conntrack|
+|`flow add @ft`|offload an established flow to a [[#Flowtables]]|[[#Flowtables]]|
+|`dup to`|send a copy of the packet elsewhere|—|
+|`fwd to`|forward the frame to another interface (netdev only)|—|
+|`synproxy`|answer TCP handshakes with SYN cookies to absorb SYN floods|[[Netfilter#Mitigating Floods]]|
 
 ```bash
 # log new SSH connections, count them, then accept
@@ -747,5 +746,4 @@ table inet filter {
 
 A source that exceeds the rate is dropped until its set entry times out; everyone else is accepted by the following rule.
 
-> [!info] Reading order recap 
-> A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].
+> [!info] Reading order recap A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].
