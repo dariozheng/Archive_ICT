@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "0 - Notes/WLC 9800.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "WireGuard"
+              "title": "WLC 9800"
             }
           }
         ]
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "0 - Notes/WLC 9800.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of WireGuard"
+              "title": "Outline of WLC 9800"
             }
           },
           {
@@ -154,7 +154,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "0 - Notes/WLC 9800.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -164,7 +164,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for WireGuard"
+              "title": "Backlinks for WLC 9800"
             }
           },
           {
@@ -173,12 +173,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "0 - Notes/WLC 9800.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from WireGuard"
+              "title": "Outgoing links from WLC 9800"
             }
           },
           {
@@ -195,7 +195,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -221,8 +222,8 @@
   },
   "active": "04122f76fb55fec6",
   "lastOpenFiles": [
-    "2 - Categories/Topics/Security/VPN.md",
     "0 - Notes/WireGuard.md",
+    "2 - Categories/Topics/Security/VPN.md",
     "0 - Notes/Distributed Denial-of-Service (DDoS).md",
     "3 - Templates/Bases/Topic/Security/VPN.base",
     "2 - Categories/Topics/Security/Firewall.md",
