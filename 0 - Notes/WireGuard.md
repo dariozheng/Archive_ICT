@@ -101,13 +101,15 @@ When the interface has a packet to send, it looks at the packet's destination ad
 
 When an encrypted packet arrives and is successfully decrypted with a given peer's keys, WireGuard checks the source address of the inner packet against that same peer's AllowedIPs. If the source is not inside the set, the packet is discarded. This stops a peer from injecting traffic that claims to come from an address it has no right to use — a peer can only send packets sourced from within its own AllowedIPs. In this direction the same list behaves like an inbound access-control list bound to the peer's identity.
 
-> [!warning] Broad AllowedIPs widens both doors Because the one list both routes outbound traffic and authorizes inbound sources, a wide AllowedIPs does more than send more traffic to a peer — it also lets that peer send packets claiming any source address within the range. On a server, keep each client's AllowedIPs as tight as its real addresses, usually a single `/32` or `/128`. Reserve broad ranges like `0.0.0.0/0` for the trusted upstream peer on a client, never for arbitrary clients on a server.
+> [!warning] Broad AllowedIPs widens both doors 
+> Because the one list both routes outbound traffic and authorizes inbound sources, a wide AllowedIPs does more than send more traffic to a peer — it also lets that peer send packets claiming any source address within the range. On a server, keep each client's AllowedIPs as tight as its real addresses, usually a single `/32` or `/128`. Reserve broad ranges like `0.0.0.0/0` for the trusted upstream peer on a client, never for arbitrary clients on a server.
 
 ## One Address, One Peer
 
 Because outbound selection is a routing lookup, a given address can belong to only one peer on an interface: if two peers both claimed `10.0.0.5`, the interface could not decide which to send to. Overlapping prefixes resolve by longest match, just like routes, so a peer with `0.0.0.0/0` catches everything not claimed more specifically by another peer. That `0.0.0.0/0, ::/0` case — routing all traffic to a single peer — is how a full-tunnel VPN is expressed; its routing-table consequences are covered in [[#Full-Tunnel Routing|full-tunnel routing]].
 
-> [!important] AllowedIPs is not the same as the kernel routing table AllowedIPs is WireGuard's own internal map of keys to addresses. For the operating system to actually hand outbound packets to the tunnel in the first place, there must also be a normal route pointing those destinations at the `wg` interface. [[#wg-quick|wg-quick]] creates those system routes automatically from each peer's AllowedIPs, which is why the two are easy to conflate — but the bare [[#wg|wg]] tool sets only the internal map and leaves kernel routing to you.
+> [!important] AllowedIPs is not the same as the kernel routing table 
+> AllowedIPs is WireGuard's own internal map of keys to addresses. For the operating system to actually hand outbound packets to the tunnel in the first place, there must also be a normal route pointing those destinations at the `wg` interface. [[#wg-quick|wg-quick]] creates those system routes automatically from each peer's AllowedIPs, which is why the two are easy to conflate — but the bare [[#wg|wg]] tool sets only the internal map and leaves kernel routing to you.
 
 ---
 
