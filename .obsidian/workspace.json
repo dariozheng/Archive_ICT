@@ -195,7 +195,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -219,7 +220,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "04122f76fb55fec6",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "0 - Notes/WLC 9800.md",
     "0 - Notes/nftables.md",
