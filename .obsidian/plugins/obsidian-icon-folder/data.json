@@ -264,5 +264,13 @@
   "2 - Categories/Topics/Security/VPN.md": {
     "iconName": "FasGlobe",
     "iconColor": "#844c3b"
+  },
+  "0 - Notes/Cisco DNA Center.md": {
+    "iconName": "SiCisco",
+    "iconColor": null
+  },
+  "0 - Notes/Cisco DNA.md": {
+    "iconName": "SiCisco",
+    "iconColor": null
   }
 }

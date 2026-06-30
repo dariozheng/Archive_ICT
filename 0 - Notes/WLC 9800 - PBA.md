@@ -18,16 +18,16 @@ Il WLC non configura direttamente gli AP ma costruisce degli profili re-usabili,
 
 ![[wlc9800-tag-architecture.png]]
 
-## Profili 
+## Profiles
 
 _Containers for the actual settings. Each profile type answers one question about the network._
 
-|Profile|Answers|Configured in|
-|---|---|---|
-|WLAN profile|What SSID is broadcast and how clients authenticate (L2 security)|[[#WLAN Profiles|
-|Policy profile|What VLAN, QoS, ACLs and switching a client gets after it joins|[[#Policy Profiles|
-|AP join profile|How the AP itself behaves — CAPWAP timers, management, SSH, syslog|[[#AP Join Profile|
-|Flex profile|VLAN mapping and local-switching behaviour for [[#FlexConnect (Local Switching)|FlexConnect]]|
-|RF profile|Data rates, channels and power per band|[[#RF Management|
+| Profile         | Answers                                                                         | Configured in                                    |
+| --------------- | ------------------------------------------------------------------------------- | ------------------------------------------------ |
+| WLAN profile    | What SSID is broadcast and how clients authenticate (L2 security)               | [[#WLAN Profiles]]                               |
+| Policy profile  | What VLAN, QoS, ACLs and switching a client gets after it joins                 | [[#Policy Profiles]]                             |
+| AP join profile | How the AP itself behaves — CAPWAP timers, management, SSH, syslog              | [[#AP Join Profile]]                             |
+| Flex profile    | VLAN mapping and local-switching behaviour for [[#FlexConnect (Local Switching) | [[#FlexConnect (Local Switching)\| FlexConnect]] |
+| RF profile      | Data rates, channels and power per band                                         | [[#RF Management]]                               |
 
 A WLAN profile and a policy profile are always used as a pair: the WLAN says how to authenticate, the policy says what access results. The pairing is made inside the [[#Policy Tag|policy tag]].
