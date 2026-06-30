@@ -9,7 +9,7 @@ tags:
 icon: SiCisco
 iconColor:
 ---
-Cisco Digital Network Architecture (Cisco DNA) is Cisco's intent-based networking architecture for the enterprise campus, branch, and WAN. It is a framework, not a single product: a software-driven approach that treats the network as one programmable system expressing business intent, rather than as a collection of independently configured devices. The controller, the fabric, the policy model, and the analytics that appear as concrete products are the implementation of this architecture — most visibly the controller, whose configuration is documented separately in [[Cisco DNA Center]]. This note covers the concepts behind it.
+Cisco Digital Network Architecture (Cisco DNA) is Cisco's intent-based networking architecture for the enterprise campus, branch, and WAN. It is a framework, not a single product: a software-driven approach that treats the network as one programmable system expressing business intent, rather than as a collection of independently configured devices. The controller, the fabric, the policy model, and the analytics that appear as concrete products are the implementation of this architecture — most visibly the controller, whose configuration is documented separately in [[Cisco DNA Center]]. This note covers the concepts behind the architecture.
 
 > [!info] Architecture versus controller "Cisco DNA" names the architecture and its guiding ideas. "Cisco DNA Center" (now Catalyst Center) is the on-premises controller that realises those ideas. The theory here is vendor-framed but largely general to intent-based networking; the product note is specific to the controller.
 
@@ -30,6 +30,12 @@ When each switch, router, and access point is configured individually through th
 _The difference between telling the network how and telling it what._
 
 Box-by-box configuration is imperative: the operator specifies the exact commands — the how — on every device. Intent-based networking is declarative: the operator specifies the desired outcome — the what — and the system works out the configuration needed to achieve it and keeps it that way. Declaring that finance endpoints may reach finance servers and nothing else is intent; the VLANs, ACLs, and tags that implement it are the system's concern, not the operator's.
+
+### Building on software-defined networking
+
+_How intent-based networking extends, rather than replaces, SDN._
+
+Software-defined networking (SDN) was the prior step in this evolution: it centralised control and made the network programmable, separating control decisions from the forwarding hardware and exposing them through a controller and open interfaces. Intent-based networking builds directly on that programmable, centralised base rather than replacing it. What it adds on top is the [[#Translation|translation]] of high-level intent into policy and a continuous [[#Assurance|assurance]] loop that verifies the outcome — turning a programmable network into a self-aligning one. Without the programmability and central control that SDN established, there would be nothing for [[#Activation|activation]] to drive or for assurance to measure.
 
 ## Intent-based networking
 
