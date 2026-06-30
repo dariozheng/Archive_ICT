@@ -2,7 +2,10 @@
 categories:
   - "[[Networking]]"
 topic@networking:
+  - "[[Networking General]]"
 tags:
+  - claude
+  - cisco
 icon: SiCisco
 iconColor:
 ---

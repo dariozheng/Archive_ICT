@@ -6,6 +6,7 @@ tags:
   - firewall
   - networking
   - claude
+  - tobecompleted
 icon: SiLinux
 iconColor: "#000000"
 ---

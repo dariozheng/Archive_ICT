@@ -4,7 +4,7 @@ categories:
 topic@networking:
   - "[[WLAN]]"
 tags:
-icon:
+icon: SiCisco
 iconColor:
 ---
 L'accesso al portale WLC è eseguito con le credenziali RADIUS tramite il portale

@@ -11,7 +11,9 @@
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "2 - Categories/Topics/Networking/WLAN.md",
-    "0 - Notes/netfilter.md"
+    "0 - Notes/netfilter.md",
+    "0 - Notes/nftables.md",
+    "0 - Notes/WireGuard.md"
   ],
   "lockedFolders": [],
   "strictLockedNotes": [],
