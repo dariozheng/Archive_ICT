@@ -77,9 +77,38 @@ Configurazione GUI
 
 ![[Pasted image 20260630121733.png]]
 
-## Server Groups e Method Lists
+## Server Groups
 
-I Server Group crea gruppi di servers che vengono usati nelle Method List che verranno usati dalle WLANs e policy profiles. 
+![[Pasted image 20260630153701.png]]
+
+I Radius Server Group crea dei gruppi server che può essere usato per i Method List. 
+
+## Method List
+
+![[Pasted image 20260630154036.png]]
+
+I method list corrispondono ai commandi
+```
+aaa authentication login default group RADIUS_SERVER_GROUP_DAY0 group ISE
+
+aaa authentication login authentication_login_day0 group RADIUS_SERVER_GROUP_DAY0 local
+
+aaa authentication login ISE group ISE
+
+aaa authentication dot1x authentication_dot1x_day0 group RADIUS_SERVER_GROUP_DAY0
+
+aaa authentication dot1x ML-ISE group ISE
+
+aaa authorization exec default group ISE group RADIUS_SERVER_GROUP_DAY0
+
+aaa authorization network default local
+
+aaa authorization network mac_filtering group ISE
+
+aaa authorization credential-download wcm_loc_serv_cert local
+
+aaa accounting identity default start-stop group ISE
+```
 
 
 
