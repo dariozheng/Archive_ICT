@@ -77,6 +77,15 @@ Configurazione GUI
 
 ![[Pasted image 20260630121733.png]]
 
+### CoA
+Change of Authorization permette a un server NAC di cambiare il tipo di autorizzazione ad un client. Con CoA è possibile disconnettere una sessione, applicare nuovi attributi(ACL, VLAN), cambiare banda. 
+
+```cisco
+aaa server radius dynamic-author
+ client 10.140.2.27 server-key 0CiScOsSSo0
+ client 10.140.2.31 server-key Plutarco46Dc!
+```
+
 ## Server Groups
 
 ![[Pasted image 20260630153701.png]]
@@ -109,14 +118,6 @@ aaa authorization credential-download wcm_loc_serv_cert local
 
 aaa accounting identity default start-stop group ISE
 ```
-
-
-
-
-
-
-
-
 
 
 ## Profiles
