@@ -19,6 +19,55 @@ iconColor: "#1BA0D7"
 ---
 Cisco Identity Services Engine (ISE) is an <strong>identity-based network access control</strong> and <strong>policy enforcement system</strong>. It functions as a common policy engine that enables <mark style="background: #FFF3A3A6;">endpoint access control </mark>and <mark style="background: #BBFABBA6;">network device administration</mark> for enterprises.
 
+## Deployment Architecture
+
+Cisco ISE sits between the network access devices and the identity and PKI infrastructure. The switches send RADIUS authentication requests to ISE; ISE evaluates them against [[#External Identity Sources - Active Directory|Active Directory]] and the certificate trust chain, then returns an authorization result — a VLAN, a [[#Downloadable ACLs|dACL]], or a URL redirect — and can push changes mid-session through [[#Change of Authorization (CoA)|CoA]]. The same nodes host the portal that [[#Redirect_Guest_Wired|Central Web Authentication]] redirects guests to.
+
+```mermaid
+flowchart LR
+    EP["Endpoints<br/>users, machines,<br/>printers, guests"]
+    SW["Catalyst Switches<br/>NAD - 802.1X/MAB authenticator"]
+    ISE["Cisco ISE<br/>ISE01 10.140.2.31<br/>ISE02 10.140.2.32<br/>Policy Service - Portals 8443/8905"]
+    MG["Mgmt RADIUS<br/>radius-mgmnt-auth01<br/>10.140.2.27<br/>admin login: ISE, NAD, DNAC"]
+    AD["Active Directory<br/>DC01 10.140.4.250<br/>DC02 10.140.4.252"]
+    PKI["Microsoft PKI<br/>subordinateca01 10.140.2.198<br/>subordinateca02 10.140.2.199"]
+    DNAC["Cisco DNA Center<br/>provisions the NADs"]
+
+    EP -->|"802.1X / MAB"| SW
+    SW -->|"RADIUS 1812/1813"| ISE
+    ISE -->|"CoA 3799"| SW
+    AD -->|"LDAP / Kerberos"| ISE
+    ISE -->|"trust chain + CRL"| PKI
+    DNAC ==>|"provisions NADs"| SW
+    ISE -.->|"admin login"| MG
+    SW -.->|"admin login"| MG
+    DNAC -.->|"admin login"| MG
+
+    classDef ise fill:#d9effb,stroke:#049fd9,stroke-width:2px;
+    classDef ad fill:#e6effe,stroke:#3b6fd4,stroke-width:1.5px;
+    classDef pki fill:#e5f5ea,stroke:#2e9e4f,stroke-width:1.5px;
+    classDef dnac fill:#e3f6f6,stroke:#12a3a3,stroke-width:1.5px;
+    classDef mg fill:#fdf1e3,stroke:#e0862a,stroke-width:1.5px;
+    classDef net fill:#eeeeee,stroke:#6b6b6b,stroke-width:1.5px;
+    class ISE ise;
+    class AD ad;
+    class PKI pki;
+    class DNAC dnac;
+    class MG mg;
+    class SW,EP net;
+```
+
+The Policy Service is provided by two ISE nodes, ISE01 (10.140.2.31) and ISE02 (10.140.2.32). They terminate RADIUS for 802.1X and MAB on ports 1812/1813, send Change of Authorization on 3799, and host the guest/sponsor portal (8443) and posture/client-provisioning services (8905) — the ports permitted to them in the [[#Pre-Auth|Pre-Auth]] DACL. Run as a pair they provide redundancy: a switch that lists both in its [[PBA - NAC - Network Access Devices#RADIUS Server Configuration|ISESERV group]] fails over automatically if one node is unreachable. In a two-node deployment the Administration (PAN) and Monitoring (MnT) personas normally run on this same primary/secondary pair; confirm the exact persona assignment against the live system.
+
+Administrative login is handled separately from endpoint NAC. A management RADIUS target, radius-mgmnt-auth01 at 10.140.2.27 — the switch's [[PBA - NAC - Network Access Devices#RADIUS Server Configuration|RADSERV group]] — authenticates CLI and HTTPS administrator logins to ISE, the NADs, and Cisco DNA Center, returning shell:priv-lvl for the privilege level. This path is independent of the Policy Service Nodes above; whether 10.140.2.27 is a dedicated ISE node or a separate server is not captured here.
+
+The surrounding infrastructure ISE operates within:
+
+- Active Directory — the external identity store ISE is joined to; domain controllers DC01 (10.140.4.250) and DC02 (10.140.4.252) answer LDAP and Kerberos identity and group lookups.
+- Microsoft PKI — subordinate CAs subordinateca01 (10.140.2.198) and subordinateca02 (10.140.2.199), beneath a root CA, issue the [[PBA - NAC - Microsoft Servers#EAP Authentication Certificate|EAP]] and client/machine certificates; ISE trusts the CA chain and checks the CRL during EAP-TLS and TEAP.
+- Network Access Devices — the Catalyst switches are ISE's RADIUS clients for endpoint access; the switch side is documented in [[PBA - NAC - Network Access Devices#802.1X Global Settings|the NAD note]].
+- Cisco DNA Center — the network controller that provisions and rolls out the NADs (pushing their configuration); its own administrator access is authenticated by the management RADIUS above.
+
 ## Identity Management
 
 Identity Management manages all identities for ISE, from ISE GUI admins to users that have to authenticate to ISE.
@@ -49,7 +98,9 @@ Endpoint and User Groups can be used as attributes in Policy Sets.
 
 ![[Pasted image 20260513164133.png]]
 
-Endpoint Identity Groups store information about all the endpoint devices that connect to the network infrastructure or they can be filled through a CSV import.
+Endpoint Identity Groups store information about all the endpoint devices that connect to the network infrastructure or they can be filled through a CSV import. 
+
+Beyond static import, they can be populated dynamically by the ISE Profiler, which classifies endpoints from attributes its probes collect — RADIUS accounting, DHCP options, CDP/LLDP neighbor data sent inline by [[PBA - NAC - Network Access Devices#Device Sensor — Endpoint Profiling|Device Sensor]], and the MAC OUI — and files each endpoint into the matching group. This is how devices such as printers are placed in a Printers group that MAB authorization can then match on.
 
 Endpoint Groups can be used as attributes in Policy Sets.
 
@@ -81,7 +132,7 @@ MAC Addresses that must be whitelisted. Used in the MAB Access.
 
 ![[Pasted image 20260508110112.png]]
 
-The User Identity Group accept only Internal Users.
+The User Identity Group accepts only Internal Users. User Identity Groups let you group these locally-defined accounts so that authorization policies can match on group membership instead of individual users; users authenticated through Active Directory are grouped by their AD groups instead.
 
 ### External Identity Sources
 
@@ -91,7 +142,7 @@ External Identity Sources can leverage existing external identity store for netw
 
 #### External Identity Sources - Certificate Authentication Profile
 
-This is an important setting for certificate based authentication. See [[PBA - NAC - Microsoft Servers#Certificate Authentication Profile|Link]].
+The Certificate Authentication Profile (CAP) tells ISE which field of the client certificate to read as the identity — in this deployment the Subject Alternative Name (SAN), taking the UPN for users and the DNS name for machines. Before the CAP maps a certificate to an identity, ISE validates the presented certificate against the CA chain held in its [[PBA - NAC - Microsoft Servers#Trusted Certificates|Trusted Certificates]] store and confirms it has not been revoked through the [[PBA - NAC - Microsoft Servers#CRL Revocation List|CRL]]; the CA that must be trusted is the one that signed both the [[PBA - NAC - Microsoft Servers#EAP Authentication Certificate|EAP Authentication Certificate]] and the client certificates. The CAP can also perform a binary comparison, matching the presented certificate byte-for-byte against the copy stored in the account's userCertificate attribute in Active Directory. See the matching [[PBA - NAC - Microsoft Servers#Certificate Authentication Profile|Certificate Authentication Profile]] on the Microsoft side.
 
 #### External Identity Sources - Active Directory
 
@@ -135,7 +186,7 @@ In the Publiacqua deployment the ISS is Publiacqua_ISS which has [[#External Ide
 
 ## Admin Access
 
-ISE GUI permissions are configured in Admin Access for each group or type of users.
+ISE GUI permissions are configured in Admin Access for each group or type of users. ISE controls administrative access through role-based access control (RBAC): it ships with predefined admin groups (such as Super Admin, Read-Only Admin, and Helpdesk Admin), and an RBAC policy pairs an admin group with a Menu Access permission — which parts of the GUI that group can see — and a Data Access permission — which objects and logs it can read or modify. Administrators can be authenticated against the internal admin store or an external source such as Active Directory.
 
 ![[Pasted image 20260508114440.png]]
 
@@ -175,7 +226,7 @@ In Admin Groups, you can configure the groups for which you can build an RBAC Po
 
 ## Network Resources
 
-In <strong>Network Resources</strong> are managed <strong>Network Access Devices</strong> (<strong>NAD</strong>), they are the point of access for an endpoint and the main enforcement point of policies set by the server ISE. Common NAD types include the following:
+<strong>Network Resources</strong> is where <strong>Network Access Devices</strong> (<strong>NAD</strong>) are managed; a NAD is the point of access for an endpoint and the main enforcement point for the policies set by the server ISE. Common NAD types include the following:
 
 - Wired Ethernet switch
 - Wireless LAN controller (WLC)
@@ -192,7 +243,7 @@ ISE supports third-party NADs through the use of network device profiles. The NA
 
 ![[Pasted image 20260505104601.png]]
 
-Cisco dominant environment the default network device profile for Cisco is enough.
+In a Cisco-dominant environment the default network device profile for Cisco is enough.
 
 #### Authentication/Authorization
 
@@ -221,9 +272,16 @@ This is necessary for ISE to detect the right flow type for your device accordin
 
 Cisco uses the <strong>attribute</strong> and <strong>value</strong> pair:
 
-Radius:NAS-Port-Type = <strong>Ethernet</strong> for wired flows Radius:NAS-Port-Type = <strong>Wireless - IEEE 802.11</strong> for wireless flows
-
-Radius:Service-Type = <strong>Call Check</strong> for MAB access Radius:Service-Type = <strong>Framed</strong> for 802.1X access Radius:Service-Type = <strong>Login</strong> for Web Portal access
+- Radius:NAS-Port-Type = <strong>Ethernet</strong> for wired flows
+    
+- Radius:NAS-Port-Type = <strong>Wireless - IEEE 802.11</strong> for wireless flows
+    
+- Radius:Service-Type = <strong>Call Check</strong> for MAB access
+    
+- Radius:Service-Type = <strong>Framed</strong> for 802.1X access
+    
+- Radius:Service-Type = <strong>Login</strong> for Web Portal access
+    
 
 ###### ArubaWireless
 
@@ -259,7 +317,7 @@ For the ACL permission, you can specify a single RADIUS attribute, to be used fo
 
 ![[Pasted image 20260505112153.png]]
 
-This section allows you to define what CoA capabilities your device has. Refer to your device documentation for information – look for references to terms like “<strong>RFC 5176</strong>”, “<strong>Change of Authorization</strong>” or “<strong>CoA</strong>”.
+This section allows you to define what CoA capabilities your device has. Refer to your device documentation for information – look for references to terms like “<strong>RFC 5176</strong>”, “<strong>Change of Authorization</strong>” or “<strong>CoA</strong>”. On the switch, CoA is enabled by the [[PBA - NAC - Network Access Devices#Dynamic Authorization (CoA)|`dynamic-author`]] configuration.
 
 Most non-Cisco devices with RFC 5176 support will support “Push” and “Disconnect”, but not Re-authenticate, so if unsure try enabling the two checkboxes marked “RFC 5176”.
 
@@ -300,19 +358,19 @@ They can be configured with Network Device Profile, Model Name, Software Version
 
 The network device is added to ISE as an object.
 
-The object has a shared secret key for RADIUS, TACACS authentication settings, SNMP community strings, and TrustSec configuration. The RADIUS shared secret key must match the configured key on the NAD exactly.
+The object has a shared secret key for RADIUS, TACACS authentication settings, SNMP community strings, and TrustSec configuration. The RADIUS shared secret key must match the configured key on the NAD exactly. The matching switch-side configuration is documented in [[PBA - NAC - Network Access Devices#RADIUS Server Configuration|the NAD note]].
 
 Each NAD object must be configured with one or more IP addresses. Each NAD can be assigned to one NDG of each type: one Location group, one Device Type group, and one of each manually created top-level NDGs.
 
 ![[Pasted image 20260505125842.png]]
 
-The SNMP Settings section is where the SNMP community for the NAD is configured, the ISE will use this to query the NAD for profiling attributes such as CDP and LLDP cache information. The SNMP setting should be configured only for devices that do not use the device sensor to send ISE profiling data within RADIUS accounting packets.
+The SNMP Settings section is where the SNMP community for the NAD is configured, the ISE will use this to query the NAD for profiling attributes such as CDP and LLDP cache information. The SNMP setting should be configured only for devices that do not use the device sensor to send ISE profiling data within RADIUS accounting packets; on Cisco switches inline profiling is provided by [[PBA - NAC - Network Access Devices#Device Sensor — Endpoint Profiling|Device Sensor]] and is preferred over SNMP polling.
 
 The NADs can be imported with a CSV.
 
 ## Policy
 
-In Policy section defines the Policy Sets, Dictionaries, Conditions and Results.
+The Policy section defines the Policy Sets, Dictionaries, Conditions, and Results.
 
 ### Dictionaries
 
@@ -352,11 +410,11 @@ Service-Type is a RADIUS attribute (Attribute 6) that defines the nature of the 
 Common Service-Type values:
 
 - <strong>Framed (Value: 2)</strong>: Indicates standard network access control (NAC) sessions, such as Wired or Wireless 802.1X and VPN connections.
-- <strong>Login / Executive (Value: 1)</strong>: Indicates terminal/shell access. It is typically present when an administrator attempts to log into the Command Line Interface (CLI) of a switch, router, or firewall.
+- <strong>Login (Value: 1)</strong>: Indicates terminal/shell access. It is typically present when an administrator logs into the Command Line Interface (CLI) of a switch, router, or firewall.
 - <strong>Call Check (Value: 10)</strong>: Used specifically for MAC Authentication Bypass (MAB). It informs ISE that the device is authenticating strictly via its hardware MAC address without user credentials.
-- <strong>Outbound (Value: 5)</strong>: Used during certain tunneling or secondary authentication handshakes.
+- <strong>Outbound (Value: 5)</strong>: Requests access to outgoing devices; rarely used in enterprise network access.
 
-For the switch to send this data it needs to be configured with `radius-server attribute 6 on-for-login-auth
+For the switch to send this data it needs to be configured with `radius-server attribute 6 on-for-login-auth`. The switch-side configuration is covered in [[PBA - NAC - Network Access Devices#Service-Type (Attribute 6)|the NAD note]].
 
 ##### Called-Station-ID
 
@@ -396,7 +454,7 @@ This attribute identifies the <strong>endpoint device</strong> that is requestin
 
 ##### Dynamic VLAN Assignment Attributes
 
-For a network switch to accept a dynamic VLAN assignment from Cisco ISE, it must receive three IETF helper attributes in the [[#Authorization Profiles|Authorization Profile]].
+For a network switch to accept a dynamic VLAN assignment from Cisco ISE, it must receive three IETF helper attributes in the [[#Authorization Profiles|Authorization Profile]]. The switch accepts and applies them via [[PBA - NAC - Network Access Devices#`aaa authorization network default group ISESERV`|`aaa authorization network`]].
 
 <strong>`Tunnel-Private-Group-ID` (RADIUS Attribute 81)</strong> is a standard IETF attribute used as an <strong>Authorization Result</strong> to dynamically assign a user or device to a specific <strong>VLAN</strong> upon successful authentication.
 
@@ -424,16 +482,16 @@ Common uses:
 
 <strong>Central Web Authentication (CWA)</strong> and Guest Portals: When an unknown device connects to the network, ISE uses two specific AV pairs to tell the switch to intercept the user's web browser traffic and redirect them to a login portal:
 
-- <strong>url-redirect</strong>: Tells the switch exactly where the ISE Guest or Hotspot portal is hosted. `cisco-av-pair = url-redirect=https://guestportal1.publiacqua.it:port/portal/gateway?sessionId=SessionIdValue&portal=4f145223-7d12-411b-a511-92abfafef0d8&action=cwa`
+- <strong>url-redirect</strong>: Tells the switch exactly where the ISE Guest or Hotspot portal is hosted. `cisco-av-pair = url-redirect=https://guestportal1.publiacqua.it:port/portal/gateway?sessionId=SessionIdValue&portal=4f145223-7d12-411b-a511-92abfafef0d8&action=cwa`. Here `:port` is the ISE portal port, 8443 in this deployment.
     
-- <strong>url-redirect-acl</strong>: Specifies the name of the local Access Control List (ACL) pre-configured on the switch that defines what traffic should be redirected versus allowed (e.g., allow DNS and DHCP, but redirect HTTP). `cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT`
+- <strong>url-redirect-acl</strong>: Specifies the name of the local Access Control List (ACL) pre-configured on the switch that defines what traffic should be redirected versus allowed (e.g., allow DNS and DHCP, but redirect HTTP). `cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT`. On the switch this is [[PBA - NAC - Network Access Devices#Redirect ACL — `ACL_GUEST_REDIRECT`|ACL_GUEST_REDIRECT]].
     
 
 <strong>Network Controller Access Control (Role-Based Access)</strong>: When managing logins to Cisco fabric platforms like Cisco DNA Center (Catalyst Center) or Cisco APIC (ACI) via RADIUS, ISE passes the exact user roles through an AV pair:
 
 Cisco DNA Center / Catalyst Center Login: `cisco-av-pair = ROLE=SUPER-ADMIN-ROLE`
 
-Cisco APIC / ACI Fabric Login: `cisco-avpair = shell:domains=all/admin/`
+Cisco APIC / ACI Fabric Login: `cisco-av-pair = shell:domains=all/admin/`
 
 <strong>Administrative Privilege Levels</strong> (Switch CLI via RADIUS): If you are using RADIUS (instead of TACACS+) to secure administrative command-line access to Cisco switches and firewalls, you must use an AV pair to drop the administrator directly into the privileged executive mode (`enable`): <strong>shell:priv-lvl</strong>: Grants immediate execution privileges. `cisco-av-pair = shell:priv-lvl=15`
 
@@ -449,7 +507,7 @@ When this attribute evaluates to `Guest Flow` (formatted as `NetworkAccess:UseCa
 
 ### Conditions
 
-Cisco ISE policy conditions are rule-based elements (attributes, operators, values) used to define network access, profiling, posture, and guest services. They enable granular control, allowing policies based on user identity, device type, location, or time. Conditions can be Simple (one attribute) or Compound (combined using AND/OR) and are managed within the Conditions Studio
+Cisco ISE policy conditions are rule-based elements (attributes, operators, values) used to define network access, profiling, posture, and guest services. They enable granular control, allowing policies based on user identity, device type, location, or time. Conditions can be Simple (one attribute) or Compound (combined using AND/OR) and are managed within the Conditions Studio.
 
 #### Library Conditions
 
@@ -459,7 +517,7 @@ Cisco ISE <strong>library conditions</strong> are pre-configured, reusable polic
 
 ##### EAPs
 
-The EAPs condition check the if the client request is using one of these [[#Allowed Protocols|EAP protocols]]. The EAP protocols inside the conditions are PEAP, EAP-TLS and TEAP, the admin should be using one of these protocols.
+The EAPs condition checks if the client request is using one of these [[#Allowed Protocols|EAP protocols]]. The EAP protocols inside the conditions are PEAP, EAP-TLS and TEAP, the admin should be using one of these protocols.
 
 ![[Pasted image 20260514110551.png]]
 
@@ -487,13 +545,13 @@ MAC Addresses in [[#PBA_Whitelist|PBA_Whitelist]].
 
 ##### Authentication Passed
 
-Check if the AuthenticationStatus is a Passed
+Check if the AuthenticationStatus is Passed
 
 ![[Pasted image 20260514110848.png]]
 
 ##### Authentication Failed
 
-Check if the AuthenticationStatus is a Failed
+Check if the AuthenticationStatus is Failed
 
 ![[Pasted image 20260514111110.png]]
 
@@ -511,7 +569,7 @@ This condition is used if you want to get a computer certificate but you don't w
 
 ##### Admin Authorizations
 
-Admin Authorizations conditions check if the client user is [[#ID_Admin_User]] and if the EAP protocol they satisfy [[#EAPs]] conditions. 
+Admin Authorizations conditions check that the client user is in [[#ID_Admin_User]] and that the EAP protocol they use satisfies the [[#EAPs]] conditions.
 
 ![[Pasted image 20260529114616.png]]
 
@@ -550,9 +608,9 @@ Each policy set functions as a "rule book" evaluated from the top down. Once a r
 - <strong>Top-Level Condition</strong>: The "gatekeeper" that determines if a request belongs in that specific set. If the request is Wireless, Wired, from a specific location, time etc.
 - <strong>[[#Allowed Protocols|Allowed Protocols]]</strong>: Defines which protocols (like PAP, CHAP, or EAP-TLS) are permitted for the initial connection.
 - <strong>Authentication Policy</strong>: Verifies the identity of the user or device using identity sources like Active Directory or internal databases.
-- <strong>Authorization Policy</strong>: Grants specific permissions—such as VLAN assignment, Security Group Tags (SGTs), or Downloadable ACLs (dACLs)—based on the user's role or device posture.
+- <strong>Authorization Policy</strong>: Grants specific permissions—such as VLAN assignment, Security Group Tags (SGTs), or [[#Downloadable ACLs|Downloadable ACLs]] (dACLs)—based on the user's role or device posture.
 
-The Top-Level Condition in this deployment are <strong>Wired</strong>, <strong>Wired_Monitor</strong>, <strong>Wireless</strong> and <strong>DNAC</strong>, they distribute the client requests based on the type of connection (Wired or Wireless) and whether the Device Type is a DNAC-server.
+The Top-Level Conditions in this deployment are <strong>Wired</strong>, <strong>Wired_Monitor</strong>, <strong>Wireless</strong> and <strong>DNAC</strong>; they distribute the client requests based on the type of connection (Wired or Wireless) and whether the Device Type is a DNAC-server.
 
 ![[Pasted image 20260512152559.png]]
 
@@ -598,9 +656,9 @@ When a device connects to a switch port configured for 802.1X/MAB, the following
 4. <strong>ISE Decision</strong>: ISE checks the MAC address against all MAC addresses in the [[#Endpoint Identity Groups|Internal Endpoints]] database or performs <strong>Profiling</strong> to identify the device type.
 5. <strong>Authorization</strong>: Based on your configured <strong>Policy Sets</strong>, ISE sends back a RADIUS Access-Accept with specific permissions, such as a VLAN assignment or a Downloadable ACL (dACL).
 
-In the current deployment, even if the MAB check fails, the server ISE allows the authentication request to continue to the authorization policies, where they will be met with [[#Guest Redirect|Guest Redirect]] Authorization Policy.
+In the current deployment, even if the MAB check fails, the server ISE allows the authentication request to continue to the authorization policies, where they will be met with the [[#Guest Redirect|Guest Redirect]] authorization policy. The switch-side fallback from 802.1X to MAB is handled by [[PBA - NAC - Network Access Devices#IBNS 2.0 Policy Engine — `ISE-NAC-POLICY`|the IBNS 2.0 policy]].
 
-The conditions for MAB is the [[#Flow Type Conditions|predefined Wired_Mab]].
+The condition for MAB is the [[#Flow Type Conditions|predefined Wired_MAB]].
 
 ##### Dot1X (802.1X)
 
@@ -608,7 +666,7 @@ Dot1X (802.1X) should be the most used/default authentication policy.
 
 It's the authentication policy where the client has a supplicant ([[PBA - NAC - Microsoft Servers#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
 
-The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it check the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]]. If the user is found in the ISS, it is authenticated and the request is passed for authorization policy check. If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
+The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it checks the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]]. If the user is found in the ISS, it is authenticated and the request is passed for authorization policy check. If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
 
 ##### Default
 
@@ -628,7 +686,7 @@ The first authorization policy is to check if the client computer is on the [[#P
 
 ##### Admin Access
 
-Admin Access allows all users in the admin AD group to get the authorization profile for the VLAN Admin, which is set to VLAN 850. The authorization profile is configured in the same way as the one for [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
+Admin Access allows all users in the admin AD group to get the [[#Vlan_850_Lan_Admin|authorization profile for the VLAN Admin]], which is set to VLAN 850. The authorization profile is configured in the same way as the one for [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
 
 The condition to hit this policy is that [[#EAPs|the client must use an EAP protocol]], [[#ID_Admin_User|the user must be in the Admin group]] and [[#Authentication Passed|the authentication result is a pass]].
 
@@ -640,7 +698,7 @@ The Machine Access is an authorization policy created for situations where the [
 
 - User is not logged-on the domain computer
 - New user needs to access a domain computer
-- Problems with user certificate In these case the Machine Access policy provides the client with Internet access and connection to Domain Controller and the Certificate Authority Server.
+- Problems with the user certificate. In these cases the Machine Access policy gives the client limited connectivity to DNS, DHCP, the Domain Controllers, and the Certificate Authority, enough to refresh GPOs and enroll the user certificate.
 
 The conditions to hit Machine Access are [[#TEAP_Machine]] and [[#Authentication Passed]]. The authorization profiles it provides is [[#Pre-Auth-profile]].
 
@@ -662,7 +720,7 @@ The Authorization Profiles is [[#Vlan_802_Lan_Client]].
 
 ##### MAB Access
 
-MAB Access is for computers or devices that, for various reasons, don't have a supplicant to send 802.1X authentication packets. At the moment the authorization profiles for this access is also VLAN 802
+MAB Access is for computers or devices that, for various reasons, don't have a supplicant to send 802.1X authentication packets. At the moment the authorization profile for this access is also VLAN 802.
 
 The hit conditions are [[#Smart Conditions|Wired_MAB]], [[#PBA_Whitelist|Whitelist]] and [[#Authentication Passed]].
 
@@ -678,17 +736,17 @@ The hit condition is [[#Guest_Flow]]. The Authorization Profiles is VLAN Guest w
 
 The Guest Redirect authorization policy is the catch-all for all devices and users not authorized/authenticated and for guest users.
 
-The hit condition is include [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. The Authorization Profiles is [[#Redirect_Guest_Wired]], if the Guest Authentication is a success it will hit the default [[#UseCase|Guest Flow]] condition of [[#Guest Access]], and the client will have Internet access.
+The hit conditions include [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. The Authorization Profiles is [[#Redirect_Guest_Wired]], if the Guest Authentication is a success it will hit the default [[#UseCase|Guest Flow]] condition of [[#Guest Access]], and the client will have Internet access.
 
 ### Results
 
 #### Policy - Results - Authentication
 
-Authentication Results are results from authentication policy checks, if the top rule authentication policy is passed, the server ISE will check the Allowed Protocols.
+Authentication Results are the objects produced by the authentication stage. Once a policy set's top-level condition matches, ISE checks the Allowed Protocols before looking up the identity; a request using a protocol not on the list is rejected.
 
 ##### Allowed Protocols
 
-After the conditions are matched in a top-level rule, ISE determines what authentication protocols are permitted for that policy set. If the user send an authentication request that is not in the allowed protocol, the request is denied.
+After the conditions are matched in a top-level rule, ISE determines what authentication protocols are permitted for that policy set. If the user sends an authentication request that is not in the allowed protocols, the request is denied.
 
 <strong>Policy > Policy Elements > Results > Authentication > Allowed Protocols</strong>
 
@@ -720,7 +778,7 @@ The allowed protocols definition:
         - <strong>EAP MSCHAPv2</strong>: Using this inner method, the client’s credentials are sent to the server encrypted within an MS-CHAPv2 session. It allows for simple transmission of username and password or even computer name and computer password to the RADIUS server, which authenticates them to Active Directory.
         - <strong>EAP-GTC</strong>: <strong>EAP-Generic Token Card</strong> (<strong>GTC</strong>) is an inner method created by Cisco as an alternative to MS-CHAPv2 that allows generic authentications to virtually any identity store, including one-time-password (OTP) token servers, LDAP, Novell eDirectory, and more.
         - <strong>EAP-TLS</strong>: PEAP is capable of using EAP-TLS as an inner method. EAP-TLS adds an additional layer of security by tunneling the EAP authentication.
-    - <strong>EAP-FAST</strong>: <strong>Flexible Authentication via Secure Tunneling (FAST)</strong> is very similar to PEAP. Cisco created FAST as an alternative to PEAP that allows for faster re-authentication and supports faster wireless roaming. FAST forms a TLS outer tunnel and then transmits the client credentials within that TLS tunnel. Where FAST differs from the PEAP is in the ability to use Protected Access Credentials (PACs). A PAC can be thought of as a secure cookie that is stored locally on the host as proof of a successful authentication. The Windows native supplicant does not support EAP-FAST. Instead, the AnyConnect software client with the Network Access Manager (NAM) can be installed on endpoints running Windows Vista and later. NAM acts as the supplicant for the endpoint, which allows Windows to support arrange of new EAP options. EAP-FAST supports the following inner methods:
+    - <strong>EAP-FAST</strong>: <strong>Flexible Authentication via Secure Tunneling (FAST)</strong> is very similar to PEAP. Cisco created FAST as an alternative to PEAP that allows for faster re-authentication and supports faster wireless roaming. FAST forms a TLS outer tunnel and then transmits the client credentials within that TLS tunnel. Where FAST differs from the PEAP is in the ability to use Protected Access Credentials (PACs). A PAC can be thought of as a secure cookie that is stored locally on the host as proof of a successful authentication. The Windows native supplicant does not support EAP-FAST. Instead, the AnyConnect software client with the Network Access Manager (NAM) can be installed on endpoints running Windows Vista and later. NAM acts as the supplicant for the endpoint, which allows Windows to support a range of new EAP options. EAP-FAST supports the following inner methods:
         - <strong>EAP MSCHAPv2</strong>
         - <strong>EAP-GTC</strong>
         - <strong>EAP-TLS</strong>
@@ -734,7 +792,7 @@ Authorization Results are the results for each authorization policy.
 
 ##### Authorization Profiles
 
-Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy. 
+Authorization Profiles are reusable policy objects that define the specific access permissions, such as VLANs, Downloadable ACLs (dACLs), or security group tags, granted to a user or device after successful authentication and passing the authorization policy.
 
 ![[Pasted image 20260512122923.png]]
 
@@ -742,17 +800,18 @@ Authorization Profiles are reusable policy objects that define the specific acce
 
 ![[Pasted image 20260512124255.png]]
 
-The Pre-Auth-Profile is used by the Authorization Policy Machine Access. 
+The Pre-Auth-Profile is used by the Authorization Policy Machine Access.
 
-It sends an ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limit network access to Internet, Domain Controller and Certificate Authority.
+It sends an ACCESS_ACCEPT with the DACL [[#Pre-Auth|Pre-Auth]] that limits network access to DNS, DHCP, the Domain Controllers, the Certificate Authority, and the ISE nodes.
 
-This DACL is used for computer that have authenticated with machine certificate but not with user certificate for various reasons:
+This DACL is used for computers that have authenticated with machine certificate but not with user certificate for various reasons:
 
 - The user is not logged-on, so the user certificate is not available
-- There change in user happening
+- A user change is in progress
 - The user does not have a certificate enrolled
 
-In these cases the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+In these cases the DACL allows the connection to the Domain Controllers and the Certificate Authority (and DNS/DHCP) for GPO refresh and user-certificate enrollment.
+
 ###### Vlan_850_Lan_Admin
 
 ![[Pasted image 20260529141341.png]]
@@ -790,13 +849,13 @@ Vlan_805_WiFi_Guest is the Authorization Profile for guest users. It sends the V
 
 ![[Pasted image 20260512143139.png]]
 
-The Redirect_Guest_Wired is the first Authorization Profile for guest users, it send a redirection URL to the CWA guest portal.
+The Redirect_Guest_Wired is the first Authorization Profile for guest users, it sends a redirection URL to the CWA guest portal.
 
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID = 1:805]] : Put the client in VLAN 805
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
-- [[#cisco-av-pair|cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT]] : This indicate which local access list the client must use.
+- [[#cisco-av-pair|cisco-av-pair = url-redirect-acl=ACL_GUEST_REDIRECT]] : This indicates which local access list the client must use.
 - [[#cisco-av-pair|cisco-av-pair = url-redirect=https://guestportal1.publiacqua.it:port/portal/gateway?sessionId=SessionIdValue&portal=4f145223-7d12-411b-a511-92abfafef0d8&action=cwa]] : The redirect guest portal from the CWA
 - <strong>Session-Timeout = 43200</strong> : The timer for the session
 - <strong>Termination-Action = Default</strong> : When the timer of Session-Timeout runs out, kick the user off and make them start over
@@ -811,16 +870,20 @@ They are Access Lists that are configured on the server ISE and are meant to be 
 
 ##### Pre-Auth
 
-This DACL is used for computer that have authenticated with machine certificate but not with user certificate for various reasons:
+This DACL is used for computers that have authenticated with machine certificate but not with user certificate for various reasons:
 
 - The user is not logged-on, so the user certificate is not available
-- There change in user happening
+- A user change is in progress
 - The user does not have a certificate enrolled
-- ect.
+- etc.
 
-In these cases the DACL allow the connection to Internet, Domain Controller and Certificate Authority for the update of GPO, and enrollment of user certificates.
+In these cases the DACL allows the connection to the Domain Controllers and the Certificate Authority (and DNS/DHCP) for GPO refresh and user-certificate enrollment.
 
-DC01 and DC02 = 10.140.4.250 and 10.140.4.252 subordinateca01 and subordinateca02 = 10.140.2.198 and 10.140.2.199
+DC01 and DC02 = 10.140.4.250 and 10.140.4.252
+
+subordinateca01 and subordinateca02 = 10.140.2.198 and 10.140.2.199
+
+ISE01 and ISE02 (the ISE Policy Service Nodes) = 10.140.2.31 and 10.140.2.32, reached on 8443 (guest/sponsor portal) and 8905 (posture and client provisioning)
 
 ```text
 permit udp any any eq bootps
@@ -874,3 +937,9 @@ permit tcp any host 10.140.2.32 eq 8905
 permit tcp any host 10.140.2.32 eq 443
 deny ip any any
 ```
+
+## Live Logs
+
+RADIUS Live Logs, under Operations > RADIUS > Live Logs, show in near real time every authentication and authorization ISE has processed. Each row carries the timestamp, the status (green for a passed request, red for a failed one), the identity and the endpoint MAC, the [[#Network Devices|Network Device]] the request came from, the matched policy set, and the [[#Authorization Profiles|Authorization Profile]] that was returned — and, for a failure, the failure reason. Opening the details report on a row shows the full step-by-step evaluation: the identity source that was queried, the EAP method used, every attribute received from the switch, and every attribute ISE sent back. This is the first place to look when an endpoint fails authentication or lands in the wrong VLAN.
+
+The Live Sessions view lists the sessions that are currently active and lets you issue a [[#Change of Authorization (CoA)|CoA]] — a re-authentication or a disconnect — against a specific session. Live Logs and Live Sessions are served by the Monitoring (MnT) persona; for retention beyond the live window the same data is available under the Operations reports.
