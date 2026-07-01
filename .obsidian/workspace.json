@@ -119,13 +119,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/test.md",
+                "file": "0 - Notes/PBA - NAC - ISE Server.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of test"
+              "title": "Outline of PBA - NAC - ISE Server"
             }
           },
           {
@@ -169,6 +169,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "0 - Notes/PBA - NAC - ISE Server.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -178,7 +179,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for PBA - NAC - ISE Server"
             }
           },
           {
@@ -187,11 +188,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "0 - Notes/PBA - NAC - ISE Server.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from PBA - NAC - ISE Server"
             }
           },
           {
@@ -272,10 +274,10 @@
       }
     ]
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/tets2.md",
     "0 - Notes/test.md",
+    "0 - Notes/tets2.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/WLC 9800 - PBA.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
