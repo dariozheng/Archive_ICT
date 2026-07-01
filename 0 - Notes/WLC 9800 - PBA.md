@@ -189,3 +189,9 @@ Attivando il <strong>Central Web Auth</strong>, il traffico che attiva questo AC
 ![[Pasted image 20260701123009.png]]
 
 ### Policy Tag
+
+![[Pasted image 20260701154141.png]]
+
+La Policy Tag mappa WLAN Profile con il suo Policy Profile. 
+
+###
