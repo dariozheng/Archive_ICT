@@ -209,7 +209,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -272,7 +273,7 @@
       }
     ]
   },
-  "active": "b854d7994398b049",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "attachments/Pasted image 20260701164609.png",
     "0 - Notes/PBA - NAC - Network Access Devices.md",

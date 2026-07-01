@@ -199,6 +199,8 @@ La Policy Tag mappa WLAN Profile con il suo Policy Profile.
 #### WLAN Profiles 
 La WLAN Profiles configura la SSID e sicurezza L2, ha un nome profile, un SSID ed una WLAN ID. 
 
+##### PBA-Client
+
 ![[Pasted image 20260701155819.png]]
 
 Sulla sezione security, Layer2 viene configurato che per protocolli di sicurezza use WPA2 e WPA3 con la crittografia AES. 
@@ -209,6 +211,7 @@ Per l'autenticazione viene usato 802.1X o 802.1X-SHA256 che significa che l'uten
 
 ![[Pasted image 20260701162426.png]]
 
+##### PBA-Guest
 Per la WLAN GUEST invece non c'è nessun controllo Layer2 tranne per il MAC filtering dove il MAC address del client viene confrontato con la lista di MAC address sulla Authorization List indicato.  
 
 La authorization list in questo caso indica il server ISE, quindi quando un client si connette alla WLAN, il MAC address verrà inviato al server ISE per fare un confronto con la lista di MAC address permessi. Essendo la lista vuota, il MAC address torna indietro con un DenyAccess e una Redirect Url verso il guest portal. 
