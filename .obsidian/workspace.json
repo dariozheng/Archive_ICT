@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - NAC - ISE Server"
+              "title": "PBA - NAC - Network Access Devices"
             }
           }
         ]
@@ -209,8 +209,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -275,26 +274,27 @@
   },
   "active": "b854d7994398b049",
   "lastOpenFiles": [
-    "0 - Notes/WLC 9800.md",
+    "attachments/Pasted image 20260701164609.png",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/WLC 9800 - PBA.md",
-    "attachments/Pasted image 20260701154141.png",
+    "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
+    "attachments/Pasted image 20260701162626.png",
+    "attachments/Pasted image 20260701162426.png",
+    "0 - Notes/WLC 9800.md",
+    "attachments/Pasted image 20260701160528.png",
+    "attachments/Pasted image 20260701155819.png",
+    "attachments/Pasted image 20260701154141.png",
     "0 - Notes/Untitled 1.md",
     "0 - Notes/Untitled.md",
     "0 - Notes/PBA_-_NAC_-_ISE_Server.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/Cisco DNA.md",
-    "2 - Categories/Topics/Security/NAC.md",
     "attachments/Pasted image 20260701123009.png",
     "attachments/Pasted image 20260701122343.png",
     "attachments/Pasted image 20260701122312.png",
     "attachments/Pasted image 20260701120051.png",
     "attachments/Pasted image 20260701115751.png",
-    "attachments/Pasted image 20260701114902.png",
-    "attachments/Pasted image 20260701114557.png",
-    "attachments/Pasted image 20260701114537.png",
-    "attachments/Pasted image 20260701111850.png",
     "0 - Notes/WireGuard.md",
     "0 - Notes/Cisco DNA Center.md",
     "0 - Notes/netfilter.md",

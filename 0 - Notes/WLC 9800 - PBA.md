@@ -183,8 +183,11 @@ Su Flex Profile è possible configurare le VLAN, Native VLAN, autenticazione loc
 
 ![[Pasted image 20260701122343.png]]
 
-In policy ACL viene configurato il GUEST_REDIRECT access list che gestisce il dirottamento delle rotte per la Guest Wifi. 
-Attivando il <strong>Central Web Auth</strong>, il traffico che attiva questo ACL non viene gestita localmente ma reindirizzata verso il WLC in modo da attivare il portale guest.
+In Policy ACL viene configurato il GUEST_REDIRECT access list che gestisce il dirottamento delle rotte per la Guest Wifi. 
+
+Il che significa che a differenza di central switching dove AP usa le ACL dentro il WLC, in local switching le ACL sono presenti localmente, inseriti nell'AP al momento del join a seconda della configurazione di Policy ACL. 
+
+La selezione <strong>Central Web Auth</strong> viene usata per attivare la HTTP/HTTPS interception engine.
 
 ![[Pasted image 20260701123009.png]]
 
@@ -193,5 +196,27 @@ Attivando il <strong>Central Web Auth</strong>, il traffico che attiva questo AC
 ![[Pasted image 20260701154141.png]]
 
 La Policy Tag mappa WLAN Profile con il suo Policy Profile. 
+#### WLAN Profiles 
+La WLAN Profiles configura la SSID e sicurezza L2, ha un nome profile, un SSID ed una WLAN ID. 
 
-###
+![[Pasted image 20260701155819.png]]
+
+Sulla sezione security, Layer2 viene configurato che per protocolli di sicurezza use WPA2 e WPA3 con la crittografia AES. 
+
+Per l'autenticazione viene usato 802.1X o 802.1X-SHA256 che significa che l'utente non ha una password condivisa ma si autenticherà verso il server AAA configurato nella Authentication List, Il server ISE in questo caso. 
+
+![[Pasted image 20260701160528.png]]
+
+![[Pasted image 20260701162426.png]]
+
+Per la WLAN GUEST invece non c'è nessun controllo Layer2 tranne per il MAC filtering dove il MAC address del client viene confrontato con la lista di MAC address sulla Authorization List indicato.  
+
+La authorization list in questo caso indica il server ISE, quindi quando un client si connette alla WLAN, il MAC address verrà inviato al server ISE per fare un confronto con la lista di MAC address permessi. Essendo la lista vuota, il MAC address torna indietro con un DenyAccess e una Redirect Url verso il guest portal. 
+
+![[Pasted image 20260701162626.png]]
+
+Web Policy serve per attivare la Local Web Authentication, dato che usiamo CWA è disattivata e le configurazioni non sono attive. 
+
+Il tab AAA non viene usato per le guest WLAN.
+
+![[Pasted image 20260701164609.png]]
