@@ -7,25 +7,12 @@ tags:
 icon: SiCisco
 iconColor:
 ---
-# Table of Contents 
-- Overview 
-- Accessi 
-- Configurazione iniziale
-- RADIUS
-- Modello Configurazione 
+
 - AP Join
 - Policy Tag
 - Site Tag
 - RF Tag
 - HA
-
-Il Cisco Catalyst 9800 WLC è un IOS-XE controller che termina i tunnel CAPWAP degli AP e centralizza le loro configurazioni.
-
-Il WLC non configura direttamente gli AP ma costruisce degli profili re-usabili, raggruppa questi profili in tags ed assegna un tag per tipo (Policy tag, Site tag, RF tag) ad ogni AP. Le configurazioni sono date da queste tag o profili. 
-
-
-![[wlc9800-tag-architecture.png]]
-
 # Accesso 
 L'accesso al portale GUI di WLC è eseguito con le credenziali RADIUS tramite il portale
 [https://pba-wlc01.publiacqua.it/webui/](https://pba-wlc01.publiacqua.it/webui/). 
@@ -119,7 +106,12 @@ aaa authorization credential-download wcm_loc_serv_cert local
 aaa accounting identity default start-stop group ISE
 ```
 
+# Configurazione 
 
+Il WLC non configura direttamente gli AP ma costruisce degli profili re-usabili, raggruppa questi profili in tags ed assegna un tag per tipo (Policy tag, Site tag, RF tag) ad ogni AP. Le configurazioni sono date da queste tag o profili. 
+
+
+![[wlc9800-tag-architecture.png]]
 ## Profiles
 
 _Containers for the actual settings. Each profile type is related to on field of the network._
@@ -131,3 +123,32 @@ _Containers for the actual settings. Each profile type is related to on field of
 | AP join profile | How the AP itself behaves — CAPWAP timers, management, SSH, syslog                             | [[#AP Join Profile]]                             |
 | Flex profile    | VLAN mapping and local-switching behavior for [[#FlexConnect (Local Switching)\| FlexConnect]] | [[#FlexConnect (Local Switching)\| FlexConnect]] |
 | RF profile      | Data rates, channels and power per band                                                        | [[#RF Management]]                               |
+## AP Join Process
+
+In questo deployment gli AP usano <strong>DHCP option 43</strong> per joinare il WLC.
+
+Reference:
+https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/97066-dhcp-option-43-00.html
+
+![[Pasted image 20260701111850.png]]
+
+Il DHCP option 43 ha tre formatti, f1, f2 e f3. Noi usiamo <strong>f1</strong> 
+
+```
+One IP (10.140.1.10):
+  f1  04  0A 8C 01 0A
+ type  len  10.140.1.10
+= 0xf1040A8C010A
+
+CONVERSIONE BYTE: 0A=10, 8C=140, 01=1, 0A=10
+
+Two IPs (10.128.10.8 and .9) — just append each IP's 4 bytes:
+  f1 08  0a 80 0a 08  0a 80 0a 09
+= 0xf1080a800a080a800a09
+```
+
+<strong>0x</strong> significa che la stringa è in <strong>esadecimale</strong> ed non in <strong>decimale</strong>.
+
+<strong>04</strong> o <strong>08</strong> sono le lunghezza del l'indirizzo, 04 significa 4 bytes cioè un IP address, 08 sono 8 bytes ed quindi due IP address.
+
+<strong>0A8C010A</strong> indirizzo IP in esadecimale, se sono presenti due indirizzi, inserire il secondo indirizzo subito dopo il primo indirizzo. 

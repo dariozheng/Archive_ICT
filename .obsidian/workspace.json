@@ -209,8 +209,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -264,19 +263,23 @@
           }
         ],
         "direction": "vertical",
-        "x": 245,
-        "y": -1122,
-        "width": 1074,
-        "height": 920,
-        "maximize": true,
+        "x": 204,
+        "y": 80,
+        "width": 1512,
+        "height": 949,
+        "maximize": false,
         "zoom": 1
       }
     ]
   },
   "active": "b854d7994398b049",
   "lastOpenFiles": [
+    "Pasted image 20260701111850.png",
+    "Pasted image 20260701105855.png",
     "0 - Notes/WLC 9800.md",
     "0 - Notes/WLC 9800 - PBA.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/WireGuard.md",
     "attachments/Pasted image 20260630154036.png",
     "attachments/Pasted image 20260630153701.png",
     "attachments/Pasted image 20260630145410.png",
@@ -286,7 +289,6 @@
     "attachments/Pasted image 20260630121733.png",
     "attachments/Pasted image 20260630121117.png",
     "0 - Notes/netfilter.md",
-    "0 - Notes/WireGuard.md",
     "0 - Notes/nftables.md",
     "2 - Categories/Topics/Networking/WLAN.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
@@ -305,14 +307,12 @@
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/UFW.md",
     "0 - Notes/Netfilter — Linux Kernel Packet Filtering Framework.md",
-    "attachments/netfilter-masquerade.png",
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
     "2 - Categories/Systems.md",
     "2 - Categories/Linux.md",
     "2 - Categories/Topics/Linux/Ubuntu.md",
     "2 - Categories/Topics/Linux/General.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "3 - Templates/Bases/Topic/Networking/WLAN.base",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",

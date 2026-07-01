@@ -1,7 +1,3 @@
 {
-  "cssTheme": "Minimal",
-  "enabledCssSnippets": [
-    "headers"
-  ],
-  "accentColor": ""
+  "cssTheme": "Minimal"
 }
