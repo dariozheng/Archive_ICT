@@ -116,13 +116,13 @@ Il WLC non configura direttamente gli AP ma costruisce degli profili re-usabili,
 
 _Containers for the actual settings. Each profile type is related to on field of the network._
 
-| Profile         | Field                                                                         | Configured in                                    |
-| --------------- | ----------------------------------------------------------------------------- | ------------------------------------------------ |
-| WLAN profile    | SSID e L2 security                                                            | [[#WLAN Profiles]]                               |
-| Policy profile  | What VLAN, QoS, ACLs and switching a client gets after it joins               | [[#Policy Profiles]]                             |
-| AP join profile | How the AP itself behaves — CAPWAP timers, management, SSH, syslog            | [[#AP Join Profile]]                             |
-| Flex profile    | VLAN mapping and local-switching behavior for [[#Flex Profile\| FlexConnect]] | [[#FlexConnect (Local Switching)\| FlexConnect]] |
-| RF profile      | Data rates, channels and power per band                                       | [[#RF Management]]                               |
+| Profile         | Field                                                                         | Configured in                   |
+| --------------- | ----------------------------------------------------------------------------- | ------------------------------- |
+| WLAN profile    | SSID e L2 security                                                            | [[#WLAN Profiles]]              |
+| Policy profile  | What VLAN, QoS, ACLs and switching a client gets after it joins               | [[#Policy Profiles]]            |
+| AP join profile | How the AP itself behaves — CAPWAP timers, management, SSH, syslog            | [[#AP Join Profile]]            |
+| Flex profile    | VLAN mapping and local-switching behavior for [[#Flex Profile\| FlexConnect]] | [[#Flex Profile\| FlexConnect]] |
+| RF profile      | Data rates, channels and power per band                                       | [[#RF Management]]              |
 ## AP Join Process
 
 In questo deployment gli AP usano <strong>DHCP option 43</strong> per ottenere il [[#Wireless Management Interface]] per joinare il WLC.
