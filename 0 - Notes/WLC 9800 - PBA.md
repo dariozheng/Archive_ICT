@@ -156,12 +156,16 @@ Two IPs (10.128.10.8 and .9) — just append each IP's 4 bytes:
 ## Tags
 ### Site Tag
 
+Il Site Tag decide in che <strong>switching mode</strong> configurare gli AP:
+- Local Mode (Central Switching): gli AP invia il traffico dati verso il WLC tramite il CAPWAP tunnel, il quale trasferisce il traffico L2 verso la VLAN contenuto nella policy profile. In questo mode tutti i siti remoti devono riuscire a raggiungere la WLC che si trova in VM90. 
+- FlexConnect (Local Switching): gli AP porta il traffico direttamente sulla VLAN locale e la WLC viene usato solo per il control-plane. La VLAN viene fornito dalla Flex Profile che viene chiamato dalla site tag. 
+
+Nello deployment attuale lo switching mode è in FlexConnect (Local Switching). La FlexConnect disattiva la selezione <strong>Enable Local Site</strong> e aggiunge la <strong>Flex Profile</strong> tra le selezioni.
+
 ![[Pasted image 20260701120051.png]]
 
 #### AP Join Profile 
 AP join profile configura il <strong>country code</strong> delle AP, <strong>NTP server</strong>, <strong>WLC secondario</strong>, le credenziali admin locali, se <strong>SSH verso l'AP</strong> è permesso, dove invia i syslog, CAPWAP timers, e la crittografia DTLS del CAPWAP data path e altro. 
-
-AP join profile è usato dallo [[#Site Tag]].
 
 ![[Pasted image 20260701114537.png]]
 
@@ -170,8 +174,7 @@ AP join profile è usato dallo [[#Site Tag]].
 ![[Pasted image 20260701114902.png]]
 
 #### Flex Profile
-
-FlexConnect permette di lasciare il control plan al WLC 9800 e lasciare lo switching del data traffic in locale sulle AP.
+L'opzione di Flex Profile viene mostrato solo se <strong>Enable Local Site</strong> è disattivo. 
 Su Flex Profile è possible configurare le VLAN, Native VLAN, autenticazione locale e le policy ACL.
 
 ![[Pasted image 20260701115751.png]]
@@ -185,3 +188,4 @@ Attivando il <strong>Central Web Auth</strong>, il traffico che attiva questo AC
 
 ![[Pasted image 20260701123009.png]]
 
+### Policy Tag
