@@ -209,7 +209,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -272,12 +273,17 @@
       }
     ]
   },
-  "active": "b854d7994398b049",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "Pasted image 20260701111850.png",
-    "Pasted image 20260701105855.png",
+    "Pasted image 20260701120051.png",
     "0 - Notes/WLC 9800.md",
     "0 - Notes/WLC 9800 - PBA.md",
+    "Pasted image 20260701115751.png",
+    "Pasted image 20260701114902.png",
+    "Pasted image 20260701114557.png",
+    "Pasted image 20260701114537.png",
+    "Pasted image 20260701111850.png",
+    "Pasted image 20260701105855.png",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/WireGuard.md",
     "attachments/Pasted image 20260630154036.png",
@@ -286,8 +292,6 @@
     "attachments/Pasted image 20260630145030.png",
     "0 - Notes/Cisco DNA.md",
     "0 - Notes/Cisco DNA Center.md",
-    "attachments/Pasted image 20260630121733.png",
-    "attachments/Pasted image 20260630121117.png",
     "0 - Notes/netfilter.md",
     "0 - Notes/nftables.md",
     "2 - Categories/Topics/Networking/WLAN.md",
@@ -299,9 +303,6 @@
     "3 - Templates/Bases/Topic/Security/VPN.base",
     "2 - Categories/Topics/Security/Firewall.md",
     "0 - Notes/iptables.md",
-    "attachments/wlc9800-tag-architecture.png",
-    "attachments/wireguard-full-tunnel-routing.png",
-    "attachments/wireguard-cryptokey-routing.png",
     "2 - Categories/Topics/Linux/Linux General.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",

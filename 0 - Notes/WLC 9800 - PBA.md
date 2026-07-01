@@ -8,7 +8,7 @@ icon: SiCisco
 iconColor:
 ---
 
-- AP Join
+
 - Policy Tag
 - Site Tag
 - RF Tag
@@ -116,16 +116,16 @@ Il WLC non configura direttamente gli AP ma costruisce degli profili re-usabili,
 
 _Containers for the actual settings. Each profile type is related to on field of the network._
 
-| Profile         | Field                                                                                          | Configured in                                    |
-| --------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| WLAN profile    | SSID e L2 security                                                                             | [[#WLAN Profiles]]                               |
-| Policy profile  | What VLAN, QoS, ACLs and switching a client gets after it joins                                | [[#Policy Profiles]]                             |
-| AP join profile | How the AP itself behaves — CAPWAP timers, management, SSH, syslog                             | [[#AP Join Profile]]                             |
-| Flex profile    | VLAN mapping and local-switching behavior for [[#FlexConnect (Local Switching)\| FlexConnect]] | [[#FlexConnect (Local Switching)\| FlexConnect]] |
-| RF profile      | Data rates, channels and power per band                                                        | [[#RF Management]]                               |
+| Profile         | Field                                                                         | Configured in                                    |
+| --------------- | ----------------------------------------------------------------------------- | ------------------------------------------------ |
+| WLAN profile    | SSID e L2 security                                                            | [[#WLAN Profiles]]                               |
+| Policy profile  | What VLAN, QoS, ACLs and switching a client gets after it joins               | [[#Policy Profiles]]                             |
+| AP join profile | How the AP itself behaves — CAPWAP timers, management, SSH, syslog            | [[#AP Join Profile]]                             |
+| Flex profile    | VLAN mapping and local-switching behavior for [[#Flex Profile\| FlexConnect]] | [[#FlexConnect (Local Switching)\| FlexConnect]] |
+| RF profile      | Data rates, channels and power per band                                       | [[#RF Management]]                               |
 ## AP Join Process
 
-In questo deployment gli AP usano <strong>DHCP option 43</strong> per joinare il WLC.
+In questo deployment gli AP usano <strong>DHCP option 43</strong> per ottenere il [[#Wireless Management Interface]] per joinare il WLC.
 
 Reference:
 https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/97066-dhcp-option-43-00.html
@@ -152,3 +152,24 @@ Two IPs (10.128.10.8 and .9) — just append each IP's 4 bytes:
 <strong>04</strong> o <strong>08</strong> sono le lunghezza del l'indirizzo, 04 significa 4 bytes cioè un IP address, 08 sono 8 bytes ed quindi due IP address.
 
 <strong>0A8C010A</strong> indirizzo IP in esadecimale, se sono presenti due indirizzi, inserire il secondo indirizzo subito dopo il primo indirizzo. 
+
+## Tags
+### Site Tag
+
+![[Pasted image 20260701120051.png]]
+
+#### AP Join Profile 
+AP join profile configura il <strong>country code</strong> delle AP, <strong>NTP server</strong>, <strong>WLC secondario</strong>, le credenziali admin locali, se <strong>SSH verso l'AP</strong> è permesso, dove invia i syslog, CAPWAP timers, e la crittografia DTLS del CAPWAP data path e altro. 
+
+AP join profile è usato dallo [[#Site Tag]].
+
+![[Pasted image 20260701114537.png]]
+
+![[Pasted image 20260701114557.png]]
+
+![[Pasted image 20260701114902.png]]
+
+#### Flex Profile
+
+![[Pasted image 20260701115751.png]]
+
