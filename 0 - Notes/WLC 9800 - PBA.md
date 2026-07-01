@@ -171,5 +171,17 @@ AP join profile è usato dallo [[#Site Tag]].
 
 #### Flex Profile
 
+FlexConnect permette di lasciare il control plan al WLC 9800 e lasciare lo switching del data traffic in locale sulle AP.
+Su Flex Profile è possible configurare le VLAN, Native VLAN, autenticazione locale e le policy ACL.
+
 ![[Pasted image 20260701115751.png]]
+
+![[Pasted image 20260701122312.png]]
+
+![[Pasted image 20260701122343.png]]
+
+In policy ACL viene configurato il GUEST_REDIRECT access list che gestisce il dirottamento delle rotte per la Guest Wifi. 
+Attivando il <strong>Central Web Auth</strong>, il traffico che attiva questo ACL non viene gestita localmente ma reindirizzata verso il WLC in modo da attivare il portale guest.
+
+![[Pasted image 20260701123009.png]]
 
