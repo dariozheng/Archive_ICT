@@ -20,7 +20,9 @@ tags:
 icon: SiWindows
 iconColor: "#0078D4"
 ---
-In most cases the external services used are Microsoft Servers, with Active Directory as identity store, Certificate Authority for the certificates to use together with the user and/or host on the Active Directory and Group Policy Management rolls out the configuration to clients.
+
+
+In most cases the external services used are Microsoft Servers: [[#Active Directory]] as the identity store, the [[#Certificate Authority]] providing the certificates that users and/or hosts present for authentication, and [[#Group Policy Management]] rolling out the configuration to clients.
 
 ## Active Directory
 
@@ -30,7 +32,7 @@ Cisco ISE can join Microsoft Active Directory as an External Identity Source und
 
 The AD is used to identify the users when they do an authentication. They can be checked with their domain password or with the domain certificates they provide ISE.
 
-For the server ISE to be able to join the domain, it has to have a machine account in the domain and a DNS entry, while the AD User Name must have the permissions to join ISE to AD.
+For the ISE server to be able to join the domain, it has to have a machine account in the domain and a DNS entry, while the AD user account used for the join must have the permissions to join ISE to AD.
 
 ![[Pasted image 20260421152119.png]]
 
@@ -38,67 +40,67 @@ In this section it is also possible to retrieve groups from the AD to create pol
 
 ![[Pasted image 20260421125524.png]]
 
-## Certificate Authority 
+## Certificate Authority
 
 The Certificate Authority service is used to provide certificates to both ISE server itself and clients that will use it to do network access authentication.
 
 ### Server Certificates
 
-The ISE server has two types of certificates, system certificates that are used to identify itself, and trusted certificates that are used to validate clients. 
+The ISE server has two types of certificates: [[#System Certificates|system certificates]] that are used to identify itself, and [[#Trusted Certificates|trusted certificates]] that are used to validate clients.
 
 #### System Certificates
 
-There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication. Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant)
+There are many portals hosted in ISE. All the ISE portals require encryption by default. In other words, all portals in ISE use HTTPS, and a certificate on ISE is used to secure the communication. Certificates are also used to secure EAP communications, to form a Transport Layer Security (TLS) tunnel between an endpoint and a RADIUS server, or to identify the RADIUS server (ISE) to the client (supplicant).
 
 ![[Pasted image 20260421153234.png]]
 
 ##### Admin Certificate
 
-For <mark style="background: #FF5582A6;">ISE Admin Portal</mark>. If this is chosen the ISE node needs to restart all services to use the newly applied certificate.
+For the <mark style="background: #FF5582A6;">ISE Admin Portal</mark>. If this is chosen the ISE node needs to restart all services to use the newly applied certificate.
 
 ##### EAP Authentication Certificate
 
-ISE will use this certificate for <mark style="background: #FFB86CA6;">EAP protocols that use SSL/TLS tunneling</mark>. <mark style="background: #FFF3A3A6;">This is the certificate the ISE will present to the client to prove itself as trusted server</mark>.
+ISE will use this certificate for <mark style="background: #FFB86CA6;">[[PBA - NAC - ISE Server#Extensible Authentication Protocols|EAP protocols that use SSL/TLS tunneling]]</mark>. <mark style="background: #FFF3A3A6;">This is the certificate the ISE will present to the client to prove itself as a trusted server</mark>.
 
 ##### RADIUS DTLS Certificate
 
-RADIUS over Datagram Transport Layer Security encrypt the full packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
+RADIUS over Datagram Transport Layer Security encrypts the full RADIUS packet. The certificate can be used to establish and secure the communication between the <mark style="background: #FFB8EBA6;">ISE server and the NAD</mark>.
 
 ##### Portal Certificate
 
-Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>. Which can be Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it should be used to external devices.
+Certificates used for ISE <mark style="background: #BBFABBA6;">user portals</mark>, which can be the Guest Portal, Client Provisioning Portal, MDM Portal, BYOD Portal, Sponsor Portal, or My Devices Portal. The Guest Portal usually should have a public certificate as it will be used by external devices.
 
 ##### pxGrid Certificate
 
 This certificate will be used to establish trust and build a <mark style="background: #ABF7F7A6;">secure connection between ISE and third-party pxGrid clients</mark> to share contextual information.
 
-#### Certificate Signing Request
+##### Certificate Signing Request
 
-To create a certificate signed the a external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong>.
+To create a certificate signed by an external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong>.
 
 ![[Pasted image 20260427150149.png]]
 
-- <strong>Common Name (CN)</strong> : The CN should be a <mark style="background: #FF5582A6;">FQDN that will resolve via DNS to the IP address of ISE node</mark>.
-- <strong>Organization(O)</strong>: The organization the certificate is meant ot represent, the org implementing ISE
-- <strong>Organizational Unit(OU)</strong>: This is the division of the organization that is controlling the device for which the certificate is being used
-- <strong>Locality(L)</strong>: The city where the entity resides
-- <strong>State(ST)</strong>: The state or the province the entity resides in
-- <strong>Country(C)</strong>: This is the country that the entity resides in
+- <strong>Common Name (CN)</strong> : The CN should be a <mark style="background: #FF5582A6;">FQDN that will resolve via DNS to the IP address of the ISE node</mark>.
+- <strong>Organization (O)</strong>: The organization the certificate is meant to represent — the org implementing ISE
+- <strong>Organizational Unit (OU)</strong>: This is the division of the organization that is controlling the device for which the certificate is being used
+- <strong>Locality (L)</strong>: The city where the entity resides
+- <strong>State (ST)</strong>: The state or the province the entity resides in
+- <strong>Country (C)</strong>: This is the country that the entity resides in
 
 The ISE GUI also allows the customization of the Subject Alternative Name (SAN) field, which is meant to carry a number of different attributes, each designed to aid in the identification of the certificate:
 
-- <strong>DNS Name</strong>: This is the FQDN of the ISE node. If the certificate will be a wildcard certificate, be sure to specify the wildcard notation <strong>_</strong>, like <strong>_.publiacqua.it</strong>.
+- <strong>DNS Name</strong>: This is the FQDN of the ISE node. If the certificate will be a wildcard certificate, be sure to specify the wildcard notation <strong>*</strong>, like <strong>*.publiacqua.it</strong>.
 - <strong>IP Address</strong>: This is the IP address of the ISE node associated with the certificate
 - <strong>Uniform Resource Name</strong>: This is the URI associated with the certificate.
 - <strong>Directory Name</strong>: This is a string representation of the distinguished name (DN). DNs are defined in RFC 2253.
 
-A client that is presented with a certificate compare <mark style="background: #ABF7F7A6;">the name of the host</mark> with <mark style="background: #ADCCFFA6;">the CN field of the certificate subject</mark>. If the hostname or FQDN used to reach the host doesn’t match what is in the CN field, a certificate mismatch occurs.
+A client that is presented with a certificate compares <mark style="background: #ABF7F7A6;">the name of the host</mark> with <mark style="background: #ADCCFFA6;">the CN field of the certificate subject</mark>. If the hostname or FQDN used to reach the host doesn’t match what is in the CN field, a certificate mismatch occurs. Modern clients check the SAN DNS entries first — many ignore the CN entirely — so the FQDN should always be present in the SAN as well.
 
-The newly created CSR is saved in the <strong>Certificate Signing Requests</strong> section and it can be exported, it is a <strong>Base64-encoded plaintext file</strong> known as a <strong>PEM</strong> file. Open the CSR with a text editor, copy its content and paste it on the certificate authority web server similar to the procedure in [[#Enrollment - Windows Manual | this link]] except that the CSR is already present.
+The newly created CSR is saved in the <strong>Certificate Signing Requests</strong> section and it can be exported, it is a <strong>Base64-encoded plaintext file</strong> known as a <strong>PEM</strong> file. Open the CSR with a text editor, copy its content and paste it into the certificate authority web enrollment page, following a procedure similar to [[#Enrollment - Windows Manual|the manual enrollment]] except that the CSR is already present.
 
-Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and link the certificate to the CSR used to make this cert.
+Once the <strong>certnew.cer</strong> is downloaded, go back to the <strong>Certificate Signing Requests</strong> section and bind the certificate to the CSR that generated it (the <strong>Bind Certificate</strong> action).
 
-The new cert should appear on System Certificates list.
+The new cert should appear in the System Certificates list.
 
 #### Trusted Certificates
 
@@ -108,17 +110,17 @@ In <strong>Administration > System > Certificates > Trusted Certificates</strong
 
 ![[Pasted image 20260427145832.png]]
 
-When a client presents a certificate for EAP authentication protocol, the ISE server will check if the issuer of the client certificate is present on the list of Trusted Certificates.
+When a client presents a certificate for an EAP authentication protocol, the ISE server will check if the issuer of the client certificate is present on the list of Trusted Certificates.
 
 ![[Pasted image 20260427162757.png | 200]]
 
 ![[Pasted image 20260427165456.png]]
 
-If the issuing certificate authority is not present among the <strong>Trusted Certificate</strong>, the authentication fails.
+If the issuing certificate authority is not present among the <strong>Trusted Certificates</strong>, the authentication fails.
 
 ##### CRL Revocation List
 
-In the Trusted Certificates is also set the CRL validation for the selected certificate. The Certificate Revocation List is a list of the revoked certificates, it is used to check for certificates that have not yet reached their expiration date but have been <strong>revoked</strong> before expiration.
+The Trusted Certificates section is also where CRL validation is set for the selected certificate. The Certificate Revocation List is a list of the revoked certificates; it is used to check for certificates that have not yet reached their expiration date but have been <strong>revoked</strong> before expiration.
 
 ![[Pasted image 20260504121014.png]]
 
@@ -128,9 +130,9 @@ The Retrieve CRL timers should be set according to the CA CRL timers.
 
 - <strong>Effective date</strong> is the date the CRL will start to be valid.
 - <strong>Next update</strong> is the time the CRL will expire.
-- <strong>Next CRL Publish</strong> is when the new CRL will be published but is still not active The Retrieve CRL set to 8 hours before expiration is set 8 hours before the <strong>Next update</strong> so it will retrieve the <strong>Next CRL Publish</strong> CRL. The old CRL and the new CRL have 8 hours overlap in which both CRL are active, so the timer set to Automatically 8 hour before expire with 10 minutes of wait before retry, is correct and leave no blackout periods.
+- <strong>Next CRL Publish</strong> is when the new CRL will be published, while the old one is still active. The Retrieve CRL timer set to 8 hours before expiration falls 8 hours before the <strong>Next update</strong>, so it will retrieve the <strong>Next CRL Publish</strong> CRL. The old CRL and the new CRL have an 8 hour overlap in which both CRLs are active, so the timer set to Automatically 8 hours before expiration, with 10 minutes of wait before retry, is correct and leaves no blackout periods.
 
-The CRL Distribution URL can be retrieved from the Certificate Authority server
+The CRL Distribution URL can be retrieved from the Certificate Authority server.
 
 ![[Pasted image 20260427170031.png]]
 
@@ -140,15 +142,15 @@ When a certificate is revoked outside of the automated cycle, you must trigger a
 
 ![[Pasted image 20260427170229.png]]
 
-When doing a manual CRL publication do a manual download of the CRL in ISE server too, by setting the Retrieve CRL download to every 1 minute and then change back.
+When doing a manual CRL publication do a manual download of the CRL in ISE server too, by setting the Retrieve CRL download to every 1 minute and then changing it back.
 
-#### Certificate Authentication Profile 
+#### Certificate Authentication Profile
 
 ![[Pasted image 20260424144802.png]]
 
-<strong>Certificate Authentication Profile</strong>(CAP) section is used to decide which <mark style="background: #FF5582A6;">attribute of the certificate</mark> the server ISE will use to check identity of the client.
+The <strong>Certificate Authentication Profile</strong> (CAP) section is used to decide which <mark style="background: #FF5582A6;">attribute of the certificate</mark> the ISE server will use to check the identity of the client.
 
-Here it is set to Subject Alternate Name (SAN) as the CAP will be used for both Machine and User EAP authentication protocols. The Users in the SAN will use the UPN while the Machines will use the DNS Name.
+Here it is set to Subject Alternative Name (SAN) as the CAP will be used for both Machine and User EAP authentication protocols. The Users in the SAN will use the UPN while the Machines will use the DNS Name. See the ISE-side counterpart in [[PBA - NAC - ISE Server#External Identity Sources - Certificate Authentication Profile|the ISE note]], where the CAP sits in the certificate-validation flow.
 
 |User Certificate|Machine Certificate|
 |---|---|
@@ -157,29 +159,28 @@ Here it is set to Subject Alternate Name (SAN) as the CAP will be used for both 
 The selection <strong>Match Client Certificate Against Certificate In Identity Store</strong>:
 
 - <strong>Only to resolve identity ambiguity</strong>: This is the standard setting. It tells ISE to use the certificate information to identify the user in AD, but it doesn't require a byte-for-byte match of the certificate itself against an AD attribute.
-- <strong>Always perform binary comparison</strong>: <mark style="background: #FF5582A6;">Use this only if you have physically uploaded or published the user/machine certificates into the <strong>userCertificate</strong> attribute in Active Directory</mark>. <mark style="background: #FFB86CA6;">ISE will then perform a byte-for-byte comparison between the certificate the client presents and the one stored in AD</mark>. If they don't match exactly, authentication will fail. [[#Domain Users Certificate| Link to configuration of a domain user certificate and the img of userCertificate attribute]] [[#Script To Remove Expired userCertificate| Link to the managing of expired userCertificate attribute]]
+- <strong>Always perform binary comparison</strong>: <mark style="background: #FF5582A6;">Use this only if you have physically uploaded or published the user/machine certificates into the <strong>userCertificate</strong> attribute in Active Directory</mark>. <mark style="background: #FFB86CA6;">ISE will then perform a byte-for-byte comparison between the certificate the client presents and the one stored in AD</mark>. If they don't match exactly, authentication will fail. See [[#Domain Users Certificate|the domain user certificate configuration]] for populating the userCertificate attribute, and [[#Script To Remove Expired userCertificate|the removal script]] for clearing expired entries from it.
 - <strong>Never:</strong> Choose this if you are not using an identity store at all for this profile. This would be common for Guest or BYOD setups where you just want to verify that the certificate is valid and signed by a trusted CA without checking it against an AD account.
 
 ### Client Certificates
 
-Client Certificates are used by users, machine or both to authenticate to ISE. On the server SubordinateCA, in the Certificate Authority service create the Certificate Templates that will be used by Domain Users, Domain Machines, and non Domain Users.
+Client Certificates are used by users, machines, or both to authenticate to ISE; the identity is read from the certificate field configured in the [[#Certificate Authentication Profile]]. On the server SubordinateCA, in the Certificate Authority service, create the Certificate Templates that will be used by Domain Users, Domain Machines, and non-Domain Users. When a client can present only the machine certificate and not the user one, ISE grants the limited [[PBA - NAC - ISE Server#Machine Access|Machine Access]] authorization.
 
 #### Domain Users Certificate
 
 For Users Certificates, duplicate from the default <strong>User</strong> certificate template:
 
-- On the <u>General tab</u> create a logical template name. The <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the user <strong>userCertificate</strong> attribute in Active Directory. 
-  ![[Pasted image 20260424150748.png|200]]
+- On the <u>General tab</u> create a logical template name. The <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the user <strong>userCertificate</strong> attribute in Active Directory. ![[Pasted image 20260424150748.png|200]]
 - On the <u>Request Handling tab</u>, uncheck the <strong>Allow private key to be exported</strong> box.
-- On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong>. The <strong>Edit Application Policies Extension</strong> window will pop up. Click the <strong>Add</strong> button. Then, add the <strong>Server Authentication</strong> policy to the <strong>Application Policies</strong>. Then click <strong>OK</strong> to close the <strong>Edit Application Policies Extension</strong> window.
+- On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong> to verify that <strong>Client Authentication</strong> (OID 1.3.6.1.5.5.7.3.2) is listed — the duplicated <strong>User</strong> template already includes it. This is the EKU a supplicant certificate presents for EAP-TLS, the same one the [[#Enrollment - Windows Script|enrollment script]] INF requests. Do not add <strong>Server Authentication</strong>: that EKU belongs on the ISE [[#EAP Authentication Certificate|EAP Authentication Certificate]], not on client certificates.
 - On the <u>Security tab</u>, highlight <strong>Domain Users</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> users with a user certificate</mark> for EAP authentication when they log into their computers.
-- On the <u>Subject Name tab</u>. If this is a lab environment, <mark style="background: #ADCCFFA6;">you may want to exclude email addresses from the Certificate template</mark> as your environment may not have an Exchange server or SMTP server integrated with Active Directory to pre-populate that information in the AD. <mark style="background: #ADCCFFA6;">If that information is not in the Active Directory record and this box is checked in the template, your certificate will not be issued to the user</mark>. <mark style="background: #FFB8EBA6;">The UPN in Alternate Subject Name (SAN) is what the ISE Server will use to check the identity of the machine in the Active Directory</mark>, if the Certificate Authentication Profile is configured with the SAN.
+- On the <u>Subject Name tab</u>. If this is a lab environment, <mark style="background: #ADCCFFA6;">you may want to exclude email addresses from the Certificate template</mark> as your environment may not have an Exchange server or SMTP server integrated with Active Directory to pre-populate that information in the AD. <mark style="background: #ADCCFFA6;">If that information is not in the Active Directory record and this box is checked in the template, your certificate will not be issued to the user</mark>. <mark style="background: #FFB8EBA6;">The UPN in the Alternate Subject Name (SAN) is what the ISE Server will use to check the identity of the user in the Active Directory</mark>, if the Certificate Authentication Profile is configured with the SAN.
 
 |General tab|Request Handling tab|Extensions tab|Security tab|Subject Name tab|
 |---|---|---|---|---|
 |![[General tab.png\|200]]|![[Request Handling tab.png\|200]]|![[Extensions tab.png\|200]]|![[Security tab.png\|200]]|![[Subject Name tab.png\|200]]|
 
-Once the Domain Users Certificate Template is created, <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA server</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. In this case the <strong>User Certificate</strong> is issued on the <strong>SubordinateCA01</strong>.
+Once the Domain Users Certificate Template is created, <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA servers</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. In this case the <strong>User Certificate</strong> is issued on the <strong>SubordinateCA01</strong>.
 
 ![[Pasted image 20260424135651.png]]
 
@@ -195,11 +196,11 @@ As the Domain Admin Certificate is made for admins that have a domain user accou
 
 ##### Enrollment - Windows Script
 
-This is a script that enroll a non domain computer with a domain certificate if the user is an admin with a account in the Active Directory.
+This is a script that enrolls a non-domain computer with a domain certificate if the user is an admin with an account in the Active Directory.
 
-To correctly activate this script, it must be saved with <strong>.ps1</strong> extension in the format <strong>UTF-8 with BOM</strong>.
+To run correctly, the script must be saved with the <strong>.ps1</strong> extension in the format <strong>UTF-8 with BOM</strong>.
 
-It's advised to install the Base64 <strong>certnew.p7b</strong> certificate chain, for easiest install, but the <strong>certnew.cer</strong> certificate works too.
+It's advised to install the Base64 <strong>certnew.p7b</strong> certificate chain, for the easiest install, but the <strong>certnew.cer</strong> certificate works too.
 
 ```powershell
 param(
@@ -729,51 +730,50 @@ end moveToTrash
 
 For Computer Certificates, duplicate from the default <strong>Workstation Authentication</strong> certificate template:
 
-- On the <u>General tab</u> create a logical template name, the <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the computer <strong>userCertificate</strong> attribute in Active Directory. 
-  ![[Pasted image 20260424150609.png|200]]
-- On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong>. The <strong>Edit Application Policies Extension</strong> window will pop up. Click the <strong>Add</strong> button. Then, add the <strong>Server Authentication</strong> policy to the <strong>Application Policies</strong>. Then click <strong>OK</strong> to close the <strong>Edit Application Policies Extension</strong> window.
+- On the <u>General tab</u> create a logical template name. The <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the computer <strong>userCertificate</strong> attribute in Active Directory. ![[Pasted image 20260424150609.png|200]]
+- On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong> to verify that <strong>Client Authentication</strong> (OID 1.3.6.1.5.5.7.3.2) is listed — it is the only application policy the default <strong>Workstation Authentication</strong> template carries, and the only EKU the machine needs to authenticate as an EAP-TLS client.
 - On the <u>Security tab</u>, highlight <strong>Domain Computers</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> computers with a machine certificate</mark> for EAP authentication when they log into their computers.
-- On the <u>Subject Name tab</u> under Subject Name Format, change it to <strong>Fully distinguished name</strong>, and leave the DNS Name checked. <mark style="background: #FFB8EBA6;">The DNS name in Alternate Subject Name (SAN) is what the ISE Server will use to check the identity of the machine in the Active Directory</mark>, if the Certificate Authentication Profile is configured with the SAN.
+- On the <u>Subject Name tab</u> under Subject Name Format, change it to <strong>Fully distinguished name</strong>, and leave the DNS Name checked. <mark style="background: #FFB8EBA6;">The DNS name in the Alternate Subject Name (SAN) is what the ISE Server will use to check the identity of the machine in the Active Directory</mark>, if the Certificate Authentication Profile is configured with the SAN.
 
-|General tab|Extensions tab|Security tab|Subject Name tab|
-|---|---|---|---|
-|![[Pasted image 20260424150448.png]]|![[Pasted image 20260424141629.png]]|![[Pasted image 20260424141754.png]]|![[Pasted image 20260424141809.png]]|
+| General tab                          | Extensions tab                       | Security tab                         | Subject Name tab                     |
+| ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------ |
+| ![[Pasted image 20260424150448.png]] | ![[Pasted image 20260424141629.png]] | ![[Pasted image 20260424141754.png]] | ![[Pasted image 20260424141809.png]] |
 
-Like the User certificate templates <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA server</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. In this case the <strong>Machine Certificate</strong> is issued on the <strong>SubordinateCA02</strong>.
+Like the [[#Domain Users Certificate|User certificate template]], <mark style="background: #FF5582A6;">issue the template only on one of the SubordinateCA servers</mark> <mark style="background: #FFB86CA6;">if the design is to separate User Certificates</mark> from <mark style="background: #BBFABBA6;">Machine Certificates</mark>. In this case the <strong>Machine Certificate</strong> is issued on the <strong>SubordinateCA02</strong>.
 
 ![[Pasted image 20260424141851.png]]
 
 #### Script To Remove Expired userCertificate
 
-The expired certificates in the userCertificate attribute cannot be removed automatically, we should remove them manually or with the help of a script. By default this script is in read only mode, read the description for the how to use.
+The expired certificates in the userCertificate attribute cannot be removed automatically; we should remove them manually or with the help of a script. By default this script is in read-only mode; read the description for how to use it.
 
 [[Script To Remove Expired userCertificate]]
 
 ## Group Policy Management
 
-The Group Policy Management service is used to deploy the configuration of Windows native supplicant and the rollout of the Client Certificates and other setting to manage the user and computer configuration.
+The Group Policy Management service is used to deploy the configuration of the [[PBA - NAC - ISE Server#Dot1X (802.1X)|Windows native supplicant]], roll out the [[#Client Certificates]], and manage other user and computer configuration settings.
 
-Make sure the GPO with the desired configuration is winning against other GPOs and its policies are enforced, and the <strong>Security Filtering</strong> is applied correctly. This is possible to check on <strong>Group Policy Results Wizard</strong> on <strong>Group Policy Management</strong>.
+Make sure the GPO with the desired configuration is winning against other GPOs and its policies are enforced, and the <strong>Security Filtering</strong> is applied correctly. This can be checked with the <strong>Group Policy Results Wizard</strong> in <strong>Group Policy Management</strong>.
 
 ### Computer GPO
 
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Computers</mark> with the [[#Domain Computer Certificate]] and enable <mark style="background: #FFB86CA6;">Wired AutoConfig</mark> on computers.
 
-All computer GPO must be created in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> which is where the Domain Computer accounts are stored. <mark style="background: #FFB8EBA6;"><u>After each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command and a reboot of the client computer to apply the GPO configuration</u></mark>.
+All computer GPOs must be created under the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> OU, which is where the Domain Computer accounts are stored. <mark style="background: #FFB8EBA6;"><u>After each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command and a reboot of the client computer to apply the GPO configuration</u></mark>.
 
-<strong>Wired AutoConfig</strong> (<strong>DOT3SVC</strong>) is a Windows service that manages <mark style="background: #FF5582A6;">IEEE 802.1X authentication on Ethernet connections</mark>. It enables computers to authenticate themselves on secure networks, often used in corporate environments to enforce network access control. <strong>Computer Configuration → Policies → Windows Settings → Security Settings → System Services → Wired AutoConfig</strong>
+<strong>Wired AutoConfig</strong> (<strong>DOT3SVC</strong>) is a Windows service that manages <mark style="background: #FF5582A6;">IEEE 802.1X authentication on Ethernet connections</mark>. It enables computers to authenticate themselves on secure networks, often used in corporate environments to enforce network access control. The service is enabled at <strong>Computer Configuration → Policies → Windows Settings → Security Settings → System Services → Wired AutoConfig</strong>, setting the startup mode to Automatic.
 
 ![[Pasted Graphic 2.png]]
 
 The [[#Domain Computer Certificate]] has Auto-Enrollment configured on its certificate template, so to enroll the computers we just need to enable the Auto-Enrollment.
 
-To activate Auto-Enrollment go to <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Public Key Policies → Certificate Services Client - Auto-Enrollment</strong>
+To activate Auto-Enrollment go to <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Public Key Policies → Certificate Services Client - Auto-Enrollment</strong>. Set the Configuration Model to Enabled and tick both checkboxes: renew expired, update pending, and remove revoked certificates; and update certificates that use certificate templates.
 
 ![[Pasted Graphic.png]]
 
-<mark style="background: #ABF7F7A6;">Core 802.1X configuration is the <strong>Wired Network (IEEE 802.3) Policies</strong></mark> in <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Wired Network (IEEE 802.3) Policies</strong>, in the current deployment there are <strong>PEAP</strong>, <strong>TEAP</strong> and <strong>EAP-TLS</strong>.
+<mark style="background: #ABF7F7A6;">Core 802.1X configuration is the <strong>Wired Network (IEEE 802.3) Policies</strong></mark> in <strong>Computer Configuration → Policies → Windows Settings → Security Settings → Wired Network (IEEE 802.3) Policies</strong>; in the current deployment there are <strong>[[#PEAP MSCHAPv2|PEAP]]</strong>, <strong>[[#TEAP]]</strong> and <strong>[[#EAP-TLS]]</strong>.
 
-GPO hierarchy: <strong>EAP-TLS → PEAP-MSCHAPv2 → TEAP</strong>
+GPO hierarchy: <strong>EAP-TLS → PEAP-MSCHAPv2 → TEAP</strong>, from highest to lowest link precedence.
 
 - <strong>TEAP</strong> GPO — scoped to <strong>Domain Computers</strong>. This makes TEAP the default authentication method for the entire fleet.
 - <strong>PEAP MSCHAPv2</strong> GPO — scoped to a custom security group (e.g., <strong>GPO_C_PC_Enable_PEAP</strong>) for machines that require PEAP.
@@ -781,11 +781,9 @@ GPO hierarchy: <strong>EAP-TLS → PEAP-MSCHAPv2 → TEAP</strong>
 
 Because the EAP-TLS and PEAP GPOs are linked at higher precedence than TEAP, <mark style="background: #FFB86CA6;">any computer added to one of the custom groups will have that GPO's wired profile applied last and override the default TEAP profile</mark>. <mark style="background: #BBFABBA6;">To switch a machine's authentication method, just add its computer object to the appropriate group</mark> — no per-machine configuration needed.
 
-The default is TEAP and when some computers need EAP-TLS or PEAP they just need to be dropped in to the custom groups, they will automatically pick the correct authentication method at new reboot.
-
 #### PEAP MSCHAPv2
 
-PEAP is used for Domain Users that cannot or do not want to use the certification to authenticate to ISE.
+PEAP is used for Domain Users that cannot or do not want to use a certificate to authenticate to ISE.
 
 - <strong>General tab</strong>: enable <strong>Use Windows Wired Auto Config service for clients</strong>
 - <strong>Security tab</strong>:
@@ -793,18 +791,18 @@ PEAP is used for Domain Users that cannot or do not want to use the certificatio
     - Network authentication method: <strong>Microsoft: Protected EAP (PEAP)</strong>, go to <strong>Properties...</strong>
         - Tick <strong>Verify server's identity by validating certificate</strong>
         - <strong>Connect to these servers</strong>: Cisco ISE server FQDN
-        - In Trusted Root Certification Authorities select the Root CA that signed the ISE [[#EAP Authentication Certificate]], <strong>Don't ask user to authorize new servers or trusted CAs</strong>.
+        - In Trusted Root Certification Authorities select the Root CA that signed the ISE [[#EAP Authentication Certificate]], and tick <strong>Don't ask user to authorize new servers or trusted CAs</strong>.
         - Authentication Method: <strong>Secured password (EAP-MSCHAP v2)</strong>
         - Tick <strong>Enable Fast Reconnect</strong>
     - Authentication Mode: <strong>User authentication</strong>
     - Max authentication failures: 1–3
-    - Tick <strong>Cache user information for subsequent connections</strong>, to decide if to tick or not.
+    - <strong>Cache user information for subsequent connections</strong>: optional, decide whether to tick it.
 
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 
 #### EAP-TLS
 
-This is a GPO with authentication protocol set in EAP-TLS, made specifically for RDP connection, see the policy rule made for this.
+This is a GPO with the authentication protocol set to EAP-TLS, made specifically for the RDP connections — see [[PBA - NAC - ISE Server#RDP Access|the policy rule]] made for this.
 
 - <strong>General tab</strong>: enable <strong>Use Windows Wired Auto Config service for clients</strong>
 - <strong>Security tab</strong>:
@@ -814,8 +812,8 @@ This is a GPO with authentication protocol set in EAP-TLS, made specifically for
         - Tick <strong>Use simple certificate selection</strong>
         - Tick <strong>Verify server's identity by validating certificate</strong>
         - Tick <strong>Connect to these servers</strong>: Cisco ISE servers FQDN
-        - In <strong>Trusted Root Certificate Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]]
-        - Tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+        - In <strong>Trusted Root Certification Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]]
+        - Tick <strong>Don't prompt user to authorize new servers or trusted certification authorities</strong>.
     - Authentication Mode: <strong>Computer only</strong>
     - Max authentication failures: 1–3
 
@@ -823,9 +821,9 @@ Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for
 
 #### TEAP
 
-TEAP authentication protocol is the default protocol used by Domain Users and Domain Computers.
+The TEAP authentication protocol — described in [[PBA - NAC - ISE Server#Extensible Authentication Protocols|the ISE note]] — is the default protocol used by Domain Users and Domain Computers.
 
-On Group Policy Management editor, the TEAP authentication method is broken, to rollout this type of authentication method we need to import a XML configuration from a working Win10/11 client.
+In the Group Policy Management editor the TEAP authentication method is not available; to roll out this authentication method we need to import an XML configuration from a working Win10/11 client.
 
 ##### TEAP profile
 
@@ -839,29 +837,29 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
 2. Network authentication method → <strong>Microsoft: Tunnel EAP (TEAP)</strong>.
 3. Click <strong>Settings</strong>:
     - <strong>Identity privacy</strong> → anonymous.
-        - <strong>Connect to these servers</strong>: Cisco ISE servers FQDN.
-        - <strong>Trusted Root Certification Authorities</strong> → tick the root that signed the ISE [[#EAP Authentication Certificate]]. (If you have a 2-tier PKI, <mark style="background: #FF5582A6;">only tick the <strong>offline root</strong></mark>, not the issuing CA)
-        - Tick <strong>Don't prompt user if unable to authorize server</strong>
+    - <strong>Connect to these servers</strong>: Cisco ISE servers FQDN.
+    - <strong>Trusted Root Certification Authorities</strong> → tick the root that signed the ISE [[#EAP Authentication Certificate]]. (If you have a 2-tier PKI, <mark style="background: #FF5582A6;">only tick the <strong>offline root</strong></mark>, not the issuing CA).
+    - Tick <strong>Don't prompt user if unable to authorize server</strong>
     - <strong>Client authentication</strong>:
         - <strong>Primary EAP method </strong>→ <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this is the computer authentication.
             - Tick <strong>Use a certificate on this computer</strong>
             - Tick <strong>Use simple certificate selection</strong>
             - Tick <strong>Verify server's identity by validating certificate</strong>
             - Tick <strong>Connect to these servers</strong>: Cisco ISE servers FQDN
-            - In <strong>Trusted Root Certificate Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]]
-            - Tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+            - In <strong>Trusted Root Certification Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]]
+            - Tick <strong>Don't prompt user to authorize new servers or trusted certification authorities</strong>.
         - <strong>Secondary EAP method</strong> → <mark style="background: #FFF3A3A6;">Microsoft: Smart Card or other certificate (EAP-TLS)</mark> → this becomes the user auth.
             - Tick <strong>Use a certificate on this computer</strong>
             - Tick <strong>Use simple certificate selection</strong>
             - Tick <strong>Verify server's identity by validating certificate</strong>
             - Tick <strong>Connect to these servers</strong>: Cisco ISE servers FQDN
-            - In <strong>Trusted Root Certificate Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]]
-            - Tick <strong>don't prompt user to authorize new servers or trusted certification authorities</strong>.
+            - In <strong>Trusted Root Certification Authorities</strong> select the Root CA (only the Root CA) that signed the ISE [[#EAP Authentication Certificate]]
+            - Tick <strong>Don't prompt user to authorize new servers or trusted certification authorities</strong>.
 4. Back on the <strong>Authentication</strong> tab → <strong>Additional settings</strong>
     - Tick <strong>Specify authentication mode</strong> → <strong>User or computer authentication</strong>.
     - Tick <strong>Enable Single Sign On for this network</strong>
         - Tick <strong>Perform immediately before user logon</strong>
-        - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong> The <strong>Fallback to unauthorized network access</strong> must remain <strong>ticked</strong>, as without this option enabled if the user connect to a switch with no authenticator it will not get network access.
+        - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>. The <strong>Fallback to unauthorized network access</strong> option must remain <strong>ticked</strong>; without it, a user connecting to a switch port with no authenticator would get no network access.
 
 ##### Export the profile to XML
 
@@ -872,11 +870,11 @@ netsh lan show profiles
 netsh lan export profile folder=C:\Temp interface="Ethernet"
 ```
 
-The interface="" depends on the show lan profiles.
+The `interface=""` value depends on the output of `netsh lan show profiles`.
 
-Note that the <strong>netsh</strong> can have a bug where the TrustedRootCAHash block have malformed hash like `fc 5 c2 6 c0 a7 f0 6e 66 10 3f f0 65 3b ad 49 bf 59 85 9e where bytes` 0x05`and`0x06`came out as single hex digits. Change it like`fc 05 c2 06 c0 a7 f0 6e 66 10 3f f0 65 3b ad 49 bf 59 85 9e`.
+Note that <strong>netsh</strong> can have a bug where the TrustedRootCAHash block has a malformed hash like `fc 5 c2 6 c0 a7 f0 6e 66 10 3f f0 65 3b ad 49 bf 59 85 9e`, where bytes `0x05` and `0x06` came out as single hex digits. Change it to `fc 05 c2 06 c0 a7 f0 6e 66 10 3f f0 65 3b ad 49 bf 59 85 9e`.
 
-When there are more than one FQDN in the ServerNames block, separate the FQDNs with a semicolon <strong>;</strong> with no trailing spaces.
+When there is more than one FQDN in the ServerNames block, separate the FQDNs with a semicolon <strong>;</strong> with no trailing spaces.
 
 Open the resulting XML and copy everything inside the OneX block.
 
@@ -907,7 +905,7 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
     - <strong>General tab</strong>: Choose a <strong>Policy Name</strong>, enable <strong>Use Windows Wired Auto Config service for clients</strong>
     - <strong>Security tab</strong>:
         - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
-        - Network authentication method: Pick <strong>Microsoft: Protected EAP (PEAP)</strong> for placeholder, it will be overwritten.
+        - Network authentication method: Pick <strong>Microsoft: Protected EAP (PEAP)</strong> as a placeholder; it will be overwritten.
     - <strong>Security → Advanced</strong>:
         - Tick <strong>Enforce advanced 802.1X settings</strong>
             - <strong>Max Eapol-Start Msgs</strong>: 2
@@ -922,20 +920,20 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
 5. Find the block <strong>OneX xmlns="http://www.microsoft.com/networking/OneX/v1"</strong>
 6. Replace the whole block with the customized one, save and close.
 7. Return to <strong>Group Policy Objects</strong>, click <strong>Restore from Backup...</strong>
-8. Select Backup folder, if the the GUID folder was inside <strong>C:\Users\username\Desktop</strong> just select <strong>C:\Users\username\Desktop</strong> and not the GUID folder.
-9. And finish the restore of the backup.
+8. Select the Backup folder; if the GUID folder was inside <strong>C:\Users\username\Desktop</strong> just select <strong>C:\Users\username\Desktop</strong> and not the GUID folder.
+9. Finish the restore of the backup.
 10. Check that it works.
 
-Under <strong>Scope → Security Filtering</strong> of the GPO add <strong>Domain Computers</strong> which is the group this GPO will be applied to. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
+Under <strong>Scope → Security Filtering</strong> of the GPO add <strong>Domain Computers</strong>, which is the group this GPO will be applied to. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 
 ### User GPO
 
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Users</mark> with the [[#Domain Users Certificate]].
 
-All user GPOs must be created in the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Publiacqua</strong> which is where the Domain User accounts are stored. <mark style="background: #CACFD9A6;">At each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command to apply the GPO configuration</mark>.
+All user GPOs must be created under the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Publiacqua</strong> OU, which is where the Domain User accounts are stored. <mark style="background: #CACFD9A6;">At each change of user GPO, there must be a <strong>gpupdate /force</strong> CMD command to apply the GPO configuration</mark>.
 
 To activate Auto-Enrollment go to <strong>User Configuration → Policies → Windows Settings → Security Settings → Public Key Policies → Certificate Services Client - Auto-Enrollment</strong>
 
 ![[Pasted Graphic 3.png]]
 
-The GPO should be in <strong>Enforced</strong> mode to ensure that it will be applied.
+The GPO should be in <strong>Enforced</strong> mode to ensure that it will be applied. As with the computer GPOs, check under Scope → Security Filtering that the GPO applies to the intended user group.

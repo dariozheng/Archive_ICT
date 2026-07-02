@@ -1,7 +1,9 @@
 ---
 categories:
   - "[[Linux]]"
+  - "[[Security]]"
 topic@linux: "[[Linux General]]"
+topic@security:
 tags:
   - networking
   - documentation

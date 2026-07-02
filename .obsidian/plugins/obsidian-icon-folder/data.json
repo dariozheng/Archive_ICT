@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWindows",
       "SiLinux",
       "FasGlobe",
       "LiBrickWallFire",
-      "SiCisco",
-      "SiWireguard"
+      "SiCisco"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
