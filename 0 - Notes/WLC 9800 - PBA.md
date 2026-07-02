@@ -7,12 +7,6 @@ tags:
 icon: SiCisco
 iconColor:
 ---
-
-
-- Policy Tag
-- Site Tag
-- RF Tag
-- HA
 # Accesso 
 L'accesso al portale GUI di WLC è eseguito con le credenziali RADIUS tramite il portale
 [https://pba-wlc01.publiacqua.it/webui/](https://pba-wlc01.publiacqua.it/webui/). 
