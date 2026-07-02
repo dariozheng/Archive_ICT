@@ -210,7 +210,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -306,7 +307,7 @@
       }
     ]
   },
-  "active": "85099a6ee1fbe7b4",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
