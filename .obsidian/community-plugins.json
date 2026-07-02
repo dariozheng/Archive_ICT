@@ -3,7 +3,6 @@
   "templater-obsidian",
   "table-editor-obsidian",
   "note-locker",
-  "obsidian-excalidraw-plugin",
   "metadata-menu",
   "homepage",
   "obsidian-minimal-settings",
@@ -14,5 +13,6 @@
   "dataview",
   "notebook-navigator",
   "obsidian-style-settings",
-  "find-orphaned-images"
+  "find-orphaned-images",
+  "obsidian-excalidraw-plugin"
 ]

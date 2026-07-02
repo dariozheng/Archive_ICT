@@ -4,39 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "02e42c87e0720317",
+        "id": "a815b537cc5f0709",
         "type": "tabs",
         "children": [
           {
-            "id": "9ac05a8fb550d07e",
+            "id": "392ac5e1aeef99b2",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "nftables"
-            }
-          },
-          {
-            "id": "85099a6ee1fbe7b4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
-                "mode": "preview",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "PBA - NAC - Microsoft Servers"
+              "title": "PBA - NAC - Network Access Devices"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -103,7 +88,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 281.5026054382324
+    "width": 291.5026054382324
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -119,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "Dow"
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - Microsoft Servers"
+              "title": "Outline of PBA - NAC - Network Access Devices"
             }
           },
           {
@@ -169,7 +154,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -179,7 +164,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for PBA - NAC - Microsoft Servers"
+              "title": "Backlinks for PBA - NAC - Network Access Devices"
             }
           },
           {
@@ -188,12 +173,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from PBA - NAC - Microsoft Servers"
+              "title": "Outgoing links from PBA - NAC - Network Access Devices"
             }
           },
           {
@@ -210,8 +195,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -307,17 +291,25 @@
       }
     ]
   },
-  "active": "85099a6ee1fbe7b4",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
-    "0 - Notes/nftables.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+    "Homepage.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
+    "3 - Templates/Bases/Topic/Security/Firewall.base",
+    "2 - Categories/Microsoft.md",
+    "2 - Categories/Linux.md",
+    "2 - Categories/Topics/Networking/WLAN.md",
+    "2 - Categories/Topics/Linux/Ubuntu.md",
+    "2 - Categories/Topics/Linux/Linux General.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/nftables.md",
     "0 - Notes/Cisco DNA Center.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/WLC 9800 - PBA.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/netfilter.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
-    "2 - Categories/Topics/Networking/WLAN.md",
     "0 - Notes/Untitled.md",
     "0 - Notes/Untitled 1.md",
     "attachments/Pasted image 20260424141809.png",
@@ -326,16 +318,10 @@
     "0 - Notes/iptables.md",
     "0 - Notes/WireGuard.md",
     "2 - Categories/Topics/Security/VPN.md",
-    "2 - Categories/Topics/Linux/Linux General.md",
     "0 - Notes/Cisco DNA.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/WLC 9800.md",
     "2 - Categories/Networking.md",
-    "2 - Categories/Cloud Computing.md",
-    "2 - Categories/Hardware.md",
-    "2 - Categories/Microsoft.md",
-    "2 - Categories/Linux.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
     "attachments/Pasted image 20260701164609.png",
     "attachments/Pasted image 20260701162626.png",
     "attachments/Pasted image 20260701162426.png",
@@ -349,10 +335,8 @@
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
     "3 - Templates/Bases/Topic/Networking/WLAN.base",
-    "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
     "1 - Excalidraw/Scripts",
-    "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Networking.base",
     "3 - Templates/Bases/Linux.base",
     "Untitled.canvas"
