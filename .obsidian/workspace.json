@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - NAC - ISE Server"
+              "title": "PBA - NAC - Microsoft Servers"
             }
           }
         ],
@@ -119,13 +119,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "Dow"
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - ISE Server"
+              "title": "Outline of PBA - NAC - Microsoft Servers"
             }
           },
           {
@@ -169,7 +169,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -179,7 +179,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for PBA - NAC - ISE Server"
+              "title": "Backlinks for PBA - NAC - Microsoft Servers"
             }
           },
           {
@@ -188,12 +188,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/PBA - NAC - ISE Server.md",
+                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from PBA - NAC - ISE Server"
+              "title": "Outgoing links from PBA - NAC - Microsoft Servers"
             }
           },
           {
@@ -302,20 +302,25 @@
         "y": -1122,
         "width": 1146,
         "height": 1931,
-        "maximize": true,
+        "maximize": false,
         "zoom": 1
       }
     ]
   },
-  "active": "0aa7a519a475b13e",
+  "active": "85099a6ee1fbe7b4",
   "lastOpenFiles": [
+    "0 - Notes/nftables.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/Cisco DNA Center.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "0 - Notes/WLC 9800 - PBA.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/netfilter.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
+    "2 - Categories/Topics/Networking/WLAN.md",
     "0 - Notes/Untitled.md",
     "0 - Notes/Untitled 1.md",
     "attachments/Pasted image 20260424141809.png",
-    "0 - Notes/nftables.md",
-    "0 - Notes/netfilter.md",
     "0 - Notes/UFW.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
     "0 - Notes/iptables.md",
@@ -324,17 +329,13 @@
     "2 - Categories/Topics/Linux/Linux General.md",
     "0 - Notes/Cisco DNA.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "0 - Notes/WLC 9800 - PBA.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "0 - Notes/WLC 9800.md",
     "2 - Categories/Networking.md",
     "2 - Categories/Cloud Computing.md",
     "2 - Categories/Hardware.md",
     "2 - Categories/Microsoft.md",
     "2 - Categories/Linux.md",
-    "2 - Categories/Topics/Networking/WLAN.md",
     "2 - Categories/Topics/Networking/Networking General.md",
-    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "attachments/Pasted image 20260701164609.png",
     "attachments/Pasted image 20260701162626.png",
     "attachments/Pasted image 20260701162426.png",
