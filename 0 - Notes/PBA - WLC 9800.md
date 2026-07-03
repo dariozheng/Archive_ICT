@@ -240,15 +240,16 @@ La selezione <strong>Central Web Auth</strong> <strong>marca l'ACL come redirect
 
 Il comportamento della redirect ACL sul 9800: le entry permit indicano il traffico da intercettare e re-dirigere, le entry deny il traffico che attraversa senza redirect, e tutto ciò che non matcha nulla resta bloccato dallo stato WEBAUTH_REQD della sessione finché la CWA non si conclude. Questa è la struttura canonica, da confrontare con quella reale (`show ip access-lists GUEST_REDIRECT`):
 
-```cisco
+```
 ip access-list extended GUEST_REDIRECT
- deny   udp any any eq bootps
- deny   udp any any eq bootpc
- deny   udp any any eq domain
- deny   ip any host 10.140.2.31
- deny   ip host 10.140.2.31 any
- permit tcp any any eq www
- permit tcp any any eq 443
+ 10 deny ip any host 10.140.2.31
+ 11 deny ip any host 10.140.2.32
+ 20 deny ip host 10.140.2.31 any
+ 21 deny ip host 10.140.2.32 any
+ 30 deny udp any any eq domain
+ 40 deny udp any eq domain any
+ 50 permit tcp any any eq www
+ 60 permit tcp any any eq 443
 ```
 
 #### Policy Tag
@@ -396,6 +397,4 @@ Lo stato corrente si legge con `show ap tag summary`, che mostra per ogni AP i t
 
 > [!warning] Cambiare i tag di un AP non è un'operazione trasparente: alla riassegnazione (in particolare del site tag) l'AP riavvia il CAPWAP e i client vengono disconnessi per qualche istante. Con `ap tag persistency enable` i tag vengono salvati sull'AP e sopravvivono ai rejoin.
 
-
-- Blocco reale della configurazione base: VLAN della WMI, uplink, NTP, DNS, SSH — [[#Configurazione Iniziale]].
 
