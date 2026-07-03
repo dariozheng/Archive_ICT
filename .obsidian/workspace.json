@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
-                "mode": "preview",
+                "file": "0 - Notes/PBA - WLC 9800.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - NAC - Network Access Devices"
+              "title": "PBA - WLC 9800"
             }
           },
           {
@@ -118,13 +118,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
+                "file": "0 - Notes/PBA - WLC 9800.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "Dow"
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - NAC - Network Access Devices"
+              "title": "Outline of PBA - WLC 9800"
             }
           },
           {
@@ -209,8 +209,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -236,13 +235,18 @@
   },
   "active": "686c7f9ed49f226a",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260703161956.png",
+    "attachments/Pasted image 20260703161205.png",
+    "attachments/Pasted image 20260703161125.png",
+    "attachments/Pasted image 20260703161044.png",
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/PBA - WLC 9800.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/iptables.md",
     "0 - Notes/Cisco DNA Center.md",
     "0 - Notes/WLC 9800.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/Untitled.md",
@@ -262,19 +266,14 @@
     "2 - Categories/Topics/Networking/WLAN.md",
     "2 - Categories/Topics/Linux/Ubuntu.md",
     "2 - Categories/Topics/Linux/Linux General.md",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
     "attachments/Pasted image 20260424141809.png",
     "0 - Notes/UFW.md",
-    "0 - Notes/Microsoft Remote Procedure Call.md",
     "attachments/Pasted image 20260701164609.png",
     "attachments/Pasted image 20260701162626.png",
     "attachments/Pasted image 20260701162426.png",
     "attachments/Pasted image 20260701160528.png",
     "attachments/Pasted image 20260701155819.png",
     "attachments/Pasted image 20260701154141.png",
-    "attachments/Pasted image 20260701123009.png",
-    "attachments/Pasted image 20260701122343.png",
-    "attachments/Pasted image 20260701122312.png",
     "3 - Templates/Bases/Topic/Security/VPN.base",
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",

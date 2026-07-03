@@ -206,8 +206,8 @@ Il WLC non configura direttamente gli AP: costruisce dei profili riutilizzabili,
 
 Il Site Tag associa a ogni AP il suo AP Join Profile e decide in che <strong>switching mode</strong> configurare gli AP:
 
-- Local Mode (Central Switching): gli AP inviano il traffico dati verso il WLC tramite il tunnel CAPWAP, e il WLC lo riversa in L2 sulla VLAN contenuta nel [[#Policy Profiles|policy profile]]. In questo mode tutti i siti remoti devono riuscire a raggiungere il WLC, che si trova in VM90.
-- FlexConnect (Local Switching): gli AP portano il traffico direttamente sulla VLAN locale e il WLC viene usato solo per il control plane. La VLAN viene fornita dal [[#Flex Profile]] richiamato dal site tag.
+- Local Mode (<strong>Central Switching</strong>): gli AP inviano il traffico dati verso il WLC tramite il tunnel CAPWAP, e il WLC lo riversa in L2 sulla VLAN contenuta nel [[#Policy Profiles|policy profile]]. In questo mode tutti i siti remoti devono riuscire a raggiungere il WLC, che si trova in VM90.
+- FlexConnect (<strong>Local Switching</strong>): gli AP portano il traffico direttamente sulla VLAN locale e il WLC viene usato solo per il control plane. La VLAN viene fornita dal [[#Flex Profile]] richiamato dal site tag.
 
 Nel deployment attuale lo switching mode è FlexConnect (Local Switching): deselezionando <strong>Enable Local Site</strong> il site tag passa in FlexConnect e compare la selezione della <strong>Flex Profile</strong>.
 
@@ -294,11 +294,13 @@ Il tab AAA non viene usato per le guest WLAN: l'Authorization List del MAC filte
 
 Il Policy Profile definisce cosa succede al client dopo l'associazione: la VLAN di destinazione, QoS, ACL, i timeout di sessione e il tipo di switching e autenticazione (central o local) per quella WLAN. Per il funzionamento con ISE sono importanti tre impostazioni:
 
-- AAA Override: permette al WLC di applicare gli attributi restituiti da ISE (VLAN, ACL, redirect URL); senza, gli attributi dell'Access-Accept vengono ignorati.
-- NAC State (RADIUS NAC): abilita la CWA e le CoA sulla WLAN; indispensabile per il flusso di PBA-Guest.
-- Accounting List: invia gli accounting a ISE.
+- <strong>AAA Override</strong>: permette al WLC di applicare gli attributi restituiti da ISE (VLAN, ACL, redirect URL); senza, gli attributi dell'Access-Accept vengono ignorati.
+- <strong>NAC State</strong> (RADIUS NAC): abilita la CWA e le CoA sulla WLAN; indispensabile per il flusso di PBA-Guest.
+- <strong>Accounting List</strong>: invia gli accounting a ISE.
 
-I policy profile effettivi di PBA-Client e PBA-Guest (nomi, VLAN assegnate, flag attivi) non sono ancora documentati qui — da integrare con gli screenshot.
+![[Pasted image 20260703161044.png]]
+
+![[Pasted image 20260703161205.png]]
 
 ###### General
 
@@ -311,13 +313,20 @@ Oltre a nome e stato del profilo, il tab General contiene le quattro spunte che 
 |Central DHCP|Se il DHCP dei client transita dal WLC|Disattivo|
 |Central Association|Se l'associazione dei client è gestita centralmente|Disattivo|
 
-La combinazione in tabella è quella canonica del FlexConnect local switching con CWA: l'autenticazione resta centrale perché è il WLC a parlare con ISE e a ricevere le [[#CoA]], mentre dati, DHCP e associazione restano sull'AP. Se Central Authentication fosse disattivo, 802.1X e MAB passerebbero alla local authentication del [[#Flex Profile]] e il flusso guest descritto in [[#PBA-Guest]] non funzionerebbe così com'è. I valori reali sono da confermare con gli screenshot.
+La combinazione in tabella è quella canonica del FlexConnect local switching con CWA: l'autenticazione resta centrale perché è il WLC a parlare con ISE e a ricevere le [[#CoA]], mentre dati, DHCP e associazione restano sull'AP. 
+Se Central Authentication fosse disattivo, 802.1X e MAB passerebbero alla local authentication del [[#Flex Profile]] e il flusso guest descritto in [[#PBA-Guest]] non funzionerebbe così com'è. 
 
 ###### Access Policies
 
-Qui si assegna la VLAN di destinazione dei client (per nome o ID) ed eventuali ACL statiche della WLAN. In local switching il valore deve corrispondere a una VLAN presente nel mapping del [[#Flex Profile]], perché è l'AP a taggare il traffico: se il nome non combacia con il mapping il client finisce su una VLAN diversa da quella attesa o resta senza rete. Lo stesso vincolo vale per la VLAN restituita da ISE con l'AAA Override: l'override può assegnare solo VLAN già mappate nel flex profile, il WLC non può crearle sull'AP al volo.
+Qui si assegna la VLAN di destinazione dei client (per nome o ID) ed eventuali ACL statiche della WLAN. 
 
-Le ACL impostate qui (WLAN ACL) non vanno confuse con la redirect ACL della CWA: quella arriva da ISE come nome dentro url-redirect-acl e vive nella Policy ACL del [[#Flex Profile]].
+In local switching <mark style="background: #FFF3A3A6;">il valore deve corrispondere a una VLAN presente nel mapping del [[#Flex Profile]]</mark>, perché è l'AP a taggare il traffico: se il nome non combacia con il mapping il client finisce su una VLAN diversa da quella attesa o resta senza rete. 
+
+Lo stesso vincolo vale per la VLAN restituita da ISE con l'AAA Override: l'override può assegnare solo VLAN già mappate nel flex profile, il WLC non può crearle sull'AP al volo.
+
+![[Pasted image 20260703161956.png]]
+
+Le ACL impostate qui (WLAN ACL) non vanno confuse con la redirect ACL della CWA: quella arriva da ISE come nome dentro <strong>url-redirect-acl</strong> e vive nella Policy ACL del [[#Flex Profile]].
 
 ###### Advanced
 
