@@ -21,32 +21,29 @@ Il WLC ha l'indirizzo 10.140.1.10.
 
 ![[Pasted image 20260630121117.png]]
 
-Anche l'accesso SSH è eseguito con le credenziali RADIUS. L'autenticazione degli accessi admin è definita dalle [[#Method List|method list]] di login; l'eventuale utente locale di fallback per quando i server RADIUS non sono raggiungibili si trova su password manager.
+Anche l'accesso SSH è eseguito con le credenziali RADIUS. L'autenticazione degli accessi admin è definita dalle [[#Method List|method list]] di login; l'eventuale utente locale di fallback per quando i server RADIUS non sono raggiungibili è il solito Cisco admin user.
 
 ## Configurazione Iniziale
 
-Le configurazioni che devono essere fatte prima di creare le WLAN e prima di joinare gli AP sono le configurazioni base come hostname, VLAN, SSH, NTP, DNS, country code e la Wireless Management Interface. 
+Le configurazioni che devono essere fatte prima di creare le WLAN e prima di joinare gli AP sono le configurazioni base come hostname, SSH, NTP, DNS, country code e la Wireless Management Interface. 
 
 ```cisco
-hostname pba-wlc01
+hostname PBA-WLC-01
 ip domain name publiacqua.it
 !
-vlan <wmi-vlan-id>
- name <wmi-vlan-name>
+interface GigabitEthernet1
+ no switchport
+ ip dhcp relay information trusted
+ ip address 10.140.1.10 255.255.255.0
+ ip helper-address 10.140.2.8
+ negotiation auto
+end
 !
-interface TenGigabitEthernet0/0/<n>
- description Uplink
- switchport mode trunk
- switchport trunk allowed vlan <wmi-vlan-id>
+wireless management interface GigabitEthernet1
 !
-interface Vlan<wmi-vlan-id>
- description Wireless Management Interface
- ip address 10.140.1.10 <netmask>
-!
-wireless management interface Vlan<wmi-vlan-id>
-!
-ip name-server <dns-1> <dns-2>
-ntp server <ntp-1>
+ip name-server 10.140.4.250 10.140.4.252 10.139.133.50 10.139.133.52
+ntp server 172.20.129.64
+ntp server 172.20.129.65
 !
 ip ssh version 2
 line vty 0 15
@@ -292,17 +289,21 @@ Il tab AAA non viene usato per le guest WLAN: l'Authorization List del MAC filte
 
 ##### Policy Profiles
 
-Il Policy Profile definisce cosa succede al client dopo l'associazione: la VLAN di destinazione, QoS, ACL, i timeout di sessione e il tipo di switching e autenticazione (central o local) per quella WLAN. Per il funzionamento con ISE sono importanti tre impostazioni:
+Il Policy Profile definisce cosa succede al client dopo l'associazione: la VLAN di destinazione, QoS, ACL, i timeout di sessione e il tipo di switching e autenticazione (central o local) per quella WLAN. 
+
+![[Pasted image 20260703161044.png]]
+
+Per il funzionamento con ISE sono importanti tre impostazioni:
 
 - <strong>AAA Override</strong>: permette al WLC di applicare gli attributi restituiti da ISE (VLAN, ACL, redirect URL); senza, gli attributi dell'Access-Accept vengono ignorati.
 - <strong>NAC State</strong> (RADIUS NAC): abilita la CWA e le CoA sulla WLAN; indispensabile per il flusso di PBA-Guest.
 - <strong>Accounting List</strong>: invia gli accounting a ISE.
 
-![[Pasted image 20260703161044.png]]
-
 ![[Pasted image 20260703161205.png]]
 
 ###### General
+
+![[Pasted image 20260703161044.png]]
 
 Oltre a nome e stato del profilo, il tab General contiene le quattro spunte che definiscono il modello di traffico della WLAN, cioè cosa resta centrale sul WLC e cosa scende sull'AP:
 
@@ -330,27 +331,28 @@ Le ACL impostate qui (WLAN ACL) non vanno confuse con la redirect ACL della CWA:
 
 ###### Advanced
 
-Il tab Advanced concentra le impostazioni che legano la WLAN a ISE; conviene guardarle una per una.
+Il tab Advanced concentra le impostazioni che legano la WLAN a ISE.
 
-AAA Override autorizza il WLC ad applicare gli attributi dell'Access-Accept al posto della configurazione statica del profilo. Gli attributi rilevanti per questo deployment:
+![[Pasted image 20260703161205.png]]
 
-|Attributo|Effetto|
-|---|---|
-|Tunnel-Private-Group-ID (con Tunnel-Type e Tunnel-Medium-Type)|VLAN override: sposta il client su una VLAN diversa da quella del tab Access Policies.|
-|cisco-av-pair url-redirect|URL del guest portal verso cui dirottare il client.|
-|cisco-av-pair url-redirect-acl|Nome della redirect ACL da attivare (GUEST_REDIRECT).|
-|Airespace-ACL-Name|ACL con nome da applicare alla sessione come filtro.|
-|Session-Timeout|Durata della sessione decisa da ISE al posto del valore del profilo.|
+<strong>AAA Override</strong> autorizza il WLC ad applicare gli attributi dell'Access-Accept al posto della configurazione statica del profilo. Gli attributi rilevanti per questo deployment:
 
-Senza AAA Override tutti questi attributi vengono ignorati: niente redirect, niente VLAN dinamiche.
+| Attributo                                                      | Effetto                                                                                |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Tunnel-Private-Group-ID (con Tunnel-Type e Tunnel-Medium-Type) | VLAN override: sposta il client su una VLAN diversa da quella del tab Access Policies. |
+| cisco-av-pair url-redirect                                     | URL del guest portal verso cui dirottare il client.                                    |
+| cisco-av-pair url-redirect-acl                                 | Nome della redirect ACL da attivare (GUEST_REDIRECT).                                  |
+| Airespace-ACL-Name                                             | ACL con nome da applicare alla sessione come filtro.                                   |
+| Session-Timeout                                                | Durata della sessione decisa da ISE al posto del valore del profilo.                   |
 
-NAC State (con NAC Type su ISE NAC) abilita il RADIUS NAC sulla WLAN: permette al WLC di gestire lo stato intermedio della CWA — client autorizzato ma in redirect — e di accettare le [[#CoA]] per le sessioni di quella WLAN. Senza, la CoA di riautenticazione che ISE invia dopo il login sul portale viene ignorata e il guest resta intrappolato nel redirect.
+Senza <strong>AAA Override</strong> tutti questi attributi vengono ignorati: niente redirect, niente VLAN dinamiche.
 
-Accounting List richiama la lista default di accounting identity descritta in [[#Method List]]. Non è cosmetica: con gli start, gli interim e gli stop ISE popola e chiude le Live Sessions e impara l'indirizzo IP del client, che serve al portale per agganciare la sessione giusta; e una CoA può essere indirizzata solo a una sessione che ISE conosce.
+<strong>NAC State</strong> (con NAC Type su ISE NAC) abilita il RADIUS NAC sulla WLAN: permette al WLC di gestire lo stato intermedio della CWA — client autorizzato ma in redirect — e di accettare le [[#CoA]] per le sessioni di quella WLAN. Senza, la CoA di riautenticazione che ISE invia dopo il login sul portale viene ignorata e il guest resta intrappolato nel redirect.
+
+<strong>Accounting List</strong> richiama la lista default di accounting identity descritta in [[#Method List]].
+Con gli start, gli interim e gli stop ISE popola e chiude le Live Sessions e impara l'indirizzo IP del client, che serve al portale per agganciare la sessione giusta; e una CoA può essere indirizzata solo a una sessione che ISE conosce.
 
 Session Timeout e Idle Timeout definiscono la durata massima della sessione e l'inattività tollerata prima della disconnessione; con AAA Override attivo il session timeout può essere sovrascritto da ISE, ed è il meccanismo tipico con cui si limita la durata dell'accesso guest.
-
-> [!note] Le altre voci del tab vanno toccate con cautela in local switching: IPv4 DHCP Required, per esempio, scarta i client con indirizzo statico e va valutata solo con i profili reali davanti.
 
 #### RF Tag
 
@@ -358,13 +360,13 @@ Il RF Tag associa a ogni AP i RF Profile da usare per banda (2.4 GHz, 5 GHz ed e
 
 ##### RF Profiles
 
-Nei RF Profile si configurano i data rate, i canali (DCA), le potenze (TPC) e le altre impostazioni radio per banda. Quali RF tag e RF profile siano in uso nel deployment, o se si usi il default-rf-tag, non è ancora documentato qui.
+Nei RF Profile si configurano i data rate, i canali (DCA), le potenze (TPC) e le altre impostazioni radio per banda. 
 
 In generale è qui che si interviene per banda su tre leve: i data rate (disattivare i rate legacy del 2.4 GHz come 1–11 Mb/s e alzare il primo rate mandatory riduce l'airtime sprecato), il DCA (limitare i canali utilizzabili e, sul 5 GHz, la larghezza di canale) e il TPC (fissare potenza minima e massima per contenere celle troppo grandi o troppo deboli). Finché non viene creato e assegnato un RF tag dedicato, gli AP restano sul default-rf-tag con i default-rf-profile per banda.
 
 ### Assegnazione dei Tag agli AP
 
-I tag possono essere assegnati agli AP in tre modi: staticamente per singolo AP, tramite filtri con regex sul nome dell'AP, oppure lasciando i default tag (default-policy-tag, default-site-tag, default-rf-tag). Il metodo usato in questo deployment e la naming convention degli AP non sono ancora documentati qui.
+I tag possono essere assegnati agli AP in tre modi: staticamente per singolo AP, tramite filtri con regex sul nome dell'AP, oppure lasciando i default tag (default-policy-tag, default-site-tag, default-rf-tag). 
 
 I tre meccanismi in dettaglio, in ordine di precedenza:
 
@@ -394,17 +396,6 @@ Lo stato corrente si legge con `show ap tag summary`, che mostra per ogni AP i t
 
 > [!warning] Cambiare i tag di un AP non è un'operazione trasparente: alla riassegnazione (in particolare del site tag) l'AP riavvia il CAPWAP e i client vengono disconnessi per qualche istante. Con `ap tag persistency enable` i tag vengono salvati sull'AP e sopravvivono ai rejoin.
 
-## Da recuperare dal sistema live
 
-_La coda delle verifiche: tutto ciò che nelle sezioni sopra è marcato come non ancora documentato._
-
-- Modello esatto e versione IOS-XE (`show version`).
-- Utente locale di fallback e linee su cui è applicata authentication_login_day0 (`show run | section ^line`) — [[#Accesso]], [[#Method List]].
 - Blocco reale della configurazione base: VLAN della WMI, uplink, NTP, DNS, SSH — [[#Configurazione Iniziale]].
-- Presenza di `dot1x system-auth-control` nella running-config — [[#Method List]].
-- Contenuto reale della redirect ACL (`show ip access-lists GUEST_REDIRECT`) — [[#Flex Profile]].
-- Impostazioni PMF e Fast Transition della WLAN client — [[#PBA-Client]].
-- Nomi, VLAN e flag dei policy profile, con screenshot (`show wireless profile policy detailed <nome>`) — [[#Policy Profiles]].
-- Nome del profilo di authorization ISE usato per il guest wireless, l'equivalente di [[PBA - NAC - ISE Server#Redirect_Guest_Wired|Redirect_Guest_Wired]] — [[#PBA-Guest]].
-- RF tag e RF profile in uso (`show wireless tag rf summary`) — [[#RF Profiles]].
-- Metodo di assegnazione dei tag e naming convention degli AP (`show ap tag summary`) — [[#Assegnazione dei Tag agli AP]].
+
