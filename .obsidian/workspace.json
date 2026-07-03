@@ -209,7 +209,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -235,22 +236,23 @@
   },
   "active": "686c7f9ed49f226a",
   "lastOpenFiles": [
-    "0 - Notes/Untitled.md",
-    "0 - Notes/WLC 9800 - PBA.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/WLC 9800 - PBA.md",
+    "0 - Notes/iptables.md",
+    "0 - Notes/Cisco DNA Center.md",
+    "0 - Notes/WLC 9800.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/Cisco DNA Center.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/Untitled.md",
     "0 - Notes/nftables.md",
-    "0 - Notes/WLC 9800.md",
     "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
     "2 - Categories/Topics/Security/NAC.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
     "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "Untitled.canvas",
-    "0 - Notes/WireGuard.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
@@ -264,7 +266,6 @@
     "attachments/Pasted image 20260424141809.png",
     "0 - Notes/UFW.md",
     "0 - Notes/Microsoft Remote Procedure Call.md",
-    "0 - Notes/iptables.md",
     "attachments/Pasted image 20260701164609.png",
     "attachments/Pasted image 20260701162626.png",
     "attachments/Pasted image 20260701162426.png",

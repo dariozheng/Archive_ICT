@@ -144,70 +144,14 @@ aaa accounting identity default start-stop group ISE
 
 Le liste più rilevanti:
 
-| Method list                       | Tipo                  | Uso                                                                                                           |
-| --------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------- |
-| default                           | authentication login  | Autentica gli accessi admin GUI/SSH descritti in [[#Accesso]]: prima il gruppo day0, poi ISE.                 |
-| authentication_login_day0         | authentication login  | Come la default ma con fallback sulle credenziali locali; su quali linee sia applicata non è documentato qui. |
-| ML-ISE, authentication_dot1x_day0 | authentication dot1x  | Authentication List per le WLAN 802.1X come [[#PBA-Client]].                                                  |
-| mac_filtering                     | authorization network | Authorization List del MAC filtering della WLAN guest.                                                        |
-| default                           | authorization exec    | Livello di privilegio della shell per gli admin: prima ISE, poi il gruppo day0.                               |
-| default                           | accounting identity   | Invia a ISE gli accounting start/stop delle sessioni client, necessari a ISE per tracciare le sessioni.       |
-
-#### Anatomia e ordine dei metodi
-
-_Il fallback tra metodi scatta solo se i server sono irraggiungibili, mai su un Access-Reject._
-
-La sintassi generale è `aaa <funzione> <sottotipo> {default|nome} metodo1 [metodo2 ...]`: le funzioni sono authentication, authorization e accounting, il sottotipo indica il contesto (login, dot1x, exec, network, identity) e i metodi sono server group, `local` o `none`. La lista `default` si applica automaticamente ovunque non venga richiamata una lista con nome.
-
-I metodi vengono percorsi in ordine, ma il passaggio al successivo avviene solo se il metodo corrente non risponde — cioè se tutti i server del gruppo sono marcati dead o irraggiungibili. Un Access-Reject è una risposta valida: la lista si ferma lì e l'accesso viene negato, senza provare i metodi dopo. Quindi il `local` in coda a authentication_login_day0 non è una password alternativa da usare quando quella RADIUS viene rifiutata: entra in gioco esclusivamente quando i server RADIUS sono giù.
-
-Quando un server è considerato dead lo decidono i comandi già visti in [[#RADIUS Servers]]: con dead-criteria un server che non risponde a 3 tentativi entro 5 secondi viene marcato dead, con deadtime resta fuori rotazione per 15 minuti, e l'automate-tester lo sonda con autenticazioni fittizie (probe-user) così lo stato torna alive appena il server risponde, anche in assenza di traffico reale.
-
-> [!warning] La lista default di authentication login non ha `local` in coda: se tutti i server RADIUS di entrambi i gruppi risultano dead, GUI e SSH restano chiusi fuori. Il fallback locale esiste solo in authentication_login_day0, quindi va verificato su quale linea è applicata (tipicamente la console) e che l'utente locale esista davvero.
-
-#### Dove vengono richiamate
-
-_Una method list non fa nulla finché un profilo, una linea o un processo non la richiama._
-
-I punti di aggancio sul 9800 sono quattro: le WLAN (tab Security dei [[#WLAN Profiles]]), i policy profile (tab Advanced), le linee e i processi di management, e i processi interni che usano le liste default in modo implicito.
-
-```
-WLAN Profile > Security
-├─ AAA > Authentication List ──── ML-ISE ─────────── (dot1x)
-│                                  └─ PBA-Client: EAP 802.1X
-└─ Layer2 > Authorization List ── mac_filtering ──── (network)
-                                   └─ PBA-Guest: MAB
-
-Policy Profile > Advanced
-└─ Accounting List ────────────── default ────────── (identity)
-
-Management
-├─ GUI/SSH login ──────────────── default ────────── (login)
-├─ privilegio shell ───────────── default ────────── (exec)
-└─ console (da verificare) ────── authentication_login_day0
-```
-
-|Method list|Dove viene richiamata|Cosa fa|
-|---|---|---|
-|ML-ISE|[[#PBA-Client]] > Security > AAA > Authentication List|Autentica l'EAP 802.1X dei client Wi-Fi: il WLC fa da authenticator e inoltra le richieste a ISE.|
-|authentication_dot1x_day0|Da verificare se qualche WLAN la richiami|Gemella day-0 di ML-ISE, ma verso il gruppo RADIUS_SERVER_GROUP_DAY0.|
-|mac_filtering|[[#PBA-Guest]] > Security > Layer2 > Authorization List|La MAB della guest: sul 9800 il MAC filtering è una transazione di authorization network, per questo la lista è di tipo network e in GUI si chiama Authorization List.|
-|default (login)|Implicita su VTY e HTTP|Gli accessi admin GUI/SSH di [[#Accesso]].|
-|authentication_login_day0|Da verificare (tipicamente line console)|Login admin con fallback sulle credenziali locali.|
-|default (exec)|Implicita dopo il login admin|Chiede a ISE il privilege level della shell; ISE risponde con il cisco-av-pair shell:priv-lvl=15.|
-|default (identity)|[[#Policy Profiles]] > Advanced > Accounting List|Start, interim e stop delle sessioni client verso ISE.|
-|default (network, local)|Processi interni|Autorizzazioni network senza RADIUS; creata dal wizard day-0.|
-|wcm_loc_serv_cert|Processi interni (credential-download)|Lista generata in day-0 per il download locale di credenziali e certificati (Local EAP, LWA); estranea al flusso ISE.|
-
-> [!note] Le WLAN 802.1X richiedono anche il toggle globale `dot1x system-auth-control`, assente dagli estratti sopra: verificare che sia presente nella running-config.
-
-#### Verifica
-
-```cisco
-show aaa method-lists all
-show aaa servers
-show run | section ^aaa|^radius|^line
-```
+| Method list                       | Tipo                  | Uso                                                                                                     |
+| --------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------- |
+| default                           | authentication login  | Autentica gli accessi admin GUI/SSH descritti in [[#Accesso]].                                          |
+| authentication_login_day0         | authentication login  | Come la default ma con fallback sulle credenziali locali.                                               |
+| ML-ISE, authentication_dot1x_day0 | authentication dot1x  | Authentication List per le WLAN 802.1X come [[#PBA-Client]].                                            |
+| mac_filtering                     | authorization network | Authorization List del MAC filtering della WLAN guest.                                                  |
+| default                           | authorization exec    | Livello di privilegio della shell per gli admin: prima ISE, poi il gruppo day0.                         |
+| default                           | accounting identity   | Invia a ISE gli accounting start/stop delle sessioni client, necessari a ISE per tracciare le sessioni. |
 
 ## AP Join Process
 
@@ -246,15 +190,13 @@ Il WLC non configura direttamente gli AP: costruisce dei profili riutilizzabili,
 
 ### Profiles
 
-_Containers for the actual settings. Each profile type is related to one field of the network._
-
-|Profile|Field|Configured in|
-|---|---|---|
-|WLAN profile|SSID e L2 security|[[#WLAN Profiles]]|
-|Policy profile|What VLAN, QoS, ACLs and switching a client gets after it joins|[[#Policy Profiles]]|
-|AP join profile|How the AP itself behaves — CAPWAP timers, management, SSH, syslog|[[#AP Join Profile]]|
-|Flex profile|VLAN mapping and local-switching behavior for FlexConnect|[[#Flex Profile]]|
-|RF profile|Data rates, channels and power per band|[[#RF Profiles]]|
+| Profile         | Field                                                              | Configured in        |
+| --------------- | ------------------------------------------------------------------ | -------------------- |
+| WLAN profile    | SSID e L2 security                                                 | [[#WLAN Profiles]]   |
+| Policy profile  | What VLAN, QoS, ACLs and switching a client gets after it joins    | [[#Policy Profiles]] |
+| AP join profile | How the AP itself behaves — CAPWAP timers, management, SSH, syslog | [[#AP Join Profile]] |
+| Flex profile    | VLAN mapping and local-switching behavior for FlexConnect          | [[#Flex Profile]]    |
+| RF profile      | Data rates, channels and power per band                            | [[#RF Profiles]]     |
 
 ### Tags
 
@@ -289,15 +231,15 @@ L'opzione Flex Profile viene mostrata solo se <strong>Enable Local Site</strong>
 
 ![[Pasted image 20260701122343.png]]
 
-In Policy ACL viene configurata l'access list GUEST_REDIRECT, la redirect ACL della Guest Wifi: definisce quale traffico del client viene intercettato e reindirizzato verso il portale (permit su HTTP/HTTPS) e quale invece deve passare liberamente (deny su DHCP, DNS e traffico verso i nodi ISE). È la stessa logica dell'ACL lato switch [[PBA - NAC - Network Access Devices#Redirect ACL — `ACL_GUEST_REDIRECT`|ACL_GUEST_REDIRECT]]; il contenuto esatto dell'ACL definita sul WLC non è ancora documentato qui.
+In Policy ACL viene configurata l'access list GUEST_REDIRECT, la redirect ACL della Guest Wifi: definisce quale traffico del client viene intercettato e reindirizzato verso il portale (permit su HTTP/HTTPS) e quale invece deve passare liberamente (deny su DHCP, DNS e traffico verso i nodi ISE).
 
 Il che significa che, a differenza del central switching dove gli AP usano le ACL dentro il WLC, in local switching le ACL sono presenti localmente, inserite nell'AP al momento del join a seconda della configurazione di Policy ACL.
 
-La selezione <strong>Central Web Auth</strong> marca l'ACL come redirect ACL per la CWA e viene usata per attivare la HTTP/HTTPS interception engine sull'AP.
+La selezione <strong>Central Web Auth</strong> <strong>marca l'ACL come redirect ACL per la CWA</strong> e viene usata per attivare la HTTP/HTTPS interception engine sull'AP.
 
 ![[Pasted image 20260701123009.png]]
 
-Il comportamento della redirect ACL sul 9800: le entry permit indicano il traffico da intercettare e redirigere, le entry deny il traffico che attraversa senza redirect, e tutto ciò che non matcha nulla resta bloccato dallo stato WEBAUTH_REQD della sessione finché la CWA non si conclude. Questa è la struttura canonica, da confrontare con quella reale (`show ip access-lists GUEST_REDIRECT`):
+Il comportamento della redirect ACL sul 9800: le entry permit indicano il traffico da intercettare e re-dirigere, le entry deny il traffico che attraversa senza redirect, e tutto ciò che non matcha nulla resta bloccato dallo stato WEBAUTH_REQD della sessione finché la CWA non si conclude. Questa è la struttura canonica, da confrontare con quella reale (`show ip access-lists GUEST_REDIRECT`):
 
 ```cisco
 ip access-list extended GUEST_REDIRECT
