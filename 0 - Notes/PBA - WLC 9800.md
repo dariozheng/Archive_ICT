@@ -4,8 +4,10 @@ categories:
 topic@networking:
   - "[[WLAN]]"
 tags:
+  - PBA
+  - cisco
 icon: SiCisco
-iconColor:
+iconColor: "#1BA0D7"
 ---
 Il Wireless LAN Controller (WLC) è il punto di controllo centrale della rete wireless: gli AP si registrano al controller tramite CAPWAP e ne ricevono la configurazione.
 
@@ -266,7 +268,7 @@ I WLAN Profile configurano l'SSID e la sicurezza L2; ogni profilo ha un nome, un
 
 ![[Pasted image 20260701155819.png]]
 
-Nella sezione Security, in Layer2 è configurato che come protocolli di sicurezza si usano WPA2 e WPA3 con la crittografia AES.
+Nella sezione Security, in <strong>Layer2</strong> è configurato che come protocolli di sicurezza si usano WPA2 e WPA3 con la crittografia AES.
 
 Per l'autenticazione viene usato 802.1X o 802.1X-SHA256, il che significa che l'utente non ha una password condivisa ma si autentica verso il server AAA configurato nella Authentication List — il server ISE in questo caso, tramite una delle method list dot1x definite in [[#Method List]].
 
@@ -274,19 +276,11 @@ Per l'autenticazione viene usato 802.1X o 802.1X-SHA256, il che significa che l'
 
 ![[Pasted image 20260701162426.png]]
 
-Le impostazioni PMF (richieste da WPA3) e l'eventuale Fast Transition 802.11r non sono ancora documentate qui.
-
-Il vincolo tecnico da tenere presente quando verranno documentate: WPA3 richiede le Protected Management Frames (802.11w), quindi su un SSID misto WPA2+WPA3 l'impostazione coerente è PMF Optional — i client WPA3 le negoziano sempre, quelli WPA2 privi di supporto si associano comunque. PMF Required è praticabile solo rinunciando ai client WPA2 senza 802.11w. L'AKM 802.1X-SHA256 visto sopra è proprio la variante usata dai client che negoziano PMF.
-
-Per il Fast Transition le opzioni del 9800 sono Disabled, Enabled e Adaptive: con FT attivo il roaming tra AP riusa le chiavi già derivate ed evita la full authentication EAP a ogni passaggio, cosa che pesa soprattutto su voce e client in movimento; Adaptive è la variante Cisco che non annuncia l'11r come obbligatorio nei beacon e lo concede solo ai client che lo negoziano esplicitamente.
-
 ###### PBA-Guest
 
 Per la WLAN guest invece non c'è nessun controllo Layer2 tranne il MAC filtering: il MAC address del client viene inviato come richiesta MAB al server indicato nella Authorization List, cioè la method list mac_filtering che punta a ISE.
 
-Il MAC non è censito tra gli endpoint autorizzati, quindi la MAB "fallisce", ma ISE è configurato per proseguire comunque: la authorization policy risponde con un Access-Accept che contiene la redirect URL verso il guest portal e il nome della redirect ACL da applicare (non un DenyAccess: con un reject il client non otterrebbe rete e non vedrebbe mai il portale). L'AP intercetta l'HTTP/HTTPS del client con la Policy ACL del Flex Profile e lo dirotta sul portale; dopo il login ISE invia una [[#CoA]] di riautenticazione e alla seconda MAB il client, ormai in Guest Flow, riceve l'accesso pieno.
-
-Il profilo di authorization equivalente lato wired è [[PBA - NAC - ISE Server#Redirect_Guest_Wired|Redirect_Guest_Wired]]; il profilo usato per il wireless non è ancora documentato, e il nome dell'ACL che ISE invia in url-redirect-acl deve combaciare esattamente con quello dell'ACL definita sul WLC (GUEST_REDIRECT).
+Il MAC non è censito tra gli endpoint autorizzati, quindi la MAB "fallisce", ma ISE è configurato per proseguire comunque: la authorization policy risponde con un Access-Accept che contiene la redirect URL verso il guest portal e il nome della redirect ACL da applicare. L'AP intercetta l'HTTP/HTTPS del client con la Policy ACL del Flex Profile e lo dirotta sul portale; dopo il login ISE invia una [[#CoA]] di ri-autenticazione e alla seconda MAB il client, ormai in Guest Flow, riceve l'accesso guest.
 
 ![[Pasted image 20260701162626.png]]
 
