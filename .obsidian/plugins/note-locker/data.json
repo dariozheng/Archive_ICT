@@ -10,8 +10,9 @@
     "2 - Categories/Topics/Networking/WLAN.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md"
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md"
   ],
   "lockedFolders": [],
   "strictLockedNotes": [],

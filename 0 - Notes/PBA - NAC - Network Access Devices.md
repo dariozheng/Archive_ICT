@@ -28,7 +28,7 @@ NAD types include the following:
 - Load balancer
 - Software application that uses ISE for AAA
 
-This note covers the only NAD type deployed here: the Catalyst access switches, provisioned by Cisco DNA Center. Each switch plays two distinct roles — it is a managed device whose administrators log in through management RADIUS, and an ISE enforcement point for the endpoints plugged into it. The two roles use two separate RADIUS constructs, detailed in [[#Two AAA Planes — RADSERV vs ISESERV|Two AAA Planes]].
+This note covers the only NAD type deployed here: the Catalyst access switches, provisioned by Cisco DNA Center. Each switch plays two distinct roles — it is a managed device whose administrators log in through management RADIUS, and an ISE enforcement point for the endpoints plugged into it. 
 
 ## Initial Configuration
 
@@ -124,7 +124,7 @@ Two details worth knowing when applying this block by hand:
 
 Baseline settings shared by every NAD, mirroring what the [[#DNA - PBA BASIC|DNA - PBA BASIC]] template enforces. Each block below is one functional area.
 
-Timezone and DST rules for Italy. Accurate clocks is important: certificate validity checks during EAP-TLS and the correlation of switch syslog with ISE Live Logs both assume the switch and ISE agree on the time.
+Timezone and DST rules for Italy. An accurate clock matters here: certificate validity checks during EAP-TLS and the correlation of switch syslog with ISE Live Logs both assume the switch and ISE agree on the time.
 
 ```bash
 clock timezone CET 1 0
@@ -152,7 +152,7 @@ spanning-tree mode rapid-pvst
 spanning-tree extend system-id
 ```
 
-The site VLAN plan — 800 (management, where RADIUS, SNMP, syslog and NTP are sourced), 802 (the client data VLAN endpoints are authorized into) and 805 (the guest VLAN used by [[#Centralized Web Authentication (CWA) for Guests|CWA]]) — alongside the printer, thin-client, wireless, badge-reader, VoIP and admin segments.
+The site VLAN plan declares 800 (management — where RADIUS, SNMP, syslog and NTP are sourced), 802 (the client data VLAN endpoints are authorized into) and 805 (the guest VLAN used by [[#Centralized Web Authentication (CWA) for Guests|CWA]]), alongside the printer, thin-client, wireless, badge-reader, VoIP and admin segments.
 
 ```bash
 vlan 800
@@ -163,6 +163,9 @@ vlan 801
 !
 vlan 802
  name LAN-CLIENT
+!
+vlan 803
+ name LAN-THIN-CLIENT
 !
 vlan 804
  name WLAN-CLIENT
@@ -229,7 +232,7 @@ aaa group server radius RADSERV
  server name radius-mgmnt-auth01
 ```
 
-Method lists for device administration: VTY and HTTPS logins try RADSERV first and fall back to the local account (`local-case` is the case-sensitive variant), the console stays local-only so it always works, exec authorization takes the privilege level from RADIUS (`if-authenticated` keeps working sessions alive if the server dies mid-login), and exec accounting records administrator sessions.
+Method lists for device administration. VTY and HTTPS logins try RADSERV first and fall back to the local account (`local-case` is the case-sensitive variant of `local`), while the console stays local-only so it always works and `enable` keeps using the enable secret. Exec authorization takes the privilege level from RADIUS — `if-authenticated` means an admin who has already passed authentication stays authorized even when the server can no longer answer the authorization query — and exec accounting records administrator sessions.
 
 ```bash
 aaa authentication login default group RADSERV local-case 
@@ -272,7 +275,7 @@ logging host 10.140.2.24
 logging host 10.139.108.10
 ```
 
-The HTTP/HTTPS server stays up — it will be needed by the [[#Centralized Web Authentication (CWA) for Guests|CWA redirect]] — but every web-management module is disabled, plus SSH tuning.
+The HTTP/HTTPS server stays up — it will be needed by the [[#Centralized Web Authentication (CWA) for Guests|CWA redirect]] — but every web-management module is disabled. The same block carries the SSH tuning and `ip forward-protocol nd`.
 
 ```bash
 ip http server
@@ -288,8 +291,7 @@ ip ssh version 2
 ip ssh source-interface Vlan800
 ```
 
-> [!note] Method-list mismatch 
-> This block authenticates HTTP with the `default` list while the [[#DNA - PBA BASIC|DNA - PBA BASIC]] template uses the dedicated `HTTPSRV` list. Both resolve to RADSERV with local fallback, so behavior is identical today, but the two should be aligned — `HTTPSRV` is the intended list, since it allows HTTP authentication to be tuned later without touching the VTYs.
+> [!note] Method-list mismatch This block authenticates HTTP with the `default` list while the [[#DNA - PBA BASIC|DNA - PBA BASIC]] template uses the dedicated `HTTPSRV` list. Both resolve to RADSERV with local fallback, so behavior is identical today, but the two should be aligned — `HTTPSRV` is the intended list, since it allows HTTP authentication to be tuned later without touching the VTYs.
 
 Auto-recovery from err-disable is enabled for UDLD only. Ports err-disabled by BPDU Guard or by the DHCP/ARP rate limits of the [[#Interface Template — `NAC-INT-TEMPLATE`|NAC interface template]] stay down until someone intervenes (or until matching `errdisable recovery cause` entries are added).
 
@@ -322,6 +324,8 @@ line vty 5 15
  transport input ssh
 ```
 
+Persist the configuration:
+
 ```bash
 end
 write memory
@@ -330,7 +334,7 @@ write memory
 
 ## DNA - PBA BASIC
 
-The DNA Center provisioning template that enforces the [[#Initial Configuration|initial]] and [[#General Configuration|general]] baseline fleet-wide. `{{ variable }}` placeholders are filled per device at provisioning time, `{% ... %}` blocks are template logic, and lines between `! @start-ignore-compliance` and `! @end-ignore-compliance` are excluded from DNA Center's compliance check (used for commands the switch rewrites or does not echo back verbatim).
+The DNA Center provisioning template that enforces the [[#Initial Configuration|initial]] and [[#General Configuration|general]] baseline fleet-wide. `{{ variable }}` placeholders are filled per device at provisioning time, `{% ... %}` blocks are template logic, and lines between `! @start-ignore-compliance` and `! @end-ignore-compliance` are excluded from DNA Center's compliance check (used for commands the switch rewrites or does not echo back verbatim). The empty `{% block interfaces %}` renders nothing here — [[#DNA - PBA NAC|DNA - PBA NAC]] carries the populated version of the same block.
 
 ```bash
 !
@@ -550,6 +554,8 @@ wr
 The DNA Center template that layers NAC on top of the baseline: RADIUS toward ISE, CoA, 802.1X/MAB, device tracking, Device Sensor, the IBNS 2.0 policy and the CWA plumbing. Everything in it is dissected command by command in [[#NAD Configuration|NAD Configuration]] below.
 
 The `#INTERACTIVE ... #ENDS_INTERACTIVE` markers answer IOS prompts during provisioning. The first new-style command entered on a switch still in legacy mode — here `no access-session mac-move deny` or `aaa accounting identity` — triggers the one-time, irreversible conversion of all authentication commands to their IBNS 2.0 (Cisco Policy Language) equivalents, and IOS asks `Do you wish to continue? [yes]:`. The template auto-replies `yes` so provisioning does not hang.
+
+A few lines appear in both templates on purpose: `aaa new-model`, `aaa session-id common`, `ip radius source-interface Vlan800` and the VLAN declarations are owned by [[#DNA - PBA BASIC|DNA - PBA BASIC]] and merely re-asserted here so this template can stand on its own, while `ip http server` and `ip http secure-server` are re-asserted as a functional guard — [[#Centralized Web Authentication (CWA) for Guests|CWA]] breaks silently if the web server ever disappears from the baseline. When one of these shared lines has to change, change it in BASIC; the copies here follow.
 
 ```bash
 ! Template to enable Cisco ISE - NAC
@@ -975,10 +981,10 @@ username test-user privilege 0 password 7 06120A3258031918160405041E00
 
 A local account whose only purpose is to populate the RADIUS health-check probe. `automate-tester` (configured on the RADIUS server block below) sends periodic Access-Requests using these credentials to verify ISE is alive.
 
-|Field|Meaning|
-|---|---|
-|`privilege 0`|Lowest privilege level — allows only `disable`, `enable`, `exit`, `help`, and `logout`. Deliberately useless for management, so even if the credentials leak, the account grants nothing.|
-|`password 7`|Cisco Type-7 reversible encryption. Weak — meaningful only as obfuscation. ISE will normally reject this account on policy (no matching identity), which is fine for the probe.|
+| Field         | Meaning                                                                                                                                                                                   |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `privilege 0` | Lowest privilege level — allows only `disable`, `enable`, `exit`, `help`, and `logout`. Deliberately useless for management, so even if the credentials leak, the account grants nothing. |
+| `password 7`  | Cisco Type-7 reversible encryption. Weak — meaningful only as obfuscation. ISE will normally reject this account on policy (no matching identity), which is fine for the probe.           |
 
 > [!info] How the probe works 
 > The probe doesn't need to _succeed_ — a clean `Access-Reject` from ISE is enough to prove the server is responsive. What matters is that ISE answers at all.
@@ -1241,7 +1247,7 @@ With it:
 
 ##### `radius-server vsa send accounting`
 
-Without it, ISE Live Sessions and accounting reports are missing key fields (`connect-progress`, NAS speeds, the audit-session-id binding, etc.).
+Includes the same Cisco VSAs in Accounting Start / Update / Stop messages. Without them, ISE Live Sessions and accounting reports are missing key fields (`connect-progress`, NAS speeds, the audit-session-id binding, etc.).
 
 ```
 Without it:
@@ -1438,6 +1444,8 @@ DAI is entirely dependent on DHCP snooping — configure snooping first.
 
 > On trunk ports facing other infrastructure: `ip arp inspection trust`.
 
+---
+
 ### IP Device Tracking — Global
 
 ```cisco
@@ -1447,11 +1455,11 @@ device-tracking tracking auto-source
 Enables active device tracking (SISF — Switch Integrated Security Features) globally. The `auto-source` keyword instructs the switch to automatically derive a source IP for ARP probes:
 
 - If the VLAN has an <strong>SVI</strong>, the SVI's IP is used as the probe source.
-- If the VLAN has <strong>no SVI</strong>, the switch fabricates a source IP from the endpoint's subnet (learned via DHCP snooping or the binding table).
+- If the VLAN has <strong>no SVI</strong>, the switch borrows the source from an existing binding-table entry in the same subnet; with nothing to borrow, the probe goes out sourced from `0.0.0.0`. The optional `fallback <host-ip> <mask>` keywords compute a deterministic per-subnet source instead.
 
 This makes tracking work across <strong>all VLANs uniformly</strong> — with or without SVIs configured — which is the recommended setting for ISE deployments with mixed VLAN types (e.g., Management and Guest have SVIs; Data and IoT do not).
 
-> Without `auto-source`, probes on SVIless VLANs may silently fail, causing ISE sessions to show <strong>unknown</strong> for the endpoint IP.
+> The thing to watch on SVI-less VLANs is the `0.0.0.0`-sourced probe: it is RFC 5227-compliant, but some Windows versions flag it as a duplicate-address conflict. If those alerts appear, add the `fallback` keywords so probes carry a real per-subnet source.
 
 Once enabled, attaching a `device-tracking policy` to an interface causes the switch to maintain IP-to-MAC bindings on that port by snooping DHCP and ARP and, optionally, sending ARP probes.
 
@@ -1463,8 +1471,7 @@ The resulting binding table is consumed by:
 - <strong>CoA</strong> — to find the correct port when bouncing a session.
 - <strong>Downloadable ACLs</strong> — when they refer to source IPs.
 
-> [!warning] Don't mix legacy with SISF 
-> The legacy global `ip device tracking` family is deprecated on modern IOS-XE.
+> [!warning] Don't mix legacy with SISF The legacy global `ip device tracking` family is deprecated on modern IOS-XE.
 > 
 > Mixing it with `device-tracking policy` causes duplicate or stale bindings that fail silently. Use SISF exclusively.
 
@@ -1517,8 +1524,7 @@ Applied to uplinks and inter-switch links.
 |`trusted-port`|Skip validation and inspection for bindings learned on this port — the peer switch is trusted infrastructure.|
 |`device-role switch`|Tells SISF the neighbor is a switch, not a host. The switch won't try to ARP-probe it and won't attempt to track it as an endpoint.|
 
-> [!tip] Default policy can be aggressive 
-> On modern IOS-XE, the default SISF policy probes endpoints fairly aggressively, which can cause problems with some IP phones, older Windows hosts, and certain IoT devices. Always attach an explicit policy rather than relying on defaults.
+> [!tip] Default policy can be aggressive On modern IOS-XE, the default SISF policy probes endpoints fairly aggressively, which can cause problems with some IP phones, older Windows hosts, and certain IoT devices. Always attach an explicit policy rather than relying on defaults.
 
 ---
 
@@ -1526,7 +1532,7 @@ Applied to uplinks and inter-switch links.
 
 _Passively reads DHCP / CDP traffic the switch already sees and forwards selected fields to ISE for profiling._
 
-Device Sensor is a passive sensor — it does not generate any of this traffic. It collects from what is already flowing through the switch, caches it, and forwards selected fields to ISE in RADIUS authentication and accounting messages.
+Device Sensor never generates traffic of its own: it reads the DHCP and CDP packets already flowing through the switch and caches the selected fields per endpoint. The [[#Sending Sensor Data to ISE|access-session wiring]] then carries that cache to ISE inside RADIUS authentication and accounting messages.
 
 #### `cdp run`
 
@@ -1568,8 +1574,8 @@ device-sensor filter-spec cdp include list cdp_list
 
 |TLV|Why ISE Wants It|
 |---|---|
-|`device-name`|The <strong>switch neighbor's hostnames</strong> — typically meaningful for Cisco IP phones.|
-|`address-type`|The <strong>switch neighbor's IP addresses</strong>, as advertised in CDP.|
+|`device-name`|The neighbor's advertised <strong>device name</strong> — for a Cisco IP phone, its `SEP<MAC>`-style hostname.|
+|`address-type`|The neighbor's <strong>IP address</strong> as advertised in CDP.|
 |`capabilities-type`|<strong>Device class of the neighbors</strong> (switch, router, telephone, host). For an IP phone this immediately identifies it as `telephone`.|
 |`platform-type`|<strong>Exact hardware model</strong> of connected devices (e.g. `Cisco IP Phone 8841`).|
 |`version-type`|<strong>Firmware version</strong> of connected devices. Useful for compliance policies (e.g. "phones below firmware X get quarantined").|
@@ -1707,7 +1713,8 @@ Complementary predicates:
 - `CRITICAL_AUTH` is true when the session is currently running under the local Critical Access fallback.
 - `NOT_CRITICAL_AUTH` uses `match-none` on the same condition, so it is true when the session is <strong>not</strong> under Critical Access.
 
-> [!note] How `match-none` works here The `match-none` keyword is part of the class-map header itself, not a separate match line. The class-map says: "match if none of the conditions below are true." Combined with the single condition that follows, it evaluates as the logical inverse of `CRITICAL_AUTH`.
+> [!note] How `match-none` works here 
+> The `match-none` keyword is part of the class-map header itself, not a separate match line. The class-map says: "match if none of the conditions below are true." Combined with the single condition that follows, it evaluates as the logical inverse of `CRITICAL_AUTH`.
 
 #### Verification
 
@@ -2196,12 +2203,12 @@ parameter-map type webauth global
 
 The redirect ACL identifies _which_ traffic to catch. The parameter-map decides _what to do with it_.
 
-|Line|Purpose|
-|---|---|
-|`parameter-map ... global`|Global definition — applies to any port receiving a redirect instruction from ISE.|
-|`type webauth`|Operate as a CWA interceptor (handing off to the ISE portal) rather than hosting a local login page.|
-|`virtual-ip ipv4 192.0.2.1`|The IP the switch uses as the source of its 302 response to the guest's browser. Spoofed and non-routable by design.|
-|`intercept-https-enable`|Enable interception on TCP 443 as well. Without it, only port 80 is caught — and modern browsers default to HTTPS for nearly everything.|
+| Line                        | Purpose                                                                                                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `parameter-map ... global`  | Global definition — applies to any port receiving a redirect instruction from ISE.                                                       |
+| `type webauth`              | Operate as a CWA interceptor (handing off to the ISE portal) rather than hosting a local login page.                                     |
+| `virtual-ip ipv4 192.0.2.1` | The IP the switch uses as the source of its 302 response to the guest's browser. Spoofed and non-routable by design.                     |
+| `intercept-https-enable`    | Enable interception on TCP 443 as well. Without it, only port 80 is caught — and modern browsers default to HTTPS for nearly everything. |
 
 > [!note] Why `192.0.2.1`? 
 > This address belongs to <strong>TEST-NET-1</strong>, defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737) as reserved for documentation and guaranteed never to be a real routable destination. Using a real IP here would risk redirecting guest traffic to an unintended host.
@@ -2317,6 +2324,8 @@ show ip access-lists interface <int>     ! shows the ACL ISE pushed live
 show access-session interface <int> details
 show ip http server session-module
 ```
+
+---
 
 ### AAA-Down
 
@@ -2455,30 +2464,32 @@ event aaa-available match-all
 
 The two complementary predicates are defined in [[#Critical-Auth State|Critical-Auth State]], so for any given session exactly one class runs:
 
-|Session State at Recovery|Action|Result|
-|---|---|---|
-|Has `Critical_Access` template|`clear-session`|Full re-authentication from scratch|
-|Does <strong>not</strong> have `Critical_Access` template|`resume reauthentication`|Normal reauthentication cycle resumes|
+| Session State at Recovery                                 | Action                    | Result                                |
+| --------------------------------------------------------- | ------------------------- | ------------------------------------- |
+| Has `Critical_Access` template                            | `clear-session`           | Full re-authentication from scratch   |
+| Does <strong>not</strong> have `Critical_Access` template | `resume reauthentication` | Normal reauthentication cycle resumes |
 
 > [!important] Recovery is a full re-authentication 
 > Endpoints placed in Critical Access are forced to re-authenticate completely when ISE recovers — they don't silently inherit the Critical Access VLAN permanently.
+
+---
 
 ### ISE-Side Configuration Reference
 
 Every switch command in this note has a counterpart on the ISE side. This table maps the most common pairings so a reader can find the matching ISE configuration when troubleshooting.
 
-|Switch-side|ISE-side counterpart|
-|---|---|
-|`radius server ISE01` / `key ...`|<strong>Administration → Network Resources → Network Devices</strong> — NAD entry must list the switch's IP (or subnet) and matching shared secret.|
-|`ip radius source-interface Vlan800`|The IP recorded against the NAD entry must equal the VLAN 800 address.|
-|`aaa server radius dynamic-author`|The CoA shared secret and CoA port on the NAD entry — 1700 by default on both ISE and IOS-XE. ISE sends CoA from its PSN IPs, which must be the ones listed as `client`s on the switch.|
-|`automate-tester` probes|No ISE configuration is required — the Access-Reject itself is the liveness signal. The rejects do appear in Live Logs; if the noise bothers reporting, filter them or create `test-user` as an internal account mapped to a deny policy.|
-|`radius-server attribute 31 mac format ietf upper-case`|The Allowed Protocols service used by the MAB policy set must have Process Host Lookup enabled; ISE reads the endpoint MAC from `Calling-Station-Id`, so the attribute must carry the MAC only, in the format ISE stores endpoints in.|
-|`vsa send authentication` / `accounting`|ISE policy uses `audit-session-id` to find sessions; CoA targets by this attribute.|
-|`aaa authorization network default`|<strong>Policy → Policy Sets → Authorization Profile</strong> — the VLAN, dACL, redirect URL, etc. that get pushed back.|
-|`service-template Guest_Redirect` (local shell)|<strong>Policy → Policy Elements → Results → Authorization Profile</strong> = `Redirect_Guest_Wired`. References the redirect ACL name.|
-|`service-template Critical_Access` (local content)|Not an ISE concept — defined entirely on the switch as the local fallback.|
-|Device Sensor attributes flowing in accounting|<strong>Profiling Service</strong> must be enabled on at least one PSN; profile policies use these attributes to classify endpoints.|
-|`ip dhcp snooping` binding feeding device tracking|ISE relies on the `Framed-IP-Address` and Device Sensor data; without bindings, profiling collapses to MAC OUI only.|
-|CWA portal URL pushed via `url-redirect`|<strong>Work Centers → Guest Access → Portals & Components → Guest Portals</strong> — URL composed from the portal's FQDN and ID.|
-|Redirect ACL name (`ACL_GUEST_REDIRECT`)|The ISE authorization profile must reference the <strong>exact same name</strong> as defined on the switch.|
+| Switch-side                                             | ISE-side counterpart                                                                                                                                                                                                                      |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `radius server ISE01` / `key ...`                       | <strong>Administration → Network Resources → Network Devices</strong> — NAD entry must list the switch's IP (or subnet) and matching shared secret.                                                                                       |
+| `ip radius source-interface Vlan800`                    | The IP recorded against the NAD entry must equal the VLAN 800 address.                                                                                                                                                                    |
+| `aaa server radius dynamic-author`                      | The CoA shared secret and CoA port on the NAD entry — 1700 by default on both ISE and IOS-XE. ISE sends CoA from its PSN IPs, which must be the ones listed as `client`s on the switch.                                                   |
+| `automate-tester` probes                                | No ISE configuration is required — the Access-Reject itself is the liveness signal. The rejects do appear in Live Logs; if the noise bothers reporting, filter them or create `test-user` as an internal account mapped to a deny policy. |
+| `radius-server attribute 31 mac format ietf upper-case` | The Allowed Protocols service used by the MAB policy set must have Process Host Lookup enabled; ISE reads the endpoint MAC from `Calling-Station-Id`, so the attribute must carry the MAC only, in the format ISE stores endpoints in.    |
+| `vsa send authentication` / `accounting`                | ISE policy uses `audit-session-id` to find sessions; CoA targets by this attribute.                                                                                                                                                       |
+| `aaa authorization network default`                     | <strong>Policy → Policy Sets → Authorization Profile</strong> — the VLAN, dACL, redirect URL, etc. that get pushed back.                                                                                                                  |
+| `service-template Guest_Redirect` (local shell)         | <strong>Policy → Policy Elements → Results → Authorization Profile</strong> = `Redirect_Guest_Wired`. References the redirect ACL name.                                                                                                   |
+| `service-template Critical_Access` (local content)      | Not an ISE concept — defined entirely on the switch as the local fallback.                                                                                                                                                                |
+| Device Sensor attributes flowing in accounting          | <strong>Profiling Service</strong> must be enabled on at least one PSN; profile policies use these attributes to classify endpoints.                                                                                                      |
+| `ip dhcp snooping` binding feeding device tracking      | ISE relies on the `Framed-IP-Address` and Device Sensor data; without bindings, profiling collapses to MAC OUI only.                                                                                                                      |
+| CWA portal URL pushed via `url-redirect`                | <strong>Work Centers → Guest Access → Portals & Components → Guest Portals</strong> — URL composed from the portal's FQDN and ID.                                                                                                         |
+| Redirect ACL name (`ACL_GUEST_REDIRECT`)                | The ISE authorization profile must reference the <strong>exact same name</strong> as defined on the switch.                                                                                                                               |
