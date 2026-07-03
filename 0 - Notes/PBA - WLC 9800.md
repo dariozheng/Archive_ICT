@@ -199,6 +199,12 @@ Il WLC non configura direttamente gli AP: costruisce dei profili riutilizzabili,
 
 ### Tags
 
+![[Pasted image 20260703170017.png]]
+
+![[Pasted image 20260703164926.png]]
+
+![[Pasted image 20260703164940.png]]
+
 #### Site Tag
 
 Il Site Tag associa a ogni AP il suo AP Join Profile e decide in che <strong>switching mode</strong> configurare gli AP:

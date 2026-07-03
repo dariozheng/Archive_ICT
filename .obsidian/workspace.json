@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/PBA - WLC 9800.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -234,8 +234,11 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "686c7f9ed49f226a",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260703170017.png",
+    "attachments/Pasted image 20260703164940.png",
+    "attachments/Pasted image 20260703164926.png",
     "attachments/Pasted image 20260703161956.png",
     "attachments/Pasted image 20260703161205.png",
     "attachments/Pasted image 20260703161125.png",
@@ -272,9 +275,6 @@
     "attachments/Pasted image 20260701164609.png",
     "attachments/Pasted image 20260701162626.png",
     "attachments/Pasted image 20260701162426.png",
-    "attachments/Pasted image 20260701160528.png",
-    "attachments/Pasted image 20260701155819.png",
-    "attachments/Pasted image 20260701154141.png",
     "3 - Templates/Bases/Topic/Security/VPN.base",
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
