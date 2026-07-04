@@ -199,8 +199,6 @@ Il WLC non configura direttamente gli AP: costruisce dei profili riutilizzabili,
 
 ### Tags
 
-![[Pasted image 20260703170017.png]]
-
 ![[Pasted image 20260703164926.png]]
 
 ![[Pasted image 20260703164940.png]]
@@ -372,6 +370,8 @@ Nei RF Profile si configurano i data rate, i canali (DCA), le potenze (TPC) e le
 In generale è qui che si interviene per banda su tre leve: i data rate (disattivare i rate legacy del 2.4 GHz come 1–11 Mb/s e alzare il primo rate mandatory riduce l'airtime sprecato), il DCA (limitare i canali utilizzabili e, sul 5 GHz, la larghezza di canale) e il TPC (fissare potenza minima e massima per contenere celle troppo grandi o troppo deboli). Finché non viene creato e assegnato un RF tag dedicato, gli AP restano sul default-rf-tag con i default-rf-profile per banda.
 
 ### Assegnazione dei Tag agli AP
+
+![[Pasted image 20260703170017.png]]
 
 I tag possono essere assegnati agli AP in tre modi: staticamente per singolo AP, tramite filtri con regex sul nome dell'AP, oppure lasciando i default tag (default-policy-tag, default-site-tag, default-rf-tag). 
 
