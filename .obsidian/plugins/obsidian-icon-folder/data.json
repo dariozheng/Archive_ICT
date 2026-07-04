@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWireguard",
       "SiWindows",
       "SiLinux",
       "FasGlobe",
-      "LiBrickWallFire",
-      "SiCisco"
+      "LiBrickWallFire"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -252,10 +252,6 @@
   "0 - Notes/netfilter.md": {
     "iconName": "SiLinux",
     "iconColor": "#000000"
-  },
-  "0 - Notes/WLC 9800.md": {
-    "iconName": "SiCisco",
-    "iconColor": "#1BA0D7"
   },
   "2 - Categories/Topics/Linux/Linux General.md": {
     "iconName": "SiLinux",
