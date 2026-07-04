@@ -186,8 +186,12 @@ Two IPs (10.128.10.8 and .9) — just append each IP's 4 bytes:
 Il WLC non configura direttamente gli AP: costruisce dei profili riutilizzabili, raggruppa questi profili in tag e assegna un tag per tipo (Policy tag, Site tag, RF tag) a ogni AP. Le configurazioni sono date da questi tag e profili.
 
 ![[wlc9800-tag-architecture.png]]
-
-### Profiles
+  
+| Tag        | Contains                         | Function                                                                                        |
+| ---------- | -------------------------------- | ----------------------------------------------------------------------------------------------- |
+| RF Tag     | Radio profile                    | RF tags are used to group and manage radio frequency profiles for wireless networks.            |
+| Site Tag   | Flex profile and AP join profile | Site tags define the properties of a site and maps the flex profile to the the AP join profile. |
+| Policy Tag | WLAN profile and policy profile  | Policy tags map WLAN profile to the policy profile                                              |
 
 | Profile         | Field                                                              | Configured in        |
 | --------------- | ------------------------------------------------------------------ | -------------------- |
@@ -261,6 +265,12 @@ ip access-list extended GUEST_REDIRECT
 ![[Pasted image 20260701154141.png]]
 
 Il Policy Tag mappa ogni WLAN Profile con il suo Policy Profile: la coppia stabilisce quali SSID trasmette l'AP e che trattamento ricevono i client di ciascuna.
+
+| Network Configuration Object | Function                                                                                                                                                                                             |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WLAN profile                 | defines the wireless characteristics of the WLAN.                                                                                                                                                    |
+| Policy profile               | defines the network policies and the switching policies for the client (Quality of Service is an exception, which constitutes AP policies as well).                                                  |
+| Policy Tag                   | maps the WLAN profile to the policy profile.<br><br>There are 16 such WLAN-to-policy profile pairs.<br><br>The policy tag directs how wireless services and policies are applied across the network. |
 
 ##### WLAN Profiles
 
@@ -365,7 +375,7 @@ Il RF Tag associa a ogni AP i RF Profile da usare per banda (2.4 GHz, 5 GHz ed e
 
 ##### RF Profiles
 
-Nei RF Profile si configurano i data rate, i canali (DCA), le potenze (TPC) e le altre impostazioni radio per banda. 
+Nei RF Profile si configurano i data rate, i canali (Dynamic Channel Assignment), le potenze (Transmit Power Control) e le altre impostazioni radio per banda. 
 
 In generale è qui che si interviene per banda su tre leve: i data rate (disattivare i rate legacy del 2.4 GHz come 1–11 Mb/s e alzare il primo rate mandatory riduce l'airtime sprecato), il DCA (limitare i canali utilizzabili e, sul 5 GHz, la larghezza di canale) e il TPC (fissare potenza minima e massima per contenere celle troppo grandi o troppo deboli). Finché non viene creato e assegnato un RF tag dedicato, gli AP restano sul default-rf-tag con i default-rf-profile per banda.
 
