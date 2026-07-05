@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "0 - Notes/PBA - WLC 9800.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "netfilter"
+              "title": "PBA - WLC 9800"
             }
           }
         ]
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/netfilter.md",
+                "file": "0 - Notes/PBA - WLC 9800.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "Dow"
               },
               "icon": "lucide-list",
-              "title": "Outline of netfilter"
+              "title": "Outline of PBA - WLC 9800"
             }
           },
           {
@@ -195,7 +195,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -219,15 +220,15 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "990bebc9dd0f9174",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/netfilter.md",
-    "0 - Notes/App-ID™.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/nftables.md",
+    "0 - Notes/App-ID™.md",
     "0 - Notes/homelab-setup-.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/Untitled.md",
     "attachments/wireguard-network-namespaces 1.png",
     "attachments/wireguard-cryptokey-routing.png",

@@ -195,6 +195,7 @@ Il WLC non configura direttamente gli AP: costruisce dei profili riutilizzabili,
 | Site Tag   | Flex profile and AP join profile | Site tags define the properties of a site and maps the flex profile to the the AP join profile. |
 | Policy Tag | WLAN profile and policy profile  | Policy tags map WLAN profile to the policy profile                                              |
 
+
 | Profile         | Field                                                              | Configured in        |
 | --------------- | ------------------------------------------------------------------ | -------------------- |
 | WLAN profile    | SSID e L2 security                                                 | [[#WLAN Profiles]]   |

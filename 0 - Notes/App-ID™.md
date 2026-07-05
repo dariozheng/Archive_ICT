@@ -362,7 +362,9 @@ In the example, <mark style="background: #FFF3A3A6;">the SSL client initiates a 
 
 <mark style="background: #FFB8EBA6;">Application block response pages must be enabled using an <strong>Interface Management Profile</strong></mark>.
 
-The generic response page might result in additional support calls if users do not correctly interpret the message. <mark style="background: #BBFABBA6;">You can create and upload a custom HTML response page</mark>. ![[Application Block Page.gif]]
+The generic response page might result in additional support calls if users do not correctly interpret the message. <mark style="background: #BBFABBA6;">You can create and upload a custom HTML response page</mark>. 
+
+![[Application Block Page.gif]]
 
 # Application Group
 
