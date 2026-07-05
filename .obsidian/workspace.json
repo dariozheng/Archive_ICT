@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/WireGuard.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "nftables"
+              "title": "WireGuard"
             }
           }
         ]
@@ -88,7 +88,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 291.5026054382324
+    "width": 241.50260543823242
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/WireGuard.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "Dow"
               },
               "icon": "lucide-list",
-              "title": "Outline of nftables"
+              "title": "Outline of WireGuard"
             }
           },
           {
@@ -195,7 +195,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -221,13 +222,18 @@
   },
   "active": "990bebc9dd0f9174",
   "lastOpenFiles": [
-    "0 - Notes/Untitled 1.md",
-    "0 - Notes/nftables.md",
-    "0 - Notes/WireGuard.md",
-    "0 - Notes/App-ID™.md",
     "0 - Notes/Untitled.md",
-    "0 - Notes/netfilter.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/nftables.md",
+    "attachments/wireguard-network-namespaces 1.png",
+    "attachments/wireguard-cryptokey-routing.png",
     "attachments/wireguard-network-namespaces.png",
+    "attachments/wireguard-full-tunnel-routing.png",
+    "attachments/wireguard-cryptokey-routing 1.png",
+    "attachments/wireguard-full-tunnel-routing 1.png",
+    "0 - Notes/Untitled 1.md",
+    "0 - Notes/App-ID™.md",
+    "0 - Notes/netfilter.md",
     "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
@@ -249,18 +255,12 @@
     "attachments/Pasted image 20260703170017.png",
     "attachments/Pasted image 20260703164940.png",
     "attachments/Pasted image 20260703164926.png",
-    "attachments/Pasted image 20260703161956.png",
-    "attachments/Pasted image 20260703161205.png",
-    "attachments/Pasted image 20260703161125.png",
-    "attachments/Pasted image 20260703161044.png",
     "2 - Categories/Topics/Security/NAC.md",
     "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
-    "attachments/Pasted image 20260424141809.png",
     "3 - Templates/Bases/Topic/Security/VPN.base",
     "3 - Templates/Bases/Topic/Linux/Linux General.base",
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",

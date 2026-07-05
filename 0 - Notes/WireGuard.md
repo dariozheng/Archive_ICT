@@ -6,18 +6,17 @@ topic@security:
 tags:
   - claude
   - vpn
-  - tobecompleted
 icon: SiWireguard
 iconColor: "#87151F"
 ---
-<strong>WireGuard</strong> is a fast, modern VPN that runs as a <strong>virtual network interface</strong> in the Linux kernel, mainline since 5.6 (with portable userspace implementations such as wireguard-go and BoringTun for other platforms). 
+<strong>WireGuard</strong> is a fast, modern VPN that runs as a <strong>virtual network interface</strong> in the Linux kernel, mainline since 5.6 (with portable userspace implementations such as wireguard-go and BoringTun for other platforms).
 
-It builds an encrypted tunnel out of a small, fixed set of cryptographic primitives, identifies every participant by a public key rather than a username or certificate, and decides where packets go with a single mechanism — <strong>cryptokey routing</strong> — that doubles as its access-control model. 
+It builds an encrypted tunnel out of a small, fixed set of cryptographic primitives, identifies every participant by a public key rather than a username or certificate, and decides where packets go with a single mechanism — <strong>cryptokey routing</strong> — that doubles as its access-control model.
 
 You drive it with two userspace tools, `wg` and `wg-quick`, and everything around the tunnel — <strong>routing between interfaces</strong>, <strong>NAT</strong> and <strong>filtering</strong> — is left to the kernel and to [[nftables]].
 
 > [!info] WireGuard moves packets; the kernel routes them 
-> WireGuard only encrypts packets into, and decrypts them out of, a [[#The Tunnel Interface|tunnel interface]]. 
+> WireGuard only encrypts packets into, and decrypts them out of, a [[#The Tunnel Interface|tunnel interface]].
 > 
 > Forwarding between that interface and the rest of the network, [[Netfilter#Network Address Translation|NAT]], and filtering are the kernel's job, driven by [[nftables]]. The firewall rules that turn a WireGuard host into a gateway are the [[nftables#WireGuard Gateway|WireGuard gateway recipe]]; this note covers everything on the WireGuard side of that line — keys, peers, [[#AllowedIPs|AllowedIPs]], the [[#The Cryptographic Handshake|handshake]] and the [[#Configuration|configuration]].
 
@@ -33,11 +32,11 @@ WireGuard's entire object model is small. A host has <mark style="background: #F
 
 _A virtual network interface that happens to encrypt._
 
-A <mark style="background: #FF5582A6;">WireGuard tunnel</mark> is a <mark style="background: #FF5582A6;">network interface</mark>, conventionally named `wg0`, `wg1` and so on. 
+A <mark style="background: #FF5582A6;">WireGuard tunnel</mark> is a <mark style="background: #FF5582A6;">network interface</mark>, conventionally named `wg0`, `wg1` and so on.
 
-To the rest of the system it behaves like any other interface: it has an IP address, it appears in the routing table, and packets routed to it are sent, while packets it receives are delivered up the stack. 
+To the rest of the system it behaves like any other interface: it has an IP address, it appears in the routing table, and packets routed to it are sent, while packets it receives are delivered up the stack.
 
-The difference is hidden inside: <mark style="background: #FFF3A3A6;">on transmit it encrypts each packet and wraps it in UDP</mark> to a peer; on receive it decrypts and unwraps. 
+The difference is hidden inside: <mark style="background: #FFF3A3A6;">on transmit it encrypts each packet and wraps it in UDP</mark> to a peer; on receive it decrypts and unwraps.
 
 Because it is an ordinary interface, <mark style="background: #D2B3FFA6;">it lives in exactly one</mark> [[Netfilter#Network Namespaces|network namespace]] <mark style="background: #D2B3FFA6;">at a time</mark> and <mark style="background: #CACFD9A6;">is filtered by matching its name in</mark> [[nftables]], exactly like a physical NIC.
 
@@ -47,7 +46,7 @@ Unlike a TCP-based VPN, the interface is connectionless and always "up" once con
 
 _A Curve25519 key pair per interface; the public half is the identity._
 
-Each interface has one private key and the public key derived from it, using Curve25519. <mark style="background: #BBFABBA6;">The private key is a secret known only to that host</mark>; <mark style="background: #ABF7F7A6;">the public key is shared with every peer that needs to talk to the interface</mark>. <mark style="background: #FF5582A6;">Identity</mark> in WireGuard is nothing more than this <mark style="background: #FF5582A6;">public key</mark> — there is no separate username, certificate or account. 
+Each interface has one private key and the public key derived from it, using Curve25519. <mark style="background: #BBFABBA6;">The private key is a secret known only to that host</mark>; <mark style="background: #ABF7F7A6;">the public key is shared with every peer that needs to talk to the interface</mark>. <mark style="background: #FF5582A6;">Identity</mark> in WireGuard is nothing more than this <mark style="background: #FF5582A6;">public key</mark> — there is no separate username, certificate or account.
 
 A peer that holds your public key, and whose own public key you have configured, is authorized to exchange traffic; anyone else is ignored.
 
@@ -61,7 +60,7 @@ The `wg` tool generates keys. A private key is produced on its own, and the publ
 wg genkey | tee privatekey | wg pubkey > publickey
 ```
 
-`wg genkey` emits a new private key, `tee` saves it, and `wg pubkey` reads a private key on standard input and writes the matching public key. 
+`wg genkey` emits a new private key, `tee` saves it, and `wg pubkey` reads a private key on standard input and writes the matching public key.
 
 Because the private key is a secret, set a restrictive umask first so the file is not world-readable:
 
@@ -73,9 +72,9 @@ wg pubkey < privatekey > publickey
 
 ### Pre-shared Keys
 
-In addition to the per-interface key pair, any pair of peers may share an optional pre-shared key — a 32-byte symmetric secret generated with `wg genpsk`. 
+In addition to the per-interface key pair, any pair of peers may share an optional pre-shared key — a 32-byte symmetric secret generated with `wg genpsk`.
 
-It is mixed into the [[#The Noise Handshake|handshake]] <mark style="background: #FFB8EBA6;">as an extra layer on top of the public-key cryptography</mark>. 
+It is mixed into the [[#The Noise Handshake|handshake]] <mark style="background: #FFB8EBA6;">as an extra layer on top of the public-key cryptography</mark>.
 
 Its purpose is defense in depth: even if Curve25519 were broken in the future, traffic recorded today could not be decrypted without also having the pre-shared key, which makes it a practical hedge against later cryptographic advances (see [[#Key Management|key management]]). It is symmetric, so the same value is configured on both ends of the pair.
 
@@ -83,9 +82,9 @@ Its purpose is defense in depth: even if Curve25519 were broken in the future, t
 
 _The remote endpoints an interface will talk to, each keyed by its public key._
 
-A peer is a remote WireGuard interface this one is configured to communicate with. 
+A peer is a remote WireGuard interface this one is configured to communicate with.
 
-Each peer entry carries its public key (which identifies it), the set of addresses that belong to it ([[#AllowedIPs|AllowedIPs]]), optionally where to reach it on the underlying network (its [[#Endpoints|endpoint]]), optionally a [[#Pre-shared Keys]], and optionally a [[#Persistent Keepalive|keepalive]] interval. 
+Each peer entry carries its public key (which identifies it), the set of addresses that belong to it ([[#AllowedIPs|AllowedIPs]]), optionally where to reach it on the underlying network (its [[#Endpoints|endpoint]]), optionally a [[#Pre-shared Keys]], and optionally a [[#Persistent Keepalive|keepalive]] interval.
 
 An interface may have one peer (a point-to-point link) or many (a server with many clients).
 
@@ -136,6 +135,26 @@ Because outbound selection is a routing lookup, a given address can belong to on
 
 > [!important] AllowedIPs is not the same as the kernel routing table 
 > AllowedIPs is WireGuard's own internal map of keys to addresses. For the operating system to actually hand outbound packets to the tunnel in the first place, there must also be a normal route pointing those destinations at the `wg` interface. [[#wg-quick|wg-quick]] creates those system routes automatically from each peer's AllowedIPs, which is why the two are easy to conflate — but the bare [[#wg|wg]] tool sets only the internal map and leaves kernel routing to you.
+
+## A Worked Example
+
+_One hub, two peers — following a packet each way._
+
+Take a hub at `10.0.0.1` with two peers: a laptop whose `AllowedIPs` is `10.0.0.2/32`, and a branch router whose `AllowedIPs` is `10.0.0.3/32, 192.168.50.0/24`.
+
+Outbound, the hub has a packet for `192.168.50.10`. It matches each peer's list against the destination address: it is not in `10.0.0.2/32` and not in `10.0.0.3/32`, but it is inside `192.168.50.0/24` — so the branch router is chosen. The packet is encrypted with the router's key and sent to its endpoint, and the router decrypts it and forwards it onto its LAN. A packet for `10.0.0.2` instead matches the laptop's `/32`.
+
+Inbound, a packet arrives and decrypts with the branch router's key; its inner source address is `192.168.50.10`. That address is inside the router's AllowedIPs, so the packet is accepted. Had the inner source been an address the router has no claim to, it would be dropped even though it decrypted correctly — the same list that selected the peer outbound now authorizes what that peer may send inbound.
+
+So AllowedIPs is read against the destination on the way out and against the source on the way in.
+
+### What a Peer's Range Means
+
+_A single host versus a gateway for a whole network._
+
+The size of a peer's prefix says what that peer stands for. A `/32` (or `/128` for IPv6) is a single host — a laptop, a phone, one machine's tunnel address — that speaks only for itself. A whole subnet like `192.168.50.0/24` means the peer is the gateway for that network: anything destined into the range is sent to that peer, which forwards it to the real hosts behind it, as in a [[#Site-to-Site|site-to-site]] link or a [[#Hub-and-Spoke and Mesh|hub]] routing for its spokes.
+
+The distinction describes what is reachable through the peer, not what kind of machine it is. A central VPN server is not marked as such by its own AllowedIPs — from the server's side every client is a `/32`; it is from the client's side that the server appears as `0.0.0.0/0` (a [[#Full-Tunnel Routing|full tunnel]]) or as the server's subnets (a [[#Split Tunneling|split tunnel]]). The same host can be a `/32` to one peer and a subnet gateway to another.
 
 ---
 
@@ -239,11 +258,11 @@ WireGuard is configured through a small INI-style file, conventionally `/etc/wir
 
 _An INI file split into [Interface] and [Peer] sections._
 
-Two layers share this file. 
+Two layers share this file.
 
-A core set of directives is understood by the [[#wg|wg]] tool itself and configures the protocol: in `[Interface]`, the private key, listen port and firewall mark; in `[Peer]`, the public key, pre-shared key, allowed IPs, endpoint and keepalive. 
+A core set of directives is understood by the [[#wg|wg]] tool itself and configures the protocol: in `[Interface]`, the private key, listen port and firewall mark; in `[Peer]`, the public key, pre-shared key, allowed IPs, endpoint and keepalive.
 
-A second set — addressing, DNS, MTU, routing table and lifecycle hooks — is understood only by [[#wg-quick|wg-quick]], the wrapper that sets up everything around the protocol. 
+A second set — addressing, DNS, MTU, routing table and lifecycle hooks — is understood only by [[#wg-quick|wg-quick]], the wrapper that sets up everything around the protocol.
 
 The distinction matters when configuring WireGuard by hand without wg-quick, because the wg-quick-only directives are then yours to perform yourself.
 
@@ -279,7 +298,7 @@ _A remote end: its identity, the addresses it owns, and how to reach it._
 ### Identifying the Peer
 
 - `PublicKey` — the peer's public [[#Keys|key]]. Required; this is the peer's identity.
-- `Pre-sharedKey` — the optional symmetric [[#Pre-shared Keys|pre-shared key]] shared with this peer.
+- `PresharedKey` — the optional symmetric [[#Pre-shared Keys|pre-shared key]] shared with this peer. The directive is one word; only the prose name is hyphenated.
 - `AllowedIPs` — the prefixes that belong to this peer, the basis of [[#Cryptokey Routing|cryptokey routing]]. Required; a comma-separated list such as `10.0.0.2/32` for a single client, or `0.0.0.0/0, ::/0` to route everything to this peer.
 
 ### Endpoint and Keepalive
@@ -393,7 +412,34 @@ ip link set wg0 up                            # bring it up
 ip route add 10.0.0.0/24 dev wg0              # route the VPN subnet into the tunnel
 ```
 
-A tunnel interface can also be moved into another [[Netfilter#Network Namespaces|network namespace]] after creation, which is the basis of running WireGuard for a namespace while the encrypted packets still exit through the host's network.
+A tunnel interface can also be moved into another [[Netfilter#Network Namespaces|network namespace]] after creation — the basis of [[#WireGuard in a Network Namespace|running it in an isolated namespace]], where the encrypted packets still exit through the host's network.
+
+## WireGuard in a Network Namespace
+
+_Isolating the tunnel so a namespace can reach the network only through it._
+
+A WireGuard interface remembers the [[Netfilter#Network Namespaces|network namespace]] it was created in and keeps its encrypted UDP socket there for the life of the interface, even after the interface itself is moved elsewhere.
+
+Moving the cleartext side of the tunnel into a second namespace while the encrypted side stays in the first produces a powerful arrangement: processes in the second namespace can reach the network only through the tunnel, yet the encryption still egresses through the first namespace's real connection.
+
+![[wireguard-network-namespaces.png]]
+
+The interface is created in the init namespace — which has internet access — and then moved into a dedicated namespace whose only route is the tunnel:
+
+```bash
+ip netns add vpn                                       # create the namespace
+ip link add wg0 type wireguard                         # created in init -> its socket stays here
+ip link set wg0 netns vpn                              # move the interface into vpn
+ip -n vpn addr add 10.0.0.2/32 dev wg0                 # tunnel address, inside vpn
+ip netns exec vpn wg setconf wg0 <(wg-quick strip wg0) # keys and peers (wg-quick-only keys removed)
+ip -n vpn link set wg0 up
+ip -n vpn route add default dev wg0                    # wg0 is the only way out of vpn
+ip netns exec vpn curl https://example.com             # run something inside the namespace
+```
+
+Because the namespace holds no other interface, this is a killswitch by construction: if the tunnel drops, nothing inside has a path to the network, so no traffic can leak onto the underlying link.
+
+Two details are easy to miss — DNS in a namespace is read from `/etc/netns/vpn/resolv.conf` rather than the global file, and each namespace is unfirewalled until you load rules into it. This is also how a container's traffic can be forced entirely through WireGuard: hand the container the namespace as its own.
 
 ## Running as a Service
 
@@ -424,7 +470,7 @@ The latest-handshake time is the quickest health check: a recent timestamp means
 
 _Turning a host into a gateway: forwarding, masquerade, the full-tunnel route trick, and MTU._
 
-WireGuard moves packets in and out of its interface and stops there. 
+WireGuard moves packets in and out of its interface and stops there.
 
 Everything that makes a host a useful gateway — routing the decrypted packets onward, translating their addresses, and filtering them — is ordinary kernel networking, configured with `sysctl`, `ip` and [[nftables]]. This is the same boundary the nftables note draws around its [[nftables#WireGuard Gateway|gateway recipe]]; the points below are the WireGuard-side context for it.
 
@@ -440,6 +486,25 @@ sysctl -w net.ipv6.conf.all.forwarding=1
 ```
 
 If the peers' tunnel addresses are private and need to reach the internet, the gateway also [[Netfilter#Masquerade|masquerades]] their traffic onto its public address as it leaves the upstream interface. The forward and masquerade rules belong in [[nftables]] — see the [[nftables#WireGuard Gateway|WireGuard gateway recipe]] — and are often attached to the interface through wg-quick's [[#Lifecycle Hooks|PostUp and PostDown]] hooks. With globally routable IPv6 addresses on the tunnel there is usually [[Netfilter#No NAT by Default|no masquerade]] at all — the gateway simply forwards — so inbound protection there falls entirely to the [[Netfilter#Forward|forward]] filter rather than to the side effect of an address translation.
+
+WireGuard itself has no masquerade or NAT directive: `wg` and the configuration file describe only the tunnel, and the translation is the kernel's job. So the rule lives either in a persistent [[nftables]] ruleset or, for a self-contained tunnel, in the [[#Lifecycle Hooks|PostUp and PostDown]] hooks, where `%i` expands to the interface name. A clean nftables form creates a dedicated table on the way up and drops it on the way down:
+
+```bash
+# server [Interface] — masquerade tunnel traffic out the WAN (eth0)
+PostUp   = nft add table inet wg0
+PostUp   = nft add chain inet wg0 postrouting '{ type nat hook postrouting priority srcnat; }'
+PostUp   = nft add rule  inet wg0 postrouting oifname "eth0" masquerade
+PostDown = nft delete table inet wg0
+```
+
+The single `nft delete table inet wg0` on `PostDown` removes everything the `PostUp` lines added. The same thing with the older iptables tooling is the form seen in most tutorials:
+
+```bash
+PostUp   = iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+```
+
+In both, `eth0` is the upstream (WAN) interface, forwarding must already be enabled as shown above, and filtering of the forwarded traffic still belongs in the main [[nftables]] ruleset.
 
 ## Full-Tunnel Routing
 
@@ -460,7 +525,10 @@ sysctl -w net.ipv4.conf.all.src_valid_mark=1       # let the marked replies surv
 
 ![[wireguard-full-tunnel-routing.png]]
 
-The mark is what makes the two paths diverge: an ordinary packet carries no mark, so it falls into the tunnel table and is encrypted, while the encrypted result then re-enters routing carrying the mark, fails the `not fwmark` test, and is routed out the real interface by the main table — no loop. 
+The mark is what makes the two paths diverge: an ordinary packet carries no mark, so it falls into the tunnel table and is encrypted, while the encrypted result then re-enters routing carrying the mark, fails the `not fwmark` test, and is routed out the real interface by the main table — no loop.
+
+Put plainly: all application traffic rides the VPN, while the encrypted packets that carry the VPN travel out normally to reach the peer's endpoint — following the default route in the main table, which is ordinarily your WAN uplink. The tunnel is built over your real internet connection; only the traffic inside it is redirected.
+
 The `src_valid_mark` sysctl (with companion connmark rules that restore the mark on inbound replies) keeps strict reverse-path filtering from dropping the returning encrypted packets.
 
 ## Split Tunneling
