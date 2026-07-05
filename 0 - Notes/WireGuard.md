@@ -33,7 +33,13 @@ WireGuard's entire object model is small. A host has <mark style="background: #F
 
 _A virtual network interface that happens to encrypt._
 
-A WireGuard tunnel is a network interface, conventionally named `wg0`, `wg1` and so on. To the rest of the system it behaves like any other interface: it has an IP address, it appears in the routing table, and packets routed to it are sent, while packets it receives are delivered up the stack. The difference is hidden inside: on transmit it encrypts each packet and wraps it in UDP to a peer; on receive it decrypts and unwraps. Because it is an ordinary interface, it lives in exactly one [[Netfilter#Network Namespaces|network namespace]] at a time and is filtered by matching its name in [[nftables]], exactly like a physical NIC.
+A <mark style="background: #FF5582A6;">WireGuard tunnel</mark> is a <mark style="background: #FF5582A6;">network interface</mark>, conventionally named `wg0`, `wg1` and so on. 
+
+To the rest of the system it behaves like any other interface: it has an IP address, it appears in the routing table, and packets routed to it are sent, while packets it receives are delivered up the stack. 
+
+The difference is hidden inside: <mark style="background: #FFF3A3A6;">on transmit it encrypts each packet and wraps it in UDP</mark> to a peer; on receive it decrypts and unwraps. 
+
+Because it is an ordinary interface, <mark style="background: #D2B3FFA6;">it lives in exactly one</mark> [[Netfilter#Network Namespaces|network namespace]] <mark style="background: #D2B3FFA6;">at a time</mark> and <mark style="background: #CACFD9A6;">is filtered by matching its name in</mark> [[nftables]], exactly like a physical NIC.
 
 Unlike a TCP-based VPN, the interface is connectionless and always "up" once configured. There is no dial sequence and no persistent socket to a server; the interface simply sends an encrypted UDP datagram whenever it has a packet for a peer, and a [[#The Cryptographic Handshake|handshake]] happens on demand the first time keys are needed.
 
@@ -41,7 +47,9 @@ Unlike a TCP-based VPN, the interface is connectionless and always "up" once con
 
 _A Curve25519 key pair per interface; the public half is the identity._
 
-Each interface has one private key and the public key derived from it, using Curve25519. The private key is a secret known only to that host; the public key is shared with every peer that needs to talk to the interface. Identity in WireGuard is nothing more than this public key — there is no separate username, certificate or account. A peer that holds your public key, and whose own public key you have configured, is authorized to exchange traffic; anyone else is ignored.
+Each interface has one private key and the public key derived from it, using Curve25519. <mark style="background: #BBFABBA6;">The private key is a secret known only to that host</mark>; <mark style="background: #ABF7F7A6;">the public key is shared with every peer that needs to talk to the interface</mark>. <mark style="background: #FF5582A6;">Identity</mark> in WireGuard is nothing more than this <mark style="background: #FF5582A6;">public key</mark> — there is no separate username, certificate or account. 
+
+A peer that holds your public key, and whose own public key you have configured, is authorized to exchange traffic; anyone else is ignored.
 
 Keys are 32 raw bytes, normally handled in their 44-character base64 encoding.
 
@@ -53,7 +61,9 @@ The `wg` tool generates keys. A private key is produced on its own, and the publ
 wg genkey | tee privatekey | wg pubkey > publickey
 ```
 
-`wg genkey` emits a new private key, `tee` saves it, and `wg pubkey` reads a private key on standard input and writes the matching public key. Because the private key is a secret, set a restrictive umask first so the file is not world-readable:
+`wg genkey` emits a new private key, `tee` saves it, and `wg pubkey` reads a private key on standard input and writes the matching public key. 
+
+Because the private key is a secret, set a restrictive umask first so the file is not world-readable:
 
 ```bash
 umask 077
@@ -61,15 +71,23 @@ wg genkey > privatekey
 wg pubkey < privatekey > publickey
 ```
 
-### Preshared Keys
+### Pre-shared Keys
 
-In addition to the per-interface key pair, any pair of peers may share an optional preshared key — a 32-byte symmetric secret generated with `wg genpsk`. It is mixed into the [[#The Noise Handshake|handshake]] as an extra layer on top of the public-key cryptography. Its purpose is defence in depth: even if Curve25519 were broken in the future, traffic recorded today could not be decrypted without also having the preshared key, which makes it a practical hedge against later cryptographic advances (see [[#Key Management|key management]]). It is symmetric, so the same value is configured on both ends of the pair.
+In addition to the per-interface key pair, any pair of peers may share an optional pre-shared key — a 32-byte symmetric secret generated with `wg genpsk`. 
+
+It is mixed into the [[#The Noise Handshake|handshake]] <mark style="background: #FFB8EBA6;">as an extra layer on top of the public-key cryptography</mark>. 
+
+Its purpose is defense in depth: even if Curve25519 were broken in the future, traffic recorded today could not be decrypted without also having the pre-shared key, which makes it a practical hedge against later cryptographic advances (see [[#Key Management|key management]]). It is symmetric, so the same value is configured on both ends of the pair.
 
 ## Peers
 
 _The remote endpoints an interface will talk to, each keyed by its public key._
 
-A peer is a remote WireGuard interface this one is configured to communicate with. Each peer entry carries its public key (which identifies it), the set of addresses that belong to it ([[#AllowedIPs|AllowedIPs]]), optionally where to reach it on the underlying network (its [[#Endpoints|endpoint]]), optionally a [[#Preshared Keys|preshared key]], and optionally a [[#Persistent Keepalive|keepalive]] interval. An interface may have one peer (a point-to-point link) or many (a server with many clients).
+A peer is a remote WireGuard interface this one is configured to communicate with. 
+
+Each peer entry carries its public key (which identifies it), the set of addresses that belong to it ([[#AllowedIPs|AllowedIPs]]), optionally where to reach it on the underlying network (its [[#Endpoints|endpoint]]), optionally a [[#Pre-shared Keys]], and optionally a [[#Persistent Keepalive|keepalive]] interval. 
+
+An interface may have one peer (a point-to-point link) or many (a server with many clients).
 
 ### Endpoints
 
@@ -97,7 +115,7 @@ WireGuard is silent by design: with no traffic to send, it sends nothing. That i
 
 _How [[#AllowedIPs|AllowedIPs]] binds public keys to address ranges, serving as routing table and access-control list in one._
 
-Cryptokey routing is the idea that gives WireGuard its name and its simplicity: the association between a peer's public key and the set of IP addresses allowed to travel to and from that key. Each peer's [[#AllowedIPs|AllowedIPs]] is consulted in two directions, and understanding both is the key to configuring WireGuard correctly.
+<strong>Cryptokey routing</strong> is the idea that gives WireGuard its name and its simplicity: the association between a peer's public key and the set of IP addresses allowed to travel to and from that key. Each peer's [[#AllowedIPs|AllowedIPs]] is consulted in two directions, and understanding both is the key to configuring WireGuard correctly.
 
 ![[wireguard-cryptokey-routing.png]]
 
@@ -107,10 +125,10 @@ When the interface has a packet to send, it looks at the packet's destination ad
 
 ## Inbound: Authorizing a Source
 
-When an encrypted packet arrives and is successfully decrypted with a given peer's keys, WireGuard checks the source address of the inner packet against that same peer's AllowedIPs. If the source is not inside the set, the packet is discarded. This stops a peer from injecting traffic that claims to come from an address it has no right to use — a peer can only send packets sourced from within its own AllowedIPs. In this direction the same list behaves like an inbound access-control list bound to the peer's identity.
+When an encrypted packet arrives and is successfully decrypted with a given peer's keys, <strong>WireGuard</strong> checks the <mark style="background: #FF5582A6;">source address</mark> of the inner packet against that same <mark style="background: #FF5582A6;">peer's AllowedIPs</mark>. If the source is not inside the set, the packet is discarded. This stops a peer from injecting traffic that claims to come from an address it has no right to use — a peer can only send packets sourced from within its own AllowedIPs. <mark style="background: #FFF3A3A6;">In this direction the same list behaves like an inbound access-control list bound to the peer's identity</mark>.
 
 > [!warning] Broad AllowedIPs widens both doors 
-> Because the one list both routes outbound traffic and authorizes inbound sources, a wide AllowedIPs does more than send more traffic to a peer — it also lets that peer send packets claiming any source address within the range. On a server, keep each client's AllowedIPs as tight as its real addresses, usually a single `/32` or `/128`. Reserve broad ranges like `0.0.0.0/0` for the trusted upstream peer on a client, never for arbitrary clients on a server.
+> Because the one list both routes outbound traffic and authorizes inbound sources, a wide AllowedIPs does more than send more traffic to a peer — it also lets that peer send packets claiming any source address within the range. <strong>On a server, keep each client's AllowedIPs as tight as its real addresses, usually a single</strong> `/32` or `/128`. Reserve broad ranges like `0.0.0.0/0` for the trusted upstream peer <strong>on a client</strong>, <strong>never for arbitrary clients on a server</strong>.
 
 ## One Address, One Peer
 
@@ -131,7 +149,7 @@ Before any data flows between two peers, they perform a brief handshake that aut
 
 _A one-round-trip exchange based on the Noise framework's IK pattern._
 
-WireGuard's handshake is built on the Noise protocol framework, using its IK pattern with the optional preshared-key mixing — formally `Noise_IKpsk2_25519_ChaChaPoly_BLAKE2s`. It is a one-round-trip exchange: the initiator sends a handshake initiation, the responder sends a handshake response, and after those two messages both sides have derived the shared pair of session keys. The initiator may then send transport data immediately; the responder, however, holds off until the initiator's first transport packet arrives — which implicitly confirms the response was received — before sending data of its own.
+WireGuard's handshake is built on the Noise protocol framework, using its IK pattern with the optional pre-shared-key mixing — formally `Noise_IKpsk2_25519_ChaChaPoly_BLAKE2s`. It is a one-round-trip exchange: the initiator sends a handshake initiation, the responder sends a handshake response, and after those two messages both sides have derived the shared pair of session keys. The initiator may then send transport data immediately; the responder, however, holds off until the initiator's first transport packet arrives — which implicitly confirms the response was received — before sending data of its own.
 
 ```
 Initiator                                    Responder
@@ -221,7 +239,7 @@ WireGuard is configured through a small INI-style file, conventionally `/etc/wir
 
 _An INI file split into [Interface] and [Peer] sections._
 
-Two layers share this file. A core set of directives is understood by the [[#wg|wg]] tool itself and configures the protocol: in `[Interface]`, the private key, listen port and firewall mark; in `[Peer]`, the public key, preshared key, allowed IPs, endpoint and keepalive. A second set — addressing, DNS, MTU, routing table and lifecycle hooks — is understood only by [[#wg-quick|wg-quick]], the wrapper that sets up everything around the protocol. The distinction matters when configuring WireGuard by hand without wg-quick, because the wg-quick-only directives are then yours to perform yourself.
+Two layers share this file. A core set of directives is understood by the [[#wg|wg]] tool itself and configures the protocol: in `[Interface]`, the private key, listen port and firewall mark; in `[Peer]`, the public key, pre-shared key, allowed IPs, endpoint and keepalive. A second set — addressing, DNS, MTU, routing table and lifecycle hooks — is understood only by [[#wg-quick|wg-quick]], the wrapper that sets up everything around the protocol. The distinction matters when configuring WireGuard by hand without wg-quick, because the wg-quick-only directives are then yours to perform yourself.
 
 ## The Interface Section
 
@@ -255,7 +273,7 @@ _A remote end: its identity, the addresses it owns, and how to reach it._
 ### Identifying the Peer
 
 - `PublicKey` — the peer's public [[#Keys|key]]. Required; this is the peer's identity.
-- `PresharedKey` — the optional symmetric [[#Preshared Keys|preshared key]] shared with this peer.
+- `Pre-sharedKey` — the optional symmetric [[#Pre-shared Keys|pre-shared key]] shared with this peer.
 - `AllowedIPs` — the prefixes that belong to this peer, the basis of [[#Cryptokey Routing|cryptokey routing]]. Required; a comma-separated list such as `10.0.0.2/32` for a single client, or `0.0.0.0/0, ::/0` to route everything to this peer.
 
 ### Endpoint and Keepalive
@@ -323,7 +341,7 @@ wg showconf wg0               # dump the interface's config (includes the privat
 
 wg genkey                     # generate a private key
 wg pubkey                     # derive a public key from a private key on stdin
-wg genpsk                     # generate a preshared key
+wg genpsk                     # generate a pre-shared key
 
 # set fields directly on a running interface
 wg set wg0 listen-port 51820 private-key ./privatekey
@@ -336,7 +354,7 @@ wg syncconf wg0 wg0.conf      # apply changes without disturbing live sessions
 
 > [!note] setconf resets, syncconf does not `wg setconf` makes the interface match the file exactly, removing peers not listed and resetting affected sessions. `wg syncconf` applies only the differences, so unchanged peers keep their current [[#The Cryptographic Handshake|handshake]] and sessions stay up — the right choice for editing a live ruleset. `syncconf` expects a config with the [[#wg-quick|wg-quick]]-only directives stripped, which `wg-quick strip wg0` produces.
 
-`wg show` never prints private or preshared keys; only `wg showconf` does, so it should be treated as sensitive.
+`wg show` never prints private or pre-shared keys; only `wg showconf` does, so it should be treated as sensitive.
 
 ## wg-quick
 
@@ -511,4 +529,4 @@ A WireGuard interface answers only packets that authenticate — that decrypt co
 
 _No PKI; trust comes from exchanging public keys._
 
-WireGuard has no certificate authority and no built-in key-distribution mechanism. Trust between two peers is established by exchanging [[#Keys|public keys]] out of band and configuring each as the other's `PublicKey`. A peer's public key is simultaneously its identity and, through its [[#AllowedIPs|AllowedIPs]], its authorization to use particular addresses. Rotating keys means generating a new pair, distributing the new public key to every peer, and updating the configurations. WireGuard also has no mechanism to push addresses, routes or DNS to a peer the way some VPNs do — each end is configured independently, so provisioning many clients is a matter of templates or external tooling rather than anything the protocol negotiates. For environments that need automated provisioning, revocation or short-lived credentials, that machinery is layered on top by separate tooling; the protocol itself stays minimal. A [[#Preshared Keys|preshared key]] can be added to any peering as a symmetric second factor and as a hedge against a future break of the public-key cryptography.
+WireGuard has no certificate authority and no built-in key-distribution mechanism. Trust between two peers is established by exchanging [[#Keys|public keys]] out of band and configuring each as the other's `PublicKey`. A peer's public key is simultaneously its identity and, through its [[#AllowedIPs|AllowedIPs]], its authorization to use particular addresses. Rotating keys means generating a new pair, distributing the new public key to every peer, and updating the configurations. WireGuard also has no mechanism to push addresses, routes or DNS to a peer the way some VPNs do — each end is configured independently, so provisioning many clients is a matter of templates or external tooling rather than anything the protocol negotiates. For environments that need automated provisioning, revocation or short-lived credentials, that machinery is layered on top by separate tooling; the protocol itself stays minimal. A [[#Pre-shared Keys|pre-shared key]] can be added to any peering as a symmetric second factor and as a hedge against a future break of the public-key cryptography.
