@@ -24,6 +24,31 @@ _How rules are organized: a family holds tables, a table holds chains, a chain h
 
 ![[nftables-object-model.png]]
 
+Two relationships hold the whole model together, and every object in this note is some mix of the two. 
+
+The first is _containment_ — a family holds tables, a table holds chains and data structures, a chain holds rules, a rule holds statements — which gives the ruleset its tree shape. 
+
+The second is _reference_ — a rule names a set, a map, a stateful object or another chain that lives beside it in the same table, rather than containing it. Containment decides where an object is defined; references decide how those objects cooperate once packets start flowing.
+
+The containment spine runs from the outside in:
+
+```text
+family                which protocol layer, and which hooks exist   (a property, not a container you create)
+└── table             names a family; groups objects; no behaviour of its own
+    ├── chain         an ordered list of rules
+    │   └── rule      an ordered list of statements — matches gate it, a verdict ends it
+    ├── set / map     values the rules look up in a single shot (@name, vmap)
+    └── object        state that outlives any one rule: counter, quota, ct helper/timeout, flowtable
+```
+
+A [[#Address Families|family]] is the outermost choice, but it is not something you create and pour objects into — it is a property every [[#Tables|table]] carries that fixes which layer of the stack the table's chains can see and which [[Netfilter#Hooks and Packet Flow|Netfilter hooks]] are open to them. The [[#Tables|table]] beneath it is a pure container: it gathers chains, sets, maps and objects under one family and name and does nothing by itself. A [[#Chains|chain]] holds the rules, and whether packets ever reach those rules depends on the chain's kind — a [[#Base Chains|base chain]] is registered at a hook and entered automatically, a [[#Regular Chains|regular chain]] runs only when another chain jumps to it. A [[#Anatomy of a Rule|rule]] is the bottom of the tree: a line of statements where [[#Match Statements|matches]] gate the rule and a [[#Verdict Statements|verdict]] settles the packet.
+
+References are what keep that tree short and stateful. Rather than one rule per value, a rule tests membership in a [[#Sets|set]] (`ip saddr @blocklist`) or dispatches through a verdict [[#Maps|map]] in one lookup; rather than losing state when the rule ends, a rule attaches a named [[#Stateful Objects|object]] — a [[#Counters and Quotas|counter]] that accumulates across every rule that names it, a [[#Connection-Tracking Objects|ct helper]], a [[#Flowtables|flowtable]] — that persists independently of any rule. `jump` and `goto` are references as well: they pass control to a [[#Regular Chains|regular chain]] so a block of rules can be shared.
+
+What each layer _does to_ the others falls out of this. The family constrains everything under it: pick `arp` and there is no IP match or NAT hook to be had; pick `netdev` and only `ingress`/`egress` exist. Inside a table it is the chain's [[#Chain Types|type]] and [[#Hook and Priority|hook]] — never the table's name — that decide what the chain does and where in the packet's path it runs. And the [[#Base Chains|base chain]] is the single seam to the kernel: registering at a hook is what pulls packets into the ruleset in the first place, so every regular chain, set, map and object is inert until a rule in some base chain reaches it.
+
+That seam is also the line between the two subjects. The objects here are nftables' way of _expressing_ a policy; the [[Netfilter#Hooks and Packet Flow|hooks]] they hang on, the [[Netfilter#Hook Priorities|priorities]] that order them, and the [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] they drive all belong to [[Netfilter]] and are documented there. The sections below walk the tree from the outside in, starting with the family.
+
 ## Address Families
 
 _Which protocol's packets a [[#Tables|table]] sees, and which [[Netfilter#Hooks and Packet Flow|hooks]] are available to it._

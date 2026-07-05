@@ -220,12 +220,12 @@ On the wire WireGuard is UDP, by default on port 51820, and that is all an obser
 
 _The firewall sees the inner and outer packets at different interfaces._
 
-WireGuard's encryption and decryption happen inside the interface's own transmit and receive path, not at a [[Netfilter]] hook, so to the firewall the `wg` interface is simply another interface whose traffic traverses the normal [[Netfilter#Hooks and Packet Flow|hooks]]. The consequence is that the two packets are filtered at two different places:
+WireGuard's <mark style="background: #FF5582A6;">encryption</mark> and <mark style="background: #FF5582A6;">decryption</mark> <mark style="background: #FFB86CA6;">happen inside the interface's own transmit and receive path</mark>, not at a [[Netfilter]] hook, so to the firewall the `wg` interface is simply another interface whose traffic traverses the normal [[Netfilter#Hooks and Packet Flow|hooks]]. <mark style="background: #FFF3A3A6;">The consequence is that the two packets are filtered at two different places</mark>:
 
-- The outer, encrypted UDP packets traverse the hooks on the physical interface (`eth0`). You permit the tunnel itself by allowing its listen port there, with `udp dport 51820`.
-- The inner, decrypted packets traverse the hooks with the `wg` interface as their input or output interface. You filter VPN traffic — what peers may reach, and what they may route through — by matching `iifname "wg0"` and `oifname "wg0"`.
+- The outer, <mark style="background: #FF5582A6;">encrypted</mark> UDP packets traverse the hooks on the physical interface (`eth0`). <mark style="background: #FFB8EBA6;">You permit the tunnel itself by allowing its listen port there, with</mark> `udp dport 51820`.
+- The inner, <mark style="background: #FF5582A6;">decrypted</mark> packets traverse the hooks with the <strong>`wg` interface</strong> <strong>as their input or output interface</strong>. <mark style="background: #ABF7F7A6;">You filter VPN traffic</mark> — what peers may reach, and what they may route through —<mark style="background: #ABF7F7A6;"> by matching</mark> `iifname "wg0"` and `oifname "wg0"`.
 
-[[Netfilter#Connection Tracking|Conntrack]] tracks the two independently: the outer UDP flow is one tracked connection on `eth0`, and each inner flow is tracked separately as it crosses the `wg` interface. This split is exactly what the [[nftables#WireGuard Gateway|gateway recipe]] relies on — one rule opens the outer listen port, another governs the inner forwarded traffic — and it is why a working tunnel can still fail to route until both halves are permitted.
+[[Netfilter#Connection Tracking|Conntrack]] tracks the two independently: <mark style="background: #FFB8EBA6;">the outer UDP flow is one tracked connection on `eth0`</mark>, <mark style="background: #ADCCFFA6;">and each inner flow is tracked separately as it crosses the `wg` interface</mark>. This split is exactly what the [[nftables#WireGuard Gateway|gateway recipe]] relies on — one rule opens the outer listen port, another governs the inner forwarded traffic — and it is why a working tunnel can still fail to route until both halves are permitted.
 
 ---
 
@@ -239,7 +239,13 @@ WireGuard is configured through a small INI-style file, conventionally `/etc/wir
 
 _An INI file split into [Interface] and [Peer] sections._
 
-Two layers share this file. A core set of directives is understood by the [[#wg|wg]] tool itself and configures the protocol: in `[Interface]`, the private key, listen port and firewall mark; in `[Peer]`, the public key, pre-shared key, allowed IPs, endpoint and keepalive. A second set — addressing, DNS, MTU, routing table and lifecycle hooks — is understood only by [[#wg-quick|wg-quick]], the wrapper that sets up everything around the protocol. The distinction matters when configuring WireGuard by hand without wg-quick, because the wg-quick-only directives are then yours to perform yourself.
+Two layers share this file. 
+
+A core set of directives is understood by the [[#wg|wg]] tool itself and configures the protocol: in `[Interface]`, the private key, listen port and firewall mark; in `[Peer]`, the public key, pre-shared key, allowed IPs, endpoint and keepalive. 
+
+A second set — addressing, DNS, MTU, routing table and lifecycle hooks — is understood only by [[#wg-quick|wg-quick]], the wrapper that sets up everything around the protocol. 
+
+The distinction matters when configuring WireGuard by hand without wg-quick, because the wg-quick-only directives are then yours to perform yourself.
 
 ## The Interface Section
 
@@ -259,7 +265,7 @@ _The local end: who this host is and how its tunnel should be set up._
 ### Routing Controls
 
 - `Table` — which routing table wg-quick should install the peers' routes into. `Table = off` disables automatic route creation entirely, leaving routing to you; a numeric value directs routes into a custom table. A wg-quick directive.
-- `FwMark` — a [[Netfilter#Packet and Connection Marks|firewall mark]] to stamp on this interface's outgoing encrypted packets, so they can be singled out by [[Netfilter#Marks and Policy Routing|policy routing]]. Understood by `wg`; wg-quick sets it automatically when it needs it for [[#Full-Tunnel Routing|full-tunnel routing]].
+- `FwMark` — a [[Netfilter#Packet and Connection Marks|firewall mark]] <mark style="background: #FFB8EBA6;">to stamp on this interface's outgoing encrypted packets</mark>, <mark style="background: #FFB86CA6;">so they can be singled out by</mark> [[Netfilter#Marks and Policy Routing|policy routing]]. Understood by `wg`; wg-quick sets it automatically when it needs it for [[#Full-Tunnel Routing|full-tunnel routing]].
 
 ### Lifecycle Hooks
 
@@ -352,7 +358,8 @@ wg setconf wg0 wg0.conf       # replace the whole config from a file
 wg syncconf wg0 wg0.conf      # apply changes without disturbing live sessions
 ```
 
-> [!note] setconf resets, syncconf does not `wg setconf` makes the interface match the file exactly, removing peers not listed and resetting affected sessions. `wg syncconf` applies only the differences, so unchanged peers keep their current [[#The Cryptographic Handshake|handshake]] and sessions stay up — the right choice for editing a live ruleset. `syncconf` expects a config with the [[#wg-quick|wg-quick]]-only directives stripped, which `wg-quick strip wg0` produces.
+> [!note] setconf resets, syncconf does not 
+> `wg setconf` makes the interface match the file exactly, removing peers not listed and resetting affected sessions. `wg syncconf` applies only the differences, so unchanged peers keep their current [[#The Cryptographic Handshake|handshake]] and sessions stay up — the right choice for editing a live ruleset. `syncconf` expects a config with the [[#wg-quick|wg-quick]]-only directives stripped, which `wg-quick strip wg0` produces.
 
 `wg show` never prints private or pre-shared keys; only `wg showconf` does, so it should be treated as sensitive.
 
@@ -417,7 +424,9 @@ The latest-handshake time is the quickest health check: a recent timestamp means
 
 _Turning a host into a gateway: forwarding, masquerade, the full-tunnel route trick, and MTU._
 
-WireGuard moves packets in and out of its interface and stops there. Everything that makes a host a useful gateway — routing the decrypted packets onward, translating their addresses, and filtering them — is ordinary kernel networking, configured with `sysctl`, `ip` and [[nftables]]. This is the same boundary the nftables note draws around its [[nftables#WireGuard Gateway|gateway recipe]]; the points below are the WireGuard-side context for it.
+WireGuard moves packets in and out of its interface and stops there. 
+
+Everything that makes a host a useful gateway — routing the decrypted packets onward, translating their addresses, and filtering them — is ordinary kernel networking, configured with `sysctl`, `ip` and [[nftables]]. This is the same boundary the nftables note draws around its [[nftables#WireGuard Gateway|gateway recipe]]; the points below are the WireGuard-side context for it.
 
 ## Forwarding and Masquerade
 
@@ -436,9 +445,9 @@ If the peers' tunnel addresses are private and need to reach the internet, the g
 
 _Sending all of a client's traffic through the VPN without a routing loop._
 
-Setting a peer's [[#AllowedIPs|AllowedIPs]] to `0.0.0.0/0, ::/0` declares that all traffic should go to that peer. The obvious implementation — a default route pointing at the tunnel — creates a loop: WireGuard's own encrypted packets, on their way to the peer's real [[#Endpoints|endpoint]], would themselves match the default route and be sent back into the tunnel.
+Setting a peer's [[#AllowedIPs|AllowedIPs]] to `0.0.0.0/0, ::/0` declares that all traffic should go to that peer. The obvious implementation — a default route pointing at the tunnel — creates a loop: <mark style="background: #FFB8EBA6;">WireGuard's own encrypted packets</mark>, <mark style="background: #FFF3A3A6;">on their way to the peer's real [[#Endpoints|endpoint]]</mark>, <mark style="background: #FFB86CA6;">would themselves match the default route and be sent back into the tunnel</mark>.
 
-[[#wg-quick|wg-quick]] solves this with a [[Netfilter#Packet and Connection Marks|firewall mark]] and [[Netfilter#Marks and Policy Routing|policy routing]] rather than a plain default route. It stamps the interface's outgoing encrypted packets with a mark, puts the default route in a dedicated routing table, and adds policy rules so that only marked packets — WireGuard's own encapsulated traffic — bypass that table and route to the real endpoint normally, while everything else is sent into the tunnel. A `suppress_prefixlength 0` rule keeps any more-specific routes in the main table winning over the tunnel's default, so local and link-local destinations are not swallowed. The result is that all ordinary traffic goes through the VPN while the tunnel's own packets still find their way out.
+[[#wg-quick|wg-quick]] solves this with a [[Netfilter#Packet and Connection Marks|firewall mark]] and [[Netfilter#Marks and Policy Routing|policy routing]] rather than a plain default route. <mark style="background: #BBFABBA6;">It stamps the interface's outgoing encrypted packets with a <strong>mark</strong></mark>, puts <mark style="background: #ABF7F7A6;">the default route in a dedicated routing table</mark>, and <mark style="background: #ADCCFFA6;">adds policy rules so that only marked packets</mark> — <mark style="background: #D2B3FFA6;">WireGuard's own encapsulated traffic</mark> — <mark style="background: #CACFD9A6;">bypass that table and route to the real endpoint normally</mark>, while everything else is sent into the tunnel. A `suppress_prefixlength 0` rule keeps any more-specific routes in the main table winning over the tunnel's default, so local and link-local destinations are not swallowed. The result is that all ordinary traffic goes through the VPN while the tunnel's own packets still find their way out.
 
 ```bash
 # what wg-quick installs for AllowedIPs = 0.0.0.0/0 (IPv4 shown; ::/0 is analogous)
@@ -451,7 +460,8 @@ sysctl -w net.ipv4.conf.all.src_valid_mark=1       # let the marked replies surv
 
 ![[wireguard-full-tunnel-routing.png]]
 
-The mark is what makes the two paths diverge: an ordinary packet carries no mark, so it falls into the tunnel table and is encrypted, while the encrypted result then re-enters routing carrying the mark, fails the `not fwmark` test, and is routed out the real interface by the main table — no loop. The `src_valid_mark` sysctl (with companion connmark rules that restore the mark on inbound replies) keeps strict reverse-path filtering from dropping the returning encrypted packets.
+The mark is what makes the two paths diverge: an ordinary packet carries no mark, so it falls into the tunnel table and is encrypted, while the encrypted result then re-enters routing carrying the mark, fails the `not fwmark` test, and is routed out the real interface by the main table — no loop. 
+The `src_valid_mark` sysctl (with companion connmark rules that restore the mark on inbound replies) keeps strict reverse-path filtering from dropping the returning encrypted packets.
 
 ## Split Tunneling
 
