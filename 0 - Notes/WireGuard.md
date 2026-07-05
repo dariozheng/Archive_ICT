@@ -10,10 +10,16 @@ tags:
 icon: SiWireguard
 iconColor: "#87151F"
 ---
-<strong>WireGuard</strong> is a fast, modern VPN that runs as a virtual network interface in the Linux kernel, mainline since 5.6 (with portable userspace implementations such as wireguard-go and BoringTun for other platforms). It builds an encrypted tunnel out of a small, fixed set of cryptographic primitives, identifies every participant by a public key rather than a username or certificate, and decides where packets go with a single mechanism — cryptokey routing — that doubles as its access-control model. You drive it with two userspace tools, `wg` and `wg-quick`, and everything around the tunnel — routing between interfaces, NAT and filtering — is left to the kernel and to [[nftables]].
+<strong>WireGuard</strong> is a fast, modern VPN that runs as a <strong>virtual network interface</strong> in the Linux kernel, mainline since 5.6 (with portable userspace implementations such as wireguard-go and BoringTun for other platforms). 
+
+It builds an encrypted tunnel out of a small, fixed set of cryptographic primitives, identifies every participant by a public key rather than a username or certificate, and decides where packets go with a single mechanism — <strong>cryptokey routing</strong> — that doubles as its access-control model. 
+
+You drive it with two userspace tools, `wg` and `wg-quick`, and everything around the tunnel — <strong>routing between interfaces</strong>, <strong>NAT</strong> and <strong>filtering</strong> — is left to the kernel and to [[nftables]].
 
 > [!info] WireGuard moves packets; the kernel routes them 
-> WireGuard only encrypts packets into, and decrypts them out of, a [[#The Tunnel Interface|tunnel interface]]. Forwarding between that interface and the rest of the network, [[Netfilter#Network Address Translation|NAT]], and filtering are the kernel's job, driven by [[nftables]]. The firewall rules that turn a WireGuard host into a gateway are the [[nftables#WireGuard Gateway|WireGuard gateway recipe]]; this note covers everything on the WireGuard side of that line — keys, peers, [[#AllowedIPs|AllowedIPs]], the [[#The Cryptographic Handshake|handshake]] and the [[#Configuration|configuration]].
+> WireGuard only encrypts packets into, and decrypts them out of, a [[#The Tunnel Interface|tunnel interface]]. 
+> 
+> Forwarding between that interface and the rest of the network, [[Netfilter#Network Address Translation|NAT]], and filtering are the kernel's job, driven by [[nftables]]. The firewall rules that turn a WireGuard host into a gateway are the [[nftables#WireGuard Gateway|WireGuard gateway recipe]]; this note covers everything on the WireGuard side of that line — keys, peers, [[#AllowedIPs|AllowedIPs]], the [[#The Cryptographic Handshake|handshake]] and the [[#Configuration|configuration]].
 
 ---
 
@@ -21,7 +27,7 @@ iconColor: "#87151F"
 
 _The three nouns everything else is built from: an interface, its keys, and the peers it talks to._
 
-WireGuard's entire object model is small. A host has one or more tunnel interfaces; each interface owns a single key pair and a list of peers; each peer is identified by its public key and carries the handful of attributes needed to reach it and to decide which traffic belongs to it. There are no connections, sessions or users to manage as first-class objects — those exist only inside the protocol and are created and torn down automatically.
+WireGuard's entire object model is small. A host has <mark style="background: #FFB8EBA6;">one or more tunnel interfaces</mark>; <mark style="background: #FFB86CA6;">each interface owns a single key pair and a list of peers</mark>; <mark style="background: #FFF3A3A6;">each peer is identified by its public key</mark> and carries the handful of attributes needed to reach it and to decide which traffic belongs to it. There are no connections, sessions or users to manage as first-class objects — those exist only inside the protocol and are created and torn down automatically.
 
 ## The Tunnel Interface
 
