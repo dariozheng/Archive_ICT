@@ -9,6 +9,7 @@ tags:
 icon: SiWireguard
 iconColor: "#87151F"
 ---
+
 <strong>WireGuard</strong> is a fast, modern VPN that runs as a <strong>virtual network interface</strong> in the Linux kernel, mainline since 5.6 (with portable userspace implementations such as wireguard-go and BoringTun for other platforms).
 
 It builds an encrypted tunnel out of a small, fixed set of cryptographic primitives, identifies every participant by a public key rather than a username or certificate, and decides where packets go with a single mechanism — <strong>cryptokey routing</strong> — that doubles as its access-control model.
@@ -16,6 +17,7 @@ It builds an encrypted tunnel out of a small, fixed set of cryptographic primiti
 You drive it with two userspace tools, `wg` and `wg-quick`, and everything around the tunnel — <strong>routing between interfaces</strong>, <strong>NAT</strong> and <strong>filtering</strong> — is left to the kernel and to [[nftables]].
 
 > [!info] WireGuard moves packets; the kernel routes them 
+> 
 > WireGuard only encrypts packets into, and decrypts them out of, a [[#The Tunnel Interface|tunnel interface]].
 > 
 > Forwarding between that interface and the rest of the network, [[Netfilter#Network Address Translation|NAT]], and filtering are the kernel's job, driven by [[nftables]]. The firewall rules that turn a WireGuard host into a gateway are the [[nftables#WireGuard Gateway|WireGuard gateway recipe]]; this note covers everything on the WireGuard side of that line — keys, peers, [[#AllowedIPs|AllowedIPs]], the [[#The Cryptographic Handshake|handshake]] and the [[#Configuration|configuration]].
@@ -96,6 +98,8 @@ The endpoint is the peer's address and UDP port on the underlying network — th
 
 An endpoint is only required for peers this host needs to initiate contact with. A central server typically configures no endpoint for its roaming clients, because their addresses are unknown and change; instead it learns each client's current endpoint automatically from the source of that client's authenticated packets (see [[#Roaming|roaming]]). A client, by contrast, must configure the server's endpoint so it knows where to send the first packet.
 
+When the endpoint is written as a hostname it is resolved once, when the tunnel comes up, and not re-resolved afterwards, so an endpoint on dynamic DNS needs a periodic re-resolve (see [[#Troubleshooting|troubleshooting]]).
+
 ### AllowedIPs
 
 _The list of addresses associated with a peer — the heart of WireGuard's routing and access control._
@@ -127,6 +131,7 @@ When the interface has a packet to send, it looks at the packet's destination ad
 When an encrypted packet arrives and is successfully decrypted with a given peer's keys, <strong>WireGuard</strong> checks the <mark style="background: #FF5582A6;">source address</mark> of the inner packet against that same <mark style="background: #FF5582A6;">peer's AllowedIPs</mark>. If the source is not inside the set, the packet is discarded. This stops a peer from injecting traffic that claims to come from an address it has no right to use — a peer can only send packets sourced from within its own AllowedIPs. <mark style="background: #FFF3A3A6;">In this direction the same list behaves like an inbound access-control list bound to the peer's identity</mark>.
 
 > [!warning] Broad AllowedIPs widens both doors 
+> 
 > Because the one list both routes outbound traffic and authorizes inbound sources, a wide AllowedIPs does more than send more traffic to a peer — it also lets that peer send packets claiming any source address within the range. <strong>On a server, keep each client's AllowedIPs as tight as its real addresses, usually a single</strong> `/32` or `/128`. Reserve broad ranges like `0.0.0.0/0` for the trusted upstream peer <strong>on a client</strong>, <strong>never for arbitrary clients on a server</strong>.
 
 ## One Address, One Peer
@@ -134,6 +139,7 @@ When an encrypted packet arrives and is successfully decrypted with a given peer
 Because outbound selection is a routing lookup, a given address can belong to only one peer on an interface: if two peers both claimed `10.0.0.5`, the interface could not decide which to send to. Overlapping prefixes resolve by longest match, just like routes, so a peer with `0.0.0.0/0` catches everything not claimed more specifically by another peer. That `0.0.0.0/0, ::/0` case — routing all traffic to a single peer — is how a full-tunnel VPN is expressed; its routing-table consequences are covered in [[#Full-Tunnel Routing|full-tunnel routing]].
 
 > [!important] AllowedIPs is not the same as the kernel routing table 
+> 
 > AllowedIPs is WireGuard's own internal map of keys to addresses. For the operating system to actually hand outbound packets to the tunnel in the first place, there must also be a normal route pointing those destinations at the `wg` interface. [[#wg-quick|wg-quick]] creates those system routes automatically from each peer's AllowedIPs, which is why the two are easy to conflate — but the bare [[#wg|wg]] tool sets only the internal map and leaves kernel routing to you.
 
 ## A Worked Example
@@ -233,7 +239,7 @@ wg0: pick peer by AllowedIPs,                         │
 
 _A single UDP port carries every peer's traffic._
 
-On the wire WireGuard is UDP, by default on port 51820, and that is all an observer sees: UDP datagrams between two addresses, with an encrypted payload and no visible indication of the protocol inside. A single listen port serves every peer at once — peers are told apart by the keys their packets decrypt with, not by separate ports or connections. Running over UDP, with no handshake visible to middleboxes and no reply to anything unauthenticated, is also what lets WireGuard [[#Roaming|roam]] and stay hard to fingerprint.
+On the wire WireGuard is UDP, by default on port 51820, and that is all an observer sees of the contents: UDP datagrams between two addresses, with an encrypted payload and no visible indication of the protocol carried inside. A single listen port serves every peer at once — peers are told apart by the keys their packets decrypt with, not by separate ports or connections. Each data packet carries a monotonic counter as its nonce, and the receiver keeps a sliding window of recently seen counters to reject replays and badly reordered packets, the same anti-replay scheme IPsec uses. Running over a single UDP flow, with no cleartext handshake for a middlebox to key on and no reply to anything unauthenticated, is what lets WireGuard [[#Roaming|roam]] and stay invisible to active probing — though not, as [[#Silence and Stealth|Silence and Stealth]] describes, to passive traffic analysis.
 
 ## Interaction with the Network Stack
 
@@ -349,7 +355,7 @@ The server lists the client's tunnel address as its [[#AllowedIPs|AllowedIPs]] a
 
 _The two userspace tools — wg for the protocol, wg-quick for the plumbing — and bringing a tunnel up._
 
-WireGuard ships with two commands, from the `wireguard-tools` package. `wg` configures the protocol on an interface that already exists; `wg-quick` is a wrapper that creates the interface, applies the configuration, and sets up the surrounding addressing, routing and DNS in one step. Besides these, network managers such as systemd-networkd and NetworkManager can configure WireGuard interfaces natively through the same kernel module, which is the usual choice on systems already managed that way.
+WireGuard ships with two commands, from the `wireguard-tools` package. `wg` configures the protocol on an interface that already exists; `wg-quick` is a wrapper that creates the interface, applies the configuration, and sets up the surrounding addressing, routing and DNS in one step. Besides these, network managers such as systemd-networkd and NetworkManager can configure WireGuard interfaces natively through the same kernel module, which is the usual choice on systems already managed that way (see [[#Managing with systemd-networkd|systemd-networkd]]).
 
 ## wg
 
@@ -370,7 +376,7 @@ wg genpsk                     # generate a pre-shared key
 
 # set fields directly on a running interface
 wg set wg0 listen-port 51820 private-key ./privatekey
-wg set wg0 peer <pubkey> endpoint 203.0.113.7:51820 allowed-ips 10.0.0.2/32
+wg set wg0 peer <pubkey> endpoint 203.0.113.7:51820 allowed-ips 10.0.0.2/32   # allowed-ips replaces this peer's list
 wg set wg0 peer <pubkey> remove          # delete a peer
 
 wg setconf wg0 wg0.conf       # replace the whole config from a file
@@ -378,6 +384,7 @@ wg syncconf wg0 wg0.conf      # apply changes without disturbing live sessions
 ```
 
 > [!note] setconf resets, syncconf does not 
+> 
 > `wg setconf` makes the interface match the file exactly, removing peers not listed and resetting affected sessions. `wg syncconf` applies only the differences, so unchanged peers keep their current [[#The Cryptographic Handshake|handshake]] and sessions stay up — the right choice for editing a live ruleset. `syncconf` expects a config with the [[#wg-quick|wg-quick]]-only directives stripped, which `wg-quick strip wg0` produces.
 
 `wg show` never prints private or pre-shared keys; only `wg showconf` does, so it should be treated as sensitive.
@@ -451,6 +458,40 @@ The packaged `wg-quick@.service` template ties an interface's lifecycle to syste
 systemctl enable --now wg-quick@wg0           # start now and on every boot
 systemctl status wg-quick@wg0
 ```
+
+## Managing with systemd-networkd
+
+_Configuring the same tunnel declaratively, without wg-quick._
+
+On hosts already managed by systemd-networkd, the tunnel can be described in a `.netdev` (the interface and its protocol settings) and a `.network` (its addresses and routes), with no wg-quick involved:
+
+```ini
+# /etc/systemd/network/wg0.netdev
+[NetDev]
+Name = wg0
+Kind = wireguard
+
+[WireGuard]
+PrivateKey = <server-private-key>
+ListenPort = 51820
+
+[WireGuardPeer]
+PublicKey = <peer-public-key>
+AllowedIPs = 10.0.0.2/32
+Endpoint = vpn.example.com:51820
+PersistentKeepalive = 25
+```
+
+```ini
+# /etc/systemd/network/wg0.network
+[Match]
+Name = wg0
+
+[Network]
+Address = 10.0.0.1/24
+```
+
+Each peer is a separate `[WireGuardPeer]` section. The `[WireGuard]` and `[WireGuardPeer]` keys mirror the [[#The Interface Section|interface]] and [[#The Peer Section|peer]] directives of a wg-quick file, while addressing and routing move into the `.network` file. For secrets, `PrivateKeyFile` can point at a file instead of inlining the key. NetworkManager offers an equivalent through its own WireGuard connection type.
 
 ## Inspecting a Running Tunnel
 
@@ -601,10 +642,34 @@ WireGuard does not negotiate cipher suites. It uses one set of primitives for ev
 
 _No reply to anything that does not authenticate._
 
-A WireGuard interface answers only packets that authenticate — that decrypt correctly under a configured peer's keys and pass replay checks. Anything else, including a port scan or a spoofed [[#The Cryptographic Handshake|handshake]] from an unknown key, receives no response at all. To an outside observer the listen port is indistinguishable from a closed one, and there is no banner or handshake to fingerprint the service by. This silence is also the foundation of WireGuard's [[#Cookies and Denial-of-Service Resistance|denial-of-service resistance]]: work is spent only on senders that have already proven themselves.
+A WireGuard interface answers only packets that authenticate — that decrypt correctly under a configured peer's keys and pass replay checks. Anything else, including a port scan or a spoofed [[#The Cryptographic Handshake|handshake]] from an unknown key, receives no response at all. To anything actively probing the port it is indistinguishable from a closed one, with no banner or reply to give the service away. This silence is also the foundation of WireGuard's [[#Cookies and Denial-of-Service Resistance|denial-of-service resistance]]: work is spent only on senders that have already proven themselves.
+
+That invisibility is only against active probing, though. A passive observer watching the traffic can still recognize WireGuard: its fixed message-type header and characteristic packet sizes — the handshake initiation is always 148 bytes — form a static signature that deep-packet-inspection systems fingerprint readily, and standard WireGuard is blocked or throttled in a number of heavily censored networks. Concealing that WireGuard is in use needs an obfuscation layer on top: forks such as AmneziaWG randomize the headers and packet sizes and can mimic other UDP protocols, and lighter junk-packet injection defeats simpler filters. None of this changes the tunnel's cryptography — it is about hiding the protocol, not protecting the data.
 
 ## Key Management
 
 _No PKI; trust comes from exchanging public keys._
 
 WireGuard has no certificate authority and no built-in key-distribution mechanism. Trust between two peers is established by exchanging [[#Keys|public keys]] out of band and configuring each as the other's `PublicKey`. A peer's public key is simultaneously its identity and, through its [[#AllowedIPs|AllowedIPs]], its authorization to use particular addresses. Rotating keys means generating a new pair, distributing the new public key to every peer, and updating the configurations. WireGuard also has no mechanism to push addresses, routes or DNS to a peer the way some VPNs do — each end is configured independently, so provisioning many clients is a matter of templates or external tooling rather than anything the protocol negotiates. For environments that need automated provisioning, revocation or short-lived credentials, that machinery is layered on top by separate tooling; the protocol itself stays minimal. A [[#Pre-shared Keys|pre-shared key]] can be added to any peering as a symmetric second factor and as a hedge against a future break of the public-key cryptography.
+
+---
+
+# Troubleshooting
+
+_Reading the symptoms: what a given failure usually points to._
+
+Most WireGuard problems fall into a handful of patterns, and [[#Inspecting a Running Tunnel|wg show]] narrows them down quickly — the latest-handshake time alone separates a tunnel that never formed from one that is up but not carrying traffic.
+
+- No handshake ever appears. The encrypted outer packets are not completing a round trip. Check that the server's [[#The Encrypted Outer Packet|listen port]] is reachable — allowed with `udp dport 51820` on the [[Netfilter#Hooks and Packet Flow|firewall]], and port-forwarded through any NAT in front of the server — and that the client's [[#Endpoints|endpoint]] is correct. A public-key mismatch produces the same silence, since each side ignores a peer it does not recognize. And because the handshake carries a TAI64N timestamp, a badly wrong clock on either end can cause initiations to be rejected.
+    
+- The handshake succeeds but no traffic flows. Keys are fine; routing or authorization is not. The destination may fall outside the peer's [[#AllowedIPs|AllowedIPs]] — nothing matches outbound, or the inbound source is rejected. With the bare [[#wg|wg]] tool there may be no kernel route pointing at the interface. On a gateway, [[#Forwarding and Masquerade|IP forwarding]] may be off, masquerade may be missing for private tunnel addresses, or the [[Netfilter#Forward|forward]] filter may be dropping the packets.
+    
+- Small exchanges work but large transfers stall — a shell logs in, web pages load halfway. This is the classic [[#MTU and MSS|MTU]] black hole when Path MTU Discovery is broken. Clamp the TCP MSS on forwarded SYNs, or lower the tunnel MTU.
+    
+- The tunnel works, then dies after the server's address changes. An [[#Endpoints|endpoint]] given as a hostname is resolved only once, when the interface comes up, and wg-quick does not re-resolve it. For a dynamic-DNS endpoint, run the `reresolve-dns` helper shipped with wireguard-tools on a timer.
+    
+- Return traffic is silently dropped. Asymmetric paths — common with a [[#Full-Tunnel Routing|full tunnel]] — can trip strict reverse-path filtering. The full-tunnel setup handles this with `src_valid_mark`; otherwise set `rp_filter` to loose mode on the interfaces involved.
+    
+- You edited a peer and locked part of it out. `wg set … allowed-ips` replaces that peer's whole list rather than adding to it. Re-apply the complete list, or edit the file and use [[#wg|wg syncconf]] so live sessions survive.
+    
+- DNS misbehaves. A tunnel in a [[#WireGuard in a Network Namespace|network namespace]] reads its resolver from `/etc/netns/<ns>/resolv.conf`, not the global file; and wg-quick's `DNS=` only takes effect if a resolver integration — `resolvconf`, `openresolv` or systemd-resolved — is present.

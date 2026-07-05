@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/WireGuard.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/WireGuard.md",
+                "file": "0 - Notes/Untitled.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "Dow"
               },
               "icon": "lucide-list",
-              "title": "Outline of WireGuard"
+              "title": "Outline of Untitled"
             }
           },
           {
@@ -195,8 +195,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -220,10 +219,10 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "990bebc9dd0f9174",
+  "active": "c1cb4ce19e161b77",
   "lastOpenFiles": [
-    "0 - Notes/Untitled.md",
     "0 - Notes/WireGuard.md",
+    "0 - Notes/Untitled.md",
     "0 - Notes/nftables.md",
     "attachments/wireguard-network-namespaces 1.png",
     "attachments/wireguard-cryptokey-routing.png",
