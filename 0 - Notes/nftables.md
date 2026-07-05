@@ -67,7 +67,8 @@ The `bridge` family <mark style="background: #D2B3FFA6;">operates at Layer 2</ma
 
 <mark style="background: #ABF7F7A6;">Because bridging happens below IP</mark>, <mark style="background: #ADCCFFA6;">a bridge chain can match on MAC addresses, VLAN tags and EtherType</mark>, and <mark style="background: #D2B3FFA6;">can filter traffic flowing between bridge ports that may never reach the IP layer at all</mark>. It exposes the same five hook names as IP, but they fire on the bridge's L2 path — the `forward` hook, for instance, sees a frame moving from one bridge port to another.
 
-> [!note] br_netfilter is a separate, legacy mechanism The old `br_netfilter` module makes bridged IP traffic additionally traverse the `ip`/`ip6`/`inet` hooks (the `bridge-nf-call-iptables` sysctls). It is unrelated to the bridge family and a frequent source of "why is my bridge traffic being filtered" surprises — some container runtimes load it. Bridge-family rules do not need it.
+> [!note] br_netfilter is a separate, legacy mechanism 
+> The old `br_netfilter` module makes bridged IP traffic additionally traverse the `ip`/`ip6`/`inet` hooks (the `bridge-nf-call-iptables` sysctls). It is unrelated to the bridge family and a frequent source of "why is my bridge traffic being filtered" surprises — some container runtimes load it. Bridge-family rules do not need it.
 
 The bridge family defines its own [[Netfilter#Hook Priorities|priority]] scale, so the standard keywords map to different numbers than in `ip` / `ip6` / `inet`:
 
@@ -102,7 +103,8 @@ nft add table inet filter      # create a dual-stack table
 nft list ruleset               # show everything currently loaded
 ```
 
-> [!important] Different from iptables In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
+> [!important] Different from iptables 
+> In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
 
 ## Chains
 
@@ -168,7 +170,8 @@ More than one base chain may sit on the same hook; they run in ascending priorit
 
 The policy is the [[#Verdict Statements|verdict]] applied to a packet that reaches the end of a base chain without hitting a terminating rule. It can only be `accept` or `drop`. A base chain created without an explicit policy defaults to `accept`.
 
-> [!warning] Default-drop and lockout A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
+> [!warning] Default-drop and lockout 
+> A `policy drop` on the input chain is the secure default, but loading it with no allow rules can lock you out. Always permit loopback and established traffic first.
 
 ```bash
 nft add rule inet filter input iif lo accept
@@ -280,7 +283,8 @@ Verdict statements decide what happens to the packet. The terminal ones map to [
 |`jump <chain>`|no|enter a chain; `return` comes back here|
 |`goto <chain>`|no|enter a chain; does not return — the caller's context is replaced|
 
-> [!note] reject is technically separate The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice. It is only valid in the input, forward and output hooks (where a reply can sensibly be generated). The reply type is selectable with `reject with` — `reject with tcp reset` sends a TCP RST, and `reject with icmpx type admin-prohibited` sends a family-independent ICMP/ICMPv6 error.
+> [!note] reject is technically separate 
+> The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice. It is only valid in the input, forward and output hooks (where a reply can sensibly be generated). The reply type is selectable with `reject with` — `reject with tcp reset` sends a TCP RST, and `reject with icmpx type admin-prohibited` sends a family-independent ICMP/ICMPv6 error.
 
 The `queue` verdict can target a specific queue or a range — `queue num 0-3` spreads packets across several userspace readers (add `flags fanout` to keep each flow on one queue), and `queue flags bypass` lets a packet be accepted instead of dropped when no program is listening.
 
@@ -335,7 +339,8 @@ The NAT statements above only take effect in a [[#Chain Types|nat-type]] chain a
 
 _Native data structures that keep rulesets short and lookups fast._
 
-> [!note] Prefer sets and maps to long rule lists A chain of rules is evaluated one after another, while a set or map is a single hash lookup. Matching many addresses or ports against a [[#Sets|set]], or dispatching with a verdict [[#Maps|map]], is both faster and shorter than writing a rule per value — reach for them whenever a list starts to grow.
+> [!note] Prefer sets and maps to long rule lists 
+> A chain of rules is evaluated one after another, while a set or map is a single hash lookup. Matching many addresses or ports against a [[#Sets|set]], or dispatching with a verdict [[#Maps|map]], is both faster and shorter than writing a rule per value — reach for them whenever a list starts to grow.
 
 ## Sets
 
@@ -382,7 +387,8 @@ nft add rule inet filter input ct state new \
     add @flooders { ip saddr limit rate over 10/minute } drop
 ```
 
-> [!note] `meter` is the legacy spelling Older rulesets used a `meter { … }` wrapper; current nftables expresses the same idea by updating a named dynamic set from the rule, as above.
+> [!note] `meter` is the legacy spelling 
+> Older rulesets used a `meter { … }` wrapper; current nftables expresses the same idea by updating a named dynamic set from the rule, as above.
 
 ---
 
@@ -776,4 +782,5 @@ table inet filter {
 
 This throttles rather than bans: connection attempts above the rate are dropped, but as soon as a source falls back under 10 per minute its new connections pass again (the `timeout` only expires idle entries, it is not a ban duration). To turn offenders into a hard block, have the over-rate rule add the source to a second blocklist set with its own timeout and drop members of that set early in the chain. Note also that an `ipv4_addr` set tracks IPv4 sources only — SSH over IPv6 needs a parallel `ipv6_addr` set and rule.
 
-> [!info] Reading order recap A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].
+> [!info] Reading order recap 
+> A packet hits a [[Netfilter#Hooks and Packet Flow|hook]], the [[#Base Chains|base chains]] on that hook run in [[Netfilter#Hook Priorities|priority]] order, rules are evaluated top to bottom, and the first terminal [[#Verdict Statements|verdict]] wins. If no rule terminates, the chain [[#Policy|policy]] applies. If the packet is accepted, it continues to the next hook along the [[Netfilter#Packet Traversal|traversal path]].
