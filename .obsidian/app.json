@@ -1,5 +1,8 @@
 {
   "newFileLocation": "folder",
   "newFileFolderPath": "0 - Notes",
-  "attachmentFolderPath": "attachments"
+  "attachmentFolderPath": "attachments",
+  "tabSize": 4,
+  "vimMode": false,
+  "alwaysUpdateLinks": true
 }

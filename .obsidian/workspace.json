@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - WLC 9800.md",
+                "file": "0 - Notes/nftables.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - WLC 9800"
+              "title": "nftables"
             }
           }
         ]
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - WLC 9800.md",
+                "file": "0 - Notes/nftables.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": "Dow"
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - WLC 9800"
+              "title": "Outline of nftables"
             }
           },
           {
@@ -200,7 +200,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 306.5
+    "width": 306.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -220,14 +221,14 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "990bebc9dd0f9174",
   "lastOpenFiles": [
+    "0 - Notes/App-ID™.md",
+    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
-    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/nftables.md",
-    "0 - Notes/App-ID™.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Untitled.md",
     "attachments/wireguard-network-namespaces 1.png",

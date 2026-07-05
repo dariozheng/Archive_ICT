@@ -2,5 +2,7 @@
   "cssTheme": "Minimal",
   "enabledCssSnippets": [
     "headers"
-  ]
+  ],
+  "translucency": false,
+  "baseFontSizeAction": true
 }
