@@ -242,17 +242,17 @@ Match statements test packet fields. They come from three main sources: `meta` (
 
 Metadata (`meta`, the keyword is often optional):
 
-|Selector|Matches|
-|---|---|
-|`iif` / `oif`|input / output interface by index (fast, but the interface must exist when the rule loads — for interfaces that come and go, like `ppp0` or `wg0`, use the name form)|
-|`iifname` / `oifname`|interface by name, with wildcards like `eth*`|
-|`meta nfproto`|IP version (`ipv4` / `ipv6`), useful in [[#inet (dual-stack)|
-|`meta l4proto`|layer-4 protocol, IP-version-agnostic|
-|`meta mark`|the packet's firewall mark|
-|`meta length`|total packet size in bytes|
-|`meta pkttype`|link-layer class: `host`, `broadcast`, `multicast` — useful for dropping broadcast/multicast noise|
-|`meta hour` / `meta day`|wall-clock time of day and day of week, for time-windowed rules|
-|`meta skuid` / `meta skgid`|owning socket's user / group (output only)|
+| Selector                    | Matches                                                                                                                                                               |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `iif` / `oif`               | input / output interface by index (fast, but the interface must exist when the rule loads — for interfaces that come and go, like `ppp0` or `wg0`, use the name form) |
+| `iifname` / `oifname`       | interface by name, with wildcards like `eth*`                                                                                                                         |
+| `meta nfproto`              | IP version (`ipv4` / `ipv6`), useful in [[#inet (dual-stack)\|inet]]                                                                                                  |
+| `meta l4proto`              | layer-4 protocol, IP-version-agnostic                                                                                                                                 |
+| `meta mark`                 | the packet's firewall mark                                                                                                                                            |
+| `meta length`               | total packet size in bytes                                                                                                                                            |
+| `meta pkttype`              | link-layer class: `host`, `broadcast`, `multicast` — useful for dropping broadcast/multicast noise                                                                    |
+| `meta hour` / `meta day`    | wall-clock time of day and day of week, for time-windowed rules                                                                                                       |
+| `meta skuid` / `meta skgid` | owning socket's user / group (output only)                                                                                                                            |
 
 Header fields:
 
@@ -297,16 +297,16 @@ nft add rule inet filter prerouting fib saddr . iif oif missing drop
 
 Verdict statements decide what happens to the packet. The terminal ones map to [[Netfilter#Kernel Verdicts|kernel verdicts]]; the rest steer evaluation.
 
-|Verdict|Terminal?|Effect|
-|---|---|---|
-|`accept`|yes (this chain)|let the packet pass this chain (other chains on the hook still run)|
-|`drop`|yes|discard silently, no reply|
-|`reject`|yes|discard and send an error (ICMP / TCP RST)|
-|`queue`|yes|hand the packet to userspace via [[Netfilter#NFQUEUE]]|
-|`continue`|no|keep evaluating the next rule|
-|`return`|no|leave the current chain — back to the caller from a [[#Regular Chains|
-|`jump <chain>`|no|enter a chain; `return` comes back here|
-|`goto <chain>`|no|enter a chain; does not return — the caller's context is replaced|
+| Verdict        | Terminal?        | Effect                                                                                 |
+| -------------- | ---------------- | -------------------------------------------------------------------------------------- |
+| `accept`       | yes (this chain) | let the packet pass this chain (other chains on the hook still run)                    |
+| `drop`         | yes              | discard silently, no reply                                                             |
+| `reject`       | yes              | discard and send an error (ICMP / TCP RST)                                             |
+| `queue`        | yes              | hand the packet to userspace via [[Netfilter#NFQUEUE]]                                 |
+| `continue`     | no               | keep evaluating the next rule                                                          |
+| `return`       | no               | leave the current chain — back to the caller from a [[#Regular Chains\|regular chain]] |
+| `jump <chain>` | no               | enter a chain; `return` comes back here                                                |
+| `goto <chain>` | no               | enter a chain; does not return — the caller's context is replaced                      |
 
 > [!note] reject is technically separate 
 > The strict verdict statements are `accept`, `drop`, `queue`, `continue`, `return`, `jump` and `goto`. `reject` is a separate terminating statement that drops the packet and additionally sends an error reply, so it behaves like a verdict in practice. It is only valid in the input, forward and output hooks (where a reply can sensibly be generated). The reply type is selectable with `reject with` — `reject with tcp reset` sends a TCP RST, and `reject with icmpx type admin-prohibited` sends a family-independent ICMP/ICMPv6 error.
@@ -661,7 +661,8 @@ table inet filter {
 }
 ```
 
-> [!note] Match ICMPv6 with `meta l4proto`, not `ip6 nexthdr` `ip6 nexthdr icmpv6` reads only the first next-header field, so an ICMPv6 packet carrying any extension header slips past the rule — and with a drop policy, silently breaks neighbor discovery. `meta l4proto ipv6-icmp` matches the actual transport protocol regardless of extension headers.
+> [!note] Match ICMPv6 with `meta l4proto`, not `ip6 nexthdr` 
+> `ip6 nexthdr icmpv6` reads only the first next-header field, so an ICMPv6 packet carrying any extension header slips past the rule — and with a drop policy, silently breaks neighbor discovery. `meta l4proto ipv6-icmp` matches the actual transport protocol regardless of extension headers.
 
 ## NAT Gateway
 
