@@ -1,7 +1,7 @@
 {
   "collapse-filter": false,
-  "search": "-path:Notes/Glossaries",
-  "showTags": true,
+  "search": "-path:Notes/Glossaries -path:\"3 - Templates/Bases\"",
+  "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
   "showOrphans": true,
@@ -32,6 +32,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.5293829439591446,
-  "close": true
+  "scale": 1.05153713224934,
+  "close": false
 }
