@@ -249,7 +249,7 @@ La selezione <strong>Central Web Auth</strong> <strong>marca l'ACL come redirect
 
 ![[Pasted image 20260701123009.png]]
 
-Il comportamento della redirect ACL sul 9800: le entry permit indicano il traffico da intercettare e re-dirigere, le entry deny il traffico che attraversa senza redirect, e tutto ciò che non matcha nulla resta bloccato dallo stato WEBAUTH_REQD della sessione finché la CWA non si conclude. Questa è la struttura canonica, da confrontare con quella reale (`show ip access-lists GUEST_REDIRECT`):
+Il comportamento della redirect ACL sul 9800: le entry permit indicano il traffico da intercettare e re-dirigere, le entry deny il traffico che attraversa senza redirect, e tutto ciò che non matcha nulla resta bloccato dallo stato <strong>WEBAUTH_REQD</strong> della sessione finché la CWA non si conclude. Questa è la struttura canonica, da confrontare con quella reale (`show ip access-lists GUEST_REDIRECT`):
 
 ```
 ip access-list extended GUEST_REDIRECT
@@ -325,12 +325,12 @@ Per il funzionamento con ISE sono importanti tre impostazioni:
 
 Oltre a nome e stato del profilo, il tab General contiene le quattro spunte che definiscono il modello di traffico della WLAN, cioè cosa resta centrale sul WLC e cosa scende sull'AP:
 
-|Impostazione|Cosa controlla|Valore atteso qui|
-|---|---|---|
-|Central Switching|Se il traffico dati viaggia nel CAPWAP fino al WLC o esce in locale dall'AP|Disattivo|
-|Central Authentication|Se 802.1X e MAB sono gestiti dal WLC (RADIUS client verso ISE) o dall'AP|Attivo|
-|Central DHCP|Se il DHCP dei client transita dal WLC|Disattivo|
-|Central Association|Se l'associazione dei client è gestita centralmente|Disattivo|
+| Impostazione           | Cosa controlla                                                              | Valore atteso qui |
+| ---------------------- | --------------------------------------------------------------------------- | ----------------- |
+| Central Switching      | Se il traffico dati viaggia nel CAPWAP fino al WLC o esce in locale dall'AP | Disattivo         |
+| Central Authentication | Se 802.1X e MAB sono gestiti dal WLC (RADIUS client verso ISE) o dall'AP    | Attivo            |
+| Central DHCP           | Se il DHCP dei client transita dal WLC                                      | Disattivo         |
+| Central Association    | Se l'associazione dei client è gestita centralmente                         | Disattivo         |
 
 La combinazione in tabella è quella canonica del FlexConnect local switching con CWA: l'autenticazione resta centrale perché è il WLC a parlare con ISE e a ricevere le [[#CoA]], mentre dati, DHCP e associazione restano sull'AP. 
 Se Central Authentication fosse disattivo, 802.1X e MAB passerebbero alla local authentication del [[#Flex Profile]] e il flusso guest descritto in [[#PBA-Guest]] non funzionerebbe così com'è. 
@@ -418,20 +418,58 @@ Lo stato corrente si legge con `show ap tag summary`, che mostra per ogni AP i t
 
 ## PBA-guests
 
+Su WLAN profile creare la SSID:
+
 ![[Pasted image 20260706102724.png]]
+
+WLAN profile security inserire MAC Filtering vedi [[#PBA-Guest|Link]]. 
 
 ![[Pasted image 20260706102735.png]]
 
+Su Policy Profile vedi [[#General|Link]].
+
 ![[Pasted image 20260706102801.png]]
+
+Su Policy Profile Access Policies vedere [[#Access Policies|Link]].
 
 ![[Pasted image 20260706102814.png]]
 
+Su Policy Profile Advanced vedere [[#Advanced|Link]].
+
 ![[Pasted image 20260706102828.png]]
 
+Configurare la Redirect ACL per la CWA, [[#Flex Profile|link]]. 
+
 ![[Pasted image 20260706102857.png]]
+
+Nelle Flex Profile deve essere dichiarato la VLAN che deve essere usato. 
 
 ![[Pasted image 20260706102918.png]]
 
 ![[Pasted image 20260706103009.png]]
 
-![[Pasted image 20260706103943.png]]
+La configurazione della dns-guest server e come vengono impostati i forwarders.
+
+![[Pasted image 20260706114203.png]]
+
+ ![[Pasted image 20260706114254.png]]
+ 
+Firepower policy dagli dns-guest verso i suoi forwarders.
+
+![[Pasted image 20260706105737.png]]
+
+Firepower policy dagli dns-guest verso i siti remoti.
+
+![[Pasted image 20260706105752.png]]
+
+Panorama rule per gli guests.
+
+![[Pasted image 20260706110217.png]]
+
+Panorama rule per gli dns-guest verso i suoi forwarders.
+
+![[Pasted image 20260706110301.png]]
+
+![[Pasted image 20260706114448.png]]
+
+![[Pasted image 20260706114505.png]]

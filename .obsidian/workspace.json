@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/nftables.md",
+                "file": "0 - Notes/PBA - WLC 9800.md",
                 "followCursor": false,
                 "showSearch": true,
-                "searchQuery": "Dow"
+                "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of nftables"
+              "title": "Outline of PBA - WLC 9800"
             }
           },
           {
@@ -195,8 +195,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -222,25 +221,26 @@
   },
   "active": "990bebc9dd0f9174",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260706114505.png",
+    "attachments/Pasted image 20260706114448.png",
+    "attachments/Pasted image 20260706114254.png",
+    "attachments/Pasted image 20260706114203.png",
+    "attachments/Pasted image 20260706110301.png",
+    "attachments/Pasted image 20260706110217.png",
+    "attachments/Pasted image 20260706105752.png",
+    "attachments/Pasted image 20260706105737.png",
+    "0 - Notes/link.md",
+    "0 - Notes/PBA - WLC 9800.md",
     "attachments/Pasted image 20260706103943.png",
     "attachments/Pasted image 20260706103009.png",
     "attachments/Pasted image 20260706102918.png",
-    "attachments/Pasted image 20260706102857.png",
-    "attachments/Pasted image 20260706102828.png",
-    "attachments/Pasted image 20260706102814.png",
-    "attachments/Pasted image 20260706102801.png",
-    "attachments/Pasted image 20260706102735.png",
-    "attachments/Pasted image 20260706102724.png",
     "0 - Notes/nftables.md",
     "0 - Notes/App-ID™.md",
-    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Untitled.md",
-    "attachments/wireguard-network-namespaces 1.png",
-    "attachments/wireguard-cryptokey-routing.png",
     "0 - Notes/Untitled 1.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
@@ -259,7 +259,6 @@
     "0 - Notes/netfile.md",
     "2 - Categories/Topics/Security/NAC.md",
     "Homepage.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Topic/Security/VPN.base",
