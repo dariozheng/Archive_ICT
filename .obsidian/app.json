@@ -4,5 +4,6 @@
   "attachmentFolderPath": "attachments",
   "tabSize": 4,
   "vimMode": false,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "readableLineLength": true
 }

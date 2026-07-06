@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "FasGlobe",
+      "LiLock",
       "SiPaloaltonetworks",
-      "SiWireguard",
-      "SiWindows",
-      "SiLinux",
-      "FasGlobe"
+      "FasUserSecret",
+      "LiUserLock"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],

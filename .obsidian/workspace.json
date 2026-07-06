@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/nftables.md",
-                "mode": "preview",
+                "file": "0 - Notes/PBA - WLC 9800.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "nftables"
+              "title": "PBA - WLC 9800"
             }
           }
         ]
@@ -200,8 +200,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 306.5,
-    "collapsed": true
+    "width": 306.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -223,20 +222,25 @@
   },
   "active": "990bebc9dd0f9174",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260706103009.png",
+    "attachments/Pasted image 20260706102918.png",
+    "attachments/Pasted image 20260706102857.png",
+    "attachments/Pasted image 20260706102828.png",
+    "attachments/Pasted image 20260706102814.png",
+    "attachments/Pasted image 20260706102801.png",
+    "attachments/Pasted image 20260706102735.png",
+    "attachments/Pasted image 20260706102724.png",
+    "0 - Notes/nftables.md",
     "0 - Notes/App-ID™.md",
     "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/nftables.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Untitled.md",
     "attachments/wireguard-network-namespaces 1.png",
     "attachments/wireguard-cryptokey-routing.png",
     "attachments/wireguard-network-namespaces.png",
-    "attachments/wireguard-full-tunnel-routing.png",
-    "attachments/wireguard-cryptokey-routing 1.png",
-    "attachments/wireguard-full-tunnel-routing 1.png",
     "0 - Notes/Untitled 1.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
@@ -253,14 +257,9 @@
     "0 - Notes/IP Spoofing.md",
     "Untitled",
     "0 - Notes/netfile.md",
-    "attachments/netfilter-packet-flow.png",
-    "attachments/Pasted image 20260703170017.png",
-    "attachments/Pasted image 20260703164940.png",
-    "attachments/Pasted image 20260703164926.png",
     "2 - Categories/Topics/Security/NAC.md",
     "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
-    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Topic/Security/VPN.base",

@@ -416,4 +416,21 @@ Lo stato corrente si legge con `show ap tag summary`, che mostra per ogni AP i t
 
 > [!warning] Cambiare i tag di un AP non è un'operazione trasparente: alla riassegnazione (in particolare del site tag) l'AP riavvia il CAPWAP e i client vengono disconnessi per qualche istante. Con `ap tag persistency enable` i tag vengono salvati sull'AP e sopravvivono ai rejoin.
 
-## WLAN GUEST
+## PBA-guests
+
+![[Pasted image 20260706102724.png]]
+
+![[Pasted image 20260706102735.png]]
+
+![[Pasted image 20260706102801.png]]
+
+![[Pasted image 20260706102814.png]]
+
+![[Pasted image 20260706102828.png]]
+
+![[Pasted image 20260706102857.png]]
+
+![[Pasted image 20260706102918.png]]
+
+![[Pasted image 20260706103009.png]]
+
