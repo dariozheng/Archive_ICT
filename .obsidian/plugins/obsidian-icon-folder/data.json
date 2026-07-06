@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiBitcoin",
       "FasGlobe",
       "LiLock",
       "SiPaloaltonetworks",
-      "FasUserSecret",
-      "LiUserLock"
+      "FasUserSecret"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -272,5 +272,9 @@
   "0 - Notes/PBA - WLC 9800.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md": {
+    "iconName": "SiBitcoin",
+    "iconColor": null
   }
 }
