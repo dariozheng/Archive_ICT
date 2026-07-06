@@ -434,3 +434,4 @@ Lo stato corrente si legge con `show ap tag summary`, che mostra per ogni AP i t
 
 ![[Pasted image 20260706103009.png]]
 
+![[Pasted image 20260706103943.png]]
