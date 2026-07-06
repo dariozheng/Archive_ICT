@@ -7,7 +7,7 @@ tags:
   - claude
   - cisco
 icon: SiCisco
-iconColor:
+iconColor: "#1BA0D7"
 ---
 Cisco Digital Network Architecture (Cisco DNA) is Cisco's intent-based networking architecture for the enterprise campus, branch, and WAN. It is a framework, not a single product: a software-driven approach that treats the network as one programmable system expressing business intent, rather than as a collection of independently configured devices. The controller, the fabric, the policy model, and the analytics that appear as concrete products are the implementation of this architecture — most visibly the controller, whose configuration is documented separately in [[Cisco DNA Center]]. This note covers the concepts behind the architecture.
 

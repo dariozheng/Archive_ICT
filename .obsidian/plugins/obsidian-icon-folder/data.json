@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiCisco",
       "SiBitcoin",
       "FasGlobe",
       "LiLock",
-      "SiPaloaltonetworks",
-      "FasUserSecret"
+      "SiPaloaltonetworks"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -263,11 +263,7 @@
   },
   "0 - Notes/Cisco DNA Center.md": {
     "iconName": "SiCisco",
-    "iconColor": null
-  },
-  "0 - Notes/Cisco DNA.md": {
-    "iconName": "SiCisco",
-    "iconColor": null
+    "iconColor": "#1BA0D7"
   },
   "0 - Notes/PBA - WLC 9800.md": {
     "iconName": "SiCisco",
@@ -275,6 +271,14 @@
   },
   "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md": {
     "iconName": "SiBitcoin",
-    "iconColor": null
+    "iconColor": "#F38423"
+  },
+  "0 - Notes/Cisco Digital Network Architecture.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/PBA - Cisco Catalyst Center.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
   }
 }

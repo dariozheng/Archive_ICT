@@ -7,9 +7,9 @@ tags:
   - claude
   - cisco
 icon: SiCisco
-iconColor:
+iconColor: "#1BA0D7"
 ---
-Cisco DNA Center, rebranded Cisco Catalyst Center in 2023, is an intent-based network controller and central management platform for Cisco enterprise campus, branch, and WAN networks. It replaces per-device CLI management with a single point of administration that automates the full lifecycle of Catalyst switches, routers, and wireless: onboarding, configuration, software image control, policy enforcement, and health monitoring. The administrator expresses intent in the GUI or through the northbound API, and the controller translates that intent into device configuration and pushes it consistently across the network.
+Cisco DNA Center, is an intent-based network controller and central management platform for Cisco enterprise campus, branch, and WAN networks. It replaces per-device CLI management with a single point of administration that automates the full lifecycle of Catalyst switches, routers, and wireless: onboarding, configuration, software image control, policy enforcement, and health monitoring. The administrator expresses intent in the GUI or through the northbound API, and the controller translates that intent into device configuration and pushes it consistently across the network.
 
 > [!info] Two names, one product 
 > The platform was renamed from Cisco DNA Center to Cisco Catalyst Center in 2023. Both names refer to the same product. Older appliances, community posts, and most existing documentation still say "DNA Center", while current Cisco software, support pages, and image downloads use "Catalyst Center". The software-defined architecture (Cisco Digital Network Architecture, or Cisco DNA) is the framework; the controller is its on-premises implementation. That architecture, and the intent-based networking concepts behind it, are covered in [[Cisco Digital Network Architecture]]. This note uses the names interchangeably.
@@ -45,7 +45,8 @@ _Redundancy is achieved by clustering within a site, and by a separate disaster-
 
 A single appliance is a valid deployment, but production environments commonly run a three-node cluster. The three nodes share state and present a single virtual IP; a node failure is tolerated without losing the managed state.
 
-> [!warning] Three-node clusters need an odd quorum High availability is built around a three-node cluster precisely so that a surviving majority can maintain quorum. A two-node arrangement does not provide the same protection — losing one node of two breaks quorum. Plan for three nodes if you need the database to survive a node failure.
+> [!warning] Three-node clusters need an odd quorum 
+> High availability is built around a three-node cluster precisely so that a surviving majority can maintain quorum. A two-node arrangement does not provide the same protection — losing one node of two breaks quorum. Plan for three nodes if you need the database to survive a node failure.
 
 In-site clustering is distinct from disaster recovery between locations. For site-level resilience, Catalyst Center supports a disaster-recovery deployment built from a main site, a recovery site, and a lightweight witness site that arbitrates which side is active, so the managed state survives the loss of an entire location. Network interface controller (NIC) bonding is supported on second- and later-generation appliances to provide link redundancy toward the management network, using LACP in active mode with a fast rate on the connected switch ports.
 
