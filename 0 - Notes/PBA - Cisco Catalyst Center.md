@@ -98,7 +98,7 @@ Vengono memorizzati più set di credenziali e uno per ciascun tipo viene marcato
 > [!important] Le credenziali definite qui devono corrispondere al dispositivo
 > [[#Discovery|Discovery]] e provisioning usano entrambe queste credenziali. Se SNMP è errato, il dispositivo viene raccolto solo parzialmente; se CLI o NETCONF sono errati, il dispositivo non può essere gestito completamente. Un dispositivo ha quindi bisogno di una baseline funzionante di SSH, SNMP e, per la telemetria, NETCONF prima che il controller possa gestirlo. Questo è anche ciò che la [[#Controllabilità dei dispositivi|device controllability]] può stabilire automaticamente.
 
-#### Impostazioni di rete e server
+#### Network and server settings
 
 ![[Pasted image 20260707151342.png]]
 
@@ -347,7 +347,7 @@ _Dove la CLI del template si sovrappone alla configurazione intent-based del con
 
 ![[Pasted image 20260707171428.png]]
 
-Parte della configurazione è gestita da Catalyst Center tramite i suoi flussi intent-based (le funzionalità GUI per [[#Network settings|impostazioni di rete]], wireless, [[#Policy|policy]] e [[#Fabric SD-Access|SD-Access]]) e parte viene scritta come CLI grezza in un template. Quando un template invia un comando che anche il controller gestisce per intento, i due possono competere, e il risultato dipende dall'ordine di push. Il controllo dei design conflict dell'editor segnala questi comandi affinché possano essere rimossi dal template e lasciati al provisioning intent-based, che è la divisione del lavoro consigliata.
+Parte della configurazione è gestita da Catalyst Center tramite i suoi flussi intent-based (le funzionalità GUI per [[#Network settings|impostazioni di rete]], wireless, [[#Policy|policy]] e SD-Access) e parte viene scritta come CLI grezza in un template. Quando un template invia un comando che anche il controller gestisce per intento, i due possono competere, e il risultato dipende dall'ordine di push. Il controllo dei design conflict dell'editor segnala questi comandi affinché possano essere rimossi dal template e lasciati al provisioning intent-based, che è la divisione del lavoro consigliata.
 
 > [!warning] Non mettere in template ciò che il controller provisiona per intento
 > Reinviare da template configurazione gestita per intento invita configuration drift e sovrascritture imprevedibili. Usa i template per ciò che l'intent non copre, e lascia il resto ai flussi integrati.
@@ -428,7 +428,7 @@ _QoS end-to-end guidata dall'identità applicativa._
 
 ![[Pasted image 20260707173750.png]]
 
-Application policy consente di classificare applicazioni in gruppi, marcare ciascuna come business-relevant, default o business-irrelevant, e associarla a un profilo di queuing. Il controller renderizza quindi la configurazione QoS di marking e queuing corrispondente (usando il modello di classi del [[#Service provider profiles|profilo SP]] sui link WAN) e la invia ai dispositivi nello scope.
+Application policy consente di classificare applicazioni in gruppi, marcare ciascuna come business-relevant, default o business-irrelevant, e associarla a un profilo di queuing. Il controller renderizza quindi la configurazione QoS di marking e queuing corrispondente (usando il modello di classi del profilo SP sui link WAN) e la invia ai dispositivi nello scope.
 
 ### IP & URL Based Access Control
 
@@ -543,7 +543,7 @@ Il dominio Platform (`Platform` nella GUI) espone Catalyst Center per automazion
 
 _L'interfaccia REST northbound per automatizzare il controller._
 
-L'Intent API è una REST API northbound che rispecchia il modello di intento della GUI: discovery, inventory, siti, template, provisioning e policy possono tutti essere guidati programmaticamente. Le chiamate sono autenticate con un token e delimitate dal ruolo [[#Utenti e controllo di accesso basato sui ruoli|RBAC]] del chiamante, quindi l'accesso API rispetta lo stesso modello di permessi della GUI. Accanto a essa, API di integrazione westbound collegano sistemi esterni come [[#IT service management|ITSM]] e [[#Gestione degli indirizzi IP|IPAM]], e un SDK southbound multivendor con device pack consente al controller di gestire dispositivi di terze parti selezionati.
+L'Intent API è una REST API northbound che rispecchia il modello di intento della GUI: discovery, inventory, siti, template, provisioning e policy possono tutti essere guidati programmaticamente. Le chiamate sono autenticate con un token e delimitate dal ruolo [[#Utenti e controllo di accesso basato sui ruoli|RBAC]] del chiamante, quindi l'accesso API rispetta lo stesso modello di permessi della GUI. Accanto a essa, API di integrazione westbound collegano sistemi esterni come ITSM e [[#Gestione degli indirizzi IP|IPAM]], e un SDK southbound multivendor con device pack consente al controller di gestire dispositivi di terze parti selezionati.
 
 ### Bundle e impostazioni di integrazione
 
@@ -567,4 +567,4 @@ _Cosa serve per gestire dispositivi e sbloccare livelli funzionali._
 
 ![[Pasted image 20260707175038.png]]
 
-Catalyst Center è la console di gestione; il diritto di usarne le funzionalità è portato da licenze subscription per dispositivo. Storicamente questi erano i tier Cisco DNA Essentials, Advantage e Premier, ora allineati sotto il modello di subscription Cisco Networking che ha accompagnato il rebrand Catalyst. I tier più alti sbloccano le capability più avanzate: per esempio, [[#Fabric SD-Access|SD-Access]] e [[#Assurance|Assurance]] completa richiedono licenze di livello Advantage. Le licenze sono gestite tramite Cisco Smart Licensing contro uno Smart Account in Cisco Smart Software Manager, e il controller riporta la compliance rispetto agli entitlement che vede.
+Catalyst Center è la console di gestione; il diritto di usarne le funzionalità è portato da licenze subscription per dispositivo. Storicamente questi erano i tier Cisco DNA Essentials, Advantage e Premier, ora allineati sotto il modello di subscription Cisco Networking che ha accompagnato il rebrand Catalyst. I tier più alti sbloccano le capability più avanzate: per esempio, SD-Access e [[#Assurance|Assurance]] completa richiedono licenze di livello Advantage. Le licenze sono gestite tramite Cisco Smart Licensing contro uno Smart Account in Cisco Smart Software Manager, e il controller riporta la compliance rispetto agli entitlement che vede.
