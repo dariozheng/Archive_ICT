@@ -28,7 +28,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/PBA - Cisco Catalyst Center.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -253,7 +253,7 @@
                   "type": "markdown",
                   "state": {
                     "file": "0 - Notes/PBA - Cisco Catalyst Center.md",
-                    "mode": "source",
+                    "mode": "preview",
                     "source": false
                   },
                   "icon": "lucide-file",
@@ -273,20 +273,21 @@
       }
     ]
   },
-  "active": "719d795d6f6740e8",
+  "active": "981816ed9d1fa0e4",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260707175038.png",
     "0 - Notes/Cisco DNA Center.md",
     "0 - Notes/PBA - Cisco Catalyst Center.md",
-    "attachments/Pasted image 20260707171428.png",
-    "attachments/Pasted image 20260707164750.png",
-    "attachments/Pasted image 20260707164527.png",
-    "attachments/Pasted image 20260707164429.png",
-    "attachments/Pasted image 20260707163826.png",
-    "attachments/Pasted image 20260707163738.png",
-    "attachments/Pasted image 20260707163657.png",
-    "attachments/Pasted image 20260707162146.png",
-    "attachments/Pasted image 20260707162104.png",
-    "attachments/Pasted image 20260707162046.png",
+    "attachments/Pasted image 20260707174954.png",
+    "attachments/Pasted image 20260707174945.png",
+    "attachments/Pasted image 20260707174858.png",
+    "attachments/Pasted image 20260707174648.png",
+    "attachments/Pasted image 20260707174626.png",
+    "attachments/Pasted image 20260707174602.png",
+    "attachments/Pasted image 20260707174145.png",
+    "attachments/Pasted image 20260707174059.png",
+    "attachments/Pasted image 20260707173939.png",
+    "attachments/Pasted image 20260707173847.png",
     "0 - Notes/Untitled.md",
     "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/PBA - Guest Network.md",

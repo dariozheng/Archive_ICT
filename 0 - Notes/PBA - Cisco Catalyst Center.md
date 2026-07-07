@@ -397,7 +397,7 @@ PnP avvia un dispositivo nuovo di fabbrica senza sessione console manuale, ed è
 
 _Come un dispositivo factory trova il controller e si configura._
 
-Un dispositivo factory-default con connettività di rete individua il server PnP (Catalyst Center) tramite uno di diversi meccanismi: opzione DHCP 43, record DNS per `pnpserver`, oppure reindirizzamento cloud tramite il servizio Cisco PnP Connect associato allo Smart Account. Una volta raggiunto il controller, richiede la propria configurazione.
+Un dispositivo factory-default con connettività di rete individua il server PnP (Catalyst Center) tramite uno di diversi meccanismi: <strong>opzione DHCP 43</strong>, record DNS per `pnpserver`, oppure reindirizzamento cloud tramite il servizio Cisco PnP Connect associato allo Smart Account. Una volta raggiunto il controller, richiede la propria configurazione.
 
 ### Claim dei dispositivi
 
@@ -415,20 +415,26 @@ Il dominio Policy (`Policy` nella GUI) è il livello di intento per controllo di
 
 _Segmentazione per gruppo di sicurezza invece che per indirizzo IP._
 
+![[Pasted image 20260707173804.png]]
+
 Group-Based Access Control (GBAC) è il front end di Catalyst Center per Cisco TrustSec. Gli endpoint ricevono uno Scalable Group Tag (SGT) all'autenticazione, e una matrice di policy group-based definisce quali gruppi sorgente possano raggiungere quali gruppi destinazione, indipendentemente dall'indirizzamento IP. Catalyst Center crea gli SGT e la matrice di policy e li sincronizza verso [[#Cisco ISE e pxGrid|ISE]]; ISE assegna l'SGT a ciascun endpoint in fase di autorizzazione e distribuisce le Security Group ACL (SGACL) corrispondenti ai dispositivi di rete, che eseguono l'enforcement reale.
 
 > [!important] ISE è un prerequisito per la policy group-based
 > Group-Based Access Control è disponibile solo quando [[#Cisco ISE e pxGrid|Cisco ISE]] è integrato come server di autenticazione e policy. All'installazione o all'upgrade, il controller verifica la presenza di un ISE connesso e di versione compatibile; se è assente, la piattaforma si installa ma la policy group-based resta disabilitata. I dati SGT e policy esistenti vengono importati tramite una migrazione una tantum dei dati di policy da ISE.
 
-### Policy applicativa
+### Application QoS
 
 _QoS end-to-end guidata dall'identità applicativa._
 
-Application policy consente di classificare applicazioni in gruppi, marcare ciascuna come business-relevant, default o business-irrelevant, e associarla a un profilo di queuing. Il controller renderizza quindi la configurazione QoS di marking e queuing corrispondente (usando il modello di classi del [[#Profili service provider|profilo SP]] sui link WAN) e la invia ai dispositivi nello scope.
+![[Pasted image 20260707173750.png]]
 
-### Controllo di accesso basato su IP
+Application policy consente di classificare applicazioni in gruppi, marcare ciascuna come business-relevant, default o business-irrelevant, e associarla a un profilo di queuing. Il controller renderizza quindi la configurazione QoS di marking e queuing corrispondente (usando il modello di classi del [[#Service provider profiles|profilo SP]] sui link WAN) e la invia ai dispositivi nello scope.
+
+### IP & URL Based Access Control
 
 _Controllo classico in stile ACL per ambienti non-SGT._
+
+![[Pasted image 20260707173735.png]]
 
 Dove non si usa segmentazione basata su SGT, le policy di access control basate su IP applicano regole permit e deny tra pool IP, offrendo un modello più tradizionale di access list gestito centralmente.
 
@@ -438,9 +444,11 @@ _Visibilità continua, guidata dalla telemetria, su salute della rete e dei clie
 
 Assurance (`Assurance` nella GUI) consuma la [[#Attivazione della telemetria|telemetria]] abilitata al provisioning per calcolare punteggi di salute ed esporre problemi. È principalmente un dominio di monitoraggio, ma ha dipendenze di configurazione reali, soprattutto il fatto che la telemetria sia attiva e, per i test sintetici, che sensori e test siano definiti.
 
-### Dashboard di salute
+### Health
 
 _Punteggi di salute aggregati su tutta la rete._
+
+![[Pasted image 20260707173847.png]]
 
 Assurance presenta dashboard di salute overall, network, client e application, ognuna delle quali aggrega metriche individuali in un punteggio e consente all'operatore di fare drill down da un sito fino a un singolo dispositivo o sessione client. Le viste per-entità Device 360, Client 360 e Application 360 raccolgono tutto ciò che è noto su un dispositivo, client o applicazione in un'unica timeline.
 
@@ -448,11 +456,17 @@ Assurance presenta dashboard di salute overall, network, client e application, o
 
 _Rilevamento automatico e analisi guidata della root cause._
 
+![[Pasted image 20260707173939.png]]
+
+![[Pasted image 20260707174059.png]]
+
 I problemi rilevati vengono aperti come issue e prioritizzati per impatto. Il Machine Reasoning Engine offre flussi guidati o automatici di root-cause analysis per pattern di guasto comuni, riducendo la correlazione manuale che un ingegnere dovrebbe altrimenti fare a mano.
 
-### Sensori e test sintetici
+### Sensors and synthetic tests
 
 _Sondare attivamente la rete dal punto di vista del client._
+
+![[Pasted image 20260707174145.png]]
 
 Oltre alla telemetria raccolta passivamente, sensori dedicati o access point che agiscono da sensori eseguono test sintetici: associazione, autenticazione contro [[#Cisco ISE e pxGrid|ISE]], DHCP, DNS e raggiungibilità applicativa, così che l'esperienza client sia misurata proattivamente e non solo dopo un reclamo utente. I test, i loro SSID target e la loro schedulazione sono configurati in Assurance. Per troubleshooting wireless più profondo, Intelligent Capture raccoglie dati packet e RF on-demand o schedulati direttamente da access point e client.
 
@@ -460,7 +474,7 @@ Oltre alla telemetria raccolta passivamente, sensori dedicati o access point che
 
 _Collegare Catalyst Center all'ecosistema circostante._
 
-Le integrazioni sono configurate in `System > Settings` e nei [[#Bundle e impostazioni di integrazione|bundle di integrazione]]. Di gran lunga la più importante è ISE.
+Le integrazioni sono configurate in `System > Settings` e nei [[#Bundle e impostazioni di integrazione|bundle di integrazione]]. 
 
 ### Cisco ISE e pxGrid
 
@@ -477,45 +491,6 @@ _Sincronizzare lo spazio di indirizzamento con un IPAM esterno._
 
 Un IP Address Manager esterno (come Infoblox o BlueCat) può essere integrato in modo che i [[#Pool di indirizzi IP|pool di indirizzi]] usati per l'automazione siano originati dall'IPAM autorevole dell'organizzazione e riconciliati con esso, invece di essere mantenuti due volte.
 
-### IT service management
-
-_Collegare cambi di rete e incident al service desk._
-
-L'integrazione ITSM (più comunemente ServiceNow) collega issue di Assurance e cambi di provisioning al processo di service management, così che gli incident possano essere aperti automaticamente e le modifiche di configurazione possano passare attraverso il change control.
-
-### Altre integrazioni
-
-_Security analytics, WAN e collaboration._
-
-Altre integrazioni includono Cisco Secure Network Analytics (Stealthwatch) per telemetria di sicurezza basata sui flussi, Catalyst SD-WAN (vManage) per orchestrazione WAN accanto al campus, e Webex per correlazione dell'esperienza client. Sono abilitate tramite i relativi bundle di integrazione secondo necessità.
-
-## Fabric SD-Access
-
-_Un'architettura overlay opzionale per segmentazione policy-based e indipendente dalla posizione._
-
-SD-Access è una capability importante ma opzionale, non un requisito di base; una distribuzione può gestire un campus tradizionale tramite [[#Design|Design]] e [[#Provisioning|provisioning]] senza mai costruire una fabric. Dove viene usata, Catalyst Center automatizza la costruzione di una rete overlay sopra un underlay routed.
-
-### Underlay e overlay
-
-_Il trasporto sotto la fabric e la rete virtuale sopra di esso._
-
-L'underlay è una rete IP routed (costruita manualmente o da [[#LAN Automation|LAN Automation]], che usa IS-IS). L'overlay trasporta il traffico utente ed è costruito su tre piani: un control plane LISP per posizione e risoluzione degli endpoint, un data plane VXLAN che incapsula il traffico utente attraverso l'underlay, e un policy plane Cisco TrustSec che trasporta gli [[#Group-Based Access Control|SGT]] per la segmentazione. Siti fabric separati sono uniti da un transit: un transit basato su IP attraverso una rete routed tradizionale, oppure un transit SD-Access che preserva informazioni di rete virtuale e SGT end-to-end tra siti.
-
-### Ruoli fabric
-
-_Le funzioni svolte dai dispositivi dentro una fabric._
-
-- Control plane node: il map server e map resolver LISP che traccia dove si trova ogni endpoint.
-- Border node: il gateway tra la fabric e il mondo esterno (altre fabric, data center, Internet).
-- Edge node: l'access layer a cui si connettono gli endpoint e dove vengono registrati nella fabric.
-- Fabric WLC e AP in fabric-mode estendono lo stesso modello al wireless.
-
-### Reti virtuali e onboarding degli host
-
-_Mappare pool di indirizzi e gruppi in reti virtuali segmentate._
-
-Le reti virtuali (VN) sono le VRF della fabric e forniscono macro-segmentazione. L'host onboarding associa un [[#Pool di indirizzi IP|pool IP]] a una VN, assegna [[#Group-Based Access Control|SGT]] per la micro-segmentazione al suo interno e seleziona il template di autenticazione porta (closed, open o low-impact) che governa come gli endpoint vengono ammessi. Ogni edge node condivide lo stesso distributed anycast gateway per un dato pool, quindi il default gateway di un endpoint è identico ovunque si connetta e il roaming non richiede rinumerazione.
-
 ## Amministrazione di sistema
 
 _Gestire il controller stesso: accesso, protezione dei dati e software._
@@ -526,17 +501,23 @@ Le impostazioni di sistema (`System` nella GUI) governano la piattaforma invece 
 
 _Controllare chi può fare cosa dentro Catalyst Center._
 
+![[Pasted image 20260707174602.png]]
+
 L'accesso è governato dal role-based access control (RBAC). I ruoli integrati includono SUPER-ADMIN (controllo completo), NETWORK-ADMIN e OBSERVER (sola lettura), e ruoli custom possono delimitare l'accesso ad aree funzionali specifiche. Il ruolo posseduto da un utente è esattamente ciò che l'integrazione di [[#Autenticazione esterna|autenticazione esterna]] restituisce per i login remoti.
 
 ### Autenticazione esterna
 
 _Delegare il login GUI a un server AAA esterno._
 
+![[Pasted image 20260707174626.png]]
+
 La GUI di Catalyst Center può autenticare gli amministratori contro un server RADIUS o TACACS+ esterno come [[#Cisco ISE e pxGrid|Cisco ISE]]. Il server restituisce il ruolo Catalyst Center dell'utente in un `cisco-av-pair` contenente `ROLE=<role-name>` (per esempio `ROLE=SUPER-ADMIN-ROLE`), che il controller mappa al corrispondente [[#Utenti e controllo di accesso basato sui ruoli|ruolo RBAC]]. Un account locale di fallback dovrebbe sempre essere mantenuto, così che la perdita del server AAA non blocchi fuori gli amministratori.
 
 ### Backup e restore
 
 _Proteggere il database e la configurazione del controller._
+
+![[Pasted image 20260707174648.png]]
 
 I backup vengono scritti su un server esterno (comunemente NFS) e possono essere schedulati. Poiché il controller conserva lo stato desiderato dell'intera rete, un backup corrente è operativamente critico: un restore ricostruisce il modello gestito, non solo l'appliance.
 
@@ -568,16 +549,22 @@ L'Intent API è una REST API northbound che rispecchia il modello di intento del
 
 _Abilitare i pacchetti di integrazione e funzionalità del controller._
 
+![[Pasted image 20260707174858.png]]
+
 I bundle di integrazione (per esempio ITSM, oppure l'applicazione Rogue Management and aWIPS) sono abilitati e configurati qui. Abilitare un bundle espone le sue impostazioni specifiche e, dove rilevante, i relativi endpoint API.
 
 ### Eventi e notifiche
 
 _Inviare eventi del controller verso altri sistemi._
 
+![[Pasted image 20260707174954.png]]
+
 Catalyst Center può pubblicare eventi, dalle issue di Assurance alle notifiche di sistema, verso consumatori esterni tramite webhook, email, syslog o SNMP, guidato da un catalogo eventi che enumera ciò a cui ci si può sottoscrivere. È così che il controller alimenta dashboard, chat-ops e sistemi di ticketing quasi in tempo reale. Un motore di reporting separato produce report schedulati e on-demand, come riepiloghi di inventory, compliance, client ed executive, in formati come PDF e CSV.
 
 ## Licensing
 
 _Cosa serve per gestire dispositivi e sbloccare livelli funzionali._
+
+![[Pasted image 20260707175038.png]]
 
 Catalyst Center è la console di gestione; il diritto di usarne le funzionalità è portato da licenze subscription per dispositivo. Storicamente questi erano i tier Cisco DNA Essentials, Advantage e Premier, ora allineati sotto il modello di subscription Cisco Networking che ha accompagnato il rebrand Catalyst. I tier più alti sbloccano le capability più avanzate: per esempio, [[#Fabric SD-Access|SD-Access]] e [[#Assurance|Assurance]] completa richiedono licenze di livello Advantage. Le licenze sono gestite tramite Cisco Smart Licensing contro uno Smart Account in Cisco Smart Software Manager, e il controller riporta la compliance rispetto agli entitlement che vede.

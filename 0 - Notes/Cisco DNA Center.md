@@ -601,11 +601,15 @@ The Intent API is a northbound REST API that mirrors the GUI's intent model: dis
 
 _Toggling the controller's integration and feature packages._
 
+![[Pasted image 20260707174858.png]]
+
 Integration bundles (for example ITSM, or the Rogue Management and aWIPS application) are enabled and configured here. Enabling a bundle exposes its specific settings and, where relevant, its API endpoints.
 
 ### Events and notifications
 
 _Pushing controller events outward to other systems._
+
+![[Pasted image 20260707174945.png]]
 
 Catalyst Center can publish events — from Assurance issues to system notifications — to external consumers over webhooks, email, syslog, or SNMP, driven by an event catalogue that enumerates what can be subscribed to. This is how the controller feeds dashboards, chat-ops, and ticketing systems in near real time. A separate reporting engine produces scheduled and on-demand reports — inventory, compliance, client, and executive summaries — in formats such as PDF and CSV.
 
