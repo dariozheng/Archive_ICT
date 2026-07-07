@@ -13,26 +13,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Cisco DNA Center.md",
+                "file": "0 - Notes/PBA - WLC 9800.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cisco DNA Center"
-            }
-          },
-          {
-            "id": "2ccc732fd904865b",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "title": "PBA - WLC 9800"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -115,12 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "0 - Notes/PBA - WLC 9800.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of PBA - WLC 9800"
             }
           },
           {
@@ -205,8 +195,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -230,20 +219,67 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "2ccc732fd904865b",
+  "floating": {
+    "id": "ea5a44ea8f2e26de",
+    "type": "floating",
+    "children": [
+      {
+        "id": "4a66831c45bbebaa",
+        "type": "window",
+        "children": [
+          {
+            "id": "861045f493bf2580",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "ebfe340b01f83617",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "0 - Notes/PBA - Cisco Catalyst Center.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "PBA - Cisco Catalyst Center"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 521,
+        "y": -1134,
+        "width": 965.9730834960938,
+        "height": 836.3585205078125,
+        "maximize": false,
+        "zoom": 1.5
+      }
+    ]
+  },
+  "active": "990bebc9dd0f9174",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260707114519.png",
     "0 - Notes/PBA - Cisco Catalyst Center.md",
-    "0 - Notes/Cisco DNA Center.md",
-    "0 - Notes/nftables.md",
     "0 - Notes/Cisco Digital Network Architecture.md",
-    "0 - Notes/PBA - WLC 9800.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "0 - Notes/Cisco DNA Center.md",
     "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
+    "0 - Notes/PBA - WLC 9800.md",
+    "0 - Notes/nftables.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/WireGuard.md",
+    "Homepage.md",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "README.md",
+    "3 - Templates/Bases/Linux.base",
+    "0 - Notes/App-ID™.md",
+    "0 - Notes/Untitled.md",
+    "3 - Templates/Notes/Codes/ChangeHeaders.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
-    "0 - Notes/netfilter.md",
-    "0 - Notes/App-ID™.md",
     "attachments/Pasted image 20260706114505.png",
     "attachments/Pasted image 20260706114448.png",
     "attachments/Pasted image 20260706114254.png",
@@ -255,21 +291,14 @@
     "0 - Notes/link.md",
     "attachments/Pasted image 20260706103943.png",
     "attachments/Pasted image 20260706103009.png",
-    "0 - Notes/WireGuard.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Untitled 1.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/iptables.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/WLC 9800.md",
-    "0 - Notes/tab.md",
     "Untitled.canvas",
-    "0 - Notes/IP Spoofing.md",
     "Untitled",
-    "0 - Notes/netfile.md",
-    "2 - Categories/Topics/Security/NAC.md",
-    "Homepage.md",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
     "3 - Templates/Bases/Topic/Security/Firewall.base",
     "3 - Templates/Bases/Topic/Security/VPN.base",
@@ -277,7 +306,6 @@
     "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
     "3 - Templates/Bases/Topic/Networking/WLAN.base",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
-    "1 - Excalidraw/Scripts",
-    "3 - Templates/Bases/Networking.base"
+    "1 - Excalidraw/Scripts"
   ]
 }

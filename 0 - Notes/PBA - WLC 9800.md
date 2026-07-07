@@ -466,6 +466,10 @@ Panorama rule per gli guests.
 
 ![[Pasted image 20260706110217.png]]
 
+La rule permette la navigazione solo alle Applications nella lista NAVIGAZIONE_INTERNET_GUESTS.
+
+![[Pasted image 20260707114519.png]]
+
 Panorama rule per gli dns-guest verso i suoi forwarders.
 
 ![[Pasted image 20260706110301.png]]
