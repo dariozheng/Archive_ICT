@@ -218,7 +218,7 @@ _Collocare un dispositivo nella gerarchia perché erediti le impostazioni corret
 
 ![[Pasted image 20260707163826.png]]
 
-Prima del provisioning, un dispositivo viene assegnato a un sito nella [[#Network Hierarchy|gerarchia]]. Questa assegnazione determina quali [[#Impostazioni di rete e server|impostazioni server]], credenziali e [[#Network profiles|profilo di rete]] (e quindi quali template) si applicano.
+Prima del provisioning, un dispositivo viene assegnato a un sito nella [[#Network Hierarchy|gerarchia]]. Questa assegnazione determina quali [[#Network and server settings|impostazioni server]], credenziali e [[#Network profiles|profilo di rete]] (e quindi quali template) si applicano.
 
 ### The provisioning workflow
 
@@ -345,7 +345,9 @@ radius-server vsa send accounting
 
 _Dove la CLI del template si sovrappone alla configurazione intent-based del controller._
 
-Parte della configurazione è gestita da Catalyst Center tramite i suoi flussi intent-based (le funzionalità GUI per [[#Impostazioni di rete|impostazioni di rete]], wireless, [[#Policy|policy]] e [[#Fabric SD-Access|SD-Access]]) e parte viene scritta come CLI grezza in un template. Quando un template invia un comando che anche il controller gestisce per intento, i due possono competere, e il risultato dipende dall'ordine di push. Il controllo dei design conflict dell'editor segnala questi comandi affinché possano essere rimossi dal template e lasciati al provisioning intent-based, che è la divisione del lavoro consigliata.
+![[Pasted image 20260707171428.png]]
+
+Parte della configurazione è gestita da Catalyst Center tramite i suoi flussi intent-based (le funzionalità GUI per [[#Network settings|impostazioni di rete]], wireless, [[#Policy|policy]] e [[#Fabric SD-Access|SD-Access]]) e parte viene scritta come CLI grezza in un template. Quando un template invia un comando che anche il controller gestisce per intento, i due possono competere, e il risultato dipende dall'ordine di push. Il controllo dei design conflict dell'editor segnala questi comandi affinché possano essere rimossi dal template e lasciati al provisioning intent-based, che è la divisione del lavoro consigliata.
 
 > [!warning] Non mettere in template ciò che il controller provisiona per intento
 > Reinviare da template configurazione gestita per intento invita configuration drift e sovrascritture imprevedibili. Usa i template per ciò che l'intent non copre, e lascia il resto ai flussi integrati.
@@ -366,19 +368,24 @@ SWIM applica una versione software coerente in tutto il parco dispositivi, sosti
 
 _L'immagine corretta dichiarata per una famiglia e un ruolo di dispositivo._
 
-Un'immagine marcata come golden nel [[#Repository immagini|repository immagini]] è lo stato software desiderato per una data famiglia di dispositivi, [[#Ruoli dei dispositivi|ruolo]] e sito. Qualsiasi dispositivo gestito che non esegua la propria immagine golden viene segnalato in [[# Configuration drift and compliance|compliance]].
+Un'immagine marcata come golden nel [[#Repository immagini|repository immagini]] è lo stato software desiderato per una data famiglia di dispositivi, [[#Device roles|ruolo]] e sito. Qualsiasi dispositivo gestito che non esegua la propria immagine golden viene segnalato in [[# Configuration drift and compliance|compliance]].
 
 ### Distribuzione e attivazione
 
 _La procedura di upgrade a due fasi e a basso rischio._
 
-Gli upgrade sono divisi deliberatamente: la distribuzione copia l'immagine nella flash del dispositivo senza interrompere il traffico, e l'attivazione ricarica il dispositivo sulla nuova immagine (con In-Service Software Upgrade sulle piattaforme che lo supportano). Separare le due fasi significa che lo staging può essere fatto durante il giorno e il reload impattante schedulato in una finestra di manutenzione.
+Gli upgrade sono divisi deliberatamente: 
+- La distribuzione copia l'immagine nella flash del dispositivo senza interrompere il traffico.
+- L'attivazione ricarica il dispositivo sulla nuova immagine (con In-Service Software Upgrade sulle piattaforme che lo supportano).
+Separare le due fasi significa che lo staging può essere fatto durante il giorno e il reload impattante schedulato in una finestra di manutenzione.
 
-### Prontezza all'upgrade
+### Upgrade readiness
 
 _Controlli pre-flight prima di un'attivazione._
 
-Prima dell'attivazione, il controller esegue controlli preliminari di readiness: spazio flash, configuration register, compatibilità hardware e versione, così che un upgrade venga tentato solo sui dispositivi che possono riuscire. I controlli pre e post-upgrade possono essere confrontati per confermare che il dispositivo sia tornato in stato sano.
+Prima dell'attivazione, il controller esegue controlli preliminari di readiness: spazio flash, configuration register, compatibilità hardware e versione, così che un upgrade venga tentato solo sui dispositivi che possono riuscire. 
+
+I controlli pre e post-upgrade possono essere confrontati per confermare che il dispositivo sia tornato in stato sano.
 
 ## Plug and Play
 
@@ -402,7 +409,7 @@ I dispositivi possono essere pre-registrati per numero di serie (planned) oppure
 
 _Costruzione zero-touch di un underlay routed-access IS-IS a partire da un dispositivo seed._
 
-LAN Automation è l'alternativa alla creazione manuale di una nuova rete routed. Da un dispositivo seed già gestito scopre gli switch factory-default cablati sotto di esso, li porta alla loro [[#Immagini golden|immagine golden]] tramite [[#Software Image Management|SWIM]] e invia una configurazione Layer 3 routed-access best-practice a tutto il livello senza CLI per dispositivo. È usata più spesso per costruire l'underlay su cui gira una [[#Fabric SD-Access|fabric SD-Access]], ma la rete routed che produce è ugualmente valida per un disegno routed-access tradizionale. Riutilizza il meccanismo di onboarding [[#Plug and Play|Plug and Play]], quindi valgono gli stessi prerequisiti: una [[#Gerarchia di rete|gerarchia di rete]], [[#Impostazioni di rete e server|server di rete]] globali e [[#Credenziali dei dispositivi|credenziali dei dispositivi]], un [[#Pool di indirizzi IP|pool IP]] riservato e almeno il dispositivo seed già nell'[[#Inventory|inventory]].
+LAN Automation è l'alternativa alla creazione manuale di una nuova rete routed. Da un dispositivo seed già gestito scopre gli switch factory-default cablati sotto di esso, li porta alla loro [[#Immagini golden|immagine golden]] tramite [[#Software Image Management|SWIM]] e invia una configurazione Layer 3 routed-access best-practice a tutto il livello senza CLI per dispositivo. È usata più spesso per costruire l'underlay su cui gira una [[#Fabric SD-Access|fabric SD-Access]], ma la rete routed che produce è ugualmente valida per un disegno routed-access tradizionale. Riutilizza il meccanismo di onboarding [[#Plug and Play|Plug and Play]], quindi valgono gli stessi prerequisiti: una [[#Gerarchia di rete|gerarchia di rete]], [[#Network and server settings|server di rete]] globali e [[#Credenziali dei dispositivi|credenziali dei dispositivi]], un [[#Pool di indirizzi IP|pool IP]] riservato e almeno il dispositivo seed già nell'[[#Inventory|inventory]].
 
 ### Dispositivi seed e discovery
 
