@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - Guest Network.md",
-                "mode": "source",
+                "file": "0 - Notes/PBA - WLC 9800.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - Guest Network"
+              "title": "PBA - WLC 9800"
             }
           }
         ],
@@ -119,13 +119,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - Guest Network.md",
+                "file": "0 - Notes/PBA - WLC 9800.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - Guest Network"
+              "title": "Outline of PBA - WLC 9800"
             }
           },
           {
@@ -276,15 +276,15 @@
   },
   "active": "e48a5e5e6df6c8f9",
   "lastOpenFiles": [
-    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/PBA - Guest Network.md",
+    "0 - Notes/PBA - WLC 9800.md",
+    "0 - Notes/PBA - Cisco Catalyst Center.md",
     "0 - Notes/OSI Model.md",
     "attachments/Pasted image 20260707121651.png",
     "attachments/Pasted image 20260707121148.png",
     "attachments/Pasted image 20260707121037.png",
     "0 - Notes/Cisco DNA Center.md",
     "attachments/Pasted image 20260707114519.png",
-    "0 - Notes/PBA - Cisco Catalyst Center.md",
     "0 - Notes/Cisco Digital Network Architecture.md",
     "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
     "0 - Notes/nftables.md",
