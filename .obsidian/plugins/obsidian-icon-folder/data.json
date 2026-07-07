@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "FasNetworkWired",
       "SiCisco",
       "SiBitcoin",
       "FasGlobe",
-      "LiLock",
-      "SiPaloaltonetworks"
+      "LiLock"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -280,5 +280,9 @@
   "0 - Notes/PBA - Cisco Catalyst Center.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
+  },
+  "0 - Notes/PBA - Guest Network.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
   }
 }
