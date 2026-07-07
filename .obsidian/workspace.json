@@ -8,31 +8,31 @@
         "type": "tabs",
         "children": [
           {
-            "id": "2e6ae725b7382cfc",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/PBA - WLC 9800.md",
-                "mode": "preview",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "PBA - WLC 9800"
-            }
-          },
-          {
             "id": "e48a5e5e6df6c8f9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - WLC 9800.md",
-                "mode": "preview",
+                "file": "0 - Notes/Cisco DNA Center.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - WLC 9800"
+              "title": "Cisco DNA Center"
+            }
+          },
+          {
+            "id": "981816ed9d1fa0e4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/PBA - Cisco Catalyst Center.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "PBA - Cisco Catalyst Center"
             }
           }
         ],
@@ -119,13 +119,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - WLC 9800.md",
+                "file": "0 - Notes/PBA - Cisco Catalyst Center.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PBA - WLC 9800"
+              "title": "Outline of PBA - Cisco Catalyst Center"
             }
           },
           {
@@ -210,8 +210,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -274,17 +273,24 @@
       }
     ]
   },
-  "active": "e48a5e5e6df6c8f9",
+  "active": "981816ed9d1fa0e4",
   "lastOpenFiles": [
-    "0 - Notes/PBA - Guest Network.md",
-    "0 - Notes/PBA - WLC 9800.md",
-    "0 - Notes/PBA - Cisco Catalyst Center.md",
-    "0 - Notes/OSI Model.md",
-    "attachments/Pasted image 20260707121651.png",
-    "attachments/Pasted image 20260707121148.png",
-    "attachments/Pasted image 20260707121037.png",
     "0 - Notes/Cisco DNA Center.md",
-    "attachments/Pasted image 20260707114519.png",
+    "0 - Notes/PBA - Cisco Catalyst Center.md",
+    "attachments/Pasted image 20260707164750.png",
+    "attachments/Pasted image 20260707164527.png",
+    "attachments/Pasted image 20260707164429.png",
+    "attachments/Pasted image 20260707163826.png",
+    "attachments/Pasted image 20260707163738.png",
+    "attachments/Pasted image 20260707163657.png",
+    "attachments/Pasted image 20260707162146.png",
+    "attachments/Pasted image 20260707162104.png",
+    "attachments/Pasted image 20260707162046.png",
+    "attachments/Pasted image 20260707161234.png",
+    "0 - Notes/Untitled.md",
+    "0 - Notes/PBA - WLC 9800.md",
+    "0 - Notes/PBA - Guest Network.md",
+    "0 - Notes/OSI Model.md",
     "0 - Notes/Cisco Digital Network Architecture.md",
     "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
     "0 - Notes/nftables.md",
@@ -300,19 +306,11 @@
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
-    "attachments/Pasted image 20260706114505.png",
-    "attachments/Pasted image 20260706114448.png",
-    "attachments/Pasted image 20260706114254.png",
-    "attachments/Pasted image 20260706114203.png",
-    "attachments/Pasted image 20260706110301.png",
-    "attachments/Pasted image 20260706110217.png",
     "0 - Notes/link.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Untitled 1.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/iptables.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "Untitled.canvas",
     "Untitled",
     "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",

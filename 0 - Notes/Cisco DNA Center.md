@@ -121,7 +121,7 @@ Multiple credential sets are stored and one of each type is marked as the site d
 - HTTPS read and write credentials for platforms that expose a programmatic interface.
 - NETCONF with a chosen port (commonly 830), required for model-driven [[#Telemetry activation|telemetry]] on supported IOS-XE platforms.
 
-> [!important] Credentials defined here must match the device
+> [!important] Credentials defined here must match the device 
 > [[#Discovery|Discovery]] and provisioning both use these credentials. If SNMP is wrong the device is only partially collected; if CLI or NETCONF is wrong the device cannot be fully managed. A device therefore needs a working baseline of SSH, SNMP, and (for telemetry) NETCONF before the controller can manage it — which is also what [[#Device controllability|device controllability]] can establish automatically.
 
 #### Network and server settings
