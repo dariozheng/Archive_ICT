@@ -405,40 +405,6 @@ _Autorizzare un dispositivo e assegnargli cosa deve diventare._
 
 I dispositivi possono essere pre-registrati per numero di serie (planned) oppure apparire come unclaimed quando chiamano casa. Fare claim di un dispositivo lo assegna a un sito, seleziona l'immagine software da caricare e applica il [[#Template Day-0 e Day-N|template di onboarding]] Day-0 dal progetto di onboarding. Il dispositivo quindi si provisiona senza intervento e finisce nell'[[#Inventory|inventory]] come dispositivo gestito, dopodiché si applica il normale [[#Provisioning|provisioning]].
 
-## LAN Automation
-
-_Costruzione zero-touch di un underlay routed-access IS-IS a partire da un dispositivo seed._
-
-LAN Automation è l'alternativa alla creazione manuale di una nuova rete routed. Da un dispositivo seed già gestito scopre gli switch factory-default cablati sotto di esso, li porta alla loro [[#Immagini golden|immagine golden]] tramite [[#Software Image Management|SWIM]] e invia una configurazione Layer 3 routed-access best-practice a tutto il livello senza CLI per dispositivo. È usata più spesso per costruire l'underlay su cui gira una [[#Fabric SD-Access|fabric SD-Access]], ma la rete routed che produce è ugualmente valida per un disegno routed-access tradizionale. Riutilizza il meccanismo di onboarding [[#Plug and Play|Plug and Play]], quindi valgono gli stessi prerequisiti: una [[#Gerarchia di rete|gerarchia di rete]], [[#Network and server settings|server di rete]] globali e [[#Credenziali dei dispositivi|credenziali dei dispositivi]], un [[#Pool di indirizzi IP|pool IP]] riservato e almeno il dispositivo seed già nell'[[#Inventory|inventory]].
-
-### Dispositivi seed e discovery
-
-_Come il controller raggiunge e onboarda i nuovi switch._
-
-Una sessione parte da un dispositivo seed (primario), cioè uno switch esistente e gestito al layer core o distribution, e facoltativamente da un peer seed così che gli switch scoperti possano essere dual-homed. Il controller configura uno scope DHCP temporaneo sul seed; gli switch Catalyst 9000 factory-default cablati a esso si avviano come agent PnP, ottengono un indirizzo e contattano il controller. La discovery si estende al massimo a due hop dal seed, quindi avviare il confine al layer core o distribution è ciò che consente a una run di raggiungere l'access layer. Dispositivi oltre due hop possono essere visti ma non automatizzati.
-
-### Cosa provisiona LAN Automation
-
-_La configurazione underlay scritta su ciascun dispositivo scoperto._
-
-Gli indirizzi provengono da un pool IP riservato di tipo LAN. Da esso, ogni dispositivo scoperto riceve un /31 univoco su ogni link point-to-point e un /32 per `Loopback0`, che diventa il router ID e l'indirizzo di management del dispositivo. Il controller imposta anche l'MTU di sistema, abilita IP routing, porta il dispositivo alla sua immagine golden e configura il protocollo di routing:
-
-- IS-IS è sempre l'IGP dell'underlay. È scelto perché le sue adiacenze si formano senza alcuna dipendenza IP, può fare peering su loopback e tratta allo stesso modo traffico IPv4, IPv6 e non-IP, tutte proprietà che rendono più robusta una costruzione automatizzata e ordinata.
-- Il multicast underlay è un attributo opzionale (necessario per flooding Layer 2 fabric e multicast nativo); quando è abilitato, i seed sono configurati come rendezvous point PIM.
-- Il summary del pool LAN può opzionalmente essere annunciato in un processo BGP preconfigurato sui seed, così il controller mantiene raggiungibilità verso i dispositivi scoperti senza route statiche.
-
-> [!note] Perché IS-IS invece di OSPF o EIGRP
-> IS-IS gira direttamente su Layer 2 e non richiede un indirizzo IP per formare un'adiacenza, quindi il controller può portare su i vicini prima che l'indirizzamento sia convergito. Questa proprietà, insieme al supporto dual-stack nativo e al peering su loopback, è il motivo per cui Cisco ha standardizzato l'underlay automatizzato su IS-IS.
-
-### Avvio e arresto di una sessione
-
-_Le due fasi e cosa succede realmente con Stop._
-
-Una run viene lanciata da `Provision > LAN Automation` selezionando il seed (e il peer), le interfacce seed da usare, il sito target e il pool IP; fino a cinque sessioni possono girare contemporaneamente su siti diversi. Start apre la sessione e onboarda i dispositivi man mano che appaiono: DHCP, immagine e configurazione base vengono applicati mentre la sessione resta aperta. Stop la finalizza: i link point-to-point tra seed e dispositivi scoperti vengono convertiti in link routed Layer 3, lo scope DHCP temporaneo e la configurazione VLAN 1 vengono rimossi, e il subpool DHCP viene restituito al pool LAN. I dispositivi appaiono poi nell'[[#Inventory|inventory]] come normali dispositivi gestiti, pronti per essere [[#Provisioning|provisionati]] e ricevere [[#Template|template]].
-
-> [!important] L'underlay non è finito finché non premi Stop
-> La conversione Layer 3 e la pulizia avvengono con Stop, non con Start. Una sessione lasciata aperta mantiene lo scope DHCP temporaneo del seed e i dispositivi scoperti su indirizzamento transitorio, quindi una run deve essere arrestata per raggiungere il suo stato finale e supportato.
-
 ## Policy
 
 _Definire chi e cosa può comunicare, e come viene trattato il traffico._
