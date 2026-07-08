@@ -11,10 +11,14 @@
             "id": "981816ed9d1fa0e4",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+                "mode": "preview",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "CCNP Enterprise Core (ENCOR 350-401) Study Plan"
             }
           }
         ]
@@ -100,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PRIVACY.md",
+                "file": "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of PRIVACY"
+              "title": "Outline of CCNP Enterprise Core (ENCOR 350-401) Study Plan"
             }
           },
           {
@@ -191,7 +195,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -215,15 +220,17 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "981816ed9d1fa0e4",
   "lastOpenFiles": [
-    "0 - Notes/GUIDE.md",
+    "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
+    "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
+    "0 - Notes/PBA - Cisco Catalyst Center.md",
+    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/PRIVACY.md",
+    "0 - Notes/GUIDE.md",
     "0 - Notes/README.md",
     "0 - Notes/nftables.md",
     "0 - Notes/PBA - Guest Network.md",
-    "0 - Notes/PBA - Cisco Catalyst Center.md",
-    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/Cisco DNA Center.md",
     "attachments/Pasted image 20260708101944.png",
     "attachments/Pasted image 20260708100912.png",
@@ -238,7 +245,6 @@
     "attachments/Pasted image 20260707174945.png",
     "attachments/Pasted image 20260707174858.png",
     "attachments/Pasted image 20260707174648.png",
-    "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/WireGuard.md",
     "Homepage.md",
@@ -250,7 +256,6 @@
     "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
     "0 - Notes/link.md",
     "0 - Notes/homelab-setup-.md",
     "0 - Notes/Untitled 1.md",

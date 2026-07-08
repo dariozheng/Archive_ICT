@@ -15,7 +15,8 @@ Sostituisce la gestione CLI per singolo dispositivo con un unico punto di ammini
 
 L'amministratore esprime l'intento nella GUI o tramite l'API northbound, e il controller traduce tale intento in configurazione dei dispositivi e lo distribuisce in modo coerente su tutta la rete.
 
-La piattaforma è organizzata intorno a quattro domini di configurazione: [[#Design|Design]], [[#Policy|Policy]], [[#Provisioning|Provisioning]] e [[#Assurance|Assurance]], appoggiati su un livello di [[#Piattaforma e API|piattaforma]] programmabile. Questi domini non sono indipendenti: ciascuno dipende dagli artefatti prodotti da quello precedente, e la sezione [[#Flusso di configurazione|flusso di configurazione]] sotto rende esplicito l'ordine di tali dipendenze.
+La piattaforma è organizzata intorno a quattro domini di configurazione: [[#Design|Design]], [[#Policy|Policy]], [[#Provisioning|Provisioning]] e [[#Assurance|Assurance]], appoggiati su un livello di [[#Piattaforma e API|piattaforma]] programmabile. 
+
 ## Accesso
 
 L'accesso per il portale GUI di DNA è https://pba-dna.publiacqua.it/ con le credenziali RADIUS.
@@ -24,7 +25,7 @@ L'accesso per il portale GUI di DNA è https://pba-dna.publiacqua.it/ con le cre
 
 _L'ordine in cui gli elementi devono essere costruiti, perché i domini successivi consumano ciò che quelli precedenti producono._
 
-La cosa più importante da interiorizzare su Catalyst Center è che la configurazione è sequenziale. Non puoi realmente [[#Provisioning|provisionare]] un dispositivo prima che sia nell'[[#Inventory|inventory]], e il provisioning produce qualcosa di utile solo se la gerarchia e le impostazioni di [[#Design|Design]] esistono già per il sito a cui il dispositivo appartiene. L'ordine consigliato è il seguente.
+La configurazione di DNA è sequenziale. Non puoi realmente [[#Provisioning|provisionare]] un dispositivo prima che sia nell'[[#Inventory|inventory]], e il provisioning produce qualcosa di utile solo se la gerarchia e le impostazioni di [[#Design|Design]] esistono già per il sito a cui il dispositivo appartiene. L'ordine consigliato è il seguente.
 
 ```text
                  ┌──────────────────────────────────────────────┐
