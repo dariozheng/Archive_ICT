@@ -275,7 +275,7 @@ Il Policy Tag mappa ogni WLAN Profile con il suo Policy Profile: la coppia stabi
 
 ##### WLAN Profiles
 
-I WLAN Profile configurano l'SSID e la sicurezza L2; ogni profilo ha un nome, un SSID e una WLAN ID.
+I WLAN Profile configurano l'SSID e la sicurezza L2; ogni profilo ha un nome, un SSID e una WLAN ID. Le WLAN profiles presenti sono PBA-Client per la SSID PBA che è la WLAN di default, PBA-Guest per SSID PBA-guests e la WLAN PBA-Helpdesk che è per la SSID nascosta creata per gli operatori di Helpdesk, la password si trova in Password Manager.
 
 ###### PBA-Client
 
@@ -380,11 +380,27 @@ Nei RF Profile si configurano i data rate, i canali (Dynamic Channel Assignment)
 
 In generale è qui che si interviene per banda su tre leve: i data rate (disattivare i rate legacy del 2.4 GHz come 1–11 Mb/s e alzare il primo rate mandatory riduce l'airtime sprecato), il DCA (limitare i canali utilizzabili e, sul 5 GHz, la larghezza di canale) e il TPC (fissare potenza minima e massima per contenere celle troppo grandi o troppo deboli). Finché non viene creato e assegnato un RF tag dedicato, gli AP restano sul default-rf-tag con i default-rf-profile per banda.
 
+#### AP Tag
+
+![[Pasted image 20260708100912.png]]
+
+Con AP Tag Filter è possibile customizzare serie di Tag per tipo di filtro a seconda della regex usato. 
+
+![[Pasted image 20260708100657.png]]
+
+##### AP Priming Profile
+
+![[Pasted image 20260708095931.png]]
+
+AP Priming configura gli WLC primari, secondari e terziari.
+
 ### Assegnazione dei Tag agli AP
+
+![[Pasted image 20260708101944.png]]
 
 ![[Pasted image 20260703170017.png]]
 
-I tag possono essere assegnati agli AP in tre modi: staticamente per singolo AP, tramite filtri con regex sul nome dell'AP, oppure lasciando i default tag (default-policy-tag, default-site-tag, default-rf-tag). 
+I tag possono essere assegnati agli AP in tre modi: staticamente per singolo AP, tramite [[#AP Tag|filtri con regex sul nome dell'AP]], oppure lasciando i default tag (default-policy-tag, default-site-tag, default-rf-tag). 
 
 I tre meccanismi in dettaglio, in ordine di precedenza:
 
