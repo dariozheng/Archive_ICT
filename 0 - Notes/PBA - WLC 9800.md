@@ -6,11 +6,9 @@ topic@networking:
 tags:
   - PBA
   - cisco
-  - tobecompleted
 icon: SiCisco
 iconColor: "#1BA0D7"
 ---
-(to add wlan guest architecture)
 Il Wireless LAN Controller (WLC) è il punto di controllo centrale della rete wireless: gli AP si registrano al controller tramite CAPWAP e ne ricevono la configurazione.
 
 ## Accesso
