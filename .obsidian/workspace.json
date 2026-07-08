@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+                "file": "0 - Notes/nftables.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CCNP Enterprise Core (ENCOR 350-401) Study Plan"
+              "title": "nftables"
             }
           }
         ]
@@ -104,13 +104,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+                "file": "0 - Notes/nftables.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of CCNP Enterprise Core (ENCOR 350-401) Study Plan"
+              "title": "Outline of nftables"
             }
           },
           {
@@ -222,14 +222,16 @@
   },
   "active": "981816ed9d1fa0e4",
   "lastOpenFiles": [
+    "0 - Notes/OSI Model.md",
+    "0 - Notes/nftables.md",
+    "0 - Notes/PBA - Cisco Catalyst Center.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
     "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
-    "0 - Notes/PBA - Cisco Catalyst Center.md",
     "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/PRIVACY.md",
     "0 - Notes/GUIDE.md",
     "0 - Notes/README.md",
-    "0 - Notes/nftables.md",
     "0 - Notes/PBA - Guest Network.md",
     "0 - Notes/Cisco DNA Center.md",
     "attachments/Pasted image 20260708101944.png",
@@ -238,7 +240,6 @@
     "attachments/Pasted image 20260708100349.png",
     "attachments/Pasted image 20260708095931.png",
     "0 - Notes/Cisco Digital Network Architecture.md",
-    "0 - Notes/OSI Model.md",
     "0 - Notes/Untitled.md",
     "attachments/Pasted image 20260707175038.png",
     "attachments/Pasted image 20260707174954.png",
@@ -253,7 +254,6 @@
     "3 - Templates/Bases/Linux.base",
     "0 - Notes/App-ID™.md",
     "3 - Templates/Notes/Codes/ChangeHeaders.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/link.md",

@@ -59,8 +59,6 @@ La configurazione di DNA è sequenziale. Non puoi realmente [[#Provisioning|prov
 
 ## Design
 
-_Tutto ciò che viene provisionato in seguito eredita da quanto definito qui._
-
 Il dominio Design (`Design` nella GUI) è dove l'intento globale e per-sito viene dichiarato una volta e poi riutilizzato. Nulla qui tocca direttamente un dispositivo; costruisce il modello che il [[#Provisioning|provisioning]] renderizzerà in seguito sull'hardware.
 
 ### Network Hierarchy
@@ -108,7 +106,7 @@ Vengono memorizzati più set di credenziali e uno per ciascun tipo viene marcato
 
 ![[Pasted image 20260707151423.png]]
 
-Questi valori vengono renderizzati nella configurazione dei dispositivi al momento del [[#Provisioning|provisioning]]. AAA è definito in due ruoli da non confondere: server per l'amministrazione dei dispositivi di rete (login al dispositivo, tipicamente TACACS+) e server per l'autenticazione di client ed endpoint (802.1X e MAB, tipicamente RADIUS verso [[#Cisco ISE e pxGrid|Cisco ISE]]). I server DHCP, DNS e NTP stabiliscono raggiungibilità e sincronizzazione temporale di base; le destinazioni syslog e trap SNMP.
+Questi valori vengono renderizzati nella configurazione dei dispositivi al momento del [[#Provisioning|provisioning]]. AAA è definito in due ruoli da non confondere: server per l'amministrazione dei dispositivi di rete (login al dispositivo, tipicamente TACACS+) e server per l'autenticazione di client ed endpoint (802.1X e MAB, tipicamente RADIUS verso [[#Cisco ISE e pxGrid|Cisco ISE]]). 
 
 #### Pool di indirizzi IP
 
@@ -454,7 +452,11 @@ _Segmentazione per gruppo di sicurezza invece che per indirizzo IP._
 
 ![[Pasted image 20260707173804.png]]
 
-Group-Based Access Control (GBAC) è il front end di Catalyst Center per Cisco TrustSec. Gli endpoint ricevono uno Scalable Group Tag (SGT) all'autenticazione, e una matrice di policy group-based definisce quali gruppi sorgente possano raggiungere quali gruppi destinazione, indipendentemente dall'indirizzamento IP. Catalyst Center crea gli SGT e la matrice di policy e li sincronizza verso [[#Cisco ISE e pxGrid|ISE]]; ISE assegna l'SGT a ciascun endpoint in fase di autorizzazione e distribuisce le Security Group ACL (SGACL) corrispondenti ai dispositivi di rete, che eseguono l'enforcement reale.
+Group-Based Access Control (GBAC) è il front end di Catalyst Center per Cisco TrustSec. 
+
+Gli endpoint ricevono uno Scalable Group Tag (SGT) all'autenticazione, e una matrice di policy group-based definisce quali gruppi sorgente possano raggiungere quali gruppi destinazione, indipendentemente dall'indirizzamento IP. 
+
+Catalyst Center crea gli SGT e la matrice di policy e li sincronizza verso [[#Cisco ISE e pxGrid|ISE]]; ISE assegna l'SGT a ciascun endpoint in fase di autorizzazione e distribuisce le Security Group ACL (SGACL) corrispondenti ai dispositivi di rete, che eseguono l'enforcement reale.
 
 > [!important] ISE è un prerequisito per la policy group-based
 > Group-Based Access Control è disponibile solo quando [[#Cisco ISE e pxGrid|Cisco ISE]] è integrato come server di autenticazione e policy. All'installazione o all'upgrade, il controller verifica la presenza di un ISE connesso e di versione compatibile; se è assente, la piattaforma si installa ma la policy group-based resta disabilitata. I dati SGT e policy esistenti vengono importati tramite una migrazione una tantum dei dati di policy da ISE.
@@ -554,7 +556,6 @@ _Le funzioni svolte dai dispositivi dentro una fabric._
 _Mappare pool di indirizzi e gruppi in reti virtuali segmentate._
 
 Le reti virtuali (VN) sono le VRF della fabric e forniscono macro-segmentazione. L'host onboarding associa un [[#Pool di indirizzi IP|pool IP]] a una VN, assegna [[#Group-Based Access Control|SGT]] per la micro-segmentazione al suo interno e seleziona il template di autenticazione porta (closed, open o low-impact) che governa come gli endpoint vengono ammessi. Ogni edge node condivide lo stesso distributed anycast gateway per un dato pool, quindi il default gateway di un endpoint è identico ovunque si connetta e il roaming non richiede rinumerazione.
-
 
 ## Amministrazione di sistema
 
