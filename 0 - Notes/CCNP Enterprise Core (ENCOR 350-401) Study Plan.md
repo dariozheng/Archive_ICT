@@ -2,7 +2,8 @@
 
 _An 18-to-20-week, phase-ordered plan for the ENCOR 350-401 v1.2 exam, with topic lists, labs, books, courses, white papers, design guides, and RFCs per phase._
 
-> [!important] This plan targets exam blueprint v1.2, which went live on 2026-03-19. The headline change: all wireless content was removed from ENCOR and moved to a new CCNP Wireless track with its own core exam (350-101 WLCOR). Domain 6 was renamed to "Automation and Artificial Intelligence", and Cisco product names were updated throughout (DNA Center is now Catalyst Center, vManage is now SD-WAN Manager, SD-WAN is now Catalyst SD-WAN). Most study material published before 2026 still assumes v1.1 and includes wireless chapters you can skip. Always cross-check against the official exam topics: https://learningnetwork.cisco.com/s/encor-exam-topics
+> [!important] This plan targets exam blueprint v1.2, which went live on 2026-03-19. 
+> The headline change: all wireless content was removed from ENCOR and moved to a new CCNP Wireless track with its own core exam (350-101 WLCOR). Domain 6 was renamed to "Automation and Artificial Intelligence", and Cisco product names were updated throughout (DNA Center is now Catalyst Center, vManage is now SD-WAN Manager, SD-WAN is now Catalyst SD-WAN). Most study material published before 2026 still assumes v1.1 and includes wireless chapters you can skip. Always cross-check against the official exam topics: https://learningnetwork.cisco.com/s/encor-exam-topics
 
 Quick navigation: [[#Exam facts (v1.2)|exam facts]] | [[#How to use this plan|method]] | [[#Phase 0 - Baseline and lab setup|setup]] | [[#The study sequence at a glance|sequence]] | [[#Master resource list|resources]] | [[#White papers and design guides|white papers]] | [[#Week-by-week schedule|schedule]] | [[#Exam logistics and final tips|logistics]]
 

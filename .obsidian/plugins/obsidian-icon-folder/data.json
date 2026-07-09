@@ -272,5 +272,9 @@
   "0 - Notes/PBA - Guest Network.md": {
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
+  },
+  "0 - Notes/IP Routing Configuration.md": {
+    "iconName": "SiCisco",
+    "iconColor": "#1BA0D7"
   }
 }
