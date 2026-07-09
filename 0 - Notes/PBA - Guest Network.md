@@ -7,6 +7,7 @@ tags:
   - PBA
 icon: FasNetworkWired
 iconColor: "#003791"
+last_update: 2026-07-09
 ---
 In questa documentazione ci sono varie configurazioni per la rete Guest di PBA. 
 # DNS-GUEST

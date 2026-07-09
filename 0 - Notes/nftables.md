@@ -3,13 +3,14 @@ categories:
   - "[[Linux]]"
   - "[[Security]]"
 topic@linux: "[[Linux General]]"
-topic@security:
 tags:
   - firewall
   - networking
   - claude
+  - kernel
 icon: SiLinux
 iconColor: "#000000"
+last_update: 2026-07-09
 ---
 nftables is the modern packet-filtering framework for Linux: a single command, `nft`, and one in-kernel engine, `nf_tables`, that together replace iptables, ip6tables, arptables and ebtables. It does not process packets itself —<mark style="background: #FFB8EBA6;"> it compiles your ruleset into the kernel</mark> and <mark style="background: #FFB86CA6;">programs [[Netfilter]], the framework that provides the hooks and subsystems the rules actually act on</mark>.
 

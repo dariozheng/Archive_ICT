@@ -16,6 +16,7 @@ tags:
   - PBA
 icon: SiCisco
 iconColor: "#1BA0D7"
+last_update: 2026-07-09
 ---
 Network Access Devices are the point of access for an endpoint and the main enforcement point of the policies decided by the [[PBA - NAC - ISE Server|ISE server]].
 

@@ -9,6 +9,7 @@
     "last": "date",
     "modified": "date",
     "creation": "datetime",
-    "section": "multitext"
+    "section": "multitext",
+    "last_update": "date"
   }
 }

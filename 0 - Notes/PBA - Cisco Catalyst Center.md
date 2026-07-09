@@ -8,6 +8,7 @@ tags:
   - PBA
 icon: SiCisco
 iconColor: "#1BA0D7"
+last_update: 2026-07-09
 ---
 Cisco DNA Center è un controller di rete intent-based e una piattaforma di gestione centrale per reti Cisco enterprise di campus, filiale e WAN. 
 

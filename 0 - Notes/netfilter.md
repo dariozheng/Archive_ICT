@@ -3,15 +3,15 @@ categories:
   - "[[Linux]]"
   - "[[Security]]"
 topic@linux: "[[Linux General]]"
-topic@security:
 tags:
   - networking
-  - documentation
   - firewall
   - framework
   - claude
+  - kernel
 icon: SiLinux
 iconColor: "#000000"
+last_update: 2026-07-09
 ---
 Netfilter is the <mark style="background: #FFB8EBA6;">packet-processing framework</mark> <mark style="background: #FF5582A6;">built into the Linux kernel</mark>. It exposes a set of fixed points — hooks — in the network stack where kernel code can register callbacks to inspect, modify, drop, queue or reroute packets. The subsystems most administrators care about ([[#Connection Tracking|connection tracking]], [[#Network Address Translation|NAT]], [[#Logging, Queueing and Accounting|logging and queueing]]) are all built on these hooks. You rarely program <strong>Netfilter</strong> directly; you drive it through a frontend, and the modern one is [[nftables]].
 

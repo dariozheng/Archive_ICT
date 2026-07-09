@@ -8,6 +8,7 @@ tags:
   - cisco
 icon: SiCisco
 iconColor: "#1BA0D7"
+last_update: 2026-07-09
 ---
 Il Wireless LAN Controller (WLC) è il punto di controllo centrale della rete wireless: gli AP si registrano al controller tramite CAPWAP e ne ricevono la configurazione.
 

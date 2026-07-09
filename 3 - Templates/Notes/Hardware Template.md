@@ -3,6 +3,7 @@ categories:
   - "[[Hardware]]"
 topic@hardware:
 tags:
-icon: 
-iconColor: 
+icon:
+iconColor:
+last_update:
 ---

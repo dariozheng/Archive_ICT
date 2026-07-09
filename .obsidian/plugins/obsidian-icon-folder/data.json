@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWindows",
+      "SiWireguard",
       "SiLinux",
       "FasNetworkWired",
-      "SiCisco",
-      "SiBitcoin",
-      "FasGlobe"
+      "SiCisco"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -236,10 +236,6 @@
   "1 - Excalidraw/PBA - NAC - Configuration Flow.md": {
     "iconName": "SiCisco",
     "iconColor": "#1BA0D7"
-  },
-  "0 - Notes/iptables.md": {
-    "iconName": "SiLinux",
-    "iconColor": "#000000"
   },
   "2 - Categories/Topics/Networking/WLAN.md": {
     "iconName": "LiWifi",
