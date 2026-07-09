@@ -4,24 +4,39 @@
     "type": "split",
     "children": [
       {
-        "id": "c0d9aefa9a060e94",
+        "id": "1b8aab6330c61327",
         "type": "tabs",
         "children": [
           {
-            "id": "981816ed9d1fa0e4",
+            "id": "b365d5660e386728",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CCNP ENARSI (300-410 v1.1) — Complete Study Plan"
+            }
+          },
+          {
+            "id": "0c9d766b7d86745c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/nftables.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "nftables"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -195,8 +210,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -220,19 +234,23 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "981816ed9d1fa0e4",
+  "active": "0c9d766b7d86745c",
   "lastOpenFiles": [
-    "0 - Notes/OSI Model.md",
+    "0 - Notes/Untitled.md",
     "0 - Notes/nftables.md",
-    "0 - Notes/PBA - Cisco Catalyst Center.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/App-ID™.md",
     "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
-    "0 - Notes/PBA - WLC 9800.md",
-    "0 - Notes/PRIVACY.md",
+    "0 - Notes/PBA - Cisco Catalyst Center.md",
     "0 - Notes/GUIDE.md",
-    "0 - Notes/README.md",
     "0 - Notes/PBA - Guest Network.md",
+    "0 - Notes/OSI Model.md",
+    "0 - Notes/PBA - WLC 9800.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "0 - Notes/PRIVACY.md",
+    "0 - Notes/README.md",
     "0 - Notes/Cisco DNA Center.md",
     "attachments/Pasted image 20260708101944.png",
     "attachments/Pasted image 20260708100912.png",
@@ -240,19 +258,15 @@
     "attachments/Pasted image 20260708100349.png",
     "attachments/Pasted image 20260708095931.png",
     "0 - Notes/Cisco Digital Network Architecture.md",
-    "0 - Notes/Untitled.md",
     "attachments/Pasted image 20260707175038.png",
     "attachments/Pasted image 20260707174954.png",
     "attachments/Pasted image 20260707174945.png",
     "attachments/Pasted image 20260707174858.png",
     "attachments/Pasted image 20260707174648.png",
-    "0 - Notes/netfilter.md",
-    "0 - Notes/WireGuard.md",
     "Homepage.md",
     "2 - Categories/Topics/Microsoft/Microsoft General.md",
     "README.md",
     "3 - Templates/Bases/Linux.base",
-    "0 - Notes/App-ID™.md",
     "3 - Templates/Notes/Codes/ChangeHeaders.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
