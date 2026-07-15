@@ -6,6 +6,7 @@ topic@networking:
 tags:
   - ccnp
   - networking
+  - claude
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-14
@@ -675,7 +676,8 @@ Two failure modes warrant attention:
 - Summarizing beyond the allocated range. A summary that spans addresses allocated elsewhere will blackhole them. Coverage must be verified, not merely alignment.
 - Summarizing across a discontiguity. If 10.20.18.0/24 belongs to another site, no single prefix covers only 16, 17 and 19.
 
-> [!note] Why summarization is worth designing for A summarized routing table is smaller, converges faster, and hides flapping links from the rest of the network. A link failure inside 10.20.16.0/22 does not withdraw the summary, so the rest of the topology never recomputes. This is only achievable if the underlying subnets were allocated in aligned, contiguous blocks in the first place — which is a design decision taken before the first address is assigned.
+> [!note] Why summarization is worth designing for 
+> A summarized routing table is smaller, converges faster, and hides flapping links from the rest of the network. A link failure inside 10.20.16.0/22 does not withdraw the summary, so the rest of the topology never recomputes. This is only achievable if the underlying subnets were allocated in aligned, contiguous blocks in the first place — which is a design decision taken before the first address is assigned.
 
 ---
 
@@ -714,12 +716,12 @@ Blocks should be allocated at intervals larger than current need, so that a subn
 
 Where possible, the address should be self-documenting, so that traffic may be classified from the address alone:
 
-|Convention|Example|
-|---|---|
-|Third octet mirrors the VLAN ID|VLAN 30 → 10.5.30.0/24|
-|A fixed sub-block for infrastructure|`.240/20` of every site|
-|Loopbacks always /32 from a single block|10.255.0.0/24|
-|Point-to-point links from a dedicated block|10.255.1.0/24, carved into /31s|
+| Convention                                  | Example                         |
+| ------------------------------------------- | ------------------------------- |
+| Third octet mirrors the VLAN ID             | VLAN 30 → 10.5.30.0/24          |
+| A fixed sub-block for infrastructure        | `.240/20` of every site         |
+| Loopbacks always /32 from a single block    | 10.255.0.0/24                   |
+| Point-to-point links from a dedicated block | 10.255.1.0/24, carved into /31s |
 
 This also makes ACLs, [[#Route Summarization|summaries]] and firewall rules shorter, because related subnets are naturally contiguous.
 
@@ -841,16 +843,18 @@ Each nibble of subnetting multiplies the subnet count by 16:
 
 ### Standard Allocation Sizes
 
-|Prefix|Typically assigned to|
-|---|---|
-|/32|An ISP, from its RIR|
-|/48|A site or enterprise — the standard end-site allocation|
-|/56|A residential or small-business customer|
-|/64|A single LAN segment or VLAN|
-|/127|A point-to-point router link (RFC 6164), the IPv6 analogue of a /31|
-|/128|A single host or loopback|
+| Prefix | Typically assigned to                                               |
+| ------ | ------------------------------------------------------------------- |
+| /32    | An ISP, from its RIR                                                |
+| /48    | A site or enterprise — the standard end-site allocation             |
+| /56    | A residential or small-business customer                            |
+| /64    | A single LAN segment or VLAN                                        |
+| /127   | A point-to-point router link (RFC 6164), the IPv6 analogue of a /31 |
+| /128   | A single host or loopback                                           |
+|        |                                                                     |
 
-> [!warning] Do not subnet longer than /64 on a LAN SLAAC requires a 64-bit interface identifier. A /80 or /112 on a host segment breaks stateless autoconfiguration and, on some stacks, breaks neighbour discovery behaviour that assumes a /64. The only accepted exceptions are point-to-point links (/127) and loopbacks (/128). No address-conservation argument supports a longer prefix: a /48 already contains 65,536 /64s.
+> [!warning] Do not subnet longer than /64 on a LAN 
+> SLAAC requires a 64-bit interface identifier. A /80 or /112 on a host segment breaks stateless autoconfiguration and, on some stacks, breaks neighbour discovery behaviour that assumes a /64. The only accepted exceptions are point-to-point links (/127) and loopbacks (/128). No address-conservation argument supports a longer prefix: a /48 already contains 65,536 /64s.
 
 ### Quick Hex Subnetting
 

@@ -30,7 +30,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Subnetting.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -240,8 +240,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -265,7 +264,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "1a73eaa79a9842d9",
   "lastOpenFiles": [
     "0 - Notes/IP2.md",
     "0 - Notes/Subnetting.md",
