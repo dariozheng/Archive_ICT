@@ -29,16 +29,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Routing.md",
+                "file": "0 - Notes/I2P.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "I2P"
+            }
+          },
+          {
+            "id": "1c1a58f87f87979a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "0 - Notes/Untitled.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Routing"
+              "title": "Untitled"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -121,13 +135,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Routing.md",
+                "file": "0 - Notes/Untitled.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Routing"
+              "title": "Outline of Untitled"
             }
           },
           {
@@ -212,8 +226,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -237,41 +250,44 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "1c1a58f87f87979a",
   "lastOpenFiles": [
-    "0 - Notes/Tor Project.md",
-    "0 - Notes/lantern.md",
     "0 - Notes/I2P.md",
-    "0 - Notes/Crawler.md",
-    "0 - Notes/Device-ID.md",
-    "0 - Notes/Backhaul.md",
-    "0 - Notes/Autonomous Digital Experience Management.md",
-    "0 - Notes/homelab-setup-.md",
-    "0 - Notes/Script To Remove Expired userCertificate.md",
-    "0 - Notes/Dynu DDNS.md",
-    "0 - Notes/UFW.md",
-    "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
+    "0 - Notes/Untitled.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/OSI Model.md",
+    "0 - Notes/Tor Project.md",
     "0 - Notes/Routing.md",
+    "0 - Notes/IPv6.md",
+    "3 - Templates/Notes/Codes/New Note.md",
+    "3 - Templates/Categories/Systems Template.md",
+    "3 - Templates/Categories/Security Template.md",
+    "3 - Templates/Categories/Privacy Template.md",
+    "3 - Templates/Categories/Networking Template.md",
+    "3 - Templates/Categories/Microsoft Template.md",
+    "3 - Templates/Categories/Linux Template.md",
+    "3 - Templates/Categories/Hardware Template.md",
+    "3 - Templates/Categories/Cloud Computing Template.md",
+    "3 - Templates/Categories",
+    "2 - Categories/Topics/Test/test test.md",
+    "3 - Templates/Notes/Codes/Delete Topic.md",
+    "3 - Templates/Notes/Codes/Delete Category.md",
+    "3 - Templates/Bases/Topics/Test/test test.base",
+    "2 - Categories/Test.md",
+    "2 - Categories/Topics/Test/Test General.md",
+    "2 - Categories/Topics/Microsoft/Windows Server.md",
     "2 - Categories/Topics/Privacy/Privacy General.md",
-    "3 - Templates/Bases/Privacy.base",
-    "3 - Templates/Bases/Topics/Privacy/Privacy General.base",
-    "3 - Templates/Notes/Privacy Template.md",
-    "3 - Templates/Bases/Linux.base",
-    "2 - Categories/Systems.md",
+    "3 - Templates/Notes/Codes/New Topic.md",
+    "3 - Templates/Bases/Topics/Test/Test General.base",
+    "3 - Templates/Notes/Test Template.md",
+    "3 - Templates/Bases/Test.base",
+    "3 - Templates/Bases/Topics/Test",
+    "2 - Categories/Topics/Test",
+    "3 - Templates/Notes/Codes/New Category.md",
     "2 - Categories/Privacy.md",
-    "3 - Templates/Notes/Networking Template.md",
-    "2 - Categories/Linux.md",
-    "2 - Categories/Microsoft.md",
-    "2 - Categories/Networking.md",
-    "2 - Categories/Security.md",
-    "0 - Notes/Network Scanning.md",
-    "3 - Templates/Bases/Topics/Privacy",
+    "3 - Templates/Bases/Cloud Computing.base",
+    "3 - Templates/Bases/Linux.base",
     "3 - Templates/Bases/Networking.base",
-    "2 - Categories/Topics/Networking/Networking General.md",
-    "2 - Categories/Topics/Privacy",
-    "3 - Templates/Bases/Topics/Networking/Networking General.base",
+    "3 - Templates/Bases/Security.base",
     "attachments/Pasted image 20260713141531.png",
     "attachments/Pasted image 20260713141008.png",
     "attachments/Pasted image 20260713140952.png",
@@ -282,9 +298,6 @@
     "attachments/Pasted image 20260708100912.png",
     "attachments/Pasted image 20260708100657.png",
     "attachments/Pasted image 20260708100349.png",
-    "Untitled.canvas",
-    "Untitled",
-    "3 - Templates/Bases/Topics/Networking/Cisco ISE.base",
-    "3 - Templates/Bases/Topics/Security/Firewall.base"
+    "Untitled.canvas"
   ]
 }
