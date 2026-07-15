@@ -43,12 +43,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Untitled.md",
+                "file": "2 - Categories/Privacy.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Untitled"
+              "title": "Privacy"
             }
           }
         ],
@@ -135,13 +135,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Untitled.md",
+                "file": "2 - Categories/Privacy.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Untitled"
+              "title": "Outline of Privacy"
             }
           },
           {
@@ -226,7 +226,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -252,8 +253,16 @@
   },
   "active": "1c1a58f87f87979a",
   "lastOpenFiles": [
-    "0 - Notes/I2P.md",
+    "2 - Categories/test.md",
+    "2 - Categories/Topics/test/test General.md",
+    "3 - Templates/Categories/test Template.md",
+    "3 - Templates/Bases/Topics/test/test General.base",
+    "3 - Templates/Bases/test.base",
+    "3 - Templates/Bases/Topics/test",
+    "2 - Categories/Topics/test",
+    "2 - Categories/Privacy.md",
     "0 - Notes/Untitled.md",
+    "0 - Notes/I2P.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/Tor Project.md",
     "0 - Notes/Routing.md",
@@ -276,18 +285,10 @@
     "2 - Categories/Topics/Test/Test General.md",
     "2 - Categories/Topics/Microsoft/Windows Server.md",
     "2 - Categories/Topics/Privacy/Privacy General.md",
-    "3 - Templates/Notes/Codes/New Topic.md",
     "3 - Templates/Bases/Topics/Test/Test General.base",
-    "3 - Templates/Notes/Test Template.md",
     "3 - Templates/Bases/Test.base",
     "3 - Templates/Bases/Topics/Test",
     "2 - Categories/Topics/Test",
-    "3 - Templates/Notes/Codes/New Category.md",
-    "2 - Categories/Privacy.md",
-    "3 - Templates/Bases/Cloud Computing.base",
-    "3 - Templates/Bases/Linux.base",
-    "3 - Templates/Bases/Networking.base",
-    "3 - Templates/Bases/Security.base",
     "attachments/Pasted image 20260713141531.png",
     "attachments/Pasted image 20260713141008.png",
     "attachments/Pasted image 20260713140952.png",
