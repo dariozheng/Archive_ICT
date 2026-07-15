@@ -1,4 +1,18 @@
-The Invisible Internet Project (I2P) is an anonymous overlay network: a message-oriented, packet-switched layer that runs on top of the ordinary Internet and hides who is talking to whom. It is fully distributed and self-organising — there are no central servers or directory authorities — and every participant is also a relay that carries traffic for others. Unlike a general-purpose proxy, I2P is designed first for anonymous services that live entirely inside the network (its own sites, chat, file sharing and mail), rather than for anonymising access to the ordinary web.
+---
+categories:
+  - "[[Privacy]]"
+topic@privacy: "[[Privacy General]]"
+tags:
+  - claude
+  - networking
+icon: FasNetworkWired
+iconColor: "#003791"
+last_update: 2026-07-15
+aliases:
+  - Invisible Internet Project
+  - I2P
+---
+The <strong>Invisible Internet Project</strong> (I2P) is an anonymous overlay network: a message-oriented, packet-switched layer that runs on top of the ordinary Internet and hides who is talking to whom. It is fully distributed and self-organising — there are no central servers or directory authorities — and every participant is also a relay that carries traffic for others. Unlike a general-purpose proxy, I2P is designed first for anonymous services that live entirely inside the network (its own sites, chat, file sharing and mail), rather than for anonymising access to the ordinary web.
 
 Communication is protected by [[#Garlic Routing|garlic routing]], a variant of onion routing, carried over short-lived one-way [[#Tunnels|tunnels]]. Peers locate one another through a distributed [[#Network Database|network database]] rather than a central index. The result is closer in spirit to a peer-to-peer mesh than to the client–relay model used by [[#Comparison with Tor|Tor]].
 

@@ -1,13 +1,16 @@
 ---
 categories:
   - "[[Networking]]"
-topic@networking:
+  - "[[Privacy]]"
+topic@privacy: "[[Privacy General]]"
 tags:
+  - claude
+  - networking
 icon: SiTorproject
 iconColor: "#4F2C5F"
-last_update:
+last_update: 2026-07-15
 ---
-Tor (originally an acronym for The Onion Router) is a free, open-source overlay network for anonymous communication. It routes TCP traffic through a worldwide volunteer network of [[#Relays|relays]], wrapping the traffic in multiple layers of encryption so that no single point in the path can link the source of a connection to its destination.
+<strong>Tor</strong> (originally an acronym for <strong>The Onion Router</strong>) is a free, open-source overlay network for anonymous communication. It routes TCP traffic through a worldwide volunteer network of [[#Relays|relays]], wrapping the traffic in multiple layers of encryption so that no single point in the path can link the source of a connection to its destination.
 
 Tor separates two things that are normally coupled on the Internet: who you are (your IP address) and what you are talking to (the destination). Each relay in a [[#Circuits|circuit]] only knows its immediate predecessor and successor — never the full path.
 
@@ -275,13 +278,13 @@ A separate local port (default `9051`) speaking a line-based text protocol throu
 
 ### What Tor Protects
 
-|Observer|What they see|What they don't|
-|---|---|---|
-|Local network / ISP|That you use Tor (unless on a [[#Bridges|bridge]]), timing and volume|
-|[[#Guard Relay|Guard]]|Your IP, encrypted cells|
-|[[#Middle Relay|Middle]]|Guard and exit identities|
-|[[#Exit Relay|Exit]]|Destination, plaintext if no TLS|
-|Destination|Exit IP, application data you send|Your IP|
+| Observer                  | What they see                                                          | What they don't         |
+| ------------------------- | ---------------------------------------------------------------------- | ----------------------- |
+| Local network / ISP       | That you use Tor (unless on a [[#Bridges\|bridge]]), timing and volume | Destinations, content   |
+| [[#Guard Relay\|Guard]]   | Your IP, encrypted cells                                               | Destination, content    |
+| [[#Middle Relay\|Middle]] | Guard and exit identities                                              | Both endpoints, content |
+| [[#Exit Relay\|Exit]]     | Destination, plaintext if no TLS                                       | Your identity           |
+| Destination               | Exit IP, application data you send                                     | Your IP                 |
 
 ### Known Attack Vectors
 

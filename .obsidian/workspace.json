@@ -29,44 +29,16 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Routing.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Routing"
-            }
-          },
-          {
-            "id": "76750a2aba92a8f1",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/Routing.md",
+                "file": "0 - Notes/lantern.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Routing"
-            }
-          },
-          {
-            "id": "457a3ccf2e2e2dc8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0 - Notes/Tor Project.md",
-                "mode": "preview",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Tor Project"
+              "title": "lantern"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -149,13 +121,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Tor Project.md",
+                "file": "0 - Notes/lantern.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Tor Project"
+              "title": "Outline of lantern"
             }
           },
           {
@@ -199,7 +171,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Tor Project.md",
+                "file": "0 - Notes/I2P.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -209,7 +181,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Tor Project"
+              "title": "Backlinks for I2P"
             }
           },
           {
@@ -218,12 +190,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/Tor Project.md",
+                "file": "0 - Notes/I2P.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Tor Project"
+              "title": "Outgoing links from I2P"
             }
           },
           {
@@ -240,8 +212,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -265,54 +236,54 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "1a73eaa79a9842d9",
   "lastOpenFiles": [
-    "0 - Notes/OSI Model.md",
+    "0 - Notes/I2P.md",
     "0 - Notes/Tor Project.md",
-    "0 - Notes/lantern.md",
-    "0 - Notes/Routing.md",
-    "0 - Notes/IPv6.md",
-    "0 - Notes/Subnetting.md",
-    "0 - Notes/IP2.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "0 - Notes/Crawler.md",
+    "0 - Notes/Device-ID.md",
+    "0 - Notes/Backhaul.md",
+    "0 - Notes/Autonomous Digital Experience Management.md",
+    "0 - Notes/homelab-setup-.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "0 - Notes/Dynu DDNS.md",
+    "0 - Notes/UFW.md",
     "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
-    "0 - Notes/VLANs.md",
-    "0 - Notes/VLANs_pitfalls_table_fix.md",
-    "0 - Notes/IPv4 Subnetting & IPv6 Addressing Guide.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "2 - Categories/Topics/Networking/Networking General.md",
-    "3 - Templates/Bases/Topic/Networking/Networking General.base",
-    "0 - Notes/Subnetting 1.md",
-    "0 - Notes/PBA - Cisco Catalyst Center.md",
-    "0 - Notes/PBA - Guest Network.md",
-    "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/Server Name Indication.md",
+    "0 - Notes/OSI Model.md",
+    "0 - Notes/Routing.md",
+    "2 - Categories/Topics/Privacy/Privacy General.md",
+    "3 - Templates/Bases/Privacy.base",
+    "3 - Templates/Bases/Topics/Privacy/Privacy General.base",
+    "3 - Templates/Notes/Privacy Template.md",
+    "3 - Templates/Bases/Linux.base",
+    "2 - Categories/Systems.md",
+    "2 - Categories/Privacy.md",
+    "3 - Templates/Notes/Networking Template.md",
+    "2 - Categories/Linux.md",
+    "2 - Categories/Microsoft.md",
+    "2 - Categories/Networking.md",
+    "2 - Categories/Security.md",
+    "0 - Notes/Network Scanning.md",
+    "3 - Templates/Bases/Topics/Privacy",
+    "3 - Templates/Bases/Networking.base",
+    "2 - Categories/Topics/Networking/Networking General.md",
+    "2 - Categories/Topics/Privacy",
+    "3 - Templates/Notes/Codes/Untitled.md",
+    "3 - Templates/Bases/Topics/Networking/Networking General.base",
     "attachments/Pasted image 20260713141531.png",
-    "0 - Notes/Unauthorized Packet Sniffing.md",
     "attachments/Pasted image 20260713141008.png",
     "attachments/Pasted image 20260713140952.png",
     "attachments/Pasted image 20260713140945.png",
     "attachments/Pasted image 20260713140938.png",
     "attachments/Pasted image 20260713105706.png",
-    "0 - Notes/saved-html-test-report.md",
-    "0 - Notes/User-ID™.md",
-    "0 - Notes/Backhaul.md",
-    "3 - Templates/Bases/Linux.base",
     "attachments/Pasted image 20260708101944.png",
     "attachments/Pasted image 20260708100912.png",
     "attachments/Pasted image 20260708100657.png",
     "attachments/Pasted image 20260708100349.png",
     "Untitled.canvas",
     "Untitled",
-    "3 - Templates/Bases/Topic/Networking/Cisco ISE.base",
-    "3 - Templates/Bases/Topic/Security/Firewall.base",
-    "3 - Templates/Bases/Topic/Security/VPN.base",
-    "3 - Templates/Bases/Topic/Linux/Linux General.base",
-    "3 - Templates/Bases/Topic/Linux/Ubuntu.base",
-    "3 - Templates/Bases/Topic/Networking/WLAN.base",
-    "1 - Excalidraw/Scripts"
+    "3 - Templates/Bases/Topics/Networking/Cisco ISE.base",
+    "3 - Templates/Bases/Topics/Security/Firewall.base"
   ]
 }

@@ -7,10 +7,10 @@
     "iconColor": null,
     "recentlyUsedIcons": [
       "SiTorproject",
-      "SiWindows",
       "SiWireguard",
-      "SiLinux",
-      "FasNetworkWired"
+      "FasNetworkWired",
+      "FasGlobe",
+      "SiWindows"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -288,5 +288,13 @@
   "0 - Notes/Tor Project.md": {
     "iconName": "SiTorproject",
     "iconColor": "#4F2C5F"
+  },
+  "2 - Categories/Topics/Privacy/Privacy General.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": "#000000"
+  },
+  "0 - Notes/I2P.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
   }
 }
