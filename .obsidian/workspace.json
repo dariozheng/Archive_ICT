@@ -29,12 +29,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/lantern.md",
-                "mode": "preview",
+                "file": "0 - Notes/Routing.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "lantern"
+              "title": "Routing"
             }
           }
         ],
@@ -121,13 +121,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/lantern.md",
+                "file": "0 - Notes/Routing.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of lantern"
+              "title": "Outline of Routing"
             }
           },
           {
@@ -212,7 +212,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -236,10 +237,11 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "1a73eaa79a9842d9",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/I2P.md",
     "0 - Notes/Tor Project.md",
+    "0 - Notes/lantern.md",
+    "0 - Notes/I2P.md",
     "0 - Notes/Crawler.md",
     "0 - Notes/Device-ID.md",
     "0 - Notes/Backhaul.md",
@@ -269,7 +271,6 @@
     "3 - Templates/Bases/Networking.base",
     "2 - Categories/Topics/Networking/Networking General.md",
     "2 - Categories/Topics/Privacy",
-    "3 - Templates/Notes/Codes/Untitled.md",
     "3 - Templates/Bases/Topics/Networking/Networking General.base",
     "attachments/Pasted image 20260713141531.png",
     "attachments/Pasted image 20260713141008.png",
