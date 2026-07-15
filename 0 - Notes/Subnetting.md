@@ -7,6 +7,7 @@ tags:
   - ccnp
   - networking
   - claude
+  - encor/routing
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-14
@@ -152,7 +153,7 @@ Class B exhaustion and routing table growth were the two forcing functions.
 
 ### CIDR
 
-Classless Inter-Domain Routing (RFC 4632, originally RFC 1519) discards the class boundaries entirely and carries the prefix length explicitly in every route advertisement and interface configuration.
+Classless Inter-Domain Routing (RFC 4632, originally RFC 1519) discards the class boundaries entirely and carries the <strong>prefix length</strong> explicitly in every route advertisement and interface configuration.
 
 Three capabilities follow directly:
 

@@ -1,8 +1,22 @@
-## Overview
-
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - ccnp
+  - claude
+  - networking
+  - encor/switching
+icon: FasNetworkWired
+iconColor: "#003791"
+last_update: 2026-07-15
+---
 _A VLAN turns one physical switch into several isolated broadcast domains. Trunking carries many of those domains over one link. Inter-VLAN routing is the only sanctioned way back across the boundaries a VLAN creates._
 
-A switch, left alone, is one flat broadcast domain: every port can reach every other port, and a broadcast from any host is flooded to all of them. A VLAN (Virtual LAN) partitions that single switch into several independent Layer-2 domains, each with its own broadcast scope, as if the ports had been split across separate physical switches that share no wire.
+A switch, left alone, is one flat <strong>broadcast domain</strong>: every port can reach every other port, and a broadcast from any host is flooded to all of them. 
+
+A <strong>VLAN</strong> (Virtual LAN) <strong>partitions that single switch into several independent Layer-2 domains</strong>, each with its own broadcast scope, as if the ports had been split across separate physical switches that share no wire.
 
 Three mechanisms make this work, and they map onto the three parts of this note:
 
@@ -12,7 +26,8 @@ Three mechanisms make this work, and they map onto the three parts of this note:
 
 Everything else is detail on top of those three ideas: how the tag is built, how switches decide whether to trunk, how the boundary is crossed efficiently, and where the whole scheme can be attacked.
 
-> [!info] Layer 2 versus Layer 3, kept straight A VLAN is a Layer-2 construct — it defines a broadcast domain. A subnet is a Layer-3 construct — it defines an IP address range. They are different things, but in almost every real design they are mapped one-to-one: one VLAN carries exactly one subnet. The mapping is a convention, not a requirement, and keeping the two ideas distinct is what makes inter-VLAN routing comprehensible.
+> [!info] Layer 2 versus Layer 3, kept straight 
+> A VLAN is a Layer-2 construct — it defines a broadcast domain. A subnet is a Layer-3 construct — it defines an IP address range. They are different things, but in almost every real design they are mapped one-to-one: one VLAN carries exactly one subnet. The mapping is a convention, not a requirement, and keeping the two ideas distinct is what makes inter-VLAN routing comprehensible.
 
 ---
 
@@ -33,8 +48,8 @@ Two consequences follow immediately, and they are the reason VLANs exist:
 
 Membership — which VLAN a given frame belongs to — is decided when the frame enters the switch, by one of two methods:
 
-- Port-based (static). The port is configured to belong to a VLAN, and every untagged frame arriving on it is assigned to that VLAN. This is the overwhelmingly common case and is what an [[#Access Ports|access port]] does.
-- Dynamic. The VLAN is chosen per-endpoint at authentication time, by a policy server, and pushed to the port. This is how [[#Dynamic VLAN Assignment|802.1X/RADIUS assignment]] works, and it is what a NAC deployment relies on.
+- <strong>Port-based</strong> (∫). The port is configured to belong to a VLAN, and every untagged frame arriving on it is assigned to that VLAN. This is the overwhelmingly common case and is what an [[#Access Ports|access port]] does.
+- <strong>Dynamic</strong>. The VLAN is chosen per-endpoint at authentication time, by a policy server, and pushed to the port. This is how [[#Dynamic VLAN Assignment|802.1X/RADIUS assignment]] works, and it is what a NAC deployment relies on.
 
 MAC-based and protocol-based membership also exist historically, but on modern enterprise gear dynamic assignment is done through authentication rather than static MAC-to-VLAN tables.
 
@@ -316,7 +331,8 @@ A frame from VLAN 10 to VLAN 20 travels up the trunk tagged for VLAN 10, arrives
 - Strength: requires only one router interface and one switch port. Inexpensive and readily understood.
 - Weakness: every inter-VLAN packet crosses the single trunk twice — in on one tag, out on another — so the one link is a hard bandwidth ceiling and a single point of failure. This is why the model is now confined to small sites and lab work.
 
-> [!note] The `encapsulation dot1Q` line is doing the tagging On a router sub-interface, `encapsulation dot1Q 10` is what ties that sub-interface to VLAN 10's tag. Frequently, the native VLAN's sub-interface is written `encapsulation dot1Q 1 native` so the router expects it untagged, mirroring the switch's native VLAN behaviour.
+> [!note] The `encapsulation dot1Q` line is doing the tagging 
+> On a router sub-interface, `encapsulation dot1Q 10` is what ties that sub-interface to VLAN 10's tag. Frequently, the native VLAN's sub-interface is written `encapsulation dot1Q 1 native` so the router expects it untagged, mirroring the switch's native VLAN behaviour.
 
 ### SVI (Switch Virtual Interface) Model
 
@@ -385,7 +401,8 @@ ip link set eth0.10 up
 
 The parent `eth0` carries the trunk; `eth0.10` sees only VLAN 10, already de-tagged. This is how a Linux router routes between VLANs, and how a hypervisor host presents a specific VLAN to a virtual machine.
 
-> [!warning] The sub-interface MTU is capped by the parent The kernel will not let a VLAN sub-interface have an MTU larger than its parent minus the tag overhead where the driver cannot absorb it — the `netif_reduces_vlan_mtu` check subtracts `VLAN_HLEN` (4 bytes). If tagged traffic at full 1500-byte payload must pass, the parent interface's MTU has to be raised to accommodate the tag, or large frames are silently dropped. This is the software face of the [[#The MTU Cost|MTU cost]] described above.
+> [!warning] The sub-interface MTU is capped by the parent 
+> The kernel will not let a VLAN sub-interface have an MTU larger than its parent minus the tag overhead where the driver cannot absorb it — the `netif_reduces_vlan_mtu` check subtracts `VLAN_HLEN` (4 bytes). If tagged traffic at full 1500-byte payload must pass, the parent interface's MTU has to be raised to accommodate the tag, or large frames are silently dropped. This is the software face of the [[#The MTU Cost|MTU cost]] described above.
 
 ### Bridge VLAN Filtering
 

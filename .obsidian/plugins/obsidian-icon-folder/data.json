@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiTorproject",
       "SiWindows",
       "SiWireguard",
       "SiLinux",
-      "FasNetworkWired",
-      "SiCisco"
+      "FasNetworkWired"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -276,5 +276,17 @@
   "0 - Notes/Subnetting.md": {
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
+  },
+  "0 - Notes/VLANs.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Routing.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Tor Project.md": {
+    "iconName": "SiTorproject",
+    "iconColor": "#4F2C5F"
   }
 }

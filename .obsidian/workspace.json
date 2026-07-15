@@ -29,12 +29,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Subnetting.md",
-                "mode": "preview",
+                "file": "0 - Notes/Routing.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Subnetting"
+              "title": "Routing"
             }
           },
           {
@@ -43,12 +43,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/IP2.md",
-                "mode": "source",
+                "file": "0 - Notes/Routing.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "IP2"
+              "title": "Routing"
             }
           },
           {
@@ -58,7 +58,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/Tor Project.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -66,7 +66,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -149,13 +149,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Subnetting.md",
+                "file": "0 - Notes/Tor Project.md",
                 "followCursor": false,
                 "showSearch": true,
-                "searchQuery": "terminal "
+                "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Subnetting"
+              "title": "Outline of Tor Project"
             }
           },
           {
@@ -199,7 +199,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0 - Notes/Subnetting.md",
+                "file": "0 - Notes/Tor Project.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -209,7 +209,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Subnetting"
+              "title": "Backlinks for Tor Project"
             }
           },
           {
@@ -218,12 +218,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0 - Notes/Subnetting.md",
+                "file": "0 - Notes/Tor Project.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Subnetting"
+              "title": "Outgoing links from Tor Project"
             }
           },
           {
@@ -240,7 +240,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -264,27 +265,30 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "1a73eaa79a9842d9",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/IP2.md",
-    "0 - Notes/Subnetting.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "0 - Notes/OSI Model.md",
     "0 - Notes/Tor Project.md",
+    "0 - Notes/lantern.md",
+    "0 - Notes/Routing.md",
+    "0 - Notes/IPv6.md",
+    "0 - Notes/Subnetting.md",
+    "0 - Notes/IP2.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
+    "0 - Notes/VLANs.md",
+    "0 - Notes/VLANs_pitfalls_table_fix.md",
+    "0 - Notes/IPv4 Subnetting & IPv6 Addressing Guide.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Topics/Networking/Networking General.md",
     "3 - Templates/Bases/Topic/Networking/Networking General.base",
-    "0 - Notes/VLANs.md",
-    "0 - Notes/Routing_Fundamentals.md",
     "0 - Notes/Subnetting 1.md",
-    "0 - Notes/VLANs_pitfalls_table_fix.md",
     "0 - Notes/PBA - Cisco Catalyst Center.md",
     "0 - Notes/PBA - Guest Network.md",
     "0 - Notes/PBA - WLC 9800.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/Untitled.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/IPv4 Subnetting & IPv6 Addressing Guide.md",
     "0 - Notes/Server Name Indication.md",
     "attachments/Pasted image 20260713141531.png",
     "0 - Notes/Unauthorized Packet Sniffing.md",
@@ -296,9 +300,6 @@
     "0 - Notes/saved-html-test-report.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/Backhaul.md",
-    "0 - Notes/Man-in-the-Middle Attacks.md",
-    "0 - Notes/Windows Management Instrumentation.md",
-    "0 - Notes/Active Directory Certificate Services.md",
     "3 - Templates/Bases/Linux.base",
     "attachments/Pasted image 20260708101944.png",
     "attachments/Pasted image 20260708100912.png",

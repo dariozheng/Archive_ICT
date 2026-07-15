@@ -1,6 +1,12 @@
-
-## Overview
-
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+tags:
+icon: SiTorproject
+iconColor: "#4F2C5F"
+last_update:
+---
 Tor (originally an acronym for The Onion Router) is a free, open-source overlay network for anonymous communication. It routes TCP traffic through a worldwide volunteer network of [[#Relays|relays]], wrapping the traffic in multiple layers of encryption so that no single point in the path can link the source of a connection to its destination.
 
 Tor separates two things that are normally coupled on the Internet: who you are (your IP address) and what you are talking to (the destination). Each relay in a [[#Circuits|circuit]] only knows its immediate predecessor and successor — never the full path.
