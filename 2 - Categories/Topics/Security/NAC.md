@@ -1,7 +1,7 @@
 ---
 tags:
-  - security
   - topic
+  - Security
 icon: LiUserLock
 iconColor: "#ff0000"
 ---

@@ -7,8 +7,7 @@ topic@security:
   - "[[Firewall]]"
 tags:
   - firewall
-  - security
-  - networking
+  - Linux
 icon: SiUbuntu
 iconColor: "#E34423"
 ---

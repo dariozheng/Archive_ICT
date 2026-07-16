@@ -1,7 +1,7 @@
 ---
 tags:
-  - microsoft
   - product
+  - Linux
 icon: SiUbuntu
 iconColor: "#E34423"
 ---

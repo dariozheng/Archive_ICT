@@ -5,7 +5,8 @@ categories:
 topic@privacy: "[[Privacy General]]"
 tags:
   - claude
-  - networking
+  - Networking
+  - Privacy
 icon: SiTorproject
 iconColor: "#4F2C5F"
 last_update: 2026-07-15

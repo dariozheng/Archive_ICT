@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "SiTorproject",
-      "SiWireguard",
-      "FasNetworkWired",
-      "FasGlobe",
-      "SiWindows"
+      "SiPaloaltonetworks",
+      "LiLock",
+      "LiUserLock",
+      "LiBrickWallFire",
+      "FasGlobe"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -41,10 +41,6 @@
   "2 - Categories/Topics/Security/Palo Alto Networks.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
-  },
-  "2 - Categories/Topics/Security/Network-Based Attacks.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
   },
   "2 - Categories/Topics/Networking/Networking General.md": {
     "iconName": "FasNetworkWired",
@@ -82,10 +78,6 @@
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
   },
-  "0 - Notes/Unauthorized Packet Sniffing.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
   "0 - Notes/Site-to-Site VPN - Palo Alto.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
@@ -114,10 +106,6 @@
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
   },
-  "0 - Notes/Network Scanning.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
   "0 - Notes/NGFW - Palo Alto Networks.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
@@ -126,29 +114,13 @@
     "iconName": "SiMicrosoft",
     "iconColor": "#0078D4"
   },
-  "0 - Notes/Man-in-the-Middle Attacks.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/IP Spoofing.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
   "0 - Notes/Dynamic User Groups - Palo Alto.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
   },
-  "0 - Notes/Distributed Denial-of-Service (DDoS).md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
   "0 - Notes/Device-ID.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
-  },
-  "0 - Notes/Denial-of-Service (DoS).md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
   },
   "0 - Notes/Data Redistribution - Palo Alto.md": {
     "iconName": "SiPaloaltonetworks",
@@ -169,14 +141,6 @@
   "0 - Notes/Certificates - Palo Alto.md": {
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
-  },
-  "0 - Notes/Buffer Overflow Attack.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
-  },
-  "0 - Notes/Bots and Botnets.md": {
-    "iconName": "FasUserSecret",
-    "iconColor": "#000000"
   },
   "0 - Notes/Backhaul.md": {
     "iconName": "FasNetworkWired",

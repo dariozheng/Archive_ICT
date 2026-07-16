@@ -1,7 +1,7 @@
 ---
 tags:
-  - security
   - topic
+  - Security
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 ---

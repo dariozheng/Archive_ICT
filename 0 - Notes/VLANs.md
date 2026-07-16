@@ -6,8 +6,8 @@ topic@networking:
 tags:
   - ccnp
   - claude
-  - networking
   - encor/switching
+  - Networking
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15

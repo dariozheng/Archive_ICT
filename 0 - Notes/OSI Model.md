@@ -6,7 +6,7 @@ topic@networking:
 tags:
   - ccnp
   - encor
-  - networking
+  - Networking
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15

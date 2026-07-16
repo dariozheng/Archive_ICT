@@ -1,7 +1,7 @@
 ---
 tags:
-  - microsoft
   - product
+  - Microsoft
 icon: SiWindows
 iconColor: "#0078D4"
 ---

@@ -1,7 +1,7 @@
 ---
 tags:
-  - networking
   - topic
+  - Networking
 icon: SiCisco
 iconColor: "#1BA0D7"
 aliases:

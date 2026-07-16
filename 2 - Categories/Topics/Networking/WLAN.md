@@ -1,7 +1,7 @@
 ---
 tags:
-  - networking
   - topic
+  - Networking
 icon: LiWifi
 iconColor: "#003780"
 ---

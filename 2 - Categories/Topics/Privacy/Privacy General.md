@@ -1,7 +1,7 @@
 ---
 tags:
-  - privacy
   - topic
+  - Privacy
 icon: FasUserSecret
 iconColor: "#000000"
 ---

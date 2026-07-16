@@ -24,35 +24,20 @@
             }
           },
           {
-            "id": "1a73eaa79a9842d9",
+            "id": "599eb68f35e3c812",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/I2P.md",
+                "file": "2 - Categories/Topics/Security/Palo Alto Networks.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "I2P"
-            }
-          },
-          {
-            "id": "1c1a58f87f87979a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "2 - Categories/Privacy.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Privacy"
+              "title": "Palo Alto Networks"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -115,7 +100,8 @@
               "title": "Notebook Navigator"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -135,13 +121,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2 - Categories/Privacy.md",
+                "file": "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Privacy"
+              "title": "Outline of CCNP Enterprise Core (ENCOR 350-401) Study Plan"
             }
           },
           {
@@ -226,8 +212,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -251,40 +236,40 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "1c1a58f87f87979a",
+  "active": "79210eff41d29434",
   "lastOpenFiles": [
-    "2 - Categories/test.md",
-    "2 - Categories/Topics/test/test General.md",
-    "3 - Templates/Categories/test Template.md",
+    "2 - Categories/Topics/Security/Palo Alto Networks.md",
+    "2 - Categories/Topics/Security/Network-Based Attacks.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/Network Scanning.md",
+    "0 - Notes/Unauthorized Packet Sniffing.md",
+    "0 - Notes/Bots and Botnets.md",
+    "0 - Notes/Denial-of-Service (DoS).md",
+    "0 - Notes/Buffer Overflow Attack.md",
+    "0 - Notes/Distributed Denial-of-Service (DDoS).md",
+    "0 - Notes/IP Spoofing.md",
+    "0 - Notes/Man-in-the-Middle Attacks.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/nftables.md",
+    "2 - Categories/Topics/Security/VPN.md",
+    "2 - Categories/Topics/Security/Firewall.md",
+    "2 - Categories/Topics/Security/NAC.md",
+    "2 - Categories/Topics/Security/Security General.md",
+    "2 - Categories/Topics/Microsoft/Microsoft General.md",
+    "2 - Categories/Topics/Privacy/Privacy General.md",
+    "0 - Notes/Tor Project.md",
+    "2 - Categories/Topics/Microsoft/Microsoft Protocols.md",
+    "2 - Categories/Topics/Microsoft/Windows Server.md",
+    "2 - Categories/Topics/Linux/Ubuntu.md",
+    "2 - Categories/Topics/Linux/Linux General.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "0 - Notes/Routing.md",
     "3 - Templates/Bases/Topics/test/test General.base",
     "3 - Templates/Bases/test.base",
     "3 - Templates/Bases/Topics/test",
     "2 - Categories/Topics/test",
-    "2 - Categories/Privacy.md",
-    "0 - Notes/Untitled.md",
-    "0 - Notes/I2P.md",
-    "0 - Notes/WireGuard.md",
-    "0 - Notes/Tor Project.md",
-    "0 - Notes/Routing.md",
-    "0 - Notes/IPv6.md",
-    "3 - Templates/Notes/Codes/New Note.md",
-    "3 - Templates/Categories/Systems Template.md",
-    "3 - Templates/Categories/Security Template.md",
-    "3 - Templates/Categories/Privacy Template.md",
-    "3 - Templates/Categories/Networking Template.md",
-    "3 - Templates/Categories/Microsoft Template.md",
-    "3 - Templates/Categories/Linux Template.md",
-    "3 - Templates/Categories/Hardware Template.md",
-    "3 - Templates/Categories/Cloud Computing Template.md",
     "3 - Templates/Categories",
-    "2 - Categories/Topics/Test/test test.md",
-    "3 - Templates/Notes/Codes/Delete Topic.md",
-    "3 - Templates/Notes/Codes/Delete Category.md",
     "3 - Templates/Bases/Topics/Test/test test.base",
-    "2 - Categories/Test.md",
-    "2 - Categories/Topics/Test/Test General.md",
-    "2 - Categories/Topics/Microsoft/Windows Server.md",
-    "2 - Categories/Topics/Privacy/Privacy General.md",
     "3 - Templates/Bases/Topics/Test/Test General.base",
     "3 - Templates/Bases/Test.base",
     "3 - Templates/Bases/Topics/Test",

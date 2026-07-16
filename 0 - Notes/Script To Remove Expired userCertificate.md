@@ -9,6 +9,7 @@ tags:
   - script
   - powershell
   - PBA
+  - Microsoft
 icon: SiWindows
 iconColor: "#0078D4"
 ---

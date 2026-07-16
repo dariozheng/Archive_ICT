@@ -5,9 +5,9 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - ccnp
-  - networking
   - claude
   - encor/routing
+  - Networking
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-14

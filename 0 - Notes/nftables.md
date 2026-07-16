@@ -5,9 +5,11 @@ categories:
 topic@linux: "[[Linux General]]"
 tags:
   - firewall
-  - networking
   - claude
   - kernel
+  - Networking
+  - Security
+  - Linux
 icon: SiLinux
 iconColor: "#000000"
 last_update: 2026-07-09
