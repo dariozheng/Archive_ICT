@@ -29,12 +29,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/App-ID™.md",
+                "file": "0 - Notes/Subnetting.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "App-ID™"
+              "title": "Subnetting"
             }
           },
           {
@@ -52,7 +52,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -84,7 +84,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:Networking",
+                "query": "",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -115,7 +115,8 @@
               "title": "Notebook Navigator"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -135,13 +136,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "2 - Categories/Privacy.md",
+                "file": "0 - Notes/Subnetting.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Privacy"
+              "title": "Outline of Subnetting"
             }
           },
           {
@@ -251,9 +252,11 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "f0f72f1298d0c228",
+  "active": "28cae23496848823",
   "lastOpenFiles": [
     "0 - Notes/Routing.md",
+    "0 - Notes/App-ID™.md",
+    "2 - Categories/Privacy.md",
     "3 - Templates/Categories/Networking Template.md",
     "0 - Notes/Tor Project.md",
     "0 - Notes/Dynu DDNS.md",
@@ -278,8 +281,6 @@
     "2 - Categories/Cloud Computing.md",
     "0 - Notes/Glossaries/Cloud Computing Glossary.md",
     "0 - Notes/Cloud Access Security Broker.md",
-    "0 - Notes/Untitled.md",
-    "0 - Notes/App-ID™.md",
     "3 - Templates/Bases/Topics/test/test General.base",
     "3 - Templates/Bases/test.base",
     "3 - Templates/Bases/Topics/test",

@@ -124,7 +124,9 @@ CEF is topology-driven rather than traffic-driven. It builds the [[#Forwarding I
 
 CEF is the default on all modern platforms and is a prerequisite for most features that touch the data plane — NetFlow, most QoS, [[#Unicast RPF|uRPF]], per-flow load sharing.
 
-> [!note] Why CEF changes troubleshooting Because CEF pre-resolves everything, `show ip route` tells you what the control plane decided and `show ip cef` tells you what the data plane will actually do. When they disagree, believe CEF — the packets do.
+> [!note] Why CEF changes troubleshooting 
+> 
+> Because CEF pre-resolves everything, `show ip route` tells you what the control plane decided and `show ip cef` tells you what the data plane will actually do. When they disagree, believe CEF — the packets do.
 
 ---
 
@@ -165,7 +167,9 @@ A host compares a destination against its own address and mask. If the destinati
 
 This is the boundary between hosts and routing. The host makes exactly one binary decision — local or not — and delegates everything else. It also makes the gateway a single point of failure, which is why [[#First Hop Redundancy|FHRPs]] exist.
 
-> [!info] Frame versus packet The destination IP never changes as a packet crosses the network (barring NAT); the destination MAC changes at every hop. A host sending to the Internet writes the gateway's MAC and the server's IP into the same message. Confusing these two is the most common conceptual error in early routing work.
+> [!info] Frame versus packet 
+> 
+> The destination IP never changes as a packet crosses the network (barring NAT); the destination MAC changes at every hop. A host sending to the Internet writes the gateway's MAC and the server's IP into the same message. Confusing these two is the most common conceptual error in early routing work.
 
 ---
 

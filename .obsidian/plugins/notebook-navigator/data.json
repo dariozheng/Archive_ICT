@@ -16,7 +16,12 @@
       "hiddenFileProperties": [],
       "navigationBanner": null,
       "periodicNotesFolder": "",
-      "shortcuts": [],
+      "shortcuts": [
+        {
+          "type": "note",
+          "path": "0 - Notes/Routing.md"
+        }
+      ],
       "navRainbow": {
         "mode": "none",
         "balanceHueLuminance": true,
@@ -514,7 +519,7 @@
   "folderAppearances": {},
   "tagIcons": {},
   "tagColors": {
-    "category": "#ef4444"
+    "category": "#eab308"
   },
   "tagBackgroundColors": {},
   "tagSortOverrides": {},
