@@ -43,12 +43,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/Tor Project.md",
+                "file": "2 - Categories/Privacy.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tor Project"
+              "title": "Privacy"
             }
           }
         ],
@@ -135,13 +135,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/Tor Project.md",
+                "file": "2 - Categories/Privacy.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Tor Project"
+              "title": "Outline of Privacy"
             }
           },
           {
@@ -226,7 +226,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -250,13 +251,15 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "f0f72f1298d0c228",
   "lastOpenFiles": [
+    "0 - Notes/Routing.md",
+    "3 - Templates/Categories/Networking Template.md",
+    "0 - Notes/Tor Project.md",
+    "0 - Notes/Dynu DDNS.md",
     "0 - Notes/WireGuard.md",
     "0 - Notes/netfilter.md",
-    "0 - Notes/Routing.md",
     "2 - Categories/Networking.md",
-    "0 - Notes/Tor Project.md",
     "0 - Notes/Windows Remote Management Protocol.md",
     "0 - Notes/nftables.md",
     "3 - Templates/Categories/Systems Template.md",
@@ -268,7 +271,6 @@
     "2 - Categories/Microsoft.md",
     "2 - Categories/Security.md",
     "3 - Templates/Categories/Privacy Template.md",
-    "3 - Templates/Categories/Networking Template.md",
     "3 - Templates/Categories/Microsoft Template.md",
     "3 - Templates/Categories/Linux Template.md",
     "3 - Templates/Categories/Security Template.md",
@@ -278,7 +280,6 @@
     "0 - Notes/Cloud Access Security Broker.md",
     "0 - Notes/Untitled.md",
     "0 - Notes/App-ID™.md",
-    "0 - Notes/Autonomous Digital Experience Management.md",
     "3 - Templates/Bases/Topics/test/test General.base",
     "3 - Templates/Bases/test.base",
     "3 - Templates/Bases/Topics/test",
