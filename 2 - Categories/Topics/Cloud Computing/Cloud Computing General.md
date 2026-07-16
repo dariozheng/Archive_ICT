@@ -1,7 +1,7 @@
 ---
 tags:
   - topic
-  - cloud_computing
+  - category/cloud_computing/cloud_computing_general
 icon: FasCloud
 iconColor: "#68adee"
 ---

@@ -1,7 +1,7 @@
 ---
 tags:
   - topic
-  - Networking
+  - category/networking/networking_general
 icon: FasNetworkWired
 iconColor: "#003791"
 ---

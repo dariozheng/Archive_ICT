@@ -3,5 +3,5 @@ views:
     name: Table
     filters:
       and:
-        - product.contains(link("Windows Server"))
+        - note["topic@microsoft"].contains(link("Windows Server"))
         - file.tags.contains("script")

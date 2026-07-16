@@ -1,7 +1,7 @@
 ---
 tags:
   - topic
-  - Security
+  - category/security/vpn
 icon: FasGlobe
 iconColor: "#844c3b"
 ---

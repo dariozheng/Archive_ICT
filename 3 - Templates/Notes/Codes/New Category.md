@@ -32,6 +32,7 @@ if (/[\\/:]/.test(name)) {
 
 // Topic property. Default is topic@<slug>, but this vault has exceptions
 // (Cloud Computing -> topic@cloud, Microsoft -> product), so allow an override.
+// Slug for the nested tag tree: lowercase, spaces -> underscores (cloud_computing).
 const tagSlug = name.toLowerCase().replace(/\s+/g, "_");
 const propInput = await tp.system.prompt("Topic property", `topic@${tagSlug}`);
 if (!propInput || !propInput.trim()) { new Notice("New Category: cancelled."); return; }
@@ -106,6 +107,7 @@ const noteTemplate = [
     `  - "[[${name}]]"`,
     `${topicProp}:`,
     "tags:",
+    `  - category/${tagSlug}`,
     "icon:",
     "iconColor:",
     "last_update:",
@@ -113,11 +115,12 @@ const noteTemplate = [
     "",
 ].join("\n");
 
+// New categories default to the "topic" kind; change it by hand for a product line.
 const generalNote = [
     "---",
     "tags:",
-    `  - ${tagSlug}`,
     "  - topic",
+    `  - category/${tagSlug}/${tagSlug}_general`,
     "icon:",
     "iconColor:",
     "---",

@@ -1,7 +1,7 @@
 ---
 tags:
   - topic
-  - Security
+  - category/security/security_general
 icon: LiLock
 iconColor: "#e95a2b"
 ---

@@ -1,7 +1,7 @@
 ---
 tags:
   - topic
-  - Networking
+  - category/networking/cisco_ise
 icon: SiCisco
 iconColor: "#1BA0D7"
 aliases:

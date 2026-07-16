@@ -1,7 +1,7 @@
 ---
 categories:
   - "[[Microsoft]]"
-product:
+topic@microsoft:
   - "[[Windows Server]]"
 tags:
   - active_directory

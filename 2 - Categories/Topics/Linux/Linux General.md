@@ -1,7 +1,7 @@
 ---
 tags:
   - product
-  - Linux
+  - category/linux/linux_general
 icon: SiLinux
 iconColor: "#000000"
 ---

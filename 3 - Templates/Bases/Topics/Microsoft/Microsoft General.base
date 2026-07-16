@@ -5,6 +5,6 @@ views:
     name: Table
     filters:
       and:
-        - product.contains(link("Microsoft General"))
+        - note["topic@microsoft"].contains(link("Microsoft General"))
     order:
       - file.name

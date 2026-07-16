@@ -1,7 +1,7 @@
 ---
 tags:
   - product
-  - Linux
+  - category/linux/ubuntu
 icon: SiUbuntu
 iconColor: "#E34423"
 ---

@@ -1,7 +1,7 @@
 ---
 categories:
   - "[[Microsoft]]"
-product:
+topic@microsoft:
   - "[[Microsoft Protocols]]"
 tags:
   - Microsoft

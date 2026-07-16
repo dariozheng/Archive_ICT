@@ -1,7 +1,7 @@
 ---
 tags:
   - topic
-  - Security
+  - category/security/nac
 icon: LiUserLock
 iconColor: "#ff0000"
 ---

@@ -50,6 +50,11 @@ if (topicProp) {
             // List form: 45 of the 49 notes that set a topic use it, and it allows several.
             const key = topicProp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
             body = body.replace(new RegExp(`^${key}:[ \\t]*$`, "m"), `${topicProp}:\n  - "[[${topic}]]"`);
+            // Deepen the category tag: category/<cat>  ->  category/<cat>/<topic>.
+            const catSlug = category.toLowerCase().replace(/\s+/g, "_");
+            const topicSlug = topic.toLowerCase().replace(/\s+/g, "_");
+            const catTag = `category/${catSlug}`.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            body = body.replace(new RegExp(`^  - ${catTag}$`, "m"), `  - category/${catSlug}/${topicSlug}`);
         }
     }
 }

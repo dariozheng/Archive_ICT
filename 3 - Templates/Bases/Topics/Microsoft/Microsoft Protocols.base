@@ -3,4 +3,4 @@ views:
     name: Table
     filters:
       and:
-        - product.contains(link("Microsoft Protocols"))
+        - note["topic@microsoft"].contains(link("Microsoft Protocols"))

@@ -3,7 +3,7 @@ categories:
   - "[[Systems]]"
 topic@systems:
 tags:
-  - Systems
+  - category/systems
 icon:
 iconColor:
 last_update:

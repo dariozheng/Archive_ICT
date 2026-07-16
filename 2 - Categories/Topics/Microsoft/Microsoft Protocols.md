@@ -1,7 +1,7 @@
 ---
 tags:
   - product
-  - Microsoft
+  - category/microsoft/microsoft_protocols
 icon: SiMicrosoft
 iconColor: "#0078D4"
 ---

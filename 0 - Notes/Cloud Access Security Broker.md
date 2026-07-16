@@ -4,7 +4,7 @@ categories:
   - "[[Security]]"
 topic@security:
   - "[[Palo Alto Networks]]"
-topic@cloud:
+topic@cloud_computing:
   - "[[Cloud Computing General]]"
 tags:
   - palo_alto/casb

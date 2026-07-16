@@ -1,7 +1,7 @@
 ---
 tags:
   - product
-  - Microsoft
+  - category/microsoft/windows_server
 icon: SiWindows
 iconColor: "#0078D4"
 ---

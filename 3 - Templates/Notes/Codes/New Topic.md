@@ -93,9 +93,22 @@ if (file.basename !== name) {
 
 // Bases requires bracket syntax for properties containing "@".
 const topicRef = topicProp.includes("@") ? `note["${topicProp}"]` : topicProp;
-// The second tag names whatever the property names: topic@x -> "topic", product -> "product".
-const kindTag = topicProp.startsWith("topic@") ? "topic" : topicProp;
 const categorySlug = category.toLowerCase().replace(/\s+/g, "_");
+const topicSlug = name.toLowerCase().replace(/\s+/g, "_");
+
+// The kind tag (topic/product) is a per-category convention the property does NOT
+// determine - Microsoft and Linux use "product" despite topic@ properties. Copy it
+// from the category's General hub note; default to "topic" if there isn't one yet.
+let kindTag = "topic";
+const generalNote = app.vault.getAbstractFileByPath(`${folder}/${category} General.md`);
+if (generalNote) {
+    const gm = (await app.vault.read(generalNote)).match(/^tags:\n((?:  - .*\n)*)/m);
+    if (gm) {
+        const first = [...gm[1].matchAll(/  - (.*)/g)].map((x) => x[1].trim())
+            .find((t) => !t.startsWith("category/"));
+        if (first) kindTag = first;
+    }
+}
 
 const topicBase = [
     "views:",
@@ -134,5 +147,5 @@ new Notice(`✓ Topic "${name}" in ${category} (${topicProp}): ${created.length}
 // re-serialises it with Obsidian's YAML writer - which yields exactly this shape.
 if (tp.file.content.trim()) return;
 
-tR += ["---", "tags:", `  - ${categorySlug}`, `  - ${kindTag}`, "icon:", "iconColor:", "---", `![[${name}.base]]`].join("\n");
+tR += ["---", "tags:", `  - ${kindTag}`, `  - category/${categorySlug}/${topicSlug}`, "icon:", "iconColor:", "---", `![[${name}.base]]`].join("\n");
 -%>

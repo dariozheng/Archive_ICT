@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "FasNetworkWired",
-      "SiPaloaltonetworks",
-      "SiCisco",
-      "SiMicrosoft",
-      "SiWindows"
+      "LiFiles",
+      "LiLayoutTemplate",
+      "LiLayers",
+      "SiExcalidraw",
+      "LiNotebook"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -260,5 +260,10 @@
   "0 - Notes/I2P.md": {
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
-  }
+  },
+  "0 - Notes": "LiNotebook",
+  "1 - Excalidraw": "SiExcalidraw",
+  "2 - Categories": "LiLayers",
+  "3 - Templates": "LiLayoutTemplate",
+  "attachments": "LiFiles"
 }

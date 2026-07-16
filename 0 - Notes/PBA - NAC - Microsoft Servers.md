@@ -7,7 +7,7 @@ topic@networking:
   - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
 topic@security:
   - "[[NAC]]"
-product:
+topic@microsoft:
   - "[[Windows Server]]"
 tags:
   - project
