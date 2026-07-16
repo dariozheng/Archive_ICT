@@ -5,6 +5,7 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
+  - Security
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 ---

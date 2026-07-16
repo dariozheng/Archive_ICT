@@ -4,6 +4,7 @@ categories:
 product:
   - "[[Microsoft Protocols]]"
 tags:
+  - Microsoft
 aliases:
   - WinRM
 icon: SiMicrosoft

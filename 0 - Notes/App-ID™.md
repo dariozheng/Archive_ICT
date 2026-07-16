@@ -6,6 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - complete
+  - Security
 aliases:
   - applipedia
 icon: SiPaloaltonetworks

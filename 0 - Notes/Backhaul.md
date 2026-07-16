@@ -5,6 +5,7 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - complete
+  - Networking
 aliases:
   - backhauling
   - network backhauling

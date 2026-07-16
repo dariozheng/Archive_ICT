@@ -8,6 +8,8 @@ topic@cloud:
   - "[[Cloud Computing General]]"
 tags:
   - palo_alto/casb
+  - Security
+  - Cloud_Computing
 aliases:
   - CASB
 icon: SiPaloaltonetworks

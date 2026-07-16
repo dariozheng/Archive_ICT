@@ -4,6 +4,7 @@ categories:
 product:
   - "[[Windows Server]]"
 tags:
+  - Microsoft
 aliases:
   - WMI
 icon: SiWindows

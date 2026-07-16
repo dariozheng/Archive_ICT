@@ -3,6 +3,7 @@ categories:
   - "[[Systems]]"
 topic@systems:
 tags:
+  - Systems
 aliases:
   - CMI
 icon: FasServer

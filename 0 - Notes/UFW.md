@@ -8,6 +8,7 @@ topic@security:
 tags:
   - firewall
   - Linux
+  - Security
 icon: SiUbuntu
 iconColor: "#E34423"
 ---

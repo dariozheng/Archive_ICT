@@ -4,6 +4,7 @@ categories:
 product:
   - "[[Microsoft Protocols]]"
 tags:
+  - Microsoft
 aliases:
   - Microsoft RPC
   - MSRPC

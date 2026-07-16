@@ -5,6 +5,7 @@ product:
   - "[[Windows Server]]"
 tags:
   - active_directory
+  - Microsoft
 icon: SiWindows
 iconColor: "#0078D4"
 ---

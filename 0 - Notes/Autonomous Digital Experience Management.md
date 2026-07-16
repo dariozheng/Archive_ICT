@@ -6,6 +6,7 @@ topic@security:
 tags:
   - palo_alto/sase
   - tobecompleted
+  - Security
 aliases:
   - ADEM
 icon: SiPaloaltonetworks

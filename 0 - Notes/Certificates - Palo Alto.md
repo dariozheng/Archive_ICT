@@ -3,6 +3,7 @@ categories:
   - "[[Security]]"
 topic@security:
 tags:
+  - Security
 aliases:
   - pki
 icon: SiPaloaltonetworks

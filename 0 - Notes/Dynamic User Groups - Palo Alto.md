@@ -6,6 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - tobecompleted
+  - Security
 aliases:
   - DUGs
 icon: SiPaloaltonetworks

@@ -6,7 +6,7 @@ views:
     name: Table
     filters:
       and:
-        - categories.contains(link("Privacy"))
+        - categories.contains(link("Networking"))
         - '!file.name.contains("Template")'
     order:
       - file.name

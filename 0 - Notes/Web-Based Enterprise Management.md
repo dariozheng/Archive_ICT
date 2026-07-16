@@ -3,6 +3,7 @@ categories:
   - "[[Systems]]"
 topic@systems:
 tags:
+  - Systems
 aliases:
   - WBEM
 icon: FasServer

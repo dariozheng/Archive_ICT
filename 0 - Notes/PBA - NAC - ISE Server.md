@@ -14,6 +14,8 @@ tags:
   - ccnp
   - tech_doc
   - PBA
+  - Networking
+  - Security
 icon: SiCisco
 iconColor: "#1BA0D7"
 last_update: 2026-07-09

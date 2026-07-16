@@ -6,6 +6,7 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - "#tobecompleted"
+  - Security
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 ---
