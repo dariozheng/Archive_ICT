@@ -6,4 +6,4 @@ views:
     name: Table
     filters:
       and:
-        - note["topic@cloud"].contains(link("Cloud Computing General"))
+        - note["topic@cloud_computing"].contains(link("Cloud Computing General"))

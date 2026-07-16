@@ -4,7 +4,7 @@ categories:
 topic@cloud_computing:
 tags:
   - category/cloud_computing
-icon:
+icon: FasCloud
 iconColor:
 last_update:
 ---

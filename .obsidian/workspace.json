@@ -43,12 +43,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 - Templates/Categories/Cloud Computing Template.md",
+                "file": "3 - Templates/Categories/Systems Template.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cloud Computing Template"
+              "title": "Systems Template"
             }
           }
         ],
@@ -135,13 +135,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "3 - Templates/Categories/Cloud Computing Template.md",
+                "file": "3 - Templates/Categories/Systems Template.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Cloud Computing Template"
+              "title": "Outline of Systems Template"
             }
           },
           {
@@ -251,8 +251,23 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "c1cb4ce19e161b77",
+  "active": "f0f72f1298d0c228",
   "lastOpenFiles": [
+    "3 - Templates/Bases/Hardware.base",
+    "3 - Templates/Categories/Hardware Template.md",
+    "2 - Categories/Hardware.md",
+    "3 - Templates/Categories/Systems Template.md",
+    "0 - Notes/Common Information Model.md",
+    "2 - Categories/Systems.md",
+    "2 - Categories/Microsoft.md",
+    "2 - Categories/Networking.md",
+    "2 - Categories/Security.md",
+    "3 - Templates/Categories/Privacy Template.md",
+    "3 - Templates/Categories/Networking Template.md",
+    "3 - Templates/Categories/Microsoft Template.md",
+    "3 - Templates/Categories/Linux Template.md",
+    "3 - Templates/Categories/Security Template.md",
+    "3 - Templates/Categories/Cloud Computing Template.md",
     "2 - Categories/Cloud Computing.md",
     "0 - Notes/Glossaries/Cloud Computing Glossary.md",
     "0 - Notes/Cloud Access Security Broker.md",
@@ -264,21 +279,6 @@
     "0 - Notes/Server Name Indication.md",
     "0 - Notes/Script To Remove Expired userCertificate.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/Windows Management Instrumentation.md",
-    "2 - Categories/Hardware.md",
-    "2 - Categories/Topics/Microsoft/Microsoft General.md",
-    "2 - Categories/Topics/Privacy/Privacy General.md",
-    "0 - Notes/OSI Model.md",
-    "0 - Notes/Routing.md",
-    "0 - Notes/I2P.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
-    "0 - Notes/Active Directory Certificate Services.md",
-    "2 - Categories/Microsoft.md",
-    "0 - Notes/Backhaul.md",
-    "2 - Categories/Networking.md",
-    "0 - Notes/Windows Remote Management Protocol.md",
-    "0 - Notes/VLANs.md",
-    "0 - Notes/Tor Project.md",
     "3 - Templates/Bases/Topics/test/test General.base",
     "3 - Templates/Bases/test.base",
     "3 - Templates/Bases/Topics/test",

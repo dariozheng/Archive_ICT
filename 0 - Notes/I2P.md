@@ -5,8 +5,8 @@ categories:
 topic@privacy: "[[Privacy General]]"
 tags:
   - claude
-  - Networking
-  - Privacy
+  - category/networking
+  - category/privacy/privacy_general
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15

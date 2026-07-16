@@ -4,7 +4,7 @@ categories:
 topic@hardware:
 tags:
   - category/hardware
-icon:
+icon: LiHardDrive
 iconColor:
 last_update:
 ---

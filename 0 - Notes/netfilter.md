@@ -8,8 +8,8 @@ tags:
   - framework
   - claude
   - kernel
-  - Networking
-  - Linux
+  - category/networking
+  - category/linux/linux_general
 icon: SiLinux
 iconColor: "#000000"
 last_update: 2026-07-09

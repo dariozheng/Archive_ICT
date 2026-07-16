@@ -4,7 +4,7 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-  - Networking
+  - category/networking/networking_general
 aliases:
   - web crawler
   - spider

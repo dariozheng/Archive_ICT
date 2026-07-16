@@ -5,7 +5,7 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/sase
-  - Security
+  - category/security/palo_alto_networks
 aliases:
   - SASE
 icon: SiPaloaltonetworks

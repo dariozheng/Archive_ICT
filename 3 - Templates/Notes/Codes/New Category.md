@@ -30,8 +30,8 @@ if (/[\\/:]/.test(name)) {
     return;
 }
 
-// Topic property. Default is topic@<slug>, but this vault has exceptions
-// (Cloud Computing -> topic@cloud, Microsoft -> product), so allow an override.
+// Topic property. Every category now uses topic@<slug>; the prompt still lets you
+// override it for a one-off (a shorter slug, or a second axis like Linux's Distro).
 // Slug for the nested tag tree: lowercase, spaces -> underscores (cloud_computing).
 const tagSlug = name.toLowerCase().replace(/\s+/g, "_");
 const propInput = await tp.system.prompt("Topic property", `topic@${tagSlug}`);

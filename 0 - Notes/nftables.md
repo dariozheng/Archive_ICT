@@ -7,9 +7,9 @@ tags:
   - firewall
   - claude
   - kernel
-  - Networking
-  - Security
-  - Linux
+  - category/networking
+  - category/security
+  - category/linux/linux_general
 icon: SiLinux
 iconColor: "#000000"
 last_update: 2026-07-09

@@ -4,7 +4,7 @@ categories:
 topic@microsoft:
 tags:
   - category/microsoft
-icon:
+icon: SiMicrosoft
 iconColor:
 last_update:
 ---

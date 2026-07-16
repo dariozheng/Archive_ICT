@@ -4,7 +4,7 @@ categories:
 topic@networking:
 tags:
   - category/networking
-icon:
+icon: FasNetworkWired
 iconColor:
 last_update:
 ---

@@ -5,7 +5,7 @@ topic@microsoft:
   - "[[Windows Server]]"
 tags:
   - active_directory
-  - Microsoft
+  - category/microsoft/windows_server
 icon: SiWindows
 iconColor: "#0078D4"
 ---

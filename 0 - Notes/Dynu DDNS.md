@@ -4,6 +4,6 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-  - Networking
+  - category/networking/networking_general
 icon: PeDynu
 ---

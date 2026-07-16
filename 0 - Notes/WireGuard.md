@@ -8,8 +8,8 @@ topic@privacy: "[[Privacy General]]"
 tags:
   - claude
   - vpn
-  - Privacy
-  - Security
+  - category/privacy/privacy_general
+  - category/security/vpn
 icon: SiWireguard
 iconColor: "#87151F"
 last_update: 2026-07-09

@@ -5,7 +5,7 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - complete
-  - Networking
+  - category/networking/networking_general
 aliases:
   - SNI
   - Server Name Indication

@@ -4,7 +4,7 @@ categories:
 topic@systems:
 tags:
   - category/systems
-icon:
+icon: FasServer
 iconColor:
 last_update:
 ---

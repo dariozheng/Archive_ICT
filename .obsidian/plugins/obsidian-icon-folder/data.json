@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "LiFiles",
-      "LiLayoutTemplate",
-      "LiLayers",
-      "SiExcalidraw",
-      "LiNotebook"
+      "LiTemplaterIcon",
+      "LiHardDrive",
+      "FasServer",
+      "FasUserSecret",
+      "LiUserLock"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -265,5 +265,39 @@
   "1 - Excalidraw": "SiExcalidraw",
   "2 - Categories": "LiLayers",
   "3 - Templates": "LiLayoutTemplate",
-  "attachments": "LiFiles"
+  "attachments": "LiFiles",
+  "3 - Templates/Categories/Cloud Computing Template.md": {
+    "iconName": "FasCloud",
+    "iconColor": null
+  },
+  "3 - Templates/Categories/Security Template.md": {
+    "iconName": "LiLock",
+    "iconColor": null
+  },
+  "3 - Templates/Categories/Linux Template.md": {
+    "iconName": "SiLinux",
+    "iconColor": null
+  },
+  "3 - Templates/Categories/Microsoft Template.md": {
+    "iconName": "SiMicrosoft",
+    "iconColor": null
+  },
+  "3 - Templates/Categories/Networking Template.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "3 - Templates/Categories/Privacy Template.md": {
+    "iconName": "FasUserSecret",
+    "iconColor": null
+  },
+  "3 - Templates/Categories/Systems Template.md": {
+    "iconName": "FasServer",
+    "iconColor": null
+  },
+  "3 - Templates/Categories/Hardware Template.md": {
+    "iconName": "LiHardDrive",
+    "iconColor": null
+  },
+  "3 - Templates/Notes/Codes": "LiTemplaterIcon",
+  "3 - Templates/Notes": "LiTemplaterIcon"
 }

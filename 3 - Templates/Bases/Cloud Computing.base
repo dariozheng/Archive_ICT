@@ -5,7 +5,7 @@ properties:
     displayName: Topic
   note.topic@networking:
     displayName: Topic
-  note.topic@cloud:
+  note.topic@cloud_computing:
     displayName: Topic
 views:
   - type: table
@@ -16,7 +16,7 @@ views:
         - '!file.name.contains("Template")'
     order:
       - file.name
-      - topic@cloud
+      - topic@cloud_computing
     sort:
       - property: topic
         direction: DESC

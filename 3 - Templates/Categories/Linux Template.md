@@ -5,7 +5,7 @@ Distro:
 topic@linux:
 tags:
   - category/linux
-icon:
+icon: SiLinux
 iconColor:
 last_update:
 ---

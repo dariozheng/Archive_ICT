@@ -4,7 +4,7 @@ categories:
 topic@networking:
 tags:
   - glossaries
-  - networking
+  - category/networking
 ---
 #### software-defined network
 <strong>Software-Defined Network (SDN)</strong> infrastructure <mark style="background: #FFB8EBA6;">centralizes network control in software</mark>, separating it from hardware (routers/switches), <mark style="background: #FFF3A3A6;">creating a virtualized, programmable network</mark> <mark style="background: #ABF7F7A6;">managed via a central controller and APIs for agility, automation, and easier management</mark>, allowing dynamic traffic steering and policy enforcement across physical and virtual environments. 

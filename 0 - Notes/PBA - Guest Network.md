@@ -5,7 +5,7 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - PBA
-  - Networking
+  - category/networking/networking_general
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-09

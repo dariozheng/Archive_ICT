@@ -5,7 +5,7 @@ topic@systems:
 tags:
   - claude
   - tobecompleted
-  - Systems
+  - category/systems
 icon: SiBitcoin
 iconColor: "#F38423"
 ---

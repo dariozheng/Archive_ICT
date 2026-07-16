@@ -36,9 +36,8 @@ if (/[\\/:]/.test(name)) {
 }
 
 // Read the category's topic property back from its note template instead of deriving
-// it: the vault has exceptions no naming rule reproduces (Cloud Computing ->
-// topic@cloud, Microsoft -> product). Whatever key is left after removing the fixed
-// ones is the topic property.
+// it: robust even where a category carries a second key (Linux has Distro alongside
+// topic@linux). Whatever key is left after removing the fixed ones is the topic property.
 const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "aliases", "cssclasses"];
 let topicProp = null;
 const tmpl = app.vault.getAbstractFileByPath(`${CATEGORY_TEMPLATES}/${category} Template.md`);

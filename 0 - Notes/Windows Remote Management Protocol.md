@@ -4,7 +4,7 @@ categories:
 topic@microsoft:
   - "[[Microsoft Protocols]]"
 tags:
-  - Microsoft
+  - category/microsoft/microsoft_protocols
 aliases:
   - WinRM
 icon: SiMicrosoft

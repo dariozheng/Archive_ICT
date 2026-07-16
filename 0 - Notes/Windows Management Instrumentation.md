@@ -4,7 +4,7 @@ categories:
 topic@microsoft:
   - "[[Windows Server]]"
 tags:
-  - Microsoft
+  - category/microsoft/windows_server
 aliases:
   - WMI
 icon: SiWindows

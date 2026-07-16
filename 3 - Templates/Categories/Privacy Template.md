@@ -4,7 +4,7 @@ categories:
 topic@privacy:
 tags:
   - category/privacy
-icon:
+icon: FasUserSecret
 iconColor:
 last_update:
 ---

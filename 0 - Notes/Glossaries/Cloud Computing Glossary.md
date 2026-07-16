@@ -1,7 +1,7 @@
 ---
 categories:
   - "[[Cloud Computing]]"
-topic@cloud:
+topic@cloud_computing:
   - "[[Cloud Computing General]]"
 tags:
   - glossaries

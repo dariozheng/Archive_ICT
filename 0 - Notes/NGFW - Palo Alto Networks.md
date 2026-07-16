@@ -7,7 +7,7 @@ tags:
   - palo_alto/ngfw
   - ngfw
   - tobecompleted
-  - Security
+  - category/security/palo_alto_networks
 aliases:
   - Next-Generation Firewall
 icon: SiPaloaltonetworks
