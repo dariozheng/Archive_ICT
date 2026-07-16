@@ -4,6 +4,7 @@ categories:
 topic@linux:
 tags:
   - glossaries
+  - category/linux
 ---
 #### kernel modules
 independent pieces of compiled C code that extend the functionality of the Linux operating system without requiring you to reboot the computer.

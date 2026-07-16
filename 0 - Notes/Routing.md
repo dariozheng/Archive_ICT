@@ -47,6 +47,7 @@ A router is any device with interfaces in two or more IP networks that forwards 
 
 - It terminates the broadcast domain. Broadcasts and unknown-unicast floods do not cross it.
 - It owns a subnet on each interface, and every host in that subnet uses the router's address as its [[#Default Gateway|default gateway]].
+- 
 - It maintains a [[#The Routing Table|routing table]] describing every destination it believes is reachable.
 - It rewrites the Layer 2 header on every packet it forwards, because the next hop is a different neighbor on a different medium.
 

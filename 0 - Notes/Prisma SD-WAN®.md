@@ -6,6 +6,7 @@ topic@security:
 tags:
   - palo_alto/sase
   - tobecompleted
+  - category/security/palo_alto_networks
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 ---

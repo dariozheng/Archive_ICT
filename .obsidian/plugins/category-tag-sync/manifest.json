@@ -1,0 +1,9 @@
+{
+  "id": "category-tag-sync",
+  "name": "Category Tag Sync",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Keeps nested category/<cat>/<topic> tags in sync with each note's categories and topic@ properties.",
+  "author": "Archive_ICT",
+  "isDesktopOnly": false
+}
