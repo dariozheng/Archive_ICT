@@ -43,12 +43,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/BGP.md",
+                "file": "0 - Notes/Border Gateway Protocol.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "BGP"
+              "title": "Border Gateway Protocol"
             }
           },
           {
@@ -57,12 +57,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/BGP.md",
+                "file": "0 - Notes/Border Gateway Protocol.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "BGP"
+              "title": "Border Gateway Protocol"
             }
           }
         ],
@@ -151,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/BGP.md",
+                "file": "0 - Notes/Border Gateway Protocol.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
@@ -269,9 +269,10 @@
   "active": "0f2b3e32cfa375ea",
   "lastOpenFiles": [
     "0 - Notes/Autonomous System.md",
-    "0 - Notes/BGP.md",
-    "0 - Notes/AS.md",
     "0 - Notes/Router 1.md",
+    "0 - Notes/Border Gateway Protocol.md",
+    "0 - Notes/Routing.md",
+    "0 - Notes/AS.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Networking.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
@@ -281,7 +282,6 @@
     "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "2 - Categories/Security.md",
-    "0 - Notes/Routing.md",
     "0 - Notes/VRF.md",
     "0 - Notes/VRF 2.md",
     "0 - Notes/OSPF 2.md",

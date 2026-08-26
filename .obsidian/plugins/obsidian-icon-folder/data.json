@@ -364,12 +364,12 @@
     "iconName": "FasNetworkWired",
     "iconColor": null
   },
-  "0 - Notes/BGP.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": null
-  },
   "0 - Notes/Autonomous System.md": {
     "iconName": "FasNetworkWired",
-    "iconColor": null
+    "iconColor": "#003791"
+  },
+  "0 - Notes/Border Gateway Protocol.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
   }
 }
