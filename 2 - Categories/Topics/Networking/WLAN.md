@@ -1,8 +1,12 @@
 ---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[WLAN]]"
 tags:
-  - topic
   - category/networking/wlan
-icon: LiWifi
-iconColor: "#003780"
+icon: FasNetworkWired
+iconColor:
+last_update:
 ---
 ![[WLAN.base]]

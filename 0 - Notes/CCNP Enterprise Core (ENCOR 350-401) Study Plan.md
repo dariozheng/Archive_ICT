@@ -11,18 +11,18 @@ Quick navigation: [[#Exam facts (v1.2)|exam facts]] | [[#How to use this plan|me
 
 _What the exam is, what it earns, and how it is weighted._
 
-|Attribute|Value|
-|---|---|
-|Exam|350-401 ENCOR, Implementing Cisco Enterprise Network Core Technologies, v1.2 (effective 2026-03-19)|
-|Duration|120 minutes|
-|Questions|Not officially published; commonly reported around 90-110 (multiple choice, multi-select, drag-and-drop, sims)|
-|Cost|400 USD (or Cisco Learning Credits), via Pearson VUE test center or OnVUE online proctoring|
-|Languages|English, Japanese|
-|Passing score|Variable scaled cut, unofficially reported around 825/1000|
-|Earns|Cisco Certified Specialist - Enterprise Core|
-|Counts toward|Core exam for CCNP Enterprise; qualifying exam for the CCIE Enterprise Infrastructure lab|
-|Full CCNP Enterprise|ENCOR plus one concentration exam (ENARSI 300-410 is the most common pairing)|
-|Validity|3 years; renew by re-exam or Continuing Education credits|
+| Attribute            | Value                                                                                                          |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Exam                 | 350-401 ENCOR, Implementing Cisco Enterprise Network Core Technologies, v1.2 (effective 2026-03-19)            |
+| Duration             | 120 minutes                                                                                                    |
+| Questions            | Not officially published; commonly reported around 90-110 (multiple choice, multi-select, drag-and-drop, sims) |
+| Cost                 | 400 USD (or Cisco Learning Credits), via Pearson VUE test center or OnVUE online proctoring                    |
+| Languages            | English, Japanese                                                                                              |
+| Passing score        | Variable scaled cut, unofficially reported around 825/1000                                                     |
+| Earns                | Cisco Certified Specialist - Enterprise Core                                                                   |
+| Counts toward        | Core exam for CCNP Enterprise; qualifying exam for the CCIE Enterprise Infrastructure lab                      |
+| Full CCNP Enterprise | ENCOR plus one concentration exam (ENARSI 300-410 is the most common pairing)                                  |
+| Validity             | 3 years; renew by re-exam or Continuing Education credits                                                      |
 
 Domain weights in v1.2:
 

@@ -202,8 +202,8 @@
     "iconColor": "#1BA0D7"
   },
   "2 - Categories/Topics/Networking/WLAN.md": {
-    "iconName": "LiWifi",
-    "iconColor": "#003780"
+    "iconName": "FasNetworkWired",
+    "iconColor": null
   },
   "0 - Notes/nftables.md": {
     "iconName": "SiLinux",
@@ -299,5 +299,77 @@
     "iconColor": null
   },
   "3 - Templates/Notes/Codes": "LiTemplaterIcon",
-  "3 - Templates/Notes": "LiTemplaterIcon"
+  "3 - Templates/Notes": "LiTemplaterIcon",
+  "0 - Notes/OSPF.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/VRF.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Hypervisor.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Catalyst SD-WAN.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Cloud.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/High Availability.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Campus Design.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/SD-Access.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/TrustSec.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/LISP.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/VXLAN.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Hypervisors.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Wireless.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/AWS Networking.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/VRF 2.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Cisco Nexus Virtual PortChannel (vPC).md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/BGP.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Autonomous System.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  }
 }
