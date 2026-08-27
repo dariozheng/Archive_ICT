@@ -11,6 +11,8 @@ last_update: 2026-08-26
 aliases:
   - BGP
   - Border Gateway Protocol
+  - MBGP
+  - MP-BGP
 ---
 <strong>Border Gateway Protocol (BGP)</strong> is the core routing protocol that manages how data packets are directed across the internet by exchanging routing and reachability information between different networks or [[Autonomous System]].
 
@@ -26,7 +28,9 @@ Per RFC 4271, <strong>well-known attributes</strong> must be recognized by all B
 ## Well-known mandatory
 Every <strong>BGP-compliant router</strong> <mark style="background: #FFB8EBA6;">must recognize these attributes</mark>, and they <strong>must be included</strong> in every BGP route update message.
 ### AS_PATH
-A chronological list of all Autonomous Systems (AS) that the route has traveled through to help prevent loops.
+<strong>AS_PATH</strong> is a <strong>well-known mandatory attribute</strong> and <mark style="background: #FFB86CA6;">includes a complete list of all the ASNs</mark> that <mark style="background: #BBFABBA6;">the prefix advertisement has traversed</mark> from its <strong>source AS</strong>. 
+<strong>AS_Path</strong> is used as a <mark style="background: #ADCCFFA6;">loop-prevention mechanism in BGP</mark>. 
+If a <mark style="background: #ABF7F7A6;">BGP router receives a prefix advertisement with its AS listed in the AS_Path attribute</mark>, <mark style="background: #ADCCFFA6;">it discards the prefix because the router thinks the advertisement forms a loop</mark>.
 ### NEXT_HOP
 The specific IP address of the next router used to reach the destination.
 Every single BGP route must have a valid, reachable next-hop IP address. If the router's routing table cannot find a valid path to reach this `NEXT_HOP` IP, the BGP route is completely ignored.
@@ -54,3 +58,44 @@ Suggests to external neighbors which path they should prefer when entering your 
 This is used to influence <strong>inbound traffic</strong> from a directly connected neighbor. If you have two physical connections to the same provider, you send a lower MED value on the link you want them to use.
 ### ORIGINATOR_ID
 A tie-breaker ID used to prevent routing loops in networks utilizing Route Reflectors.
+# Address Families
+An <strong>address family</strong> correlates to a specific network protocol, such as IPv4 or IPv6, it uses an extension called <strong>address family identifier</strong> <strong>(AFI)</strong> and additional granularity is provided through a <strong>subsequent address-family identifier</strong> <strong>(SAFI)</strong> such as <strong>unicast</strong> or <strong>multicast</strong>.
+
+In BGP, the <strong>Network Layer Reachability Information</strong> (<strong>NLRI</strong>) is the prefix length and the prefix. 
+
+Every address family <mark style="background: #FFB8EBA6;">maintains a separate database and configuration</mark> for each protocol (address family + sub-address family) in BGP. 
+
+This allows for a routing policy in one address family to be different from a routing policy in a different address family, even though the router uses the same BGP session with the other router. 
+<mark style="background: #FFB86CA6;">BGP includes an <strong>AFI</strong> and <strong>SAFI</strong> with every route advertisement</mark> to <mark style="background: #ADCCFFA6;">differentiate between the AFI and SAFI databases</mark>.
+
+# Inter-Router Communication
+BGP is designed as an inter-autonomous routing protocol, the neighbor adjacencies should not change frequently and are coordinated. 
+
+BGP neighbor are defined by IP address. 
+
+BGP uses TCP port 179 to communicate with other routers. 
+TCP allows for handling of fragmentation, sequencing, and reliability (acknowledgment and retransmission) of communication packets. 
+Most recent implementations of BGP set the do-not-fragment (DF) bit to prevent fragmentation and rely on path MTU discovery.
+
+BGP by using TCP, <mark style="background: #BBFABBA6;">is capable of crossing network boundaries</mark> (that is, multi-hop capable) so while <mark style="background: #ABF7F7A6;">BGP can form neighbor adjacencies that are directly connected</mark>, <mark style="background: #ADCCFFA6;">it can also form adjacencies that are multiple hops away</mark>.
+
+A <strong>BGP session</strong> refers to the <strong>established adjacency between two BGP routers</strong>. 
+<strong>Multi-hop sessions</strong> require that the <mark style="background: #CACFD9A6;">router use an underlying route installed in the RIB</mark> (static or from any routing protocol) <mark style="background: #ABF7F7A6;">to establish the TCP session with the remote endpoint</mark>.
+
+![[Pasted image 20260827100535.png]]In figure, R1 is able to establish a direct BGP session with R2. 
+In addition, R2 is able to establish a BGP session with R4, even though it passes through R3. 
+R1 and R2 use a directly connected route to locate each other. 
+R2 uses a static route to reach the 10.34.1.0/24 network, and R4 has a static route to reach the 10.23.1.0/24 network. 
+R3 is unaware that R2 and R4 have established a BGP session even though the packets flow through R3.
+
+> [!NOTE]
+> BGP neighbors connected to the same network use the ARP table to locate the IP address of the peer. 
+> 
+> Multi-hop BGP sessions require routing table information for finding the IP address of the peer. It is common to have a static route or an IGP running between iBGP neighbors for providing the topology path information to establish the BGP TCP session. A default route is not sufficient to establish a multi-hop BGP session.
+
+# BGP Session Types
+BGP session are categorized into two types: 
+- <strong>Internal BGP (iBGP)</strong>: Sessions established with an <strong>iBGP</strong> router that are in the same AS or that participate in the same BGP confederation. 
+  <strong>iBGP</strong> prefixes are assigned an administrative distance (AD) of 200 upon installation in the router's RIB. 
+- <strong>External BGP (eBGP)</strong>: Sessions established with a BGP router that are in a different AS. 
+  <strong>eBGP</strong> prefixes are assigned an AD of 20 upon installation in the router's RIB.
