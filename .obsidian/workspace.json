@@ -228,8 +228,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -253,8 +252,9 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "719d795d6f6740e8",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260827112403.png",
     "attachments/Pasted image 20260827104517.png",
     "attachments/Pasted image 20260827104340.png",
     "0 - Notes/Routing.md",
@@ -290,7 +290,6 @@
     "attachments/SD-Access - Fabric and Three Planes.png",
     "attachments/Campus Design - Hierarchical Layers.png",
     "attachments/High Availability - FHRP Virtual Gateway.png",
-    "attachments/Catalyst SD-WAN - Four Planes.png",
     "3 - Templates/Bases/Hardware.base",
     "3 - Templates/Bases/Topics/test/test General.base",
     "3 - Templates/Bases/test.base",

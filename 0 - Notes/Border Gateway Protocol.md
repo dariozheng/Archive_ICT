@@ -123,6 +123,50 @@ Injecting external BGP routes into an Interior Gateway Protocol (IGP)—like OSP
 ## eBGP
 eBGP involves the exchange of network prefixes between AS. eBGP peerings are the core component of BGP on the Internet. eBGP involves the exchange of network prefixes between autonomous systems. The following behaviors are different on **eBGP sessions** than on **iBGP sessions**:
 - <strong>Time-to-live (TTL)</strong> on <strong>eBGP</strong> packets is set to <strong>1</strong> by default. <mark style="background: #BBFABBA6;">eBGP packets drop in transit if a multi-hop BGP session is attempted</mark>. (TTL on iBGP packets is set to 255, which allows for multi-hop sessions.)
-- The <strong>advertising router</strong> modifies the <strong>BGP next-hop address</strong> to the <strong>IP address sourcing the BGP connection</strong>.
-- The <strong>advertising router</strong> prepends its <strong>ASN</strong> to the existing <strong>AS_Path</strong> attribute.
-- The receiving router verifies that the <strong>AS_Path</strong> attribute does not contain an <strong>ASN</strong> that matches the local ASN. BGP discards the route if it fails the <strong>AS_Path</strong> loop prevention check.
+- <mark style="background: #FFB8EBA6;">The <strong>advertising router</strong> modifies the <strong>BGP next-hop address</strong> to the <strong>IP address sourcing the BGP connection</strong></mark>.
+- The <strong>advertising router</strong> <mark style="background: #FF5582A6;">prepends</mark> its <strong>ASN</strong> to the existing <strong>AS_Path</strong> attribute.
+- <mark style="background: #ABF7F7A6;">The receiving router verifies that the <strong>AS_Path</strong> attribute does not contain an <strong>ASN</strong> that matches the local ASN (his own)</mark>. BGP discards the route if it fails the <strong>AS_Path</strong> loop prevention check.
+The configurations for eBGP and iBGP sessions are fundamentally the same except that the ASN in the <strong>remote-as</strong> statement is different from the ASN defined in the BGP process.
+
+The figure shows the <strong>eBGP</strong> and <strong>iBGP</strong> sessions that would be needed between the routers to allow reachability between AS 65100 and AS 65300. Notice that all routers in AS 65200 establish iBGP sessions in a full mesh to allow for proper forwarding between AS 65100 and AS 65300.
+![[Pasted image 20260827112403.png]]
+# BGP Messages
+
+| Type | Name         | Functional Overview                            |
+| ---- | ------------ | ---------------------------------------------- |
+| 1    | OPEN         | Sets up and establishes BGP adjacency          |
+| 2    | UPDATE       | Advertises, updates, or withdraws routes       |
+| 3    | NOTIFICATION | Indicates an error condition to a BGP neighbor |
+| 4    | KEEPALIVE    | Ensures that BGP neighbors are still alive     |
+## OPEN
+An OPEN message is used to establish a BGP adjacency. 
+
+Both sides negotiate session capabilities before BGP peering is established. 
+
+The OPEN message contains the BGP version number, the <strong>ASN of the originating router</strong>, the <strong>hold time</strong>, the <strong>BGP identifier</strong>, and other optional parameters that establish the session capabilities.
+### Hold time 
+The hold time field in the OPEN message sets the proposed value for the hold timer in seconds, for each BGP neighbor. 
+
+The hold timer in conjunction with keepalive messages is a heartbeat mechanism for BGP neighbors to ensure that a neighbor is healthy and alive.
+When establishing a BGP session, the routers use the smaller hold time value contained in the two routers’ OPEN messages. 
+The hold time value must be at least 3 seconds, or set to 0 to disable keepalive messages. For Cisco routers, the default hold timer is 180 seconds.
+### BGP identifier
+The <strong>BGP router ID (RID)</strong> is a 32-bit unique number that identifies the BGP router in the advertised prefixes. 
+The RID can be used as a loop-prevention mechanism for routers advertised within an AS. 
+The RID can be set manually or dynamically for BGP. A nonzero value must be set in order for routers to become neighbors.
+## KEEPALIVE
+BGP does not rely on the TCP connection state to ensure that the neighbors are still alive. 
+<strong>KEEPALIVE</strong> messages are exchanged every one-third of the hold timer agreed upon between the two BGP routers. 
+Cisco devices have a default hold time of 180 seconds, so the default keepalive interval is 60 seconds. If the hold time is set to 0, then no keepalive messages are sent between the BGP neighbors.
+## UPDATE
+An <strong>UPDATE</strong> message advertises any feasible routes, withdraws previously advertised routes, or can do both. 
+
+An UPDATE message includes the advertised prefixes in the <strong>Network Layer Reachability Information (NLRI) PA</strong>, as well as other associated <strong>BGP PAs</strong>. 
+
+<mark style="background: #FFB8EBA6;">Prefixes that need to be withdrawn</mark> are <mark style="background: #FF5582A6;">advertised in the</mark> <strong>WITHDRAWN ROUTES</strong> <mark style="background: #FF5582A6;">field of the UPDATE message</mark>. 
+
+An <strong>UPDATE</strong> message can act as a keepalive to reduce unnecessary traffic. <mark style="background: #FFB86CA6;">Upon receipt of an UPDATE, the hold timer resets to the initial value</mark>. <mark style="background: #BBFABBA6;">If the hold timer reaches zero</mark>, <mark style="background: #ABF7F7A6;">the BGP session is torn down</mark>, <mark style="background: #ADCCFFA6;">routes from that neighbor are removed</mark>, <mark style="background: #D2B3FFA6;">and an UPDATE message is sent to other BGP neighbors to withdraw the affected prefixes</mark>.
+
+## NOTIFICATION
+A <strong>NOTIFICATION</strong> message is sent when an error is detected with the BGP session, such as a hold timer expiring, neighbor capabilities changing, or a BGP session reset being requested. This causes the BGP connection to close.
+# BGP Neighbor States
