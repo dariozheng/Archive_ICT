@@ -99,3 +99,25 @@ BGP session are categorized into two types:
   <strong>iBGP</strong> prefixes are assigned an administrative distance (AD) of 200 upon installation in the router's RIB. 
 - <strong>External BGP (eBGP)</strong>: Sessions established with a BGP router that are in a different AS. 
   <strong>eBGP</strong> prefixes are assigned an AD of 20 upon installation in the router's RIB.
+## iBGP
+Internal BGP (iBGP) is required within an Autonomous System (AS) when running multiple routing policies or providing transit connectivity between external networks.
+
+It is primarily used inside large enterprise networks or Service Provider (ISP) cores <strong>to distribute</strong> <mark style="background: #FFB86CA6;">external routing internet paths</mark> <strong>transitively</strong> <mark style="background: #BBFABBA6;">across the internal network</mark>.
+
+For example, in the figure, **AS 65200** acts as a transit provider, connecting **AS 65100** (at router R2) to **AS 65300** (at router R4).
+![[Pasted image 20260827104340.png]]
+
+If R2 and R4 establish an iBGP session directly, the intermediate core router (R3) remains unaware of the external routes. As shown in figure, when transit traffic from either AS reaches R3, the router drops the packets because its routing table lacks the necessary forwarding information.
+![[Pasted image 20260827104517.png]]
+Injecting external BGP routes into an Interior Gateway Protocol (IGP)—like OSPF or EIGRP—to fix this issue is not viable for three reasons:
+
+- **Scalability:** The global Internet routing table contains over 940,000 IPv4 prefixes. IGPs are not engineered to handle this volume of routes.
+- **Routing Policy:** IGPs rely strictly on metrics (like bandwidth or delay) for path selection. BGP uses a multi-step decision process and path attributes, allowing it to intentionally choose longer or seemingly suboptimal paths to satisfy corporate routing policies.
+- **Attribute Preservation:** IGPs cannot carry or preserve BGP-specific path attributes as a prefix travels across the internal network.
+
+To ensure successful traffic forwarding through AS 65200, an <mark style="background: #ADCCFFA6;">iBGP session must be established between all internal routers (<strong>R2</strong>, <strong>R3</strong>, and <strong>R4</strong>) in a <strong>full-mesh topology</strong></mark>.
+
+> [!NOTE]
+> Transit connectivity is strictly a service provider function. Enterprise organizations are consumers and should never provide transit connectivity between autonomous systems over the Internet.
+
+## eBGP 
