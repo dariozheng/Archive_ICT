@@ -5,6 +5,7 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - category/networking/networking_general
+  - encor/routing
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-08-26
@@ -61,7 +62,7 @@ A tie-breaker ID used to prevent routing loops in networks utilizing Route Refle
 # Address Families
 An <strong>address family</strong> correlates to a specific network protocol, such as IPv4 or IPv6, it uses an extension called <strong>address family identifier</strong> <strong>(AFI)</strong> and additional granularity is provided through a <strong>subsequent address-family identifier</strong> <strong>(SAFI)</strong> such as <strong>unicast</strong> or <strong>multicast</strong>.
 
-In BGP, the <strong>Network Layer Reachability Information</strong> (<strong>NLRI</strong>) is the prefix length and the prefix. 
+In BGP, the <strong>Network Layer Reachability Information</strong> (<strong>NLRI</strong>) is the prefix length and the prefix.
 
 Every address family <mark style="background: #FFB8EBA6;">maintains a separate database and configuration</mark> for each protocol (address family + sub-address family) in BGP. 
 
@@ -341,3 +342,70 @@ Foreign host: 10.12.1.1, Foreign port: <strong>56824</strong>
 After configuring a <strong>BGP network statement</strong>, the BGP process <strong>searches</strong> the <mark style="background: #FFB8EBA6;">RIB routes for an exact network prefix match</mark>. The route can be from a connected network, a secondary connected network, or any route from a routing protocol. <mark style="background: #BBFABBA6;">After verifying that the <strong>network statement</strong> matches a route in the RIB</mark>, <mark style="background: #ABF7F7A6;">the following <strong>BGP PAs</strong> are set</mark>, depending on the route type:
 - <strong>Connected network</strong>: <mark style="background: #FF5582A6;">The <strong>next-hop BGP attribute</strong> is set to <strong>0.0.0.0</strong></mark>, <mark style="background: #FFF3A3A6;">the <strong>BGP origin attribute</strong> is set to <strong>i (IGP)</strong></mark>, and the <mark style="background: #BBFABBA6;"><strong>BGP weight</strong> is set to <strong>32,768</strong></mark>.
 - <strong>Static route</strong> or <strong>routing protocol</strong>: <mark style="background: #ABF7F7A6;">The <strong>next-hop BGP attribute</strong> is set to the <strong>next-hop IP address in the RIB</strong></mark>, <mark style="background: #ADCCFFA6;">the BGP origin attribute is set to <strong>i (IGP)</strong></mark>, <mark style="background: #CACFD9A6;">the <strong>BGP weight</strong> is set to <strong>32,768</strong></mark>, and <mark style="background: #D2B3FFA6;">the <strong>MED</strong> is set to the <strong>IGP metric</strong></mark>.
+
+After the <strong>BGP PAs</strong> are set, <mark style="background: #FFF3A3A6;">the route is installed into the <strong>Loc-RIB</strong></mark> (the BGP table). Not every route in the Loc-RIB is advertised to a BGP peer. <mark style="background: #FFB86CA6;">All routes in the Loc-RIB use the following process for advertisement to BGP peers</mark>:
+1. Pass a validity check. Verify that the <strong>NLRI</strong> is valid and that the next-hop address is resolvable in the RIB. If the NLRI fails, the NLRI remains but does not process further.
+2. Process outbound neighbor route policies. After processing, if a route was not denied by the outbound policies, the route is maintained in the <strong>Adj-RIB-Out</strong> for later reference.
+3. Advertise the routes to BGP peers. If the <strong>next-hop BGP PA</strong> is <strong>0.0.0.0 </strong>for the prefixes in the NLRI PA, then the <strong>next-hop address</strong> is changed to the IP address of the BGP session (the IP of the BGP peer).
+
+![[Pasted image 20260827144307.png]]
+
+The <strong>network statement</strong> resides under the appropriate address family within the BGP router configuration. 
+The command <strong>network</strong> _network_ <strong>mask</strong> _subnet-mask_ <strong>route-map</strong> _route- map-name_ is used for advertising IPv4 networks. 
+
+The optional <strong>route-map</strong> provides a method of setting specific <strong>BGP PAs</strong> when the route installs into the Loc-RIB.
+
+The figure illustrates R1 and R2 connected through the 10.12.1.0/24 network. The example demonstrates the configuration where both routers will advertise the Loopback 0 interfaces (192.168.1.1/32 and 192.168.2.2/32, respectively) and the 10.12.1.0/24 network into BGP. Notice that R1 uses the default IPv4 address family, and R2 explicitly specifies the IPv4 address family.
+![[Pasted image 20260827145155.png]]
+![[Pasted image 20260827145205.png]]
+# Receiving Routes 
+BGP uses three tables for maintaining the network prefix and path attributes (PAs) for a route:
+- **Adj-RIB-In:** Contains the routes in original form (that is, from before inbound route policies are processed). To save memory, the table is purged after all route policies are processed.
+- **Loc-RIB:** Contains all the routes that originated locally or were received from other BGP peers. After the routes pass the validity and next-hop reachability check, the BGP best-path algorithm selects the best route for a specific prefix. The Loc-RIB, also known as the BGP table, is used for presenting routes to the IP routing table (RIB).
+- **Adj-RIB-Out:** Contains the routes after outbound route policies have been processed.
+
+Not every route in the Loc-RIB is advertised to a BGP peer or installed into the RIB when received from a BGP peer. BGP performs the following route processing steps:
+
+1. Store the route in the <strong>Adj-RIB-In</strong> in the original state and apply the inbound route policy based on the neighbor on which the route was received.
+2. Update the <strong>Loc-RIB</strong> with the latest entry. The <strong>Adj-RIB-In</strong> is cleared to save memory.
+3. Pass a validity check to <mark style="background: #FFF3A3A6;">verify that the route is valid</mark> and <mark style="background: #BBFABBA6;">that the next-hop address is resolvable in the RIB</mark>. If the route fails, the route remains in the Loc-RIB but is not processed further.
+4. <mark style="background: #ADCCFFA6;">Identify the BGP best path</mark> and <mark style="background: #D2B3FFA6;">pass only the best path and its path attributes to step 5</mark>.
+5. <mark style="background: #FFB8EBA6;">Install the best-path route into the RIB</mark>, process the outbound route policy, store the non-discarded routes in the <strong>Adj-RIB-Out</strong>, and advertise to BGP peers.
+
+![[Pasted image 20260827150713.png]]
+
+# Showing Routes
+The command **show bgp** _afi safi_ displays the contents of the BGP table (Loc-RIB) on the router. Every entry in the Loc-RIB contains at least one path but could contain multiple paths for the same network prefix.
+The example displays the BGP table on R1, which contains received routes and locally generated routes.
+
+![[Pasted image 20260827153105.png]]
+
+| Field           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Network         | A list of the prefixes installed in BGP. If multiple paths exist for the same prefix, only the first prefix is listed, and other paths leave an empty space in the output.<br>Valid paths are indicated by the * . <br>The path selected as the best path is indicated by an angle bracket (>).                                                                                                                                                     |
+| Next Hop        | A <strong>well-known mandatory BGP path attribute</strong> that defines the IP address for the next hop for that specific path.                                                                                                                                                                                                                                                                                                                     |
+| Metric          | <strong>Multiple-exit discrimator (MED)</strong>: An optional non-transitive BGP path attribute used in BGP for the specific path.                                                                                                                                                                                                                                                                                                                  |
+| LocPrf          | <strong>Local Preference</strong>: A well-known discretionary BGP path attribute used in the BGP best-path algorithm for the specific path.                                                                                                                                                                                                                                                                                                         |
+| Weight          | A locally significant Cisco-defined attribute used in the BGP best-path algorithm for the specific path.                                                                                                                                                                                                                                                                                                                                            |
+| Path and Origin | <strong>AS_Path</strong>: A <strong>well-known mandatory BGP path attribute</strong> used for loop prevention and in the BGP best-path algorithm for the specific path.<br><br><strong>Origin</strong>: A well-known mandatory BGP path attribute used in the BGP best-path algorithm. A value of <strong>i</strong> represents an IGP, <strong>e</strong> indicates EGP, and <strong>?</strong> indicates a route that was redistributed into BGP. |
+
+The command **show bgp** _afi safi network_ displays all the paths for a specific prefix and the BGP path attributes for that prefix. The example show the paths for the 10.12.1.0/24 prefix. The output includes the number of paths and which path is the best path.
+The command **show bgp** _afi safi_ **detail** displays the entire BGP table with all the path attributes.
+![[Pasted image 20260827154056.png]]
+
+The <strong>Adj-RIB-Out</strong> is a unique table maintained for <strong>each</strong> <mark style="background: #FFB8EBA6;">BGP peer</mark>. 
+It enables a network engineer to view routes advertised to a specific router. 
+The command **show bgp** _afi safi_ **neighbor** _ip-address_ **advertised routes** displays the contents of the Adj-RIB-Out for a specific neighbor.
+
+The example shows the Adj-RIB-Out entries specific to each neighbor. Notice that the next-hop address reflects the local router and will be changed as the route advertises to the peer.
+
+![[Pasted image 20260827163547.png]]
+The **show bgp ipv4 unicast summary** command can also be used to verify the exchange of routes between nodes.
+
+![[Pasted image 20260827163622.png]]
+The BGP routes in the global IP routing table (RIB) are displayed with the command **show ip route bgp**.
+
+The example shows these commands in the sample topology. The prefixes are from an eBGP session and have an AD of 20, and no metric is present.
+
+![[Pasted image 20260827163718.png]]
+#

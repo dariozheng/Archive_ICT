@@ -5,6 +5,7 @@ topic@networking:
   - "[[Networking General]]"
 tags:
   - category/networking/networking_general
+  - encor/routing
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-08-26
