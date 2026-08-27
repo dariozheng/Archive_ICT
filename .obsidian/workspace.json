@@ -228,7 +228,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -252,8 +253,14 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "eacca92367d37e14",
   "lastOpenFiles": [
+    "attachments/Pasted image 20260827122551.png",
+    "attachments/Pasted image 20260827121711.png",
+    "attachments/Pasted image 20260827115619.png",
+    "attachments/Pasted image 20260827115610.png",
+    "attachments/Pasted image 20260827114532.png",
+    "attachments/Pasted image 20260827114521.png",
     "attachments/Pasted image 20260827112403.png",
     "attachments/Pasted image 20260827104517.png",
     "attachments/Pasted image 20260827104340.png",
@@ -284,12 +291,6 @@
     "0 - Notes/IPv6.md",
     "0 - Notes/PBA - Cisco Catalyst Center.md",
     "attachments/Hypervisors - Type 1 vs Type 2.png",
-    "attachments/VXLAN - Encapsulation and Overlay.png",
-    "attachments/LISP - Map and Encapsulate.png",
-    "attachments/TrustSec - Classify Propagate Enforce.png",
-    "attachments/SD-Access - Fabric and Three Planes.png",
-    "attachments/Campus Design - Hierarchical Layers.png",
-    "attachments/High Availability - FHRP Virtual Gateway.png",
     "3 - Templates/Bases/Hardware.base",
     "3 - Templates/Bases/Topics/test/test General.base",
     "3 - Templates/Bases/test.base",

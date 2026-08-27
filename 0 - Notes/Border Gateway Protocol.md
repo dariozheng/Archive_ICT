@@ -170,3 +170,165 @@ An <strong>UPDATE</strong> message can act as a keepalive to reduce unnecessary 
 ## NOTIFICATION
 A <strong>NOTIFICATION</strong> message is sent when an error is detected with the BGP session, such as a hold timer expiring, neighbor capabilities changing, or a BGP session reset being requested. This causes the BGP connection to close.
 # BGP Neighbor States
+BGP forms a TCP session with neighbor routers called _peers_. BGP uses the <strong>finite-state machine (FSM)</strong> to maintain a table of all BGP peers and their operational status. The BGP session may report the following states:
+- Idle
+- Connect
+- Active
+- OpenSent
+- OpenConfirm
+- Established
+![[Pasted image 20260827114532.png]]
+## Idle 
+Idle is the fist stage of the <strong>BGP FSM</strong>.  <mark style="background: #FFB8EBA6;">BGP detects a start event</mark> and <mark style="background: #FF5582A6;">tries to initiate a TCP connection to the BGP peer</mark> and <mark style="background: #FFB86CA6;">also listens for a new connection from a peer router</mark>.
+
+If an error causes BGP to go back to the Idle state for a second time, the ConnectRetryTimer is set to 60 seconds and must decrement to zero before the connection can be initiated again. Further failures to leave the Idle state result in the ConnectRetryTimer doubling in length from the previous time.
+## Connect 
+In the <strong>Connect</strong> state, BGP initiates the TCP connection. If the three-way TCP handshake is completed, the established BGP session process resets the <strong>ConnectRetryTimer</strong> and sends an <strong>Open</strong> message to the neighbor; it then changes to the <strong>OpenSent</strong> state.
+
+If the <strong>ConnectRetryTimer</strong> depletes before this stage is complete, a new TCP connection is attempted, the <strong>ConnectRetryTimer</strong> is reset, and the state stays in <strong>Connect</strong>. 
+If the TCP connection fails, the state changes to <strong>Active</strong>. For any other events, the state is changed to <strong>Idle</strong>.
+
+BGP routers use TCP port 179 to listen for incoming connections and as the destination port to connect to BGP peers. The router initiating the outgoing TCP connection uses a random source port and the destination port 179.
+
+![[Pasted image 20260827115619.png]]
+## Active
+In the <strong>Active</strong> state, BGP starts a new three-way TCP handshake. 
+
+If a connection is established, an <strong>Open</strong> message is sent, the hold timer is set to 4 minutes, and the state moves to <strong>OpenSent</strong>. 
+
+If this attempt for TCP connection fails, the state moves back to the <strong>Connect</strong> state, and the <strong>ConnectRetryTimer</strong> is reset.
+
+## OpenSent
+In the OpenSent state, an Open message has been sent from the originating router and is awaiting an Open message from the other router. Once the originating router receives the OPEN message from the other router, both OPEN messages are checked for errors. The following items are examined:
+
+- BGP versions must match.
+- The source IP address of the OPEN message must match the IP address that is configured for the neighbor.
+- The AS number in the OPEN message must match what is configured for the neighbor.
+- BGP identifiers (RIDs) must be unique. If an RID does not exist, this condition is not met.
+- Security parameters (such as password and TTL) must be set appropriately.
+
+If the OPEN messages do not have any errors, the hold time is negotiated (using the lower value), and a <strong>KEEPALIVE</strong> message is sent (assuming that the value is not set to 0). The connection state is then moved to <strong>OpenConfirm</strong>. If an error is found in the <strong>OPEN</strong> message, a <strong>NOTIFICATION</strong> message is sent, and the state is moved back to Idle.
+
+If TCP receives a disconnect message, BGP closes the connection, resets the <strong>ConnectRetryTimer</strong>, and sets the state to <strong>Active</strong>. Any other events in this process result in the state moving to <strong>Idle</strong>.
+
+## OpenConfirm
+In the OpenConfirm state, BGP waits for a <strong>KEEPALIVE</strong> or <strong>NOTIFICATION</strong> message. 
+
+Upon receipt of a neighbor’s <strong>KEEPALIVE</strong> message, the state is moved to <strong>Established</strong>. If the hold timer expires, a stop event occurs, or if a <strong>NOTIFICATION</strong> message is received, the state is moved to <strong>Idle</strong>.
+
+## Established
+In the Established state, the <strong>BGP</strong> session is established. <strong>BGP</strong> neighbors exchange routes using <strong>UPDATE</strong> messages. As <strong>UPDATE</strong> and <strong>KEEPALIVE</strong> messages are received, the hold timer is reset. If the hold timer expires, an error is detected, and BGP moves the neighbor back to the Idle state.
+
+# BGP Configuration
+BGP router configuration requires the following components:
+- <strong>BGP session parameters</strong>: BGP session parameters provide settings that involve establishing communication to the remote BGP neighbor. Session settings include the <mark style="background: #FF5582A6;">ASN of the BGP peer</mark>, <mark style="background: #FFB86CA6;">authentication</mark>, and <mark style="background: #FFF3A3A6;">keepalive timers</mark>.
+- <strong>Address family initialization</strong>: The address family is initialized under the BGP router configuration mode. <strong>Network advertisement</strong> and <strong>summarization</strong> occur within the address family.
+- <strong>Activate the address family on the BGP peer</strong>: For a session to initiate, <mark style="background: #BBFABBA6;">one address family for a neighbor must be activated</mark>. <mark style="background: #ABF7F7A6;">The router’s IP address is added to the neighbor table</mark>, and <mark style="background: #ADCCFFA6;">BGP attempts to establish a BGP session</mark> or <mark style="background: #CACFD9A6;">accepts a BGP session initiated from the peer router</mark>.
+
+The following steps show how to configure BGP:
+
+- Step 1. Initialize the BGP routing process with the global command **router bgp** _as-number_.
+
+- Step 2.(Optional) Statically define the BGP router ID (RID). The dynamic RID allocation logic uses the highest IP address of any _up_ loopback interfaces. If there is not an _up_ loopback interface, then the highest IP address of any active _up_ interfaces becomes the RID when the BGP process initializes.
+  
+  To ensure that the RID does not change, a static RID is assigned (typically representing an IPv4 address that resides on the router, such as a loopback address). Any IPv4 address can be used, including IP addresses not configured on the router. Statically configuring the BGP RID is a best practice and involves using the command **bgp router-id** _router-id_.
+  
+  When the router ID changes, all BGP sessions reset and need to be reestablished.
+
+- Step 3. Identify the BGP neighbor’s IP address and autonomous system number with the BGP router configuration command **neighbor** _ip-address_ **remote-as** _as-number_. 
+  
+  It is important to understand the traffic flow of BGP packets between peers. The source IP address of the BGP packets still reflects the IP address of the outbound interface. 
+  
+  When a BGP packet is received, the router correlates the source IP address of the packet to the IP address configured for that neighbor. If the BGP packet source does not match an entry in the neighbor table, the packet cannot be associated to a neighbor and is discarded.
+  
+- Step 4. Initialize the address family with the BGP router configuration command **address-family** _afi safi_. Examples of _afi_ values are IPv4 and IPv6, and examples of _safi_ values are unicast and multicast.
+  
+- Step 5. Activate the address family for the BGP neighbor with the BGP address family configuration command **neighbor** _ip-address_ **activate**.
+
+![[Pasted image 20260827121711.png]]
+# BGP Session Verification
+The BGP session is verified with the command **show bgp** _afi safi_ **summary**. 
+
+The example shows the IPv4 BGP unicast summary. Notice that the BGP RID and table version are the first components shown. The Up/Down column indicates that the BGP session is up for over 5 minutes.
+
+![[Pasted image 20260827122551.png]]
+
+| Field        | Description                                                                                                       |
+| ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Neighbor     | IP address of the BGP peer                                                                                        |
+| V            | BGP version spoken by the BGP peer                                                                                |
+| AS           | Autonomous system number of the BGP peer                                                                          |
+| MsgRcvd      | Count of messages received from the BGP peer                                                                      |
+| MsgSent      | Count of messages sent to the BGP peer                                                                            |
+| TblVer       | Last version of the BGP database sent to the peer                                                                 |
+| InQ          | Number of messages received from the peer and queued to be processed                                              |
+| OutQ         | Number of messages queued to be sent to the peer                                                                  |
+| Up/Down      | Length of time the BGP session is established or the current status if the session is not in an established state |
+| State/PfxRcd | Current BGP peer state or the number of prefixes received from the peer                                           |
+BGP neighbor session state, timers, and other essential peering information is available with the command **show bgp** _afi safi_ **neighbors** _ip-address_, as shown in the example.
+
+```
+R2# show bgp ipv4 unicast neighbors 10.12.1.1
+
+! Output ommitted for brevity                                             
+! The first section provides the neighbor's IP address, remote-as, indicates if the neighbor is 'internal' or 'external', the neighbor's BGP version, RID, session state, and timers.                                                              
+BGP neighbor is 10.12.1.1, remote AS65100, external link
+  BGP version 4, remote router ID 192.168.1.1
+  BGP state = Established, up for 00:01:04
+  Last read 00:00:10, last write 00:00:09, hold is 180, keepalive is 60 seconds
+  Neighbor sessions:
+    1 active, is not multisession capable (disabled)
+
+! This second section indicates the capabilities of the BGP neighbor and address-families configured on the neighbor.                                           
+  Neighbor capabilities:
+    Route refresh: advertised and received(new)
+    Four-octets ASN Capability: advertised and received
+    Address family IPv4 Unicast: advertised and received
+    Enhanced Refresh Capability: advertised
+    Multisession Capability:
+    Stateful switchover support enabled: NO for session 1
+  Message statistics:
+    InQ depth is 0
+    OutQ depth is 0
+
+! This section provides a list of the BGP packet types that have been received or sent to the neighbor router.                                                         
+                        Sent        Rcvd
+    Opens:              1           1
+    Notifications:      0           0
+    Updates:            0           0
+    Keepalives:         2           2
+    Route Refresh:      0           0
+    Total:              3           3
+  Default minimum time between advertisement runs is 0 seconds
+
+! This section provides the BGP table version of the IPv4 Unicast address-family. The table version is not a 1-to-1 correlation with routes as multiple route change can occur during a revision change. Notice the Prefix Activity columns in this section.                                                                
+For address family: IPv4 Unicast
+  Session: 10.12.1.1
+  BGP table version 1, neighbor version 1/0
+  Output queue size : 0
+  Index 1, Advertise bit 0
+                                 Sent       Rcvd
+  Prefix activity:               ----       ----
+    Prefixes Current:               0          0
+    Prefixes Total:                 0          0
+    Implicit Withdraw:              0          0
+    Explicit Withdraw:              0          0
+    Used as bestpath:             n/a          0
+    Used as multipath:            n/a          0
+
+                                   Outbound    Inbound
+  Local Policy Denied Prefixes:    --------    -------
+    Total:                                0          0
+
+ Number of NLRIs in the update sent: max 0, min 0
+
+! This section indicates that a valid route exists in the RIB to the BGP peer IP address, provides the number of times that the connection has established and time dropped, since the last reset, the reason for the reset, if path-mtu-discovery is enabled, and ports used for the BGP session.                               
+ Address tracking is enabled, the RIB does have a route to 10.12.1.1
+  Connections established 2; dropped 1
+  Last reset 00:01:40, due to Peer closed the session
+  Transport(tcp) path-mtu-discovery is enabled
+Connection state is ESTAB, I/O status: 1, unread input bytes: 0
+Minimum incoming TTL 0, Outgoing TTL 255
+Local host: 10.12.1.2, Local port: 179
+Foreign host: 10.12.1.1, Foreign port: 56824
+```
