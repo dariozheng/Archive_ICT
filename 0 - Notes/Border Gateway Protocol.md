@@ -267,19 +267,19 @@ The example shows the IPv4 BGP unicast summary. Notice that the BGP RID and tabl
 | State/PfxRcd | Current BGP peer state or the number of prefixes received from the peer                                           |
 BGP neighbor session state, timers, and other essential peering information is available with the command **show bgp** _afi safi_ **neighbors** _ip-address_, as shown in the example.
 
-```
-R2# show bgp ipv4 unicast neighbors 10.12.1.1
+---
+R2# <strong>show bgp ipv4 unicast neighbors 10.12.1.1</strong>
 
-! Output ommitted for brevity                                             
-! The first section provides the neighbor's IP address, remote-as, indicates if the neighbor is 'internal' or 'external', the neighbor's BGP version, RID, session state, and timers.                                                              
-BGP neighbor is 10.12.1.1, remote AS65100, external link
-  BGP version 4, remote router ID 192.168.1.1
+<mark style="background: #ABF7F7A6;">The first section provides the neighbor's IP address, remote-as, indicates if the neighbor is 'internal' or 'external', the neighbor's BGP version, RID, session state, and timers</mark>.
+
+BGP neighbor is <strong>10.12.1.1</strong>, <strong>remote AS65100</strong>, <strong>external link</strong>
+  BGP <strong>version 4</strong>, remote router <strong>ID 192.168.1.1</strong>
   BGP state = Established, up for 00:01:04
-  Last read 00:00:10, last write 00:00:09, hold is 180, keepalive is 60 seconds
+  Last read 00:00:10, last write 00:00:09, <strong>hold is 180</strong>, <strong>keepalive is 60</strong> seconds
   Neighbor sessions:
     1 active, is not multisession capable (disabled)
 
-! This second section indicates the capabilities of the BGP neighbor and address-families configured on the neighbor.                                           
+<mark style="background: #BBFABBA6;">This second section indicates the capabilities of the BGP neighbor and address-families configured on the neighbor</mark>.                                           
   Neighbor capabilities:
     Route refresh: advertised and received(new)
     Four-octets ASN Capability: advertised and received
@@ -291,44 +291,48 @@ BGP neighbor is 10.12.1.1, remote AS65100, external link
     InQ depth is 0
     OutQ depth is 0
 
-! This section provides a list of the BGP packet types that have been received or sent to the neighbor router.                                                         
-                        Sent        Rcvd
-    Opens:              1           1
-    Notifications:      0           0
-    Updates:            0           0
-    Keepalives:         2           2
+<mark style="background: #ABF7F7A6;">This section provides a list of the BGP packet types that have been received or sent to the neighbor router</mark>.                                                         
+                   Sent        Rcvd
+    Opens:                    1           1
+    Notifications:         0           0
+    Updates:                0           0
+    Keepalives:            2           2
     Route Refresh:      0           0
-    Total:              3           3
+    Total:                      3           3
   Default minimum time between advertisement runs is 0 seconds
 
-! This section provides the BGP table version of the IPv4 Unicast address-family. The table version is not a 1-to-1 correlation with routes as multiple route change can occur during a revision change. Notice the Prefix Activity columns in this section.                                                                
+<mark style="background: #ADCCFFA6;">This section provides the BGP table version of the IPv4 Unicast address-family</mark>. <mark style="background: #CACFD9A6;">The table version is not a 1-to-1 correlation with routes as multiple route change can occur during a revision change</mark>. <mark style="background: #FFB8EBA6;">Notice the Prefix Activity columns in this section</mark>.                                                                
 For address family: IPv4 Unicast
   Session: 10.12.1.1
   BGP table version 1, neighbor version 1/0
   Output queue size : 0
   Index 1, Advertise bit 0
-                                 Sent       Rcvd
-  Prefix activity:               ----       ----
-    Prefixes Current:               0          0
-    Prefixes Total:                 0          0
-    Implicit Withdraw:              0          0
-    Explicit Withdraw:              0          0
-    Used as bestpath:             n/a          0
-    Used as multipath:            n/a          0
+                        Sent       Rcvd
+  Prefix activity:                    ----       ----
+    Prefixes Current:             0          0
+    Prefixes Total:                  0          0
+    Implicit Withdraw:           0          0
+    Explicit Withdraw:           0          0
+    Used as bestpath:         n/a          0
+    Used as multipath:        n/a          0
 
-                                   Outbound    Inbound
+							Outbound    Inbound
   Local Policy Denied Prefixes:    --------    -------
-    Total:                                0          0
+    Total:                                                  0          0
 
  Number of NLRIs in the update sent: max 0, min 0
 
-! This section indicates that a valid route exists in the RIB to the BGP peer IP address, provides the number of times that the connection has established and time dropped, since the last reset, the reason for the reset, if path-mtu-discovery is enabled, and ports used for the BGP session.                               
+<mark style="background: #FFB86CA6;">This section indicates that a valid route exists in the RIB to the BGP peer IP address</mark>, <mark style="background: #FFF3A3A6;">provides the number of times that the connection has established and time dropped, since the last reset</mark>, <mark style="background: #BBFABBA6;">the reason for the reset</mark>, if <strong>path-mtu-discovery</strong> is enabled, and ports used for the BGP session. 
+   
  Address tracking is enabled, the RIB does have a route to 10.12.1.1
-  Connections established 2; dropped 1
-  Last reset 00:01:40, due to Peer closed the session
-  Transport(tcp) path-mtu-discovery is enabled
+  Connections <strong>established 2</strong>; <strong>dropped 1</strong>
+  <strong>Last reset 00:01:40</strong>, due to <strong>Peer closed the session</strong>
+  Transport(tcp) <strong>path-mtu-discovery is enabled</strong>
 Connection state is ESTAB, I/O status: 1, unread input bytes: 0
 Minimum incoming TTL 0, Outgoing TTL 255
-Local host: 10.12.1.2, Local port: 179
-Foreign host: 10.12.1.1, Foreign port: 56824
-```
+Local host: 10.12.1.2, Local port: <strong>179</strong>
+Foreign host: 10.12.1.1, Foreign port: <strong>56824</strong>
+
+---
+
+# Route Advertisement
