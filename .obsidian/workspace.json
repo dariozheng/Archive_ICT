@@ -228,7 +228,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -252,7 +253,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "eacca92367d37e14",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "attachments/Pasted image 20260827104517.png",
     "attachments/Pasted image 20260827104340.png",

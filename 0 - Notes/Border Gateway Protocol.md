@@ -115,9 +115,14 @@ Injecting external BGP routes into an Interior Gateway Protocol (IGP)—like OSP
 - **Routing Policy:** IGPs rely strictly on metrics (like bandwidth or delay) for path selection. BGP uses a multi-step decision process and path attributes, allowing it to intentionally choose longer or seemingly suboptimal paths to satisfy corporate routing policies.
 - **Attribute Preservation:** IGPs cannot carry or preserve BGP-specific path attributes as a prefix travels across the internal network.
 
-To ensure successful traffic forwarding through AS 65200, an <mark style="background: #ADCCFFA6;">iBGP session must be established between all internal routers (<strong>R2</strong>, <strong>R3</strong>, and <strong>R4</strong>) in a <strong>full-mesh topology</strong></mark>.
+<mark style="background: #FF5582A6;">To ensure successful traffic forwarding</mark> through AS 65200, an <mark style="background: #ADCCFFA6;">iBGP session must be established between all internal routers (<strong>R2</strong>, <strong>R3</strong>, and <strong>R4</strong>) in a <strong>full-mesh topology</strong></mark>.
 
 > [!NOTE]
 > Transit connectivity is strictly a service provider function. Enterprise organizations are consumers and should never provide transit connectivity between autonomous systems over the Internet.
 
-## eBGP 
+## eBGP
+eBGP involves the exchange of network prefixes between AS. eBGP peerings are the core component of BGP on the Internet. eBGP involves the exchange of network prefixes between autonomous systems. The following behaviors are different on **eBGP sessions** than on **iBGP sessions**:
+- <strong>Time-to-live (TTL)</strong> on <strong>eBGP</strong> packets is set to <strong>1</strong> by default. <mark style="background: #BBFABBA6;">eBGP packets drop in transit if a multi-hop BGP session is attempted</mark>. (TTL on iBGP packets is set to 255, which allows for multi-hop sessions.)
+- The <strong>advertising router</strong> modifies the <strong>BGP next-hop address</strong> to the <strong>IP address sourcing the BGP connection</strong>.
+- The <strong>advertising router</strong> prepends its <strong>ASN</strong> to the existing <strong>AS_Path</strong> attribute.
+- The receiving router verifies that the <strong>AS_Path</strong> attribute does not contain an <strong>ASN</strong> that matches the local ASN. BGP discards the route if it fails the <strong>AS_Path</strong> loop prevention check.
