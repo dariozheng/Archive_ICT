@@ -22,21 +22,27 @@ aliases:
 <strong>BGP routers</strong> evaluate these attributes in a strict, sequential order to prevent routing loops, classify prefixes, and determine the single best path to a network destination.
 
 Every path attribute falls into one of four standard categories based on whether all routers must recognize it and whether it must be passed across different networks.
-
-Per RFC 4271, <strong>well-known attributes</strong> must be recognized by all BGP implementations. <strong>Well-known mandatory attributes</strong> must be included with every prefix advertisement; <strong>well-known discretionary attributes</strong> may or may not be included with a prefix advertisement.
-
-<strong>Optional attributes</strong> do not have to be recognized by all BGP implementations. Optional attributes can be set so that they are <strong>transitive</strong> and stay with the route advertisement from AS to AS. Other PAs are <strong>non-transitive</strong> and cannot be shared from AS to AS.
 ## Well-known mandatory
 Every <strong>BGP-compliant router</strong> <mark style="background: #FFB8EBA6;">must recognize these attributes</mark>, and they <strong>must be included</strong> in every BGP route update message.
 ### AS_PATH
 <strong>AS_PATH</strong> is a <strong>well-known mandatory attribute</strong> and <mark style="background: #FFB86CA6;">includes a complete list of all the ASNs</mark> that <mark style="background: #BBFABBA6;">the prefix advertisement has traversed</mark> from its <strong>source AS</strong>. 
 <strong>AS_Path</strong> is used as a <mark style="background: #ADCCFFA6;">loop-prevention mechanism in BGP</mark>. 
 If a <mark style="background: #ABF7F7A6;">BGP router receives a prefix advertisement with its AS listed in the AS_Path attribute</mark>, <mark style="background: #ADCCFFA6;">it discards the prefix because the router thinks the advertisement forms a loop</mark>.
+
+![[Pasted image 20260901124137.png]]
+
+The Path column has <strong>i</strong>, e, <strong>?</strong>, <strong>AS number</strong>, the AS_Path attribute is the AS number which identify the neighbor BGP routers. 
+### ORIGIN
+The origin codes indicates how the network first entered the BGP, <strong>i</strong> for IGP (Interior Gateway Protocol), <strong>e</strong> for EGP (Exterior Gateway Protocol) and <strong>?</strong> for incomplete origin (typically redistributed routes). 
 ### NEXT_HOP
 The specific IP address of the next router used to reach the destination.
-Every single BGP route must have a valid, reachable next-hop IP address. If the router's routing table cannot find a valid path to reach this `NEXT_HOP` IP, the BGP route is completely ignored.
-### ORIGIN
-Identifies how the route was first injected into BGP (e.g., via Interior Gateway Protocol, Exterior Gateway Protocol, or an incomplete/unknown source).
+Every single BGP route must have a valid, reachable next-hop IP address. 
+If the router's routing table cannot find a valid path to reach this `NEXT_HOP` IP, the BGP route is completely ignored.
+
+The column <strong>Next Hop</strong>.
+
+![[Pasted image 20260901124137.png]]
+
 ## Well-known discretionary 
 Every BGP router <strong>must recognize</strong> these attributes, but they are <strong>optional</strong> to include in a route update
 ### LOCAL_PREF
@@ -109,7 +115,9 @@ For example, in the figure, **AS 65200** acts as a transit provider, connecting 
 ![[Pasted image 20260827104340.png]]
 
 If R2 and R4 establish an iBGP session directly, the intermediate core router (R3) remains unaware of the external routes. As shown in figure, when transit traffic from either AS reaches R3, the router drops the packets because its routing table lacks the necessary forwarding information.
+
 ![[Pasted image 20260827104517.png]]
+
 Injecting external BGP routes into an Interior Gateway Protocol (IGP)—like OSPF or EIGRP—to fix this issue is not viable for three reasons:
 
 - **Scalability:** The global Internet routing table contains over 940,000 IPv4 prefixes. IGPs are not engineered to handle this volume of routes.
@@ -130,7 +138,9 @@ eBGP involves the exchange of network prefixes between AS. eBGP peerings are the
 The configurations for eBGP and iBGP sessions are fundamentally the same except that the ASN in the <strong>remote-as</strong> statement is different from the ASN defined in the BGP process.
 
 The figure shows the <strong>eBGP</strong> and <strong>iBGP</strong> sessions that would be needed between the routers to allow reachability between AS 65100 and AS 65300. Notice that all routers in AS 65200 establish iBGP sessions in a full mesh to allow for proper forwarding between AS 65100 and AS 65300.
+
 ![[Pasted image 20260827112403.png]]
+
 # BGP Messages
 
 | Type | Name         | Functional Overview                            |
@@ -268,80 +278,15 @@ The example shows the IPv4 BGP unicast summary. Notice that the BGP RID and tabl
 | State/PfxRcd | Current BGP peer state or the number of prefixes received from the peer                                           |
 BGP neighbor session state, timers, and other essential peering information is available with the command **show bgp** _afi safi_ **neighbors** _ip-address_, as shown in the example.
 
----
-R2# <strong>show bgp ipv4 unicast neighbors 10.12.1.1</strong>
-
-<mark style="background: #ABF7F7A6;">The first section provides the neighbor's IP address, remote-as, indicates if the neighbor is 'internal' or 'external', the neighbor's BGP version, RID, session state, and timers</mark>.
-
-BGP neighbor is <strong>10.12.1.1</strong>, <strong>remote AS65100</strong>, <strong>external link</strong>
-  BGP <strong>version 4</strong>, remote router <strong>ID 192.168.1.1</strong>
-  BGP state = Established, up for 00:01:04
-  Last read 00:00:10, last write 00:00:09, <strong>hold is 180</strong>, <strong>keepalive is 60</strong> seconds
-  Neighbor sessions:
-    1 active, is not multisession capable (disabled)
-
-<mark style="background: #BBFABBA6;">This second section indicates the capabilities of the BGP neighbor and address-families configured on the neighbor</mark>.                                           
-  Neighbor capabilities:
-    Route refresh: advertised and received(new)
-    Four-octets ASN Capability: advertised and received
-    Address family IPv4 Unicast: advertised and received
-    Enhanced Refresh Capability: advertised
-    Multisession Capability:
-    Stateful switchover support enabled: NO for session 1
-  Message statistics:
-    InQ depth is 0
-    OutQ depth is 0
-
-<mark style="background: #ABF7F7A6;">This section provides a list of the BGP packet types that have been received or sent to the neighbor router</mark>.                                                         
-                   Sent        Rcvd
-    Opens:                    1           1
-    Notifications:         0           0
-    Updates:                0           0
-    Keepalives:            2           2
-    Route Refresh:      0           0
-    Total:                      3           3
-  Default minimum time between advertisement runs is 0 seconds
-
-<mark style="background: #ADCCFFA6;">This section provides the BGP table version of the IPv4 Unicast address-family</mark>. <mark style="background: #CACFD9A6;">The table version is not a 1-to-1 correlation with routes as multiple route change can occur during a revision change</mark>. <mark style="background: #FFB8EBA6;">Notice the Prefix Activity columns in this section</mark>.                                                                
-For address family: IPv4 Unicast
-  Session: 10.12.1.1
-  BGP table version 1, neighbor version 1/0
-  Output queue size : 0
-  Index 1, Advertise bit 0
-                        Sent       Rcvd
-  Prefix activity:                    ----       ----
-    Prefixes Current:             0          0
-    Prefixes Total:                  0          0
-    Implicit Withdraw:           0          0
-    Explicit Withdraw:           0          0
-    Used as bestpath:         n/a          0
-    Used as multipath:        n/a          0
-
-							Outbound    Inbound
-  Local Policy Denied Prefixes:    --------    -------
-    Total:                                                  0          0
-
- Number of NLRIs in the update sent: max 0, min 0
-
-<mark style="background: #FFB86CA6;">This section indicates that a valid route exists in the RIB to the BGP peer IP address</mark>, <mark style="background: #FFF3A3A6;">provides the number of times that the connection has established and time dropped, since the last reset</mark>, <mark style="background: #BBFABBA6;">the reason for the reset</mark>, if <strong>path-mtu-discovery</strong> is enabled, and ports used for the BGP session. 
-   
- Address tracking is enabled, the RIB does have a route to 10.12.1.1
-  Connections <strong>established 2</strong>; <strong>dropped 1</strong>
-  <strong>Last reset 00:01:40</strong>, due to <strong>Peer closed the session</strong>
-  Transport(tcp) <strong>path-mtu-discovery is enabled</strong>
-Connection state is ESTAB, I/O status: 1, unread input bytes: 0
-Minimum incoming TTL 0, Outgoing TTL 255
-Local host: 10.12.1.2, Local port: <strong>179</strong>
-Foreign host: 10.12.1.1, Foreign port: <strong>56824</strong>
-
----
-
 # Route Advertisement
-<strong>BGP network statements</strong> do not enable BGP for a specific interface; they <strong>identify specific network prefixes</strong> <mark style="background: #FFB86CA6;">to be installed into the BGP table</mark>, known as the <strong>Loc-RIB</strong> (The main BGP table that contains all the active BGP prefixes and path attributes that is used to select the best path and install routes into the RIB). 
+<strong>BGP network statements</strong> do not enable
+
+
+BGP for a specific interface; they <strong>identify specific network prefixes</strong> <mark style="background: #FFB86CA6;">to be installed into the BGP table</mark>, known as the <strong>Loc-RIB</strong> (The main BGP table that contains all the active BGP prefixes and path attributes that is used to select the best path and install routes into the RIB). 
 
 After configuring a <strong>BGP network statement</strong>, the BGP process <strong>searches</strong> the <mark style="background: #FFB8EBA6;">RIB routes for an exact network prefix match</mark>. The route can be from a connected network, a secondary connected network, or any route from a routing protocol. <mark style="background: #BBFABBA6;">After verifying that the <strong>network statement</strong> matches a route in the RIB</mark>, <mark style="background: #ABF7F7A6;">the following <strong>BGP PAs</strong> are set</mark>, depending on the route type:
-- <strong>Connected network</strong>: <mark style="background: #FF5582A6;">The <strong>next-hop BGP attribute</strong> is set to <strong>0.0.0.0</strong></mark>, <mark style="background: #FFF3A3A6;">the <strong>BGP origin attribute</strong> is set to <strong>i (IGP)</strong></mark>, and the <mark style="background: #BBFABBA6;"><strong>BGP weight</strong> is set to <strong>32,768</strong></mark>.
-- <strong>Static route</strong> or <strong>routing protocol</strong>: <mark style="background: #ABF7F7A6;">The <strong>next-hop BGP attribute</strong> is set to the <strong>next-hop IP address in the RIB</strong></mark>, <mark style="background: #ADCCFFA6;">the BGP origin attribute is set to <strong>i (IGP)</strong></mark>, <mark style="background: #CACFD9A6;">the <strong>BGP weight</strong> is set to <strong>32,768</strong></mark>, and <mark style="background: #D2B3FFA6;">the <strong>MED</strong> is set to the <strong>IGP metric</strong></mark>.
+- <strong>Connected network</strong>: The next-hop BGP attribute is set to 0.0.0.0, the BGP origin attribute is set to <strong>i (IGP)</strong>, and the BGP weight is set to 32,768.
+- <strong>Static route</strong> or <strong>routing protocol</strong>: The next-hop BGP attribute is set to the next-hop IP address in the RIB, the BGP origin attribute is set to <strong>i (IGP)</strong>, the BGP weight is set to 32,768, and the <strong>MED</strong> is set to the IGP metric.
 
 After the <strong>BGP PAs</strong> are set, <mark style="background: #FFF3A3A6;">the route is installed into the <strong>Loc-RIB</strong></mark> (the BGP table). Not every route in the Loc-RIB is advertised to a BGP peer. <mark style="background: #FFB86CA6;">All routes in the Loc-RIB use the following process for advertisement to BGP peers</mark>:
 1. Pass a validity check. Verify that the <strong>NLRI</strong> is valid and that the next-hop address is resolvable in the RIB. If the NLRI fails, the NLRI remains but does not process further.
@@ -351,13 +296,17 @@ After the <strong>BGP PAs</strong> are set, <mark style="background: #FFF3A3A6;"
 ![[Pasted image 20260827144307.png]]
 
 The <strong>network statement</strong> resides under the appropriate address family within the BGP router configuration. 
+
 The command <strong>network</strong> _network_ <strong>mask</strong> _subnet-mask_ <strong>route-map</strong> _route- map-name_ is used for advertising IPv4 networks. 
 
 The optional <strong>route-map</strong> provides a method of setting specific <strong>BGP PAs</strong> when the route installs into the Loc-RIB.
 
 The figure illustrates R1 and R2 connected through the 10.12.1.0/24 network. The example demonstrates the configuration where both routers will advertise the Loopback 0 interfaces (192.168.1.1/32 and 192.168.2.2/32, respectively) and the 10.12.1.0/24 network into BGP. Notice that R1 uses the default IPv4 address family, and R2 explicitly specifies the IPv4 address family.
+
 ![[Pasted image 20260827145155.png]]
+
 ![[Pasted image 20260827145205.png]]
+
 # Receiving Routes 
 BGP uses three tables for maintaining the network prefix and path attributes (PAs) for a route:
 - **Adj-RIB-In:** Contains the routes in original form (that is, from before inbound route policies are processed). To save memory, the table is purged after all route policies are processed.
@@ -375,6 +324,9 @@ Not every route in the Loc-RIB is advertised to a BGP peer or installed into the
 ![[Pasted image 20260827150713.png]]
 
 # Showing Routes
+
+## show bgp afi safi
+
 The command **show bgp** _afi safi_ displays the contents of the BGP table (Loc-RIB) on the router. Every entry in the Loc-RIB contains at least one path but could contain multiple paths for the same network prefix.
 The example displays the BGP table on R1, which contains received routes and locally generated routes.
 
@@ -391,21 +343,117 @@ The example displays the BGP table on R1, which contains received routes and loc
 
 The command **show bgp** _afi safi network_ displays all the paths for a specific prefix and the BGP path attributes for that prefix. The example show the paths for the 10.12.1.0/24 prefix. The output includes the number of paths and which path is the best path.
 The command **show bgp** _afi safi_ **detail** displays the entire BGP table with all the path attributes.
+
 ![[Pasted image 20260827154056.png]]
+
+## show bgp afi safi neighbor ip-address advertised routes
 
 The <strong>Adj-RIB-Out</strong> is a unique table maintained for <strong>each</strong> <mark style="background: #FFB8EBA6;">BGP peer</mark>. 
 It enables a network engineer to view routes advertised to a specific router. 
+
 The command **show bgp** _afi safi_ **neighbor** _ip-address_ **advertised routes** displays the contents of the Adj-RIB-Out for a specific neighbor.
 
 The example shows the Adj-RIB-Out entries specific to each neighbor. Notice that the next-hop address reflects the local router and will be changed as the route advertises to the peer.
 
 ![[Pasted image 20260827163547.png]]
+
+## show bgp ipv4 unicast summary
+
 The **show bgp ipv4 unicast summary** command can also be used to verify the exchange of routes between nodes.
 
 ![[Pasted image 20260827163622.png]]
+## show ip route bgp
+
 The BGP routes in the global IP routing table (RIB) are displayed with the command **show ip route bgp**.
 
 The example shows these commands in the sample topology. The prefixes are from an eBGP session and have an AD of 20, and no metric is present.
 
 ![[Pasted image 20260827163718.png]]
-#
+# BGP Route Advertisements from Indirect Sources
+BGP session and route advertisement are two separate components. 
+The figure shows a topology where R1 installs multiple routes learned from static routes, EIGRP, and OSPF. R1 can advertise these routes to R2.
+
+![[Pasted image 20260831105421.png]]
+
+The routing table for R1. Notice that R3’s loopback is learned via EIGRP, R4’s loopback is reached using a static route, and R5’s loopback is learned from OSPF.
+
+![[Pasted image 20260831105729.png]]
+
+The installation of R3’s and R4’s loopback use a <strong>network</strong> statement. R5’s loopback is learned by redistributing OSPF straight into BGP.
+
+![[Pasted image 20260831105749.png]]
+
+<mark style="background: #FFB8EBA6;">Redistributing routes learned from an IGP into BGP is completely safe</mark>; however, <mark style="background: #FF5582A6;">BGP learned routes should be redistributed into an IGP with caution</mark>. <mark style="background: #FFB86CA6;">BGP is designed for large scale and can handle a routing table the size of the Internet</mark> (940,000+ prefixes), <mark style="background: #FFF3A3A6;">whereas IGPs could have stability problems with fewer than 20,000 routes</mark>.
+
+The image show the BGP routing tables on <strong>R1</strong> and <strong>R2</strong>.  
+Notice that on <strong>R1</strong>, <mark style="background: #BBFABBA6;">the next hop matches the next hop learned from the RIB</mark>, the <strong>AS_Path</strong> is blank, and the origin code is _IGP_ (<mark style="background: #FFB8EBA6;">for routes learned from network statement</mark>) or _incomplete_ (<mark style="background: #FF5582A6;">redistributed</mark>). 
+The metric is carried over from R3’s and R5’s IGP routing protocols and is reflected as the <strong>MED</strong>. 
+R2 learns the routes strictly from eBGP and sees only the MED and the origin codes.
+
+![[Pasted image 20260831110117.png]]
+
+# IPv4 Route Summarization
+<strong>Route summarization</strong>, also referred to as <strong>route aggregation</strong>, conserves router resources and accelerates best-path calculation by reducing the size of the table. 
+
+<strong>Summarization</strong> also provides the benefit of stability by hiding route flaps from downstream routers, thereby reducing routing churn. 
+
+While most service providers do not accept prefixes larger than /24 for IPv4 (/25 through /32), the Internet, at the time of this writing, still has more than 940,000 routes and continues to grow. 
+Route summarization is required to reduce the size of the BGP table for Internet routers.
+
+In the figure, R3 summarizes all the eBGP routes received from AS 65100 and AS 65200 to reduce route computation on R4 during link flaps. 
+
+In the event of a link flap on the 10.13.1.0/24 network, R3 removes all the AS 65100 routes learned directly from R1 and identifies the same network prefixes via R2 with different path attributes (a longer AS_Path). 
+
+R3 has to advertise new routes to R4 because of these flaps, which is a waste of CPU cycles because R4 receives connectivity only from R3. <mark style="background: #ABF7F7A6;">If R3 summarized the network prefix range, R4 would execute the best-path algorithm once and not need to run during link flaps of the 10.13.1.0/24 link</mark>.
+
+![[Pasted image 20260831110747.png]]
+
+There are two techniques for BGP summarization, in both methods of route aggregation, a new network prefix with a shorter prefix length is advertised into BGP. Because the aggregated prefix is a new route, the summarizing router is the originator for the new aggregate route: 
+#### Static 
+Create a static route to <strong>Null0</strong> for the summary network prefix and then advertise the prefix with a **network** statement. The downfall of this technique is that the summary route is always advertised, even if the networks are not available.
+
+#### Dynamic 
+Configure an aggregation network prefix. When viable component routes that match the aggregate network prefix enter the BGP table, then the aggregate prefix is created. The originating router sets the next hop to <strong>Null0</strong> as a discard route for the aggregated prefix for loop prevention.
+
+## Aggregate Address
+Dynamic route summarization is accomplished with the BGP address family configuration command **aggregate-address** _network subnet-mask_ <strong>summary-only</strong> <strong>as-set</strong>.
+
+The figure removes the flapping serial link between R1 and R3 to demonstrate BGP route summarization and the effect of the <strong>aggregate-address</strong> command. 
+
+![[Pasted image 20260831144427.png]]
+This example shows the BGP tables for R1, R2, and R3 before route summarization is performed. R1’s stub networks (172.16.1.0/24, 172.16.2.0/24, and 172.16.3.0/24) are advertised through all the autonomous systems, along with the loopback addresses of R1, R2, and R3 (192.168.1.1/32, 192.168.2.2/32, and 192.168.3.3/32) and the peering links (10.12.1.0/24 and 10.23.1.0/24).
+
+![[Pasted image 20260831145119.png]]
+R1 aggregates all the stub networks (172.16.1.0/24, 172.16.2.0/24, and 172.16.3.0/24) into a 172.16.0.0/20 summary route. R2 summarizes all of the router’s loopback addresses into a 192.168.0.0/16 summary route. The example shows the configuration for R1 using the default IPv4 address family and R2 with the default IPv4 address family disabled.
+
+![[Pasted image 20260831160345.png]]
+
+Example shows the BGP tables for R1, R2, and R3 after summarization is configured on R1 and R2.
+
+![[Pasted image 20260831160618.png]]
+
+Notice that the 172.16.0.0/20 and 192.168.0.0/16 summary routes are visible, but the smaller component routes still exist on all the routers. The **aggregate-address** command advertises the summary route in addition to the original component routes. Using the optional **summary-only** keyword suppresses the component routes, and only the summary route is advertised. Example 11-17 shows the configuration with the **summary-only** keyword.
+
+![[Pasted image 20260831160734.png]]
+
+Example 11-18 shows the BGP table for R3 after the **summary-only** keyword is added to the **aggregate-address** command on R1 and R2. Notice that the 172.16.0.0/20 and 192.168.0.0/16 summary routes are visible, but the smaller component routes are no longer present.
+
+![[Pasted image 20260831160802.png]]
+Example 11-19 shows the BGP table and RIB for R2. Notice that the component loopback networks have been suppressed by BGP and are not advertised by R2. In addition, a summary discard route has been installed to Null0 as a loop-prevention mechanism.
+
+![[Pasted image 20260831160842.png]]
+
+Example 11-20 shows that R1’s stub networks have been suppressed, and the summary discard route for the 172.16.0.0/20 network has been installed in the RIB as well.
+
+![[Pasted image 20260831160900.png]]
+
+### Atomic Aggregate 
+Summarized routes act like new BGP routes with a shorter prefix length. 
+
+When a BGP router summarizes a route, it does not advertise the <strong>AS_Path</strong> information from before the route was summarized. 
+BGP path attributes like AS_Path, <strong>MED</strong>, and <strong>BGP communities</strong> are not included in the new BGP advertisement. 
+
+The **atomic aggregate** attribute indicates that a loss of path information has occurred.
+
+## Route Aggregation with AS_SET
+To keep the BGP path information history, the optional **as-set** keyword may be used with the **aggregate-address** command. As the router generates the summary route, BGP path information from the component routes is copied over to it. The AS_Path settings from the original component routes are stored in the AS_SET portion of the AS_Path. The AS_SET, which is displayed within brackets, counts as only one hop, even if multiple ASs are listed.

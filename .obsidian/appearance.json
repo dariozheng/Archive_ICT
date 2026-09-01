@@ -4,5 +4,6 @@
     "headers"
   ],
   "translucency": false,
-  "baseFontSizeAction": true
+  "baseFontSizeAction": true,
+  "baseFontSize": 24
 }
