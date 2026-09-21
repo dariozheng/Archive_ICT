@@ -599,7 +599,7 @@ vlan 850
 !
 interface Vlan805
  description GUEST-INTERCEPT-SVI
- ip address {{ VLAN805_IP_address }}
+ ip address {{ VLAN805_IP_address }} {{ VLAN805_NETMASK }}
  no shutdown
 !
 !
@@ -660,7 +660,6 @@ aaa authorization network default group ISESERV
 #INTERACTIVE
 aaa accounting identity default start-stop group ISESERV<IQ>.*Do you wish to continue.*<R>yes
 #ENDS_INTERACTIVE
-aaa accounting system default start-stop group ISESERV
 aaa accounting update newinfo periodic 2880
 !
 !
@@ -678,6 +677,7 @@ device-tracking tracking auto-source
 device-tracking policy IPDT_POLICY 
  security-level glean 
  limit address-count 10 
+ no protocol udp
  tracking enable 
 !
 ! 
@@ -688,12 +688,12 @@ device-tracking policy Disable_DT_Trunk
 ! 
 !
 ip dhcp snooping 
-ip dhcp snooping vlan 800,802,805,850
+ip dhcp snooping vlan 802,805,850
 !
 ! 
 no ip dhcp snooping information option 
 !
-ip arp inspection vlan 800,802,805,850
+ip arp inspection vlan 802,805,850
 !
 !
 !
@@ -882,12 +882,11 @@ template NAC-INT-TEMPLATE
 !
  authentication timer reauthenticate server
  mab
- access-session control-direction in
 !
- access-session host-mode multi-domain 
- access-session closed
-!
- access-session port-control auto
+access-session port-control auto
+access-session host-mode single-host
+access-session control-direction in
+access-session closed
 !
  dot1x pae authenticator
  dot1x timeout tx-period 7
@@ -899,16 +898,10 @@ template NAC-INT-TEMPLATE
 !
 {% block interfaces %}
 {% for interface in __interface %}
-{% if interface.vlanId == 802 %}
+{% if interface.portMode | lower == 'access'
+      and interface.vlanId | int == 802 %}
 interface {{ interface.portName }}
  source template NAC-INT-TEMPLATE
- no switchport access vlan 802
-{% elif interface.portMode == 'trunk' %}
-interface {{ interface.portName }}
- ip dhcp snooping trust
- ip arp inspection trust
- switchport trunk allowed vlan add 802,805,850
- device-tracking attach-policy Disable_DT_Trunk
 {% endif %}
 {% endfor %}
 {% endblock %}
@@ -1501,6 +1494,7 @@ _Attached per-port. Tunes how aggressively the switch maintains IP-to-MAC bindin
 device-tracking policy IPDT_POLICY
  security-level glean
  limit address-count 10
+ no protocol udp
  tracking enable
 ```
 
@@ -2037,7 +2031,7 @@ template NAC-INT-TEMPLATE
  authentication timer reauthenticate server
  mab
  access-session control-direction in
- access-session host-mode multi-domain
+ access-session host-mode single-host
  access-session closed
  access-session port-control auto
  dot1x pae authenticator

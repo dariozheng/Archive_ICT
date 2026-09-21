@@ -19,13 +19,13 @@ aliases:
 
 # Path Attributes
 <strong>BGP</strong> uses <strong>path attributes (PAs)</strong> associated with each network path. 
-<strong>BGP routers</strong> evaluate these attributes in a strict, sequential order to prevent routing loops, classify prefixes, and determine the single best path to a network destination.
+<strong>BGP routers</strong> evaluate these attributes in a sequential order to prevent routing loops, classify prefixes, and determine the single best path to a network destination.
 
 Every path attribute falls into one of four standard categories based on whether all routers must recognize it and whether it must be passed across different networks.
 ## Well-known mandatory
 Every <strong>BGP-compliant router</strong> <mark style="background: #FFB8EBA6;">must recognize these attributes</mark>, and they <strong>must be included</strong> in every BGP route update message.
-### AS_PATH
-<strong>AS_PATH</strong> is a <strong>well-known mandatory attribute</strong> and <mark style="background: #FFB86CA6;">includes a complete list of all the ASNs</mark> that <mark style="background: #BBFABBA6;">the prefix advertisement has traversed</mark> from its <strong>source AS</strong>. 
+### AS_Path
+<strong>AS_Path</strong> is a <strong>well-known mandatory attribute</strong> and <mark style="background: #FFB86CA6;">includes a complete list of all the ASNs</mark> that <mark style="background: #BBFABBA6;">the prefix advertisement has traversed</mark> from its <strong>source AS</strong>. 
 <strong>AS_Path</strong> is used as a <mark style="background: #ADCCFFA6;">loop-prevention mechanism in BGP</mark>. 
 If a <mark style="background: #ABF7F7A6;">BGP router receives a prefix advertisement with its AS listed in the AS_Path attribute</mark>, <mark style="background: #ADCCFFA6;">it discards the prefix because the router thinks the advertisement forms a loop</mark>.
 
@@ -33,7 +33,9 @@ If a <mark style="background: #ABF7F7A6;">BGP router receives a prefix advertise
 
 The Path column has <strong>i</strong>, e, <strong>?</strong>, <strong>AS number</strong>, the AS_Path attribute is the AS number which identify the neighbor BGP routers. 
 ### ORIGIN
-The origin codes indicates how the network first entered the BGP, <strong>i</strong> for IGP (Interior Gateway Protocol), <strong>e</strong> for EGP (Exterior Gateway Protocol) and <strong>?</strong> for incomplete origin (typically redistributed routes). 
+A well-known mandatory BGP path attribute used in the BGP best-path algorithm. 
+
+The origin codes indicates how the network first entered the BGP, <strong>i</strong> for IGP (Interior Gateway Protocol), <strong>e</strong> for EGP (Exterior Gateway Protocol) and <strong>?</strong> for incomplete origin (redistributed routes). 
 ### NEXT_HOP
 The specific IP address of the next router used to reach the destination.
 Every single BGP route must have a valid, reachable next-hop IP address. 
@@ -49,7 +51,10 @@ Every BGP router <strong>must recognize</strong> these attributes, but they are 
 Instructs routers within the local network which path to prefer when exiting the system.
 This is the primary tool for engineering <strong>outbound traffic</strong>. If your company has two internet providers, you give a higher <strong>Local Preference</strong> to your primary provider so all internal routers choose it first.
 ### ATOMIC_AGGREGATE
-Warns downstream routers that specific routing data was lost due to route summarization
+Warns downstream routers that specific routing data was lost due to route summarization.
+
+![[Pasted image 20260901130128.png]]
+
 ## Optional transitive
 Routers do not have to recognize these attributes. If a router does not recognize it, it will still <strong>keep the attribute intact and pass it along</strong> to neighboring routers.
 ### COMMUNITY
@@ -58,13 +63,29 @@ A tagging mechanism used to group destinations and apply routing policies dynami
 While not part of the standard step-by-step decision tree, <strong>BGP Communities</strong> are <mark style="background: #FFB8EBA6;">strings of numbers</mark> used to <mark style="background: #FF5582A6;">group routes</mark>. It is heavily used by Internet Service Providers (ISPs) to let customers dynamically trigger `LOCAL_PREF` or `AS_PATH` changes on the provider's side.
 ### AGGREGATOR
 Specifies the AS number and IP address of the router that performed route summarization.
+
+![[Pasted image 20260902090457.png]]
+
 ## Optional non-transitive
 Routers do not have to recognize these attributes. If a router does not recognize it, or if the route crosses into a different network, the attribute is <strong>quietly deleted and not passed forward</strong>.
 ### MED (Multi-Exit Discriminator)
-Suggests to external neighbors which path they should prefer when entering your network.
-This is used to influence <strong>inbound traffic</strong> from a directly connected neighbor. If you have two physical connections to the same provider, you send a lower MED value on the link you want them to use.
+Suggests to external neighbors which path they should prefer when entering your network if there are more path to the same network.
+
+This is used to influence <strong>inbound traffic</strong> from a directly connected BGP neighbor. 
+If you have two physical connections to the same provider, you send a lower MED value on the link you want them to use.
+The <strong>Metric</strong> column:
+
+![[Pasted image 20260902092819.png]]
+
 ### ORIGINATOR_ID
-A tie-breaker ID used to prevent routing loops in networks utilizing Route Reflectors.
+A tie-breaker ID (BGP router-IP) used to prevent routing loops in networks utilizing Route Reflectors.
+
+![[Pasted image 20260903100646.png]]
+
+- `10.23.1.1` (Next Hop): The IP where traffic is forwarded.
+- `from 10.23.1.1` (BGP Peer IP): The actual IP address used to establish the TCP neighbor session.
+- `(10.12.1.2)` (Remote BGP Router ID): This is the BGP Router ID of that peer. The neighbor router manually configured or automatically chose 10.12.1.2 as its Router ID, even though it is peering with you using its 10.23.1.1 interface.
+
 # Address Families
 An <strong>address family</strong> correlates to a specific network protocol, such as IPv4 or IPv6, it uses an extension called <strong>address family identifier</strong> <strong>(AFI)</strong> and additional granularity is provided through a <strong>subsequent address-family identifier</strong> <strong>(SAFI)</strong> such as <strong>unicast</strong> or <strong>multicast</strong>.
 
@@ -89,7 +110,9 @@ BGP by using TCP, <mark style="background: #BBFABBA6;">is capable of crossing ne
 A <strong>BGP session</strong> refers to the <strong>established adjacency between two BGP routers</strong>. 
 <strong>Multi-hop sessions</strong> require that the <mark style="background: #CACFD9A6;">router use an underlying route installed in the RIB</mark> (static or from any routing protocol) <mark style="background: #ABF7F7A6;">to establish the TCP session with the remote endpoint</mark>.
 
-![[Pasted image 20260827100535.png]]In figure, R1 is able to establish a direct BGP session with R2. 
+![[Pasted image 20260827100535.png]]
+
+In figure, R1 is able to establish a direct BGP session with R2. 
 In addition, R2 is able to establish a BGP session with R4, even though it passes through R3. 
 R1 and R2 use a directly connected route to locate each other. 
 R2 uses a static route to reach the 10.34.1.0/24 network, and R4 has a static route to reach the 10.23.1.0/24 network. 
@@ -112,6 +135,8 @@ Internal BGP (iBGP) is required within an Autonomous System (AS) when running mu
 It is primarily used inside large enterprise networks or Service Provider (ISP) cores <strong>to distribute</strong> <mark style="background: #FFB86CA6;">external routing internet paths</mark> <strong>transitively</strong> <mark style="background: #BBFABBA6;">across the internal network</mark>.
 
 For example, in the figure, **AS 65200** acts as a transit provider, connecting **AS 65100** (at router R2) to **AS 65300** (at router R4).
+
+
 ![[Pasted image 20260827104340.png]]
 
 If R2 and R4 establish an iBGP session directly, the intermediate core router (R3) remains unaware of the external routes. As shown in figure, when transit traffic from either AS reaches R3, the router drops the packets because its routing table lacks the necessary forwarding information.
@@ -219,7 +244,7 @@ In the OpenSent state, an Open message has been sent from the originating router
 - Security parameters (such as password and TTL) must be set appropriately.
 
 If the OPEN messages do not have any errors, the hold time is negotiated (using the lower value), and a <strong>KEEPALIVE</strong> message is sent (assuming that the value is not set to 0). The connection state is then moved to <strong>OpenConfirm</strong>. If an error is found in the <strong>OPEN</strong> message, a <strong>NOTIFICATION</strong> message is sent, and the state is moved back to Idle.
-
+p
 If TCP receives a disconnect message, BGP closes the connection, resets the <strong>ConnectRetryTimer</strong>, and sets the state to <strong>Active</strong>. Any other events in this process result in the state moving to <strong>Idle</strong>.
 
 ## OpenConfirm
@@ -241,19 +266,15 @@ The following steps show how to configure BGP:
 - Step 1. Initialize the BGP routing process with the global command **router bgp** _as-number_.
 
 - Step 2.(Optional) Statically define the BGP router ID (RID). The dynamic RID allocation logic uses the highest IP address of any _up_ loopback interfaces. If there is not an _up_ loopback interface, then the highest IP address of any active _up_ interfaces becomes the RID when the BGP process initializes.
-  
   To ensure that the RID does not change, a static RID is assigned (typically representing an IPv4 address that resides on the router, such as a loopback address). Any IPv4 address can be used, including IP addresses not configured on the router. Statically configuring the BGP RID is a best practice and involves using the command **bgp router-id** _router-id_.
-  
   When the router ID changes, all BGP sessions reset and need to be reestablished.
 
 - Step 3. Identify the BGP neighbor’s IP address and autonomous system number with the BGP router configuration command **neighbor** _ip-address_ **remote-as** _as-number_. 
-  
   It is important to understand the traffic flow of BGP packets between peers. The source IP address of the BGP packets still reflects the IP address of the outbound interface. 
-  
   When a BGP packet is received, the router correlates the source IP address of the packet to the IP address configured for that neighbor. If the BGP packet source does not match an entry in the neighbor table, the packet cannot be associated to a neighbor and is discarded.
-  
+
 - Step 4. Initialize the address family with the BGP router configuration command **address-family** _afi safi_. Examples of _afi_ values are IPv4 and IPv6, and examples of _safi_ values are unicast and multicast.
-  
+
 - Step 5. Activate the address family for the BGP neighbor with the BGP address family configuration command **neighbor** _ip-address_ **activate**.
 
 ![[Pasted image 20260827121711.png]]
@@ -455,5 +476,28 @@ BGP path attributes like AS_Path, <strong>MED</strong>, and <strong>BGP communit
 
 The **atomic aggregate** attribute indicates that a loss of path information has occurred.
 
+![[Pasted image 20260901130128.png]]
+
 ## Route Aggregation with AS_SET
 To keep the BGP path information history, the optional **as-set** keyword may be used with the **aggregate-address** command. As the router generates the summary route, BGP path information from the component routes is copied over to it. The AS_Path settings from the original component routes are stored in the AS_SET portion of the AS_Path. The AS_SET, which is displayed within brackets, counts as only one hop, even if multiple ASs are listed.
+
+![[Pasted image 20260910111646.png]]
+
+Example shows the 172.16.0.0/20 summary route again, including the BGP path information copied into it. Notice that the AS_Path information now contains AS 65100.
+
+![[Pasted image 20260910111723.png]]
+
+# BGP Multihoming 
+BGP multihoming is a method of providing redundancy and optimal routing that involves adding multiple links to external AS.
+
+Multihomed environments should be configured so that branch routers cannot act as transit routers. In most designs, transit routing of traffic from another branch is undesirable, because WAN bandwidth may not be sized accordingly. Transit routing can be avoided by configuring outbound route filtering at each branch site.
+
+In essence, the branch sites do not advertise what they learn from the WAN but advertise only networks that face the LAN.
+
+If transit behavior is required, it is restricted to the data centers or specific locations as follows:
+- Proper routing design can accommodate outages.
+- Bandwidth can be sized accordingly.
+- The routing pattern is bidirectional and predictable.
+
+# Conditional Matching 
+
