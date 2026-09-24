@@ -19,6 +19,15 @@ Filter the base file in the following way:
 
 ```where categories.contains(link("Networking")) and !file.name.contains("Template")```
   
+# Homepage
+<strong>Homepage.md</strong> opens on startup and embeds the views of <strong>3 - Templates/Bases/Homepage.base</strong>:
+- Topics: every topic note, grouped by category
+- To finish: notes with status stub or draft
+- Recently updated: the 10 most recently modified notes
+- Needs triage: notes without a category or a status
+
+The old Excalidraw homepage is kept as <strong>1 - Excalidraw/Homepage Map</strong>.
+
 # Graph view:
 In Filters add:
 - <strong>-path:Notes/Glossaries</strong>

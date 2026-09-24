@@ -1,0 +1,65 @@
+properties:
+  file.name:
+    displayName: Page
+  file.folder:
+    displayName: Category
+  file.mtime:
+    displayName: Modified
+views:
+  - type: table
+    name: Topics
+    filters:
+      and:
+        - file.inFolder("2 - Categories/Topics")
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: To finish
+    filters:
+      and:
+        - file.inFolder("0 - Notes")
+        - or:
+            - status == "stub"
+            - status == "draft"
+    order:
+      - file.name
+      - status
+      - categories
+    sort:
+      - property: status
+        direction: DESC
+  - type: table
+    name: Recently updated
+    filters:
+      and:
+        - file.inFolder("0 - Notes")
+    order:
+      - file.name
+      - file.mtime
+      - categories
+    sort:
+      - property: file.mtime
+        direction: DESC
+    limit: 10
+  - type: table
+    name: Needs triage
+    filters:
+      and:
+        - file.inFolder("0 - Notes")
+        - '!file.inFolder("0 - Notes/Glossaries")'
+        - or:
+            - '!file.hasProperty("categories")'
+            - and:
+                - status != "stub"
+                - status != "draft"
+                - status != "complete"
+    order:
+      - file.name
+      - categories
+      - status
