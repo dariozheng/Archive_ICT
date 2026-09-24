@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "SiCisco",
       "FasServer",
       "LiLock",
       "FasUserSecret",
-      "FasNetworkWired"
+      "FasNetworkWired",
+      "SiMicrosoft"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -363,5 +363,33 @@
   "0 - Notes/Border Gateway Protocol.md": {
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
+  },
+  "0 - Notes/BGP Configuration commands.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Cryptocurrency coins and how they work.md": {
+    "iconName": "SiBitcoin",
+    "iconColor": "#F38423"
+  },
+  "0 - Notes/IPv6.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/NETWORK CHECK.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
+  },
+  "0 - Notes/Router 1.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": null
   }
 }

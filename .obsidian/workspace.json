@@ -24,17 +24,33 @@
             }
           },
           {
+            "id": "64a9166cf0edbdf7",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Homepage.md",
+                "mode": "source",
+                "source": false
+              },
+              "pinned": true,
+              "icon": "lucide-file",
+              "title": "Homepage"
+            }
+          },
+          {
             "id": "a21d919b98d1356b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Microsoft Servers.md",
+                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - NAC - Microsoft Servers"
+              "title": "PBA - NAC - Network Access Devices"
             }
           },
           {
@@ -43,16 +59,16 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
+                "file": "0 - Notes/VLANs.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CCNP ENARSI (300-410 v1.1) — Complete Study Plan"
+              "title": "VLANs"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -137,7 +153,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
+                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
@@ -237,7 +253,6 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "templates:Insert template": false,
       "obsidian-git:Open Git source control": false,
       "obsidian-excalidraw-plugin:New drawing": false,
       "switcher:Open quick switcher": false,
@@ -253,46 +268,47 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "22cc33582732de0e",
+  "active": "64a9166cf0edbdf7",
   "lastOpenFiles": [
+    "0 - Notes/VLANs.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "Homepage.md",
+    "3 - Templates/Bases/Homepage.base",
+    "1 - Excalidraw/Homepage Map.md",
+    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "2 - Categories/Topics/Microsoft/Windows Server.md",
+    "0 - Notes/Prisma SD-WAN®.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/nftables.md",
+    "0 - Notes/Tor Project.md",
+    "0 - Notes/Routing.md",
+    "0 - Notes/LISP.md",
+    "0 - Notes/Catalyst SD-WAN.md",
+    "0 - Notes/Cloud.md",
+    "0 - Notes/High Availability.md",
+    "0 - Notes/VRF 2.md",
+    "0 - Notes/Autonomous System.md",
+    "0 - Notes/Border Gateway Protocol.md",
+    "0 - Notes/PBA - NAC - ISE Server.md",
+    "0 - Notes/CCNP ENARSI (300-410 v1.1) — Complete Study Plan.md",
     "0 - Notes/IPv6.md",
     "0 - Notes/lantern.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "2 - Categories/Topics/Security/NAC.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "0 - Notes/Border Gateway Protocol.md",
     "2 - Categories/Networking.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
-    "VM90 NETWORK/05 - Tags 80 and 800.md",
-    "VM90 NETWORK/02 - VRF Inventory.md",
-    "VM90 NETWORK/04 - Global Leaking and Communities.md",
-    "VM90 NETWORK/00 - MOC - VM90-IP-CORE1 Routing.md",
-    "VM90 NETWORK/01 - Primer - VRF RD RT and BGP.md",
-    "VM90 NETWORK/09 - Verification Playbook.md",
-    "VM90 NETWORK/08 - Findings and Cleanup.md",
-    "VM90 NETWORK/06 - Worked Examples.md",
-    "VM90 NETWORK/07 - Command Reference.md",
-    "VM90 NETWORK/03 - Service and Backbone VRFs.md",
-    "0 - Notes/VRF.md",
     "VM90 NETWORK",
-    "0 - Notes/VM90 NETWORK.md",
     "VM90 NETWORK",
     "attachments/Pasted image 20260910111723.png",
     "attachments/Pasted image 20260910111646.png",
     "attachments/Pasted image 20260903100646.png",
-    "0 - Notes/BGP Configuration commands.md",
     "attachments/Pasted image 20260902092819.png",
     "attachments/Pasted image 20260902090457.png",
     "attachments/Pasted image 20260901130128.png",
     "attachments/Pasted image 20260901124137.png",
     "attachments/Pasted image 20260901123409.png",
-    "0 - Notes/OSPF.md",
     "attachments/Pasted image 20260831160900.png",
     "attachments/Pasted image 20260831160842.png",
-    "0 - Notes/PBA - Cisco Catalyst Center.md",
-    "0 - Notes/Hypervisor.md",
     "3 - Templates/Bases/Hardware.base",
     "3 - Templates/Bases/Topics/test/test General.base",
     "3 - Templates/Bases/test.base",
@@ -300,7 +316,6 @@
     "2 - Categories/Topics/test",
     "3 - Templates/Categories",
     "3 - Templates/Bases/Topics/Test/test test.base",
-    "3 - Templates/Bases/Topics/Test/Test General.base",
     "Untitled.canvas"
   ]
 }
