@@ -22,7 +22,7 @@ tags:
   - category/microsoft/windows_server
 icon: SiWindows
 iconColor: "#0078D4"
-last_update: 2026-07-09
+last_update: 2026-09-24
 ---
 
 
@@ -132,11 +132,28 @@ The Retrieve CRL timers should be set according to the CA CRL timers.
 
 ![[Pasted image 20260504122151.png | 200]]
 
-- <strong>Effective date</strong> is the date the CRL will start to be valid.
-- <strong>Next update</strong> is the time the CRL will expire.
-- <strong>Next CRL Publish</strong> is when the new CRL will be published, while the old one is still active. The Retrieve CRL timer set to 8 hours before expiration falls 8 hours before the <strong>Next update</strong>, so it will retrieve the <strong>Next CRL Publish</strong> CRL. The old CRL and the new CRL have an 8 hour overlap in which both CRLs are active, so the timer set to Automatically 8 hours before expiration, with 10 minutes of wait before retry, is correct and leaves no blackout periods.
+- <strong>Effective date</strong> is when the CRL starts to be valid.
+- <strong>Next CRL Publish</strong> is when the CA publishes the next CRL. The current one stays valid after that.
+- <strong>Next update</strong> is when the current CRL expires. Between Next CRL Publish and Next update both CRLs are valid: that window is the CA's overlap period.
 
-The CRL Distribution URL can be retrieved from the Certificate Authority server.
+With the values in the screenshot — a weekly CRL with an 8-hour overlap:
+
+```
+27 Apr 16:52  Effective date: this CRL becomes valid
+      │
+      │  7 days
+      ▼
+04 May 17:02  Next CRL Publish: the CA publishes the next CRL  ┐
+04 May 17:12  ISE downloads (Next update − 8 h)                │ overlap:
+      │                                                         │ both CRLs valid
+05 May 01:12  Next update: this CRL expires                     ┘
+```
+
+ISE is set to download automatically 8 hours before expiration, and to retry every 10 minutes if a download fails. With these values it downloads 10 minutes after the new CRL is published, picks up the new CRL, and there is no gap.
+
+The margin is only those 10 minutes, though. If the new CRL reaches the distribution point later than that, ISE downloads the old CRL again; with Bypass CRL Verification and Ignore expired CRL both off, certificate authentications (EAP-TLS, TEAP) start failing at 01:12 unless a newer CRL is fetched before then. A lead time of about half the overlap — 4 hours before expiration — leaves room on both sides: 4 hours for the CRL to reach the distribution point, and 4 hours of retries before it expires.
+
+The CRL Distribution URL can be retrieved from the Certificate Authority server; for the first subordinate CA it is `http://crl01.publiacqua.it/PubliacquaSubCA1.crl`.
 
 ![[Pasted image 20260427170031.png]]
 
@@ -278,8 +295,16 @@ function Write-EnrollmentEvent {
     }
 }
 
+# Report a failure without stopping the script: with ErrorActionPreference = 'Stop',
+# Write-Error would terminate here and the recovery hints that follow would never print
+function Write-Failure {
+    param([string]$Message)
+    Write-Host $Message -ForegroundColor Red
+}
+
 function Find-NewestCertificate {
-    param([datetime]$SinceTime)
+    # Nullable: Step2 run on its own has no Step1 start time
+    param([Nullable[datetime]]$SinceTime)
 
     if (-not (Test-Path $downloadsDir)) { return $null }
 
@@ -455,7 +480,7 @@ function Install-CAChainViaBrowser {
     }
 
     if (-not $p7bPath) {
-        Write-Error " No .p7b file found in $downloadsDir newer than $($promptTime.ToString('HH:mm:ss'))."
+        Write-Failure " No .p7b file found in $downloadsDir newer than $($promptTime.ToString('HH:mm:ss'))."
         return $null
     }
     Write-Host " Found chain file: $p7bPath" -ForegroundColor Cyan
@@ -465,19 +490,19 @@ function Install-CAChainViaBrowser {
         $coll.Import($p7bPath)
     }
     catch {
-        Write-Error " Could not parse $p7bPath as PKCS#7: $_"
+        Write-Failure " Could not parse $p7bPath as PKCS#7: $_"
         return $null
     }
 
     if ($coll.Count -eq 0) {
-        Write-Error " The downloaded file contains no certificates."
+        Write-Failure " The downloaded file contains no certificates."
         return $null
     }
 
     # Refuse anything that isn't a CA cert — we're installing into trusted stores
     $caOnly = @($coll | Where-Object { Test-IsCACertificate -Certificate $_ })
     if ($caOnly.Count -ne $coll.Count) {
-        Write-Error " The downloaded chain file contains non-CA certificates. Aborting for safety — you may have downloaded the wrong file."
+        Write-Failure " The downloaded chain file contains non-CA certificates. Aborting for safety — you may have downloaded the wrong file."
         return $null
     }
 
@@ -522,7 +547,7 @@ function Invoke-Step1 {
 
     certreq -new $infPath $csrPath
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path $csrPath)) {
-        Write-Error "certreq -new failed (exit code $LASTEXITCODE). CSR was not generated."
+        Write-Failure "certreq -new failed (exit code $LASTEXITCODE). CSR was not generated."
         return $false
     }
 
@@ -569,7 +594,7 @@ function Invoke-Step2 {
         }
 
         if (-not $resolvedPath) {
-            Write-Error "`n No .cer or .p7b file found in $downloadsDir$(if ($script:Step1StartTime) { " newer than $($script:Step1StartTime.ToString('HH:mm:ss'))" })."
+            Write-Failure "`n No .cer or .p7b file found in $downloadsDir$(if ($script:Step1StartTime) { " newer than $($script:Step1StartTime.ToString('HH:mm:ss'))" })."
             Write-Host " If needed, specify it explicitly:" -ForegroundColor Yellow
             Write-Host "   .\$scriptName -Step Step2 -CertPath 'C:\path\certnew.cer'" -ForegroundColor Yellow
             return $false
@@ -578,13 +603,13 @@ function Invoke-Step2 {
     }
 
     if (-not (Test-Path $resolvedPath)) {
-        Write-Error "`n Certificate file not found: $resolvedPath"
+        Write-Failure "`n Certificate file not found: $resolvedPath"
         return $false
     }
 
     $validation = Test-DownloadedCertificate -Path $resolvedPath
     if (-not $validation.Valid) {
-        Write-Error "`n Certificate validation failed: $($validation.Reason)"
+        Write-Failure "`n Certificate validation failed: $($validation.Reason)"
         Write-Host "   File: $resolvedPath" -ForegroundColor Yellow
         Write-Host "   Re-download from $subcaUrl using template '$expectedTemplate'." -ForegroundColor Yellow
         return $false
@@ -600,14 +625,14 @@ function Invoke-Step2 {
     if ($validation.CACerts.Count -gt 0) {
         Write-Host "`n Installing CA chain from the downloaded file..." -ForegroundColor Cyan
         if (-not (Install-CAChainFromCerts -CACerts $validation.CACerts)) {
-            Write-Error " CA chain installation failed."
+            Write-Failure " CA chain installation failed."
             return $false
         }
         Write-Host " CA chain installed." -ForegroundColor Green
     } else {
         $chainP7bPath = Install-CAChainViaBrowser
         if (-not $chainP7bPath) {
-            Write-Error " CA chain not installed. certreq -accept would fail with UNTRUSTEDROOT."
+            Write-Failure " CA chain not installed. certreq -accept would fail with UNTRUSTEDROOT."
             return $false
         }
         Write-Host " CA chain installed." -ForegroundColor Green
@@ -616,7 +641,7 @@ function Invoke-Step2 {
     # certreq -accept handles both .cer and .p7b; binds the issued cert to the private key in the CSP
     certreq -accept $resolvedPath
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "`n certreq -accept failed (exit code $LASTEXITCODE). The issued certificate could not be bound to its private key."
+        Write-Failure "`n certreq -accept failed (exit code $LASTEXITCODE). The issued certificate could not be bound to its private key."
         return $false
     }
 
@@ -736,7 +761,7 @@ For Computer Certificates, duplicate from the default <strong>Workstation Authen
 
 - On the <u>General tab</u> create a logical template name. The <strong>Publish certificate in Active Directory</strong> is used to publish the certificate into the computer <strong>userCertificate</strong> attribute in Active Directory. ![[Pasted image 20260424150609.png|200]]
 - On the <u>Extensions tab</u>, highlight the <strong>Application Policies</strong> and click <strong>Edit</strong> to verify that <strong>Client Authentication</strong> (OID 1.3.6.1.5.5.7.3.2) is listed — it is the only application policy the default <strong>Workstation Authentication</strong> template carries, and the only EKU the machine needs to authenticate as an EAP-TLS client.
-- On the <u>Security tab</u>, highlight <strong>Domain Computers</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> computers with a machine certificate</mark> for EAP authentication when they log into their computers.
+- On the <u>Security tab</u>, highlight <strong>Domain Computers</strong> and check the <strong>Allow</strong> boxes for <strong>Read</strong>, <strong>Enroll</strong>, and <strong>Autoenroll</strong> under the Permissions pane. <mark style="background: #FF5582A6;">This will be important when configuring our Group Policy to <strong>auto-enroll</strong> computers with a machine certificate</mark> for EAP authentication when they start up and apply the computer policy.
 - On the <u>Subject Name tab</u> under Subject Name Format, change it to <strong>Fully distinguished name</strong>, and leave the DNS Name checked. <mark style="background: #FFB8EBA6;">The DNS name in the Alternate Subject Name (SAN) is what the ISE Server will use to check the identity of the machine in the Active Directory</mark>, if the Certificate Authentication Profile is configured with the SAN.
 
 | General tab                          | Extensions tab                       | Security tab                         | Subject Name tab                     |
@@ -763,7 +788,7 @@ Make sure the GPO with the desired configuration is winning against other GPOs a
 
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Computers</mark> with the [[#Domain Computer Certificate]] and enable <mark style="background: #FFB86CA6;">Wired AutoConfig</mark> on computers.
 
-All computer GPOs must be created under the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> OU, which is where the Domain Computer accounts are stored. <mark style="background: #FFB8EBA6;"><u>After each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command and a reboot of the client computer to apply the GPO configuration</u></mark>.
+All computer GPOs must be linked to the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → ComputerXp</strong> OU, which is where the Domain Computer accounts are stored. <mark style="background: #FFB8EBA6;"><u>After each change of computer GPO, there must be a <strong>gpupdate /force</strong> CMD command and a reboot of the client computer to apply the GPO configuration</u></mark>.
 
 <strong>Wired AutoConfig</strong> (<strong>DOT3SVC</strong>) is a Windows service that manages <mark style="background: #FF5582A6;">IEEE 802.1X authentication on Ethernet connections</mark>. It enables computers to authenticate themselves on secure networks, often used in corporate environments to enforce network access control. The service is enabled at <strong>Computer Configuration → Policies → Windows Settings → Security Settings → System Services → Wired AutoConfig</strong>, setting the startup mode to Automatic.
 
@@ -802,6 +827,13 @@ PEAP is used for Domain Users that cannot or do not want to use a certificate to
     - Max authentication failures: 1–3
     - <strong>Cache user information for subsequent connections</strong>: optional, decide whether to tick it.
 
+> [!warning] User authentication only: no domain access before logon
+> With User authentication the PC does not authenticate until someone signs in. At boot the port falls back to MAB and the PC lands on [[PBA - NAC - ISE Server#Guest Redirect|Guest Redirect]] (VLAN 805), so computer GPOs and startup scripts cannot reach the Domain Controllers. Two settings under <strong>Security → Advanced</strong> make the logon itself work:
+> - <strong>Enable Single Sign On for this network → Perform immediately before user logon</strong>: the credentials typed at the logon screen authenticate the port before Windows contacts the DC, so a user without cached credentials can still log on.
+> - <strong>This network uses different VLAN for authentication with machine and user credentials</strong>: Windows renews its address after the port moves from VLAN 805 to VLAN 802.
+>
+> If the PC needs the domain at boot, use User or computer authentication instead. That also needs an ISE authorization rule for PEAP machine authentication: the current rules only match users.
+
 Under <strong>Scope → Security Filtering</strong> of the GPO add the Group for which this GPO will be applied. In <strong>Delegation → Advanced</strong> ensure this Group has <strong>Apply group policy</strong> and <strong>Read</strong> in <strong>Allow</strong>.
 
 #### EAP-TLS
@@ -837,7 +869,7 @@ On a domain-joined client that has both the machine and user certs already enrol
 
 Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab:
 
-1. Tick <strong>Enable IEEE 802.1X authentication</strong>.
+1. Tick <strong>Enable IEEE 802.1X authentication</strong>, and leave <strong>Fallback to unauthorized network access</strong> ticked on the same tab: without it, a PC plugged into a port with no authenticator gets no network access.
 2. Network authentication method → <strong>Microsoft: Tunnel EAP (TEAP)</strong>.
 3. Click <strong>Settings</strong>:
     - <strong>Identity privacy</strong> → anonymous.
@@ -863,7 +895,7 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
     - Tick <strong>Specify authentication mode</strong> → <strong>User or computer authentication</strong>.
     - Tick <strong>Enable Single Sign On for this network</strong>
         - Tick <strong>Perform immediately before user logon</strong>
-        - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>. The <strong>Fallback to unauthorized network access</strong> option must remain <strong>ticked</strong>; without it, a user connecting to a switch port with no authenticator would get no network access.
+        - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>, so Windows renews its address when the user authentication changes the VLAN — for an admin, from VLAN 802 before logon to VLAN 850 after.
 
 ##### Export the profile to XML
 
@@ -911,11 +943,11 @@ On the DC open Group Policy Management and create a new GPO linked to the OU tha
         - Enable <strong>Use IEEE 802.1X authentication for network access</strong>
         - Network authentication method: Pick <strong>Microsoft: Protected EAP (PEAP)</strong> as a placeholder; it will be overwritten.
     - <strong>Security → Advanced</strong>:
-        - Tick <strong>Enforce advanced 802.1X settings</strong>
+        - Tick <strong>Enforce advanced 802.1X settings</strong>. These timers are overwritten by the OneX block in step 6; the values below are the ones that block carries (`maxStart`, `heldPeriod`, `startPeriod`, `authPeriod`).
             - <strong>Max Eapol-Start Msgs</strong>: 2
-            - <strong>Held Period</strong>: 60
+            - <strong>Held Period</strong>: 20
             - <strong>Start Period</strong>: 3
-            - <strong>Auth Period</strong>: 30
+            - <strong>Auth Period</strong>: 18
         - Tick <strong>Enable Single Sign On for this network</strong> → <strong>Perform immediately before user logon</strong>.
         - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>.
 2. Save the policy, go to <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Group Policy Objects</strong>, find the saved policy.
@@ -934,7 +966,7 @@ Under <strong>Scope → Security Filtering</strong> of the GPO add <strong>Domai
 
 This GPO will be used to <mark style="background: #FFF3A3A6;">enroll Domain Users</mark> with the [[#Domain Users Certificate]].
 
-All user GPOs must be created under the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Publiacqua</strong> OU, which is where the Domain User accounts are stored. <mark style="background: #CACFD9A6;">At each change of user GPO, there must be a <strong>gpupdate /force</strong> CMD command to apply the GPO configuration</mark>.
+All user GPOs must be linked to the <strong>Group Policy Management → Forest: publiacqua.it → Domains → publiacqua.it → Publiacqua</strong> OU, which is where the Domain User accounts are stored. <mark style="background: #CACFD9A6;">At each change of user GPO, there must be a <strong>gpupdate /force</strong> CMD command to apply the GPO configuration</mark>.
 
 To activate Auto-Enrollment go to <strong>User Configuration → Policies → Windows Settings → Security Settings → Public Key Policies → Certificate Services Client - Auto-Enrollment</strong>
 

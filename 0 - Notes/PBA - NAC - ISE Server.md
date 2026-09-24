@@ -18,7 +18,7 @@ tags:
   - category/security/nac
 icon: SiCisco
 iconColor: "#1BA0D7"
-last_update: 2026-07-09
+last_update: 2026-09-24
 ---
 
 
@@ -64,6 +64,16 @@ flowchart LR
 
 The Policy Service is provided by two ISE nodes, ISE01 (10.140.2.31) and ISE02 (10.140.2.32). They terminate RADIUS for 802.1X and MAB on ports 1812/1813, send Change of Authorization on UDP 1700, and host the guest portal (8443) and posture/client-provisioning services (8905) — the ports permitted to them in the [[#Pre-Auth|Pre-Auth]] DACL. CoA runs on UDP 1700 — the Cisco default for both the switch's [[PBA - NAC - Network Access Devices#Dynamic Authorization (CoA)|dynamic-author]] listener and the CoA port in the ISE network device entry; RFC 5176 registers 3799, but the deployed switch configuration sets no port override. Run as a pair they provide redundancy: a switch that lists both in its [[PBA - NAC - Network Access Devices#RADIUS Server Configuration|ISESERV group]] fails over automatically if one node is unreachable. In a two-node deployment the Administration (PAN) and Monitoring (MnT) personas normally run on this same primary/secondary pair; confirm the exact persona assignment against the live system.
 
+The nodes appear under different names depending on where you look: the switches call them ISE01 and ISE02 (`radius server ISE01`), while supplicants validate the FQDNs of the EAP certificate listed in the [[PBA - NAC - Microsoft Servers#TEAP|TEAP profile]].
+
+|Node|IP|FQDN|
+|---|---|---|
+|ISE01|10.140.2.31|`cisco-ise1.publiacqua.it`|
+|ISE02|10.140.2.32|`pba-ise02.publiacqua.it`|
+|Guest portal|10.140.2.31 / 10.140.2.32|`guestportal1.publiacqua.it`, resolving to both PSNs|
+
+The FQDN-to-IP pairing follows the node numbering; confirm it in DNS.
+
 Administrative login is handled separately from endpoint NAC. A management RADIUS target, radius-mgmnt-auth01 at 10.140.2.27 — the switch's [[PBA - NAC - Network Access Devices#RADIUS Server Configuration|RADSERV group]] — authenticates CLI and HTTPS administrator logins to ISE, the NADs, and Cisco DNA Center, returning [[#cisco-av-pair|shell:priv-lvl]] for the privilege level. This path is independent of the Policy Service Nodes above; whether 10.140.2.27 is a dedicated ISE node or a separate server is not captured here.
 
 The surrounding infrastructure ISE operates within:
@@ -105,7 +115,7 @@ Endpoint and User Groups can be used as attributes in Policy Sets.
 
 Endpoint Identity Groups store information about all the endpoint devices that connect to the network infrastructure; they can also be filled through a CSV import.
 
-Beyond static import, they can be populated dynamically by the ISE Profiler, which classifies endpoints from attributes its probes collect — RADIUS accounting, DHCP options, CDP/LLDP neighbor data sent inline by [[PBA - NAC - Network Access Devices#Device Sensor — Endpoint Profiling|Device Sensor]], and the MAC OUI — and files each endpoint into the matching group. This is how devices such as printers are placed in a Printers group that MAB authorization can then match on.
+Beyond static import, they can be populated dynamically by the ISE Profiler, which classifies endpoints from attributes its probes collect — RADIUS accounting, DHCP options, CDP/LLDP neighbor data sent inline by [[PBA - NAC - Network Access Devices#Device Sensor — Endpoint Profiling|Device Sensor]], and the MAC OUI — and files each endpoint into the matching group — this is how profiled groups such as `Cisco-IP-Phone` are filled. Printers are not profiled into a group here: their MACs are imported into [[#PBA_Printers|PBA_Printers]].
 
 ![[Pasted image 20260508105729.png]]
 
@@ -116,7 +126,7 @@ For new CSV import template use the <strong>Generate a Template</strong> functio
 ```csv
 MACAddress,EndPointPolicy,IdentityGroup,PortalUser.GuestType,Description,PortalUser.Location,PortalUser.GuestStatus,StaticAssignment,User-Name,DeviceRegistrationStatus,PortalUser.CreationType,AUPAccepted,PortalUser.EmailAddress,PortalUser.PhoneNumber,FirstName,ip,Device Type,host-name,StaticGroupAssignment,MDMEnrolled,MDMOSVersion,PortalUser.LastName,PortalUser.GuestSponsor,EmailAddress,PortalUser,PortalUser.FirstName,BYODRegistration,MDMServerName,LastName,MDMServerID,Location
 
-60:18:95:30:CA:DB,,Printers,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+60:18:95:30:CA:DB,,PBA_Printers,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ```
 
 ##### PBA_Blacklist
@@ -125,7 +135,7 @@ All MAC Addresses that must be denied access to the network are put in this Endp
 
 ##### PBA_Printers
 
-All Printers MAC Addresses; child groups distribute the MAC Addresses by location. The Printers MAC Addresses can be obtained from the ARP table in the core switches/routers, and they can be imported with the CSV.
+A MAB whitelist dedicated to printers, kept separate from [[#PBA_Whitelist|PBA_Whitelist]] and split into child groups by location (PBA_Printers_Mantignano, PBA_Printers_VM25, PBA_Printers_VM39, PBA_Printers_VM90). Printers are authorized by the [[#MAB Access]] policy. The Printers MAC Addresses can be obtained from the ARP table in the core switches/routers, and they can be imported with the CSV.
 
 ##### PBA_Whitelist
 
@@ -544,7 +554,7 @@ MAC Addresses in [[#PBA_Blacklist|PBA_Blacklist]].
 
 ##### Whitelist
 
-MAC Addresses in [[#PBA_Whitelist|PBA_Whitelist]].
+MAC Addresses in [[#PBA_Whitelist|PBA_Whitelist]] or in the printers' MAB whitelist [[#PBA_Printers|PBA_Printers]].
 
 ##### Authentication Passed
 
@@ -566,7 +576,7 @@ This condition will match if the client using TEAP protocol has the [[PBA - NAC 
 
 ##### Not_TEAP
 
-This condition matches when the machine certificate authenticates outside TEAP — plain EAP-TLS rather than TEAP with inner EAP-TLS. [[#RDP Access]] uses it to grant full access to always-on machines that authenticate with only the computer certificate, instead of the limited [[#Machine Access]] result.
+The condition is `Network Access·EapChainingResult NOT EQUALS User failed and machine succeeded`. It only excludes the TEAP machine-only outcome that [[#TEAP_Machine]] catches, so it is also true for every authentication without EAP chaining — plain EAP-TLS with a machine or a user certificate. [[#RDP Access]] combines it with the EAP-TLS condition to grant full access to always-on machines that authenticate with only the computer certificate, instead of the limited [[#Machine Access]] result.
 
 ![[Pasted image 20260514113635.png]]
 
@@ -636,8 +646,10 @@ The active deployment logic is:
     - Is User not logged on?
     - Is Client a normal Domain User with Domain Computer?
     - Is the Client a PC that must be always accessible in RDP?
-    - Is the computer in Whitelist?
+    - Is the device in a MAB whitelist (PBA_Whitelist, PBA_Printers)?
+    - Has the guest just logged in on the portal?
     - Guest Redirect
+    - Default: deny
 
 #### Authentication Policy
 
@@ -653,13 +665,13 @@ There are three predefined policies:
 
 When a device connects to a switch port configured for 802.1X/MAB, the following process typically occurs:
 
-1. <strong>Detection</strong>: The switch initially tries to authenticate the device via 802.1X.
-2. <strong>Fallback</strong>: If the device fails to respond to 802.1X requests (usually after a timeout), the switch "falls back" to MAB.
+1. <strong>Detection</strong>: In many deployments the switch tries 802.1X first and falls back to MAB only after the 802.1X timers expire. Here the [[PBA - NAC - Network Access Devices#Event: `session-started match-all`|IBNS 2.0 policy]] starts both at once: a silent device is decided by MAB within seconds, and a device that answers 802.1X is re-authorized by it.
+2. <strong>Fallback</strong>: MAB also runs again when 802.1X is rejected, times out, or finds no supplicant.
 3. <strong>RADIUS Request</strong>: The switch sends a RADIUS Access-Request to Cisco ISE, using the device's MAC address as both the username and password.
 4. <strong>ISE Decision</strong>: ISE checks the MAC address against all MAC addresses in the [[#Endpoint Identity Groups|Internal Endpoints]] database or performs <strong>Profiling</strong> to identify the device type.
 5. <strong>Authorization</strong>: Based on your configured <strong>Policy Sets</strong>, ISE sends back a RADIUS Access-Accept with specific permissions, such as a VLAN assignment or a Downloadable ACL (dACL).
 
-In the current deployment, even if the MAB check fails, ISE allows the authentication request to continue to the authorization policies, where they will be met with the [[#Guest Redirect|Guest Redirect]] authorization policy. The switch-side fallback from 802.1X to MAB is handled by [[PBA - NAC - Network Access Devices#IBNS 2.0 Policy Engine — `ISE-NAC-POLICY`|the IBNS 2.0 policy]].
+In the current deployment, even if the MAB check fails, ISE allows the authentication request to continue to the authorization policies (If User not found → Continue), where they will be met with the [[#Guest Redirect|Guest Redirect]] authorization policy. The switch-side fallback from 802.1X to MAB is handled by [[PBA - NAC - Network Access Devices#IBNS 2.0 Policy Engine — `ISE-NAC-POLICY`|the IBNS 2.0 policy]].
 
 The condition for MAB is the [[#Smart Conditions|predefined Wired_MAB]].
 
@@ -669,7 +681,9 @@ Dot1X (802.1X) should be the most used/default authentication policy.
 
 It's the authentication policy where the client has a supplicant ([[PBA - NAC - Microsoft Servers#Group Policy Management|Windows Native Supplicant]]) that uses an [[#Extensible Authentication Protocols|EAP]] protocol to authenticate itself to the ISE server.
 
-The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it checks the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]]. If the user is found in the ISS, it is authenticated and the request is passed for authorization policy check. If it's not found in the Identity Store, it is also passed for authorization policy check, though it will probably hit the [[#Guest Redirect]] policy.
+The condition for the request to hit this authentication policy is the predefined [[#Smart Conditions|Wired_802.1X]] and it checks the user identity in the Identity Store [[#Identity Source Sequences|Publiacqua_ISS]]. If the user is found in the ISS and the credentials are valid, the request is passed for authorization policy check.
+
+If the user is not found, or the certificate or password is wrong, ISE rejects the request. The Continue option of an authentication rule only works for MAB and PAP, never for EAP methods: an EAP conversation cannot be resumed once its authentication has failed. The endpoint is not left without access, though: the switch treats the reject as [[PBA - NAC - Network Access Devices#Event: `authentication-failure match-first`|DOT1X_DENIED]], falls back to MAB, and MAB reaches [[#Guest Redirect]].
 
 ##### Default
 
@@ -680,6 +694,8 @@ The Default authentication policy is a catch-all type of policy, set to deny all
 Authorization Policies decide which [[#Authorization Profiles]] the client gets.
 
 ![[Pasted image 20260514115226.png]]
+
+The screenshot predates the move of [[#Admin Access]] to [[#Vlan_850_Lan_Admin]]; it still shows Vlan_802_Lan_Client on that rule.
 
 Authorization policies are evaluated top-down with first match: the client gets the authorization profile of the first policy it hits.
 
@@ -719,13 +735,16 @@ The Authorization Profile is [[#Vlan_802_Lan_Client]].
 
 The RDP Access authorization policy is used for computers that must be accessible most of the time through RDP but are not servers. The [[#Pre-Auth|Machine Access DACL]] is too limited, so there is a specific policy that gives access to VLAN 802.
 
-The hit conditions are EAP-TLS machine certificate, [[#Not_TEAP]], and [[#Authentication Passed]].
+The hit conditions are the `EAP-TLS` library condition, [[#Not_TEAP]] and [[#Authentication Passed]], joined by AND. Together they mean "a certificate issued by the trusted PKI authenticated with plain EAP-TLS": the certificate is valid, and the session is not a TEAP machine-only result.
 
 The Authorization Profile is [[#Vlan_802_Lan_Client]].
 
+> [!warning] The rule checks how a device authenticated, not which device it is
+> Every domain computer auto-enrolls a [[PBA - NAC - Microsoft Servers#Domain Computer Certificate|machine certificate]], so any of them matches this rule once its NIC is set to plain EAP-TLS, and lands on VLAN 802 without a user logging on. The [[PBA - NAC - Microsoft Servers#EAP-TLS|EAP-TLS GPO]] applies that setting only to the computers in `GPO_C_PC_Enable_EAP-TLS`, but a local administrator can set it by hand on any other PC. Adding the same group as a fourth condition closes the gap: retrieve `GPO_C_PC_Enable_EAP-TLS` in the Groups tab of [[#External Identity Sources - Active Directory|Publiacqua_AD]], then add `Publiacqua_AD·ExternalGroups EQUALS <domain path>/GPO_C_PC_Enable_EAP-TLS`.
+
 ##### MAB Access
 
-MAB Access is for computers or devices that, for various reasons, don't have a supplicant to send 802.1X authentication packets. At the moment the authorization profile for this access is also VLAN 802.
+MAB Access is for computers or devices that, for various reasons, don't have a supplicant to send 802.1X authentication packets — printers included, through their own [[#PBA_Printers|PBA_Printers]] whitelist. At the moment the authorization profile for this access is also VLAN 802.
 
 The hit conditions are [[#Smart Conditions|Wired_MAB]], [[#Whitelist]] and [[#Authentication Passed]].
 
@@ -735,13 +754,19 @@ The Authorization Profile is [[#Vlan_802_Lan_Client]].
 
 The Guest Access is used together with [[#Guest Redirect]] and it will be hit only if the client user authenticates to [[#Guest Redirect]].
 
-The hit condition is [[#Guest_Flow]]. The Authorization Profile is [[#Vlan_805_WiFi_Guest]], which assigns VLAN 805; it has the same configuration as [[#Vlan_802_Lan_Client|VLAN 802]] except for the VLAN ID.
+The hit condition is [[#Guest_Flow]]. The Authorization Profile is [[#Vlan_805_WiFi_Guest]], which assigns VLAN 805 and nothing else.
 
 ##### Guest Redirect
 
 The Guest Redirect authorization policy is the catch-all for all devices and users not authorized/authenticated and for guest users.
 
-The hit conditions include [[#Authentication Failed]], [[#Smart Conditions|Wired_MAB]] or [[#Smart Conditions|Wired_802.1X]]. The Authorization Profile is [[#Redirect_Guest_Wired]]. When the guest completes the portal login, ISE issues a CoA that makes the switch re-authorize the session; the new request carries the [[#UseCase|Guest Flow]] attribute, hits [[#Guest Access]], and the client gets Internet access.
+The hit conditions are [[#Authentication Failed]] OR [[#Smart Conditions|Wired_MAB]] OR [[#Smart Conditions|Wired_802.1X]]:
+
+- Authentication Failed and Wired_MAB catch unknown MACs that the MAB authentication rule let through with Continue.
+- Wired_802.1X catches 802.1X sessions that authenticated but matched no rule above — for example a valid AD account outside Utenti_Publiacqua.
+- A failed 802.1X never gets here: ISE rejects it, the switch retries the same endpoint with MAB, and the MAB request is the one that matches (see [[#Dot1X (802.1X)]]).
+
+The Authorization Profile is [[#Redirect_Guest_Wired]]. When the guest completes the portal login, ISE issues a CoA that makes the switch re-authorize the session; the new request carries the [[#UseCase|Guest Flow]] attribute, hits [[#Guest Access]], and the client gets Internet access.
 
 ### Results
 
@@ -821,28 +846,37 @@ Vlan_850_Lan_Admin is the Authorization Profile for most admin users. It sends t
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:850 : VLAN 850
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
+- <strong>Session-Timeout = 14400</strong> : Re-authenticate every 4 hours. The switch takes the interval from ISE ([[PBA - NAC - Network Access Devices#Re-authentication Behaviour|`authentication timer reauthenticate server`]]).
+- <strong>Termination-Action = RADIUS-Request</strong> : Re-authenticate in place, keeping the session and the port up. Set in Common Tasks → Reauthentication → Maintain Connectivity During Reauthentication.
 
 ###### Vlan_802_Lan_Client
 
 ![[Pasted image 20260512142840.png]]
 
-Vlan_802_Lan_Client should be the default Authorization Profile for most domain users. It sends the VLAN for clients and the re-authentication timer.
+Vlan_802_Lan_Client should be the default Authorization Profile for most domain users. It sends the VLAN for clients and the re-authentication timer, configured like [[#Vlan_850_Lan_Admin]] apart from the VLAN ID.
 
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:802 : VLAN 802
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
+- <strong>Session-Timeout = 14400</strong> : Re-authenticate every 4 hours.
+- <strong>Termination-Action</strong> : should be RADIUS-Request, as on Vlan_850_Lan_Admin.
+
+> [!warning] Check the Termination-Action
+> The screenshot above (12 May) shows `Termination-Action = Default`, while Vlan_850_Lan_Admin (29 May) uses `RADIUS-Request`. With Default, the switch ends the session every 4 hours and the endpoint authenticates again from scratch, with a short loss of connectivity, instead of re-authenticating in place. Confirm the live profile uses RADIUS-Request and refresh the screenshot.
 
 ###### Vlan_805_WiFi_Guest
 
 ![[Pasted image 20260529141544.png]]
 
-Vlan_805_WiFi_Guest is the Authorization Profile for guest users. It sends the guest VLAN and the re-authentication timer.
+Vlan_805_WiFi_Guest is the Authorization Profile for guest users after the portal login. It sends only the guest VLAN.
 
 - <strong>Access Type = ACCESS_ACCEPT</strong> : Authentication status is a pass
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Private-Group-ID]] = 1:805 : VLAN 805
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Type = 1:13]] : This specifies the tunneling protocol being used. In this context, value 13 explicitly tells the device that the "tunnel" is a Virtual LAN (VLAN).
 - [[#Dynamic VLAN Assignment Attributes|Tunnel-Medium-Type = 1:6]] : This indicates the transport medium. Value 6 represents IEEE 802, which includes Ethernet and wireless media.
+
+There is no Session-Timeout or Idle-Timeout. After the portal login this result replaces [[#Redirect_Guest_Wired]], and its 12-hour session and 2-hour idle limits go with it, so a logged-in guest keeps access until the device disconnects. Add a Session-Timeout here if guest access should expire.
 
 ###### Redirect_Guest_Wired
 

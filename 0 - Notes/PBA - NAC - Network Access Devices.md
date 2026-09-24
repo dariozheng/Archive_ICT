@@ -18,7 +18,7 @@ tags:
   - category/security/nac
 icon: SiCisco
 iconColor: "#1BA0D7"
-last_update: 2026-07-09
+last_update: 2026-09-24
 ---
 Network Access Devices are the point of access for an endpoint and the main enforcement point of the policies decided by the [[PBA - NAC - ISE Server|ISE server]].
 
@@ -71,7 +71,6 @@ interface Vlan805
 ip default-gateway <DEFAULT-GATEWAY>
 !
 interface <UPLINK-INTERFACE>
- ip dhcp snooping trust
  switchport mode trunk
  switchport trunk allowed vlan add 800
 !
@@ -296,7 +295,7 @@ ip ssh source-interface Vlan800
 
 > [!note] Method-list mismatch This block authenticates HTTP with the `default` list while the [[#DNA - PBA BASIC|DNA - PBA BASIC]] template uses the dedicated `HTTPSRV` list. Both resolve to RADSERV with local fallback, so behavior is identical today, but the two should be aligned — `HTTPSRV` is the intended list, since it allows HTTP authentication to be tuned later without touching the VTYs.
 
-Auto-recovery from err-disable is enabled for UDLD only. Ports err-disabled by BPDU Guard or by the DHCP/ARP rate limits of the [[#Interface Template — `NAC-INT-TEMPLATE`|NAC interface template]] stay down until someone intervenes (or until matching `errdisable recovery cause` entries are added).
+Auto-recovery from err-disable is enabled for UDLD only. Ports err-disabled by the BPDU Guard of the [[#Interface Template — `NAC-INT-TEMPLATE`|NAC interface template]] stay down until someone intervenes (or until an `errdisable recovery cause bpduguard` entry is added).
 
 ```bash
 errdisable recovery cause udld
@@ -685,16 +684,6 @@ device-tracking policy Disable_DT_Trunk
  trusted-port 
  device-role switch 
 !
-! 
-!
-ip dhcp snooping 
-ip dhcp snooping vlan 802,805,850
-!
-! 
-no ip dhcp snooping information option 
-!
-ip arp inspection vlan 802,805,850
-!
 !
 !
 cdp run
@@ -873,8 +862,6 @@ template NAC-INT-TEMPLATE
  description NAC INTERFACE
  switchport mode access
  switchport access vlan 802
- ip arp inspection limit rate 100
- ip dhcp snooping limit rate 20
  spanning-tree portfast
  spanning-tree bpduguard enable
 !
@@ -1137,7 +1124,7 @@ Multiple Service-Type:
 
 ##### `radius-server attribute 8 include-in-access-req`
 
-Includes the endpoint's <strong>IP address</strong> in Access-Requests. ISE uses this for profiling, IP-based policy conditions, and correlation with DHCP snooping data.
+Includes the endpoint's <strong>IP address</strong> in Access-Requests. ISE uses this for profiling, IP-based policy conditions, and correlation with the endpoint's DHCP data.
 
 > [!note] Requires [[#Device Tracking Policies|IPDT]] 
 > The switch can only populate this attribute if it has actually learned an IP for the endpoint. Device tracking must be functional, otherwise the field will be empty or `0.0.0.0`.
@@ -1385,12 +1372,6 @@ Without `aaa authorization network`, the switch ignores all policy attributes re
 
 Sends a Start record when an identity session opens and a Stop record when it closes. The keyword `identity` scopes this to 802.1X / MAB subscriber sessions specifically.
 
-#### `aaa accounting system default start-stop group ISESERV`
-
-Sends accounting records for <strong>switch-level events</strong> such as <strong>reloads</strong> and <strong>configuration changes</strong>.
-
-> Useful for audit trails — ISE logs when the switch rebooted or came back online.
-
 #### `aaa accounting update newinfo periodic 2880`
 
 Two distinct behaviors combined:
@@ -1404,41 +1385,18 @@ Two distinct behaviors combined:
 
 ### Layer-2 Security
 
-_Defends the binding tables and the L2 control plane against rogue clients and ARP / DHCP attacks._
+> [!note] DHCP snooping and Dynamic ARP Inspection are not deployed for now
+> Both have been removed from the [[#DNA - PBA NAC|DNA - PBA NAC]] template. 802.1X, MAB, dACLs and CWA do not need them: [[#IP Device Tracking — Global|device tracking]] learns the IP-to-MAC bindings on its own.
+>
+> To enable them again later:
+> - Trust every uplink with `ip dhcp snooping trust` and `ip arp inspection trust`. On an untrusted uplink DAI drops the gateway's ARP, which has no DHCP binding, and every client loses its default gateway.
+> - Add `no ip dhcp snooping information option`: the access switch is not the DHCP relay, and many DHCP servers drop the Option 82 it would otherwise insert.
+> - Put back the per-port `ip dhcp snooping limit rate` and `ip arp inspection limit rate` in the interface template, with matching `errdisable recovery cause` entries.
 
-#### DHCP Snooping
-
-```cisco
-ip dhcp snooping
-ip dhcp snooping vlan 800,802,805,850
-no ip dhcp snooping information option
-```
-
-|Command|Effect|
-|---|---|
-|`ip dhcp snooping`|Globally enables DHCP snooping. Without this, every other snooping command is inert. All ports start out untrusted; uplinks and DHCP server ports must be explicitly trusted with `ip dhcp snooping trust`.|
-|`ip dhcp snooping vlan 800,802,805,850`|Activates snooping on the listed VLANs.|
-|`no ip dhcp snooping information option`|Disables Option 82 insertion. With snooping enabled, the switch would insert Option 82 into client DHCP packets without setting `giaddr`; many DHCP servers drop such packets, silently breaking address assignment. Since the access switch is not the DHCP relay, the option is turned off.|
-
-The snooping process builds the <strong>binding table</strong> — IP / MAC / VLAN / port / lease time — which feeds Dynamic ARP Inspection and IP Device Tracking.
-
-> On trunk ports facing other infrastructure: `ip dhcp snooping trust`.
-
-#### Dynamic ARP Inspection
-
-```cisco
-ip arp inspection vlan 800,802,805,850
-```
-
-DAI intercepts every ARP packet on untrusted ports and validates source IP / source MAC against the DHCP snooping binding table. Mismatches are dropped, defeating ARP-spoofing attacks.
-
-- <strong>Trusted ports</strong> (uplinks): ARP passes without inspection.
-- <strong>Untrusted ports</strong> (access): every ARP is checked.
-- <strong>Static-IP hosts</strong> need manual ARP ACLs because they have no snooping entry.
-
-DAI is entirely dependent on DHCP snooping — configure snooping first.
-
-> On trunk ports facing other infrastructure: `ip arp inspection trust`.
+> [!warning] Removing lines from a DNA Center template does not remove them from switches
+> DNA Center pushes the commands in a template; it never negates the ones that were dropped. Switches provisioned with the old template keep DHCP snooping and DAI until `no ip dhcp snooping`, `no ip arp inspection vlan 802,805,850`, and `no ip dhcp snooping limit rate` / `no ip arp inspection limit rate` under `template NAC-INT-TEMPLATE` are pushed explicitly.
+>
+> After the removal, check `show device-sensor cache all`: on some IOS-XE releases Device Sensor gleans DHCP options through DHCP snooping, so the DHCP fields ISE profiles on may stop arriving.
 
 ---
 
@@ -1463,7 +1421,6 @@ The resulting binding table is consumed by:
 
 - <strong>ISE</strong> — to know where an endpoint is physically connected.
 - <strong>802.1X / MAB</strong> — to associate the session's MAC with its eventual IP.
-- <strong>DAI</strong> — as a binding source.
 - <strong>CoA</strong> — to find the correct port when bouncing a session.
 - <strong>Downloadable ACLs</strong> — when they refer to source IPs.
 
@@ -1474,10 +1431,6 @@ The resulting binding table is consumed by:
 Verification:
 
 ```cisco
-show ip dhcp snooping
-show ip dhcp snooping binding
-show ip arp inspection
-show ip arp inspection statistics
 show device-tracking database
 show device-tracking policies
 ```
@@ -1504,6 +1457,7 @@ Applied to access ports where end devices connect.
 |---|---|
 |`security-level glean`|Passively learns bindings from observed DHCP and ARP traffic without enforcement. The stricter `guard` would drop packets that violate the binding table.|
 |`limit address-count 10`|Caps the number of IPs that can be tracked per port — defeats binding-table exhaustion. Ten accommodates a PC, an IP phone, a couple of VMs, etc. without abuse.|
+|`no protocol udp`|Stops the policy from gleaning addresses out of generic UDP traffic, so bindings come only from the DHCP, ARP and IPv6 ND exchanges the switch observes. The line comes from the IPDT policy in Cisco's ISE wired prescriptive deployment guide.|
 |`tracking enable`|The switch actively probes hosts (ARP / ND) to verify they are still present and to refresh stale entries.|
 
 #### Trunk / Uplink Policy — `Disable_DT_Trunk`
@@ -1995,7 +1949,7 @@ Idle session expires → tear it down. The next packet from the endpoint trigger
   10 restrict
 ```
 
-When a host-mode constraint is violated (e.g. a second data MAC on a `multi-domain` port), drop the offending traffic but <strong>leave the port up</strong> and the legitimate session intact.
+When a host-mode constraint is violated (e.g. a second MAC on this `single-host` port), drop the offending traffic but <strong>leave the port up</strong> and the legitimate session intact.
 
 |Action|Behaviour|
 |---|---|
@@ -2023,8 +1977,6 @@ template NAC-INT-TEMPLATE
  description NAC INTERFACE
  switchport mode access
  switchport access vlan 802
- ip dhcp snooping limit rate 20
- ip arp inspection limit rate 100
  spanning-tree portfast
  spanning-tree bpduguard enable
  authentication periodic
@@ -2066,8 +2018,6 @@ Changes to the template propagate automatically to every interface that sources 
 
 |Command|Effect|
 |---|---|
-|`ip dhcp snooping limit rate 20`|Rate-limit DHCP packets to 20 pps; excess err-disables the port. Defeats DHCP flood attacks and binding-table exhaustion.|
-|`ip arp inspection limit rate 100`|Same idea for DAI — cap ARP packets at 100 pps to prevent CPU overload.|
 |`spanning-tree portfast`|Skip STP listening/learning; transition directly to forwarding. Required for end-host ports so they get DHCP before timing out.|
 |`spanning-tree bpduguard enable`|Safety partner to PortFast — if any BPDU arrives (somebody plugged in a switch), err-disable the port.|
 
@@ -2092,7 +2042,7 @@ Periodic re-auth is enabled and the interval is taken from the RADIUS `Session-T
 |Command|Effect|
 |---|---|
 |`access-session control-direction in`|Block traffic _from_ the host _to_ the network before authorization; allow traffic in the reverse direction. This enables Wake-on-LAN. The alternative `both` blocks both directions.|
-|`access-session host-mode multi-domain`|Allows one data MAC plus one voice MAC on the port — the classic IP phone + PC scenario. Voice domain is signaled by CDP or LLDP-MED.|
+|`access-session host-mode single-host`|Exactly one MAC may be authorized on the port; a second MAC is a [[#Event: `violation match-all`\|violation]]. An IP phone with a PC behind it does not fit this mode — see [[#IP Phones — Multi-Domain\|IP Phones]].|
 |`access-session closed`|Pre-auth state blocks <strong>all</strong> traffic (including DHCP, DNS) until authorization completes.|
 |`access-session port-control auto`|The on switch for 802.1X port control. Other values: `force-authorized` (always allow, dot1x off) and `force-unauthorized` (always block).|
 
@@ -2100,10 +2050,10 @@ Periodic re-auth is enabled and the interval is taken from the RADIUS `Session-T
 
 |Mode|Behaviour|
 |---|---|
-|`single-host`|Exactly one MAC.|
+|`single-host`|Exactly one MAC. Used here.|
 |`multi-host`|One MAC authenticates; all others are passively allowed if the first MAC is authenticated (legacy, weak).|
 |`multi-auth`|Each MAC authenticates independently. For unmanaged switches or hubs behind the port.|
-|`multi-domain`|Exactly one data MAC plus one voice MAC. Used here.|
+|`multi-domain`|Exactly one data MAC plus one voice MAC — the mode needed for [[#IP Phones — Multi-Domain\|IP phones]].|
 
 #### 802.1X Timing
 
@@ -2132,9 +2082,81 @@ The first attaches the IPDT policy that maintains IP-to-MAC bindings. The second
 
 ---
 
+### IP Phones — Multi-Domain
+
+_Not deployed: the template runs `single-host`. This is what changes to put IP phones on NAC ports, with or without a PC behind them._
+
+A closed port forwards nothing for a MAC without an authorized session, so a phone cannot sit completely outside NAC while the PC behind it is authenticated. What can be kept out is the credential part: the phone authenticates by MAB, ISE recognises it and places it in the voice domain, and no supplicant is ever configured on it.
+
+#### Switch Side
+
+```cisco
+template NAC-INT-TEMPLATE
+ switchport voice vlan 812
+ access-session host-mode multi-domain
+```
+
+- `switchport voice vlan 812` advertises LAN-VOIP to the phone through CDP or LLDP-MED; the phone then tags its own traffic with it.
+- `multi-domain` lets the port hold two sessions: one MAC in the voice domain and one in the data domain. A second data MAC is still a [[#Event: `violation match-all`|violation]].
+- The voice VLAN always comes from the port configuration. The phone's ISE result must not carry a VLAN.
+
+Without a critical voice template, a phone that connects while ISE is unreachable gets `Critical_Access` (data VLAN only) and no voice VLAN. `DEFAULT_CRITICAL_VOICE_TEMPLATE` is built into IOS-XE and contains only `voice vlan`; add it to the class that handles new sessions during an outage:
+
+```cisco
+policy-map type control subscriber ISE-NAC-POLICY
+ event authentication-failure match-first
+  30 class AAA-DOWN_UNAUTH_USER do-until-failure
+   10 activate service-template Critical_Access
+   15 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+   20 authorize
+   30 pause reauthentication
+```
+
+#### ISE Side
+
+Add an authorization rule below [[PBA - NAC - ISE Server#Deny Access|Deny Access]] and above [[PBA - NAC - ISE Server#MAB Access|MAB Access]]:
+
+|Part|Value|
+|---|---|
+|Conditions|`Wired_MAB` AND the phones' endpoint identity group|
+|Result|An authorization profile with <strong>Voice Domain Permission</strong> ticked, which sends `cisco-av-pair = device-traffic-class=voice`, and no VLAN. ISE's predefined `Cisco_IP_Phones` profile already does this.|
+
+The phones' endpoint group can be either:
+
+- <strong>A MAC whitelist</strong>, like [[PBA - NAC - ISE Server#PBA_Printers|PBA_Printers]] (for example a new `PBA_Phones`) — explicit, but every new phone's MAC has to be imported.
+- <strong>The profiler's `Cisco-IP-Phone` group</strong> — no maintenance, because [[#Device Sensor — Endpoint Profiling|Device Sensor]] already sends the CDP platform and capabilities ISE needs. A new phone can hit Guest Redirect on its first MAB, before it is profiled; with profiler CoA enabled (Administration → System → Settings → Profiling, CoA type Reauth), ISE re-authorizes it as soon as the profile is assigned.
+
+#### What Happens on Each Kind of Port
+
+|Port|Sessions|Result|
+|---|---|---|
+|Phone with a PC behind it|Phone MAC in the voice domain (MAB → phone rule); PC MAC in the data domain (802.1X or MAB)|Phone on VLAN 812; PC on whatever ISE returns (802, 850 or 805).|
+|Phone only|Voice domain only; the data domain stays empty|Phone on VLAN 812. The access VLAN 802 is simply unused; nothing else to configure.|
+|PC only|Data domain only|Same as today; `switchport voice vlan` has no effect without a phone.|
+
+A phone-only port can also be kept entirely outside NAC: the [[#DNA - PBA NAC|DNA - PBA NAC]] template sources `NAC-INT-TEMPLATE` only on access ports whose VLAN is 802, so a port provisioned as an access port on VLAN 812 is never enforced. That is not an option for a port with a PC behind the phone, because the PC would go unauthenticated as well.
+
+When the PC is unplugged from the phone, the switch port stays up and the switch does not see the disconnect. Cisco phones report it through CDP and the switch clears the data session; behind other phones the stale session remains until it times out or re-authenticates.
+
+---
+
 ### Centralized Web Authentication (CWA) for Guests
 
 _Cisco model where the switch does not host a login page itself. It intercepts the guest's HTTP/HTTPS traffic and hands the session off to the ISE Guest Portal via an HTTP 302 redirect._
+
+#### End-to-End Guest Flow
+
+1. The guest plugs in. 802.1X and MAB start together ([[#Event: `session-started match-all`|session-started]]); the guest's device has no supplicant, so MAB decides.
+2. ISE's MAB authentication does not find the MAC but is set to Continue, so the request falls through the authorization policy to [[PBA - NAC - ISE Server#Guest Redirect|Guest Redirect]].
+3. The Access-Accept ([[PBA - NAC - ISE Server#Redirect_Guest_Wired|Redirect_Guest_Wired]]) moves the session to VLAN 805 and carries the redirect URL, the redirect ACL name and the `Guest_Redirect` service template.
+4. The guest gets a DHCP address in VLAN 805, and [[#Device Tracking for CWA|device tracking]] binds that IP to the session's MAC.
+5. DNS, DHCP and traffic to the PSNs pass freely through the [[#Redirect ACL — `ACL_GUEST_REDIRECT`|redirect ACL]]; the first web request is intercepted and answered with a 302 to the guest portal ([[#WebAuth Parameter Map|WebAuth Parameter Map]]).
+6. The guest logs in on the ISE portal (`guestportal1.publiacqua.it:8443`).
+7. ISE sends a CoA re-authenticate to the switch on UDP 1700 ([[#Dynamic Authorization (CoA)|CoA]]).
+8. The switch re-runs MAB. This time the request carries `NetworkAccess:UseCase = Guest Flow`, matches [[PBA - NAC - ISE Server#Guest Access|Guest Access]] and gets [[PBA - NAC - ISE Server#Vlan_805_WiFi_Guest|Vlan_805_WiFi_Guest]]: VLAN 805, no redirect.
+9. The guest reaches the internet. The VLAN never changed, so the address from step 4 stays valid and no DHCP renewal is needed — which is why the redirect profile already places the guest in VLAN 805.
+
+A device whose 802.1X fails, such as a domain PC with an expired certificate, ends up in the same flow: ISE rejects the EAP request, the `DOT1X_DENIED` class of the [[#Event: `authentication-failure match-first`|authentication-failure event]] falls back to MAB, and the flow continues from step 2.
 
 #### Guest VLAN — `vlan 805`
 
@@ -2204,27 +2226,31 @@ The redirect ACL identifies _which_ traffic to catch. The parameter-map decides 
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `parameter-map ... global`  | Global definition — applies to any port receiving a redirect instruction from ISE.                                                       |
 | `type webauth`              | Operate as a CWA interceptor (handing off to the ISE portal) rather than hosting a local login page.                                     |
-| `virtual-ip ipv4 192.0.2.1` | The IP the switch uses as the source of its 302 response to the guest's browser. Spoofed and non-routable by design.                     |
-| `intercept-https-enable`    | Enable interception on TCP 443 as well. Without it, only port 80 is caught — and modern browsers default to HTTPS for nearly everything. |
+| `virtual-ip ipv4 192.0.2.1` | The address of the switch's own web-auth pages (local web-auth login, consent and logout). The CWA 302 does not use it: the switch answers from the address the guest was trying to reach, and the 302 points at the ISE portal. |
+| `intercept-https-enable`    | Enable interception on TCP 443 as well. Without it, only port 80 is caught — and modern browsers default to HTTPS for nearly everything. The switch cannot present the real site's certificate, so an intercepted HTTPS page shows a certificate warning; the portal usually opens cleanly through the operating system's captive-portal check, which uses plain HTTP. |
 
 > [!note] Why `192.0.2.1`? 
-> This address belongs to <strong>TEST-NET-1</strong>, defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737) as reserved for documentation and guaranteed never to be a real routable destination. Using a real IP here would risk redirecting guest traffic to an unintended host.
+> This address belongs to <strong>TEST-NET-1</strong>, defined in [RFC 5737](https://datatracker.ietf.org/doc/html/rfc5737) as reserved for documentation and guaranteed never to be a real routable destination. The switch answers for the virtual IP itself, so a real address here would make the host that owns it unreachable for guests.
 
 Redirect Sequence:
 
 ```
-TCP session is open to the switch (handled at the SVI)
+Guest browser opens a TCP connection to example.com:80
+        ↓
+The SYN matches a permit line of ACL_GUEST_REDIRECT → sent to the switch CPU
+        ↓
+The switch completes the handshake itself, answering with example.com's IP
+(the guest believes it reached the real site)
         ↓
 Guest sends:   GET / HTTP/1.1
                Host: example.com
         ↓
-Switch responds AS 192.0.2.1:
+Switch replies, still as example.com:
                HTTP/1.1 302 Found
-               Location: https://<ISE-PSN>/portal/...
+               Location: https://guestportal1.publiacqua.it:8443/portal/gateway?sessionId=...
         ↓
-Browser follows the 302 → ISE CWA portal
-        ↓
-TCP session to the switch closes
+Browser resolves the portal FQDN (DNS is exempt) and connects to the PSN
+(PSN traffic is exempt) → ISE guest portal
 ```
 
 #### Guest Intercept SVI
@@ -2236,7 +2262,7 @@ interface Vlan805
  no shutdown
 ```
 
-The SVI gives the switch a <strong>Layer-3 presence on the guest subnet</strong>, which is what makes TCP interception possible.
+The SVI gives the switch a <strong>Layer-3 presence on the guest subnet</strong>, which it needs to answer the connections it intercepts.
 
 Without CWA, the TCP handshake goes straight to the intended destination:
 
@@ -2247,27 +2273,27 @@ Guest ACK ───────────────────────�
 TCP established with example.com
 ```
 
-With CWA, the switch intercepts the SYN and completes the handshake itself using the SVI as its L3 endpoint — the guest ends up with a TCP session open to the <strong>switch</strong>, not to the destination:
+With CWA, the switch intercepts the SYN and completes the handshake itself, sending from its guest SVI but using the destination's IP address as the source — the guest ends up with a TCP session open to the <strong>switch</strong>, while believing it reached the destination:
 
 ```
-Guest SYN  ────────────────────────►  intended destination
-Guest     ◄────────────────────────  SYN-ACK from the switch
+Guest SYN  ────────────────────────►  intended destination (caught by the switch)
+Guest     ◄────────────────────────  SYN-ACK from the switch, source IP = destination's IP
 Guest ACK ────────────────────────►  switch
 TCP established with the SWITCH
 ```
 
-From there the web-auth parameter-map issues the 302 redirect as `192.0.2.1`.
+From there the switch sends the 302 on that same connection, still using the destination's address.
 
 If the SVI is missing:
 
 ```
 No SVI on VLAN 805
         ↓
-Switch has no L3 presence on the guest subnet
+Switch has no Layer-3 interface on the guest subnet
         ↓
-parameter-map webauth has no interface to intercept on
+It cannot answer the intercepted connection
         ↓
-Guest traffic passes through unintercepted — redirect never fires
+The browser never receives the 302 — the portal never opens
 ```
 
 #### Device Tracking for CWA
@@ -2289,7 +2315,7 @@ MAB completes   →  session known by MAC, no IP yet
         ↓
 Guest DHCP DISCOVER / OFFER / REQUEST / ACK
         ↓
-Device tracking observes the exchange (DHCP snooping integration)
+Device tracking gleans the exchange (IPDT_POLICY, security-level glean)
         ↓
 IP-to-MAC binding recorded against the port
         ↓
@@ -2487,6 +2513,6 @@ Every switch command in this note has a counterpart on the ISE side. This table 
 | `service-template Guest_Redirect` (local shell)         | <strong>Policy → Policy Elements → Results → Authorization Profile</strong> = `Redirect_Guest_Wired`. References the redirect ACL name.                                                                                                   |
 | `service-template Critical_Access` (local content)      | Not an ISE concept — defined entirely on the switch as the local fallback.                                                                                                                                                                |
 | Device Sensor attributes flowing in accounting          | <strong>Profiling Service</strong> must be enabled on at least one PSN; profile policies use these attributes to classify endpoints.                                                                                                      |
-| `ip dhcp snooping` binding feeding device tracking      | ISE relies on the `Framed-IP-Address` and Device Sensor data; without bindings, profiling collapses to MAC OUI only.                                                                                                                      |
+| Device-tracking binding table                           | ISE relies on the `Framed-IP-Address` and Device Sensor data; without bindings, profiling collapses to MAC OUI only.                                                                                                                      |
 | CWA portal URL pushed via `url-redirect`                | <strong>Work Centers → Guest Access → Portals & Components → Guest Portals</strong> — URL composed from the portal's FQDN and ID.                                                                                                         |
 | Redirect ACL name (`ACL_GUEST_REDIRECT`)                | The ISE authorization profile must reference the <strong>exact same name</strong> as defined on the switch.                                                                                                                               |
