@@ -1,3 +1,15 @@
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-08-26
+up: "[[00 - MOC - VM90-IP-CORE1 Routing]]"
+---
 # VM90-IP-CORE1
 
 `VM90-IP-CORE1` is the IP core router of the Villamagna 90 datacenter. It performs no Layer-2 switching and terminates no endpoints: every link is a Layer-3 peering carried as a tagged VLAN over two port-channels, and every routing decision it makes is made inside a VRF.

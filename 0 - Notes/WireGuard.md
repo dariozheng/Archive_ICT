@@ -4,7 +4,8 @@ categories:
   - "[[Privacy]]"
 topic@security:
   - "[[VPN]]"
-topic@privacy: "[[Privacy General]]"
+topic@privacy:
+  - "[[Privacy General]]"
 tags:
   - claude
   - vpn

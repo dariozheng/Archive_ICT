@@ -2,7 +2,8 @@
 categories:
   - "[[Privacy]]"
   - "[[Networking]]"
-topic@privacy: "[[Privacy General]]"
+topic@privacy:
+  - "[[Privacy General]]"
 tags:
   - claude
   - category/networking

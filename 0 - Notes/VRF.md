@@ -4,8 +4,8 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-  - category/cloud_computing/cloud_computing_general
   - encor/routing
+  - category/networking/networking_general
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-07-21

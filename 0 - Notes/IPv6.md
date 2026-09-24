@@ -1,7 +1,14 @@
-
-
-
-
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-07-15
+---
 ### SLAAC — Stateless Address Autoconfiguration
 
 SLAAC lets a device configure a working, routable global address on its own, with no DHCP server required for the address itself. It leans entirely on link-local addressing and router advertisements to get there.

@@ -1,3 +1,14 @@
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-08-26
+---
 A finished network is one that already carries production traffic. The design decisions are made, the addressing is allocated, the protocols have converged, and every change from this point on touches something that somebody depends on. Moving on a network like this is a different discipline from building one: the work is reading, tracing, verifying, and only then touching.
 
 This note describes how a typical enterprise campus and WAN is assembled when it uses VRFs for segmentation, OSPF as the interior routing protocol, and BGP as the carrier of reachability between sites — and how to move through it in both senses of the word.

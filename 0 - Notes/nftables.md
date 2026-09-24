@@ -2,7 +2,8 @@
 categories:
   - "[[Linux]]"
   - "[[Security]]"
-topic@linux: "[[Linux General]]"
+topic@linux:
+  - "[[Linux General]]"
 tags:
   - firewall
   - claude

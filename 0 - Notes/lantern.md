@@ -1,4 +1,13 @@
-
+---
+categories:
+  - "[[Systems]]"
+topic@systems:
+tags:
+  - category/systems
+icon: FasServer
+iconColor:
+last_update: 2026-07-15
+---
 ![[Pasted image 20260713105706.png]]
 
 

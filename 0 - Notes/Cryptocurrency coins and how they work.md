@@ -1,3 +1,13 @@
+---
+categories:
+  - "[[Systems]]"
+topic@systems:
+tags:
+  - category/systems
+icon: SiBitcoin
+iconColor: "#F38423"
+last_update: 2026-08-26
+---
 ## Foundations
 
 _What a coin actually is, why the problem is hard, and the vocabulary the rest of the note depends on._

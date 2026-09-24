@@ -1,10 +1,18 @@
 ---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
 title: Worked examples
 tags:
   - network/cisco
   - examples
   - study
+  - category/networking/networking_general
 up: "[[00 - MOC - VM90-IP-CORE1 Routing]]"
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-09-21
 ---
 
 # Worked examples

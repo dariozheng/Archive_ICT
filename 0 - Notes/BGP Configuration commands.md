@@ -1,6 +1,14 @@
-
-
-
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-09-01
+---
 !
 router bgp 65200
  bgp log-neighbor-changes

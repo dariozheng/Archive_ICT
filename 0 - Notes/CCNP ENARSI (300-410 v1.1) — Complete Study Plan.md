@@ -1,3 +1,15 @@
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - ccnp
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-07-06
+---
 **Exam:** Implementing Cisco Enterprise Advanced Routing and Services (ENARSI 300-410 v1.1) **Duration:** 90 minutes | **Format:** Multiple choice, drag-and-drop, simlets/labs **Role in certification:** Concentration exam for CCNP Enterprise (paired with ENCOR 350-401) **Plan length:** ~16 weeks at 10–14 hours/week (adjust to your pace)
 
 ---

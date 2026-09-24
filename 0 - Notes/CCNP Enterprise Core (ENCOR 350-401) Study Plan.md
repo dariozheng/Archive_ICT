@@ -1,5 +1,15 @@
-
-
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - ccnp
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-08-26
+---
 _An 18-to-20-week, phase-ordered plan for the ENCOR 350-401 v1.2 exam, with topic lists, labs, books, courses, white papers, design guides, and RFCs per phase._
 
 > [!important] This plan targets exam blueprint v1.2, which went live on 2026-03-19. 
