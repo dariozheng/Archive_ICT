@@ -15,8 +15,12 @@
   "enable_folder_templates": true,
   "folder_templates": [
     {
-      "folder": "",
-      "template": ""
+      "folder": "2 - Categories",
+      "template": "3 - Templates/Notes/Codes/New Category.md"
+    },
+    {
+      "folder": "2 - Categories/Topics",
+      "template": "3 - Templates/Notes/Codes/New Topic.md"
     }
   ],
   "enable_file_templates": false,
