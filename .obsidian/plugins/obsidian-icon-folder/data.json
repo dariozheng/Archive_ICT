@@ -308,10 +308,6 @@
     "iconName": "FasNetworkWired",
     "iconColor": null
   },
-  "0 - Notes/Hypervisor.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": null
-  },
   "0 - Notes/Catalyst SD-WAN.md": {
     "iconName": "FasNetworkWired",
     "iconColor": null
@@ -353,10 +349,6 @@
     "iconColor": null
   },
   "0 - Notes/AWS Networking.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": null
-  },
-  "0 - Notes/VRF 2.md": {
     "iconName": "FasNetworkWired",
     "iconColor": null
   },
