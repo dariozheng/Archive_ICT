@@ -11,11 +11,11 @@ last_update: 2026-08-26
 ---
 # VM90-IP-CORE1
 
-`VM90-IP-CORE1` is the IP core router of the Villamagna 90 datacenter. It performs no Layer-2 switching and terminates no endpoints: every link is a Layer-3 peering carried as a tagged VLAN over two port-channels, and every routing decision it makes is made inside a VRF.
+`VM90-IP-CORE1` is the IP core router of the Villamagna 90 datacenter. It performs no Layer-2 switching and terminates no endpoints: every link is a Layer-3 peering carried as a tagged [[VLANs|VLAN]] over two port-channels, and every [[Routing|routing]] decision it makes is made inside a [[VRF]].
 
 Its job is threefold — carry each security zone in its own routing table, force traffic between zones through the firewall, and hand the zones a controlled view of the global routing table so they can reach the WAN without seeing each other.
 
-This note documents the routing and segmentation design of the device as configured: platform, attachment, VRF model, OSPF and BGP roles, route leaking, static routing, redundancy, telemetry, and the management plane.
+This note documents the routing and segmentation design of the device as configured: platform, attachment, VRF model, [[OSPF]] and [[Border Gateway Protocol|BGP]] roles, route leaking, static routing, redundancy, telemetry, and the management plane.
 
 ---
 

@@ -168,7 +168,7 @@ An AP's mode sets what the AP does and, importantly, whether client data is tunn
 
 ### Local Mode
 
-The default mode. Client traffic is tunnelled through CAPWAP to the controller and switched there — central switching. All policy, VLANs, and security are applied at the controller. This suits campus deployments where APs and controller share a low-latency LAN.
+The default mode. Client traffic is tunnelled through CAPWAP to the controller and switched there — central switching. All policy, [[VLANs]], and security are applied at the controller. This suits campus deployments where APs and controller share a low-latency LAN.
 
 ### FlexConnect
 

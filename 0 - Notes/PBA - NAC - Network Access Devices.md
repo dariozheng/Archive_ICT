@@ -25,7 +25,7 @@ Network Access Devices are the point of access for an endpoint and the main enfo
 NAD types include the following:
 
 - Access switch
-- Wireless LAN controller (WLC)
+- [[Wireless]] LAN controller (WLC)
 - Cisco Adaptive Security Appliance (ASA)
 - Cisco Firepower device
 - Load balancer
@@ -134,7 +134,7 @@ clock timezone CET 1 0
 clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
 ```
 
-<strong>Mgmt-vrf</strong> is the built-in VRF of the dedicated out-of-band management port; it is declared so the configuration is complete and compliant even though management actually happens in-band over VLAN 800.
+<strong>Mgmt-vrf</strong> is the built-in [[VRF]] of the dedicated out-of-band management port; it is declared so the configuration is complete and compliant even though management actually happens in-band over [[VLANs|VLAN]] 800.
 
 ```bash
 vrf definition Mgmt-vrf

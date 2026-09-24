@@ -15,7 +15,7 @@ AWS networking is software-defined: instead of racking routers, switches, and fi
 
 _A logically isolated virtual network, scoped to one AWS Region, in which you place and connect your resources._
 
-A VPC is the top-level container for everything you build. It spans a single Region and every Availability Zone within it, and it is isolated from every other VPC by default — traffic cannot flow between VPCs, or between a VPC and the internet, unless you explicitly build a path. Inside the VPC you carve out subnets, attach gateways, and write routing and security rules.
+A VPC is the top-level container for everything you build. It spans a single Region and every Availability Zone within it, and it is isolated from every other VPC by default — traffic cannot flow between VPCs, or between a VPC and the internet, unless you explicitly build a path. Inside the VPC you carve out subnets, attach gateways, and write [[Routing|routing]] and security rules.
 
 Because the VPC is isolated at creation, the mental model is inverted from a physical network: you start with a sealed, private space and open only the paths you intend, rather than starting connected and locking things down afterwards.
 
@@ -29,7 +29,7 @@ A VPC is defined by an IPv4 CIDR block chosen when you create it — for example
 
 The primary CIDR block is effectively permanent: although secondary blocks can be added later, the primary cannot be resized, so it should be sized generously and — critically — chosen so it does not overlap with other VPCs or on-prem networks you might later connect. Overlapping ranges make peering and hybrid connectivity impossible, because routing cannot distinguish two identical prefixes.
 
-IPv6 is supported as an optional, additional addressing layer: a VPC can be dual-stack, carrying both an IPv4 CIDR and an Amazon-assigned `/56` IPv6 block.
+[[IPv6]] is supported as an optional, additional addressing layer: a VPC can be dual-stack, carrying both an IPv4 CIDR and an Amazon-assigned `/56` IPv6 block.
 
 > [!tip] Plan address space up front Overlapping CIDRs are the single most common cause of failed peering and VPN designs. Treat VPC addressing like on-prem IP planning: allocate non-overlapping ranges across every environment before you build.
 
@@ -49,7 +49,7 @@ _Address ranges carved from the VPC CIDR, each bound to a single Availability Zo
 
 A subnet is a slice of the VPC's CIDR block — for instance `10.0.1.0/24` within a `10.0.0.0/16` VPC. Each subnet is pinned to one Availability Zone, and every resource you launch lives, through its network interface, in exactly one subnet and therefore one zone. Subnets are how you both segment traffic and place resources in specific failure domains.
 
-Unlike a traditional VLAN, a subnet is a pure Layer 3 construct: there is no broadcast domain in the classic sense, and the switching is handled invisibly by the AWS fabric. You size and number subnets, but you never manage spanning tree, trunking, or a physical switch.
+Unlike a traditional [[VLANs|VLAN]], a subnet is a pure Layer 3 construct: there is no broadcast domain in the classic sense, and the switching is handled invisibly by the AWS fabric. You size and number subnets, but you never manage spanning tree, trunking, or a physical switch.
 
 > [!info] On-premises analogy A subnet resembles a VLAN plus its IP subnet — a segment where a group of hosts live. The difference is that it is Layer 3 only, zone-scoped, and has no L2 fabric for you to configure.
 

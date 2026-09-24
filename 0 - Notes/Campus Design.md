@@ -23,7 +23,7 @@ _The campus is organized into three functional layers, each with a distinct job.
 
 ### Access Layer
 
-Where endpoints connect — users, phones, access points, printers, IoT. Its concerns are edge features: Power over Ethernet, access VLANs, port security, 802.1X, and QoS classification and trust at the point where traffic enters the network. It is the largest layer by port count and the first place policy is applied.
+Where endpoints connect — users, phones, access points, printers, IoT. Its concerns are edge features: Power over Ethernet, access [[VLANs]], port security, 802.1X, and QoS classification and trust at the point where traffic enters the network. It is the largest layer by port count and the first place policy is applied.
 
 ### Distribution Layer
 
@@ -160,7 +160,7 @@ Access ports almost always sum to more bandwidth than their uplinks, so some ove
 
 _The hierarchical model is the classic campus; SD-Access is its automated, fabric-based evolution._
 
-Everything above describes a network that is configured device by device, where reach is defined by VLANs and subnets and redundancy is built from spanning tree and first-hop protocols. [[SD-Access#What SD-Access Is|SD-Access]] keeps the same physical hierarchy — often a [[#Spine-Leaf Fabric|spine-leaf]] underlay — but overlays a VXLAN fabric that is provisioned by a controller and enforces policy by identity rather than by address. The two coexist during migration: a traditional campus can interoperate with an SD-Access fabric through the border, so blocks can be converted incrementally rather than all at once.
+Everything above describes a network that is configured device by device, where reach is defined by VLANs and subnets and redundancy is built from spanning tree and first-hop protocols. [[SD-Access#What SD-Access Is|SD-Access]] keeps the same physical hierarchy — often a [[#Spine-Leaf Fabric|spine-leaf]] underlay — but overlays a [[VXLAN]] fabric that is provisioned by a controller and enforces policy by identity rather than by address. The two coexist during migration: a traditional campus can interoperate with an SD-Access fabric through the border, so blocks can be converted incrementally rather than all at once.
 
 ## Configuration
 
@@ -179,7 +179,7 @@ flowchart TD
 
 ### CLI Companion
 
-_Routed access with OSPF, plus an HSRP gateway where Layer 2 access remains (Cisco IOS-XE)._
+_Routed access with [[OSPF]], plus an HSRP gateway where Layer 2 access remains (Cisco IOS-XE)._
 
 ```mermaid
 flowchart TD

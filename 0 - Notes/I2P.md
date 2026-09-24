@@ -33,7 +33,7 @@ I2P defends against a partial adversary — one who controls some routers, watch
 
 ### Limits of the Threat Model
 
-I2P does not claim to defeat an attacker who can observe the entire network at once; end-to-end timing correlation remains possible in principle for such an adversary, as it does for most low-latency anonymity systems. It also does not, by itself, anonymise the ordinary Internet: reaching a normal website requires an [[#Outproxies|outproxy]], and that outproxy sees the exiting traffic much as a Tor exit node does. Anonymity can also be undermined above the network layer — by application data that leaks an identity, by correlating activity across sessions, or by an attacker who can position enough malicious routers around a target (see [[#Attacks and Limitations|attacks and limitations]]).
+I2P does not claim to defeat an attacker who can observe the entire network at once; end-to-end timing correlation remains possible in principle for such an adversary, as it does for most low-latency anonymity systems. It also does not, by itself, anonymise the ordinary Internet: reaching a normal website requires an [[#Outproxies|outproxy]], and that outproxy sees the exiting traffic much as a [[Tor Project|Tor]] exit node does. Anonymity can also be undermined above the network layer — by application data that leaks an identity, by correlating activity across sessions, or by an attacker who can position enough malicious routers around a target (see [[#Attacks and Limitations|attacks and limitations]]).
 
 ## Network Architecture
 

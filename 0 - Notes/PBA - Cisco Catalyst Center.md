@@ -13,7 +13,7 @@ last_update: 2026-07-09
 ---
 Cisco DNA Center è un controller di rete intent-based e una piattaforma di gestione centrale per reti Cisco enterprise di campus, filiale e WAN. 
 
-Sostituisce la gestione CLI per singolo dispositivo con un unico punto di amministrazione che automatizza l'intero ciclo di vita di switch Catalyst, router e wireless: onboarding, configurazione, controllo delle immagini software, applicazione delle policy e monitoraggio dello stato di salute. 
+Sostituisce la gestione CLI per singolo dispositivo con un unico punto di amministrazione che automatizza l'intero ciclo di vita di switch Catalyst, router e [[Wireless|wireless]]: onboarding, configurazione, controllo delle immagini software, applicazione delle policy e monitoraggio dello stato di salute. 
 
 L'amministratore esprime l'intento nella GUI o tramite l'API northbound, e il controller traduce tale intento in configurazione dei dispositivi e lo distribuisce in modo coerente su tutta la rete.
 
@@ -82,7 +82,7 @@ In `Design > Network Settings`, i seguenti elementi sono definiti per sito (o gl
 
 - [[#Credenziali dei dispositivi|Credenziali dei dispositivi]] per l'accesso di management.
 - Impostazioni di server e protocolli: AAA, DHCP, DNS, NTP, fuso orario, banner, syslog, trap SNMP e collector NetFlow.
-- [[#Pool di indirizzi IP|Pool di indirizzi IP]] per automazione e SD-Access.
+- [[#Pool di indirizzi IP|Pool di indirizzi IP]] per automazione e [[SD-Access]].
 - Profili service provider per QoS WAN.
 - Impostazioni wireless per SSID e comportamento RF.
 
@@ -130,7 +130,7 @@ _Il livello di associazione che collega [[#Template|template]] e impostazioni ai
 
 ![[Pasted image 20260707153256.png]]
 
-I profili di rete (`Design > Network Profiles`) esistono in tipi come switching, routing, wireless e assurance. 
+I profili di rete (`Design > Network Profiles`) esistono in tipi come switching, [[Routing|routing]], wireless e assurance. 
 Un profilo viene assegnato a uno o più siti, ed è l'oggetto attraverso cui vengono associati i <strong>template di onboarding Day-0</strong> e i <strong>template di configurazione [[#Template Day-0 e Day-N|Day-N]]</strong>. 
 Quando un dispositivo in un sito con profilo viene [[#Provisioning|provisionato]], il controller interpreta i template associati e li invia. Questo è il meccanismo che collega il template astratto a un sito concreto.
 
@@ -426,9 +426,9 @@ _La configurazione underlay scritta su ciascun dispositivo scoperto._
 
 Gli indirizzi provengono da un pool IP riservato di tipo LAN. Da esso, ogni dispositivo scoperto riceve un /31 univoco su ogni link point-to-point e un /32 per `Loopback0`, che diventa il router ID e l'indirizzo di management del dispositivo. Il controller imposta anche l'MTU di sistema, abilita IP routing, porta il dispositivo alla sua immagine golden e configura il protocollo di routing:
 
-- IS-IS è sempre l'IGP dell'underlay. È scelto perché le sue adiacenze si formano senza alcuna dipendenza IP, può fare peering su loopback e tratta allo stesso modo traffico IPv4, IPv6 e non-IP, tutte proprietà che rendono più robusta una costruzione automatizzata e ordinata.
+- IS-IS è sempre l'IGP dell'underlay. È scelto perché le sue adiacenze si formano senza alcuna dipendenza IP, può fare peering su loopback e tratta allo stesso modo traffico IPv4, [[IPv6]] e non-IP, tutte proprietà che rendono più robusta una costruzione automatizzata e ordinata.
 - Il multicast underlay è un attributo opzionale (necessario per flooding Layer 2 fabric e multicast nativo); quando è abilitato, i seed sono configurati come rendezvous point PIM.
-- Il summary del pool LAN può opzionalmente essere annunciato in un processo BGP preconfigurato sui seed, così il controller mantiene raggiungibilità verso i dispositivi scoperti senza route statiche.
+- Il summary del pool LAN può opzionalmente essere annunciato in un processo [[Border Gateway Protocol|BGP]] preconfigurato sui seed, così il controller mantiene raggiungibilità verso i dispositivi scoperti senza route statiche.
 
 > [!note] Perché IS-IS invece di OSPF o EIGRP
 > IS-IS gira direttamente su Layer 2 e non richiede un indirizzo IP per formare un'adiacenza, quindi il controller può portare su i vicini prima che l'indirizzamento sia convergito. Questa proprietà, insieme al supporto dual-stack nativo e al peering su loopback, è il motivo per cui Cisco ha standardizzato l'underlay automatizzato su IS-IS.
@@ -437,7 +437,7 @@ Gli indirizzi provengono da un pool IP riservato di tipo LAN. Da esso, ogni disp
 
 _Le due fasi e cosa succede realmente con Stop._
 
-Una run viene lanciata da `Provision > LAN Automation` selezionando il seed (e il peer), le interfacce seed da usare, il sito target e il pool IP; fino a cinque sessioni possono girare contemporaneamente su siti diversi. Start apre la sessione e onboarda i dispositivi man mano che appaiono: DHCP, immagine e configurazione base vengono applicati mentre la sessione resta aperta. Stop la finalizza: i link point-to-point tra seed e dispositivi scoperti vengono convertiti in link routed Layer 3, lo scope DHCP temporaneo e la configurazione VLAN 1 vengono rimossi, e il subpool DHCP viene restituito al pool LAN. I dispositivi appaiono poi nell'[[#Inventory|inventory]] come normali dispositivi gestiti, pronti per essere [[#Provisioning|provisionati]] e ricevere [[#Template|template]].
+Una run viene lanciata da `Provision > LAN Automation` selezionando il seed (e il peer), le interfacce seed da usare, il sito target e il pool IP; fino a cinque sessioni possono girare contemporaneamente su siti diversi. Start apre la sessione e onboarda i dispositivi man mano che appaiono: DHCP, immagine e configurazione base vengono applicati mentre la sessione resta aperta. Stop la finalizza: i link point-to-point tra seed e dispositivi scoperti vengono convertiti in link routed Layer 3, lo scope DHCP temporaneo e la configurazione [[VLANs|VLAN]] 1 vengono rimossi, e il subpool DHCP viene restituito al pool LAN. I dispositivi appaiono poi nell'[[#Inventory|inventory]] come normali dispositivi gestiti, pronti per essere [[#Provisioning|provisionati]] e ricevere [[#Template|template]].
 
 > [!important] L'underlay non è finito finché non premi Stop
 > La conversione Layer 3 e la pulizia avvengono con Stop, non con Start. Una sessione lasciata aperta mantiene lo scope DHCP temporaneo del seed e i dispositivi scoperti su indirizzamento transitorio, quindi una run deve essere arrestata per raggiungere il suo stato finale e supportato.
@@ -454,7 +454,7 @@ _Segmentazione per gruppo di sicurezza invece che per indirizzo IP._
 
 ![[Pasted image 20260707173804.png]]
 
-Group-Based Access Control (GBAC) è il front end di Catalyst Center per Cisco TrustSec. 
+Group-Based Access Control (GBAC) è il front end di Catalyst Center per Cisco [[TrustSec]]. 
 
 Gli endpoint ricevono uno Scalable Group Tag (SGT) all'autenticazione, e una matrice di policy group-based definisce quali gruppi sorgente possano raggiungere quali gruppi destinazione, indipendentemente dall'indirizzamento IP. 
 
@@ -542,7 +542,7 @@ SD-Access è una capability importante ma opzionale, non un requisito di base; u
 
 _Il trasporto sotto la fabric e la rete virtuale sopra di esso._
 
-L'underlay è una rete IP routed (costruita manualmente o da [[#LAN Automation|LAN Automation]], che usa IS-IS). L'overlay trasporta il traffico utente ed è costruito su tre piani: un control plane LISP per posizione e risoluzione degli endpoint, un data plane VXLAN che incapsula il traffico utente attraverso l'underlay, e un policy plane Cisco TrustSec che trasporta gli [[#Group-Based Access Control|SGT]] per la segmentazione. Siti fabric separati sono uniti da un transit: un transit basato su IP attraverso una rete routed tradizionale, oppure un transit SD-Access che preserva informazioni di rete virtuale e SGT end-to-end tra siti.
+L'underlay è una rete IP routed (costruita manualmente o da [[#LAN Automation|LAN Automation]], che usa IS-IS). L'overlay trasporta il traffico utente ed è costruito su tre piani: un control plane [[LISP]] per posizione e risoluzione degli endpoint, un data plane [[VXLAN]] che incapsula il traffico utente attraverso l'underlay, e un policy plane Cisco TrustSec che trasporta gli [[#Group-Based Access Control|SGT]] per la segmentazione. Siti fabric separati sono uniti da un transit: un transit basato su IP attraverso una rete routed tradizionale, oppure un transit SD-Access che preserva informazioni di rete virtuale e SGT end-to-end tra siti.
 
 ### Ruoli fabric
 
@@ -557,7 +557,7 @@ _Le funzioni svolte dai dispositivi dentro una fabric._
 
 _Mappare pool di indirizzi e gruppi in reti virtuali segmentate._
 
-Le reti virtuali (VN) sono le VRF della fabric e forniscono macro-segmentazione. L'host onboarding associa un [[#Pool di indirizzi IP|pool IP]] a una VN, assegna [[#Group-Based Access Control|SGT]] per la micro-segmentazione al suo interno e seleziona il template di autenticazione porta (closed, open o low-impact) che governa come gli endpoint vengono ammessi. Ogni edge node condivide lo stesso distributed anycast gateway per un dato pool, quindi il default gateway di un endpoint è identico ovunque si connetta e il roaming non richiede rinumerazione.
+Le reti virtuali (VN) sono le [[VRF]] della fabric e forniscono macro-segmentazione. L'host onboarding associa un [[#Pool di indirizzi IP|pool IP]] a una VN, assegna [[#Group-Based Access Control|SGT]] per la micro-segmentazione al suo interno e seleziona il template di autenticazione porta (closed, open o low-impact) che governa come gli endpoint vengono ammessi. Ogni edge node condivide lo stesso distributed anycast gateway per un dato pool, quindi il default gateway di un endpoint è identico ovunque si connetta e il roaming non richiede rinumerazione.
 
 ## Amministrazione di sistema
 

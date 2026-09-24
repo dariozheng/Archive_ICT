@@ -12,7 +12,7 @@ last_update: 2026-07-21
 aliases:
   - Open Shortest Path First
 ---
-Open Shortest Path First (OSPF) is a link-state interior gateway protocol (IGP) that computes loop-free routes by having every router build an identical map of the topology and independently run Dijkstra's shortest-path algorithm against it. It is standardised as OSPFv2 (RFC 2328) for IPv4 and OSPFv3 (RFC 5340) for IPv6.
+Open Shortest Path First (OSPF) is a link-state interior gateway protocol (IGP) that computes loop-free routes by having every router build an identical map of the topology and independently run Dijkstra's shortest-path algorithm against it. It is standardised as OSPFv2 (RFC 2328) for IPv4 and OSPFv3 (RFC 5340) for [[IPv6]].
 
 Defining characteristics:
 
@@ -50,7 +50,7 @@ A router first uses the [[#Hello Protocol|Hello protocol]] to find neighbours. O
 
 _A 32-bit identifier that uniquely names a router inside the OSPF domain._
 
-Every router is identified by a Router ID (RID), written in dotted-decimal form like an IPv4 address. The RID names the router in every LSA it originates, breaks ties in DR election, and determines master/slave roles during database exchange. It must be unique across the domain — two routers sharing a RID will produce inconsistent databases and unstable routing, and the symptom is usually an adjacency that never gets past ExStart.
+Every router is identified by a Router ID (RID), written in dotted-decimal form like an IPv4 address. The RID names the router in every LSA it originates, breaks ties in DR election, and determines master/slave roles during database exchange. It must be unique across the domain — two routers sharing a RID will produce inconsistent databases and unstable [[Routing|routing]], and the symptom is usually an adjacency that never gets past ExStart.
 
 ### Selection Order
 
@@ -418,7 +418,7 @@ Also originated by an ABR, this advertises the location of an ASBR to routers in
 
 #### Type 5 — AS External LSA
 
-Originated by an ASBR for each external prefix redistributed into OSPF. Unlike the intra-area and inter-area types, a Type 5 LSA floods throughout the entire autonomous system, crossing every area boundary — except that it is blocked from stub and NSSA areas. Its cost can be interpreted in two ways, described under [[#Route Preference Order|route preference]].
+Originated by an ASBR for each external prefix redistributed into OSPF. Unlike the intra-area and inter-area types, a Type 5 LSA floods throughout the entire [[Autonomous System|autonomous system]], crossing every area boundary — except that it is blocked from stub and NSSA areas. Its cost can be interpreted in two ways, described under [[#Route Preference Order|route preference]].
 
 A Type 5 also carries a forwarding address. When it is 0.0.0.0, traffic is sent to the ASBR itself. When the ASBR's own next hop for that prefix sits on a network already running OSPF, the ASBR sets the forwarding address to that next hop instead, so other routers send traffic directly there rather than making an unnecessary detour through the ASBR.
 
@@ -594,7 +594,7 @@ Bidirectional Forwarding Detection is the better answer where it is supported. A
 
 ### Stub Router Advertisement
 
-A router that is up but not ready to forward — still booting, still converging BGP — should not attract transit traffic. Advertising itself as a stub router makes it set the metric on its transit links to the maximum, so SPF on every other router routes around it while still reaching networks directly attached to it.
+A router that is up but not ready to forward — still booting, still converging [[Border Gateway Protocol|BGP]] — should not attract transit traffic. Advertising itself as a stub router makes it set the metric on its transit links to the maximum, so SPF on every other router routes around it while still reaching networks directly attached to it.
 
 ```cisco
 router ospf 1

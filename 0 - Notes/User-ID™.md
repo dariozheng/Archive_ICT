@@ -12,7 +12,7 @@ status: draft
 aliases:
   - User-ID
 ---
-<strong>User-ID™</strong> technology enables the next-generation firewalls (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
+<strong>User-ID™</strong> technology enables the [[NGFW - Palo Alto Networks|next-generation firewalls]] (NGFWs) <mark style="background: #FFB86CA6;">to identify users in all locations, no matter what their device type or operating system is</mark>, <mark style="background: #BBFABBA6;">giving visibility into application activity based on users and groups</mark>, instead of IP addresses.
 
 <mark style="background: #FFB8EBA6;">With User-ID, you can define application access policies based on <strong>users</strong> or <strong>groups</strong> of users</mark>. 
 
@@ -337,7 +337,7 @@ The Authentication Portal mode defines how the firewall captures web requests fo
 This is the preferred mode because it provides a better end-user experience (no certificate errors). 
 
 Another benefit of the Redirect mode is that <mark style="background: #FF5582A6;">it provides for the use of session cookies</mark>, <mark style="background: #FFB8EBA6;">which enable the user to continue browsing to authenticated sites without requiring re-mapping each time the timeouts expire</mark>. 
-This is especially useful for users who roam from one IP address to another (for example, from the corporate LAN to the wireless network) because they won’t need to re-authenticate when the IP address changes as long as the session stays open.
+This is especially useful for users who roam from one IP address to another (for example, from the corporate LAN to the [[Wireless|wireless]] network) because they won’t need to re-authenticate when the IP address changes as long as the session stays open.
 
 If you use <strong>Kerberos SSO</strong>, you must use Redirect mode because the browser will provide credentials only to trusted sites. 
 

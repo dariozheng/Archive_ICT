@@ -54,7 +54,7 @@ sequenceDiagram
 
 ### HSRP
 
-Hot Standby Router Protocol, Cisco proprietary. One router is active and forwards for the virtual IP; another is standby and takes over if the active fails. The virtual MAC is 0000.0C07.ACxx, where xx is the group number. Version 1 supports groups 0–255 and uses multicast 224.0.0.2; version 2 supports groups 0–4095, uses 224.0.0.102, and adds IPv6 support. Both run over UDP 1985. Priority defaults to 100 and the higher priority wins the active role, but preemption is off by default, so a recovered router does not reclaim active unless preemption is enabled. Interface or object tracking can decrement priority when an uplink fails, handing the active role to the peer.
+Hot Standby Router Protocol, Cisco proprietary. One router is active and forwards for the virtual IP; another is standby and takes over if the active fails. The virtual MAC is 0000.0C07.ACxx, where xx is the group number. Version 1 supports groups 0–255 and uses multicast 224.0.0.2; version 2 supports groups 0–4095, uses 224.0.0.102, and adds [[IPv6]] support. Both run over UDP 1985. Priority defaults to 100 and the higher priority wins the active role, but preemption is off by default, so a recovered router does not reclaim active unless preemption is enabled. Interface or object tracking can decrement priority when an uplink fails, handing the active role to the peer.
 
 ```
              Virtual IP 10.0.0.1  (virtual MAC 0000.0C07.ACxx)
@@ -128,7 +128,7 @@ A chassis with two supervisors runs one active and one hot standby, continuously
 
 ### Nonstop Forwarding (NSF)
 
-NSF runs together with [[#Stateful Switchover (SSO)|SSO]]. During a supervisor switchover the routing protocols must re-establish, which normally takes time; NSF keeps forwarding along the existing hardware forwarding table during that window so no traffic is dropped and neighbors see no routing flap. It depends on [[#Graceful Restart|graceful restart]] — the neighbors must be NSF-aware to hold the adjacency while the control plane recovers.
+NSF runs together with [[#Stateful Switchover (SSO)|SSO]]. During a supervisor switchover the [[Routing|routing]] protocols must re-establish, which normally takes time; NSF keeps forwarding along the existing hardware forwarding table during that window so no traffic is dropped and neighbors see no routing flap. It depends on [[#Graceful Restart|graceful restart]] — the neighbors must be NSF-aware to hold the adjacency while the control plane recovers.
 
 ### Nonstop Routing (NSR)
 
@@ -154,7 +154,7 @@ EtherChannel bundles several physical links into one logical link, negotiated wi
 
 _Each layer of the campus uses the redundancy technique that suits its role._
 
-At the [[Campus Design#Access Layer|access layer]], switches are stacked with StackWise, endpoints get dual uplinks, and power is duplicated. At the [[Campus Design#Distribution Layer|distribution layer]], a first-hop redundancy protocol protects the gateway for [[Campus Design#Layer 2 Access|Layer 2 access]], while StackWise Virtual or VSS with MEC provides loop-free dual-homing and SSO with NSF protects the chassis control plane. The core uses redundant nodes, equal-cost paths, and the same chassis-level protection. In an SD-Access fabric these roles still exist, but gateway redundancy shifts to the anycast gateway and the control plane to LISP, so the fabric achieves the same resilience by different means.
+At the [[Campus Design#Access Layer|access layer]], switches are stacked with StackWise, endpoints get dual uplinks, and power is duplicated. At the [[Campus Design#Distribution Layer|distribution layer]], a first-hop redundancy protocol protects the gateway for [[Campus Design#Layer 2 Access|Layer 2 access]], while StackWise Virtual or VSS with MEC provides loop-free dual-homing and SSO with NSF protects the chassis control plane. The core uses redundant nodes, equal-cost paths, and the same chassis-level protection. In an SD-Access fabric these roles still exist, but gateway redundancy shifts to the anycast gateway and the control plane to [[LISP]], so the fabric achieves the same resilience by different means.
 
 ## Configuration
 

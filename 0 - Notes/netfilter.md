@@ -72,7 +72,7 @@ _The fixed points where Netfilter intercepts packets, and the order in which the
 
 ## IP Hooks
 
-_The five hooks on the IPv4 and IPv6 path, where most firewalling happens._
+_The five hooks on the IPv4 and [[IPv6]] path, where most firewalling happens._
 
 For IPv4 and IPv6 there are five hooks, named `NF_INET_*`. Every [[nftables#Base Chains|base chain]] attaches to exactly one of them, and the [[nftables#Address Families|family]] you pick decides which hooks are available.
 
@@ -88,7 +88,7 @@ For IPv4 and IPv6 there are five hooks, named `NF_INET_*`. Every [[nftables#Base
 
 ### Prerouting
 
-<mark style="background: #ABF7F7A6;">The first hook every incoming packet hits</mark>, right after basic sanity checks but before the kernel decides where the packet should go. Because it runs before routing, changing the destination here still lets the packet be routed accordingly, <mark style="background: #ADCCFFA6;">which is why</mark> [[#DNAT|DNAT]] <mark style="background: #ADCCFFA6;">lives here</mark> for incoming traffic. (For locally generated traffic the [[#Output|output]] hook offers the same trick: if a rule there rewrites the destination, the kernel re-runs the routing decision.)
+<mark style="background: #ABF7F7A6;">The first hook every incoming packet hits</mark>, right after basic sanity checks but before the kernel decides where the packet should go. Because it runs before [[Routing|routing]], changing the destination here still lets the packet be routed accordingly, <mark style="background: #ADCCFFA6;">which is why</mark> [[#DNAT|DNAT]] <mark style="background: #ADCCFFA6;">lives here</mark> for incoming traffic. (For locally generated traffic the [[#Output|output]] hook offers the same trick: if a rule there rewrites the destination, the kernel re-runs the routing decision.)
 
 ### Input
 

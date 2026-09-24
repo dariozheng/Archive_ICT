@@ -12,11 +12,11 @@ last_update: 2026-09-24
 aliases:
   - Virtual Routing and Forwarding
 ---
-Virtual Routing and Forwarding (VRF) is a Layer 3 virtualization technology that lets a single physical router or switch maintain several independent routing and forwarding tables at the same time. Each table behaves like a separate virtual router: interfaces assigned to one VRF reach only the destinations known to that VRF, and address space may overlap freely between VRFs because their tables never mix. VRF is the construct beneath MPLS Layer 3 VPNs, but it is equally useful on its own — as [[#VRF-Lite]] — for tenant separation, management-plane isolation, and keeping otherwise-conflicting networks apart on shared hardware.
+Virtual Routing and Forwarding (VRF) is a Layer 3 virtualization technology that lets a single physical router or switch maintain several independent [[Routing|routing]] and forwarding tables at the same time. Each table behaves like a separate virtual router: interfaces assigned to one VRF reach only the destinations known to that VRF, and address space may overlap freely between VRFs because their tables never mix. VRF is the construct beneath MPLS Layer 3 VPNs, but it is equally useful on its own — as [[#VRF-Lite]] — for tenant separation, management-plane isolation, and keeping otherwise-conflicting networks apart on shared hardware.
 
 ## Concept
 
-VRF virtualizes the routing and forwarding plane of a device the way a hypervisor virtualizes a server. One box runs many logical routers, each with its own routing table, its own forwarding table, and its own set of interfaces. A packet that arrives on an interface belonging to a given VRF is routed only against that VRF's table; it has no visibility into any other VRF unless an explicit leak is configured.
+VRF virtualizes the routing and forwarding plane of a device the way a [[Hypervisors|hypervisor]] virtualizes a server. One box runs many logical routers, each with its own routing table, its own forwarding table, and its own set of interfaces. A packet that arrives on an interface belonging to a given VRF is routed only against that VRF's table; it has no visibility into any other VRF unless an explicit leak is configured.
 
 Because each VRF carries a completely separate table, two VRFs can use the same IP prefix — even the exact same address on different interfaces — without conflict. The device keeps them apart by context, not by address.
 
@@ -71,7 +71,7 @@ The separation a VRF provides is control-plane and data-plane isolation at Layer
 
 ### Comparison to VLANs
 
-VLANs and VRFs are frequently confused because both "segment the network," but they operate at different layers and solve different problems.
+[[VLANs]] and VRFs are frequently confused because both "segment the network," but they operate at different layers and solve different problems.
 
 |Aspect|VLAN|VRF|
 |---|---|---|
@@ -91,7 +91,7 @@ VRF is deployed wherever a single device must serve multiple routing contexts th
 - Multi-tenancy: a shared aggregation or data-center switch that routes for several independent tenants, each confined to its own VRF.
 - Management-plane isolation: keeping device management traffic in a dedicated VRF so it stays reachable even when the production routing table is unstable, and so production traffic can never reach the management interface. This is the role of the [[#Management VRF|management VRF]].
 - Path and security isolation: separating zones such as guest, corporate, IoT, or PCI into distinct routing tables so traffic cannot cross between them without passing through a controlled inspection point.
-- MPLS Layer 3 VPN: within a service-provider or large-enterprise core, each customer VPN is a VRF on the provider-edge routers, carried across the backbone by MP-BGP and MPLS. This is the [[#MPLS L3VPN VRF|MPLS L3VPN]] model.
+- MPLS Layer 3 VPN: within a service-provider or large-enterprise core, each customer VPN is a VRF on the provider-edge routers, carried across the backbone by [[Border Gateway Protocol|MP-BGP]] and MPLS. This is the [[#MPLS L3VPN VRF|MPLS L3VPN]] model.
 - Dual internet and multihoming: organizations with multiple ISP connections can use VRF to maintain separate routing tables per ISP connection, preventing routing asymmetry and allowing policy-based path selection per traffic class.
 - Lab and test environments: a production router can carry an isolated lab or test topology alongside production traffic. The lab VRF can use any addressing it needs — including addresses that overlap with production — without risk of interference.
 
@@ -125,7 +125,7 @@ The global — or default — VRF is the ordinary routing table the device has a
 
 ### Address Families
 
-A modern VRF can carry more than one protocol. Under the multiprotocol VRF definition, an address-family sub-mode enables and scopes each protocol independently — typically IPv4 and IPv6. Policy such as route-target import and export is applied per address-family, so a VRF can, for example, leak IPv4 routes under one policy and IPv6 under another, or not at all.
+A modern VRF can carry more than one protocol. Under the multiprotocol VRF definition, an address-family sub-mode enables and scopes each protocol independently — typically IPv4 and [[IPv6]]. Policy such as route-target import and export is applied per address-family, so a VRF can, for example, leak IPv4 routes under one policy and IPv6 under another, or not at all.
 
 ### Route Distinguisher
 
@@ -341,7 +341,7 @@ Without the `vrf CUSTOMER_A` keyword the route lands in the global VRF and has n
 
 ### Dynamic Routing
 
-Routing protocols are made VRF-aware either through an address-family (BGP, named-mode EIGRP) or through a per-VRF process (OSPF).
+Routing protocols are made VRF-aware either through an address-family (BGP, named-mode EIGRP) or through a per-VRF process ([[OSPF]]).
 
 #### OSPF
 

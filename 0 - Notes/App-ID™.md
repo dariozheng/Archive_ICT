@@ -28,7 +28,7 @@ status: complete
 
 ![[App-ID dropbox.png]]
 
-When used in conjunction with User-ID™, you can see exactly who is using the application based on their identity, not just an IP address.
+When used in conjunction with [[User-ID™]], you can see exactly who is using the application based on their identity, not just an IP address.
 
 Example of App-ID:
 
@@ -294,7 +294,7 @@ It's possible to check the implicit dependencies on the Application details or o
 
 ## Implicit Permissions
 
-<mark style="background: #ADCCFFA6;">Implicit permissions for a parent application are processed only if you have <strong>not</strong> added an explicit Security policy rule for the parent application</mark>. This implicit support also applies to administrator-defined custom applications that are based on HTTP, SSL, MS-RPC, or RTSP.
+<mark style="background: #ADCCFFA6;">Implicit permissions for a parent application are processed only if you have <strong>not</strong> added an explicit Security policy rule for the parent application</mark>. This implicit support also applies to administrator-defined custom applications that are based on HTTP, SSL, [[Microsoft Remote Procedure Call|MS-RPC]], or RTSP.
 
 ![[Implicit permission example.png]]
 

@@ -52,6 +52,6 @@ Every IPv6-capable interface carries a link-local address automatically, whether
 
 - **Range:** `fe80::/10` by the standard, though every real implementation uses `fe80::/64` in practice.
 - **Never routed.** A router will not forward a packet with a link-local source or destination, under any circumstance — this is enforced behavior, not just convention.
-- **What it's used for:** Neighbor Discovery Protocol (NDP, IPv6's replacement for ARP), the RS/RA exchange that makes SLAAC possible in the first place, a host's default-gateway entry (routers advertise themselves by link-local address, so renumbering the global prefix later doesn't break anyone's routing table), and routing-protocol adjacencies such as OSPFv3 and RIPng.
+- **What it's used for:** Neighbor Discovery Protocol (NDP, IPv6's replacement for ARP), the RS/RA exchange that makes SLAAC possible in the first place, a host's default-gateway entry (routers advertise themselves by link-local address, so renumbering the global prefix later doesn't break anyone's [[Routing|routing]] table), and routing-protocol adjacencies such as OSPFv3 and RIPng.
 - **Scope / zone ID:** the same `fe80::` address legitimately exists on every interface a host has, so tools append a zone ID to say which one — `fe80::5054:ff:fe12:3456%eth0`. You'll see this in `ping` and `traceroute` output and in socket APIs.
 - **Not optional:** even a host using a manually configured or DHCPv6-assigned global address still depends on its link-local address for the underlying link operations to work at all.

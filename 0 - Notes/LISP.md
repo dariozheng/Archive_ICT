@@ -15,7 +15,7 @@ LISP (Locator/ID Separation Protocol) is a control-plane architecture that split
 
 ## The Problem LISP Solves
 
-_An IP address means two things at once — who a host is and where it sits in the topology — and overloading one number with both jobs is what limits routing scale and mobility._
+_An IP address means two things at once — who a host is and where it sits in the topology — and overloading one number with both jobs is what limits [[Routing|routing]] scale and mobility._
 
 In traditional routing an IP address is simultaneously the host's identity and its place in the network. That dual role has two costs. Routing tables bloat, because every site's prefixes must be carried through the transit network for anyone to reach them. And mobility is awkward, because a host that moves either has to change its address or force its specific route to be injected everywhere it appears. LISP removes the overload by giving the host a stable identity and letting its location vary independently, with a mapping system tracking the current binding.
 
@@ -167,7 +167,7 @@ Connects the fabric to everything outside it — other domains, the WAN, the dat
 
 ### Instance IDs and Segmentation
 
-LISP instance IDs keep tenants separate in the control plane and map onto the VXLAN VNI in the data plane. SD-Access uses a Layer 3 instance per VRF or virtual network and a Layer 2 instance per fabric VLAN, so segmentation is consistent end to end — the mapping database, the encapsulation, and the forwarding all agree on which segment a packet belongs to.
+LISP instance IDs keep tenants separate in the control plane and map onto the VXLAN VNI in the data plane. SD-Access uses a Layer 3 instance per [[VRF]] or virtual network and a Layer 2 instance per fabric [[VLANs|VLAN]], so segmentation is consistent end to end — the mapping database, the encapsulation, and the forwarding all agree on which segment a packet belongs to.
 
 ```
 Endpoint joins the fabric
@@ -185,7 +185,7 @@ Encapsulate in VXLAN toward that RLOC ─► remote edge decapsulates ─► end
 
 _Separating who from where is what buys LISP its scalability, mobility, and flexibility._
 
-Because EID prefixes are resolved on demand and cached rather than carried everywhere, the transit network holds only RLOCs — routing tables stay small and the control plane scales. Because a host's EID is independent of its location, that host can move and simply be re-registered against a new RLOC, so mobility works without renumbering; in the fabric this is what lets a client roam between edge nodes and keep its address and policy. The priority and weight in each Map-Reply give built-in multihoming and traffic engineering, and because EIDs and RLOCs are independent, they can even be different address families — an IPv4 EID reachable over an IPv6 RLOC, for instance. In Cisco SD-Access these properties become subnet stretching, seamless roaming, and segmentation that holds across the whole campus.
+Because EID prefixes are resolved on demand and cached rather than carried everywhere, the transit network holds only RLOCs — routing tables stay small and the control plane scales. Because a host's EID is independent of its location, that host can move and simply be re-registered against a new RLOC, so mobility works without renumbering; in the fabric this is what lets a client roam between edge nodes and keep its address and policy. The priority and weight in each Map-Reply give built-in multihoming and traffic engineering, and because EIDs and RLOCs are independent, they can even be different address families — an IPv4 EID reachable over an [[IPv6]] RLOC, for instance. In Cisco SD-Access these properties become subnet stretching, seamless roaming, and segmentation that holds across the whole campus.
 
 ## Configuration
 

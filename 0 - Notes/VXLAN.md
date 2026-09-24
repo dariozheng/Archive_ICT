@@ -15,7 +15,7 @@ VXLAN (Virtual eXtensible LAN, RFC 7348) is an overlay technology that carries L
 
 ## Why VXLAN Exists
 
-_VXLAN removes three limits that plain VLANs impose on large and virtualized networks._
+_VXLAN removes three limits that plain [[VLANs]] impose on large and virtualized networks._
 
 ### VLAN Scale Ceiling
 
@@ -44,7 +44,7 @@ _VXLAN builds a virtual network on top of a physical one; the two are named sepa
 
 ### Underlay
 
-The physical, routed IP network — switches, routers, and their links — that provides plain reachability between tunnel endpoints. In a data center this is typically a spine-leaf topology running an IGP such as OSPF or IS-IS. The underlay knows nothing about tenants or segments; it only has to route packets between VTEP IP addresses, and it uses ECMP so all links carry traffic.
+The physical, routed IP network — switches, routers, and their links — that provides plain reachability between tunnel endpoints. In a data center this is typically a spine-leaf topology running an IGP such as [[OSPF]] or IS-IS. The underlay knows nothing about tenants or segments; it only has to route packets between VTEP IP addresses, and it uses ECMP so all links carry traffic.
 
 ### Overlay
 
@@ -109,7 +109,7 @@ _The 24-bit VNI is the segment label — the VXLAN equivalent of a VLAN ID, but 
 Every VXLAN segment is identified by a VNI carried in every encapsulated packet. It comes in two forms:
 
 - Layer 2 VNI — mapped one-to-one with a VLAN, extending that broadcast domain across the fabric (VLAN-to-VNI).
-- Layer 3 VNI — mapped to a VRF, providing routed, per-tenant separation across the fabric (VRF-to-VNI).
+- Layer 3 VNI — mapped to a [[VRF]], providing routed, per-tenant separation across the fabric (VRF-to-VNI).
 
 The Layer 2 VNI stretches a subnet; the Layer 3 VNI carries routed traffic between subnets while keeping tenants isolated. In SD-Access terms, separate Layer 3 VNIs are the basis of macro segmentation (virtual networks), while the SGT provides micro segmentation within a virtual network.
 
@@ -117,7 +117,7 @@ The Layer 2 VNI stretches a subnet; the Layer 3 VNI carries routed traffic betwe
 
 _The 50-byte overhead means the underlay must carry larger frames or traffic will fragment._
 
-Encapsulation adds 50 bytes for IPv4 (70 for IPv6). If the underlay still uses a 1500-byte MTU, a full-size inner frame no longer fits, forcing fragmentation or drops that are painful to troubleshoot.
+Encapsulation adds 50 bytes for IPv4 (70 for [[IPv6]]). If the underlay still uses a 1500-byte MTU, a full-size inner frame no longer fits, forcing fragmentation or drops that are painful to troubleshoot.
 
 > [!warning] Raise the underlay MTU
 > Increase the underlay MTU to absorb the overhead — at least ~1554 bytes for IPv4, though jumbo frames (9000) are the common choice in data-center and fabric designs. This is a frequent root cause of intermittent overlay failures.
@@ -170,7 +170,7 @@ A refinement that removes the multicast requirement. Instead of one multicast co
 
 ### BGP EVPN
 
-The modern data-center control plane. MP-BGP with the Layer 2 VPN EVPN address family distributes MAC and IP-to-VTEP reachability between VTEPs before any traffic flows, so unknown-unicast flooding and much of ARP are eliminated. This is the standard control plane for Nexus spine-leaf VXLAN fabrics.
+The modern data-center control plane. [[Border Gateway Protocol|MP-BGP]] with the Layer 2 VPN EVPN address family distributes MAC and IP-to-VTEP reachability between VTEPs before any traffic flows, so unknown-unicast flooding and much of ARP are eliminated. This is the standard control plane for Nexus spine-leaf VXLAN fabrics.
 
 ### LISP
 

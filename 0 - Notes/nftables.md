@@ -380,7 +380,7 @@ table inet example {
 
 A `nat` chain only inspects the first packet of a connection; [[Netfilter#How NAT Uses Conntrack|conntrack]] replays the same translation on every later packet, which is why NAT chains should not carry general filtering rules. (NAT in the `inet` family needs kernel 5.2 or later; on older kernels use separate `ip` / `ip6` NAT tables.)
 
-The `route` type is a specialised output-only type. After the [[Netfilter#Output|output]] chain runs, if the packet's routing-relevant fields changed — destination address, source address, TOS/DSCP, or the firewall mark (`meta mark`) — the kernel performs a fresh routing lookup so the change takes effect. Use it when locally generated traffic must be policy-routed based on a mark set in the output path; it corresponds to the old iptables mangle OUTPUT behaviour.
+The `route` type is a specialised output-only type. After the [[Netfilter#Output|output]] chain runs, if the packet's routing-relevant fields changed — destination address, source address, TOS/DSCP, or the firewall mark (`meta mark`) — the kernel performs a fresh [[Routing|routing]] lookup so the change takes effect. Use it when locally generated traffic must be policy-routed based on a mark set in the output path; it corresponds to the old iptables mangle OUTPUT behaviour.
 
 ### Hook and Priority
 
@@ -594,7 +594,7 @@ Two further expressions query kernel state rather than fields in the packet:
 |`fib <keys> <result>`|the result of a routing-table lookup, used for reverse-path / anti-spoofing checks (see [[Netfilter#Anti-Spoofing with fib]])|
 |`socket`|properties of the local socket a packet belongs to, e.g. `socket transparent 1` for [[Netfilter#Transparent Proxying (TPROXY)]]|
 
-Strict reverse-path filtering, working for IPv4 and IPv6 alike, is a single `fib` rule:
+Strict reverse-path filtering, working for IPv4 and [[IPv6]] alike, is a single `fib` rule:
 
 ```bash
 nft add rule inet filter prerouting fib saddr . iif oif missing drop
@@ -1310,7 +1310,7 @@ Because [[Netfilter#DNAT|DNAT]] runs before the forward chain, the forward rule 
 
 ## WireGuard Gateway
 
-_The firewall rules for a WireGuard server. WireGuard's own configuration — keys, peers, `AllowedIPs`, `wg-quick` — is a separate topic and is not shown here; these are only the nftables rules that turn a WireGuard host into a working gateway._
+_The firewall rules for a [[WireGuard]] server. WireGuard's own configuration — keys, peers, `AllowedIPs`, `wg-quick` — is a separate topic and is not shown here; these are only the nftables rules that turn a WireGuard host into a working gateway._
 
 ```bash
 #!/usr/sbin/nft -f
