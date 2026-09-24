@@ -8,7 +8,6 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-08-26
-up: "[[00 - MOC - VM90-IP-CORE1 Routing]]"
 ---
 # VM90-IP-CORE1
 

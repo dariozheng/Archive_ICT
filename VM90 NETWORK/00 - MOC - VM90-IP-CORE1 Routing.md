@@ -1,22 +1,14 @@
 ---
-categories:
-  - "[[Networking]]"
-topic@networking:
-  - "[[Networking General]]"
 title: VM90-IP-CORE1 Routing - Map of Content
 tags:
   - network/cisco
   - moc
   - vrf
   - bgp
-  - category/networking/networking_general
 device: VM90-IP-CORE1
 platform: C8500-12X / IOS-XE 17.06.03a
 site: Via Villamagna 90/C - Publiacqua DataCenter
 config-date: 2026-07-29
-icon: FasNetworkWired
-iconColor:
-last_update: 2026-09-21
 ---
 
 # VM90-IP-CORE1 - How the VRFs Talk to Each Other

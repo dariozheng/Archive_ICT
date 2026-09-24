@@ -1,19 +1,11 @@
 ---
-categories:
-  - "[[Networking]]"
-topic@networking:
-  - "[[Networking General]]"
 title: Primer - VRF, RD, RT, BGP, route-maps and tags
 tags:
   - network/cisco
   - primer
   - vrf
   - bgp
-  - category/networking/networking_general
 up: "[[00 - MOC - VM90-IP-CORE1 Routing]]"
-icon: FasNetworkWired
-iconColor:
-last_update: 2026-09-21
 ---
 
 # Primer - everything you need before reading the rest

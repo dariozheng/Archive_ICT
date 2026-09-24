@@ -1,18 +1,10 @@
 ---
-categories:
-  - "[[Networking]]"
-topic@networking:
-  - "[[Networking General]]"
 title: Verification playbook
 tags:
   - network/cisco
   - troubleshooting
   - playbook
-  - category/networking/networking_general
 up: "[[00 - MOC - VM90-IP-CORE1 Routing]]"
-icon: FasNetworkWired
-iconColor:
-last_update: 2026-09-21
 ---
 
 # Verification playbook

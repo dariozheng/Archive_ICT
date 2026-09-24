@@ -1,19 +1,11 @@
 ---
-categories:
-  - "[[Networking]]"
-topic@networking:
-  - "[[Networking General]]"
 title: Service VRFs and Backbone VRFs - the firewall hairpin
 tags:
   - network/cisco
   - vrf
   - firewall
   - design
-  - category/networking/networking_general
 up: "[[00 - MOC - VM90-IP-CORE1 Routing]]"
-icon: FasNetworkWired
-iconColor:
-last_update: 2026-09-21
 ---
 
 # Service VRFs and Backbone VRFs
