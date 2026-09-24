@@ -4,6 +4,7 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
+  - encor
   - category/networking/networking_general
 icon: FasNetworkWired
 iconColor:
