@@ -5,5 +5,9 @@
   "tabSize": 4,
   "vimMode": false,
   "alwaysUpdateLinks": true,
-  "readableLineLength": true
+  "readableLineLength": true,
+  "userIgnoreFilters": [
+    "3 - Templates/",
+    "attachments/"
+  ]
 }

@@ -38,7 +38,7 @@ if (/[\\/:]/.test(name)) {
 // Read the category's topic property back from its note template instead of deriving
 // it: robust even where a category carries a second key (Linux has Distro alongside
 // topic@linux). Whatever key is left after removing the fixed ones is the topic property.
-const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "aliases", "cssclasses"];
+const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "status", "aliases", "cssclasses"];
 let topicProp = null;
 const tmpl = app.vault.getAbstractFileByPath(`${CATEGORY_TEMPLATES}/${category} Template.md`);
 if (tmpl) {

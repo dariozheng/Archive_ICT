@@ -5,10 +5,12 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/sase
-  - tobecompleted
   - category/security/palo_alto_networks
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
+aliases:
+  - Prisma SD-WAN
 ---
 <mark style="background: #FFB8EBA6;"><strong>Prisma SD-WAN</strong> provides a <strong>software-defined wide area network</strong> (SD-WAN) <strong>solution</strong> that transforms <strong>legacy wide area networks</strong> (WANs)</mark> <mark style="background: #FF5582A6;">into a simplified, secure, application-defined fabric</mark>, virtualizing <u>heterogeneous underlying transports</u> (MPLS, 5G, LTE, Broadband) <mark style="background: #FFB86CA6;">into a <strong>unified hybrid WAN</strong></mark>. 
 
@@ -88,7 +90,7 @@ Existing MPLS and internet connections can be directed into the Prisma SD-WAN IO
 # Prisma SD-WAN Site
 Sites include brach offices and data centers. 
 
-<mark style="background: #FFB8EBA6;">Prisma SD-WAN uses <strong>site prefixes</strong> to advertise <strong>reachability</strong> from branch sites <strong>into</strong> the SD-WAN fabric</mark>. <mark style="background: #FFB86CA6;">Site prefixes allow Prisma SD-WAN <strong>data center sites</strong> to easily advertise <strong>routes</strong> and <strong>reachability</strong> to branch sites</mark>. You can configure site prefixes for branch sites, but <mark style="background: #FFF3A3A6;">the preferred method for advertising branch reachability is through the use of global scope interfaces and static routes</mark>. From release 6.2.1, both IPv4 and IPv6 prefixes are supported. From release 6.5.1, prefixes learned from global BGP/OSPF peers by the DC ION can be exported into the SD-WAN fabric.
+<mark style="background: #FFB8EBA6;">Prisma SD-WAN uses <strong>site prefixes</strong> to advertise <strong>reachability</strong> from branch sites <strong>into</strong> the SD-WAN fabric</mark>. <mark style="background: #FFB86CA6;">Site prefixes allow Prisma SD-WAN <strong>data center sites</strong> to easily advertise <strong>routes</strong> and <strong>reachability</strong> to branch sites</mark>. You can configure site prefixes for branch sites, but <mark style="background: #FFF3A3A6;">the preferred method for advertising branch reachability is through the use of global scope interfaces and static routes</mark>. From release 6.2.1, both IPv4 and [[IPv6]] prefixes are supported. From release 6.5.1, prefixes learned from global [[Border Gateway Protocol|BGP]]/OSPF peers by the DC ION can be exported into the SD-WAN fabric.
 
 ## Control
 After a customer uses analytics-only mode, they can easily switch the device to <strong>control mode</strong>. 
@@ -380,7 +382,7 @@ Additionally, when the site is in Analytics mode or in Control mode, <mark style
 <mark style="background: #BBFABBA6;">Prisma SD-WAN seamlessly integrates <strong>third-party security solutions</strong> by using <strong>CloudBlades</strong> to establish <strong>VPNs</strong> to these endpoints in a fully automated fashion</mark>.
 
 <mark style="background: #ADCCFFA6;">Prisma SD-WAN enables you to have multiple <strong>active/active VPN paths</strong> to <strong>third-party security endpoints</strong></mark>. <mark style="background: #D2B3FFA6;">These <strong>VPN paths</strong> can be used in the path selection algorithm along with overlay and underlay paths</mark>. <mark style="background: #CACFD9A6;">Standard VPNs can be manually configured and brought up between a Prisma SD-WAN branch ION and a third-party device</mark>. 
-You can also automate these tunnel setups by using CloudBlades, or, in the case of Prisma Access, by using native SASE integration. 
+You can also automate these tunnel setups by using CloudBlades, or, in the case of [[Prisma Access]], by using native [[Prisma SASE|SASE]] integration. 
 
 Standard VPN interfaces are used to communicate with systems that require traditional IKE and ESP secure tunnel negotiation.
 
@@ -399,7 +401,7 @@ Commonly deployed standard VPN endpoints are:
 The following are configuration parameters for standard VPNs:
 - Name and Description
 - <strong>Parent Interface</strong>: All standard VPN tunnels must be attached to a parent Interface (internet or private WAN).
-- <strong>Scope</strong> (Local or Global): Determines whether the inner tunnel IP address is advertised through the fabric via routing protocols
+- <strong>Scope</strong> (Local or Global): Determines whether the inner tunnel IP address is advertised through the fabric via [[Routing|routing]] protocols
 - <strong>Endpoint</strong>: Used in application policy for path selection and can contain a list of IP addresses and hostnames
 - <strong>Peer Hostname</strong>: Used to determine the IPSec tunnel remote system IP address
 - <strong>Peer IP</strong>: Used to determine the IPSec tunnel remote system IP address when no DNS name is available
@@ -611,7 +613,7 @@ QoS prefixes can be configured and used in QoS policies. From release 6.2.1, bot
 
 ##### Define Policy Rule
 ###### Path Policy Rule
-Within a simple Path policy rule, <mark style="background: #ABF7F7A6;">applications and their desired path and policy behaviors are configured as shown</mark>. Prisma SD-WAN supports unified App-IDs to provide application detection services for Prisma SD-WAN and Palo Alto Network applications. Sites must have their ION devices updated to 6.0.1 to take advantage of the new applications. To filter applications based on the ION device version, use the options at the top of the page.
+Within a simple Path policy rule, <mark style="background: #ABF7F7A6;">applications and their desired path and policy behaviors are configured as shown</mark>. Prisma SD-WAN supports unified [[App-ID™|App-IDs]] to provide application detection services for Prisma SD-WAN and Palo Alto Network applications. Sites must have their ION devices updated to 6.0.1 to take advantage of the new applications. To filter applications based on the ION device version, use the options at the top of the page.
 
 ![[Path Policy Rule.png]]
 

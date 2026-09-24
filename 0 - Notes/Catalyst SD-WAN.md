@@ -9,13 +9,13 @@ icon: FasNetworkWired
 iconColor:
 last_update:
 ---
-Cisco Catalyst SD-WAN, formerly Viptela and then Cisco SD-WAN, is a software-defined approach to the wide-area network. It separates the WAN into four planes and builds a transport-independent, encrypted overlay that rides on top of any underlying transport — MPLS, broadband internet, or cellular — while being managed centrally and driven by policy. Instead of configuring each branch router by hand and locking the design to one carrier, an operator defines intent in a controller and the fabric of edge routers is provisioned to match. This note covers the four planes and their components, the overlay routing protocol and its locators, the split between control and data connections, policy and application-aware routing, onboarding, and how the whole thing compares to a traditional WAN. It is the WAN sibling of [[SD-Access#What SD-Access Is|SD-Access]]: the same separation of control from data, applied to the WAN instead of the campus.
+Cisco Catalyst SD-WAN, formerly Viptela and then Cisco SD-WAN, is a software-defined approach to the wide-area network. It separates the WAN into four planes and builds a transport-independent, encrypted overlay that rides on top of any underlying transport — MPLS, broadband internet, or cellular — while being managed centrally and driven by policy. Instead of configuring each branch router by hand and locking the design to one carrier, an operator defines intent in a controller and the fabric of edge routers is provisioned to match. This note covers the four planes and their components, the overlay [[Routing|routing]] protocol and its locators, the split between control and data connections, policy and application-aware routing, onboarding, and how the whole thing compares to a traditional WAN. It is the WAN sibling of [[SD-Access#What SD-Access Is|SD-Access]]: the same separation of control from data, applied to the WAN instead of the campus.
 
 ## Traditional WAN versus SD-WAN
 
 _The WAN moved from router-by-router and transport-locked to centrally managed and transport-independent._
 
-A traditional WAN is configured device by device, usually built around MPLS, and tends to backhaul internet-bound traffic to a central hub for inspection. Policy, QoS, and access lists live on each router, so change is slow and error-prone. SD-WAN centralizes the design in a controller and manager, treats every transport as interchangeable, allows direct internet access at the branch, and steers traffic by application rather than by static routing metrics — all over an overlay that is encrypted by default.
+A traditional WAN is configured device by device, usually built around MPLS, and tends to [[Backhaul|backhaul]] internet-bound traffic to a central hub for inspection. Policy, QoS, and access lists live on each router, so change is slow and error-prone. SD-WAN centralizes the design in a controller and manager, treats every transport as interchangeable, allows direct internet access at the branch, and steers traffic by application rather than by static routing metrics — all over an overlay that is encrypted by default.
 
 |Aspect|Traditional WAN|Catalyst SD-WAN|
 |---|---|---|
@@ -76,7 +76,7 @@ _How edges learn about each other and decide where to build tunnels._
 
 ### OMP — Overlay Management Protocol
 
-OMP is the routing protocol of the overlay, running between each edge and the [[#Control Plane — vSmart|vSmart controllers]] inside the control connections. It unifies routing, policy, security, and service information into one protocol, advertising OMP routes (the actual prefixes reachable at each site), TLOC routes (the transport attachment points), service routes, and the encryption keys that let edges bring up data tunnels. Conceptually it is to SD-WAN what BGP is to a traditional network, but purpose-built for the overlay.
+OMP is the routing protocol of the overlay, running between each edge and the [[#Control Plane — vSmart|vSmart controllers]] inside the control connections. It unifies routing, policy, security, and service information into one protocol, advertising OMP routes (the actual prefixes reachable at each site), TLOC routes (the transport attachment points), service routes, and the encryption keys that let edges bring up data tunnels. Conceptually it is to SD-WAN what [[Border Gateway Protocol|BGP]] is to a traditional network, but purpose-built for the overlay.
 
 ### TLOC — Transport Locator
 

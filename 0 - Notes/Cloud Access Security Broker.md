@@ -82,6 +82,6 @@ Where API-based integrations are supported, the following significant benefits m
 Governing organizational use of SaaS applications is a multifaceted challenge. 
 <mark style="background: #FFF3A3A6;">CASB solutions require a multiplatform, multi-layered solution</mark>, <mark style="background: #FFF3A3A6;">that is multi-platform</mark> across the <mark style="background: #FFB8EBA6;">cloud-delivered security services application</mark>, <mark style="background: #FFB86CA6;">destination SaaS applications</mark>, <mark style="background: #ADCCFFA6;">gateways</mark>, and <mark style="background: #D2B3FFA6;">mobile/remote access points</mark>.
 
-The specific console view and location of CASB-related information and configuration tools varies based on a customer’s licensing and management of the larger Prisma SASE platform.
+The specific console view and location of CASB-related information and configuration tools varies based on a customer’s licensing and management of the larger [[Prisma SASE]] platform.
 
 ![[Palo Alto Networks CASB solution.png]]

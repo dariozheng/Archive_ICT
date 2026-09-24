@@ -10,6 +10,7 @@
     "modified": "date",
     "creation": "datetime",
     "section": "multitext",
-    "last_update": "date"
+    "last_update": "date",
+    "status": "text"
   }
 }

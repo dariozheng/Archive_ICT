@@ -8,10 +8,13 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - vPC
+  - Virtual PortChannel
 ---
 Cisco Nexus Virtual PortChannel, abbreviated vPC, allows a downstream device to build one logical Layer 2 port channel across two physical Nexus switches. Both [[#vPC Peer Devices|peer switches]] can forward traffic at the same time, while the [[#vPC Peer-Link|peer-link]] synchronizes state and the [[#Peer-Keepalive Link|peer-keepalive path]] helps the pair distinguish a peer failure from a peer-link failure.
 
-This note covers classic vPC on Cisco Nexus 9000 switches running standalone NX-OS. The example follows the command model documented for NX-OS 10.6(x). Interface names, addresses, VLANs, timers, priorities, and feature support must be checked against the exact switch model, NX-OS release, topology, and Cisco release notes before production use.
+This note covers classic vPC on Cisco Nexus 9000 switches running standalone NX-OS. The example follows the command model documented for NX-OS 10.6(x). Interface names, addresses, [[VLANs]], timers, priorities, and feature support must be checked against the exact switch model, NX-OS release, topology, and Cisco release notes before production use.
 
 ## Definition and Scope
 
@@ -38,7 +41,7 @@ vPC is not:
 - One shared management plane.
 - One shared Layer 3 control plane.
 - A replacement for STP.
-- A replacement for HSRP, VRRP, routing protocols, or routed ECMP links.
+- A replacement for HSRP, VRRP, [[Routing|routing]] protocols, or routed ECMP links.
 - A mechanism that makes every Layer 2 topology safe or supported.
 
 At Layer 2, a vPC pair can appear as one logical node to a vPC-attached device. At Layer 3, the peers remain two separate routers with separate interfaces, addresses, routing tables, adjacencies, and failure states.
@@ -48,7 +51,7 @@ At Layer 2, a vPC pair can appear as one logical node to a vPC-attached device. 
 Common vPC attachments include:
 
 - An access switch dual-homed to two aggregation switches.
-- A server or hypervisor with one LACP bond split across two Nexus switches.
+- A server or [[Hypervisors|hypervisor]] with one LACP bond split across two Nexus switches.
 - A firewall, load balancer, or storage appliance with a multichassis link aggregation group.
 - A Fabric Extender design supported by the exact Nexus platform and release.
 - A Layer 2 interconnection between two vPC pairs, commonly called double-sided or back-to-back vPC.
@@ -185,7 +188,7 @@ Its main job is to answer a specific question after the peer-link fails: is the 
 
 The keepalive design should:
 
-- Use a dedicated VRF and routed interfaces where practical.
+- Use a dedicated [[VRF]] and routed interfaces where practical.
 - Otherwise use a resilient out-of-band management network.
 - Have unique, mutually reachable global-unicast source and destination addresses.
 - Remain independent from the complete peer-link failure domain.
@@ -305,7 +308,7 @@ Configure it symmetrically on both peers and verify the exact routing design. It
 
 #### ARP and Neighbor Discovery Synchronization
 
-`ip arp synchronize` accelerates ARP-table recovery between peers. `ipv6 nd synchronize` provides the equivalent benefit for IPv6 Neighbor Discovery where the platform and deployment support it.
+`ip arp synchronize` accelerates ARP-table recovery between peers. `ipv6 nd synchronize` provides the equivalent benefit for [[IPv6]] Neighbor Discovery where the platform and deployment support it.
 
 Configure the applicable command on both peers. IPv6 synchronization is unnecessary in an IPv4-only deployment.
 

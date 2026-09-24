@@ -8,4 +8,5 @@ aliases:
   - WBEM
 icon: FasServer
 iconColor: "#103f7aff"
+status: stub
 ---

@@ -1,4 +1,16 @@
-**Exam:** Implementing Cisco Enterprise Advanced Routing and Services (ENARSI 300-410 v1.1) **Duration:** 90 minutes | **Format:** Multiple choice, drag-and-drop, simlets/labs **Role in certification:** Concentration exam for CCNP Enterprise (paired with ENCOR 350-401) **Plan length:** ~16 weeks at 10–14 hours/week (adjust to your pace)
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - ccnp
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-07-06
+---
+**Exam:** Implementing Cisco Enterprise Advanced [[Routing]] and Services (ENARSI 300-410 v1.1) **Duration:** 90 minutes | **Format:** Multiple choice, drag-and-drop, simlets/labs **Role in certification:** Concentration exam for CCNP Enterprise (paired with ENCOR 350-401) **Plan length:** ~16 weeks at 10–14 hours/week (adjust to your pace)
 
 ---
 
@@ -18,7 +30,7 @@
 Before touching ENARSI content:
 
 1. **Download the official exam topics PDF** from the Cisco Learning Network — https://learningnetwork.cisco.com/s/enarsi-exam-topics. Print it. Check off every line item as you master it. This is your master checklist.
-2. **Verify your ENCOR/CCNA routing foundations.** ENARSI assumes you already know basic OSPF, EIGRP, BGP, and IPv6 configuration. If EIGRP metrics or OSPF LSA types are fuzzy, do a 1-week ENCOR routing refresher first.
+2. **Verify your ENCOR/CCNA routing foundations.** ENARSI assumes you already know basic [[OSPF]], EIGRP, [[Border Gateway Protocol|BGP]], and [[IPv6]] configuration. If EIGRP metrics or OSPF LSA types are fuzzy, do a 1-week ENCOR routing refresher first.
 3. **Build your lab environment** (pick one):
     - **Cisco Modeling Labs (CML) Personal** — best fidelity, official IOS-XE images (~$199/yr) — https://developer.cisco.com/modeling-labs/
     - **EVE-NG Community + IOSv/CSR1000v images** — free platform, very popular for ENARSI — https://www.eve-ng.net
@@ -63,11 +75,11 @@ Study order:
 
 1. EIGRP fundamentals review: DUAL, feasibility condition, FD/RD, successors/feasible successors
 2. Classic vs. **named mode** configuration (address-family, af-interface, topology base) — named mode is heavily tested
-3. Neighbor relationships: K-values, AS mismatch, authentication (MD5 + SHA in named mode), passive interfaces, mismatched subnets, timers
+3. Neighbor relationships: K-values, [[Autonomous System|AS]] mismatch, authentication (MD5 + SHA in named mode), passive interfaces, mismatched subnets, timers
 4. EIGRP stub routing: all stub types, why remote sites use it, stuck-in-active (SIA) and how stubs prevent it
 5. EIGRP load balancing: equal and unequal cost (variance)
 6. EIGRP summarization (interface-level), leak maps
-7. EIGRP over IPv6 and **EIGRP inside a VRF** (blueprint tests EIGRP in "VRF and global" contexts — lab `address-family ipv4 vrf X autonomous-system Y`)
+7. EIGRP over IPv6 and **EIGRP inside a [[VRF]]** (blueprint tests EIGRP in "VRF and global" contexts — lab `address-family ipv4 vrf X autonomous-system Y`)
 8. Troubleshooting methodology: `show ip eigrp neighbors/topology/interfaces`, event logs, debugs
 
 Labs: build classic AND named-mode topologies; break authentication, K-values, and stub configs on purpose; convert classic → named.

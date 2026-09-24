@@ -1,21 +1,5 @@
 {
   "editor:toggle-bold": [],
-  "templater-obsidian:create-Templates/Cloud Computing Template.md": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "G"
-    }
-  ],
-  "insert-template": [
-    {
-      "modifiers": [
-        "Alt"
-      ],
-      "key": "G"
-    }
-  ],
   "highlightr-plugin:highlighter-plugin-menu": [
     {
       "modifiers": [
@@ -80,6 +64,14 @@
         "Ctrl"
       ],
       "key": "P"
+    }
+  ],
+  "templater-obsidian:insert-templater": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "G"
     }
   ]
 }

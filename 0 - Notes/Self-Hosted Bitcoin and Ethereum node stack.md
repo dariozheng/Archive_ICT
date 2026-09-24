@@ -4,10 +4,10 @@ categories:
 topic@systems:
 tags:
   - claude
-  - tobecompleted
   - category/systems
 icon: SiBitcoin
 iconColor: "#F38423"
+status: draft
 ---
 _A fully self-hosted Bitcoin and Ethereum node stack — full chain validation, private wallet connectivity, and address monitoring — packaged as a hardened Docker Compose deployment with every config file included inline._
 
@@ -1887,7 +1887,7 @@ Then in the compose file replace each `image: name:tag` with `image: name@sha256
 
 _Hide your node's IP from Bitcoin peers._
 
-Run a Tor container on the Bitcoin external network, then point bitcoind at it by adding the proxy settings to [[#Config: bitcoin.conf|bitcoin.conf]] (this image reads its config from that file, not from environment variables):
+Run a [[Tor Project|Tor]] container on the Bitcoin external network, then point bitcoind at it by adding the proxy settings to [[#Config: bitcoin.conf|bitcoin.conf]] (this image reads its config from that file, not from environment variables):
 
 ```yaml
 # docker-compose.yml

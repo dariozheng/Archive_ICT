@@ -15,7 +15,7 @@ Cisco TrustSec is a software-defined segmentation architecture that enforces sec
 
 _Traditional ACLs bind policy to addresses and topology; TrustSec binds it to identity, so the policy stops depending on where a host sits._
 
-Classic segmentation is built from VLANs and IP access lists. Every rule references subnets, so the policy is tied to the addressing plan and the topology: renumber a subnet, move a server, or add a site, and the ACLs have to be rewritten. In a large network this produces sprawling, brittle access lists that are hard to audit and easy to break. TrustSec removes the dependency by classifying traffic into groups and writing policy between those groups. A device joins a group and inherits its policy; it can move anywhere and keep it.
+Classic segmentation is built from [[VLANs]] and IP access lists. Every rule references subnets, so the policy is tied to the addressing plan and the topology: renumber a subnet, move a server, or add a site, and the ACLs have to be rewritten. In a large network this produces sprawling, brittle access lists that are hard to audit and easy to break. TrustSec removes the dependency by classifying traffic into groups and writing policy between those groups. A device joins a group and inherits its policy; it can move anywhere and keep it.
 
 ## Security Group Tag (SGT)
 
@@ -144,7 +144,7 @@ SD-Access uses two complementary layers of segmentation.
 
 ### Macro Segmentation
 
-Separate virtual networks, each a VRF carried by its own Layer 3 [[LISP#Instance IDs and Segmentation|LISP instance and VXLAN VNI]]. Traffic cannot cross between virtual networks without passing through an explicit policy point such as a firewall — complete isolation, for keeping whole domains apart (for example corporate versus building-management systems).
+Separate virtual networks, each a [[VRF]] carried by its own Layer 3 [[LISP#Instance IDs and Segmentation|LISP instance and VXLAN VNI]]. Traffic cannot cross between virtual networks without passing through an explicit policy point such as a firewall — complete isolation, for keeping whole domains apart (for example corporate versus building-management systems).
 
 ### Micro Segmentation
 

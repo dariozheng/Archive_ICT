@@ -26,7 +26,7 @@ Cisco Identity Services Engine (ISE) is an <strong>identity-based network access
 
 ## Deployment Architecture
 
-Cisco ISE sits between the network access devices and the identity and PKI infrastructure. The switches send RADIUS authentication requests to ISE; ISE evaluates them against [[#External Identity Sources - Active Directory|Active Directory]] and the certificate trust chain, then returns an authorization result — a VLAN, a [[#Downloadable ACLs|dACL]], or a URL redirect — and can push changes mid-session through [[#Change of Authorization (CoA)|CoA]]. The same nodes host the portal that [[#Redirect_Guest_Wired|Central Web Authentication]] redirects guests to.
+Cisco ISE sits between the network access devices and the identity and PKI infrastructure. The switches send RADIUS authentication requests to ISE; ISE evaluates them against [[#External Identity Sources - Active Directory|Active Directory]] and the certificate trust chain, then returns an authorization result — a [[VLANs|VLAN]], a [[#Downloadable ACLs|dACL]], or a URL redirect — and can push changes mid-session through [[#Change of Authorization (CoA)|CoA]]. The same nodes host the portal that [[#Redirect_Guest_Wired|Central Web Authentication]] redirects guests to.
 
 ```mermaid
 flowchart LR
@@ -85,7 +85,7 @@ Cisco ISE includes a built-in internal identity store that supports a limited nu
 
 Within the Identities section, administrators can configure local user accounts serving one of two purposes: logging into the ISE GUI, or authenticating for network access.
 
-This internal store is particularly useful for granting temporary or contractor access to the wireless network without provisioning accounts in the company's primary identity store.
+This internal store is particularly useful for granting temporary or contractor access to the [[Wireless|wireless]] network without provisioning accounts in the company's primary identity store.
 
 Each internal user account can be associated with a user identity group, which defines the type and role of the account being created.
 
@@ -361,7 +361,7 @@ They can be configured with Network Device Profile, Model Name, Software Version
 
 The network device is added to ISE as an object.
 
-The object has a shared secret key for RADIUS, TACACS authentication settings, SNMP community strings, and TrustSec configuration. The RADIUS shared secret key must match the configured key on the NAD exactly. The matching switch-side configuration is documented in [[PBA - NAC - Network Access Devices#RADIUS Server Configuration|the NAD note]].
+The object has a shared secret key for RADIUS, TACACS authentication settings, SNMP community strings, and [[TrustSec]] configuration. The RADIUS shared secret key must match the configured key on the NAD exactly. The matching switch-side configuration is documented in [[PBA - NAC - Network Access Devices#RADIUS Server Configuration|the NAD note]].
 
 Each NAD object must be configured with one or more IP addresses. Each NAD can be assigned to one NDG of each type: one Location group, one Device Type group, and one of each manually created top-level NDG.
 

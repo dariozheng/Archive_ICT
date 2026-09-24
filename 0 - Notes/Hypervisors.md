@@ -4,12 +4,15 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
+  - encor
   - category/networking/networking_general
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - Hypervisor
 ---
-Device virtualization lets one physical server present itself as many independent machines. The component that makes this possible is the hypervisor: a layer that abstracts CPU, memory, storage, and network interfaces away from the physical hardware and hands each guest its own virtual set. This note documents hypervisors with a networking emphasis — how a [[#Virtual Machine|virtual machine]] is given a network adapter, how the [[#Virtual Switch|virtual switch]] inside the host moves its frames, how VLANs are applied, and how that internal switching plane meets the physical enterprise network. It closes on the contrast between virtual machines and [[#Containers versus Virtual Machines|containers]].
+Device virtualization lets one physical server present itself as many independent machines. The component that makes this possible is the hypervisor: a layer that abstracts CPU, memory, storage, and network interfaces away from the physical hardware and hands each guest its own virtual set. This note documents hypervisors with a networking emphasis — how a [[#Virtual Machine|virtual machine]] is given a network adapter, how the [[#Virtual Switch|virtual switch]] inside the host moves its frames, how [[VLANs]] are applied, and how that internal switching plane meets the physical enterprise network. It closes on the contrast between virtual machines and [[#Containers versus Virtual Machines|containers]].
 
 ## Hypervisor Classification
 

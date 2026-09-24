@@ -5,12 +5,12 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/sase
-  - tobecompleted
   - category/security/palo_alto_networks
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 ---
-Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <strong><mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark></strong> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust Network Access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">SWG</mark>, <strong>CASB</strong>, and <mark style="background: #BBFABBA6;">DLP</mark> for <mark style="background: #ABF7F7A6;">remote users, branches, and applications</mark>. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management (ADEM). 
+Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <strong><mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark></strong> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust Network Access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">SWG</mark>, <strong>CASB</strong>, and <mark style="background: #BBFABBA6;">DLP</mark> for <mark style="background: #ABF7F7A6;">remote users, branches, and applications</mark>. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management ([[Autonomous Digital Experience Management|ADEM]]). 
 
 Core Topology Components:
 - <mark style="background: #FFB86CA6;">Mobile Users</mark> Security Processing Node (<strong>MU-SPN</strong>): <mark style="background: #FFB8EBA6;">Individual users connecting via the <strong>GlobalProtect</strong> app</mark> to nearby <mark style="background: #FFF3A3A6;">cloud gateways</mark>. <mark style="background: #ABF7F7A6;">These gateways act as the security enforcement point for remote employees</mark>.
@@ -156,7 +156,7 @@ Starting in Prisma Access Innovation v3.2, <mark style="background: #FFB8EBA6;">
 ##### Enable Infrastructure Traffic Source NAT
 <mark style="background: #ABF7F7A6;">Performs NAT on addresses from the Infrastructure Subnet</mark> so that they are not advertised to the data center, and only those subnets you specify at the service connections are advertised and routed in the data center.
 ##### IP Pool 
-<mark style="background: #ADCCFFA6;">Specify the IP address pool used to perform NAT on the mobile user IP address pool, Infrastructure Subnet, or both</mark>. Use a private IP (RFC 1918) subnet or a suitable subnet that is routable in your routing domain and does not overlap with the Mobile Users GlobalProtect IP address pool or the Infrastructure Subnet.
+<mark style="background: #ADCCFFA6;">Specify the IP address pool used to perform NAT on the mobile user IP address pool, Infrastructure Subnet, or both</mark>. Use a private IP (RFC 1918) subnet or a suitable subnet that is routable in your [[Routing|routing]] domain and does not overlap with the Mobile Users GlobalProtect IP address pool or the Infrastructure Subnet.
 Enter a subnet between /25 and /32.
 ## Routing and QoS
 In order for Prisma Access <mark style="background: #FFB8EBA6;">to route traffic to the HQ and data centers</mark>, <mark style="background: #FF5582A6;"><strong>routing information</strong> for the subnetworks that you want users to access must be provided</mark>. This can be done in three ways: <mark style="background: #FFB86CA6;">configuring static routing</mark>, <mark style="background: #FFF3A3A6;">creating a QoS Profile to prioritize business-critical traffic</mark>, or <mark style="background: #BBFABBA6;">configuring dynamic routing and Border Gateway Protocol (BGP)</mark>.
@@ -165,7 +165,7 @@ The first method is <mark style="background: #ABF7F7A6;">using static routing</m
 
 The subnetworks at HQ, data centers, and remote network sites <mark style="background: #BBFABBA6;">must not overlap with each other</mark>, <mark style="background: #ADCCFFA6;">with the IP pools that you designated for Prisma Access for users</mark>, or <mark style="background: #D2B3FFA6;">with the infrastructure subnet</mark>. <mark style="background: #CACFD9A6;">If you are using static routes to route traffic to and from your HQ/DC</mark>, <mark style="background: #FFB8EBA6;">add the IP subnets or IP addresses that you want to secure at the branch</mark>. 
 
-Note: If you make any changes to the IP subnets on your HQ/DC network, you must manually update the static routes. Additionally, if you configure both static routes and BGP routing, the static routes take precedence.
+Note: If you make any changes to the IP subnets on your HQ/DC network, you must manually update the static routes. Additionally, if you configure both static routes and [[Border Gateway Protocol|BGP]] routing, the static routes take precedence.
 
 To configure static routing, navigate to <strong>Panorama > Cloud Services > Configuration > Service Connection > Onboarding > Add</strong>. On the <strong>Static Routes</strong> tab, click <strong>Add</strong>.![[Configuring Static Routing.png]]
 
@@ -190,7 +190,7 @@ The third method is using Border Gateway Protocol (BGP).
 
 If you want to enable BGP to dynamically route traffic to and from your HQ and data centers, you will need to provide the following BGP information for the eBGP router at the HQ/DC:
 ##### Branch Router AS Number
-The autonomous system (AS) to which the eBGP router at the HQ/DC belongs. This is called the Peer AS.
+The [[Autonomous System|autonomous system]] (AS) to which the eBGP router at the HQ/DC belongs. This is called the Peer AS.
 ##### Router ID
 The IP address is assigned as the Router ID of the eBGP router on the HQ/DC network. This is called the Peer Address.
 #### Dynamic Routing Configuration Settings
@@ -454,7 +454,7 @@ The <strong>GlobalProtect portal</strong> can <mark style="background: #FF5582A6
 ### Internal Gateway
 <strong>Prisma Access cloud-native internal gateway solution</strong> reduces the need to implement GlobalProtect in conjunction with an on-premises internal gateway <mark style="background: #FFF3A3A6;">to learn User-ID for users on an internal network</mark>. <mark style="background: #BBFABBA6;">Prisma Access deployments can enable a native-internal gateway natively</mark> within the Prisma Access architecture.
 
-Prior to Prisma Access 5.1, an on-premises NGFW had to be deployed as an internal gateway to generate IP user mappings and HIP for hosts running the GlobalProtect client software in Prisma Access remote networks. 
+Prior to Prisma Access 5.1, an on-premises [[NGFW - Palo Alto Networks|NGFW]] had to be deployed as an internal gateway to generate IP user mappings and HIP for hosts running the GlobalProtect client software in Prisma Access remote networks. 
 With Prisma Access cloud-native internal gateway, you can avoid using on-premises internal gateways; <mark style="background: #FFB86CA6;">the Prisma Access internal gateway generates the IP user mappings and HIPs locally in remote networks</mark>. <mark style="background: #FF5582A6;">Remote networks consume IP user mappings and HIPs from the local database</mark> for posture checks, instead of learning them from other firewalls.
 
 ![[nternal Gateway GlobalProtect.png]]
@@ -690,7 +690,7 @@ Allows you to <strong>group</strong> <mark style="background: #ADCCFFA6;">specif
 
 The group membership <mark style="background: #FF5582A6;">is based on an attribute or activity that the tag identifies</mark>, and <mark style="background: #FFB86CA6;">members are included in the group only when they meet that criterion</mark>. 
 
-A dynamic user group that is based on an auto-tag includes <mark style="background: #ADCCFFA6;">users or IP addresses that are associated with a certain type of log activity</mark>. You do not need to manually update policy or groups to respond to a threat.
+A [[Dynamic User Groups - Palo Alto|dynamic user group]] that is based on an auto-tag includes <mark style="background: #ADCCFFA6;">users or IP addresses that are associated with a certain type of log activity</mark>. You do not need to manually update policy or groups to respond to a threat.
 ##### Tags
 <mark style="background: #FFF3A3A6;">Tag policies and objects to group related items and add colors to visually distinguish them from other configured policies for easy review</mark>. You can tag all <mark style="background: #FF5582A6;">Prisma Access policies</mark>, as well as <mark style="background: #FF5582A6;">addresses</mark>, <mark style="background: #FF5582A6;">objects</mark>, <mark style="background: #FF5582A6;">address groups</mark>, <mark style="background: #FF5582A6;">service objects</mark>, and <mark style="background: #FF5582A6;">service groups</mark>. You can apply one or more tags to any policy rule or object, up to a maximum of 64 tags. Prisma Access supports up to 10,000 tags.
 ##### Auto Tags

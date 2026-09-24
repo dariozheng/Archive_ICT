@@ -1,6 +1,17 @@
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-08-26
+---
 A finished network is one that already carries production traffic. The design decisions are made, the addressing is allocated, the protocols have converged, and every change from this point on touches something that somebody depends on. Moving on a network like this is a different discipline from building one: the work is reading, tracing, verifying, and only then touching.
 
-This note describes how a typical enterprise campus and WAN is assembled when it uses VRFs for segmentation, OSPF as the interior routing protocol, and BGP as the carrier of reachability between sites — and how to move through it in both senses of the word.
+This note describes how a typical enterprise campus and WAN is assembled when it uses [[VRF|VRFs]] for segmentation, [[OSPF]] as the interior [[Routing|routing]] protocol, and [[Border Gateway Protocol|BGP]] as the carrier of reachability between sites — and how to move through it in both senses of the word.
 
 | Sense                 | Question it answers                                                                                     |
 | --------------------- | ------------------------------------------------------------------------------------------------------- |
@@ -87,7 +98,7 @@ Where private addressing meets public. The internet edge holds the [[#NAT|NAT]] 
 
 #### Data Center Fabric
 
-Where servers attach. Modern fabrics are leaf-and-spine with a [[#VXLAN EVPN|VXLAN EVPN]] overlay, which changes what "the same VLAN" means physically but not logically. Older fabrics look like a distribution layer with more ports.
+Where servers attach. Modern fabrics are leaf-and-spine with a [[#VXLAN EVPN|VXLAN EVPN]] overlay, which changes what "the same [[VLANs|VLAN]]" means physically but not logically. Older fabrics look like a distribution layer with more ports.
 
 ---
 
@@ -149,7 +160,7 @@ show etherchannel load-balance
 
 #### Multi-Chassis Link Aggregation
 
-The same idea across two physical chassis — StackWise Virtual, VSS, vPC, or MLAG depending on platform. The downstream switch sees a single upstream device, which removes the blocked link that [[#Spanning Tree|spanning tree]] would otherwise create and makes both uplinks active.
+The same idea across two physical chassis — StackWise Virtual, VSS, [[Cisco Nexus Virtual PortChannel (vPC)|vPC]], or MLAG depending on platform. The downstream switch sees a single upstream device, which removes the blocked link that [[#Spanning Tree|spanning tree]] would otherwise create and makes both uplinks active.
 
 The difference is visible from the access switch, which either sees two upstream devices and blocks one path, or sees one.
 
@@ -279,7 +290,7 @@ show mac address-table address 0011.2233.4455
 
 ### IPv6 and Dual Stack
 
-Where both protocols are deployed, they are two independent control planes sharing one physical network. Addresses, neighbour tables, routing tables, [[#First Hop Redundancy|FHRP]] groups, and access lists all exist twice, and a fault in one is invisible in the other. A destination that resolves to an AAAA record will be traced entirely in the IPv6 tables even though the IPv4 path is healthy.
+Where both protocols are deployed, they are two independent control planes sharing one physical network. Addresses, neighbour tables, routing tables, [[#First Hop Redundancy|FHRP]] groups, and access lists all exist twice, and a fault in one is invisible in the other. A destination that resolves to an AAAA record will be traced entirely in the [[IPv6]] tables even though the IPv4 path is healthy.
 
 ```cisco
 show ipv6 neighbors vrf CORP
@@ -607,7 +618,7 @@ BGP does not discover neighbours. Every session is configured by hand on both en
 
 #### eBGP
 
-A session between two different autonomous systems. Routes learned from an eBGP peer are advertised to every other peer. The AS number is prepended to the AS path on the way out, which is what makes loop detection work. eBGP peers are expected to be directly connected — a session between loopbacks requires `ebgp-multihop` or `update-source` adjustments.
+A session between two different [[Autonomous System|autonomous systems]]. Routes learned from an eBGP peer are advertised to every other peer. The AS number is prepended to the AS path on the way out, which is what makes loop detection work. eBGP peers are expected to be directly connected — a session between loopbacks requires `ebgp-multihop` or `update-source` adjustments.
 
 #### iBGP
 

@@ -4,7 +4,8 @@ categories:
   - "[[Privacy]]"
 topic@security:
   - "[[VPN]]"
-topic@privacy: "[[Privacy General]]"
+topic@privacy:
+  - "[[Privacy General]]"
 tags:
   - claude
   - vpn
@@ -41,7 +42,7 @@ _A virtual network interface that happens to encrypt._
 
 A <mark style="background: #FF5582A6;">WireGuard tunnel</mark> is a <mark style="background: #FF5582A6;">network interface</mark>, conventionally named `wg0`, `wg1` and so on.
 
-To the rest of the system it behaves like any other interface: it has an IP address, it appears in the routing table, and packets routed to it are sent, while packets it receives are delivered up the stack.
+To the rest of the system it behaves like any other interface: it has an IP address, it appears in the [[Routing|routing]] table, and packets routed to it are sent, while packets it receives are delivered up the stack.
 
 The difference is hidden inside: <mark style="background: #FFF3A3A6;">on transmit it encrypts each packet and wraps it in UDP</mark> to a peer; on receive it decrypts and unwraps.
 
@@ -163,7 +164,7 @@ So AllowedIPs is read against the destination on the way out and against the sou
 
 _A single host versus a gateway for a whole network._
 
-The size of a peer's prefix says what that peer stands for. A `/32` (or `/128` for IPv6) is a single host — a laptop, a phone, one machine's tunnel address — that speaks only for itself. A whole subnet like `192.168.50.0/24` means the peer is the gateway for that network: anything destined into the range is sent to that peer, which forwards it to the real hosts behind it, as in a [[#Site-to-Site|site-to-site]] link or a [[#Hub-and-Spoke and Mesh|hub]] routing for its spokes.
+The size of a peer's prefix says what that peer stands for. A `/32` (or `/128` for [[IPv6]]) is a single host — a laptop, a phone, one machine's tunnel address — that speaks only for itself. A whole subnet like `192.168.50.0/24` means the peer is the gateway for that network: anything destined into the range is sent to that peer, which forwards it to the real hosts behind it, as in a [[#Site-to-Site|site-to-site]] link or a [[#Hub-and-Spoke and Mesh|hub]] routing for its spokes.
 
 The distinction describes what is reachable through the peer, not what kind of machine it is. A central VPN server is not marked as such by its own AllowedIPs — from the server's side every client is a `/32`; it is from the client's side that the server appears as `0.0.0.0/0` (a [[#Full-Tunnel Routing|full tunnel]]) or as the server's subnets (a [[#Split Tunneling|split tunnel]]). The same host can be a `/32` to one peer and a subnet gateway to another.
 

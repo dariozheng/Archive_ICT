@@ -10,6 +10,8 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15
+aliases:
+  - OSI
 ---
 The <strong>Open Systems Interconnection</strong> (OSI) model is a <strong>seven-layer reference model</strong> that describes how a communication system carries data between two applications running on different machines. It was published by the International Organization for Standardization as ISO/IEC 7498-1 and, in parallel, by the ITU-T as recommendation X.200. 
 
@@ -24,7 +26,7 @@ What the decomposition buys:
 - A shared vocabulary. "The problem is at layer 2" carries precise meaning between two engineers who have never met.
 - Independent evolution. A layer can be replaced entirely without disturbing its neighbours, provided the service it offers is unchanged. Ethernet can become Wi-Fi without altering IP, TCP or HTTP.
 - Bounded scope. A protocol designer inherits a defined service from below and must offer a defined service above; nothing else is their concern.
-- Division of labour. Cabling, switching, routing and application development are separate disciplines because the model separates them.
+- Division of labour. Cabling, switching, [[Routing|routing]] and application development are separate disciplines because the model separates them.
 - An order of investigation. A fault can be localised layer by layer instead of guessed at.
 
 What it costs: every layer adds control information to the data, so bandwidth is spent on headers; some functions are performed more than once at different layers; and strict layering, followed literally, is slow enough that real implementations break it deliberately. These are covered in [[#Limitations of the Model|the limitations of the model]].
@@ -169,7 +171,7 @@ flowchart TD
 
 Encapsulation has a hard constraint attached to it. The frame that layer 2 can carry has a maximum payload — the maximum transmission unit (MTU), 1500 bytes on standard Ethernet — and everything above must fit inside it. That single number propagates upward as pressure: it is why the transport layer performs [[#Segmentation and Reassembly|segmentation]], why the network layer performs [[#Fragmentation and Reassembly|fragmentation]], and why the payload an application actually gets is smaller than the MTU.
 
-A standard IPv4 and TCP conversation over untagged Ethernet spends 54 bytes per frame on headers: 14 for Ethernet, 20 for IPv4, 20 for TCP. The 1518-byte frame carries 1460 bytes of application data. A VLAN tag, a tunnel header or IPsec each take a further bite out of the same budget.
+A standard IPv4 and TCP conversation over untagged Ethernet spends 54 bytes per frame on headers: 14 for Ethernet, 20 for IPv4, 20 for TCP. The 1518-byte frame carries 1460 bytes of application data. A [[VLANs|VLAN]] tag, a tunnel header or IPsec each take a further bite out of the same budget.
 
 ## The Seven Layers
 
@@ -329,7 +331,7 @@ The <strong>frame check sequence</strong> carries a CRC-32 computed over the fra
 Three things follow, and each is regularly misunderstood:
 
 - It is detection, not correction. Nothing is repaired.
-- Ethernet does not retransmit. There is no acknowledgement and no recovery at this layer; a lost frame is noticed, if at all, by [[#Connection-Oriented Service|TCP]] or by the application. 802.11 is the exception — a wireless medium is lossy enough that acknowledging and retransmitting per frame is worth the cost.
+- Ethernet does not retransmit. There is no acknowledgement and no recovery at this layer; a lost frame is noticed, if at all, by [[#Connection-Oriented Service|TCP]] or by the application. 802.11 is the exception — a [[Wireless|wireless]] medium is lossy enough that acknowledging and retransmitting per frame is worth the cost.
 - The layer that detects an error is not the layer that caused it. A rising CRC counter is a layer 2 report of a layer 1 defect: a damaged cable, a dirty or failing optic, EMI, or a [[#Duplex and Synchronization|duplex mismatch]].
 
 #### Data Link Flow Control
@@ -396,7 +398,7 @@ The service IP offers is deliberately minimal — connectionless and best-effort
 An IP address has two parts: a network portion and a host portion, split by a subnet mask or prefix length. That hierarchy is the whole difference from [[#Physical Addressing|MAC addressing]]. Because addresses on a network share a prefix, a router can hold one route for millions of hosts, and can advertise one summary to its neighbors instead of an entry per device. A flat address space cannot be aggregated; a hierarchical one can, and aggregation is what makes a global routing table possible at all.
 
 - IPv4 — 32 bits, written as four decimal octets. Unicast, multicast, broadcast.
-- IPv6 — 128 bits, written as hexadecimal groups. Unicast, multicast, anycast; no broadcast, its functions replaced by multicast.
+- [[IPv6]] — 128 bits, written as hexadecimal groups. Unicast, multicast, anycast; no broadcast, its functions replaced by multicast.
 
 An IP address is assigned by configuration or DHCP rather than burned into hardware, and it describes a position in the topology rather than a piece of equipment. Move a laptop to another building and its MAC is unchanged while its IP must change — the two addresses answer different questions, and both are needed on every frame for exactly that reason.
 
@@ -504,7 +506,7 @@ That is the right trade in four situations, and recognising them explains most o
 - Latency matters more than completeness — voice and video, where a retransmitted packet arrives too late to play.
 - The exchange is a single request and response — DNS, DHCP, SNMP, syslog, NTP; a handshake would cost more than the data.
 - The application implements its own reliability and wants control of it — QUIC.
-- A tunnel needs the lightest possible wrapper that NAT and load balancers will still hash on — VXLAN, GTP.
+- A tunnel needs the lightest possible wrapper that NAT and load balancers will still hash on — [[VXLAN]], GTP.
 
 #### Flow Control and Congestion Control
 

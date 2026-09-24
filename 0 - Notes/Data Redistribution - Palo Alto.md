@@ -8,6 +8,8 @@ tags:
   - category/security/palo_alto_networks
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+aliases:
+  - Data Redistribution
 ---
 <mark style="background: #FFB8EBA6;"><strong>Data redistribution</strong> allows <strong>IP-to-user mappings</strong> from one firewall to be shared with another firewall</mark>. 
 

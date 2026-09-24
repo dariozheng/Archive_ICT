@@ -11,8 +11,10 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15
+aliases:
+  - VLAN
 ---
-_A VLAN turns one physical switch into several isolated broadcast domains. Trunking carries many of those domains over one link. Inter-VLAN routing is the only sanctioned way back across the boundaries a VLAN creates._
+_A VLAN turns one physical switch into several isolated broadcast domains. Trunking carries many of those domains over one link. Inter-VLAN [[Routing|routing]] is the only sanctioned way back across the boundaries a VLAN creates._
 
 A switch, left alone, is one flat <strong>broadcast domain</strong>: every port can reach every other port, and a broadcast from any host is flooded to all of them. 
 
@@ -125,7 +127,7 @@ The VID is 12 bits, so it can express 2¹² = 4096 values. Two are reserved by t
 - `0` — means "no VLAN, priority-tagged only." A frame with VID 0 carries a PCP value but no VLAN membership.
 - `4095` — reserved for implementation use.
 
-That leaves 1–4094 as assignable VLAN IDs — 4094 usable values. This ceiling is a hard property of the 12-bit field, and it is one of the motivations for VXLAN in large multi-tenant fabrics, where a 24-bit identifier replaces the 12-bit VID.
+That leaves 1–4094 as assignable VLAN IDs — 4094 usable values. This ceiling is a hard property of the 12-bit field, and it is one of the motivations for [[VXLAN]] in large multi-tenant fabrics, where a 24-bit identifier replaces the 12-bit VID.
 
 ### The MTU Cost
 
@@ -386,7 +388,7 @@ The `no switchport` line converts the port from Layer 2 to Layer 3. It belongs t
 
 _The same 802.1Q tagging, expressed as kernel sub-interfaces and bridge VLAN filtering. The concepts map directly onto the switch model; only the syntax changes._
 
-A Linux host is a fully capable 802.1Q participant. It can terminate tagged traffic on VLAN sub-interfaces, and it can act as a VLAN-aware switch through the bridge's VLAN filtering — the same two roles as a router sub-interface and a switch, respectively. This is directly relevant wherever a Linux box sits on a trunk, as a router, firewall, or hypervisor.
+A Linux host is a fully capable 802.1Q participant. It can terminate tagged traffic on VLAN sub-interfaces, and it can act as a VLAN-aware switch through the bridge's VLAN filtering — the same two roles as a router sub-interface and a switch, respectively. This is directly relevant wherever a Linux box sits on a trunk, as a router, firewall, or [[Hypervisors|hypervisor]].
 
 ### VLAN Sub-Interfaces
 

@@ -8,8 +8,10 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - Software-Defined Access
 ---
-Cisco SD-Access (Software-Defined Access) is Cisco's intent-based networking solution for the campus. It turns the access network into an automated fabric: a routed [[#Underlay|underlay]] carrying a virtual [[#Overlay|overlay]] in which policy is defined by identity rather than by IP address. Instead of configuring VLANs and access lists box by box, an operator expresses intent in a controller and the fabric is provisioned to match. SD-Access is built from three cooperating planes — a [[LISP#Core Namespaces|LISP]] control plane, a [[VXLAN#VXLAN Encapsulation|VXLAN]] data plane, and a [[TrustSec#Security Group Tag (SGT)|Cisco TrustSec]] policy plane — managed by Cisco Catalyst Center and Cisco ISE. This note is the hub for the fabric: it explains the underlay and overlay, the three planes, the device roles, the segmentation model, wireless integration, how a host is onboarded, and how sites are joined together.
+Cisco SD-Access (Software-Defined Access) is Cisco's intent-based networking solution for the campus. It turns the access network into an automated fabric: a routed [[#Underlay|underlay]] carrying a virtual [[#Overlay|overlay]] in which policy is defined by identity rather than by IP address. Instead of configuring [[VLANs]] and access lists box by box, an operator expresses intent in a controller and the fabric is provisioned to match. SD-Access is built from three cooperating planes — a [[LISP#Core Namespaces|LISP]] control plane, a [[VXLAN#VXLAN Encapsulation|VXLAN]] data plane, and a [[TrustSec#Security Group Tag (SGT)|Cisco TrustSec]] policy plane — managed by Cisco Catalyst Center and Cisco ISE. This note is the hub for the fabric: it explains the underlay and overlay, the three planes, the device roles, the segmentation model, [[Wireless|wireless]] integration, how a host is onboarded, and how sites are joined together.
 
 ## What SD-Access Is
 
@@ -23,7 +25,7 @@ _A stable routed foundation carries a virtual, policy-rich network on top of it.
 
 ### Underlay
 
-The physical network — every link routed, no spanning tree, all paths active through equal-cost multipath. Its only responsibility is plain IP reachability between fabric nodes. It can be an existing network (bring-your-own) or built automatically by Catalyst Center LAN Automation, which provisions the devices and runs IS-IS as the underlay routing protocol.
+The physical network — every link routed, no spanning tree, all paths active through equal-cost multipath. Its only responsibility is plain IP reachability between fabric nodes. It can be an existing network (bring-your-own) or built automatically by Catalyst Center LAN Automation, which provisions the devices and runs IS-IS as the underlay [[Routing|routing]] protocol.
 
 ### Overlay
 
@@ -114,7 +116,7 @@ _Two tiers of segmentation, one for whole domains and one for groups inside a do
 
 ### Macro Segmentation — Virtual Networks
 
-A virtual network (VN) is a VRF carried by its own Layer 3 VNI. Different VNs are completely isolated — traffic cannot pass between them inside the fabric, and any communication must go through an explicit policy point such as a firewall or a fusion router that leaks routes between VRFs. Macro segmentation keeps entire domains apart, for example corporate versus guest versus building-management systems.
+A virtual network (VN) is a [[VRF]] carried by its own Layer 3 VNI. Different VNs are completely isolated — traffic cannot pass between them inside the fabric, and any communication must go through an explicit policy point such as a firewall or a fusion router that leaks routes between VRFs. Macro segmentation keeps entire domains apart, for example corporate versus guest versus building-management systems.
 
 ### Micro Segmentation — Security Groups
 

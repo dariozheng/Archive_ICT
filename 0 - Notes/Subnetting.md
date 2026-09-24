@@ -89,7 +89,7 @@ Because the ones must be contiguous, only nine octet values can ever appear in a
 |Octet value|0|128|192|224|240|248|252|254|255|
 
 > [!note] Non-contiguous masks 
-> A mask such as `255.255.0.255` is syntactically expressible but is not valid in any modern stack, routing protocol or allocation policy. If a mask octet is not one of the nine values above, the mask is wrong.
+> A mask such as `255.255.0.255` is syntactically expressible but is not valid in any modern stack, [[Routing|routing]] protocol or allocation policy. If a mask octet is not one of the nine values above, the mask is wrong.
 
 ### CIDR Prefix Notation
 
@@ -99,7 +99,7 @@ Since the mask is fully described by the number of leading ones, it is written a
 192.168.10.200/27   ≡   192.168.10.200  255.255.255.224
 ```
 
-The prefix length is the only form used by routing protocols, the Linux `ip` command, nftables, WireGuard `AllowedIPs`, and every allocation registry. Dotted-decimal masks persist chiefly in Cisco interface configuration and in Windows dialogs.
+The prefix length is the only form used by routing protocols, the Linux `ip` command, [[nftables]], [[WireGuard]] `AllowedIPs`, and every allocation registry. Dotted-decimal masks persist chiefly in Cisco interface configuration and in Windows dialogs.
 
 ### The Wildcard Mask
 
@@ -119,7 +119,7 @@ wildcard        0 .   0 .   0 .  31      0.0.0.31
 |/20|255.255.240.0|0.0.15.255|
 |/13|255.248.0.0|0.7.255.255|
 
-Wildcards appear in Cisco ACLs and OSPF `network` statements. Linux tooling never uses them, though Python exposes the same value as the `hostmask` attribute of a network object. The wildcard is numerically identical to the block size minus one in the octet where the boundary falls.
+Wildcards appear in Cisco ACLs and [[OSPF]] `network` statements. Linux tooling never uses them, though Python exposes the same value as the `hostmask` attribute of a network object. The wildcard is numerically identical to the block size minus one in the octet where the boundary falls.
 
 ---
 
@@ -817,7 +817,7 @@ _The arithmetic is identical; the scale and the conventions are not._
 |Host subnet size|sized to the host count|effectively always /64|
 |Masks|dotted-decimal or prefix|prefix only|
 
-Consequently, IPv6 subnetting is not concerned with conserving host addresses. A /64 holds 2⁶⁴ addresses whether it contains three hosts or three thousand. Subnetting determines only how many /64 segments a site requires.
+Consequently, [[IPv6]] subnetting is not concerned with conserving host addresses. A /64 holds 2⁶⁴ addresses whether it contains three hosts or three thousand. Subnetting determines only how many /64 segments a site requires.
 
 ### Nibble Boundaries
 
@@ -882,7 +882,7 @@ Subnet to /64: 8 bits → the low byte of the fourth hextet
   2001:db8:abcd:abff::/64     last  (256 subnets)
 ```
 
-A practical convention is to mirror the IPv4 plan in the subnet ID — VLAN 30 becomes `...:0030::/64` — so that dual-stack subnets are recognisably paired.
+A practical convention is to mirror the IPv4 plan in the subnet ID — [[VLANs|VLAN]] 30 becomes `...:0030::/64` — so that dual-stack subnets are recognisably paired.
 
 ### Reserved IPv6 Ranges
 

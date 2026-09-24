@@ -19,7 +19,7 @@ The subject splits into two questions that are easy to conflate:
 - Where can I reach, and over which path? — learning routes and choosing between them.
 - Where does this specific packet go, right now? — looking the destination up and forwarding it.
 
-Everything else in this note — static routes, OSPF areas, BGP attributes, redistribution, VRFs — is machinery built in service of those two questions.
+Everything else in this note — static routes, [[OSPF]] areas, [[Border Gateway Protocol|BGP]] attributes, redistribution, [[VRF|VRFs]] — is machinery built in service of those two questions.
 
 ---
 
@@ -53,7 +53,7 @@ A router is any device with interfaces in two or more IP networks that forwards 
 
 #### Layer 3 Switch
 
-A Layer 3 switch (multilayer switch) applies the same routing logic, but in ASIC hardware rather than software, and it combines routing with switching in one chassis. It routes between VLANs it already carries, using [[#Switched Virtual Interface|SVIs]] or [[#Routed Port|routed ports]] instead of physical WAN interfaces. On Cisco IOS the routing function is off until `ip routing` is configured.
+A Layer 3 switch (multilayer switch) applies the same routing logic, but in ASIC hardware rather than software, and it combines routing with switching in one chassis. It routes between [[VLANs]] it already carries, using [[#Switched Virtual Interface|SVIs]] or [[#Routed Port|routed ports]] instead of physical WAN interfaces. On Cisco IOS the routing function is off until `ip routing` is configured.
 
 The functional difference is not the algorithm — it is scale, interface types, and feature depth. A router terminates diverse WAN media and carries the heavy feature set (deep NAT, tunnels, extensive QoS); a Layer 3 switch pushes very high Ethernet port density at line rate.
 
@@ -102,7 +102,7 @@ The FIB is derived from the RIB and optimized purely for lookup speed. The criti
 
 #### Adjacency Table
 
-The adjacency table holds the Layer 2 rewrite information for each next hop — the destination MAC, the source MAC, and the frame type — populated from ARP, IPv6 Neighbor Discovery, and static mappings. The FIB says which next hop; the adjacency table says how to address the frame to it.
+The adjacency table holds the Layer 2 rewrite information for each next hop — the destination MAC, the source MAC, and the frame type — populated from ARP, [[IPv6]] Neighbor Discovery, and static mappings. The FIB says which next hop; the adjacency table says how to address the frame to it.
 
 Splitting them is what makes forwarding cheap: when a neighbor's MAC changes, only one adjacency entry updates, not the thousands of FIB entries pointing through it.
 
@@ -287,7 +287,7 @@ AD is purely local to the router. It is never advertised, never carried in an up
 |Internal BGP|200|
 |Unknown / unusable|255|
 
-The ordering encodes a rough judgement about reliability. First-hand knowledge (connected) outranks a human's assertion (static), which outranks a protocol's computation. Among protocols, EIGRP's [[#DUAL|DUAL]] is trusted over OSPF's [[#SPF Algorithm|SPF]], both over RIP's hop count. External routes are trusted less than internal ones of the same protocol, because they came from outside the protocol's own view. eBGP at 20 is trusted above every IGP, on the reasoning that a route from another autonomous system is authoritative about that AS; iBGP at 200 is trusted below every IGP, because that information is second-hand within your own AS.
+The ordering encodes a rough judgement about reliability. First-hand knowledge (connected) outranks a human's assertion (static), which outranks a protocol's computation. Among protocols, EIGRP's [[#DUAL|DUAL]] is trusted over OSPF's [[#SPF Algorithm|SPF]], both over RIP's hop count. External routes are trusted less than internal ones of the same protocol, because they came from outside the protocol's own view. eBGP at 20 is trusted above every IGP, on the reasoning that a route from another [[Autonomous System|autonomous system]] is authoritative about that AS; iBGP at 200 is trusted below every IGP, because that information is second-hand within your own AS.
 
 > [!note] AD 255 means never A route at distance 255 is considered unusable and is never installed. Setting AD to 255 is a way of suppressing a route source entirely without removing the configuration.
 
@@ -1048,7 +1048,7 @@ The router ID is still a 32-bit value and must still be configured manually — 
 
 ### IS-IS
 
-The other [[#Link State|link-state]] protocol. Functionally very close to OSPF, but it originates from OSI rather than IP, and that origin gives it the properties that make it dominant in service provider cores.
+The other [[#Link State|link-state]] protocol. Functionally very close to OSPF, but it originates from [[OSI Model|OSI]] rather than IP, and that origin gives it the properties that make it dominant in service provider cores.
 
 #### IS-IS Addressing
 
@@ -1919,7 +1919,7 @@ Relevant to routing because of what it does _not_ do: plain IPsec carries only u
 
 ### VXLAN and EVPN
 
-VXLAN encapsulates an Ethernet frame in UDP (port 4789) and carries it across a routed network. The endpoints — VTEPs — are the boundary between the bridged overlay and the routed underlay. The 24-bit VNI replaces the 12-bit VLAN ID, raising the segment limit from 4,094 to roughly 16 million.
+[[VXLAN]] encapsulates an Ethernet frame in UDP (port 4789) and carries it across a routed network. The endpoints — VTEPs — are the boundary between the bridged overlay and the routed underlay. The 24-bit VNI replaces the 12-bit VLAN ID, raising the segment limit from 4,094 to roughly 16 million.
 
 Alone, VXLAN has no control plane and floods to learn, exactly like a switch. EVPN supplies one: MP-BGP with the L2VPN EVPN address family distributes MAC and IP reachability explicitly, so the fabric learns by advertisement rather than by flooding.
 
@@ -1929,7 +1929,7 @@ Alone, VXLAN has no control plane and floods to learn, exactly like a switch. EV
 |Type 3|multicast — how to reach a VTEP for BUM traffic|
 |Type 5|IP prefix — routed reachability, no MAC involved|
 
-The result resolves the tension in [[#Routed Access Design|routed access]]: a fully routed underlay with ECMP and sub-second convergence, and Layer 2 adjacency anywhere it is needed on top of it. It is the basis of modern data centre fabrics and of Cisco SD-Access.
+The result resolves the tension in [[#Routed Access Design|routed access]]: a fully routed underlay with ECMP and sub-second convergence, and Layer 2 adjacency anywhere it is needed on top of it. It is the basis of modern data centre fabrics and of Cisco [[SD-Access]].
 
 ### Segment Routing
 

@@ -2,7 +2,8 @@
 categories:
   - "[[Networking]]"
   - "[[Privacy]]"
-topic@privacy: "[[Privacy General]]"
+topic@privacy:
+  - "[[Privacy General]]"
 tags:
   - claude
   - category/networking
@@ -10,6 +11,8 @@ tags:
 icon: FasNetworkWired
 iconColor: "#4F2C5F"
 last_update: 2026-07-15
+aliases:
+  - Tor
 ---
 <strong>Tor</strong> (originally an acronym for <strong>The Onion Router</strong>) is a free, open-source overlay network for anonymous communication. It routes TCP traffic through a worldwide volunteer network of [[#Relays|relays]], wrapping the traffic in multiple layers of encryption so that no single point in the path can link the source of a connection to its destination.
 

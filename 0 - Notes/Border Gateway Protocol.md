@@ -15,7 +15,7 @@ aliases:
   - MBGP
   - MP-BGP
 ---
-<strong>Border Gateway Protocol (BGP)</strong> is the core routing protocol that manages how data packets are directed across the internet by exchanging routing and reachability information between different networks or [[Autonomous System]].
+<strong>Border Gateway Protocol (BGP)</strong> is the core [[Routing|routing]] protocol that manages how data packets are directed across the internet by exchanging routing and reachability information between different networks or [[Autonomous System]].
 
 # Path Attributes
 <strong>BGP</strong> uses <strong>path attributes (PAs)</strong> associated with each network path. 
@@ -87,7 +87,7 @@ A tie-breaker ID (BGP router-IP) used to prevent routing loops in networks utili
 - `(10.12.1.2)` (Remote BGP Router ID): This is the BGP Router ID of that peer. The neighbor router manually configured or automatically chose 10.12.1.2 as its Router ID, even though it is peering with you using its 10.23.1.1 interface.
 
 # Address Families
-An <strong>address family</strong> correlates to a specific network protocol, such as IPv4 or IPv6, it uses an extension called <strong>address family identifier</strong> <strong>(AFI)</strong> and additional granularity is provided through a <strong>subsequent address-family identifier</strong> <strong>(SAFI)</strong> such as <strong>unicast</strong> or <strong>multicast</strong>.
+An <strong>address family</strong> correlates to a specific network protocol, such as IPv4 or [[IPv6]], it uses an extension called <strong>address family identifier</strong> <strong>(AFI)</strong> and additional granularity is provided through a <strong>subsequent address-family identifier</strong> <strong>(SAFI)</strong> such as <strong>unicast</strong> or <strong>multicast</strong>.
 
 In BGP, the <strong>Network Layer Reachability Information</strong> (<strong>NLRI</strong>) is the prefix length and the prefix.
 
@@ -143,7 +143,7 @@ If R2 and R4 establish an iBGP session directly, the intermediate core router (R
 
 ![[Pasted image 20260827104517.png]]
 
-Injecting external BGP routes into an Interior Gateway Protocol (IGP)—like OSPF or EIGRP—to fix this issue is not viable for three reasons:
+Injecting external BGP routes into an Interior Gateway Protocol (IGP)—like [[OSPF]] or EIGRP—to fix this issue is not viable for three reasons:
 
 - **Scalability:** The global Internet routing table contains over 940,000 IPv4 prefixes. IGPs are not engineered to handle this volume of routes.
 - **Routing Policy:** IGPs rely strictly on metrics (like bandwidth or delay) for path selection. BGP uses a multi-step decision process and path attributes, allowing it to intentionally choose longer or seemingly suboptimal paths to satisfy corporate routing policies.

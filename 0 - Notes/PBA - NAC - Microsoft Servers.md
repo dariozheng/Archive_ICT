@@ -80,7 +80,7 @@ This certificate will be used to establish trust and build a <mark style="backgr
 
 ##### Certificate Signing Request
 
-To create a certificate signed by an external Certificate Authority like Microsoft AD CS, create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong>.
+To create a certificate signed by an external Certificate Authority like Microsoft [[Active Directory Certificate Services|AD CS]], create <strong>a Certificate Signing Request (CSR)</strong> in <strong>Administration > System > Certificates > Certificate Signing Request</strong>.
 
 ![[Pasted image 20260427150149.png]]
 

@@ -5,12 +5,13 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
-  - complete
   - category/security/palo_alto_networks
 aliases:
   - applipedia
+  - App-ID
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: complete
 ---
 <mark style="background: #FF5582A6;">App-ID is a <strong>traffic classification system</strong> available only in Palo Alto Networks firewalls</mark>.
 
@@ -27,7 +28,7 @@ iconColor: "#F04E23"
 
 ![[App-ID dropbox.png]]
 
-When used in conjunction with User-ID™, you can see exactly who is using the application based on their identity, not just an IP address.
+When used in conjunction with [[User-ID™]], you can see exactly who is using the application based on their identity, not just an IP address.
 
 Example of App-ID:
 
@@ -293,7 +294,7 @@ It's possible to check the implicit dependencies on the Application details or o
 
 ## Implicit Permissions
 
-<mark style="background: #ADCCFFA6;">Implicit permissions for a parent application are processed only if you have <strong>not</strong> added an explicit Security policy rule for the parent application</mark>. This implicit support also applies to administrator-defined custom applications that are based on HTTP, SSL, MS-RPC, or RTSP.
+<mark style="background: #ADCCFFA6;">Implicit permissions for a parent application are processed only if you have <strong>not</strong> added an explicit Security policy rule for the parent application</mark>. This implicit support also applies to administrator-defined custom applications that are based on HTTP, SSL, [[Microsoft Remote Procedure Call|MS-RPC]], or RTSP.
 
 ![[Implicit permission example.png]]
 

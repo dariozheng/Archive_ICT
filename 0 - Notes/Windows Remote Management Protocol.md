@@ -7,6 +7,7 @@ tags:
   - category/microsoft/microsoft_protocols
 aliases:
   - WinRM
+  - Windows Remote Management
 icon: SiMicrosoft
 iconColor: "#0078D4"
 ---

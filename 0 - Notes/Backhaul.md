@@ -4,7 +4,6 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-  - complete
   - category/networking/networking_general
 aliases:
   - backhauling
@@ -12,12 +11,13 @@ aliases:
   - network backhaul
 icon: FasNetworkWired
 iconColor: "#003791"
+status: complete
 ---
 > [!info] Network Backhaul (The infrastructure)
 ><strong>Backhaul</strong> in networking refers to the <strong>infrastructure</strong> that connects a <strong>local network</strong>, or <strong>subnetwork</strong>, to a <strong>backbone</strong> or <strong>core network</strong>. 
 
 > [!info] Backhauling (The action)
-><strong>Backhauling</strong> is routing all data from each location back to a <strong>central location</strong>, even if the ultimate destination for some traffic is another office or the internet. 
+><strong>Backhauling</strong> is [[Routing|routing]] all data from each location back to a <strong>central location</strong>, even if the ultimate destination for some traffic is another office or the internet. 
 >This allows security policy to be enforced and traffic inspected consistently from central hubs. 
 
 The network backhaul It’s typically a high capacity, low latency link designed to transmit data efficiently and fast.
@@ -39,7 +39,7 @@ ISPs connect you to the internet through a backbone network connecting data cent
 2. <strong>Backbone network</strong>: The data travels through the backbone network, a high capacity network that connects regions, ISPs and data centers to the internet and cloud services.
 3. <strong>Exchange backhaul</strong>: <mark style="background: #FFB86CA6;">Backhaul connects the backbone network to your local exchange</mark>, <mark style="background: #ABF7F7A6;">ensuring the data is transported efficiently <strong>to</strong> and <strong>from</strong> the internet</mark>.
 4. <strong>Access network</strong>: If the customer uses a fixed-line connection like DSL or fibre, the data may pass through a street cabinet connecting to their home or business.
-5. <strong>Router</strong>: The data reaches their router, which creates a wired or wireless local area network o deliver the movie to their laptop, mobile phone or smart TV. You connect your devices to the router by Wi-Fi or by plugging in an Ethernet cable.
+5. <strong>Router</strong>: The data reaches their router, which creates a wired or [[Wireless|wireless]] local area network o deliver the movie to their laptop, mobile phone or smart TV. You connect your devices to the router by Wi-Fi or by plugging in an Ethernet cable.
 
 Exchange backhaul plays a critical role in this process. By providing high capacity transport between the <strong>backbone network (2)</strong> and the customer’s local <strong>access network (4)</strong>, backhaul ensures their content is transmitted efficiently, ensuring a smooth streaming experience.
 # Types of backhaul

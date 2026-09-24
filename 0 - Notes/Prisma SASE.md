@@ -26,7 +26,7 @@ iconColor: "#F04E23"
 <mark style="background: #BBFABBA6;"><strong>Autonomous Digital Experience Management</strong> (<strong>ADEM</strong>) is a service</mark> <mark style="background: #ABF7F7A6;">that provides native <strong>end-to-end visibility</strong> and <strong>performance metrics</strong> for <strong>real application traffic</strong> in your <strong>Secure Access Service Edge</strong> (<strong>SASE</strong>) environment</mark>.
 # Prisma SASE Components
 ## Prisma Access
-Prisma Access is the primary security component of the Prisma SASE platform, utilizing a cloud-native virtual infrastructure to protect the hybrid workforce.
+[[Prisma Access]] is the primary security component of the Prisma SASE platform, utilizing a cloud-native virtual infrastructure to protect the hybrid workforce.
 
 ![[Prisma Access.png]]
 
@@ -52,7 +52,7 @@ The organization is unable or unwilling to install the VPN client (or app) that 
 
 This includes cases where they use a VPN client for private application access, but the remote-access solution does not provide internet access.
 ### Lack of Direct Routed Path
-There is no direct routed path to the internet. This includes networks that do not provide default routing capabilities.
+There is no direct routed path to the internet. This includes networks that do not provide default [[Routing|routing]] capabilities.
 ## Zero Trust Network Access
 It is important <mark style="background: #FFB8EBA6;">to identify the protection surface</mark> and <mark style="background: #FF5582A6;">where sensitive data is stored</mark>, <mark style="background: #FFB86CA6;">determine who will need access to that data</mark>, and then <mark style="background: #FFF3A3A6;">implement the necessary required security prevention methods</mark> to protect the data with <strong>ZTNA</strong>. 
 
@@ -82,7 +82,7 @@ It provides continuous ongoing <mark style="background: #ABF7F7A6;">deep inspect
 ## Cloud Access Security Brokers
 <strong>CASBs</strong> can be on-premises or cloud-based <mark style="background: #FFB8EBA6;"><strong>services</strong> that provide <strong>security policy enforcement points</strong></mark> between <mark style="background: #FFB86CA6;">those who use or consume the cloud service</mark> and <mark style="background: #FFF3A3A6;">those who provide it</mark>.
 
-CASB addresses the issues of <strong>securing</strong> <mark style="background: #BBFABBA6;">the cloud services being adopted both inside and outside the traditional fixed perimeter of the network</mark>, along with the increased implementation of direct cloud-to-cloud access. 
+[[Cloud Access Security Broker|CASB]] addresses the issues of <strong>securing</strong> <mark style="background: #BBFABBA6;">the cloud services being adopted both inside and outside the traditional fixed perimeter of the network</mark>, along with the increased implementation of direct cloud-to-cloud access. 
 
 <mark style="background: #ABF7F7A6;">The <strong>CASB</strong> sits between the two</mark> and allows cloud service providers to implement security policies for cloud-based data and applications. Prisma SASE delivers CASB services, which include the following capabilities:
 - <strong>Inspect</strong> <mark style="background: #FF5582A6;">data</mark>, <mark style="background: #FFB8EBA6;">application</mark>, and <mark style="background: #FFB86CA6;">user</mark> behavior in cloud services <mark style="background: #FFF3A3A6;">via provider application programming interfaces (APIs)</mark>.

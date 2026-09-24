@@ -102,7 +102,7 @@ Customer secures "IN the cloud":  data, identities, access, configuration
 
 _Providers structure capacity geographically so workloads can be placed for locality and survivability._
 
-A region is a geographic area; an availability zone is one or more isolated data centers within a region with independent power and networking. Deploying a workload across multiple availability zones protects it from a single data-center failure, and deploying across regions provides disaster recovery and places services closer to users. This is the cloud expression of the same redundancy thinking that drives on-premises high availability.
+A region is a geographic area; an availability zone is one or more isolated data centers within a region with independent power and networking. Deploying a workload across multiple availability zones protects it from a single data-center failure, and deploying across regions provides disaster recovery and places services closer to users. This is the cloud expression of the same redundancy thinking that drives on-premises [[High Availability|high availability]].
 
 ```
 Region (a geographic area)
@@ -143,7 +143,7 @@ Placing enterprise equipment in a carrier-neutral facility where many providers 
 
 ### SD-WAN Cloud On-Ramp
 
-Cisco Catalyst SD-WAN Cloud OnRamp extends the SD-WAN overlay and its [[Catalyst SD-WAN#Application-Aware Routing|application-aware routing]] into IaaS and toward SaaS applications, choosing and optimizing the best path to cloud workloads automatically rather than backhauling or relying on plain [[Catalyst SD-WAN#Onboarding and Transport Independence|direct internet access]].
+Cisco Catalyst SD-WAN Cloud OnRamp extends the SD-WAN overlay and its [[Catalyst SD-WAN#Application-Aware Routing|application-aware routing]] into IaaS and toward SaaS applications, choosing and optimizing the best path to cloud workloads automatically rather than [[Backhaul|backhauling]] or relying on plain [[Catalyst SD-WAN#Onboarding and Transport Independence|direct internet access]].
 
 |Option|How it works|Tradeoff|
 |---|---|---|
@@ -168,7 +168,7 @@ Cloud shifts spending from capital to operational, turns fixed capacity into ela
 
 ## Configuration
 
-_Reaching the cloud is a networking task: choose the path, provision the circuit or tunnel, then peer with the cloud over BGP and secure it._
+_Reaching the cloud is a networking task: choose the path, provision the circuit or tunnel, then peer with the cloud over [[Border Gateway Protocol|BGP]] and secure it._
 
 ### High-Level Workflow
 

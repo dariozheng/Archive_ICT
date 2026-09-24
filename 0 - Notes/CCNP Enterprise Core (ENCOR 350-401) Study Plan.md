@@ -1,9 +1,19 @@
-
-
+---
+categories:
+  - "[[Networking]]"
+topic@networking:
+  - "[[Networking General]]"
+tags:
+  - ccnp
+  - category/networking/networking_general
+icon: FasNetworkWired
+iconColor:
+last_update: 2026-08-26
+---
 _An 18-to-20-week, phase-ordered plan for the ENCOR 350-401 v1.2 exam, with topic lists, labs, books, courses, white papers, design guides, and RFCs per phase._
 
 > [!important] This plan targets exam blueprint v1.2, which went live on 2026-03-19. 
-> The headline change: all wireless content was removed from ENCOR and moved to a new CCNP Wireless track with its own core exam (350-101 WLCOR). Domain 6 was renamed to "Automation and Artificial Intelligence", and Cisco product names were updated throughout (DNA Center is now Catalyst Center, vManage is now SD-WAN Manager, SD-WAN is now Catalyst SD-WAN). Most study material published before 2026 still assumes v1.1 and includes wireless chapters you can skip. Always cross-check against the official exam topics: https://learningnetwork.cisco.com/s/encor-exam-topics
+> The headline change: all [[Wireless|wireless]] content was removed from ENCOR and moved to a new CCNP Wireless track with its own core exam (350-101 WLCOR). Domain 6 was renamed to "Automation and Artificial Intelligence", and Cisco product names were updated throughout (DNA Center is now Catalyst Center, vManage is now SD-WAN Manager, SD-WAN is now [[Catalyst SD-WAN]]). Most study material published before 2026 still assumes v1.1 and includes wireless chapters you can skip. Always cross-check against the official exam topics: https://learningnetwork.cisco.com/s/encor-exam-topics
 
 Quick navigation: [[#Exam facts (v1.2)|exam facts]] | [[#How to use this plan|method]] | [[#Phase 0 - Baseline and lab setup|setup]] | [[#The study sequence at a glance|sequence]] | [[#Master resource list|resources]] | [[#White papers and design guides|white papers]] | [[#Week-by-week schedule|schedule]] | [[#Exam logistics and final tips|logistics]]
 
@@ -74,8 +84,8 @@ Blueprint first:
 
 CCNA-level knowledge assumed by everything below. Refresh anything shaky now:
 
-- IPv4 subnetting fluency and IPv6 addressing (types, SLAAC, link-local behavior)
-- VLANs, trunking, and inter-VLAN routing basics
+- IPv4 [[Subnetting|subnetting]] fluency and [[IPv6]] addressing (types, SLAAC, link-local behavior)
+- [[VLANs]], trunking, and inter-VLAN [[Routing|routing]] basics
 - Static routing, administrative distance, and the idea of a routing protocol
 - Standard and extended ACL syntax
 - Device management: SSH, local users, basic IOS navigation
@@ -86,7 +96,7 @@ Lab environment. Pick one primary and one supplementary:
 - Cisco Modeling Labs (CML), https://developer.cisco.com/modeling-labs/ : the free tier (small node count) covers early phases; the paid personal tier is the most comfortable option for the full plan since it ships legal IOS XE, IOSv/IOSvL2, and Catalyst 9000v images.
 - EVE-NG (https://www.eve-ng.net) or GNS3 (https://www.gns3.com) with Catalyst 8000v/CSR 1000v and IOSvL2 images if you already run a virtualization host; note that image licensing is on you.
 - Cisco DevNet Sandboxes, https://developer.cisco.com/site/sandbox/ : free, reservable, and the only practical way to touch Catalyst Center and Catalyst SD-WAN Manager. Mandatory for phases 7, 9, and 10.
-- Cisco dCloud, https://dcloud.cisco.com : scripted full-stack demos of SD-Access and Catalyst SD-WAN with real controllers, free with a cisco.com login.
+- Cisco dCloud, https://dcloud.cisco.com : scripted full-stack demos of [[SD-Access]] and Catalyst SD-WAN with real controllers, free with a cisco.com login.
 - Packet Tracer is below ENCOR level for most topics; keep it only as a quick STP/FHRP scratchpad.
 
 Suggested core topology, reused all plan long (grow it, never rebuild it):
@@ -113,16 +123,16 @@ Baseline tooling:
 
 _Ordered so that every phase only depends on phases before it._
 
-The blueprint lists Architecture first, but studying in blueprint order forces you to absorb SD-Access before you know LISP and VXLAN, and SD-WAN before you know BGP-like control planes. This sequence builds bottom-up instead:
+The blueprint lists Architecture first, but studying in blueprint order forces you to absorb SD-Access before you know [[LISP]] and [[VXLAN]], and SD-WAN before you know BGP-like control planes. This sequence builds bottom-up instead:
 
 1. Phase 1, weeks 1-2: switching and forwarding internals (CEF, TCAM, VLANs, STP/RSTP/MST, EtherChannel)
-2. Phase 2, weeks 3-4: IGP routing (routing essentials, OSPF v2/v3 in depth, EIGRP for comparison)
-3. Phase 3, week 5: BGP (peering, path attributes, best-path selection)
+2. Phase 2, weeks 3-4: IGP routing (routing essentials, [[OSPF]] v2/v3 in depth, EIGRP for comparison)
+3. Phase 3, week 5: [[Border Gateway Protocol|BGP]] (peering, path attributes, best-path selection)
 4. Phase 4, week 6: multicast and QoS
 5. Phase 5, week 7: IP services (NTP, NAT/PAT, HSRP/VRRP/GLBP)
-6. Phase 6, weeks 8-9: virtualization and overlays (hypervisors, VRF-lite, GRE, IPsec, LISP, VXLAN)
-7. Phase 7, weeks 10-11: architecture (campus design, high availability, SD-Access, Catalyst SD-WAN, cloud)
-8. Phase 8, weeks 12-13: security (AAA, ACL/CoPP, TrustSec, MACsec, threat-defense portfolio, zero trust)
+6. Phase 6, weeks 8-9: virtualization and overlays ([[Hypervisors|hypervisors]], VRF-lite, GRE, IPsec, LISP, VXLAN)
+7. Phase 7, weeks 10-11: architecture ([[Campus Design|campus design]], [[High Availability|high availability]], SD-Access, Catalyst SD-WAN, cloud)
+8. Phase 8, weeks 12-13: security (AAA, ACL/CoPP, [[TrustSec]], MACsec, threat-defense portfolio, zero trust)
 9. Phase 9, week 14: network assurance (syslog, SNMP, NetFlow, SPAN/ERSPAN, IP SLA, Catalyst Center, NETCONF/RESTCONF)
 10. Phase 10, weeks 15-16: automation and AI (Python/JSON, YANG, REST APIs, Catalyst Center and SD-WAN Manager APIs, EEM, orchestration)
 11. Phase 11, weeks 17-18 (+2 buffer): consolidation, full practice exams, weak-area loops, exam booking
@@ -205,7 +215,7 @@ What to master:
 - When BGP instead of an IGP; path-vector logic; eBGP vs iBGP rules (TTL, next-hop behavior, loop prevention via AS_PATH and split horizon)
 - Peering mechanics: neighbor states, update-source and loopback peering, ebgp-multihop, authentication
 - Address families and NLRI exchange; network statements vs redistribution into BGP
-- Path attributes and the best-path algorithm in order (weight, local preference, locally originated, AS path length, origin, MED, eBGP over iBGP, IGP metric to next hop, and the tiebreakers)
+- Path attributes and the best-path algorithm in order (weight, local preference, locally originated, [[Autonomous System|AS]] path length, origin, MED, eBGP over iBGP, IGP metric to next hop, and the tiebreakers)
 - Basic policy: prefix filtering, AS-path prepending, communities at awareness level
 
 Primary sources:
@@ -294,7 +304,7 @@ _The 10% virtualization domain plus the tunnel tech that SD-Access is built from
 What to master:
 
 - Device virtualization: type 1 vs type 2 hypervisors, VMs vs containers, virtual switching concepts, SR-IOV awareness
-- Path virtualization: VRF-lite (VRF definition, interface assignment, per-VRF routing and verification)
+- Path virtualization: VRF-lite ([[VRF]] definition, interface assignment, per-VRF routing and verification)
 - GRE: encapsulation, tunnel interfaces, recursive-routing pitfalls
 - IPsec: IKEv2 at concept level, ESP, tunnel vs transport mode, GRE over IPsec and VTI as the practical patterns
 - LISP: the map-and-encap model, EID vs RLOC, ITR/ETR, map server and map resolver roles

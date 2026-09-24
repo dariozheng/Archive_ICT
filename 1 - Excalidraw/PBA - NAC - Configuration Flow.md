@@ -2,6 +2,8 @@
 excalidraw-plugin: parsed
 tags:
   - excalidraw
+  - category/networking/cisco_ise
+  - category/security/nac
 categories:
   - "[[Networking]]"
   - "[[Security]]"

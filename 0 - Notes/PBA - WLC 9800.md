@@ -11,7 +11,7 @@ icon: SiCisco
 iconColor: "#1BA0D7"
 last_update: 2026-07-09
 ---
-Il Wireless LAN Controller (WLC) è il punto di controllo centrale della rete wireless: gli AP si registrano al controller tramite CAPWAP e ne ricevono la configurazione.
+Il [[Wireless]] LAN Controller (WLC) è il punto di controllo centrale della rete wireless: gli AP si registrano al controller tramite CAPWAP e ne ricevono la configurazione.
 
 ## Accesso
 
@@ -99,7 +99,7 @@ Configurazione GUI
 
 #### CoA
 
-Change of Authorization permette a un server NAC di cambiare l'autorizzazione di una sessione già attiva: con una CoA è possibile disconnettere la sessione, forzare una riautenticazione o applicare nuovi attributi (VLAN, ACL, redirect URL). È il meccanismo che chiude il flusso guest di [[#PBA-Guest]]: dopo il login sul portale, ISE invia al WLC una CoA di riautenticazione.
+Change of Authorization permette a un server NAC di cambiare l'autorizzazione di una sessione già attiva: con una CoA è possibile disconnettere la sessione, forzare una riautenticazione o applicare nuovi attributi ([[VLANs|VLAN]], ACL, redirect URL). È il meccanismo che chiude il flusso guest di [[#PBA-Guest]]: dopo il login sul portale, ISE invia al WLC una CoA di riautenticazione.
 
 ```cisco
 aaa server radius dynamic-author

@@ -9,8 +9,10 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-08-26
+aliases:
+  - AS
 ---
-<strong>Autonomous System (AS)</strong> is a massive network or a collection of networks under a single administrative control that shares a unified routing policy, and an <strong>Autonomous System Number (ASN)</strong> is a globally unique identifier assigned to that system. 
+<strong>Autonomous System (AS)</strong> is a massive network or a collection of networks under a single administrative control that shares a unified [[Routing|routing]] policy, and an <strong>Autonomous System Number (ASN)</strong> is a globally unique identifier assigned to that system. 
 
 An <strong>AS</strong> is essentially a major building block of the internet infrastructure. Large organizations—such as Internet Service Providers (ISPs), tech giants like Google and Amazon, universities, and government agencies—operate their own AS networks.
 

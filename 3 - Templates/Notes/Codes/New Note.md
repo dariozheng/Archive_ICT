@@ -27,7 +27,7 @@ let body = await app.vault.read(pick);
 // The topic property is whatever key the template declares that is not a fixed one
 // - the same discovery New Topic uses, so any per-category quirk (e.g. Linux's extra
 // Distro key) needs no special casing here either.
-const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "aliases", "cssclasses"];
+const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "status", "aliases", "cssclasses"];
 const fm = body.match(/^---\n([\s\S]*?)\n---/);
 let keys = fm
     ? [...fm[1].matchAll(/^([A-Za-z][A-Za-z0-9_@-]*):/gm)].map((m) => m[1]).filter((k) => !FIXED.includes(k))

@@ -6,12 +6,13 @@ topic@security:
 tags:
   - palo_alto/ngfw
   - ngfw
-  - tobecompleted
   - category/security/palo_alto_networks
 aliases:
   - Next-Generation Firewall
+  - NGFW
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 ---
 Palo Alto Networks firewalls are built with a <mark style="background: #FFB8EBA6;">dedicated <strong>out-of-band Ethernet network management interface</strong></mark> labeled <mark style="background: #FFB8EBA6;"><strong>MGT</strong></mark>. 
 
