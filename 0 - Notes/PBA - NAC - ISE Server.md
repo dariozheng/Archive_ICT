@@ -520,7 +520,7 @@ Cisco ISE <strong>library conditions</strong> are pre-configured, reusable polic
 
 ##### EAPs
 
-The EAPs condition checks if the client request is using one of these [[#Allowed Protocols|EAP protocols]]. The EAP protocols inside the condition are PEAP, EAP-TLS, and TEAP; admin users must authenticate with one of these.
+The EAPs condition checks if the client request is using one of these [[#Extensible Authentication Protocols|EAP protocols]]. The EAP protocols inside the condition are PEAP, EAP-TLS, and TEAP; admin users must authenticate with one of these.
 
 ![[Pasted image 20260514110551.png]]
 
