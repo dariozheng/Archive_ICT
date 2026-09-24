@@ -8,6 +8,7 @@ tags:
   - category/security/palo_alto_networks
 aliases:
   - applipedia
+  - App-ID
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 status: complete

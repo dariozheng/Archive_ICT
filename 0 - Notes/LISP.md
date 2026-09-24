@@ -8,6 +8,8 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - Locator/ID Separation Protocol
 ---
 LISP (Locator/ID Separation Protocol) is a control-plane architecture that splits the single meaning of an IP address into two separate namespaces — an identity and a location — and keeps a mapping database that binds one to the other. A router that needs to reach a host asks the mapping system where that host currently is, caches the answer, and tunnels the traffic there: a model called map-and-encapsulate, conceptually close to how DNS resolves a name to an address. Originally defined in RFC 6830 and updated by RFC 9300 and RFC 9301, LISP matters for the ENCOR exam as the control plane of Cisco SD-Access, where it locates endpoints while [[VXLAN#VXLAN Encapsulation|VXLAN]] carries their traffic. This note covers the problem LISP solves, its two namespaces, the map-and-encapsulate flow, the device roles and control messages, and how all of it maps onto the SD-Access fabric.
 

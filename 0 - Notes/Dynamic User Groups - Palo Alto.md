@@ -8,6 +8,8 @@ tags:
   - category/security/palo_alto_networks
 aliases:
   - DUGs
+  - Dynamic User Group
+  - DUG
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 status: draft

@@ -9,6 +9,7 @@ tags:
   - category/security/palo_alto_networks
 aliases:
   - Next-Generation Firewall
+  - NGFW
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 status: draft

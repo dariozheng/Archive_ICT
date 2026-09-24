@@ -9,6 +9,8 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-08-26
+aliases:
+  - AS
 ---
 <strong>Autonomous System (AS)</strong> is a massive network or a collection of networks under a single administrative control that shares a unified routing policy, and an <strong>Autonomous System Number (ASN)</strong> is a globally unique identifier assigned to that system. 
 

@@ -10,6 +10,8 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15
+aliases:
+  - OSI
 ---
 The <strong>Open Systems Interconnection</strong> (OSI) model is a <strong>seven-layer reference model</strong> that describes how a communication system carries data between two applications running on different machines. It was published by the International Organization for Standardization as ISO/IEC 7498-1 and, in parallel, by the ITU-T as recommendation X.200. 
 

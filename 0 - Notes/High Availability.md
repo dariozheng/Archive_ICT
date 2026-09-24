@@ -8,6 +8,8 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - HA
 ---
 High availability is about keeping the network forwarding through failures — removing single points of failure and recovering fast enough that users barely notice. The techniques fall into a few groups: plain redundancy of devices, links, and power; [[#First-Hop Redundancy Protocols|first-hop redundancy]] that protects the default gateway; [[#Switch Redundancy and Virtualization|switch virtualization]] that turns several boxes into one logical device; and [[#Supervisor and Control-Plane Redundancy|control-plane resilience]] that keeps a device forwarding while its brain fails over. This note works alongside [[Campus Design#Hierarchical Layers|Campus Design]] — high availability is what makes each layer of the hierarchy survivable rather than a single point of failure.
 

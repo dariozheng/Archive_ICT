@@ -8,6 +8,8 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - Virtual Extensible LAN
 ---
 VXLAN (Virtual eXtensible LAN, RFC 7348) is an overlay technology that carries Layer 2 Ethernet frames inside UDP so they can cross a routed Layer 3 network. It wraps the original frame in outer IP, UDP, and VXLAN headers — a scheme known as MAC-in-UDP — so that two endpoints in the same virtual segment behave as if they share a switch even when many routed hops separate them. For the ENCOR exam, the important lens is that VXLAN is the data-plane encapsulation of the Cisco SD-Access campus fabric, paired with a LISP control plane and a Cisco TrustSec policy plane. The same encapsulation is used in data-center spine-leaf fabrics, where the control plane is usually [[#BGP EVPN\|BGP EVPN]] instead. This note covers why VXLAN exists, how a frame is encapsulated, what a [[#VXLAN Tunnel Endpoint\|VTEP]] does, how endpoints are learned, and how the three planes fit together in SD-Access.
 

@@ -9,6 +9,8 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-09-24
+aliases:
+  - Virtual Routing and Forwarding
 ---
 Virtual Routing and Forwarding (VRF) is a Layer 3 virtualization technology that lets a single physical router or switch maintain several independent routing and forwarding tables at the same time. Each table behaves like a separate virtual router: interfaces assigned to one VRF reach only the destinations known to that VRF, and address space may overlap freely between VRFs because their tables never mix. VRF is the construct beneath MPLS Layer 3 VPNs, but it is equally useful on its own — as [[#VRF-Lite]] — for tenant separation, management-plane isolation, and keeping otherwise-conflicting networks apart on shared hardware.
 

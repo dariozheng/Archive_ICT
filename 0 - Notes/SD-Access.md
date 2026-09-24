@@ -8,6 +8,8 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - Software-Defined Access
 ---
 Cisco SD-Access (Software-Defined Access) is Cisco's intent-based networking solution for the campus. It turns the access network into an automated fabric: a routed [[#Underlay|underlay]] carrying a virtual [[#Overlay|overlay]] in which policy is defined by identity rather than by IP address. Instead of configuring VLANs and access lists box by box, an operator expresses intent in a controller and the fabric is provisioned to match. SD-Access is built from three cooperating planes — a [[LISP#Core Namespaces|LISP]] control plane, a [[VXLAN#VXLAN Encapsulation|VXLAN]] data plane, and a [[TrustSec#Security Group Tag (SGT)|Cisco TrustSec]] policy plane — managed by Cisco Catalyst Center and Cisco ISE. This note is the hub for the fabric: it explains the underlay and overlay, the three planes, the device roles, the segmentation model, wireless integration, how a host is onboarded, and how sites are joined together.
 

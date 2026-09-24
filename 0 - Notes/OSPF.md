@@ -9,6 +9,8 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-07-21
+aliases:
+  - Open Shortest Path First
 ---
 Open Shortest Path First (OSPF) is a link-state interior gateway protocol (IGP) that computes loop-free routes by having every router build an identical map of the topology and independently run Dijkstra's shortest-path algorithm against it. It is standardised as OSPFv2 (RFC 2328) for IPv4 and OSPFv3 (RFC 5340) for IPv6.
 

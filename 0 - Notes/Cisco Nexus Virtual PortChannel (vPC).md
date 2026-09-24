@@ -8,6 +8,9 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+aliases:
+  - vPC
+  - Virtual PortChannel
 ---
 Cisco Nexus Virtual PortChannel, abbreviated vPC, allows a downstream device to build one logical Layer 2 port channel across two physical Nexus switches. Both [[#vPC Peer Devices|peer switches]] can forward traffic at the same time, while the [[#vPC Peer-Link|peer-link]] synchronizes state and the [[#Peer-Keepalive Link|peer-keepalive path]] helps the pair distinguish a peer failure from a peer-link failure.
 

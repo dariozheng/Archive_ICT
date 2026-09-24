@@ -11,6 +11,8 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15
+aliases:
+  - VLAN
 ---
 _A VLAN turns one physical switch into several isolated broadcast domains. Trunking carries many of those domains over one link. Inter-VLAN routing is the only sanctioned way back across the boundaries a VLAN creates._
 
