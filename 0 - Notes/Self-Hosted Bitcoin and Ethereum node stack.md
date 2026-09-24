@@ -4,10 +4,10 @@ categories:
 topic@systems:
 tags:
   - claude
-  - tobecompleted
   - category/systems
 icon: SiBitcoin
 iconColor: "#F38423"
+status: draft
 ---
 _A fully self-hosted Bitcoin and Ethereum node stack — full chain validation, private wallet connectivity, and address monitoring — packaged as a hardened Docker Compose deployment with every config file included inline._
 

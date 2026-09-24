@@ -7,6 +7,7 @@ tags:
 icon: FasServer
 iconColor:
 last_update: 2026-07-15
+status: stub
 ---
 ![[Pasted image 20260713105706.png]]
 

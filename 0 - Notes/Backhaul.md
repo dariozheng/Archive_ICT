@@ -4,7 +4,6 @@ categories:
 topic@networking:
   - "[[Networking General]]"
 tags:
-  - complete
   - category/networking/networking_general
 aliases:
   - backhauling
@@ -12,6 +11,7 @@ aliases:
   - network backhaul
 icon: FasNetworkWired
 iconColor: "#003791"
+status: complete
 ---
 > [!info] Network Backhaul (The infrastructure)
 ><strong>Backhaul</strong> in networking refers to the <strong>infrastructure</strong> that connects a <strong>local network</strong>, or <strong>subnetwork</strong>, to a <strong>backbone</strong> or <strong>core network</strong>. 

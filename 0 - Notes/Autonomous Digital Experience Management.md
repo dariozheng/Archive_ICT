@@ -5,12 +5,12 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/sase
-  - tobecompleted
   - category/security/palo_alto_networks
 aliases:
   - ADEM
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 ---
 <strong>Autonomous Digital Experience Management (ADEM)</strong> is a <strong>service</strong> that provides <strong>native end-to-end visibility</strong> and <strong>performance metrics</strong> for real application traffic in your <strong>secure access service edge (SASE) environment</strong>. 
 

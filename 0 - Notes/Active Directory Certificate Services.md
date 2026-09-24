@@ -8,5 +8,6 @@ tags:
   - category/microsoft/windows_server
 icon: SiWindows
 iconColor: "#0078D4"
+status: stub
 ---
 https://learn.microsoft.com/en-us/windows-server/identity/ad-cs/

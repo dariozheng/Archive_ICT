@@ -5,12 +5,12 @@ topic@security:
   - "[[Palo Alto Networks]]"
 tags:
   - palo_alto/ngfw
-  - tobecompleted
   - category/security/palo_alto_networks
 aliases:
   - DUGs
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 ---
 <mark style="background: #FFB8EBA6;"><strong>DUGs</strong> are groups where membership is based on tags</mark>.
 

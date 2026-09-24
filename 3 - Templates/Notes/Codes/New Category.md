@@ -111,6 +111,7 @@ const noteTemplate = [
     "icon:",
     "iconColor:",
     "last_update:",
+    "status: draft",
     "---",
     "",
 ].join("\n");
