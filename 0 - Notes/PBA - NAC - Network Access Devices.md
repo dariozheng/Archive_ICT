@@ -559,6 +559,16 @@ The `#INTERACTIVE ... #ENDS_INTERACTIVE` markers answer IOS prompts during provi
 
 A few lines appear in both templates on purpose: `aaa new-model`, `aaa session-id common`, `ip radius source-interface Vlan800` and the VLAN declarations are owned by [[#DNA - PBA BASIC|DNA - PBA BASIC]] and merely re-asserted here so this template can stand on its own, while `ip http server` and `ip http secure-server` are re-asserted as a functional guard — [[#Centralized Web Authentication (CWA) for Guests|CWA]] breaks silently if the web server ever disappears from the baseline. When one of these shared lines has to change, change it in BASIC; the copies here follow.
 
+The RADIUS and CoA shared secrets are stored as type 6 (AES), encrypted with the master key that `key config-key password-encrypt {{ MASTER_KEY }}` sets on the switch, and `password encryption aes` keeps any secret entered later encrypted the same way. A `key 6` string can only be decrypted with the master key it was encrypted with, so `MASTER_KEY` must have the same value on every switch this template is applied to; on a switch with a different value the secrets decrypt to the wrong text and every RADIUS request fails. The master key never appears in the running configuration and `secret test-password` is stored as a hash, so both lines sit between ignore-compliance markers — otherwise DNA Center would report them as missing forever.
+
+The `{% block interfaces %}` loop at the end decides which ports get NAC. `__interface` is DNA Center's inventory list of the switch's interfaces:
+
+- A port that is not a trunk and whose access VLAN is 802 sources [[#Interface Template — `NAC-INT-TEMPLATE`|NAC-INT-TEMPLATE]]. Checking "not a trunk" rather than "is access" also catches ports without an explicit `switchport mode access`, which report a mode such as `dynamic_auto`.
+- Every trunk, port-channels included, gets the [[#Trunk / Uplink Policy — `Disable_DT_Trunk`|Disable_DT_Trunk]] device-tracking policy.
+- `vlanId | int` compares the VLAN as a number whether the inventory returns it as text or as a number, and `portMode | lower` guards against the mode being reported capitalised (`Trunk`). An earlier version with `vlanId == 802` and `portMode == 'access'` rendered no ports at all.
+
+To check what the loop will do, run Simulate in the Template Editor against a switch. On a 48-port access switch with four trunk uplinks, two Ten-Gigabit uplinks and two port-channels, the simulation renders `source template NAC-INT-TEMPLATE` on Gi1/0/1–40 and `device-tracking attach-policy Disable_DT_Trunk` on the eight uplinks; ports on other VLANs get nothing.
+
 ```bash
 ! Template to enable Cisco ISE - NAC
 !
@@ -603,7 +613,16 @@ interface Vlan805
 !
 !
 !
-username test-user privilege 0 password 7 06120A3258031918160405041E00
+! @start-ignore-compliance
+key config-key password-encrypt {{ MASTER_KEY }}
+! @end-ignore-compliance
+password encryption aes
+!
+!
+!
+! @start-ignore-compliance
+username test-user privilege 0 secret test-password
+! @end-ignore-compliance
 !
 !
 !
@@ -616,14 +635,14 @@ radius server ISE01
  timeout 5
  retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
- key 7 075F02457D0A36162421045C
+ key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
 !
 radius server ISE02
  address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
  timeout 5
  retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
- key 7 0054300F375824153C12431E
+ key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
 !
 ! 
 radius-server timeout 5
@@ -664,8 +683,8 @@ aaa accounting update newinfo periodic 2880
 !
 !
 aaa server radius dynamic-author
- client 10.140.2.31 server-key 7 040B280F3C22635D3A2A0A47
- client 10.140.2.32 server-key 7 08716F473A1A2A0421380354
+ client 10.140.2.31 server-key 6 gAiTI`bLACJdW[bEPceHa[EAXX[RgZFHVJbZAAB
+ client 10.140.2.32 server-key 6 SUbKgg\P]_OROX]aLWWFRWEPLDgZdY`hQE]bAAB
 !
 !
 !
@@ -683,6 +702,7 @@ device-tracking policy IPDT_POLICY
 device-tracking policy Disable_DT_Trunk 
  trusted-port 
  device-role switch 
+!
 !
 !
 !
@@ -815,8 +835,9 @@ policy-map type control subscriber ISE-NAC-POLICY
    20 pause reauthentication
   30 class AAA-DOWN_UNAUTH_USER do-until-failure
    10 activate service-template Critical_Access
-   20 authorize
-   30 pause reauthentication
+   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+   30 authorize
+   40 pause reauthentication
   40 class DOT1X_TIMEOUT do-until-failure
    10 terminate dot1x
    20 authenticate using mab priority 20 
@@ -871,7 +892,7 @@ template NAC-INT-TEMPLATE
  mab
 !
 access-session port-control auto
-access-session host-mode single-host
+access-session host-mode multi-domain
 access-session control-direction in
 access-session closed
 !
@@ -885,10 +906,12 @@ access-session closed
 !
 {% block interfaces %}
 {% for interface in __interface %}
-{% if interface.portMode | lower == 'access'
-      and interface.vlanId | int == 802 %}
+{% if interface.portMode | lower != 'trunk' and interface.vlanId | int == 802 %}
 interface {{ interface.portName }}
  source template NAC-INT-TEMPLATE
+{% elif interface.portMode | lower == 'trunk' %}
+interface {{ interface.portName }}
+ device-tracking attach-policy Disable_DT_Trunk
 {% endif %}
 {% endfor %}
 {% endblock %}
@@ -959,7 +982,7 @@ _Defines how the switch reaches ISE, how it health-checks it, and where its pack
 #### Local Probe User
 
 ```cisco
-username test-user privilege 0 password 7 06120A3258031918160405041E00
+username test-user privilege 0 secret test-password
 ```
 
 A local account whose only purpose is to populate the RADIUS health-check probe. `automate-tester` (configured on the RADIUS server block below) sends periodic Access-Requests using these credentials to verify ISE is alive.
@@ -967,7 +990,7 @@ A local account whose only purpose is to populate the RADIUS health-check probe.
 | Field         | Meaning                                                                                                                                                                                   |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `privilege 0` | Lowest privilege level — allows only `disable`, `enable`, `exit`, `help`, and `logout`. Deliberately useless for management, so even if the credentials leak, the account grants nothing. |
-| `password 7`  | Cisco Type-7 reversible encryption. Weak — meaningful only as obfuscation. ISE will normally reject this account on policy (no matching identity), which is fine for the probe.           |
+| `secret`      | The password is stored as a one-way hash, so the running configuration shows `secret 9 <hash>` rather than what the template sent — which is why the line is excluded from compliance. ISE will normally reject this account on policy (no matching identity), which is fine for the probe. |
 
 > [!info] How the probe works 
 > The probe doesn't need to _succeed_ — a clean `Access-Reject` from ISE is enough to prove the server is responsive. What matters is that ISE answers at all.
@@ -980,7 +1003,7 @@ radius server ISE01
  timeout 5
  retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
- key 7 075F02457D0A36162421045C
+ key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
 ```
 
 ##### `radius server ISE01`
@@ -1015,9 +1038,9 @@ Three behaviors rolled into one command:
 |`ignore-acct-port`|Probe the auth port only. ISE may not always answer probes on 1813 the same way, and including it can cause false "dead" detections.|
 |`probe-on`|Probe <strong>only when the server is currently marked dead</strong>. Without this, the switch probes continuously, generating unnecessary RADIUS traffic.|
 
-##### `key 7 075F02457D0A36162421045C`
+##### `key 6 ...`
 
-The RADIUS shared secret. Must match the value configured on ISE for this NAD entry, otherwise every Access-Request fails the message-authenticator check.
+The RADIUS shared secret, stored as type 6 (AES) and decrypted with the switch's master key — see [[#DNA - PBA NAC|DNA - PBA NAC]] for why that key must be the same on every switch. The decrypted value must match the shared secret configured on ISE for this NAD entry, otherwise every Access-Request fails the message-authenticator check.
 
 #### AAA Server Group — `ISESERV`
 
@@ -1300,8 +1323,8 @@ This is also one of the new-style commands whose first use triggers the interact
 
 ```cisco
 aaa server radius dynamic-author
- client 10.140.2.31 server-key 7 040B280F3C22635D3A2A0A47
- client 10.140.2.32 server-key 7 08716F473A1A2A0421380354
+ client 10.140.2.31 server-key 6 gAiTI`bLACJdW[bEPceHa[EAXX[RgZFHVJbZAAB
+ client 10.140.2.32 server-key 6 SUbKgg\P]_OROX]aLWWFRWEPLDgZdY`hQE]bAAB
 ```
 
 Standard RADIUS is one-way: the switch asks, ISE answers. CoA (RFC 5176) makes it bidirectional — ISE can push policy changes mid-session.
@@ -1468,7 +1491,7 @@ device-tracking policy Disable_DT_Trunk
  device-role switch
 ```
 
-Applied to uplinks and inter-switch links.
+Applied to uplinks and inter-switch links: the [[#DNA - PBA NAC|DNA - PBA NAC]] interface loop attaches it to every trunk, port-channels included.
 
 |Setting|Effect|
 |---|---|
@@ -1476,6 +1499,9 @@ Applied to uplinks and inter-switch links.
 |`device-role switch`|Tells SISF the neighbor is a switch, not a host. The switch won't try to ARP-probe it and won't attempt to track it as an endpoint.|
 
 > [!tip] Default policy can be aggressive On modern IOS-XE, the default SISF policy probes endpoints fairly aggressively, which can cause problems with some IP phones, older Windows hosts, and certain IoT devices. Always attach an explicit policy rather than relying on defaults.
+
+> [!warning] Port-channel members
+> The loop sees a port-channel and its member ports as separate trunks, so both get the policy. After provisioning, `show device-tracking policies` should list `Disable_DT_Trunk` on the Port-channel interfaces; if the member ports rejected the command, exclude them from the loop and keep the policy on the Port-channel only.
 
 ---
 
@@ -1738,8 +1764,9 @@ policy-map type control subscriber ISE-NAC-POLICY
    20 pause reauthentication
   30 class AAA-DOWN_UNAUTH_USER do-until-failure
    10 activate service-template Critical_Access
-   20 authorize
-   30 pause reauthentication
+   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+   30 authorize
+   40 pause reauthentication
   40 class DOT1X_TIMEOUT do-until-failure
    10 terminate dot1x
    20 authenticate using mab priority 20 
@@ -1847,11 +1874,12 @@ ISE went down but the endpoint was already fully authorized. Do <strong>not</str
 
 ```
 10 activate service-template Critical_Access
-20 authorize
-30 pause reauthentication
+20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+30 authorize
+40 pause reauthentication
 ```
 
-ISE went down before the endpoint authenticated. There's no prior profile to keep — apply the local fallback so the device gets at least limited access.
+ISE went down before the endpoint authenticated. There's no prior profile to keep — apply the local fallback so the device gets at least limited access. `DEFAULT_CRITICAL_VOICE_TEMPLATE` is built into IOS-XE (it contains only `voice vlan`): it lets a phone that connects during the outage use the port's voice VLAN — see [[#IP Phones — Multi-Domain|IP Phones]].
 
 ##### Class 40 — [[#dot1x Failure Modes|DOT1X_TIMEOUT]]
 
@@ -1949,7 +1977,7 @@ Idle session expires → tear it down. The next packet from the endpoint trigger
   10 restrict
 ```
 
-When a host-mode constraint is violated (e.g. a second MAC on this `single-host` port), drop the offending traffic but <strong>leave the port up</strong> and the legitimate session intact.
+When a host-mode constraint is violated (e.g. a second data MAC on this `multi-domain` port), drop the offending traffic but <strong>leave the port up</strong> and the legitimate session intact.
 
 |Action|Behaviour|
 |---|---|
@@ -1983,7 +2011,7 @@ template NAC-INT-TEMPLATE
  authentication timer reauthenticate server
  mab
  access-session control-direction in
- access-session host-mode single-host
+ access-session host-mode multi-domain
  access-session closed
  access-session port-control auto
  dot1x pae authenticator
@@ -1998,14 +2026,16 @@ template NAC-INT-TEMPLATE
 
 #### Applying the Template to Real Interfaces
 
-The template itself does nothing until sourced from an interface:
+The template itself does nothing until sourced from an interface. The [[#DNA - PBA NAC|DNA - PBA NAC]] loop renders one block per NAC port:
 
 ```cisco
-interface range GigabitEthernet1/0/1 - 48
+interface GigabitEthernet1/0/1
  source template NAC-INT-TEMPLATE
 ```
 
 Changes to the template propagate automatically to every interface that sources it — this is the operational reason for using templates instead of repeating the same block per port.
+
+A command configured directly on the interface overrides the same command from the template. That is how legacy phone ports keep their own `switchport voice vlan 300` while sourcing the template — and also how a leftover `authentication` or `dot1x` line on a port can silently override it. `show derived-config interface <int>` shows the merged result the port actually runs.
 
 #### Basic Port Configuration
 
@@ -2042,7 +2072,7 @@ Periodic re-auth is enabled and the interval is taken from the RADIUS `Session-T
 |Command|Effect|
 |---|---|
 |`access-session control-direction in`|Block traffic _from_ the host _to_ the network before authorization; allow traffic in the reverse direction. This enables Wake-on-LAN. The alternative `both` blocks both directions.|
-|`access-session host-mode single-host`|Exactly one MAC may be authorized on the port; a second MAC is a [[#Event: `violation match-all`\|violation]]. An IP phone with a PC behind it does not fit this mode — see [[#IP Phones — Multi-Domain\|IP Phones]].|
+|`access-session host-mode multi-domain`|One MAC in the data domain plus one in the voice domain — an IP phone with a PC behind it. A second data MAC is a [[#Event: `violation match-all`\|violation]]. See [[#IP Phones — Multi-Domain\|IP Phones]].|
 |`access-session closed`|Pre-auth state blocks <strong>all</strong> traffic (including DHCP, DNS) until authorization completes.|
 |`access-session port-control auto`|The on switch for 802.1X port control. Other values: `force-authorized` (always allow, dot1x off) and `force-unauthorized` (always block).|
 
@@ -2050,10 +2080,10 @@ Periodic re-auth is enabled and the interval is taken from the RADIUS `Session-T
 
 |Mode|Behaviour|
 |---|---|
-|`single-host`|Exactly one MAC. Used here.|
+|`single-host`|Exactly one MAC.|
 |`multi-host`|One MAC authenticates; all others are passively allowed if the first MAC is authenticated (legacy, weak).|
 |`multi-auth`|Each MAC authenticates independently. For unmanaged switches or hubs behind the port.|
-|`multi-domain`|Exactly one data MAC plus one voice MAC — the mode needed for [[#IP Phones — Multi-Domain\|IP phones]].|
+|`multi-domain`|Exactly one data MAC plus one voice MAC — the mode for [[#IP Phones — Multi-Domain\|IP phones]]. Used here.|
 
 #### 802.1X Timing
 
@@ -2084,57 +2114,42 @@ The first attaches the IPDT policy that maintains IP-to-MAC bindings. The second
 
 ### IP Phones — Multi-Domain
 
-_Not deployed: the template runs `single-host`. This is what changes to put IP phones on NAC ports, with or without a PC behind them._
+_Deployed: `multi-domain` and the critical voice template. Not in the template yet: the voice VLAN, which is still set port by port._
 
 A closed port forwards nothing for a MAC without an authorized session, so a phone cannot sit completely outside NAC while the PC behind it is authenticated. What can be kept out is the credential part: the phone authenticates by MAB, ISE recognises it and places it in the voice domain, and no supplicant is ever configured on it.
 
 #### Switch Side
 
-```cisco
-template NAC-INT-TEMPLATE
- switchport voice vlan 812
- access-session host-mode multi-domain
-```
+`access-session host-mode multi-domain` lets the port hold two sessions: one MAC in the voice domain and one in the data domain. A second data MAC is a [[#Event: `violation match-all`|violation]].
 
-- `switchport voice vlan 812` advertises LAN-VOIP to the phone through CDP or LLDP-MED; the phone then tags its own traffic with it.
-- `multi-domain` lets the port hold two sessions: one MAC in the voice domain and one in the data domain. A second data MAC is still a [[#Event: `violation match-all`|violation]].
+The voice VLAN is not in [[#Interface Template — `NAC-INT-TEMPLATE`|NAC-INT-TEMPLATE]]: each port keeps the `switchport voice vlan` configured directly on it, because interface configuration overrides the template. Two voice VLANs are in use:
+
+|Voice VLAN|Where|
+|---|---|
+|300 (`VOIP`)|Old phone ports, configured on each interface|
+|812 (`LAN-VOIP`)|The new voice VLAN|
+
+- `switchport voice vlan` advertises the VLAN to the phone through CDP or LLDP-MED; the phone then tags its own traffic with it.
 - The voice VLAN always comes from the port configuration. The phone's ISE result must not carry a VLAN.
+- A port without a voice VLAN has no voice domain to place a phone in. Test a phone on such a port before relying on it.
 
-Without a critical voice template, a phone that connects while ISE is unreachable gets `Critical_Access` (data VLAN only) and no voice VLAN. `DEFAULT_CRITICAL_VOICE_TEMPLATE` is built into IOS-XE and contains only `voice vlan`; add it to the class that handles new sessions during an outage:
+To make 812 the standard later, add `switchport voice vlan 812` to the template under `switchport access vlan 802`. Ports with their own voice VLAN keep it; every other NAC port gets 812. An old port moves to 812 when its own line is removed with `no switchport voice vlan`.
 
-```cisco
-policy-map type control subscriber ISE-NAC-POLICY
- event authentication-failure match-first
-  30 class AAA-DOWN_UNAUTH_USER do-until-failure
-   10 activate service-template Critical_Access
-   15 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
-   20 authorize
-   30 pause reauthentication
-```
+The [[#AAA-Down|AAA-Down]] class for new sessions also activates `DEFAULT_CRITICAL_VOICE_TEMPLATE`, so a phone that connects while ISE is unreachable still uses the port's voice VLAN instead of ending up in `Critical_Access`.
 
 #### ISE Side
 
-Add an authorization rule below [[PBA - NAC - ISE Server#Deny Access|Deny Access]] and above [[PBA - NAC - ISE Server#MAB Access|MAB Access]]:
-
-|Part|Value|
-|---|---|
-|Conditions|`Wired_MAB` AND the phones' endpoint identity group|
-|Result|An authorization profile with <strong>Voice Domain Permission</strong> ticked, which sends `cisco-av-pair = device-traffic-class=voice`, and no VLAN. ISE's predefined `Cisco_IP_Phones` profile already does this.|
-
-The phones' endpoint group can be either:
-
-- <strong>A MAC whitelist</strong>, like [[PBA - NAC - ISE Server#PBA_Printers|PBA_Printers]] (for example a new `PBA_Phones`) — explicit, but every new phone's MAC has to be imported.
-- <strong>The profiler's `Cisco-IP-Phone` group</strong> — no maintenance, because [[#Device Sensor — Endpoint Profiling|Device Sensor]] already sends the CDP platform and capabilities ISE needs. A new phone can hit Guest Redirect on its first MAB, before it is profiled; with profiler CoA enabled (Administration → System → Settings → Profiling, CoA type Reauth), ISE re-authorizes it as soon as the profile is assigned.
+Phones must match the [[PBA - NAC - ISE Server#Phone Access|Phone Access]] authorization rule, which puts them in the voice domain. Without it, a phone's MAB falls through to Guest Redirect: the phone lands in the data domain on VLAN 805, and a PC behind it becomes a second data MAC, blocked as a violation.
 
 #### What Happens on Each Kind of Port
 
 |Port|Sessions|Result|
 |---|---|---|
-|Phone with a PC behind it|Phone MAC in the voice domain (MAB → phone rule); PC MAC in the data domain (802.1X or MAB)|Phone on VLAN 812; PC on whatever ISE returns (802, 850 or 805).|
-|Phone only|Voice domain only; the data domain stays empty|Phone on VLAN 812. The access VLAN 802 is simply unused; nothing else to configure.|
-|PC only|Data domain only|Same as today; `switchport voice vlan` has no effect without a phone.|
+|Phone with a PC behind it|Phone MAC in the voice domain (MAB → Phone Access); PC MAC in the data domain (802.1X or MAB)|Phone on the port's voice VLAN (300 or 812); PC on whatever ISE returns (802, 850 or 805).|
+|Phone only|Voice domain only; the data domain stays empty|Phone on the port's voice VLAN. The access VLAN 802 is simply unused; nothing else to configure.|
+|PC only|Data domain only|As before; the voice VLAN has no effect without a phone.|
 
-A phone-only port can also be kept entirely outside NAC: the [[#DNA - PBA NAC|DNA - PBA NAC]] template sources `NAC-INT-TEMPLATE` only on access ports whose VLAN is 802, so a port provisioned as an access port on VLAN 812 is never enforced. That is not an option for a port with a PC behind the phone, because the PC would go unauthenticated as well.
+A phone-only port can also be kept entirely outside NAC: the [[#DNA - PBA NAC|DNA - PBA NAC]] loop sources `NAC-INT-TEMPLATE` only on ports whose access VLAN is 802, so a port provisioned as an access port on another VLAN is never enforced. That is not an option for a port with a PC behind the phone, because the PC would go unauthenticated as well.
 
 When the PC is unplugged from the phone, the switch port stays up and the switch does not see the disconnect. Cisco phones report it through CDP and the switch clears the data session; behind other phones the stale session remains until it times out or re-authenticates.
 
@@ -2407,8 +2422,9 @@ event authentication-failure match-first
 
   30 class AAA-DOWN_UNAUTH_USER do-until-failure
    10 activate service-template Critical_Access
-   20 authorize
-   30 pause reauthentication
+   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+   30 authorize
+   40 pause reauthentication
 ```
 
 > [!note] `match-first` 
@@ -2437,8 +2453,9 @@ event authentication-failure match-first
 |Step|Action|Reason|
 |---|---|---|
 |1|`activate service-template Critical_Access`|Gives limited internet-only access|
-|2|`authorize`|Pushes the template to the data plane|
-|3|`pause reauthentication`|Stops retrying a dead ISE|
+|2|`activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE`|Lets a phone use the port's voice VLAN|
+|3|`authorize`|Pushes the templates to the data plane|
+|4|`pause reauthentication`|Stops retrying a dead ISE|
 
 #### Service Templates
 

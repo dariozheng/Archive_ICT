@@ -642,6 +642,7 @@ The active deployment logic is:
     - Identity Store = [[#Endpoint Identity Groups|Internal Endpoints]] for MAB or [[#Identity Source Sequences|Publiacqua_ISS]] for 802.1X.
 - Authorization Policy
     - Is computer in Blacklist?
+    - Is it an IP phone? (to be added)
     - Is user an Admin?
     - Is User not logged on?
     - Is Client a normal Domain User with Domain Computer?
@@ -702,6 +703,27 @@ Authorization policies are evaluated top-down with first match: the client gets 
 ##### Deny Access
 
 The first authorization policy checks the [[#Blacklist]] condition — whether the client MAC address is in the [[#PBA_Blacklist|PBA_Blacklist]] Endpoint Identity Group. If the MAC is found there ISE rejects the request; if not, the policy is not hit and ISE checks the following policy.
+
+##### Phone Access
+
+_To be added: not yet in the policy screenshot above._
+
+The switch ports run [[PBA - NAC - Network Access Devices#IP Phones — Multi-Domain|multi-domain]]: one session in the data domain and one in the voice domain. A phone reaches the voice domain only if ISE says so, with `cisco-av-pair = device-traffic-class=voice`. Without this rule, a phone's MAB falls through to [[#Guest Redirect]]: the phone lands in the data domain on VLAN 805, and a PC behind it becomes a second data device, blocked as a violation.
+
+To build it:
+
+1. <strong>Decide how ISE recognises a phone.</strong>
+    - The profiler's `Cisco-IP-Phone` endpoint identity group (under Profiled): no maintenance, because [[PBA - NAC - Network Access Devices#Device Sensor — Endpoint Profiling|Device Sensor]] already sends the CDP data the profiler needs. First check in Context Visibility → Endpoints that the phones are profiled, and which identity group they are in.
+    - Or a MAC whitelist like [[#PBA_Printers|PBA_Printers]] (for example `PBA_Phones` under PBA), filled by CSV import: explicit, but every new phone has to be imported.
+2. <strong>Enable profiler CoA</strong> (only with the profiler group): Administration → System → Settings → Profiling → CoA Type = Reauth. A new phone's first MAB happens before it is profiled and lands on Guest Redirect; once it is profiled, ISE re-authenticates it and it matches this rule.
+3. <strong>Check the result profile.</strong> Policy → Policy Elements → Results → Authorization → Authorization Profiles → `Cisco_IP_Phones` (predefined). Under Common Tasks, <strong>Voice Domain Permission</strong> must be ticked, and Attributes Details must show `cisco-av-pair = device-traffic-class=voice` with no VLAN and no redirect.
+4. <strong>Add the rule.</strong> Policy → Policy Sets → Wired → Authorization Policy; on the Deny Access row, gear icon → Insert new row below:
+    - Name: Phone Access
+    - Conditions: `Wired_MAB` AND `IdentityGroup·Name EQUALS Endpoint Identity Groups:Profiled:Cisco-IP-Phone` (or the whitelist group)
+    - Profile: `Cisco_IP_Phones`
+
+    It must sit above [[#MAB Access]]: a phone whose MAC is also in a MAB whitelist would otherwise get VLAN 802 as a data device.
+5. <strong>Test</strong> on a port that has a voice VLAN: Live Logs shows the phone's MAB matching Phone Access, and on the switch `show access-session interface <int> details` shows the phone's session in the voice domain.
 
 ##### Admin Access
 
