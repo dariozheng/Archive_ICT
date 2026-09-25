@@ -245,13 +245,13 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 
 The `Set-ExecutionPolicy` line lets scripts run in this window only: it does not change the computer's policy and ends when the window is closed.
 
-The script creates the request, lists the browser steps (the same as [[#Step 4 - Request the certificate in the browser|Step 4]]), and opens the page when you press <strong>ENTER</strong> at <strong>Premi INVIO per aprire la pagina nel browser</strong>. It then waits with <strong>Quando certnew.p7b è nella cartella Download, premi INVIO per avviare il passo 2 (Q per uscire)</strong>: Step2 starts only when you press <strong>ENTER</strong>. <mark style="background: #FFB86CA6;">Leave the PowerShell window open.</mark>
+The script creates the request, lists the browser steps (the same as [[#Step 4 - Request the certificate in the browser|Step 4]]), and opens the page when you press <strong>ENTER</strong> at <strong>Premi INVIO per aprire la pagina nel browser</strong>. It then waits with <strong>Quando certnew.p7b è nella cartella Download, premi INVIO per avviare il passo 2 (per interrompere scrivi Q e premi INVIO)</strong>: Step2 starts only when you press <strong>ENTER</strong>. <mark style="background: #FFB86CA6;">Leave the PowerShell window open.</mark>
 
 ###### Step 4 - Request the certificate in the browser
 
 The script shows these steps in Italian; the page labels are in English because they appear that way on the CA page.
 
-1. Sign in with your <strong>Publiacqua domain</strong> username and password.
+1. If the browser asks, sign in with your <strong>Publiacqua domain</strong> username and password.
 2. On <strong>Submit a Certificate Request or Renewal Request</strong>, click in the <strong>Saved Request</strong> box and press <strong>Ctrl+V</strong>. The pasted text starts with `-----BEGIN NEW CERTIFICATE REQUEST-----`. If the box stays empty, open <strong>request.csr</strong> on the Desktop with Notepad, copy all of it, and paste it.
 3. In <strong>Certificate Template</strong> select <strong>EAP-Admin-User</strong>.
 4. Leave <strong>Additional Attributes</strong> empty and click <strong>Submit</strong>.
@@ -292,14 +292,14 @@ The enrollment is also logged in <strong>Event Viewer → Windows Logs → Appli
 | Message or problem | Cause | Fix |
 |---|---|---|
 | <strong>cannot be loaded because running scripts is disabled on this system</strong> | The execution policy blocks scripts | Run the `Set-ExecutionPolicy` line from [[#Step 3 - Run the script\|Step 3]], then the script again |
-| <strong>Esegui lo script da Windows PowerShell aperto come amministratore</strong> | PowerShell is not elevated | Open PowerShell as in [[#Step 2 - Open PowerShell as administrator\|Step 2]] |
+| <strong>Lo script va avviato da PowerShell come amministratore</strong> | PowerShell is not elevated | Open PowerShell as in [[#Step 2 - Open PowerShell as administrator\|Step 2]] |
 | Accented letters show as <strong>Ã¨</strong>, <strong>Ã¹</strong> | The script was saved without the BOM | Save it again with encoding <strong>UTF-8 with BOM</strong>, as in [[#Step 1 - Save the script\|Step 1]] |
 | <strong>EAP-Admin-User</strong> is not in the Certificate Template list | The signed-in AD account cannot enroll the template, or the template is not issued on SubordinateCA01 | Sign in with your admin account; check the template [[#Domain Admin Certificate\|Security tab]] and that the template is issued on SubordinateCA01 |
-| <strong>Nessun nuovo file .p7b in ...\Downloads</strong> | The file was saved outside Downloads | Run `-Step Step2 -CertPath` with the full path of the file |
-| <strong>non contiene la catena CA</strong> or <strong>dovrebbe contenere 1 certificato utente</strong> | The wrong file was downloaded: <strong>Download certificate</strong> (.cer) or a CA-only chain | If the Certificate Issued page is still open, click <strong>Download certificate chain</strong> and run `-Step Step2`; otherwise run the script again from the start |
-| <strong>Il certificato non ha l'utilizzo Client Authentication</strong> | The wrong template was selected | Run the script again from the start and select <strong>EAP-Admin-User</strong> |
-| <strong>Il certificato è valido dal ... non adesso</strong> | The computer clock is wrong | <strong>Settings → Time & language → Date & time → Sync now</strong>, then run `-Step Step2` |
-| <strong>certreq -accept non riuscito</strong> or <strong>non è nell'archivio Personale con la sua chiave privata</strong> | The certificate does not match a request made on this computer by this Windows account | Run the script again from the start, with the same account, and download the new certificate |
+| <strong>non c'è un nuovo file certnew.p7b</strong> | The file was not downloaded yet, or was saved outside Downloads | Run `-Step Step2 -CertPath` with the full path of the file |
+| <strong>non la catena della CA</strong> or <strong>dovrebbe contenere 1 certificato personale</strong> | The wrong file was downloaded: <strong>Download certificate</strong> (.cer) or a CA-only chain | If the Certificate Issued page is still open, click <strong>Download certificate chain</strong> and run `-Step Step2`; otherwise run the script again from the start |
+| <strong>manca l'utilizzo Client Authentication</strong> | The wrong template was selected | Run the script again from the start and select <strong>EAP-Admin-User</strong> |
+| <strong>Il certificato è valido dal ... ma la data di questo PC è ...</strong> | The computer clock is wrong | <strong>Settings → Time & language → Date & time → Sync now</strong>, then run `-Step Step2` |
+| <strong>certreq -accept, codice</strong> or <strong>installato senza la sua chiave privata</strong> | The certificate does not match a request made on this computer by this Windows account | Run the script again from the start, with the same account, and download the new certificate |
 
 > [!warning] Trusted Root store
 > The script adds the CA certificates it finds in the .p7b to the computer's <strong>Trusted Root</strong> and <strong>Intermediate</strong> stores. Use only a file downloaded from the SubordinateCA01 page the script opens.
@@ -307,14 +307,25 @@ The enrollment is also logged in <strong>Event Viewer → Windows Logs → Appli
 ###### Script code
 
 ```powershell
-# Registrazione del certificato NAC (template EAP-Admin-User) su un PC Windows non in dominio.
+# Certificato NAC per PC Windows non in dominio (template EAP-Admin-User).
+# Richiede e installa il certificato con cui ti autentichi alla rete aziendale da questo PC,
+# usando il tuo account del dominio Publiacqua.
+#
 # Come avviarlo:
-#   1. Menu Start > digita PowerShell > clic destro su Windows PowerShell > Esegui come amministratore
-#   2. Nella finestra esegui questi comandi (il secondo vale solo per questa finestra):
-#        cd <cartella in cui si trova lo script>
+#   1. Apri il menu Start e digita PowerShell
+#   2. Clic destro su Windows PowerShell > Esegui come amministratore, poi Sì.
+#      Se Windows chiede nome utente e password di un altro account, fermati:
+#      il certificato verrebbe installato per quell'account e non per il tuo.
+#   3. Nella finestra di PowerShell esegui questi comandi, premendo INVIO dopo ciascuno
+#      (il secondo permette di eseguire script solo in questa finestra):
+#        cd "<cartella in cui hai salvato lo script>"
 #        Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 #        .\Enroll-EAPAdminCert.ps1
-#   Per completare in un secondo momento: .\Enroll-EAPAdminCert.ps1 -Step Step2 [-CertPath <certnew.p7b>]
+#   4. Segui le istruzioni che compaiono nella finestra.
+#
+# Se hai chiuso la finestra dopo il passo 1, ripeti i punti 1-3 usando come ultimo comando
+#   .\Enroll-EAPAdminCert.ps1 -Step Step2
+# e aggiungi -CertPath "<percorso di certnew.p7b>" se il file non è nella cartella Download.
 param(
     [ValidateSet('All', 'Step1', 'Step2')]
     [string]$Step = 'All',
@@ -332,6 +343,7 @@ $downloadsDir = Join-Path $env:USERPROFILE 'Downloads'
 $infPath      = Join-Path $env:TEMP 'cert_request.inf'
 $csrPath      = Join-Path ([Environment]::GetFolderPath('Desktop')) 'request.csr'
 $scriptName   = $MyInvocation.MyCommand.Name
+$step2Command = ".\$scriptName -Step Step2"
 $step1Start   = $null
 
 # User-context request with a non-exportable key and the Client Authentication EKU
@@ -360,55 +372,67 @@ function Get-IssuedCertificate([string]$Path) {
     $caCerts = @($all | Where-Object { Test-IsCA $_ })
     $leaf    = @($all | Where-Object { -not (Test-IsCA $_) })
 
+    $downloadAgain = "Nella pagina 'Certificate Issued' fai clic su 'Download certificate chain', poi esegui $step2Command. Se hai già chiuso la pagina, esegui di nuovo lo script dall'inizio."
     if ($leaf.Count -ne 1) {
-        throw "$Path dovrebbe contenere 1 certificato utente, ne contiene $($leaf.Count). Nella pagina 'Certificate Issued' fai clic su 'Download certificate chain'."
+        throw "Il file $Path non è quello giusto: dovrebbe contenere 1 certificato personale, ne contiene $($leaf.Count). $downloadAgain"
     }
     if ($caCerts.Count -eq 0) {
-        throw "$Path non contiene la catena CA. Nella pagina 'Certificate Issued' fai clic su 'Download certificate chain', non su 'Download certificate'."
+        throw "Il file $Path contiene il tuo certificato ma non la catena della CA, perché è stato scaricato con 'Download certificate'. $downloadAgain"
     }
 
     $ekus = @($leaf[0].Extensions |
         Where-Object { $_ -is [Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension] } |
         ForEach-Object { $_.EnhancedKeyUsages.Value })
     if ('1.3.6.1.5.5.7.3.2' -notin $ekus) {
-        throw "Il certificato non ha l'utilizzo Client Authentication. Rifai la richiesta scegliendo il template $template."
+        throw "Il certificato non vale per l'accesso alla rete (manca l'utilizzo Client Authentication): probabilmente è stato scelto un template diverso da $template. Esegui di nuovo lo script dall'inizio e scegli $template."
     }
 
     $now = Get-Date
     if ($now -lt $leaf[0].NotBefore -or $now -gt $leaf[0].NotAfter) {
-        throw "Il certificato è valido dal $($leaf[0].NotBefore) al $($leaf[0].NotAfter), non adesso. Controlla data e ora di questo computer."
+        throw "Il certificato è valido dal $($leaf[0].NotBefore) al $($leaf[0].NotAfter), ma la data di questo PC è $now. Correggi data e ora del PC, poi esegui $step2Command."
     }
 
     [pscustomobject]@{ Leaf = $leaf[0]; CACerts = $caCerts }
 }
 
 function Invoke-Step1 {
-    Write-Host "`n ==== Certificato NAC - Passo 1 di 2: richiesta ====" -ForegroundColor Cyan
+    Write-Host @"
+
+ ==== Certificato NAC - Passo 1 di 2: richiesta del certificato ====
+
+ Lo script crea una richiesta di certificato e una chiave privata, che resta su questo PC
+ e non può essere esportata. Poi apre la pagina della CA Publiacqua, dove invii la
+ richiesta e scarichi il certificato.
+
+"@ -ForegroundColor Cyan
     $script:step1Start = Get-Date
     Set-Content -Path $infPath -Value $infContent -Encoding ASCII
     if (Test-Path $csrPath) { Remove-Item $csrPath }
 
     certreq -new $infPath $csrPath
-    if ($LASTEXITCODE -ne 0) { throw "certreq -new non riuscito (codice $LASTEXITCODE). La richiesta non è stata creata." }
+    if ($LASTEXITCODE -ne 0) {
+        throw "Non è stato possibile creare la richiesta (certreq -new, codice $LASTEXITCODE). Esegui di nuovo lo script; se l'errore si ripete, contatta il reparto IT."
+    }
 
     try {
         Get-Content $csrPath -Raw | Set-Clipboard
-        Write-Host "`n La richiesta è stata copiata negli appunti (ed è salvata in $csrPath)." -ForegroundColor Green
+        Write-Host "`n La richiesta è stata copiata negli appunti (è salvata anche in $csrPath)." -ForegroundColor Green
     }
     catch {
-        Write-Host "`n Appunti non disponibili: apri $csrPath con Blocco note e copia tutto il testo." -ForegroundColor Yellow
+        Write-Host "`n Appunti non disponibili: apri $csrPath con Blocco note, copia tutto il testo e incollalo al punto 2." -ForegroundColor Yellow
     }
 
     # With -Step Step1 the script ends here, so Step2 is started by running the script again
-    $startStep2 = if ($Step -eq 'All') { 'e premi INVIO per avviare il passo 2' } else { "ed esegui .\$scriptName -Step Step2" }
+    $startStep2 = if ($Step -eq 'All') { 'e premi INVIO per avviare il passo 2' } else { "ed esegui $step2Command" }
     Write-Host @"
 
- Nella pagina che si apre nel browser:
-   1. Accedi con nome utente e password del dominio Publiacqua
+ Dopo aver premuto INVIO si apre la pagina della CA nel browser. Nella pagina:
+   1. Se il browser lo chiede, accedi con nome utente e password del dominio Publiacqua
    2. Fai clic nella casella 'Saved Request' e premi Ctrl+V per incollare la richiesta
-   3. In 'Certificate Template' seleziona $template
+      (il testo inizia con -----BEGIN NEW CERTIFICATE REQUEST-----)
+   3. In 'Certificate Template' scegli $template
    4. Lascia vuoto 'Additional Attributes' e fai clic su 'Submit'
-   5. Nella pagina 'Certificate Issued' seleziona 'Base 64 encoded' e fai clic su
+   5. Nella pagina 'Certificate Issued' seleziona 'Base 64 encoded', poi fai clic su
       'Download certificate chain' (NON su 'Download certificate')
    6. Salva il file certnew.p7b nella cartella Download ($downloadsDir).
       Se il browser chiede conferma, scegli di mantenere il file
@@ -419,16 +443,15 @@ function Invoke-Step1 {
 }
 
 function Invoke-Step2 {
-    Write-Host "`n ==== Certificato NAC - Passo 2 di 2: installazione ====" -ForegroundColor Cyan
     Write-Host @"
 
- Ora lo script, senza altre azioni da parte tua:
-   1. cerca certnew.p7b nella cartella Download e lo controlla
-   2. installa su questo computer i certificati della CA Publiacqua
-   3. installa il tuo certificato e lo collega alla chiave privata creata nel passo 1
-   4. sposta nel Cestino i file usati
- Attendi il messaggio 'Registrazione completata'.
-"@ -ForegroundColor Green
+ ==== Certificato NAC - Passo 2 di 2: installazione del certificato ====
+
+ Non devi fare nulla: lo script controlla il file scaricato, installa su questo PC i
+ certificati della CA Publiacqua e poi il tuo certificato, collegandolo alla chiave
+ privata creata nel passo 1. Infine sposta nel Cestino i file che non servono più.
+ Attendi il messaggio "Registrazione completata".
+"@ -ForegroundColor Cyan
     $path = $CertPath
     if (-not $path) {
         # Newest .p7b in Downloads, saved after Step1 when Step1 ran in this session
@@ -436,10 +459,10 @@ function Invoke-Step2 {
             Where-Object { -not $script:step1Start -or $_.LastWriteTime -ge $script:step1Start } |
             Sort-Object LastWriteTime | Select-Object -Last 1 -ExpandProperty FullName
         if (-not $path) {
-            throw "Nessun nuovo file .p7b in $downloadsDir. Se l'hai salvato altrove esegui: .\$scriptName -Step Step2 -CertPath 'C:\percorso\certnew.p7b'"
+            throw "Nella cartella $downloadsDir non c'è un nuovo file certnew.p7b. Se non l'hai ancora scaricato, segui i punti 5 e 6 del passo 1, poi esegui $step2Command. Se l'hai salvato in un'altra cartella, esegui $step2Command -CertPath `"<percorso completo del file>`"."
         }
     }
-    Write-Host "`n File: $path" -ForegroundColor Cyan
+    Write-Host "`n File del certificato: $path" -ForegroundColor Cyan
     $issued = Get-IssuedCertificate $path
 
     # The CA chain must be trusted first, or certreq -accept fails with UNTRUSTEDROOT
@@ -449,18 +472,18 @@ function Invoke-Step2 {
         $store.Open('ReadWrite')
         $store.Add($ca)
         $store.Close()
-        Write-Host "  Certificato CA installato: $($ca.Subject)" -ForegroundColor DarkGreen
+        Write-Host "  Certificato della CA installato: $($ca.Subject)" -ForegroundColor DarkGreen
     }
 
     # Binds the issued certificate to the private key created in Step1
     certreq -accept $path
     if ($LASTEXITCODE -ne 0) {
-        throw "certreq -accept non riuscito (codice $LASTEXITCODE). Il passo 1 e il passo 2 vanno eseguiti su questo computer con lo stesso account Windows."
+        throw "Non è stato possibile installare il certificato (certreq -accept, codice $LASTEXITCODE). Il certificato va richiesto e installato su questo PC con lo stesso account Windows: esegui di nuovo lo script dall'inizio."
     }
 
     $thumb = $issued.Leaf.Thumbprint
     if (-not (Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.Thumbprint -eq $thumb -and $_.HasPrivateKey })) {
-        throw "Il certificato è stato accettato ma non è nell'archivio Personale con la sua chiave privata, quindi l'autenticazione EAP-TLS non funzionerebbe. Riesegui lo script dall'inizio."
+        throw "Il certificato è stato installato senza la sua chiave privata, quindi non funzionerebbe per l'accesso alla rete. Esegui di nuovo lo script dall'inizio."
     }
     Write-Host "`n Certificato installato nell'archivio Personale dell'utente (impronta digitale $thumb)." -ForegroundColor Green
 
@@ -469,7 +492,7 @@ function Invoke-Step2 {
         Write-EventLog -LogName Application -Source $eventSource -EventId 1000 -EntryType Information `
             -Message "EAP cert enrolled for $env:USERNAME on $env:COMPUTERNAME, thumbprint $thumb, source file $path"
     }
-    catch { Write-Warning "Voce nel registro eventi non scritta: $_" }
+    catch { Write-Warning "Non è stato possibile scrivere l'operazione nel registro eventi (il certificato non ne risente): $_" }
 
     # Recycle Bin rather than delete, so the files can be restored
     try {
@@ -481,13 +504,13 @@ function Invoke-Step2 {
         }
         Write-Host " File usati spostati nel Cestino." -ForegroundColor Green
     }
-    catch { Write-Warning "File usati non spostati nel Cestino: $_" }
+    catch { Write-Warning "Non è stato possibile spostare nel Cestino i file usati (il certificato non ne risente): $_" }
 
     Write-Host @"
 
- Registrazione completata. Per verificare il certificato:
-   Win+R > digita certmgr.msc > INVIO > Personale > Certificati
-   (l'icona del tuo certificato mostra una piccola chiave)
+ Registrazione completata: il tuo certificato è installato.
+ Per verificarlo premi Win+R, digita certmgr.msc e premi INVIO, poi apri
+ Personale > Certificati: il tuo certificato ha un'icona con una piccola chiave.
  Puoi chiudere questa finestra.
 "@ -ForegroundColor Green
 }
@@ -495,14 +518,14 @@ function Invoke-Step2 {
 try {
     $identity = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
     if (-not $identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-        throw "Esegui lo script da Windows PowerShell aperto come amministratore: menu Start > digita PowerShell > clic destro su Windows PowerShell > Esegui come amministratore."
+        throw "Lo script va avviato da PowerShell come amministratore: menu Start > digita PowerShell > clic destro su Windows PowerShell > Esegui come amministratore. Nella nuova finestra esegui di nuovo i comandi cd, Set-ExecutionPolicy e .\$scriptName."
     }
 
     if ($Step -ne 'Step2') { Invoke-Step1 }
     if ($Step -eq 'All') {
-        $answer = Read-Host "`n Quando certnew.p7b è nella cartella Download, premi INVIO per avviare il passo 2 (Q per uscire)"
+        $answer = Read-Host "`n Quando certnew.p7b è nella cartella Download, premi INVIO per avviare il passo 2 (per interrompere scrivi Q e premi INVIO)"
         if ($answer -match '^[Qq]$') {
-            Write-Host " Interrotto dopo il passo 1. Per completare più tardi esegui: .\$scriptName -Step Step2" -ForegroundColor Yellow
+            Write-Host " Interrotto dopo il passo 1. Per completare più tardi esegui $step2Command (in una nuova finestra di PowerShell ripeti prima i comandi cd e Set-ExecutionPolicy)." -ForegroundColor Yellow
             exit 0
         }
     }
