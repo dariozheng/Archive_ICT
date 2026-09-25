@@ -206,9 +206,9 @@ This PowerShell script enrolls the [[#Domain Admin Certificate]] (template <stro
 
 It runs in two steps and waits for you in between:
 
-1. <strong>Step1 - Create the request</strong>: creates a private key and a certificate request (CSR) with `certreq`, copies the CSR to the clipboard (it is also saved as <strong>request.csr</strong> on the Desktop), and opens the web enrollment page of <strong>SubordinateCA01</strong>.
-2. <strong>You, in the browser</strong>: submit the CSR with the <strong>EAP-Admin-User</strong> template and download the issued certificate to the <strong>Downloads</strong> folder.
-3. <strong>Step2 - Install the certificate</strong>: finds the downloaded file and checks it (one user certificate, <strong>Client Authentication</strong> EKU, valid today), installs the CA chain in the computer's <strong>Trusted Root</strong> and <strong>Intermediate</strong> stores, links the certificate to its private key with `certreq -accept`, confirms it is in your <strong>Personal</strong> store, logs the enrollment in the Application event log, and moves the files it used to the Recycle Bin.
+1. <strong>Step1 - Create the request</strong>: creates a <strong>non-exportable</strong> private key and a certificate request (CSR) with `certreq`, copies the CSR to the clipboard (it is also saved as <strong>request.csr</strong> on the Desktop), and opens the web enrollment page of <strong>SubordinateCA01</strong>.
+2. <strong>You, in the browser</strong>: submit the CSR with the <strong>EAP-Admin-User</strong> template and download the issued certificate with its CA chain (<strong>certnew.p7b</strong>) to the <strong>Downloads</strong> folder.
+3. <strong>Step2 - Install the certificate</strong>: finds the newest <strong>.p7b</strong> in Downloads and checks it (one user certificate plus the CA chain, <strong>Client Authentication</strong> EKU, valid today), installs the CA chain in the computer's <strong>Trusted Root</strong> and <strong>Intermediate</strong> stores, links the certificate to its private key with `certreq -accept`, confirms it is in your <strong>Personal</strong> store, logs the enrollment in the Application event log, and moves the files it used to the Recycle Bin.
 
 ###### Before you start
 
@@ -245,7 +245,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 
 The `Set-ExecutionPolicy` line lets scripts run in this window only: it does not change the computer's policy and ends when the window is closed.
 
-The script creates the request, opens the certificate request page in the browser, and then waits with <strong>Once the certificate is downloaded, press ENTER to continue or Q to quit</strong>. <mark style="background: #FFB86CA6;">Leave the PowerShell window open.</mark>
+The script creates the request, opens the certificate request page in the browser, and then waits with <strong>Once certnew.p7b is downloaded, press ENTER to continue or Q to quit</strong>. <mark style="background: #FFB86CA6;">Leave the PowerShell window open.</mark>
 
 ###### Step 4 - Request the certificate in the browser
 
@@ -254,17 +254,14 @@ The script creates the request, opens the certificate request page in the browse
 3. On <strong>Submit a Certificate Request or Renewal Request</strong>, click in the <strong>Saved Request</strong> box and press <strong>Ctrl+V</strong>. The pasted text starts with `-----BEGIN NEW CERTIFICATE REQUEST-----`. If the box stays empty, open <strong>request.csr</strong> on the Desktop with Notepad, copy all of it, and paste it.
 4. In <strong>Certificate Template</strong> select <strong>EAP-Admin-User</strong>.
 5. Leave <strong>Additional Attributes</strong> empty and click <strong>Submit</strong>.
-6. On <strong>Certificate Issued</strong> select <strong>Base 64 encoded</strong>, then click:
-    - <strong>Download certificate chain</strong> (recommended): saves <strong>certnew.p7b</strong>, which already contains the CA chain.
-    - or <strong>Download certificate</strong>: saves <strong>certnew.cer</strong>; the script then asks you to download the CA chain separately (see Step 5).
+6. On <strong>Certificate Issued</strong> select <strong>Base 64 encoded</strong> and click <strong>Download certificate chain</strong>. This saves <strong>certnew.p7b</strong>, which holds your certificate and the CA chain. Do not use <strong>Download certificate</strong>: that <strong>.cer</strong> file has no CA chain and the script rejects it.
 7. Save the file in the <strong>Downloads</strong> folder, the browser default. Do not open it or double-click it.
 
 ###### Step 5 - Finish the installation
 
 1. Go back to the PowerShell window and press <strong>ENTER</strong>.
-2. The script finds the file in Downloads, checks it, and installs the CA chain.
-3. Only if you downloaded <strong>certnew.cer</strong>: the script opens the <strong>Download a CA Certificate, Certificate Chain, or CRL</strong> page. Select <strong>Base 64</strong>, click <strong>Download CA certificate chain</strong>, save the file in <strong>Downloads</strong>, then press <strong>ENTER</strong> in PowerShell.
-4. The enrollment is complete when the script shows <strong>Certificate installed to CurrentUser\Personal store</strong> followed by <strong>Used files sent to user Recycle Bin</strong>.
+2. The script finds the file in Downloads, checks it, installs the CA chain, and then the certificate.
+3. The enrollment is complete when the script shows <strong>Certificate installed to CurrentUser\Personal store</strong> followed by <strong>Used files sent to user Recycle Bin</strong>.
 
 ###### Step 6 - Check the certificate
 
@@ -283,76 +280,58 @@ The enrollment is also logged in <strong>Event Viewer → Windows Logs → Appli
 |---|---|
 | `.\Enroll-EAPAdminCert.ps1` | Normal use: runs both steps and waits while you use the browser |
 | `.\Enroll-EAPAdminCert.ps1 -Step Step1` | Only create the request and open the page |
-| `.\Enroll-EAPAdminCert.ps1 -Step Step2` | Finish later, or after pressing <strong>Q</strong> at the prompt: installs the newest .cer or .p7b in Downloads |
+| `.\Enroll-EAPAdminCert.ps1 -Step Step2` | Finish later, or after pressing <strong>Q</strong> at the prompt: installs the newest .p7b in Downloads |
 | `.\Enroll-EAPAdminCert.ps1 -Step Step2 -CertPath 'C:\path\certnew.p7b'` | The file is not in Downloads, or the newest file there is not the right one |
 
-<mark style="background: #FF5582A6;">Run Step2 on the same computer and with the same Windows account as Step1</mark>: the private key created in Step1 is stored only there, and without it the certificate cannot be installed. When Step2 runs on its own it takes the newest .cer or .p7b in Downloads, whatever its age.
+<mark style="background: #FF5582A6;">Run Step2 on the same computer and with the same Windows account as Step1</mark>: the private key created in Step1 is stored only there, and without it the certificate cannot be installed. When Step2 runs on its own it takes the newest .p7b in Downloads, whatever its age.
 
 ###### Troubleshooting
 
 | Message or problem | Cause | Fix |
 |---|---|---|
 | <strong>cannot be loaded because running scripts is disabled on this system</strong> | The execution policy blocks scripts | Run the `Set-ExecutionPolicy` line from [[#Step 3 - Run the script\|Step 3]], then the script again |
-| <strong>This script must be run as Administrator</strong> | PowerShell is not elevated | Open PowerShell as in [[#Step 2 - Open PowerShell as administrator\|Step 2]] |
+| <strong>Run this script from Windows PowerShell opened with 'Run as administrator'</strong> | PowerShell is not elevated | Open PowerShell as in [[#Step 2 - Open PowerShell as administrator\|Step 2]] |
 | <strong>EAP-Admin-User</strong> is not in the Certificate Template list | The signed-in AD account cannot enroll the template, or the template is not issued on SubordinateCA01 | Sign in with your admin account; check the template [[#Domain Admin Certificate\|Security tab]] and that the template is issued on SubordinateCA01 |
-| <strong>No .cer or .p7b file found</strong> | The file was saved outside Downloads | Run `-Step Step2 -CertPath` with the full path of the file |
-| <strong>File contains only CA certificates</strong> | The CA chain was downloaded instead of your certificate | Run the script again from the start, and on Certificate Issued click <strong>Download certificate chain</strong> |
-| <strong>Certificate is missing Client Authentication EKU</strong> | The wrong template was selected | Run the script again from the start and select <strong>EAP-Admin-User</strong> |
-| <strong>Certificate is not yet valid ... possible clock skew</strong> | The computer clock is wrong | <strong>Settings → Time & language → Date & time → Sync now</strong>, then run `-Step Step2` |
-| <strong>certreq -accept failed</strong> | The certificate does not match a request made on this computer by this Windows account | Run the script again from the start, with the same account, and download the new certificate |
-| <strong>CA chain not installed</strong> | The CA chain was not downloaded, or the wrong file was saved | Run `-Step Step2` again; on the CA page select <strong>Base 64</strong> and click <strong>Download CA certificate chain</strong> |
+| <strong>No new .p7b file in ...\Downloads</strong> | The file was saved outside Downloads | Run `-Step Step2 -CertPath` with the full path of the file |
+| <strong>has no CA chain</strong> or <strong>should contain 1 user certificate</strong> | The wrong file was downloaded: <strong>Download certificate</strong> (.cer) or a CA-only chain | If the Certificate Issued page is still open, click <strong>Download certificate chain</strong> and run `-Step Step2`; otherwise run the script again from the start |
+| <strong>The certificate has no Client Authentication EKU</strong> | The wrong template was selected | Run the script again from the start and select <strong>EAP-Admin-User</strong> |
+| <strong>The certificate is valid from ... not now</strong> | The computer clock is wrong | <strong>Settings → Time & language → Date & time → Sync now</strong>, then run `-Step Step2` |
+| <strong>certreq -accept failed</strong> or <strong>not in CurrentUser\My with its private key</strong> | The certificate does not match a request made on this computer by this Windows account | Run the script again from the start, with the same account, and download the new certificate |
 
 > [!warning] Trusted Root store
-> The script adds the CA certificates it finds to the computer's <strong>Trusted Root</strong> and <strong>Intermediate</strong> stores. Use only files downloaded from the SubordinateCA01 pages the script opens.
+> The script adds the CA certificates it finds in the .p7b to the computer's <strong>Trusted Root</strong> and <strong>Intermediate</strong> stores. Use only a file downloaded from the SubordinateCA01 page the script opens.
 
 ###### Script code
 
 ```powershell
+# Enrolls an EAP-Admin-User certificate on a non-domain Windows computer.
+# Run from Windows PowerShell opened with "Run as administrator":
+#   .\Enroll-EAPAdminCert.ps1 [-Step All|Step1|Step2] [-CertPath <certnew.p7b>]
 param(
-    [ValidateSet("All", "Step1", "Step2")]
-    [string]$Step = "All",
+    [ValidateSet('All', 'Step1', 'Step2')]
+    [string]$Step = 'All',
     [string]$CertPath
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-# Require elevation - CA chain import writes to LocalMachine stores
-if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
-        [Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    throw "This script must be run as Administrator. Open Windows PowerShell with 'Run as administrator' and run it again."
-}
-
-# Verify certreq is available before doing anything else
-if (-not (Get-Command certreq.exe -ErrorAction SilentlyContinue)) {
-    throw "certreq.exe not found on this system. This script requires the Windows certificate request utility."
-}
-
-# Load VB assembly once at script scope (used by Move-UsedFilesToRecycleBin)
-Add-Type -AssemblyName Microsoft.VisualBasic
-
-# Paths
-$desktop      = [Environment]::GetFolderPath('Desktop')
+# Settings
+$caUrl        = 'https://subordinateca01.publiacqua.it/certsrv/certrqxt.asp'
+$template     = 'EAP-Admin-User'
+$eventSource  = 'EAPEnroll'
 $downloadsDir = Join-Path $env:USERPROFILE 'Downloads'
-$infPath      = Join-Path $env:TEMP "cert_request.inf"
-$csrPath      = Join-Path $desktop  "request.csr"
-$subcaBase    = "https://subordinateca01.publiacqua.it/certsrv"
-$subcaUrl     = "$subcaBase/certrqxt.asp"
-$caChainPage  = "$subcaBase/certcarc.asp"
+$infPath      = Join-Path $env:TEMP 'cert_request.inf'
+$csrPath      = Join-Path ([Environment]::GetFolderPath('Desktop')) 'request.csr'
 $scriptName   = $MyInvocation.MyCommand.Name
-$eventSource  = "EAPEnroll"
+$step1Start   = $null
 
-# Expected template name (for display only)
-$expectedTemplate = "EAP-Admin-User"
-
-$script:Step1StartTime = $null
-$IsCertPathExplicit    = $PSBoundParameters.ContainsKey('CertPath')
-
+# User-context request with a non-exportable key and the Client Authentication EKU
 $infContent = @"
 [NewRequest]
 Subject = "CN=$env:USERNAME"
 KeyLength = 2048
-Exportable = TRUE
+Exportable = FALSE
 MachineKeySet = FALSE
 RequestType = PKCS10
 ProviderName = "Microsoft Software Key Storage Provider"
@@ -361,411 +340,143 @@ ProviderName = "Microsoft Software Key Storage Provider"
 OID = 1.3.6.1.5.5.7.3.2 ; Client Authentication
 "@
 
-function Write-Failure {
-    # Not Write-Error: with ErrorActionPreference 'Stop' it would end the script before the hints that follow it
-    param([string]$Message)
-    Write-Host $Message -ForegroundColor Red
+function Test-IsCA($Cert) {
+    [bool]($Cert.Extensions | Where-Object {
+        $_ -is [Security.Cryptography.X509Certificates.X509BasicConstraintsExtension] -and $_.CertificateAuthority })
 }
 
-function Write-EnrollmentEvent {
-    param(
-        [string]$Message,
-        [ValidateSet('Information','Warning','Error')]
-        [string]$EntryType = 'Information'
-    )
-    try {
-        if (-not [System.Diagnostics.EventLog]::SourceExists($eventSource)) {
-            try { New-EventLog -LogName Application -Source $eventSource -ErrorAction Stop } catch { return }
-        }
-        Write-EventLog -LogName Application -Source $eventSource -EventId 1000 `
-            -EntryType $EntryType -Message $Message -ErrorAction Stop
+function Get-IssuedCertificate([string]$Path) {
+    # Returns the user certificate and its CA chain from the .p7b, or throws with the reason
+    $all = New-Object Security.Cryptography.X509Certificates.X509Certificate2Collection
+    $all.Import($Path)
+    $caCerts = @($all | Where-Object { Test-IsCA $_ })
+    $leaf    = @($all | Where-Object { -not (Test-IsCA $_) })
+
+    if ($leaf.Count -ne 1) {
+        throw "$Path should contain 1 user certificate, found $($leaf.Count). On the Certificate Issued page click 'Download certificate chain'."
     }
-    catch {
-        # Best-effort.
-    }
-}
-
-function Find-NewestCertificate {
-    # Nullable: SinceTime is $null when Step2 runs on its own
-    param([Nullable[datetime]]$SinceTime)
-
-    if (-not (Test-Path $downloadsDir)) { return $null }
-
-    $candidates = Get-ChildItem -Path $downloadsDir -File -ErrorAction SilentlyContinue |
-        Where-Object { $_.Extension -in '.cer','.p7b' }
-
-    if ($SinceTime) {
-        $candidates = $candidates | Where-Object { $_.LastWriteTime -ge $SinceTime }
+    if ($caCerts.Count -eq 0) {
+        throw "$Path has no CA chain. On the Certificate Issued page click 'Download certificate chain', not 'Download certificate'."
     }
 
-    $newest = $candidates | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-    if ($newest) { return $newest.FullName }
-    return $null
-}
-
-function Test-IsCACertificate {
-    param([System.Security.Cryptography.X509Certificates.X509Certificate2]$Certificate)
-
-    $bcExt = $Certificate.Extensions | Where-Object { $_.Oid.Value -eq '2.5.29.19' } | Select-Object -First 1
-    if (-not $bcExt) { return $false }
-    return ([System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension]$bcExt).CertificateAuthority
-}
-
-function Test-DownloadedCertificate {
-    <#
-    Accepts either a single-cert (.cer) or PKCS#7 chain (.p7b).
-    For a chain, finds the leaf (non-CA) certificate and validates it.
-    #>
-    param([string]$Path)
-
-    $result = [ordered]@{
-        Valid       = $false
-        Reason      = $null
-        Certificate = $null
-        CACerts     = @()
-    }
-
-    $collection = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
-    try {
-        $collection.Import($Path)
-    }
-    catch {
-        $result.Reason = "File could not be parsed as a certificate or PKCS#7 chain: $_"
-        return $result
-    }
-
-    if ($collection.Count -eq 0) {
-        $result.Reason = "File contains no certificates."
-        return $result
-    }
-
-    $leafCandidates = @()
-    $caCerts        = @()
-    foreach ($c in $collection) {
-        if (Test-IsCACertificate -Certificate $c) { $caCerts += $c }
-        else { $leafCandidates += $c }
-    }
-
-    if ($leafCandidates.Count -eq 0) {
-        $result.Reason = "File contains only CA certificates - no user/leaf certificate found. Did you download the CA chain instead of your issued certificate?"
-        return $result
-    }
-    if ($leafCandidates.Count -gt 1) {
-        $result.Reason = "File contains multiple non-CA certificates ($($leafCandidates.Count)). Cannot determine which is yours."
-        return $result
-    }
-
-    $cert = $leafCandidates[0]
-    $result.Certificate = $cert
-    $result.CACerts     = $caCerts
-
-    $clientAuthOid = '1.3.6.1.5.5.7.3.2'
-    $ekuExts = $cert.Extensions | Where-Object { $_.Oid.Value -eq '2.5.29.37' }
-    if (-not $ekuExts) {
-        $result.Reason = "Certificate has no Enhanced Key Usage extension. Wrong template?"
-        return $result
-    }
-
-    $ekuOids = foreach ($ext in $ekuExts) {
-        ([System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension]$ext).EnhancedKeyUsages |
-            ForEach-Object { $_.Value }
-    }
-
-    if ($clientAuthOid -notin $ekuOids) {
-        $result.Reason = "Certificate is missing Client Authentication EKU. Found EKUs: $($ekuOids -join ', ')"
-        return $result
+    $ekus = @($leaf[0].Extensions |
+        Where-Object { $_ -is [Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension] } |
+        ForEach-Object { $_.EnhancedKeyUsages.Value })
+    if ('1.3.6.1.5.5.7.3.2' -notin $ekus) {
+        throw "The certificate has no Client Authentication EKU. Request it again with the $template template."
     }
 
     $now = Get-Date
-    if ($cert.NotAfter -lt $now) {
-        $result.Reason = "Certificate is already expired (NotAfter: $($cert.NotAfter))."
-        return $result
-    }
-    if ($cert.NotBefore -gt $now) {
-        $result.Reason = "Certificate is not yet valid (NotBefore: $($cert.NotBefore)) - possible clock skew."
-        return $result
+    if ($now -lt $leaf[0].NotBefore -or $now -gt $leaf[0].NotAfter) {
+        throw "The certificate is valid from $($leaf[0].NotBefore) to $($leaf[0].NotAfter), not now. Check this computer's date and time."
     }
 
-    $result.Valid = $true
-    return $result
-}
-
-function Install-CAChainFromCerts {
-    param([System.Security.Cryptography.X509Certificates.X509Certificate2[]]$CACerts)
-
-    if (-not $CACerts -or $CACerts.Count -eq 0) { return $false }
-
-    $rootStore = $null
-    $caStore   = $null
-    try {
-        $rootStore = New-Object System.Security.Cryptography.X509Certificates.X509Store('Root','LocalMachine')
-        $caStore   = New-Object System.Security.Cryptography.X509Certificates.X509Store('CA','LocalMachine')
-        $rootStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
-        $caStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
-
-        foreach ($c in $CACerts) {
-            $isSelfSigned = ($c.Subject -eq $c.Issuer)
-            if ($isSelfSigned) {
-                $rootStore.Add($c)
-                Write-Host "  Installed root: $($c.Subject)" -ForegroundColor DarkGreen
-            } else {
-                $caStore.Add($c)
-                Write-Host "  Installed intermediate: $($c.Subject)" -ForegroundColor DarkGreen
-            }
-        }
-        return $true
-    }
-    catch {
-        Write-Warning " CA chain import failed: $_"
-        return $false
-    }
-    finally {
-        if ($rootStore) { $rootStore.Close() }
-        if ($caStore)   { $caStore.Close() }
-    }
-}
-
-function Install-CAChainViaBrowser {
-    <#
-    Asks the user to download the CA certificate chain .p7b through their browser
-    (auth is handled by the browser), then finds it in Downloads, validates that
-    it contains only CA certs, and installs it.
-
-    Returns the path to the installed .p7b on success, or $null on failure.
-    #>
-
-    Write-Host ""
-    Write-Host " The downloaded certificate does not include the CA chain." -ForegroundColor Yellow
-    Write-Host " The CA chain must be installed before the certificate can be bound to its private key." -ForegroundColor Yellow
-    Write-Host ""
-    Write-Host " Opening the CA certificate download page:" -ForegroundColor Cyan
-    Write-Host "   $caChainPage" -ForegroundColor Cyan
-    Write-Host ""
-    Write-Host " On that page:" -ForegroundColor Cyan
-    Write-Host "   1. Select 'Base 64'" -ForegroundColor Cyan
-    Write-Host "   2. Click 'Download CA certificate chain'" -ForegroundColor Cyan
-    Write-Host "   3. Save the .p7b file to your Downloads folder" -ForegroundColor Cyan
-
-    $promptTime = Get-Date
-    Start-Process $caChainPage
-
-    [void](Read-Host "`n Press ENTER once the .p7b is downloaded")
-
-    Write-Host " Looking for newly downloaded .p7b in $downloadsDir..." -ForegroundColor Cyan
-    $p7bPath = $null
-    for ($i = 0; $i -lt 10; $i++) {
-        $candidate = Get-ChildItem -Path $downloadsDir -Filter '*.p7b' -File -ErrorAction SilentlyContinue |
-            Where-Object { $_.LastWriteTime -ge $promptTime } |
-            Sort-Object LastWriteTime -Descending |
-            Select-Object -First 1
-        if ($candidate) { $p7bPath = $candidate.FullName; break }
-        Start-Sleep -Milliseconds 500
-    }
-
-    if (-not $p7bPath) {
-        Write-Failure " No .p7b file found in $downloadsDir newer than $($promptTime.ToString('HH:mm:ss'))."
-        return $null
-    }
-    Write-Host " Found chain file: $p7bPath" -ForegroundColor Cyan
-
-    try {
-        $coll = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2Collection
-        $coll.Import($p7bPath)
-    }
-    catch {
-        Write-Failure " Could not parse $p7bPath as PKCS#7: $_"
-        return $null
-    }
-
-    if ($coll.Count -eq 0) {
-        Write-Failure " The downloaded file contains no certificates."
-        return $null
-    }
-
-    # Refuse anything that isn't a CA cert - we're installing into trusted stores
-    $caOnly = @($coll | Where-Object { Test-IsCACertificate -Certificate $_ })
-    if ($caOnly.Count -ne $coll.Count) {
-        Write-Failure " The downloaded chain file contains non-CA certificates. Aborting for safety - you may have downloaded the wrong file."
-        return $null
-    }
-
-    Write-Host " Installing $($caOnly.Count) CA cert(s) from the chain..." -ForegroundColor Cyan
-    if (-not (Install-CAChainFromCerts -CACerts $caOnly)) {
-        return $null
-    }
-
-    return $p7bPath
-}
-
-function Move-UsedFilesToRecycleBin {
-    param(
-        [string]$ResolvedCertPath,
-        [string]$CAChainPath
-    )
-
-    $filesToMove = @($infPath, $csrPath, $ResolvedCertPath, $CAChainPath)
-    foreach ($file in $filesToMove) {
-        if ($file -and (Test-Path $file)) {
-            try {
-                [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile(
-                    $file,
-                    [Microsoft.VisualBasic.FileIO.UIOption]::OnlyErrorDialogs,
-                    [Microsoft.VisualBasic.FileIO.RecycleOption]::SendToRecycleBin
-                )
-            }
-            catch {
-                Write-Warning "Could not move '$file' to Recycle Bin: $_"
-            }
-        }
-    }
+    [pscustomobject]@{ Leaf = $leaf[0]; CACerts = $caCerts }
 }
 
 function Invoke-Step1 {
-    if (Test-Path $csrPath) { Remove-Item $csrPath -Force }
-    if (Test-Path $infPath) { Remove-Item $infPath -Force }
-
-    $script:Step1StartTime = Get-Date
-
+    $script:step1Start = Get-Date
     Set-Content -Path $infPath -Value $infContent -Encoding ASCII
+    if (Test-Path $csrPath) { Remove-Item $csrPath }
 
-    # Out-Host keeps certreq's output out of the function's return value
-    certreq -new $infPath $csrPath | Out-Host
-    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $csrPath)) {
-        Write-Failure "certreq -new failed (exit code $LASTEXITCODE). CSR was not generated."
-        return $false
-    }
+    certreq -new $infPath $csrPath
+    if ($LASTEXITCODE -ne 0) { throw "certreq -new failed (exit code $LASTEXITCODE). The request was not created." }
 
-    $csrText = Get-Content $csrPath -Raw
-
-    $clipboardOk = $false
     try {
-        $csrText | Set-Clipboard
-        $clipboardOk = $true
+        Get-Content $csrPath -Raw | Set-Clipboard
+        Write-Host "`n Request copied to the clipboard and saved to $csrPath" -ForegroundColor Green
     }
     catch {
-        Write-Warning "Clipboard unavailable: $_"
+        Write-Host "`n Clipboard unavailable: open $csrPath and copy all of it." -ForegroundColor Yellow
     }
 
-    if ($clipboardOk) {
-        Write-Host "`n CSR saved and copied to clipboard (your previous clipboard contents have been replaced)." -ForegroundColor Green
-    }
-    else {
-        Write-Host "`n CSR saved to: $csrPath" -ForegroundColor Yellow
-        Write-Host " Clipboard was unavailable - open the file and copy its contents manually." -ForegroundColor Yellow
-    }
+    Write-Host @"
 
-    Write-Host "`n Use Publiacqua domain credentials." -ForegroundColor Green
-    Write-Host "`n Paste the CSR to $subcaUrl" -ForegroundColor Green
-    Write-Host "`n Certificate Template must be $expectedTemplate." -ForegroundColor Green
-    Write-Host "`n Download the Base64 certificate (.cer) OR full chain (.p7b) to the Downloads folder." -ForegroundColor Green
-
-    Start-Process $subcaUrl
-    return $true
+ In the page that opens now:
+   1. Sign in with your Publiacqua domain account
+   2. Paste the request in 'Saved Request'
+   3. Certificate Template: $template, then Submit
+   4. Select 'Base 64 encoded' and click 'Download certificate chain'
+   5. Save certnew.p7b in $downloadsDir
+"@ -ForegroundColor Green
+    Start-Process $caUrl
 }
 
 function Invoke-Step2 {
-    $resolvedPath = $null
-
-    if ($IsCertPathExplicit) {
-        $resolvedPath = $CertPath
-    }
-    else {
-        Write-Host "`n Looking for newly downloaded .cer or .p7b in $downloadsDir..." -ForegroundColor Cyan
-        for ($i = 0; $i -lt 10; $i++) {
-            $resolvedPath = Find-NewestCertificate -SinceTime $script:Step1StartTime
-            if ($resolvedPath) { break }
-            Start-Sleep -Milliseconds 500
+    $path = $CertPath
+    if (-not $path) {
+        # Newest .p7b in Downloads, saved after Step1 when Step1 ran in this session
+        $path = Get-ChildItem $downloadsDir -Filter *.p7b -File -ErrorAction SilentlyContinue |
+            Where-Object { -not $script:step1Start -or $_.LastWriteTime -ge $script:step1Start } |
+            Sort-Object LastWriteTime | Select-Object -Last 1 -ExpandProperty FullName
+        if (-not $path) {
+            throw "No new .p7b file in $downloadsDir. If it was saved elsewhere, run: .\$scriptName -Step Step2 -CertPath 'C:\path\certnew.p7b'"
         }
+    }
+    Write-Host "`n Using $path" -ForegroundColor Cyan
+    $issued = Get-IssuedCertificate $path
 
-        if (-not $resolvedPath) {
-            Write-Failure "`n No .cer or .p7b file found in $downloadsDir$(if ($script:Step1StartTime) { " newer than $($script:Step1StartTime.ToString('HH:mm:ss'))" })."
-            Write-Host " If needed, specify it explicitly:" -ForegroundColor Yellow
-            Write-Host "   .\$scriptName -Step Step2 -CertPath 'C:\path\certnew.cer'" -ForegroundColor Yellow
-            return $false
-        }
-        Write-Host " Auto-detected: $resolvedPath" -ForegroundColor Cyan
+    # The CA chain must be trusted first, or certreq -accept fails with UNTRUSTEDROOT
+    foreach ($ca in $issued.CACerts) {
+        $storeName = if ($ca.Subject -eq $ca.Issuer) { 'Root' } else { 'CA' }
+        $store = New-Object Security.Cryptography.X509Certificates.X509Store($storeName, 'LocalMachine')
+        $store.Open('ReadWrite')
+        $store.Add($ca)
+        $store.Close()
+        Write-Host "  Trusted ($storeName): $($ca.Subject)" -ForegroundColor DarkGreen
     }
 
-    if (-not (Test-Path $resolvedPath)) {
-        Write-Failure "`n Certificate file not found: $resolvedPath"
-        return $false
-    }
-
-    $validation = Test-DownloadedCertificate -Path $resolvedPath
-    if (-not $validation.Valid) {
-        Write-Failure "`n Certificate validation failed: $($validation.Reason)"
-        Write-Host "   File: $resolvedPath" -ForegroundColor Yellow
-        Write-Host "   Re-download from $subcaUrl using template '$expectedTemplate'." -ForegroundColor Yellow
-        return $false
-    }
-
-    Write-Host " Certificate validated (Subject: $($validation.Certificate.Subject), Issuer: $($validation.Certificate.Issuer))." -ForegroundColor Green
-    if ($validation.CACerts.Count -gt 0) {
-        Write-Host " Found $($validation.CACerts.Count) CA cert(s) bundled in the file." -ForegroundColor Green
-    }
-
-    # Install CA chain - either from the downloaded .p7b, or by asking the user to download one
-    $chainP7bPath = $null
-    if ($validation.CACerts.Count -gt 0) {
-        Write-Host "`n Installing CA chain from the downloaded file..." -ForegroundColor Cyan
-        if (-not (Install-CAChainFromCerts -CACerts $validation.CACerts)) {
-            Write-Failure " CA chain installation failed."
-            return $false
-        }
-        Write-Host " CA chain installed." -ForegroundColor Green
-    } else {
-        $chainP7bPath = Install-CAChainViaBrowser
-        if (-not $chainP7bPath) {
-            Write-Failure " CA chain not installed. certreq -accept would fail with UNTRUSTEDROOT."
-            return $false
-        }
-        Write-Host " CA chain installed." -ForegroundColor Green
-    }
-
-    # certreq -accept handles both .cer and .p7b; binds the issued cert to the private key in the CSP
-    certreq -accept $resolvedPath | Out-Host
+    # Binds the issued certificate to the private key created in Step1
+    certreq -accept $path
     if ($LASTEXITCODE -ne 0) {
-        Write-Failure "`n certreq -accept failed (exit code $LASTEXITCODE). The issued certificate could not be bound to its private key."
-        return $false
+        throw "certreq -accept failed (exit code $LASTEXITCODE). Step1 and Step2 must run on this computer with the same Windows account."
     }
 
-    $imported = Get-ChildItem Cert:\CurrentUser\My |
-        Where-Object {
-            $_.Thumbprint -eq $validation.Certificate.Thumbprint -and $_.HasPrivateKey
-        } |
-        Select-Object -First 1
-
-    if (-not $imported) {
-        Write-Warning "Certificate accepted, but no matching cert with a private key was found in CurrentUser\My. EAP authentication may fail."
+    $thumb = $issued.Leaf.Thumbprint
+    if (-not (Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.Thumbprint -eq $thumb -and $_.HasPrivateKey })) {
+        throw "The certificate was accepted but is not in CurrentUser\My with its private key, so EAP-TLS will fail. Run the script again from Step1."
     }
-    else {
-        Write-Host "`n Certificate installed to CurrentUser\Personal store (thumbprint $($imported.Thumbprint))." -ForegroundColor Green
-        Write-EnrollmentEvent -Message "EAP cert enrolled for $env:USERNAME on $env:COMPUTERNAME, thumbprint $($imported.Thumbprint), source file $resolvedPath"
-    }
+    Write-Host "`n Certificate installed to CurrentUser\Personal store (thumbprint $thumb)." -ForegroundColor Green
 
-    Move-UsedFilesToRecycleBin -ResolvedCertPath $resolvedPath -CAChainPath $chainP7bPath
-    Write-Host "`n Used files sent to user Recycle Bin." -ForegroundColor Green
-    return $true
+    try {
+        if (-not [Diagnostics.EventLog]::SourceExists($eventSource)) { New-EventLog -LogName Application -Source $eventSource }
+        Write-EventLog -LogName Application -Source $eventSource -EventId 1000 -EntryType Information `
+            -Message "EAP cert enrolled for $env:USERNAME on $env:COMPUTERNAME, thumbprint $thumb, source file $path"
+    }
+    catch { Write-Warning "Event log entry not written: $_" }
+
+    # Recycle Bin rather than delete, so the files can be restored
+    try {
+        Add-Type -AssemblyName Microsoft.VisualBasic
+        foreach ($file in $infPath, $csrPath, $path) {
+            if (Test-Path $file) {
+                [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($file, 'OnlyErrorDialogs', 'SendToRecycleBin')
+            }
+        }
+        Write-Host " Used files sent to user Recycle Bin." -ForegroundColor Green
+    }
+    catch { Write-Warning "Used files not moved to the Recycle Bin: $_" }
 }
 
-switch ($Step) {
-    'Step1' {
-        if (-not (Invoke-Step1)) { exit 1 }
+try {
+    $identity = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+    if (-not $identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        throw "Run this script from Windows PowerShell opened with 'Run as administrator'."
     }
-    'Step2' {
-        if (-not (Invoke-Step2)) { exit 1 }
-    }
-    'All' {
-        if (-not (Invoke-Step1)) { exit 1 }
 
-        $userInput = Read-Host "`n Once the certificate is downloaded, press ENTER to continue or Q to quit"
-        if ($userInput -match '^[Qq]$') {
-            Write-Host "`n Stopped after Step 1. You can later run: .\$scriptName -Step Step2" -ForegroundColor Yellow
+    if ($Step -ne 'Step2') { Invoke-Step1 }
+    if ($Step -eq 'All') {
+        $answer = Read-Host "`n Once certnew.p7b is downloaded, press ENTER to continue or Q to quit"
+        if ($answer -match '^[Qq]$') {
+            Write-Host " Stopped after Step1. Finish later with: .\$scriptName -Step Step2" -ForegroundColor Yellow
             exit 0
         }
-
-        if (-not (Invoke-Step2)) { exit 1 }
     }
+    if ($Step -ne 'Step1') { Invoke-Step2 }
+}
+catch {
+    Write-Host "`n $($_.Exception.Message)" -ForegroundColor Red
+    exit 1
 }
 ```
 
