@@ -262,8 +262,8 @@ The script shows these steps in Italian; the page labels are in English because 
 ###### Step 5 - Finish the installation
 
 1. Go back to the PowerShell window and press <strong>ENTER</strong>.
-2. The script finds the file in Downloads, checks it, installs the CA chain, and then the certificate.
-3. The enrollment is complete when the script shows <strong>Certificato installato nell'archivio Personale dell'utente</strong> and ends with <strong>Registrazione completata. Puoi chiudere questa finestra.</strong>
+2. The script explains in Italian what it is about to do, then finds the file in Downloads, checks it, installs the CA chain, and then the certificate. No other action is needed.
+3. The enrollment is complete when the script shows <strong>Certificato installato nell'archivio Personale dell'utente</strong> and then <strong>Registrazione completata</strong>, with how to check the certificate as in [[#Step 6 - Check the certificate|Step 6]].
 
 ###### Step 6 - Check the certificate
 
@@ -418,6 +418,15 @@ function Invoke-Step1 {
 
 function Invoke-Step2 {
     Write-Host "`n ==== Certificato NAC - Passo 2 di 2: installazione ====" -ForegroundColor Cyan
+    Write-Host @"
+
+ Ora lo script, senza altre azioni da parte tua:
+   1. cerca certnew.p7b nella cartella Download e lo controlla
+   2. installa su questo computer i certificati della CA Publiacqua
+   3. installa il tuo certificato e lo collega alla chiave privata creata nel passo 1
+   4. sposta nel Cestino i file usati
+ Attendi il messaggio 'Registrazione completata'.
+"@ -ForegroundColor Green
     $path = $CertPath
     if (-not $path) {
         # Newest .p7b in Downloads, saved after Step1 when Step1 ran in this session
@@ -472,7 +481,13 @@ function Invoke-Step2 {
     }
     catch { Write-Warning "File usati non spostati nel Cestino: $_" }
 
-    Write-Host "`n Registrazione completata. Puoi chiudere questa finestra." -ForegroundColor Green
+    Write-Host @"
+
+ Registrazione completata. Per verificare il certificato:
+   Win+R > digita certmgr.msc > INVIO > Personale > Certificati
+   (l'icona del tuo certificato mostra una piccola chiave)
+ Puoi chiudere questa finestra.
+"@ -ForegroundColor Green
 }
 
 try {
