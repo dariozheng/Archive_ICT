@@ -245,7 +245,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 
 The `Set-ExecutionPolicy` line lets scripts run in this window only: it does not change the computer's policy and ends when the window is closed.
 
-The script creates the request, lists the browser steps (the same as [[#Step 4 - Request the certificate in the browser|Step 4]]), and opens the page when you press <strong>ENTER</strong> at <strong>Premi INVIO per aprire la pagina nel browser</strong>. It then waits with <strong>Quando certnew.p7b è nella cartella Download premi INVIO per continuare (Q per uscire)</strong>. <mark style="background: #FFB86CA6;">Leave the PowerShell window open.</mark>
+The script creates the request, lists the browser steps (the same as [[#Step 4 - Request the certificate in the browser|Step 4]]), and opens the page when you press <strong>ENTER</strong> at <strong>Premi INVIO per aprire la pagina nel browser</strong>. It then waits with <strong>Quando certnew.p7b è nella cartella Download, premi INVIO per avviare il passo 2 (Q per uscire)</strong>: Step2 starts only when you press <strong>ENTER</strong>. <mark style="background: #FFB86CA6;">Leave the PowerShell window open.</mark>
 
 ###### Step 4 - Request the certificate in the browser
 
@@ -257,7 +257,7 @@ The script shows these steps in Italian; the page labels are in English because 
 4. Leave <strong>Additional Attributes</strong> empty and click <strong>Submit</strong>.
 5. On <strong>Certificate Issued</strong> select <strong>Base 64 encoded</strong> and click <strong>Download certificate chain</strong>. This saves <strong>certnew.p7b</strong>, which holds your certificate and the CA chain. Do not use <strong>Download certificate</strong>: that <strong>.cer</strong> file has no CA chain and the script rejects it.
 6. Save the file in the <strong>Downloads</strong> folder, the browser default; if the browser asks, keep the file. Do not open it or double-click it.
-7. Go back to the PowerShell window for Step2.
+7. Go back to the PowerShell window and press <strong>ENTER</strong> to start Step2 (if you started with `-Step Step1`, run `-Step Step2` instead).
 
 ###### Step 5 - Finish the installation
 
@@ -399,6 +399,8 @@ function Invoke-Step1 {
         Write-Host "`n Appunti non disponibili: apri $csrPath con Blocco note e copia tutto il testo." -ForegroundColor Yellow
     }
 
+    # With -Step Step1 the script ends here, so Step2 is started by running the script again
+    $startStep2 = if ($Step -eq 'All') { 'e premi INVIO per avviare il passo 2' } else { "ed esegui .\$scriptName -Step Step2" }
     Write-Host @"
 
  Nella pagina che si apre nel browser:
@@ -410,7 +412,7 @@ function Invoke-Step1 {
       'Download certificate chain' (NON su 'Download certificate')
    6. Salva il file certnew.p7b nella cartella Download ($downloadsDir).
       Se il browser chiede conferma, scegli di mantenere il file
-   7. Torna in questa finestra per il passo 2
+   7. Torna in questa finestra $startStep2
 "@ -ForegroundColor Green
     [void](Read-Host "`n Premi INVIO per aprire la pagina nel browser")
     Start-Process $caUrl
@@ -497,11 +499,8 @@ try {
     }
 
     if ($Step -ne 'Step2') { Invoke-Step1 }
-    if ($Step -eq 'Step1') {
-        Write-Host "`n Dopo aver scaricato certnew.p7b esegui: .\$scriptName -Step Step2" -ForegroundColor Yellow
-    }
     if ($Step -eq 'All') {
-        $answer = Read-Host "`n Quando certnew.p7b è nella cartella Download premi INVIO per continuare (Q per uscire)"
+        $answer = Read-Host "`n Quando certnew.p7b è nella cartella Download, premi INVIO per avviare il passo 2 (Q per uscire)"
         if ($answer -match '^[Qq]$') {
             Write-Host " Interrotto dopo il passo 1. Per completare più tardi esegui: .\$scriptName -Step Step2" -ForegroundColor Yellow
             exit 0
