@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "FasNetworkWired",
       "SiCisco",
       "SiWindows",
       "FasServer",
-      "LiLock",
-      "FasUserSecret"
+      "LiLock"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -391,5 +391,9 @@
   "0 - Notes/Router 1.md": {
     "iconName": "FasNetworkWired",
     "iconColor": null
+  },
+  "0 - Notes/PBA - NAC - Presentazione.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
   }
 }
