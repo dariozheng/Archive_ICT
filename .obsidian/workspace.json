@@ -46,7 +46,7 @@
               "type": "markdown",
               "state": {
                 "file": "0 - Notes/PBA - NAC - Presentazione.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -256,8 +256,9 @@
   },
   "active": "372d643502475ffb",
   "lastOpenFiles": [
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "0 - Notes/Enroll-EAPAdminCert-guide-IT.md",
     "0 - Notes/PBA - NAC - Presentazione.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "0 - Notes/VLANs.md",
     "0 - Notes/Web-Based Enterprise Management.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
@@ -269,7 +270,6 @@
     "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/Enroll-EAPAdminCert-guide-IT.md",
     "0 - Notes/Enroll-EAPAdminCert-guide-EN.md",
     "0 - Notes/nftables.md",
     "0 - Notes/Border Gateway Protocol.md",
