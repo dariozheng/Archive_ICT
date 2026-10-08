@@ -4,6 +4,7 @@ categories:
   - "[[Security]]"
 topic@networking:
   - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
+  - "[[Cisco ISE|Cisco ISE]]"
 topic@security:
   - "[[NAC]]"
 tags:
