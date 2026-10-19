@@ -43,14 +43,12 @@
             "id": "372d643502475ffb",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "excalidraw",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Presentazione.md",
-                "mode": "preview",
-                "source": false
+                "file": "1 - Excalidraw/PBA - NAC - Configuration Flow.md"
               },
-              "icon": "lucide-file",
-              "title": "PBA - NAC - Presentazione"
+              "icon": "excalidraw-icon",
+              "title": "PBA - NAC - Configuration Flow"
             }
           },
           {
@@ -59,12 +57,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
+                "file": "0 - Notes/VLANs.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - NAC - Network Access Devices"
+              "title": "VLANs"
             }
           },
           {
@@ -82,7 +80,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -167,7 +165,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Presentazione.md",
+                "file": "0 - Notes/VLANs.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
@@ -282,30 +280,35 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "46a1071b40a98157",
   "lastOpenFiles": [
-    "0 - Notes/Presentazione NAC.md",
-    "0 - Notes/PBA - NAC - Presentazione.md",
-    "0 - Notes/Flusso.md",
-    "0 - Notes/Router 1.md",
-    "0 - Notes/Server Name Indication.md",
-    "0 - Notes/Routing.md",
-    "0 - Notes/I2P.md",
-    "0 - Notes/IPv6.md",
-    "attachments/Pasted image 20260511145530.png",
+    "0 - Notes/User-ID™.md",
+    "0 - Notes/VLANs.md",
+    "0 - Notes/UFW.md",
+    "0 - Notes/VXLAN.md",
+    "0 - Notes/VRF.md",
+    "0 - Notes/WireGuard.md",
+    "0 - Notes/Windows Remote Management Protocol.md",
+    "0 - Notes/Web-Based Enterprise Management.md",
+    "0 - Notes/netfilter.md",
+    "0 - Notes/Wireless.md",
+    "0 - Notes/nftables.md",
+    "0 - Notes/Border Gateway Protocol.md",
+    "0 - Notes/Backhaul.md",
+    "0 - Notes/Autonomous Digital Experience Management.md",
+    "0 - Notes/Autonomous System.md",
+    "0 - Notes/BGP Configuration commands.md",
+    "0 - Notes/PBA - Guest Network.md",
+    "0 - Notes/Device-ID.md",
     "0 - Notes/Crawler.md",
-    "0 - Notes/Certificates - Palo Alto.md",
-    "VM90 NETWORK/09 - Verification Playbook.md",
-    "VM90 NETWORK/08 - Findings and Cleanup.md",
-    "VM90 NETWORK/05 - Tags 80 and 800.md",
-    "VM90 NETWORK/01 - Primer - VRF RD RT and BGP.md",
-    "VM90 NETWORK/00 - MOC - VM90-IP-CORE1 Routing.md",
-    "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "Homepage.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "2 - Categories/Topics/Networking/Cisco ISE.md",
-    "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
-    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/AWS Networking.md",
+    "0 - Notes/Active Directory Certificate Services.md",
+    "0 - Notes/Windows Management Instrumentation.md",
+    "0 - Notes/Site-to-Site VPN - Palo Alto.md",
+    "0 - Notes/Script To Remove Expired userCertificate.md",
+    "0 - Notes/Microsoft Remote Procedure Call.md",
+    "0 - Notes/Dynu DDNS.md",
+    "attachments/Pasted image 20260511145530.png",
     "attachments/nac-07-onboarding.svg",
     "attachments/nac-06-ise-non-raggiungibile.svg",
     "attachments/nac-05-ciclo-certificati.svg",
@@ -315,11 +318,6 @@
     "attachments/nac-01-panoramica.svg",
     "attachments/nac-01-panoramica.png",
     "attachments/nac-05-ciclo-certificati.png",
-    "0 - Notes/PBA - NAC - ISE Server.md",
-    "0 - Notes/Enroll-EAPAdminCert-guide-IT.md",
-    "0 - Notes/VLANs.md",
-    "0 - Notes/Web-Based Enterprise Management.md",
-    "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "3 - Templates/Bases/Homepage.base",
     "VM90 NETWORK",
     "VM90 NETWORK",

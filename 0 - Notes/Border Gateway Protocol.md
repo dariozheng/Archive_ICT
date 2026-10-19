@@ -442,9 +442,11 @@ Dynamic route summarization is accomplished with the BGP address family configur
 The figure removes the flapping serial link between R1 and R3 to demonstrate BGP route summarization and the effect of the <strong>aggregate-address</strong> command. 
 
 ![[Pasted image 20260831144427.png]]
+
 This example shows the BGP tables for R1, R2, and R3 before route summarization is performed. R1’s stub networks (172.16.1.0/24, 172.16.2.0/24, and 172.16.3.0/24) are advertised through all the autonomous systems, along with the loopback addresses of R1, R2, and R3 (192.168.1.1/32, 192.168.2.2/32, and 192.168.3.3/32) and the peering links (10.12.1.0/24 and 10.23.1.0/24).
 
 ![[Pasted image 20260831145119.png]]
+
 R1 aggregates all the stub networks (172.16.1.0/24, 172.16.2.0/24, and 172.16.3.0/24) into a 172.16.0.0/20 summary route. R2 summarizes all of the router’s loopback addresses into a 192.168.0.0/16 summary route. The example shows the configuration for R1 using the default IPv4 address family and R2 with the default IPv4 address family disabled.
 
 ![[Pasted image 20260831160345.png]]
