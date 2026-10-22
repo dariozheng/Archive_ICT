@@ -45,12 +45,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
-                "mode": "source",
+                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PBA - NAC - Network Access Devices"
+              "title": "Cisco ISE"
             }
           }
         ],
@@ -115,15 +115,16 @@
             "state": {
               "type": "notebook-navigator",
               "state": {},
-              "icon": "notebook-navigator",
-              "title": "Notebook Navigator"
+              "icon": "lucide-ghost",
+              "title": "notebook-navigator"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 241.50260543823242
+    "width": 241.50260543823242,
+    "collapsed": true
   },
   "right": {
     "id": "8ded5475b75f4577",
@@ -139,7 +140,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "0 - Notes/PBA - NAC - Network Access Devices.md",
+                "file": "2 - Categories/Topics/Networking/Cisco ISE.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
@@ -230,7 +231,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -253,13 +255,17 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "372d643502475ffb",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
-    "0 - Notes/PBA - NAC - Presentazione.md",
-    "0 - Notes/PBA - NAC - Network Access Devices.md",
-    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/PBA - NAC - Microsoft Servers.md",
+    "2 - Categories/Topics/Networking/Cisco ISE.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "Homepage.md",
+    "2 - Categories/Topics/Security/NAC.md",
+    "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/PBA - NAC - Presentazione.md",
     "0 - Notes/VLANs.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/UFW.md",
@@ -277,10 +283,6 @@
     "0 - Notes/Autonomous System.md",
     "0 - Notes/BGP Configuration commands.md",
     "0 - Notes/PBA - Guest Network.md",
-    "0 - Notes/Device-ID.md",
-    "0 - Notes/Crawler.md",
-    "0 - Notes/AWS Networking.md",
-    "0 - Notes/Active Directory Certificate Services.md",
     "attachments/Pasted image 20260511145530.png",
     "attachments/nac-07-onboarding.svg",
     "attachments/nac-06-ise-non-raggiungibile.svg",
