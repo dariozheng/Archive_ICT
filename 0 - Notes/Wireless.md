@@ -7,7 +7,7 @@ tags:
   - category/networking/networking_general
 icon: FasNetworkWired
 iconColor:
-last_update:
+last_update: 2026-11-12
 ---
 Enterprise wireless networking replaces the standalone access point with a controller-based design, where a central Wireless LAN Controller (WLC) manages a fleet of lightweight access points (APs) as a single system. Rather than configuring each AP by hand, an administrator defines wireless policy once on the controller and pushes it to every AP that matches. This note covers the Cisco enterprise model built around the Catalyst 9800 controller: how the AP and controller divide responsibility, how they communicate over CAPWAP, how APs forward client traffic, and how the controller manages radio frequency, roaming, and security across the whole deployment.
 

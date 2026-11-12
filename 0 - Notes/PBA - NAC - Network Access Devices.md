@@ -4,7 +4,6 @@ categories:
   - "[[Security]]"
 topic@networking:
   - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
-  - "[[Cisco ISE|Cisco ISE]]"
 topic@security:
   - "[[NAC]]"
 tags:
@@ -26,13 +25,14 @@ Network Access Devices are the point of access for an endpoint and the main enfo
 NAD types include the following:
 
 - Access switch
-- [[Wireless]] LAN controller (WLC)
+- [[Wireless LAN controller (WLC)]]
 - Cisco Adaptive Security Appliance (ASA)
 - Cisco Firepower device
 - Load balancer
 - Software application that uses ISE for AAA
 
-This note covers the only NAD type deployed here: the Catalyst access switches, provisioned by Cisco DNA Center. Each switch plays two distinct roles — it is a managed device whose administrators log in through management RADIUS, and an ISE enforcement point for the endpoints plugged into it. 
+This note covers the only NAD type deployed here: the Catalyst access switches, provisioned by Cisco DNA Center. 
+Each switch plays two distinct roles — it is a managed device whose administrators log in through management RADIUS, and an ISE enforcement point for the endpoints plugged into it. 
 
 ## Initial Configuration
 
