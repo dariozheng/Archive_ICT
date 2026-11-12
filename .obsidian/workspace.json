@@ -254,14 +254,15 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "0aa7a519a475b13e",
+  "active": "372d643502475ffb",
   "lastOpenFiles": [
+    "0 - Notes/NAC-Timeline_v25.xlsx",
+    "Homepage.md",
     "0 - Notes/Wireless.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
     "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
-    "Homepage.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
@@ -281,7 +282,6 @@
     "0 - Notes/Autonomous Digital Experience Management.md",
     "0 - Notes/Autonomous System.md",
     "0 - Notes/BGP Configuration commands.md",
-    "0 - Notes/PBA - Guest Network.md",
     "attachments/Pasted image 20260511145530.png",
     "attachments/nac-07-onboarding.svg",
     "attachments/nac-06-ise-non-raggiungibile.svg",
@@ -301,7 +301,6 @@
     "3 - Templates/Bases/Topics/test",
     "2 - Categories/Topics/test",
     "3 - Templates/Categories",
-    "3 - Templates/Bases/Topics/Test/test test.base",
     "Untitled.canvas"
   ]
 }

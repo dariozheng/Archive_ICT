@@ -56,16 +56,8 @@ ip ssh source-interface Vlan800
 vlan 800
  name LAN-MGMT
 !
-vlan 805
- name LAN-GUEST-ACCESS
-!
 interface Vlan800
  description LAN-MGMT
- ip address <IP-ADDRESS> <SUBNET-MASK>
- no shutdown
-!
-interface Vlan805
- description GUEST-INTERCEPT-SVI
  ip address <IP-ADDRESS> <SUBNET-MASK>
  no shutdown
 !
@@ -77,7 +69,6 @@ interface <UPLINK-INTERFACE>
  switchport trunk allowed vlan add 800
 !
 aaa new-model
-!
 !
 !
 !
@@ -105,7 +96,6 @@ aaa session-id common
 !
 line vty 0 4
  transport input ssh
- login authentication default
 !
 !
 !
@@ -118,11 +108,6 @@ end
 write memory
 !
 ```
-
-Two details worth knowing when applying this block by hand:
-
-- With `aaa new-model` enabled, the legacy `login local` line command is not accepted on the VTYs — authentication comes from the `default` method list (RADIUS with local fallback), so the explicit `login authentication default` shown above is optional but harmless.
-- Paste order matters: `ip ssh source-interface Vlan800` may be rejected if entered before `interface Vlan800` exists. If pasting the block top to bottom, verify afterwards that the source-interface lines were applied.
 
 ## General Configuration
 
