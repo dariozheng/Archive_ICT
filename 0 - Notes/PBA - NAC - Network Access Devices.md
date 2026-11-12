@@ -401,19 +401,35 @@ address-family ipv6
 exit-address-family
 ```
 
+#### vtp mode transparent
 
-VTP transparent keeps the VLAN database local to each switch — no domain-wide VLAN propagation — and Rapid PVST+ is the spanning-tree flavor in use.
+Disables VTP VLAN synchronization on the switch while still allowing VTP advertisements to pass through to downstream switches.
+
+VTP transparent keeps the VLAN database local to each switch.
 
 ```bash
 vtp mode transparent
-!
+```
+
+#### spanning-tree mode rapid-pvst
+
+Enables Rapid Per-VLAN Spanning Tree Plus, which should be already the default. 
+
+Embeds the 12-bit VLAN ID into the Spanning Tree Bridge ID priority field. This is mandatory when using rapid-pvst (and is enabled by default on almost all modern Cisco switches) so the switch can run independent STP instances per VLAN using a single base MAC address.
+
+```bash
 spanning-tree mode rapid-pvst
 spanning-tree extend system-id
 ```
 
+#### VLAN
+
 The site VLAN plan declares 800 (management — where RADIUS, SNMP, syslog and NTP are sourced), 802 (the client data VLAN endpoints are authorized into) and 805 (the guest VLAN used by [[#Centralized Web Authentication (CWA) for Guests|CWA]]), alongside the printer, thin-client, wireless, badge-reader, VoIP and admin segments.
 
 ```bash
+vlan 10
+ name OLD-LAN-STAMPANTI
+!
 vlan 800
  name LAN-MGMT
 !
@@ -424,13 +440,13 @@ vlan 802
  name LAN-CLIENT
 !
 vlan 803
- name LAN-THIN-CLIENT
+ name LAN-ADMIN
 !
 vlan 804
  name WLAN-CLIENT
 !
 vlan 805
- name LAN-GUEST-ACCESS
+ name LAN-GUEST
 !
 vlan 806
  name WLAN-MGMT
@@ -442,13 +458,12 @@ vlan 812
  name LAN-VOIP
 !
 vlan 830
- name WLAN-MGMNT-AP
-!
-vlan 850
- name LAN-ADMIN
+ name WLAN-MGMT-AP
 ```
 
-<strong>Vlan1</strong> is shut down as unused, the management SVI drops ICMP redirects/unreachables and proxy-ARP as basic hardening, and the guest intercept SVI gives the switch the Layer-3 presence that [[#Guest Intercept SVI|CWA interception]] requires.
+### SVI
+
+<strong>Vlan1</strong> is shut down as unused, the management SVI (Vlan800) drops ICMP redirects/unreachables and proxy-ARP as basic hardening.
 
 ```bash
 interface Vlan1
@@ -463,11 +478,30 @@ interface Vlan800
  no ip route-cache
  no shutdown
 !
-interface Vlan805
- description GUEST-INTERCEPT-SVI
- no shutdown
-!
 ```
+
+#### local credentials 
+
+```bash
+enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
+username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
+```
+
+#### SSH
+
+- `ip ssh time-out 30`: Disables legacy, insecure SSHv1 and forces all management sessions to use SSHv2.
+- `ip ssh time-out 30`: Sets the pre-login authentication timeout to **30 seconds** (down from the 120-second default). If a user or bot connects over SSH and does not finish authenticating within 30 seconds, the switch drops the session to free up VTY resources.
+- `ip ssh bulk-mode 131072`: Increases the SSH receive window size to 128 KB (131,072 bytes) for bulk data transfers. This dramatically speeds up SCP/SFTP file copies (such as uploading IOS-XE firmware images to the switch).
+- `ip ssh source-interface Vlan800`: Forces any outbound SSH connections initiated _from_ the switch to use the IP address of `Vlan800` as their source IP, ensuring consistent firewall rules and TACACS+/RADIUS accounting.
+
+```bash
+ip ssh version 2
+ip ssh time-out 30
+ip ssh bulk-mode 131072
+ip ssh source-interface Vlan800
+```
+
+#### 
 
 
 The management RADIUS server used for administrator logins — the RADSERV plane described in [[#Two AAA Planes — RADSERV vs ISESERV|Two AAA Planes]]. Note the aggressive `timeout 2`: an admin login should fail over to the local account quickly, unlike the more patient ISE timers.
