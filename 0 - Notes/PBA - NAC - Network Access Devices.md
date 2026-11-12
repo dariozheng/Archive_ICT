@@ -331,7 +331,7 @@ line vty 5 15
 
 Baseline settings shared by every NAD, mirroring what the [[#DNA - PBA BASIC|DNA - PBA BASIC]] template enforces. Each block below is one functional area.
 
-#### `service timestamps log datetime msec localtime show-timezone year`
+#### service timestamps log datetime msec localtime show-timezone year
 
 This command controls the timestamps at the start of every log message:
 
@@ -347,20 +347,45 @@ This command controls the timestamps at the start of every log message:
 EX.
 `Nov 12 2026 15:03:21.457 CET: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/5, changed state to up`
 
-#### `service password-encryption `
+#### service password-encryption 
 
 The `service password-encryption` command encrypts all current and future plain-text passwords inside a Cisco switch's configuration file. 
 The encryption is a weak <strong>Type 7 encryption</strong>, it should be considered a basic first encryption layer and not the default encryption for all password as it can be easily broken.
 
-#### `key config-key password-encrypt {{ MASTER_KEY }}`
+#### key config-key password-encrypt {{ MASTER_KEY }}
 
 The `key config-key password-encrypt` command defines a <strong>master key</strong> used by Cisco IOS/IOS-XE to strongly encrypt sensitive passwords (<strong>Type 6</strong>) inside the configuration file.
 This command just define the master key, to use it, use the command [[#password encryption aes]].
 
-#### `password encryption aes`
+#### password encryption aes
 
 `password encryption aes` globally activates <strong>Type 6 AES encryption</strong> on a Cisco IOS/IOS-XE switch, converting eligible plain-text and weak Type 7 passwords into strong encrypted strings. 
 It requires key [[#`key config-key password-encrypt {{ MASTER_KEY }}`]] to be configured first so the switch has a master key to lock and unlock those credentials.
+
+#### Timezone
+
+Timezone and DST rules for Italy. An accurate clock matters here: certificate validity checks during EAP-TLS and the correlation of switch syslog with ISE Live Logs both assume the switch and ISE agree on the time.
+
+```bash
+clock timezone CET 1 0
+clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
+```
+
+#### ip name-server
+
+The DNS used by the switch.
+
+```bash
+ip name-server 10.140.4.250 10.139.109.54
+```
+
+#### ip domain name
+
+Definition of the domain name.
+
+```
+ip domain name publiacqua.it
+```
 
 #### Mgmt-vrf
 
@@ -374,15 +399,6 @@ exit-address-family
 !
 address-family ipv6
 exit-address-family
-```
-
-#### Timezone
-
-Timezone and DST rules for Italy. An accurate clock matters here: certificate validity checks during EAP-TLS and the correlation of switch syslog with ISE Live Logs both assume the switch and ISE agree on the time.
-
-```bash
-clock timezone CET 1 0
-clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
 ```
 
 
@@ -453,12 +469,6 @@ interface Vlan805
 !
 ```
 
-DNS resolvers and the domain name — the latter is also a prerequisite for generating the SSH RSA keys.
-
-```bash
-ip name-server 10.140.4.250 10.140.4.252 172.20.129.250 172.20.129.252
-ip domain name publiacqua.it
-```
 
 The management RADIUS server used for administrator logins — the RADSERV plane described in [[#Two AAA Planes — RADSERV vs ISESERV|Two AAA Planes]]. Note the aggressive `timeout 2`: an admin login should fail over to the local account quickly, unlike the more patient ISE timers.
 
