@@ -109,16 +109,260 @@ write memory
 !
 ```
 
+## DNA - PBA BASIC
+
+The DNA Center provisioning template that enforces the [[#Initial Configuration|initial]] and [[#General Configuration|general]] baseline fleet-wide. `{{ variable }}` placeholders are filled per device at provisioning time, `{% ... %}` blocks are template logic, and lines between `! @start-ignore-compliance` and `! @end-ignore-compliance` are excluded from DNA Center's compliance check (used for commands the switch rewrites or does not echo back verbatim). 
+
+```bash
+! Base Configuration
+!
+!
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+!
+!
+!
+service password-encryption 
+! @start-ignore-compliance
+key config-key password-encrypt {{ MASTER_KEY }}
+! @end-ignore-compliance
+password encryption aes
+!
+!
+!
+clock timezone CET 1 0
+clock summer-time CEST recurring last Sun Mar 2:00 last Sun Oct 3:00
+!
+!
+!
+ip name-server 10.140.4.250 10.139.109.54
+ip domain name publiacqua.it
+!
+!
+!
+vrf definition Mgmt-vrf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+vtp mode transparent
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+!
+!
+vlan 10
+ name OLD-LAN-STAMPANTI
+!
+vlan 800
+ name LAN-MGMT
+!
+vlan 801
+ name LAN-STAMPANTI
+!
+vlan 802
+ name LAN-CLIENT
+!
+vlan 803
+ name LAN-ADMIN
+!
+vlan 804
+ name WLAN-CLIENT
+!
+vlan 805
+ name LAN-GUEST
+!
+vlan 806
+ name WLAN-MGMT
+!
+vlan 808
+ name LAN-TIMBRATORI
+!
+vlan 812
+ name LAN-VOIP
+!
+vlan 830
+ name WLAN-MGMT-AP
+!
+!
+!
+interface Vlan1
+ no ip address
+ no ip route-cache
+ shutdown
+!
+interface Vlan800
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ no ip route-cache
+ no shutdown
+!
+!
+!
+enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
+username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
+!
+!
+!
+! @start-ignore-compliance
+ip ssh version 2
+! @end-ignore-compliance
+ip ssh time-out 30
+ip ssh bulk-mode 131072
+ip ssh source-interface Vlan800
+!
+!
+!
+snmp-server community publiacqua RO
+snmp-server community publiacquarw RW
+snmp-server trap-source Vlan800
+snmp-server contact operationcenter@publiacqua.it
+!
+!
+!
+logging facility local6
+logging source-interface Vlan800
+logging host 10.140.2.181
+logging host 10.140.2.24
+logging host 10.139.108.10
+!
+!
+!
+ntp source Vlan800
+ntp server 172.20.129.64
+ntp server 172.20.129.65 prefer
+!
+!
+!
+service call-home
+!
+call-home
+ contact-email-addr operationcenter@publiacqua.it
+ source-interface Vlan800
+ no http secure server-identity-check
+ profile "CiscoTAC-1"
+  active
+  destination transport-method http
+!
+!
+!
+udld aggressive
+errdisable recovery cause udld
+errdisable recovery interval 90
+diagnostic bootup level minimal
+!
+!
+!
+aaa new-model
+!
+radius server radius-mgmnt-auth01
+ address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 3
+ key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK`]SETi`CKGAAB
+!
+!
+!
+aaa group server radius RADSERV
+ server name radius-mgmnt-auth01
+ deadtime 15
+ ip radius source-interface Vlan800
+!
+!
+!
+aaa authentication login default group RADSERV local-case 
+aaa authentication login console local-case
+aaa authentication login HTTPSRV group RADSERV local-case
+!
+aaa authentication enable default enable
+!
+aaa authorization exec default group RADSERV local if-authenticated
+aaa authorization exec HTTPSRV group RADSERV if-authenticated
+!
+aaa accounting exec default start-stop group RADSERV
+aaa session-id common 
+login on-success log
+!
+!
+!
+ip http server
+ip http secure-server
+ip http secure-active-session-modules none
+ip http active-session-modules none
+ip http authentication aaa login-authentication HTTPSRV
+ip http client source-interface Vlan800
+!
+!
+!
+line con 0
+ session-timeout 5
+ exec-timeout 30 0
+ privilege level 15
+ logging synchronous
+ login authentication console
+ transport preferred none
+ stopbits 1
+line vty 0 4
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
+ transport preferred none
+line vty 5 15
+ session-timeout 60
+ exec-timeout 60 0
+ logging synchronous
+ history size 64
+ transport input ssh
+ transport preferred none
+!
+!
+!
+```
+
 ## General Configuration
 
 Baseline settings shared by every NAD, mirroring what the [[#DNA - PBA BASIC|DNA - PBA BASIC]] template enforces. Each block below is one functional area.
 
-Timezone and DST rules for Italy. An accurate clock matters here: certificate validity checks during EAP-TLS and the correlation of switch syslog with ISE Live Logs both assume the switch and ISE agree on the time.
+#### `service timestamps log datetime msec localtime show-timezone year`
 
-```bash
-clock timezone CET 1 0
-clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
-```
+This command controls the timestamps at the start of every log message:
+
+| Keyword                  | What it does                                                                                    |
+| ------------------------ | ----------------------------------------------------------------------------------------------- |
+| `service timestamps log` | Puts a timestamp on log/syslog messages                                                         |
+| `datetime`               | Uses the date and time, instead of “time since boot” (`uptime`)                                 |
+| `msec`                   | Adds milliseconds, which helps put events that happen within the same second in the right order |
+| `localtime`              | Uses your `clock timezone` / `summer-time` settings instead of UTC                              |
+| `show-timezone`          | Prints the zone name (CET or CEST)                                                              |
+| `year`                   | Adds the year                                                                                   |
+
+EX.
+`Nov 12 2026 15:03:21.457 CET: %LINK-3-UPDOWN: Interface GigabitEthernet1/0/5, changed state to up`
+
+#### `service password-encryption `
+
+The `service password-encryption` command encrypts all current and future plain-text passwords inside a Cisco switch's configuration file. 
+The encryption is a weak <strong>Type 7 encryption</strong>, it should be considered a basic first encryption layer and not the default encryption for all password as it can be easily broken.
+
+#### `key config-key password-encrypt {{ MASTER_KEY }}`
+
+The `key config-key password-encrypt` command defines a <strong>master key</strong> used by Cisco IOS/IOS-XE to strongly encrypt sensitive passwords (<strong>Type 6</strong>) inside the configuration file.
+This command just define the master key, to use it, use the command [[#password encryption aes]].
+
+#### `password encryption aes`
+
+`password encryption aes` globally activates <strong>Type 6 AES encryption</strong> on a Cisco IOS/IOS-XE switch, converting eligible plain-text and weak Type 7 passwords into strong encrypted strings. 
+It requires key [[#`key config-key password-encrypt {{ MASTER_KEY }}`]] to be configured first so the switch has a master key to lock and unlock those credentials.
+
+#### Mgmt-vrf
 
 <strong>Mgmt-vrf</strong> is the built-in [[VRF]] of the dedicated out-of-band management port; it is declared so the configuration is complete and compliant even though management actually happens in-band over [[VLANs|VLAN]] 800.
 
@@ -131,6 +375,16 @@ exit-address-family
 address-family ipv6
 exit-address-family
 ```
+
+#### Timezone
+
+Timezone and DST rules for Italy. An accurate clock matters here: certificate validity checks during EAP-TLS and the correlation of switch syslog with ISE Live Logs both assume the switch and ISE agree on the time.
+
+```bash
+clock timezone CET 1 0
+clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
+```
+
 
 VTP transparent keeps the VLAN database local to each switch — no domain-wide VLAN propagation — and Rapid PVST+ is the spanning-tree flavor in use.
 
@@ -318,223 +572,6 @@ Persist the configuration:
 ```bash
 end
 write memory
-!
-```
-
-## DNA - PBA BASIC
-
-The DNA Center provisioning template that enforces the [[#Initial Configuration|initial]] and [[#General Configuration|general]] baseline fleet-wide. `{{ variable }}` placeholders are filled per device at provisioning time, `{% ... %}` blocks are template logic, and lines between `! @start-ignore-compliance` and `! @end-ignore-compliance` are excluded from DNA Center's compliance check (used for commands the switch rewrites or does not echo back verbatim). The empty `{% block interfaces %}` renders nothing here — [[#DNA - PBA NAC|DNA - PBA NAC]] carries the populated version of the same block.
-
-```bash
-!
-service password-encryption 
-service call-home
-!
-!
-!
-vrf definition Mgmt-vrf
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
-!
-!
-!
-clock timezone CET 1 0
-clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
-!
-!
-!
-ip name-server 10.140.4.250 10.140.4.252 172.20.129.250 172.20.129.252
-ip domain name publiacqua.it
-!
-!
-!
-enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
-!
-username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
-!
-!
-!
-! @start-ignore-compliance
-ip ssh version 2
-! @end-ignore-compliance
-ip ssh time-out 30
-ip ssh bulk-mode 131072
-ip ssh source-interface Vlan800
-!
-!
-!
-aaa new-model
-!
-radius server radius-mgmnt-auth01
- address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
- timeout 2
- retransmit 3
- key 7 11593A0C2411241F37192474
-!
-!
-!
-ip radius source-interface Vlan800
-!
-!
-!
-aaa group server radius RADSERV
- server name radius-mgmnt-auth01
- deadtime 15
- ip radius source-interface Vlan800
-!
-!
-!
-aaa authentication login default group RADSERV local-case 
-aaa authentication login console local-case
-aaa authentication login HTTPSRV group RADSERV local-case
-!
-aaa authentication enable default enable
-!
-aaa authorization exec default group RADSERV if-authenticated
-aaa authorization exec HTTPSRV group RADSERV if-authenticated
-!
-aaa accounting exec default start-stop group RADSERV
-!
-aaa session-id common 
-!
-login on-success log
-!
-!
-!
-netconf-yang
-!
-!
-!
-vtp mode transparent
-!
-spanning-tree mode rapid-pvst
-spanning-tree extend system-id
-!
-!
-!
-vlan 800
- name LAN-MGMT
-!
-vlan 801
- name LAN-STAMPANTI
-!
-vlan 802
- name LAN-CLIENT
-!
-vlan 803
- name LAN-THIN-CLIENT
-!
-vlan 804
- name WLAN-CLIENT
-!
-vlan 805
- name LAN-GUEST-ACCESS
-!
-vlan 806
- name WLAN-MGMT
-!
-vlan 808
- name LAN-TIMBRATORI
-!
-vlan 812
- name LAN-VOIP
-!
-vlan 830
- name WLAN-MGMNT-AP
-!
-vlan 850
- name LAN-ADMIN
-!
-!
-!
-{% block interfaces %}
-{% endblock %}
-!
-!
-!
-interface Vlan1
- no ip address
- no ip route-cache
- shutdown
-!
-interface Vlan800
- no ip redirects
- no ip unreachables
- no ip proxy-arp
- no ip route-cache
- no shutdown
-!
-!
-!
-snmp-server community publiacqua RO
-snmp-server community publiacquarw RW
-snmp-server trap-source Vlan800
-snmp-server location {{ SNMPLocation }}
-snmp-server contact operationcenter@publiacqua.it
-!
-!
-!
-logging facility local6
-logging source-interface Vlan800
-logging host 10.140.2.181
-logging host 10.140.2.24
-logging host 10.139.108.10
-!
-!
-!
-ntp source Vlan800
-ntp server 172.20.129.64
-ntp server 172.20.129.65 prefer
-!
-!
-!
-ip http server
-ip http secure-server
-ip http secure-active-session-modules none
-ip http active-session-modules none
-ip http authentication aaa login-authentication HTTPSRV
-ip http client source-interface Vlan800
-ip forward-protocol nd
-!
-!
-!
-errdisable recovery cause udld
-errdisable recovery interval 90
-!
-diagnostic bootup level minimal
-!
-!
-!
-line con 0
- session-timeout 5
- exec-timeout 30 0
- privilege level 15
- logging synchronous
- login authentication console
- stopbits 1
-line vty 0 4
- session-timeout 60
- exec-timeout 60 0
- logging synchronous
- history size 64
- transport input ssh
-line vty 5 15
- session-timeout 60
- exec-timeout 60 0
- logging synchronous
- history size 64
- transport input ssh
-!
-!
-!
-end
-! @start-ignore-compliance
-wr 
-! @end-ignore-compliance
 !
 ```
 

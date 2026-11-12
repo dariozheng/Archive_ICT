@@ -230,8 +230,7 @@
               "title": "All properties"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -256,18 +255,18 @@
   },
   "active": "372d643502475ffb",
   "lastOpenFiles": [
-    "0 - Notes/NAC-Timeline_v25.xlsx",
-    "Homepage.md",
-    "0 - Notes/Wireless.md",
+    "0 - Notes/VLANs.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "Homepage.md",
+    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
+    "0 - Notes/NAC-Timeline_v25.xlsx",
+    "0 - Notes/Wireless.md",
     "2 - Categories/Topics/Security/NAC.md",
     "0 - Notes/PBA - NAC - ISE Server.md",
     "0 - Notes/PBA - NAC - Microsoft Servers.md",
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
-    "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/PBA - NAC - Presentazione.md",
-    "0 - Notes/VLANs.md",
     "0 - Notes/User-ID™.md",
     "0 - Notes/UFW.md",
     "0 - Notes/VXLAN.md",
