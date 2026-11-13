@@ -672,60 +672,92 @@ The more specific named rule list (`console`) win the broader default login meth
 
 `aaa authentication login HTTPSRV group RADSERV local-case` creates a named authentication list (`HTTPSRV`) for web UI / RESTCONF access (`ip http authentication aaa login-authentication HTTPSRV`). Just like the default list, it checks `RADSERV` first and falls back to case-sensitive local accounts.
 
-#### 
+#### aaa authentication enable 
+
+When a user lands in unprivileged mode (`Switch>`) and types `enable`, the switch checks the `aaa authentication enable` rule to decide how to authenticate them.
+
+`aaa authentication enable default enable` tells the switch to verify the local enable secret password whenever a user types enable to escalate from basic user mode (>) into privileged admin mode (#). 
+
+The keyword `enable` at the end of the line means "check the locally configured `enable secret` (or `enable password`) stored on the switch." It does not contact `RADSERV`.
+
+This command is used so that even if the RADIUS server is down and you log in via your local account (`local-case`), having `enable` as the method ensures you can still elevate to `#` mode if your local user wasn't already assigned `privilege 15`.
 
 ```bash
-aaa authentication login default group RADSERV local-case 
-aaa authentication login console local-case
-aaa authentication login HTTPSRV group RADSERV local-case
-!
 aaa authentication enable default enable
-!
+```
+
+#### aaa authorization exec
+
+`aaa authorization exec` is a Cisco IOS global configuration command that verifies whether an authenticated user is permitted to start an interactive CLI shell (EXEC session) and determines their initial privilege level (User EXEC `>` vs. Privileged EXEC `#`).
+
+When the RADIUS server (RADSERV) approves the login, it can be configured to return the Cisco attribute `shell:priv-lvl=15` inside the Access-Accept response. 
+With `aaa authorization exec` enabled, the switch reads this attribute and places the user directly into Privileged EXEC mode (`Switch#`), bypassing the enable password prompt. Without this command, the switch ignores the privilege attribute and drops the user into User EXEC mode (`Switch>`).
+
+`if-authenticated` is a fallback authorization method that automatically grants CLI shell (`EXEC`) access if the user has already passed login authentication, acting as a safety net when primary authorization sources (`RADSERV` or `local`) are unreachable or lack authorization attributes.
+
+```bash
 aaa authorization exec default group RADSERV local if-authenticated
 aaa authorization exec HTTPSRV group RADSERV if-authenticated
-!
+```
+
+#### aaa accounting exec
+
+`aaa accounting exec` logs when users start and stop an interactive CLI shell (EXEC session) on the device, sending audit records to the AAA server (`RADSERV`) for tracking and compliance.
+
+The switch sends RADIUS Accounting-Request packets (UDP port 1813) to `RADSERV` at two points during a user's session:
+
+- Session Start (`Acct-Status-Type = Start`): Sent the moment a user opens a CLI shell (`Switch>` or `Switch#`) via SSH, Telnet, or Console. It logs the username, source IP address, login time, and assigned privilege level.
+- Session Stop (`Acct-Status-Type = Stop`): Sent when the user exits the shell or disconnects. It logs the disconnect time, total session duration, and why the session ended.
+
+```bash
 aaa accounting exec default start-stop group RADSERV
+```
+
+#### aaa session-id common 
+
+`aaa session-id common` forces the Cisco switch to use the exact same <strong>Session ID</strong> across all AAA phases—<strong>Authentication</strong>, <strong>Authorization</strong>, and <strong>Accounting</strong>—for a single user login session.
+Every RADIUS packet generated during that user's SSH session shares one identical `Acct-Session-Id` value, making it simple to trace a user's complete session lifecycle from login to disconnect in FreeRADIUS logs.
+
+```bash
 aaa session-id common 
 ```
 
-Time sources, queried from the management SVI.
+#### login on-success log
+
+`login on-success log` generates a local syslog entry (`%SEC_LOGIN-5-LOGIN_SUCCESS`) whenever a user successfully authenticates to the switch, providing local audit visibility alongside external RADIUS accounting.
+
+`login on-failure log` generates a `%SEC_LOGIN-4-LOGIN_FAILED` syslog message whenever someone enters an invalid username or password. 
 
 ```bash
-ntp source Vlan800
-ntp server 172.20.129.64
-ntp server 172.20.129.65 prefer
+login on-success log
+login on-failure log
 ```
 
+#### ip http server
 
+This configuration block enables the switch's web server (HTTP/HTTPS) for [[#Centralized Web Authentication (CWA) for Guests|CWA redirect]], ties web login authentication to an AAA method list named HTTPSRV, and forces outbound HTTP client traffic to originate from Vlan800.
 
+`ip http server` and `ip http secure-server` enable the built-in HTTP (port 80) and HTTPS (port 443) servers on the switch. Both must remain enabled for <strong>Guest Central Web Authentication (CWA)</strong> so the switch can intercept initial HTTP captive-portal probes and HTTPS browser requests and redirect guest clients to the ISE Guest Portal.
 
+`ip http active-session-modules none` and `ip http secure-active-session-modules none` disables interactive browser-based WebUI management modules while keeping the underlying HTTP/HTTPS engine active. 
+This allows CWA URL redirection and programmatic services (such as RESTCONF APIs or Smart Licensing) to function without exposing the switch's administrative web login page to users or guests.
 
-The HTTP/HTTPS server stays up — it will be needed by the [[#Centralized Web Authentication (CWA) for Guests|CWA redirect]] — but every web-management module is disabled. The same block carries the SSH tuning and `ip forward-protocol nd`.
+`ip http authentication aaa login-authentication HTTPSRV` tells the switch to verify incoming HTTP or HTTPS login requests using a custom AAA method list named `HTTPSRV`, rather than falling back to the switch's local `enable` password or the `default` AAA login list.
+
+- `ip http authentication aaa`: Instructs the switch's built-in web server (HTTP/HTTPS) to use AAA (Authentication, Authorization, and Accounting) instead of checking the local enable password.
+- `login-authentication`: Specifies that this rule applies to the <strong>login verification step</strong>(checking the username and password) for incoming web or RESTCONF API requests.
+- `HTTPSRV`: Points to a custom AAA method list defined elsewhere in your config (for example, `aaa authentication login HTTPSRV local` or `aaa authentication login HTTPSRV group RADSERV local`).
 
 ```bash
 ip http server
 ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
-ip http authentication aaa login-authentication default
+ip http authentication aaa login-authentication HTTPSRV
 ip http client source-interface Vlan800
-ip forward-protocol nd
-ip ssh bulk-mode 131072
-ip ssh time-out 30
-ip ssh version 2
-ip ssh source-interface Vlan800
 ```
 
-> [!note] Method-list mismatch This block authenticates HTTP with the `default` list while the [[#DNA - PBA BASIC|DNA - PBA BASIC]] template uses the dedicated `HTTPSRV` list. Both resolve to RADSERV with local fallback, so behavior is identical today, but the two should be aligned — `HTTPSRV` is the intended list, since it allows HTTP authentication to be tuned later without touching the VTYs.
-
-Auto-recovery from err-disable is enabled for UDLD only. Ports err-disabled by BPDU Guard or by the DHCP/ARP rate limits of the [[#Interface Template — `NAC-INT-TEMPLATE`|NAC interface template]] stay down until someone intervenes (or until matching `errdisable recovery cause` entries are added).
-
-```bash
-errdisable recovery cause udld
-errdisable recovery interval 90
-```
-
-Console and VTY session policies: short console timeouts, hour-long SSH sessions, SSH-only transport.
+#### line con
 
 ```bash
 line con 0
@@ -734,21 +766,58 @@ line con 0
  privilege level 15
  logging synchronous
  login authentication console
+ transport preferred none
  stopbits 1
+```
+
+The `line con 0` command enters line configuration mode for the <strong>primary physical console port (port 0)</strong> on a Cisco router or switch.
+
+`session-timeout 5` measures idle time when you are connected to the console and then open a session outbound to another network device 
+
+`exec-timeout 30 0` automatically logs out an idle session after <strong>30 minutes and 0 seconds</strong>. Leaving the console unlocked after unplugging a laptop is a major physical security risk.
+
+`logging synchronous` keeps console log messages from cutting through commands while you are typing.
+
+`transport preferred none` prevents the router from freezing while trying to resolve mistyped commands as network hostnames.
+
+`stopbits 1` ensures clean serial communication with modern terminal software.
+
+`privilege level 15` grants full, unrestricted administrative access immediately upon connecting to the physical console port.
+#### line vty
+
+```bash
 line vty 0 4
  session-timeout 60
  exec-timeout 60 0
  logging synchronous
  history size 64
  transport input ssh
+ transport preferred none
 line vty 5 15
  session-timeout 60
  exec-timeout 60 0
  logging synchronous
  history size 64
  transport input ssh
+ transport preferred none
 ```
 
+`line vty` stands for <strong>Virtual Teletype (VTY) line</strong>, which is a software-based virtual port on a Cisco router or switch used exclusively for remote command-line access over a network (via <strong>SSH</strong> or <strong>Telnet</strong>).
+
+Each VTY line number represents one concurrent remote login session. Having lines **`0` through `15`** means up to **16 administrators** can SSH into the device at the exact same time.
+Cisco splits VTY lines into **`0 4`** and **`5 15`** for **historical backward compatibility** with older Cisco IOS versions that only supported 5 simultaneous remote connections (lines 0 through 4).
+
+`transport input ssh` blocks unencrypted Telnet and forces all 16 remote terminal lines to accept SSH only.
+
+`history size 64` stores up to 64 recent commands in memory for up-arrow recall during an SSH session (higher than the default 10).
+
+`exec-timeout 60 0` automatically logs out an idle session after <strong>60 minutes and 0 seconds</strong>. Leaving the console unlocked after unplugging a laptop is a major physical security risk.
+
+`logging synchronous` keeps console log messages from cutting through commands while you are typing.
+
+`transport preferred none` prevents the router from freezing while trying to resolve mistyped commands as network hostnames.
+
+`session-timeout 60` measures idle time when you are connected to the console and then open a session outbound to another network device 
 
 ## DNA - PBA NAC
 
