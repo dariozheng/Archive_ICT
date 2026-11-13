@@ -72,7 +72,7 @@ aaa new-model
 !
 !
 !
-radius server radius-mgmnt-auth01
+radius server PBA-RADIUS
  address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
  timeout 2
  retransmit 3
@@ -81,7 +81,7 @@ radius server radius-mgmnt-auth01
 ip radius source-interface Vlan800
 !
 aaa group server radius RADSERV
- server name radius-mgmnt-auth01
+ server name PBA-RADIUS
 !
 !
 !
@@ -89,10 +89,12 @@ aaa authentication login default group RADSERV local-case
 aaa authentication login console local-case
 aaa authentication login HTTPSRV group RADSERV local-case
 aaa authentication enable default enable
-aaa authorization exec default group RADSERV if-authenticated
+aaa authorization exec default group RADSERV local if-authenticated
 aaa authorization exec HTTPSRV group RADSERV if-authenticated
 aaa accounting exec default start-stop group RADSERV
 aaa session-id common 
+login on-success log
+login on-failure log
 !
 line vty 0 4
  transport input ssh
@@ -255,13 +257,16 @@ call-home
 udld aggressive
 errdisable recovery cause udld
 errdisable recovery interval 90
+!
+!
+!
 diagnostic bootup level minimal
 !
 !
 !
 aaa new-model
 !
-radius server radius-mgmnt-auth01
+radius server PBA-RADIUS
  address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
  timeout 2
  retransmit 3
@@ -270,7 +275,7 @@ radius server radius-mgmnt-auth01
 !
 !
 aaa group server radius RADSERV
- server name radius-mgmnt-auth01
+ server name PBA-RADIUS
  deadtime 15
  ip radius source-interface Vlan800
 !
@@ -288,6 +293,7 @@ aaa authorization exec HTTPSRV group RADSERV if-authenticated
 aaa accounting exec default start-stop group RADSERV
 aaa session-id common 
 login on-success log
+login on-failure log
 !
 !
 !
@@ -489,10 +495,13 @@ username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjY
 
 #### SSH
 
-- `ip ssh time-out 30`: Disables legacy, insecure SSHv1 and forces all management sessions to use SSHv2.
-- `ip ssh time-out 30`: Sets the pre-login authentication timeout to **30 seconds** (down from the 120-second default). If a user or bot connects over SSH and does not finish authenticating within 30 seconds, the switch drops the session to free up VTY resources.
-- `ip ssh bulk-mode 131072`: Increases the SSH receive window size to 128 KB (131,072 bytes) for bulk data transfers. This dramatically speeds up SCP/SFTP file copies (such as uploading IOS-XE firmware images to the switch).
-- `ip ssh source-interface Vlan800`: Forces any outbound SSH connections initiated _from_ the switch to use the IP address of `Vlan800` as their source IP, ensuring consistent firewall rules and TACACS+/RADIUS accounting.
+`ip ssh time-out 30`: Disables legacy, insecure SSHv1 and forces all management sessions to use SSHv2.
+
+`ip ssh time-out 30`: Sets the pre-login authentication timeout to **30 seconds** (down from the 120-second default). If a user or bot connects over SSH and does not finish authenticating within 30 seconds, the switch drops the session to free up VTY resources.
+
+`ip ssh bulk-mode 131072`: Increases the SSH receive window size to 128 KB (131,072 bytes) for bulk data transfers. This dramatically speeds up SCP/SFTP file copies (such as uploading IOS-XE firmware images to the switch).
+
+`ip ssh source-interface Vlan800`: Forces any outbound SSH connections initiated _from_ the switch to use the IP address of `Vlan800` as their source IP, ensuring consistent firewall rules and TACACS+/RADIUS accounting.
 
 ```bash
 ip ssh version 2
@@ -612,10 +621,13 @@ Until this command is used all other aaa configuration commands remain hidden an
 
 The `radius server` block defines an external RADIUS server (10.140.2.27) for switch authentication and accounting, with its shared secret securely encrypted using the Type 6 AES master key.
 
-• `radius server PBA-RADIUS`: Uses Cisco's modern named RADIUS server syntax (replacing legacy radius-server host commands). 
-• `address ipv4 10.140.2.27 auth-port 1812 acct-port 1813`: Points the switch to 10.140.2.27 using standard IANA RADIUS ports (1812 for authentication/authorization and 1813 for accounting).
-• `timeout 2 / retransmit 3`: Tells the switch to wait 2 seconds for a reply and retry up to 3 times (8 seconds total) before marking the server unresponsive and failing over to your next RADIUS server or local account. These aggressive timers prevent long login hangs during a server outage.
-• `key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK]SETiCKGAAB`: The shared secret stored with strong Type 6 AES encryption, the radius server must user the same secret to communicate.
+`radius server PBA-RADIUS`: Uses Cisco's modern named RADIUS server syntax (replacing legacy radius-server host commands). 
+
+`address ipv4 10.140.2.27 auth-port 1812 acct-port 1813`: Points the switch to 10.140.2.27 using standard IANA RADIUS ports (1812 for authentication/authorization and 1813 for accounting).
+
+`timeout 2 / retransmit 3`: Tells the switch to wait 2 seconds for a reply and retry up to 3 times (8 seconds total) before marking the server unresponsive and failing over to your next RADIUS server or local account. These aggressive timers prevent long login hangs during a server outage.
+
+`key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK]SETiCKGAAB`: The shared secret stored with strong Type 6 AES encryption, the radius server must user the same secret to communicate.
 
 ```bash
 radius server PBA-RADIUS
@@ -629,10 +641,13 @@ radius server PBA-RADIUS
 
 This command block bundle the RADIUS server in a single named group (RADSERV), set how long to skip a failed server, and lock all RADIUS traffic to the management interface (Vlan800).
 
-• `aaa group server radius RADSERV`: Creates a custom container named RADSERV for RADIUS servers. Using a named group lets you apply shared rules (like deadtime and source-interface) to multiple servers at once and call group RADSERV in your login rules.
-• `server name PBA-RADIUS`: Assigns a specific RADIUS server definition into this group. This name must match the exact name from your radius server  block, such as PBA-RADIUS, or the group will not find the server.
-• `deadtime 15`: Tells the switch to mark an unresponsive RADIUS server as "dead" for 15 minutes after it fails to answer. During those 15 minutes, the switch skips straight to your backup RADIUS server (or local login) instead of making every login wait 8 seconds for a timeout.
-• `ip radius source-interface Vlan800`: Forces all RADIUS authentication and accounting packets sent by this group to use the IP address of Vlan800 as their source IP. 
+`aaa group server radius RADSERV`: Creates a custom container named RADSERV for RADIUS servers. Using a named group lets you apply shared rules (like deadtime and source-interface) to multiple servers at once and call group RADSERV in your login rules.
+
+`server name PBA-RADIUS`: Assigns a specific RADIUS server definition into this group. This name must match the exact name from your radius server  block, such as PBA-RADIUS, or the group will not find the server.
+
+`deadtime 15`: Tells the switch to mark an unresponsive RADIUS server as "dead" for 15 minutes after it fails to answer. During those 15 minutes, the switch skips straight to your backup RADIUS server (or local login) instead of making every login wait 8 seconds for a timeout.
+
+`ip radius source-interface Vlan800`: Forces all RADIUS authentication and accounting packets sent by this group to use the IP address of Vlan800 as their source IP. 
 
 ```bash
 aaa group server radius RADSERV
@@ -664,6 +679,7 @@ aaa authentication login HTTPSRV group RADSERV local-case
 `aaa authentication login default group RADSERV local-case` is the default  login method, the switch check the RADIUS group (`RADSERV`) first, and if `PBA-RADIUS` is unreachable, it falls back to the switch's local user database using case-sensitive usernames (`local-case`).
 
 ##### aaa authentication login console local-case
+
 `aaa authentication login console local-case` matches the`login authentication console` command under `line con 0`. 
 It forces physical console logins to authenticate directly against the local user database (case-sensitive) without waiting for RADIUS. 
 The more specific named rule list (`console`) win the broader default login method. 
