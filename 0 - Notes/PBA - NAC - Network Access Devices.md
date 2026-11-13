@@ -206,8 +206,8 @@ interface Vlan800
 !
 !
 !
-enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
-username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
+enable secret 9 $9$qO.VLlIA7cZqaU$dsUyyzqhHGvjYoY.LHxuKKkUq3IRwy94gsQWZwNM8Bg
+username admin privilege 15 secret 9 $9$w3tUmJIppNRAE.$sG.1e4QLCLb/ZmAFZLbAV4LTa72sL6eQWiYXx41j3Zc
 !
 !
 !
@@ -361,6 +361,8 @@ The encryption is a weak <strong>Type 7 encryption</strong>, it should be consid
 The `key config-key password-encrypt` command defines a <strong>master key</strong> used by Cisco IOS/IOS-XE to strongly encrypt sensitive passwords (<strong>Type 6</strong>) inside the configuration file.
 This command only defines the master key; to use it, enable the command [[#password encryption aes]].
 
+`MASTER_KEY` must be identical on every switch: the Type 6 RADIUS key in [[#radius server]] is a fixed string and only decrypts with the master key that created it. A switch with a different master key can't use RADIUS.
+
 #### password encryption aes
 
 `password encryption aes` globally activates <strong>Type 6 AES encryption</strong> on a Cisco IOS/IOS-XE switch, converting eligible plain-text and weak Type 7 passwords into strong encrypted strings. 
@@ -419,7 +421,7 @@ vtp mode transparent
 
 Sets the spanning-tree mode to Rapid PVST+ explicitly, so it doesn’t depend on the platform default.
 
-Embeds the 12-bit VLAN ID into the Spanning Tree Bridge ID priority field. This is mandatory when using rapid-pvst (and is enabled by default on almost all modern Cisco switches) so the switch can run independent STP instances per VLAN using a single base MAC address.
+`spanning-tree extend system-id` lets the switch use one base MAC for all VLANs and supports the extended VLAN range. 
 
 ```bash
 spanning-tree mode rapid-pvst
@@ -467,7 +469,9 @@ vlan 830
 
 #### SVI
 
-<strong>Vlan1</strong> is shut down as unused, the management SVI (Vlan800) drops ICMP redirects/unreachables and proxy-ARP as basic hardening.
+**Vlan1** is shut down as unused. 
+
+As basic hardening, the management SVI (<strong>Vlan800</strong>) doesn't send ICMP redirects or unreachables and doesn't answer ARP on behalf of other hosts (proxy-ARP).
 
 ```bash
 interface Vlan1
@@ -487,8 +491,8 @@ interface Vlan800
 #### local credentials 
 
 ```bash
-enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
-username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
+enable secret 9 $9$qO.VLlIA7cZqaU$dsUyyzqhHGvjYoY.LHxuKKkUq3IRwy94gsQWZwNM8Bg
+username admin privilege 15 secret 9 $9$w3tUmJIppNRAE.$sG.1e4QLCLb/ZmAFZLbAV4LTa72sL6eQWiYXx41j3Zc
 ```
 
 #### SSH
@@ -594,7 +598,7 @@ udld aggressive
 
 The `errdisable recovery cause` command tells the switch to automatically re-enable ports err-disabled for the listed causes.
 
-- `errdisable recovery cause udld`: Enables automatic recovery specifically for ports placed into `err-disable` state by UDLD aggressive mode. 
+- `errdisable recovery cause udld`: Enables automatic recovery specifically for ports placed into `err-disable` state by UDLD. 
 - `errdisable recovery interval 90`: Sets the wait timer to **90 seconds** (down from the Cisco default of 300 seconds) before the switch attempts to bring an err-disabled port back up.
 
 ```bash
@@ -625,7 +629,7 @@ The `radius server` block defines an external RADIUS server (10.140.2.27) for sw
 
 `timeout 2 / retransmit 3`: Tells the switch to wait 2 seconds for a reply and retry up to 3 times (8 seconds total) before marking the server unresponsive and failing over to your next RADIUS server or local account. These aggressive timers prevent long login hangs during a server outage.
 
-`key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK]SETiCKGAAB`: The shared secret stored with strong Type 6 AES encryption, the radius server must use the same secret to communicate.
+`key 6`: The shared secret stored with strong Type 6 AES encryption, the radius server must use the same secret to communicate.
 
 ```bash
 radius server PBA-RADIUS
@@ -658,7 +662,7 @@ aaa group server radius RADSERV
 
 `aaa authentication login` tells the Cisco switch how to verify a user's identity (username and password) when they try to log in, and sets the exact order of backup methods if the primary server is unreachable.
 
-`default`, `console` and `HTTPSRV` are method lists assigned to different access points like SSH (`line vty`), the physical serial port (`line con 0`), or the web interface. 
+`default`, `console` and `HTTPSRV` are method lists for different access points: SSH (`line vty`, via `default`), the physical console (`line con 0`) and the HTTP server (`ip http authentication`).
 
 `default` method list automatically applies to any line (like VTY SSH) that doesn't have a custom `login authentication <name>` command under it. 
 
@@ -674,7 +678,7 @@ aaa authentication login HTTPSRV group RADSERV local-case
 
 ##### aaa authentication login default group RADSERV local-case
 
-`aaa authentication login default group RADSERV local-case` is the default login method: the switch check the RADIUS group (`RADSERV`) first, and if `PBA-RADIUS` is unreachable, it falls back to the switch's local user database using case-sensitive usernames (`local-case`).
+`aaa authentication login default group RADSERV local-case` is the default login method: the switch checks the RADIUS group (`RADSERV`) first, and if `PBA-RADIUS` is unreachable, it falls back to the switch's local user database using case-sensitive usernames (`local-case`).
 
 ##### aaa authentication login console local-case
 
@@ -684,8 +688,7 @@ The more specific named method list (`console`) takes precedence over the defaul
 
 ##### aaa authentication login HTTPSRV group RADSERV local-case
 
-`aaa authentication login HTTPSRV group RADSERV local-case` creates a named authentication list (`HTTPSRV`) for web UI / RESTCONF access (`ip http authentication aaa login-authentication HTTPSRV`). Just like the default list, it checks `RADSERV` first and falls back to case-sensitive local accounts.
-
+`aaa authentication login HTTPSRV group RADSERV local-case` creates a named login list (`HTTPSRV`) for the switch's HTTP server (`ip http authentication aaa login-authentication HTTPSRV`). No HTTP module that asks for a login is enabled today (see [[#ip http server]]), if one is turned on later, logins go through RADIUS instead of the enable password. Like the default list, it checks `RADSERV` first and falls back to case-sensitive local accounts.
 #### aaa authentication enable 
 
 When a user lands in unprivileged mode (`Switch>`) and types `enable`, the switch checks the `aaa authentication enable` rule to decide how to authenticate them.
@@ -720,7 +723,7 @@ aaa authorization exec HTTPSRV group RADSERV if-authenticated
 
 The switch sends RADIUS Accounting-Request packets (UDP port 1813) to `RADSERV` at two points during a user's session:
 
-- Session Start (`Acct-Status-Type = Start`): Sent the moment a user opens a CLI shell (`Switch>` or `Switch#`) via SSH, Telnet, or Console. It logs the username, source IP address, login time, and assigned privilege level.
+- Session Start (`Acct-Status-Type = Start`): Sent the moment a user opens a CLI shell (`Switch>` or `Switch#`) via SSH or the Console. It logs the username, source IP address, login time, and assigned privilege level.
 - Session Stop (`Acct-Status-Type = Stop`): Sent when the user exits the shell or disconnects. It logs the disconnect time, total session duration, and why the session ended.
 
 ```bash
@@ -751,15 +754,15 @@ login on-failure log
 
 This configuration block enables the switch's web server (HTTP/HTTPS) for [[#Centralized Web Authentication (CWA) for Guests|CWA redirect]], ties web login authentication to an AAA method list named HTTPSRV, and forces outbound HTTP client traffic to originate from Vlan800.
 
-`ip http server` and `ip http secure-server` enable the built-in HTTP (port 80) and HTTPS (port 443) servers on the switch. Both must remain enabled for <strong>Guest Central Web Authentication (CWA)</strong> so the switch can intercept initial HTTP captive-portal probes and HTTPS browser requests and redirect guest clients to the ISE Guest Portal.
+`ip http server` is required so the switch can intercept HTTP and redirect guests to the ISE Guest Portal. `ip http secure-server` is only needed to intercept HTTPS as well, which always shows guests a certificate warning.
 
 `ip http active-session-modules none` and `ip http secure-active-session-modules none` disable interactive browser-based WebUI management modules while keeping the underlying HTTP/HTTPS engine active. 
-This allows CWA URL redirection and programmatic services (such as RESTCONF APIs) to function without exposing the switch's administrative web login page to users or guests.
+This allows CWA URL redirection to function without exposing the switch's administrative web login page to users or guests.
 
 `ip http authentication aaa login-authentication HTTPSRV` tells the switch to verify incoming HTTP or HTTPS login requests using a custom AAA method list named `HTTPSRV`, rather than falling back to the switch's local `enable` password or the `default` AAA login list.
 
 - `ip http authentication aaa`: Instructs the switch's built-in web server (HTTP/HTTPS) to use AAA (Authentication, Authorization, and Accounting) instead of checking the local enable password.
-- `login-authentication`: Specifies that this rule applies to the <strong>login verification step</strong> (checking the username and password) for incoming web or RESTCONF API requests.
+- `login-authentication`: Specifies that this rule applies to the <strong>login verification step</strong> (checking the username and password).
 - `HTTPSRV`: Points to the `aaa authentication login HTTPSRV group RADSERV local-case` method list (see [[#aaa authentication login HTTPSRV group RADSERV local-case]]).
 
 ```bash
