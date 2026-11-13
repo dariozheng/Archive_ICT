@@ -461,7 +461,7 @@ vlan 830
  name WLAN-MGMT-AP
 ```
 
-### SVI
+#### SVI
 
 <strong>Vlan1</strong> is shut down as unused, the management SVI (Vlan800) drops ICMP redirects/unreachables and proxy-ARP as basic hardening.
 
@@ -501,8 +501,77 @@ ip ssh bulk-mode 131072
 ip ssh source-interface Vlan800
 ```
 
-#### 
+#### SNMP
 
+The `snmp-server community` command configures a shared password called a <strong>community string</strong> to control access for Simple Network Management Protocol (SNMP) monitoring and management.
+
+The `snmp-server trap-source` command specifies the source IP address that a network device uses when sending Simple Network Management Protocol (SNMP) traps or informs to a monitoring server.
+
+The `snmp-server contact` command configures the <strong>system contact string</strong> (stored in the standard SNMP `sysContact` MIB object) on a network device, identifying the person, team, or helpdesk responsible for managing that hardware. This command is purely informational for documentation purpose. 
+
+The rest of SNMP configuration is provided directly by the DNA center.
+
+```bash
+snmp-server community publiacqua RO
+snmp-server community publiacquarw RW
+snmp-server trap-source Vlan800
+snmp-server contact operationcenter@publiacqua.it
+```
+
+#### Logging
+
+`logging facility local6` tags all outgoing syslog messages from the switch with the local6 facility code so your syslog server can filter, sort, and store network logs separately from standard Linux/Windows system logs.
+
+`logging host` command specifies the IP address (or hostname) of an external syslog server where your Cisco switch sends its system log messages. 
+By default, typing `logging host <IP>` sends logs over <strong>UDP port 514</strong>, with severity levels 0 0 through 6.
+
+```bash
+logging facility local6
+logging source-interface Vlan800
+logging host 10.140.2.181
+logging host 10.140.2.24
+logging host 10.139.108.10
+```
+#### NTP
+
+NTP time configuration.
+
+```bash
+ntp source Vlan800
+ntp server 172.20.129.64
+ntp server 172.20.129.65 prefer
+```
+
+#### call-home
+
+`service call-home`  enables <strong>Cisco Smart Call Home</strong>, a feature that monitors your switch for hardware or software faults and automatically sends diagnostic alerts and inventory data to Cisco TAC or the internal support system. 
+
+`call-home` is the configuration sub-mode on a Cisco switch where you set up the rules, destination servers, and contact details for Cisco Smart Call Home. 
+While `service call-home` turns the engine on globally, entering `call-home` opens the menu that tells the switch what to send, where to send it, and who to notify.
+
+`contact-email-addr operationcenter@publiacqua.it` tells Cisco who owns the switch and where to send automated support alerts. Cisco attaches this address to the switch's diagnostic reports to identify which company or IT team manages the device.
+
+`no http secure server-identity-check` tells the switch to skip verifying that the hostname on a remote server's SSL/TLS certificate matches the destination URL during an HTTPS connection. It allows the switch to send <strong>Smart Licensing</strong> and <strong>diagnostic data over HTTPS</strong> even if an internal proxy, firewall, or local licensing server presents a certificate with a different name.
+
+The profile `"CiscoTAC-1"` block activates Cisco's built-in Smart Call Home profile (CiscoTAC-1) and tells the switch to send diagnostic and Smart Licensing data over HTTPS.
+
+- `profile "CiscoTAC-1"`: Selects the default, pre-configured profile built into Cisco IOS/IOS-XE. Under the hood, this profile already points to Cisco's official backend server (https://cisco.com) and defines which hardware and licensing events to report.
+- `active`: Turns this specific profile on. Even if service call-home is enabled globally, the switch will not transmit any data unless at least one profile is marked active.
+- `destination transport-method http`: Sets the delivery method to web transport (which defaults to encrypted HTTPS on TCP port 443 for CiscoTAC-1) instead of legacy email (smtp).
+
+```bash
+service call-home
+!
+call-home
+ contact-email-addr operationcenter@publiacqua.it
+ source-interface Vlan800
+ no http secure server-identity-check
+ profile "CiscoTAC-1"
+  active
+  destination transport-method http
+```
+
+#### call-home
 
 The management RADIUS server used for administrator logins — the RADSERV plane described in [[#Two AAA Planes — RADSERV vs ISESERV|Two AAA Planes]]. Note the aggressive `timeout 2`: an admin login should fail over to the local account quickly, unlike the more patient ISE timers.
 
@@ -544,23 +613,9 @@ ntp server 172.20.129.64
 ntp server 172.20.129.65 prefer
 ```
 
-Read-only and read-write SNMP communities for monitoring, with traps sourced from management.
 
-```bash
-snmp-server community publiacqua RO
-snmp-server community publiacquarw RW
-snmp-server trap-source Vlan800
-```
 
-Syslog targets on facility local6, also sourced from management.
 
-```bash
-logging facility local6
-logging source-interface Vlan800
-logging host 10.140.2.181
-logging host 10.140.2.24
-logging host 10.139.108.10
-```
 
 The HTTP/HTTPS server stays up — it will be needed by the [[#Centralized Web Authentication (CWA) for Guests|CWA redirect]] — but every web-management module is disabled. The same block carries the SSH tuning and `ip forward-protocol nd`.
 
