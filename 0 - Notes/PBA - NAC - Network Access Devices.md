@@ -469,9 +469,11 @@ vlan 830
 
 #### SVI
 
-**Vlan1** is shut down as unused. 
+<strong>Vlan1</strong> is shut down as unused. 
 
 As basic hardening, the management SVI (<strong>Vlan800</strong>) doesn't send ICMP redirects or unreachables and doesn't answer ARP on behalf of other hosts (proxy-ARP).
+
+`no ip route-cache` turns off the CPU's route cache (fast switching) on the SVI. Vlan800 only carries traffic to and from the switch itself, and traffic through the switch is forwarded in hardware.
 
 ```bash
 interface Vlan1
@@ -688,7 +690,9 @@ The more specific named method list (`console`) takes precedence over the defaul
 
 ##### aaa authentication login HTTPSRV group RADSERV local-case
 
-`aaa authentication login HTTPSRV group RADSERV local-case` creates a named login list (`HTTPSRV`) for the switch's HTTP server (`ip http authentication aaa login-authentication HTTPSRV`). No HTTP module that asks for a login is enabled today (see [[#ip http server]]), if one is turned on later, logins go through RADIUS instead of the enable password. Like the default list, it checks `RADSERV` first and falls back to case-sensitive local accounts.
+`aaa authentication login HTTPSRV group RADSERV local-case` creates a named login list (`HTTPSRV`) for the switch's HTTP server (`ip http authentication aaa login-authentication HTTPSRV`). 
+No HTTP module that asks for a login is enabled today (see [[#ip http server]]). 
+If one is turned on later, logins go through RADIUS instead of the enable password. Like the default list, it checks `RADSERV` first and falls back to case-sensitive local accounts.
 #### aaa authentication enable 
 
 When a user lands in unprivileged mode (`Switch>`) and types `enable`, the switch checks the `aaa authentication enable` rule to decide how to authenticate them.
