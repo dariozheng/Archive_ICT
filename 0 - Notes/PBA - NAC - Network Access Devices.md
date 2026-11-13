@@ -627,6 +627,13 @@ radius server PBA-RADIUS
 
 #### aaa group server radius RADSERV
 
+This command block bundle the RADIUS server in a single named group (RADSERV), set how long to skip a failed server, and lock all RADIUS traffic to the management interface (Vlan800).
+
+• `aaa group server radius RADSERV`: Creates a custom container named RADSERV for RADIUS servers. Using a named group lets you apply shared rules (like deadtime and source-interface) to multiple servers at once and call group RADSERV in your login rules.
+• `server name PBA-RADIUS`: Assigns a specific RADIUS server definition into this group. This name must match the exact name from your radius server  block, such as PBA-RADIUS, or the group will not find the server.
+• `deadtime 15`: Tells the switch to mark an unresponsive RADIUS server as "dead" for 15 minutes after it fails to answer. During those 15 minutes, the switch skips straight to your backup RADIUS server (or local login) instead of making every login wait 8 seconds for a timeout.
+• `ip radius source-interface Vlan800`: Forces all RADIUS authentication and accounting packets sent by this group to use the IP address of Vlan800 as their source IP. 
+
 ```bash
 aaa group server radius RADSERV
  server name PBA-RADIUS
@@ -634,23 +641,38 @@ aaa group server radius RADSERV
  ip radius source-interface Vlan800
 ```
 
+#### aaa authentication login
 
-The management RADIUS server used for administrator logins — the RADSERV plane described in [[#Two AAA Planes — RADSERV vs ISESERV|Two AAA Planes]]. Note the aggressive `timeout 2`: an admin login should fail over to the local account quickly, unlike the more patient ISE timers.
+`aaa authentication login` tells the Cisco switch how to verify a user's identity (username and password) when they try to log in, and sets the exact order of backup methods if the primary server is unreachable.
+
+`default`, `console` and `HTTPSRV` are rule list that are assigned different access points like SSH (`line vty`), the physical serial port (`line con 0`), or the web interface. 
+
+`default` rule list automatically applies to any line (like VTY SSH) that doesn't have a custom `login authentication <name>` command under it. 
+
+`group RADSERV` command tells the switch to send the username and password to the `RADSERV` RADIUS server group first.
+
+`local-case` command tells the switch to check its own local `username` database requiring the username's uppercase and lowercase letters to match exactly.
 
 ```bash
-radius server radius-mgmnt-auth01
- address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
- timeout 2
- retransmit 3
- key 7 11593A0C2411241F37192474
-!
-ip radius source-interface Vlan800
-!
-aaa group server radius RADSERV
- server name radius-mgmnt-auth01
+aaa authentication login default group RADSERV local-case 
+aaa authentication login console local-case
+aaa authentication login HTTPSRV group RADSERV local-case
 ```
 
-Method lists for device administration. VTY and HTTPS logins try RADSERV first and fall back to the local account (`local-case` is the case-sensitive variant of `local`), while the console stays local-only so it always works and `enable` keeps using the enable secret. Exec authorization takes the privilege level from RADIUS — `if-authenticated` means an admin who has already passed authentication stays authorized even when the server can no longer answer the authorization query — and exec accounting records administrator sessions.
+##### aaa authentication login default group RADSERV local-case
+
+`aaa authentication login default group RADSERV local-case` is the default  login method, the switch check the RADIUS group (`RADSERV`) first, and if `PBA-RADIUS` is unreachable, it falls back to the switch's local user database using case-sensitive usernames (`local-case`).
+
+##### aaa authentication login console local-case
+`aaa authentication login console local-case` matches the`login authentication console` command under `line con 0`. 
+It forces physical console logins to authenticate directly against the local user database (case-sensitive) without waiting for RADIUS. 
+The more specific named rule list (`console`) win the broader default login method. 
+
+##### aaa authentication login HTTPSRV group RADSERV local-case
+
+`aaa authentication login HTTPSRV group RADSERV local-case` creates a named authentication list (`HTTPSRV`) for web UI / RESTCONF access (`ip http authentication aaa login-authentication HTTPSRV`). Just like the default list, it checks `RADSERV` first and falls back to case-sensitive local accounts.
+
+#### 
 
 ```bash
 aaa authentication login default group RADSERV local-case 
@@ -659,11 +681,10 @@ aaa authentication login HTTPSRV group RADSERV local-case
 !
 aaa authentication enable default enable
 !
-aaa authorization exec default group RADSERV if-authenticated
+aaa authorization exec default group RADSERV local if-authenticated
 aaa authorization exec HTTPSRV group RADSERV if-authenticated
 !
 aaa accounting exec default start-stop group RADSERV
-!
 aaa session-id common 
 ```
 
