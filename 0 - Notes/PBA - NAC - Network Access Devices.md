@@ -50,7 +50,6 @@ username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjY
 crypto key generate rsa modulus 2048
 ip ssh version 2
 ip ssh time-out 30
-ip ssh bulk-mode 131072
 ip ssh source-interface Vlan800
 !
 vlan 800
@@ -124,7 +123,7 @@ service timestamps log datetime msec localtime show-timezone year
 !
 !
 !
-service password-encryption 
+service password-encryption
 ! @start-ignore-compliance
 key config-key password-encrypt {{ MASTER_KEY }}
 ! @end-ignore-compliance
@@ -216,7 +215,6 @@ username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjY
 ip ssh version 2
 ! @end-ignore-compliance
 ip ssh time-out 30
-ip ssh bulk-mode 131072
 ip ssh source-interface Vlan800
 !
 !
@@ -281,7 +279,7 @@ aaa group server radius RADSERV
 !
 !
 !
-aaa authentication login default group RADSERV local-case 
+aaa authentication login default group RADSERV local-case
 aaa authentication login console local-case
 aaa authentication login HTTPSRV group RADSERV local-case
 !
@@ -291,7 +289,7 @@ aaa authorization exec default group RADSERV local if-authenticated
 aaa authorization exec HTTPSRV group RADSERV if-authenticated
 !
 aaa accounting exec default start-stop group RADSERV
-aaa session-id common 
+aaa session-id common
 login on-success log
 login on-failure log
 !
@@ -356,25 +354,25 @@ EX.
 #### service password-encryption 
 
 The `service password-encryption` command encrypts all current and future plain-text passwords inside a Cisco switch's configuration file. 
-The encryption is a weak <strong>Type 7 encryption</strong>, it should be considered a basic first encryption layer and not the default encryption for all password as it can be easily broken.
+The encryption is a weak <strong>Type 7 encryption</strong>, it should be considered a basic first encryption layer and not the default encryption for all passwords as it can be easily broken.
 
 #### key config-key password-encrypt {{ MASTER_KEY }}
 
 The `key config-key password-encrypt` command defines a <strong>master key</strong> used by Cisco IOS/IOS-XE to strongly encrypt sensitive passwords (<strong>Type 6</strong>) inside the configuration file.
-This command just define the master key, to use it, use the command [[#password encryption aes]].
+This command only defines the master key; to use it, enable the command [[#password encryption aes]].
 
 #### password encryption aes
 
 `password encryption aes` globally activates <strong>Type 6 AES encryption</strong> on a Cisco IOS/IOS-XE switch, converting eligible plain-text and weak Type 7 passwords into strong encrypted strings. 
-It requires key [[#`key config-key password-encrypt {{ MASTER_KEY }}`]] to be configured first so the switch has a master key to lock and unlock those credentials.
+It requires [[#key config-key password-encrypt {{ MASTER_KEY }}]] to be configured first so the switch has a master key to lock and unlock those credentials.
 
 #### Timezone
 
-Timezone and DST rules for Italy. An accurate clock matters here: certificate validity checks during EAP-TLS and the correlation of switch syslog with ISE Live Logs both assume the switch and ISE agree on the time.
+Timezone and DST rules for Italy. 
 
 ```bash
 clock timezone CET 1 0
-clock summer-time ROME recurring last Sun Mar 2:00 last Sun Oct 2:00
+clock summer-time CEST recurring last Sun Mar 2:00 last Sun Oct 3:00
 ```
 
 #### ip name-server
@@ -400,11 +398,11 @@ ip domain name publiacqua.it
 ```bash
 vrf definition Mgmt-vrf
 !
-address-family ipv4
-exit-address-family
+ address-family ipv4
+ exit-address-family
 !
-address-family ipv6
-exit-address-family
+ address-family ipv6
+ exit-address-family
 ```
 
 #### vtp mode transparent
@@ -419,7 +417,7 @@ vtp mode transparent
 
 #### spanning-tree mode rapid-pvst
 
-Enables Rapid Per-VLAN Spanning Tree Plus, which should be already the default. 
+Sets the spanning-tree mode to Rapid PVST+ explicitly, so it doesn’t depend on the platform default.
 
 Embeds the 12-bit VLAN ID into the Spanning Tree Bridge ID priority field. This is mandatory when using rapid-pvst (and is enabled by default on almost all modern Cisco switches) so the switch can run independent STP instances per VLAN using a single base MAC address.
 
@@ -430,7 +428,7 @@ spanning-tree extend system-id
 
 #### VLAN
 
-The site VLAN plan declares 800 (management — where RADIUS, SNMP, syslog and NTP are sourced), 802 (the client data VLAN endpoints are authorized into) and 805 (the guest VLAN used by [[#Centralized Web Authentication (CWA) for Guests|CWA]]), alongside the printer, thin-client, wireless, badge-reader, VoIP and admin segments.
+The site VLAN plan declares 800 (management — where RADIUS, SNMP, syslog and NTP are sourced), 802 (the client data VLAN endpoints are authorized into) and 805 (the guest VLAN used by [[#Centralized Web Authentication (CWA) for Guests|CWA]]), alongside the printer, wireless, badge-reader, VoIP and admin segments.
 
 ```bash
 vlan 10
@@ -495,18 +493,15 @@ username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjY
 
 #### SSH
 
-`ip ssh time-out 30`: Disables legacy, insecure SSHv1 and forces all management sessions to use SSHv2.
+`ip ssh version 2`: Disables legacy, insecure SSHv1 and forces all management sessions to use SSHv2.
 
 `ip ssh time-out 30`: Sets the pre-login authentication timeout to **30 seconds** (down from the 120-second default). If a user or bot connects over SSH and does not finish authenticating within 30 seconds, the switch drops the session to free up VTY resources.
 
-`ip ssh bulk-mode 131072`: Increases the SSH receive window size to 128 KB (131,072 bytes) for bulk data transfers. This dramatically speeds up SCP/SFTP file copies (such as uploading IOS-XE firmware images to the switch).
-
-`ip ssh source-interface Vlan800`: Forces any outbound SSH connections initiated _from_ the switch to use the IP address of `Vlan800` as their source IP, ensuring consistent firewall rules and TACACS+/RADIUS accounting.
+`ip ssh source-interface Vlan800`: Forces any outbound SSH connections initiated _from_ the switch to use the IP address of `Vlan800` as their source IP.
 
 ```bash
 ip ssh version 2
 ip ssh time-out 30
-ip ssh bulk-mode 131072
 ip ssh source-interface Vlan800
 ```
 
@@ -516,7 +511,7 @@ The `snmp-server community` command configures a shared password called a <stron
 
 The `snmp-server trap-source` command specifies the source IP address that a network device uses when sending Simple Network Management Protocol (SNMP) traps or informs to a monitoring server.
 
-The `snmp-server contact` command configures the <strong>system contact string</strong> (stored in the standard SNMP `sysContact` MIB object) on a network device, identifying the person, team, or helpdesk responsible for managing that hardware. This command is purely informational for documentation purpose. 
+The `snmp-server contact` command configures the <strong>system contact string</strong> (stored in the standard SNMP `sysContact` MIB object) on a network device, identifying the person, team, or helpdesk responsible for managing that hardware. This command is purely informational for documentation purposes. 
 
 The rest of SNMP configuration is provided directly by the DNA center.
 
@@ -532,7 +527,7 @@ snmp-server contact operationcenter@publiacqua.it
 `logging facility local6` tags all outgoing syslog messages from the switch with the local6 facility code so your syslog server can filter, sort, and store network logs separately from standard Linux/Windows system logs.
 
 `logging host` command specifies the IP address (or hostname) of an external syslog server where your Cisco switch sends its system log messages. 
-By default, typing `logging host <IP>` sends logs over <strong>UDP port 514</strong>, with severity levels 0 0 through 6.
+By default, typing `logging host <IP>` sends logs over <strong>UDP port 514</strong>, with severity levels 0 through 6.
 
 ```bash
 logging facility local6
@@ -553,20 +548,20 @@ ntp server 172.20.129.65 prefer
 
 #### call-home
 
-`service call-home`  enables <strong>Cisco Smart Call Home</strong>, a feature that monitors your switch for hardware or software faults and automatically sends diagnostic alerts and inventory data to Cisco TAC or the internal support system. 
+`service call-home` enables <strong>Cisco Smart Call Home</strong>, a feature that monitors your switch for hardware or software faults and automatically sends diagnostic alerts and inventory data to Cisco TAC or the internal support system. 
 
 `call-home` is the configuration sub-mode on a Cisco switch where you set up the rules, destination servers, and contact details for Cisco Smart Call Home. 
 While `service call-home` turns the engine on globally, entering `call-home` opens the menu that tells the switch what to send, where to send it, and who to notify.
 
 `contact-email-addr operationcenter@publiacqua.it` tells Cisco who owns the switch and where to send automated support alerts. Cisco attaches this address to the switch's diagnostic reports to identify which company or IT team manages the device.
 
-`no http secure server-identity-check` tells the switch to skip verifying that the hostname on a remote server's SSL/TLS certificate matches the destination URL during an HTTPS connection. It allows the switch to send <strong>Smart Licensing</strong> and <strong>diagnostic data over HTTPS</strong> even if an internal proxy, firewall, or local licensing server presents a certificate with a different name.
+`no http secure server-identity-check` tells the switch to skip verifying that the hostname on a remote server's SSL/TLS certificate matches the destination URL during an HTTPS connection. It allows the switch to send diagnostic data over HTTPS even if an internal proxy or firewall presents a certificate with a different name.
 
-The profile `"CiscoTAC-1"` block activates Cisco's built-in Smart Call Home profile (CiscoTAC-1) and tells the switch to send diagnostic and Smart Licensing data over HTTPS.
+The profile `"CiscoTAC-1"` block activates Cisco's built-in Smart Call Home profile (CiscoTAC-1) and tells the switch to send diagnostic data over HTTPS. 
 
-- `profile "CiscoTAC-1"`: Selects the default, pre-configured profile built into Cisco IOS/IOS-XE. Under the hood, this profile already points to Cisco's official backend server (https://cisco.com) and defines which hardware and licensing events to report.
+- `profile "CiscoTAC-1"`: Selects the default, pre-configured profile built into Cisco IOS/IOS-XE. Under the hood, this profile already points to Cisco's official backend server (tools.cisco.com) and defines which hardware and diagnostic events to report.
 - `active`: Turns this specific profile on. Even if service call-home is enabled globally, the switch will not transmit any data unless at least one profile is marked active.
-- `destination transport-method http`: Sets the delivery method to web transport (which defaults to encrypted HTTPS on TCP port 443 for CiscoTAC-1) instead of legacy email (smtp).
+- `destination transport-method http`: Sets the delivery method to web transport (which defaults to HTTPS on TCP port 443 for CiscoTAC-1) instead of legacy email (smtp).
 
 ```bash
 service call-home
@@ -586,7 +581,10 @@ call-home
 <strong>UniDirectional Link Detection (UDLD)</strong> is a Cisco Layer 2 protocol that monitors physical network cables to ensure data flows in both directions and shuts down the port if the link becomes one-way. 
 It prevents network loops and silent traffic drops, especially on fiber-optic connections.
 
-Normal mode only logs an alert and leaves the port running, while Aggressive mode actively shuts the port down (err-disable).
+In normal mode, UDLD detects a unidirectional condition when fiber strands are misconnected between ports and Layer 1 mechanisms do not detect the cabling error. 
+If the fiber strands connect to the correct ports but traffic flows in only one direction, UDLD normal mode marks the logical link as undetermined and does not disable the port. 
+
+Aggressive mode also err-disables a port in that second case, when UDLD messages stop arriving while the link is still up.
 
 ```bash
 udld aggressive
@@ -594,7 +592,7 @@ udld aggressive
 
 #### errdisable recovery 
 
-`errdisable recovery cause` command tell the switch to automatically re-enable any port shut down by errdisable.
+The `errdisable recovery cause` command tells the switch to automatically re-enable ports err-disabled for the listed causes.
 
 - `errdisable recovery cause udld`: Enables automatic recovery specifically for ports placed into `err-disable` state by UDLD aggressive mode. 
 - `errdisable recovery interval 90`: Sets the wait timer to **90 seconds** (down from the Cisco default of 300 seconds) before the switch attempts to bring an err-disabled port back up.
@@ -627,7 +625,7 @@ The `radius server` block defines an external RADIUS server (10.140.2.27) for sw
 
 `timeout 2 / retransmit 3`: Tells the switch to wait 2 seconds for a reply and retry up to 3 times (8 seconds total) before marking the server unresponsive and failing over to your next RADIUS server or local account. These aggressive timers prevent long login hangs during a server outage.
 
-`key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK]SETiCKGAAB`: The shared secret stored with strong Type 6 AES encryption, the radius server must user the same secret to communicate.
+`key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK]SETiCKGAAB`: The shared secret stored with strong Type 6 AES encryption, the radius server must use the same secret to communicate.
 
 ```bash
 radius server PBA-RADIUS
@@ -639,11 +637,11 @@ radius server PBA-RADIUS
 
 #### aaa group server radius RADSERV
 
-This command block bundle the RADIUS server in a single named group (RADSERV), set how long to skip a failed server, and lock all RADIUS traffic to the management interface (Vlan800).
+This command block bundles the RADIUS server in a single named group (RADSERV), sets how long to skip a failed server, and locks all RADIUS traffic to the management interface (Vlan800).
 
 `aaa group server radius RADSERV`: Creates a custom container named RADSERV for RADIUS servers. Using a named group lets you apply shared rules (like deadtime and source-interface) to multiple servers at once and call group RADSERV in your login rules.
 
-`server name PBA-RADIUS`: Assigns a specific RADIUS server definition into this group. This name must match the exact name from your radius server  block, such as PBA-RADIUS, or the group will not find the server.
+`server name PBA-RADIUS`: Assigns a specific RADIUS server definition into this group. This name must match the exact name from your radius server block, such as PBA-RADIUS, or the group will not find the server.
 
 `deadtime 15`: Tells the switch to mark an unresponsive RADIUS server as "dead" for 15 minutes after it fails to answer. During those 15 minutes, the switch skips straight to your backup RADIUS server (or local login) instead of making every login wait 8 seconds for a timeout.
 
@@ -660,9 +658,9 @@ aaa group server radius RADSERV
 
 `aaa authentication login` tells the Cisco switch how to verify a user's identity (username and password) when they try to log in, and sets the exact order of backup methods if the primary server is unreachable.
 
-`default`, `console` and `HTTPSRV` are rule list that are assigned different access points like SSH (`line vty`), the physical serial port (`line con 0`), or the web interface. 
+`default`, `console` and `HTTPSRV` are method lists assigned to different access points like SSH (`line vty`), the physical serial port (`line con 0`), or the web interface. 
 
-`default` rule list automatically applies to any line (like VTY SSH) that doesn't have a custom `login authentication <name>` command under it. 
+`default` method list automatically applies to any line (like VTY SSH) that doesn't have a custom `login authentication <name>` command under it. 
 
 `group RADSERV` command tells the switch to send the username and password to the `RADSERV` RADIUS server group first.
 
@@ -676,13 +674,13 @@ aaa authentication login HTTPSRV group RADSERV local-case
 
 ##### aaa authentication login default group RADSERV local-case
 
-`aaa authentication login default group RADSERV local-case` is the default  login method, the switch check the RADIUS group (`RADSERV`) first, and if `PBA-RADIUS` is unreachable, it falls back to the switch's local user database using case-sensitive usernames (`local-case`).
+`aaa authentication login default group RADSERV local-case` is the default login method: the switch check the RADIUS group (`RADSERV`) first, and if `PBA-RADIUS` is unreachable, it falls back to the switch's local user database using case-sensitive usernames (`local-case`).
 
 ##### aaa authentication login console local-case
 
-`aaa authentication login console local-case` matches the`login authentication console` command under `line con 0`. 
+`aaa authentication login console local-case` matches the `login authentication console` command under `line con 0`. 
 It forces physical console logins to authenticate directly against the local user database (case-sensitive) without waiting for RADIUS. 
-The more specific named rule list (`console`) win the broader default login method. 
+The more specific named method list (`console`) takes precedence over the default method list. 
 
 ##### aaa authentication login HTTPSRV group RADSERV local-case
 
@@ -709,7 +707,7 @@ aaa authentication enable default enable
 When the RADIUS server (RADSERV) approves the login, it can be configured to return the Cisco attribute `shell:priv-lvl=15` inside the Access-Accept response. 
 With `aaa authorization exec` enabled, the switch reads this attribute and places the user directly into Privileged EXEC mode (`Switch#`), bypassing the enable password prompt. Without this command, the switch ignores the privilege attribute and drops the user into User EXEC mode (`Switch>`).
 
-`if-authenticated` is a fallback authorization method that automatically grants CLI shell (`EXEC`) access if the user has already passed login authentication, acting as a safety net when primary authorization sources (`RADSERV` or `local`) are unreachable or lack authorization attributes.
+Once `aaa authorization exec` is configured, a successful login is not enough: the switch also needs an <strong>authorization method to answer</strong>, or it refuses the shell. `if-authenticated` is the fallback for when none can (RADIUS down, no `local`): it allows the shell because the user already authenticated, but at level 1.
 
 ```bash
 aaa authorization exec default group RADSERV local if-authenticated
@@ -732,7 +730,7 @@ aaa accounting exec default start-stop group RADSERV
 #### aaa session-id common 
 
 `aaa session-id common` forces the Cisco switch to use the exact same <strong>Session ID</strong> across all AAA phases—<strong>Authentication</strong>, <strong>Authorization</strong>, and <strong>Accounting</strong>—for a single user login session.
-Every RADIUS packet generated during that user's SSH session shares one identical `Acct-Session-Id` value, making it simple to trace a user's complete session lifecycle from login to disconnect in FreeRADIUS logs.
+Every RADIUS packet generated during that user's SSH session shares one identical `Acct-Session-Id` value, making it simple to trace a user's complete session lifecycle from login to disconnect in RADIUS logs.
 
 ```bash
 aaa session-id common 
@@ -755,14 +753,14 @@ This configuration block enables the switch's web server (HTTP/HTTPS) for [[#Cen
 
 `ip http server` and `ip http secure-server` enable the built-in HTTP (port 80) and HTTPS (port 443) servers on the switch. Both must remain enabled for <strong>Guest Central Web Authentication (CWA)</strong> so the switch can intercept initial HTTP captive-portal probes and HTTPS browser requests and redirect guest clients to the ISE Guest Portal.
 
-`ip http active-session-modules none` and `ip http secure-active-session-modules none` disables interactive browser-based WebUI management modules while keeping the underlying HTTP/HTTPS engine active. 
-This allows CWA URL redirection and programmatic services (such as RESTCONF APIs or Smart Licensing) to function without exposing the switch's administrative web login page to users or guests.
+`ip http active-session-modules none` and `ip http secure-active-session-modules none` disable interactive browser-based WebUI management modules while keeping the underlying HTTP/HTTPS engine active. 
+This allows CWA URL redirection and programmatic services (such as RESTCONF APIs) to function without exposing the switch's administrative web login page to users or guests.
 
 `ip http authentication aaa login-authentication HTTPSRV` tells the switch to verify incoming HTTP or HTTPS login requests using a custom AAA method list named `HTTPSRV`, rather than falling back to the switch's local `enable` password or the `default` AAA login list.
 
 - `ip http authentication aaa`: Instructs the switch's built-in web server (HTTP/HTTPS) to use AAA (Authentication, Authorization, and Accounting) instead of checking the local enable password.
-- `login-authentication`: Specifies that this rule applies to the <strong>login verification step</strong>(checking the username and password) for incoming web or RESTCONF API requests.
-- `HTTPSRV`: Points to a custom AAA method list defined elsewhere in your config (for example, `aaa authentication login HTTPSRV local` or `aaa authentication login HTTPSRV group RADSERV local`).
+- `login-authentication`: Specifies that this rule applies to the <strong>login verification step</strong> (checking the username and password) for incoming web or RESTCONF API requests.
+- `HTTPSRV`: Points to the `aaa authentication login HTTPSRV group RADSERV local-case` method list (see [[#aaa authentication login HTTPSRV group RADSERV local-case]]).
 
 ```bash
 ip http server
@@ -788,7 +786,7 @@ line con 0
 
 The `line con 0` command enters line configuration mode for the <strong>primary physical console port (port 0)</strong> on a Cisco router or switch.
 
-`session-timeout 5` measures idle time when you are connected to the console and then open a session outbound to another network device 
+`session-timeout 5` applies to outbound connections opened from this line. If the user is idle for 5 minutes on the outbound session the switch closes the session.
 
 `exec-timeout 30 0` automatically logs out an idle session after <strong>30 minutes and 0 seconds</strong>. Leaving the console unlocked after unplugging a laptop is a major physical security risk.
 
@@ -798,7 +796,8 @@ The `line con 0` command enters line configuration mode for the <strong>primary 
 
 `stopbits 1` ensures clean serial communication with modern terminal software.
 
-`privilege level 15` grants full, unrestricted administrative access immediately upon connecting to the physical console port.
+`privilege level 15` starts console sessions directly at level 15 (`Switch#`) once the user has logged in with a local account, with no `enable` needed. Exec authorization is not applied to the console (that would require `aaa authorization console`), so this line is what sets the console privilege.
+
 #### line vty
 
 ```bash
@@ -827,13 +826,13 @@ Cisco splits VTY lines into **`0 4`** and **`5 15`** for **historical backward c
 
 `history size 64` stores up to 64 recent commands in memory for up-arrow recall during an SSH session (higher than the default 10).
 
-`exec-timeout 60 0` automatically logs out an idle session after <strong>60 minutes and 0 seconds</strong>. Leaving the console unlocked after unplugging a laptop is a major physical security risk.
+`exec-timeout 60 0` automatically logs out an idle session after <strong>60 minutes and 0 seconds</strong>. 
 
 `logging synchronous` keeps console log messages from cutting through commands while you are typing.
 
 `transport preferred none` prevents the router from freezing while trying to resolve mistyped commands as network hostnames.
 
-`session-timeout 60` measures idle time when you are connected to the console and then open a session outbound to another network device 
+`session-timeout 60` applies to outbound connections opened from this line. If the user is idle for 60 minutes on the outbound session the switch closes the session.
 
 ## DNA - PBA NAC
 
