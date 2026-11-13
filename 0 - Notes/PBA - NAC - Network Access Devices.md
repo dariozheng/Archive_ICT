@@ -571,7 +571,30 @@ call-home
   destination transport-method http
 ```
 
-#### call-home
+#### udld aggressive
+
+`udld aggressive` globally enables <strong>UniDirectional Link Detection (UDLD)</strong> in aggressive mode across all fiber-optic ports on the Cisco switch.
+<strong>UniDirectional Link Detection (UDLD)</strong> is a Cisco Layer 2 protocol that monitors physical network cables to ensure data flows in both directions and shuts down the port if the link becomes one-way. 
+It prevents network loops and silent traffic drops, especially on fiber-optic connections.
+
+Normal mode only logs an alert and leaves the port running, while Aggressive mode actively shuts the port down (err-disable).
+
+```bash
+udld aggressive
+```
+
+#### errdisable recovery 
+
+`errdisable recovery cause` command tell the switch to automatically re-enable any port shut down by errdisable.
+
+- `errdisable recovery cause udld`: Enables automatic recovery specifically for ports placed into `err-disable` state by UDLD aggressive mode. 
+- `errdisable recovery interval 90`: Sets the wait timer to **90 seconds** (down from the Cisco default of 300 seconds) before the switch attempts to bring an err-disabled port back up.
+
+```bash
+errdisable recovery cause udld
+errdisable recovery interval 90
+```
+
 
 The management RADIUS server used for administrator logins — the RADSERV plane described in [[#Two AAA Planes — RADSERV vs ISESERV|Two AAA Planes]]. Note the aggressive `timeout 2`: an admin login should fail over to the local account quickly, unlike the more patient ISE timers.
 
