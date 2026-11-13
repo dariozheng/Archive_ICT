@@ -230,7 +230,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -253,7 +254,7 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "0aa7a519a475b13e",
   "lastOpenFiles": [
     "Homepage.md",
     "0 - Notes/VLANs.md",
