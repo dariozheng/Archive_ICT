@@ -693,6 +693,7 @@ The more specific named method list (`console`) takes precedence over the defaul
 `aaa authentication login HTTPSRV group RADSERV local-case` creates a named login list (`HTTPSRV`) for the switch's HTTP server (`ip http authentication aaa login-authentication HTTPSRV`). 
 No HTTP module that asks for a login is enabled today (see [[#ip http server]]). 
 If one is turned on later, logins go through RADIUS instead of the enable password. Like the default list, it checks `RADSERV` first and falls back to case-sensitive local accounts.
+
 #### aaa authentication enable 
 
 When a user lands in unprivileged mode (`Switch>`) and types `enable`, the switch checks the `aaa authentication enable` rule to decide how to authenticate them.
