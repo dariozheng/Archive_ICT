@@ -595,6 +595,45 @@ errdisable recovery cause udld
 errdisable recovery interval 90
 ```
 
+#### diagnostic bootup level minimal
+
+`diagnostic bootup level minimal` tells the switch to run only fast, basic hardware checks (GOLD — Generic Online Diagnostics) when powering on or rebooting.
+
+It is already the factory default on modern Cisco Catalyst switches (like the Catalyst 9000 series).
+
+#### aaa new-model
+
+The global configuration command `aaa new-model` enables the <strong>Authentication, Authorization, and Accounting (AAA)</strong> access control framework on a Cisco IOS device. 
+
+Entering this command unlocks advanced security commands and replaces legacy line-based login methods with customizable method lists.
+Until this command is used all other aaa configuration commands remain hidden and unavailable in the Cisco CLI.
+
+#### radius server 
+
+The `radius server` block defines an external RADIUS server (10.140.2.27) for switch authentication and accounting, with its shared secret securely encrypted using the Type 6 AES master key.
+
+• `radius server PBA-RADIUS`: Uses Cisco's modern named RADIUS server syntax (replacing legacy radius-server host commands). 
+• `address ipv4 10.140.2.27 auth-port 1812 acct-port 1813`: Points the switch to 10.140.2.27 using standard IANA RADIUS ports (1812 for authentication/authorization and 1813 for accounting).
+• `timeout 2 / retransmit 3`: Tells the switch to wait 2 seconds for a reply and retry up to 3 times (8 seconds total) before marking the server unresponsive and failing over to your next RADIUS server or local account. These aggressive timers prevent long login hangs during a server outage.
+• `key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK]SETiCKGAAB`: The shared secret stored with strong Type 6 AES encryption, the radius server must user the same secret to communicate.
+
+```bash
+radius server PBA-RADIUS
+ address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 3
+ key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK`]SETi`CKGAAB
+```
+
+#### aaa group server radius RADSERV
+
+```bash
+aaa group server radius RADSERV
+ server name PBA-RADIUS
+ deadtime 15
+ ip radius source-interface Vlan800
+```
+
 
 The management RADIUS server used for administrator logins — the RADSERV plane described in [[#Two AAA Planes — RADSERV vs ISESERV|Two AAA Planes]]. Note the aggressive `timeout 2`: an admin login should fail over to the local account quickly, unlike the more patient ISE timers.
 
@@ -689,13 +728,6 @@ line vty 5 15
  transport input ssh
 ```
 
-Persist the configuration:
-
-```bash
-end
-write memory
-!
-```
 
 ## DNA - PBA NAC
 
