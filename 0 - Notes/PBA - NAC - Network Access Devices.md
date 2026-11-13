@@ -43,9 +43,9 @@ conf t
 hostname <HOSTNAME>
 ip domain name publiacqua.it
 !
-enable secret 9 $14$kOh9$BYiVhdtn8rdhuU$ZksoQp0DSO9GhUJnJUWH1zmtTb2ChF1iXZC/etIkbb.
+enable secret 9 $9$qO.VLlIA7cZqaU$dsUyyzqhHGvjYoY.LHxuKKkUq3IRwy94gsQWZwNM8Bg
 !
-username admin privilege 15 secret 9 $14$GFW4$GKyL6MNZejulQU$A2EEwLhU1gQd2Ac.AjYj0CqlvW6qW.9cWZPDoda06fo
+username admin privilege 15 secret 9 $9$w3tUmJIppNRAE.$sG.1e4QLCLb/ZmAFZLbAV4LTa72sL6eQWiYXx41j3Zc
 !
 crypto key generate rsa modulus 2048
 ip ssh version 2
@@ -84,14 +84,17 @@ aaa group server radius RADSERV
 !
 !
 !
-aaa authentication login default group RADSERV local-case 
+aaa authentication login default group RADSERV local-case
 aaa authentication login console local-case
 aaa authentication login HTTPSRV group RADSERV local-case
+!
 aaa authentication enable default enable
+!
 aaa authorization exec default group RADSERV local if-authenticated
 aaa authorization exec HTTPSRV group RADSERV if-authenticated
+!
 aaa accounting exec default start-stop group RADSERV
-aaa session-id common 
+aaa session-id common
 login on-success log
 login on-failure log
 !
@@ -207,6 +210,7 @@ interface Vlan800
 !
 !
 enable secret 9 $9$qO.VLlIA7cZqaU$dsUyyzqhHGvjYoY.LHxuKKkUq3IRwy94gsQWZwNM8Bg
+!
 username admin privilege 15 secret 9 $9$w3tUmJIppNRAE.$sG.1e4QLCLb/ZmAFZLbAV4LTa72sL6eQWiYXx41j3Zc
 !
 !
