@@ -883,22 +883,21 @@ vlan 800
 vlan 802
  name LAN-CLIENT
 !
-vlan 805
- name LAN-GUEST-ACCESS
-!
-vlan 850
+vlan 803
  name LAN-ADMIN
 !
-!
-!
-interface Vlan805
- description GUEST-INTERCEPT-SVI
- ip address {{ VLAN805_IP_address }} {{ VLAN805_NETMASK }}
- no shutdown
+vlan 805
+ name LAN-GUEST
 !
 !
 !
-username test-user privilege 0 password 7 06120A3258031918160405041E00
+! @start-ignore-compliance
+key config-key password-encrypt {{ MASTER_KEY }}
+! @end-ignore-compliance
+password encryption aes
+!
+!
+!
 !
 !
 !
@@ -911,18 +910,20 @@ radius server ISE01
  timeout 5
  retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
- key 7 075F02457D0A36162421045C
+ key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
 !
 radius server ISE02
  address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
  timeout 5
  retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
- key 7 0054300F375824153C12431E
+ key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
 !
-! 
+!
+! @start-ignore-compliance
 radius-server timeout 5
 radius-server retransmit 3
+! @end-ignore-compliance
 radius-server dead-criteria time 5 tries 3
 radius-server deadtime 15
 !   
@@ -959,8 +960,8 @@ aaa accounting update newinfo periodic 2880
 !
 !
 aaa server radius dynamic-author
- client 10.140.2.31 server-key 7 040B280F3C22635D3A2A0A47
- client 10.140.2.32 server-key 7 08716F473A1A2A0421380354
+ client 10.140.2.31 server-key 6 gAiTI`bLACJdW[bEPceHa[EAXX[RgZFHVJbZAAB
+ client 10.140.2.32 server-key 6 SUbKgg\P]_OROX]aLWWFRWEPLDgZdY`hQE]bAAB
 !
 !
 !
@@ -968,26 +969,23 @@ aaa server radius dynamic-author
 device-tracking tracking auto-source 
 !
 ! 
-device-tracking policy IPDT_POLICY 
- security-level glean 
- limit address-count 10 
+device-tracking policy ISE_DT_Access
  no protocol udp
- tracking enable 
+ security-level glean
+ tracking enable
 !
 ! 
 device-tracking policy Disable_DT_Trunk 
  trusted-port 
  device-role switch 
 !
-! 
+!
 !
 ip dhcp snooping 
-ip dhcp snooping vlan 802,805,850
 !
 ! 
 no ip dhcp snooping information option 
 !
-ip arp inspection vlan 802,805,850
 !
 !
 !
@@ -1025,26 +1023,30 @@ access-session authentication attributes filter-spec include list sensor_list
 !
 !
 !
-ip access-list extended ACL_GUEST_REDIRECT
- 10 deny udp any any eq domain
- 20 deny udp any any eq bootps
- 30 deny ip any host 10.140.2.31  
- 40 deny ip any host 10.140.2.32  
- 50 permit tcp any any eq www
- 60 permit tcp any any eq 443
-!
 ip access-list extended ACL_AAA-Down
  10 permit udp any any eq domain
- 20 permit udp any eq bootpc any eq bootps
- 30 deny ip any 10.0.0.0 0.255.255.255
- 40 deny ip any 172.16.0.0 0.0.15.255
- 50 deny ip any 192.168.0.0 0.0.255.255
- 60 permit ip any any
+ 20 permit tcp any any eq domain
+ 30 permit udp any eq bootpc any eq bootps
+ 40 deny ip any 10.0.0.0 0.255.255.255
+ 50 deny ip any 172.16.0.0 0.15.255.255
+ 60 deny ip any 192.168.0.0 0.0.255.255
+ 70 permit ip any any
+!
+ip access-list extended ACL_GUEST_REDIRECT
+ 10 deny udp any any eq domain
+ 20 deny tcp any any eq domain
+ 30 deny udp any any eq bootps
+ 40 deny udp any any eq bootpc
+ 50 deny ip any host 10.140.2.31
+ 60 deny ip any host 10.140.2.32
+ 70 permit tcp any any eq www
+ 80 permit tcp any any eq 443
 !
 !
 !
 service-template Critical_Access 
  vlan 802
+ voice vlan
  access-group ACL_AAA-Down
 !
 service-template Guest_Redirect
@@ -1104,15 +1106,14 @@ policy-map type control subscriber ISE-NAC-POLICY
  event session-started match-all
   10 class always do-until-failure
     10 authenticate using dot1x priority 10
-    20 authenticate using mab priority 20
 !
  event authentication-failure match-first
   5 class DOT1X_DENIED do-until-failure
    10 terminate dot1x
    20 authenticate using mab priority 20
   10 class AAA-DOWN_GUEST_USER do-until-failure
-   10 clear-session
-   20 activate service-template Critical_Access
+   10 activate service-template Critical_Access
+   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
    30 authorize
    40 pause reauthentication
   20 class AAA-DOWN_AUTH_USER do-until-failure
@@ -1120,8 +1121,9 @@ policy-map type control subscriber ISE-NAC-POLICY
    20 pause reauthentication
   30 class AAA-DOWN_UNAUTH_USER do-until-failure
    10 activate service-template Critical_Access
-   20 authorize
-   30 pause reauthentication
+   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+   30 authorize
+   40 pause reauthentication
   40 class DOT1X_TIMEOUT do-until-failure
    10 terminate dot1x
    20 authenticate using mab priority 20 
@@ -1167,10 +1169,11 @@ template NAC-INT-TEMPLATE
  description NAC INTERFACE
  switchport mode access
  switchport access vlan 802
- ip arp inspection limit rate 100
- ip dhcp snooping limit rate 20
  spanning-tree portfast
  spanning-tree bpduguard enable
+!
+ switchport nonegotiate    
+ ip dhcp snooping limit rate 15 
 !
  authentication periodic
 !
@@ -1185,20 +1188,37 @@ access-session closed
  dot1x pae authenticator
  dot1x timeout tx-period 7
  dot1x max-reauth-req 3
- device-tracking attach-policy IPDT_POLICY
+ device-tracking attach-policy ISE_DT_Access
  service-policy type control subscriber ISE-NAC-POLICY
+!
 !
 !
 !
 {% block interfaces %}
 {% for interface in __interface %}
-{% if interface.portMode | lower == 'access'
-      and interface.vlanId | int == 802 %}
-interface {{ interface.portName }}
+{% set name = interface.portName | default('') %}
+{% set mode = interface.portMode | default('') | lower %}
+{% set desc = interface.description | default('') | lower %}
+{% set vlan = interface.vlanId | default(0) | int %}
+{% if mode != 'trunk' and (vlan == 802 or vlan == 803) %}
+interface {{ name }}
+ switchport access vlan 802
+ switchport voice vlan 300
  source template NAC-INT-TEMPLATE
+{% elif mode == 'trunk' %}
+interface {{ name }}
+{% if 'Port-channel' in name %}
+ device-tracking attach-policy Disable_DT_Trunk
+ ip dhcp snooping trust
+{% elif 'po1' in desc or 'po2' in desc or 'po3' in desc or 'po4' in desc or 'po5' in desc or 'po6' in desc or 'po7' in desc or 'po8' in desc or 'po9' in desc %}
+ ip dhcp snooping trust
+{% elif 'cw9171' in desc or 'cw9172' in desc or 'cw9174' in desc or 'cw9175' in desc or 'cw9176' in desc or 'cw9177' in desc or 'cw9178' in desc or 'cw9179' in desc %}
+ switchport trunk allowed vlan add 803
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endblock %}
+!
 !
 !
 !
@@ -1207,10 +1227,387 @@ ip http secure-server
 !
 !
 !
-end
+ip dhcp snooping vlan 802-803,805
+!
+!
+!! Template to enable Cisco ISE - NAC
+!
+!
+!
+aaa new-model
+!
+!
+!
+dot1x system-auth-control 
+! 
+dot1x critical eapol 
+!
+#INTERACTIVE
+no access-session mac-move deny<IQ>.*Do you wish to continue\? \[yes\]:\s*<R>yes
+#ENDS_INTERACTIVE
+!
+!
+!
+aaa session-id common 
+!
+!
+!
+vlan 800
+ name LAN-MGMT
+!
+vlan 802
+ name LAN-CLIENT
+!
+vlan 803
+ name LAN-ADMIN
+!
+vlan 805
+ name LAN-GUEST
+!
+!
+!
 ! @start-ignore-compliance
-wr
+key config-key password-encrypt {{ MASTER_KEY }}
 ! @end-ignore-compliance
+password encryption aes
+!
+!
+!
+! @start-ignore-compliance
+username test-user privilege 0 secret Test0
+! @end-ignore-compliance
+!
+!
+!
+ip radius source-interface Vlan800
+!
+!
+!
+radius server ISE01
+ address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
+ timeout 5
+ retransmit 3
+ automate-tester username test-user ignore-acct-port probe-on
+ key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
+!
+radius server ISE02
+ address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
+ timeout 5
+ retransmit 3
+ automate-tester username test-user ignore-acct-port probe-on
+ key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
+!
+!
+! @start-ignore-compliance
+radius-server timeout 5
+radius-server retransmit 3
+! @end-ignore-compliance
+radius-server dead-criteria time 5 tries 3
+radius-server deadtime 15
+!   
+! 
+radius-server attribute 6 on-for-login-auth
+radius-server attribute 6 support-multiple
+radius-server attribute 8 include-in-access-req
+radius-server attribute 25 access-request include
+radius-server attribute 31 mac format ietf upper-case
+radius-server attribute 31 send nas-port-detail mac-only
+radius-server attribute 32 include-in-access-req format %h
+!
+! @start-ignore-compliance
+radius-server vsa send authentication
+radius-server vsa send accounting
+! @end-ignore-compliance
+!
+!
+!
+aaa group server radius ISESERV
+ server name ISE01
+ server name ISE02
+ deadtime 15
+ ip radius source-interface Vlan800
+!
+aaa authentication dot1x default group ISESERV
+aaa authorization network default group ISESERV
+!
+#INTERACTIVE
+aaa accounting identity default start-stop group ISESERV<IQ>.*Do you wish to continue.*<R>yes
+#ENDS_INTERACTIVE
+aaa accounting update newinfo periodic 2880
+!
+!
+!
+aaa server radius dynamic-author
+ client 10.140.2.31 server-key 6 gAiTI`bLACJdW[bEPceHa[EAXX[RgZFHVJbZAAB
+ client 10.140.2.32 server-key 6 SUbKgg\P]_OROX]aLWWFRWEPLDgZdY`hQE]bAAB
+!
+!
+!
+! 
+device-tracking tracking auto-source 
+!
+! 
+device-tracking policy ISE_DT_Access
+ no protocol udp
+ security-level glean
+ tracking enable
+!
+! 
+device-tracking policy Disable_DT_Trunk 
+ trusted-port 
+ device-role switch 
+!
+!
+!
+ip dhcp snooping 
+!
+! 
+no ip dhcp snooping information option 
+!
+!
+!
+!
+cdp run
+!
+! 
+device-sensor filter-list dhcp list dhcp_list
+ option name host-name
+ option name requested-address
+ option name parameter-request-list
+ option name class-identifier
+ option name client-identifier
+device-sensor filter-spec dhcp include list dhcp_list 
+!
+!
+!
+device-sensor filter-list cdp list cdp_list 
+ tlv name device-name
+ tlv name address-type
+ tlv name capabilities-type
+ tlv name platform-type
+ tlv name version-type
+device-sensor filter-spec cdp include list cdp_list
+!
+!
+device-sensor notify all-changes 
+!
+!
+access-session attributes filter-list list sensor_list 
+ cdp
+ dhcp
+!
+access-session accounting attributes filter-spec include list sensor_list 
+access-session authentication attributes filter-spec include list sensor_list 
+!
+!
+!
+ip access-list extended ACL_AAA-Down
+ 10 permit udp any any eq domain
+ 20 permit tcp any any eq domain
+ 30 permit udp any eq bootpc any eq bootps
+ 40 deny ip any 10.0.0.0 0.255.255.255
+ 50 deny ip any 172.16.0.0 0.15.255.255
+ 60 deny ip any 192.168.0.0 0.0.255.255
+ 70 permit ip any any
+!
+ip access-list extended ACL_GUEST_REDIRECT
+ 10 deny udp any any eq domain
+ 20 deny tcp any any eq domain
+ 30 deny udp any any eq bootps
+ 40 deny udp any any eq bootpc
+ 50 deny ip any host 10.140.2.31
+ 60 deny ip any host 10.140.2.32
+ 70 permit tcp any any eq www
+ 80 permit tcp any any eq 443
+!
+!
+!
+service-template Critical_Access 
+ vlan 802
+ voice vlan
+ access-group ACL_AAA-Down
+!
+service-template Guest_Redirect
+!
+!
+!
+parameter-map type webauth global
+ type webauth
+ virtual-ip ipv4 192.0.2.1
+ intercept-https-enable
+!
+!
+!
+class-map type control subscriber match-all DOT1X
+ match method dot1x
+!
+class-map type control subscriber match-all DOT1X_DENIED
+ match method dot1x
+ match result-type method dot1x authoritative
+!
+class-map type control subscriber match-all DOT1X_NO_SUPPLICANT
+ match result-type method dot1x agent-not-found
+!
+class-map type control subscriber match-all DOT1X_TIMEOUT
+ match method dot1x
+ match result-type method dot1x method-timeout
+!
+class-map type control subscriber match-all MAB
+ match method mab
+!
+class-map type control subscriber match-all MAB_DENIED
+ match method mab
+ match result-type method mab authoritative
+!
+class-map type control subscriber match-all AAA-DOWN_UNAUTH_USER
+ match result-type aaa-timeout
+ match authorization-status unauthorized
+!
+class-map type control subscriber match-all AAA-DOWN_GUEST_USER
+ match result-type aaa-timeout
+ match activated-service-template Guest_Redirect
+!
+class-map type control subscriber match-all AAA-DOWN_AUTH_USER
+ match result-type aaa-timeout
+ match authorization-status authorized
+!
+class-map type control subscriber match-all CRITICAL_AUTH
+ match activated-service-template Critical_Access
+!
+class-map type control subscriber match-none NOT_CRITICAL_AUTH
+ match activated-service-template Critical_Access
+!
+!
+!
+policy-map type control subscriber ISE-NAC-POLICY
+!
+ event session-started match-all
+  10 class always do-until-failure
+    10 authenticate using dot1x priority 10
+!
+ event authentication-failure match-first
+  5 class DOT1X_DENIED do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  10 class AAA-DOWN_GUEST_USER do-until-failure
+   10 activate service-template Critical_Access
+   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+   30 authorize
+   40 pause reauthentication
+  20 class AAA-DOWN_AUTH_USER do-until-failure
+   10 authorize
+   20 pause reauthentication
+  30 class AAA-DOWN_UNAUTH_USER do-until-failure
+   10 activate service-template Critical_Access
+   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
+   30 authorize
+   40 pause reauthentication
+  40 class DOT1X_TIMEOUT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20 
+  50 class MAB_DENIED do-until-failure
+   10 terminate mab
+   20 unauthorize
+  60 class DOT1X_NO_SUPPLICANT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  70 class always do-until-failure
+   10 terminate mab
+   20 terminate dot1x
+   30 authentication-restart 60
+!    
+ event aaa-available match-all
+  10 class CRITICAL_AUTH do-until-failure
+   10 clear-session
+  20 class NOT_CRITICAL_AUTH do-until-failure
+   10 resume reauthentication
+!
+ event agent-found match-all
+  10 class always do-until-failure
+   10 terminate mab
+   20 authenticate using dot1x priority 10
+!    
+ event inactivity-timeout match-all
+  10 class always do-until-failure
+   10 clear-session
+!    
+ event authentication-success match-all
+  10 class DOT1X do-until-failure
+   10 authorize
+  20 class MAB do-until-failure
+   10 authorize 
+!    
+ event violation match-all
+  10 class always do-until-failure
+   10 restrict
+!
+!
+!
+template NAC-INT-TEMPLATE
+ description NAC INTERFACE
+ switchport mode access
+ switchport access vlan 802
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+!
+ switchport nonegotiate    
+ ip dhcp snooping limit rate 15 
+!
+ authentication periodic
+!
+ authentication timer reauthenticate server
+ mab
+!
+access-session port-control auto
+access-session host-mode single-host
+access-session control-direction in
+access-session closed
+!
+ dot1x pae authenticator
+ dot1x timeout tx-period 7
+ dot1x max-reauth-req 3
+ device-tracking attach-policy ISE_DT_Access
+ service-policy type control subscriber ISE-NAC-POLICY
+!
+!
+!
+!
+{% block interfaces %}
+{% for interface in __interface %}
+{% set name = interface.portName | default('') %}
+{% set mode = interface.portMode | default('') | lower %}
+{% set desc = interface.description | default('') | lower %}
+{% set vlan = interface.vlanId | default(0) | int %}
+{% if mode != 'trunk' and (vlan == 802 or vlan == 803) %}
+interface {{ name }}
+ switchport access vlan 802
+ switchport voice vlan 300
+ source template NAC-INT-TEMPLATE
+{% elif mode == 'trunk' %}
+interface {{ name }}
+{% if 'Port-channel' in name %}
+ device-tracking attach-policy Disable_DT_Trunk
+ ip dhcp snooping trust
+{% elif 'po1' in desc or 'po2' in desc or 'po3' in desc or 'po4' in desc or 'po5' in desc or 'po6' in desc or 'po7' in desc or 'po8' in desc or 'po9' in desc %}
+ ip dhcp snooping trust
+{% elif 'cw9171' in desc or 'cw9172' in desc or 'cw9174' in desc or 'cw9175' in desc or 'cw9176' in desc or 'cw9177' in desc or 'cw9178' in desc or 'cw9179' in desc %}
+ switchport trunk allowed vlan add 803
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endblock %}
+!
+!
+!
+!
+ip http server
+ip http secure-server
+!
+!
+!
+ip dhcp snooping vlan 802-803,805
+!
+!
 !
 ```
 

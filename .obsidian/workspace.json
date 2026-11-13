@@ -88,7 +88,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "note",
+                "query": "tag:claude",
                 "matchingCase": true,
                 "explainSearch": true,
                 "collapseAll": true,
@@ -230,7 +230,8 @@
               "title": "All properties"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -253,11 +254,17 @@
       "find-orphaned-images:Find orphaned images": false
     }
   },
-  "active": "719d795d6f6740e8",
+  "active": "372d643502475ffb",
   "lastOpenFiles": [
-    "Homepage.md",
-    "0 - Notes/VLANs.md",
     "0 - Notes/PBA - NAC - Network Access Devices.md",
+    "0 - Notes/Subnetting.md",
+    "0 - Notes/VLANs.md",
+    "0 - Notes/Routing.md",
+    "0 - Notes/Self-Hosted Bitcoin and Ethereum node stack.md",
+    "0 - Notes/User-ID™.md",
+    "0 - Notes/Windows Remote Management Protocol.md",
+    "0 - Notes/Web-Based Enterprise Management.md",
+    "Homepage.md",
     "0 - Notes/CCNP Enterprise Core (ENCOR 350-401) Study Plan.md",
     "0 - Notes/NAC-Timeline_v25.xlsx",
     "0 - Notes/Wireless.md",
@@ -267,20 +274,15 @@
     "2 - Categories/Topics/Networking/Cisco ISE.md",
     "1 - Excalidraw/PBA - NAC - Configuration Flow.md",
     "0 - Notes/PBA - NAC - Presentazione.md",
-    "0 - Notes/User-ID™.md",
     "0 - Notes/UFW.md",
     "0 - Notes/VXLAN.md",
     "0 - Notes/VRF.md",
     "0 - Notes/WireGuard.md",
-    "0 - Notes/Windows Remote Management Protocol.md",
-    "0 - Notes/Web-Based Enterprise Management.md",
     "0 - Notes/netfilter.md",
     "0 - Notes/nftables.md",
     "0 - Notes/Border Gateway Protocol.md",
     "0 - Notes/Backhaul.md",
     "0 - Notes/Autonomous Digital Experience Management.md",
-    "0 - Notes/Autonomous System.md",
-    "0 - Notes/BGP Configuration commands.md",
     "attachments/Pasted image 20260511145530.png",
     "attachments/nac-07-onboarding.svg",
     "attachments/nac-06-ise-non-raggiungibile.svg",
