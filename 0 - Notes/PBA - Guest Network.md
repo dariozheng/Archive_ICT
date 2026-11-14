@@ -12,13 +12,13 @@ last_update: 2026-07-09
 status: draft
 ---
 In questa documentazione ci sono varie configurazioni per la rete Guest di PBA. 
-# DNS-GUEST
+## DNS-GUEST
 La configurazione della dns-guest server e come vengono impostati i forwarders.
 
 ![[Pasted image 20260706114203.png]]
 
  ![[Pasted image 20260706114254.png]]
-# Firewall Firepower
+## Firewall Firepower
 Firepower policy dagli dns-guest verso i suoi forwarders. Regola per permettere DNS-GUEST di raggiungere il firewall Palo-Alto.
 
 ![[Pasted image 20260706105737.png]]
@@ -27,7 +27,7 @@ Firepower policy dagli dns-guest verso i siti remoti.
 
 ![[Pasted image 20260706105752.png]]
 
-# Firewall Panorama
+## Firewall Panorama
 Panorama rule per gli guests.
 
 ![[Pasted image 20260706110217.png]]

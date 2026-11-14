@@ -15,7 +15,7 @@
       }
     },
     {
-      "query": "tag:#topic  ",
+      "query": "tag:#topic OR tag:#product",
       "color": {
         "a": 1,
         "rgb": 14069084

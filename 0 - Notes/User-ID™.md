@@ -88,7 +88,7 @@ Multiple Windows-based agents can be deployed to handle larger environments or m
 ![[User-ID Windows Session Monitoring.png]]
 
 #### Windows-Based Agent Configuration  #configuration 
-<img src="Windows-Based Agent Configuration.png" style="background-color:grey;" />
+![[Windows-Based Agent Configuration.png|grey-background]]
 
 ##### Installation Location 
 The Windows-based agent can be installed on machines running Windows Server 2008 or later.  

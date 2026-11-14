@@ -49,3 +49,9 @@ h6 {
   line-height: 1.5;
   font-weight: 600;
 }
+
+/* An image embedded as ![[image.png|grey-background]] gets a grey background:
+   for images with white text on a transparent background. */
+img[alt="grey-background"] {
+  background-color: grey;
+}

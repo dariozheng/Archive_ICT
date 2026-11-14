@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWireguard",
       "SiPaloaltonetworks",
       "SiWindows",
       "SiCisco",
-      "FasNetworkWired",
-      "SiLinux"
+      "FasNetworkWired"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],

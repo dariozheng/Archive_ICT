@@ -22,7 +22,7 @@ status: draft
 <mark style="background: #FFB8EBA6;">User membership in a DUG is dynamic, and it is controlled by tagging and untagging usernames</mark>.
 <mark style="background: #BBFABBA6;">You can manually tag and untag usernames using the web interface</mark>. 
 <mark style="background: #ADCCFFA6;">Usernames can also be tagged and untagged by using the auto-tagging feature in a <strong>Log Forwarding profile</strong> or by programming another utility to invoke PAN-OS XML API commands</mark>.
-# Dynamic User Group Operation
+## Dynamic User Group Operation
 DUGs enable you to create a Security policy that provides auto-remediation in response to user behavior and activity.
 
 ![[Dynamic User Group Operation.png]]
@@ -42,4 +42,4 @@ In the example here, <mark style="background: #FFF3A3A6;">a user’s traffic is 
 
 DUG membership then is used to determine future policy rule matches. 
 
-As examples, a Security policy could block a user, an Authentication policy could force the user to use multi-factor authentication (MFA), or a Decryption policy could force the user’s traffic to be decrypted.
+As examples, a Security policy could block a user, an Authentication policy could force the user to use multi-factor authentication ([[Multi-Factor Authentication - Palo Alto|MFA]]), or a Decryption policy could force the user’s traffic to be decrypted.

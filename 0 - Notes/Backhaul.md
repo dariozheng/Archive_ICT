@@ -31,7 +31,7 @@ ISPs connect you to the internet through a backbone network connecting data cent
 <mark style="background: #FFF3A3A6;">Backhaul is also used for mobile data access. When you browse the internet on your mobile phone, your device connects to cell towers in a local <strong>Radio Access Network (RAN)</strong></mark>.
 <mark style="background: #D2B3FFA6;"><strong>Backhaul is</strong> this local <strong>RAN</strong> and its <strong>related infrastructure</strong></mark>, <mark style="background: #CACFD9A6;">which connects your mobile device to a wired backbone network and the internet</mark>.
 
-# How does backhaul work?
+## How does backhaul work?
 
 ![[Backhaul.png]]
 
@@ -42,11 +42,11 @@ ISPs connect you to the internet through a backbone network connecting data cent
 5. <strong>Router</strong>: The data reaches their router, which creates a wired or [[Wireless|wireless]] local area network o deliver the movie to their laptop, mobile phone or smart TV. You connect your devices to the router by Wi-Fi or by plugging in an Ethernet cable.
 
 Exchange backhaul plays a critical role in this process. By providing high capacity transport between the <strong>backbone network (2)</strong> and the customer’s local <strong>access network (4)</strong>, backhaul ensures their content is transmitted efficiently, ensuring a smooth streaming experience.
-# Types of backhaul
+## Types of backhaul
 Backhaul solutions can be divided into two broad categories: wired or wireless.
-### Wired (fixed-line) backhaul
+#### Wired (fixed-line) backhaul
 <mark style="background: #FFB86CA6;">Wired or fixed-line backhaul uses cables to transmit data</mark>, which can provide higher bandwidth and lower latency than wireless backhaul.
 
 <mark style="background: #BBFABBA6;">Wired backhaul can use fibre optic, copper, Ethernet or coaxial cabling</mark>. Today, wired backhaul tends to use fibre as it offers very low latency and the highest capacity to satisfy the growing demand for data.
-### Wireless backhaul
+#### Wireless backhaul
 <mark style="background: #D2B3FFA6;">Wireless backhaul typically uses microwave signals</mark>, <mark style="background: #FFF3A3A6;">which can make point-to-point and point-to-multipoint connections over medium to long distances</mark>. For remote areas or areas without wired infrastructure, <mark style="background: #CACFD9A6;">satellites can be used to transmit data over long distances</mark>, while Wi-Fi can extend networks locally.

@@ -27,7 +27,7 @@ In simple terms, the idea is <mark style="background: #FFB8EBA6;">to set up an i
 <mark style="background: #BBFABBA6;">For a firewall, context could be something like <strong>IP-to-user mapping</strong> or <strong>host information profile</strong> (HIP), which gives information about device posture</mark>. 
 
 <mark style="background: #ABF7F7A6;">Now irrespective of whether users are working from an office or home or a coffee shop</mark>, <mark style="background: #ADCCFFA6;"><u>the information is fed to all the firewalls that are enforcing identity-based policies</u></mark>.
-### Configure the Firewall to Connect to the Redistribution Point #configuration 
+## Configure the Firewall to Connect to the Redistribution Point #configuration 
 With data redistribution, <mark style="background: #FFB8EBA6;">you configure the <strong>source</strong> or <strong>redistribution point</strong> the firewall will connect to</mark> and <mark style="background: #ADCCFFA6;">then select the type of information you want it to redistribute</mark>.
 
 <mark style="background: #ABF7F7A6;">You can connect to the source device by using either the serial number or the host and port numbers</mark>. 

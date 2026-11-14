@@ -25,7 +25,7 @@ After successful authentication, the <mark style="background: #ABF7F7A6;">peers 
 
 <mark style="background: #BBFABBA6;">The <strong>SAs</strong> specify all of the parameters that are required for secure transmission, <mark style="background: #ABF7F7A6;">including the <strong>security parameter index (SPI)</strong></mark>, <strong>security protocol</strong>, <mark style="background: #ADCCFFA6;">cryptographic keys</mark>, <mark style="background: #D2B3FFA6;">destination IP address</mark>, <mark style="background: #CACFD9A6;">encryption</mark>, <mark style="background: #FFB8EBA6;">data authentication</mark>, <mark style="background: #FF5582A6;">data integrity</mark>, and <mark style="background: #FFB86CA6;">endpoint authentication</mark></mark>.
 
-# IPsec
+## IPsec
 <mark style="background: #FFB8EBA6;"><strong>IPsec</strong> is a suite of protocols</mark> for <mark style="background: #FFF3A3A6;"><strong>authenticating</strong> and <strong>encrypting</strong> the traffic</mark> between two peers.
 
 The three most used protocols in the IPsec suite are <strong>IKE</strong>, <strong>ESP</strong>, and <strong>AH</strong>.
@@ -38,9 +38,9 @@ The three most used protocols in the IPsec suite are <strong>IKE</strong>, <stro
 
 <strong>Authentication Header (AH)</strong> is a security protocol for <mark style="background: #FFB86CA6;">authenticating the source of an IP packet</mark> and <mark style="background: #FFF3A3A6;">verifying the integrity of the IP packet content</mark>. The <strong>AH protocol</strong> <mark style="background: #ABF7F7A6;">verifies the authenticity and integrity of the content and the origin of a packet</mark>.
 
-## Internet Key Exchange (IKE)
+### Internet Key Exchange (IKE)
 An IPsec tunnel is created in two phases.
-### IKE Phase 1
+#### IKE Phase 1
 With IKE Phase 1,<mark style="background: #FFF3A3A6;"> <u>each device is identified to the other by a <strong>peer ID</strong></u></mark>. In most cases, <mark style="background: #BBFABBA6;">this ID is just the <strong>public IP address</strong> of the device</mark>. <mark style="background: #ABF7F7A6;">In situations where the public ID is not static, this value can be replaced with a <strong>domain name</strong> or other text value</mark>. 
 
 <mark style="background: #ADCCFFA6;">IKE Phase 1 provides <strong>authentication</strong> of the endpoints of the tunnel</mark> and <mark style="background: #D2B3FFA6;">creates a <strong>secure channel</strong> for the next phase of the VPN</mark>. <mark style="background: #FFB86CA6;">The IKE protocol uses the <strong>IKE-Crypto profile</strong> for negotiation</mark>.
@@ -49,7 +49,7 @@ During IKE Phase 1, five pieces of information are passed between peers:
 
 ![[IKE Phase 1.png]]
 
-### IKE Phase 2
+#### IKE Phase 2
 IKE Phase 2 creates the tunnel that will encapsulate data traffic.
 
 IKE Phase 1 is concerned with authenticating the endpoints. <mark style="background: #FFF3A3A6;">IKE Phase 2 is concerned with data traffic that crosses the tunnel</mark>. <mark style="background: #BBFABBA6;">Each side of the tunnel has a <strong>proxy ID</strong> to identify the traffic that it will send</mark> <mark style="background: #ABF7F7A6;">and what it expects to receive</mark>. <mark style="background: #ADCCFFA6;">The IDs either can be a specific network range</mark> or <mark style="background: #D2B3FFA6;">a generic network of <strong>0.0.0.0/0</strong></mark>. <mark style="background: #CACFD9A6;">In either case, both sides need to know what the other side will send for the tunnel to work</mark>.
@@ -58,13 +58,13 @@ During IKE Phase 2, five pieces of information are passed between peers:
 
 ![[IKE Phase 2.png]]
 
-# Route-Based Site-to-Site VPN
+## Route-Based Site-to-Site VPN
 
 ![[Route-Based Site-to-Site VPN.png]]
 
 When a client that is secured by <strong>VPN Peer A</strong> needs content from a server at the other site, <mark style="background: #FFB8EBA6;"><strong>VPN Peer A</strong> initiates a connection request to <strong>VPN Peer B</strong></mark>. <mark style="background: #FFF3A3A6;">If the security policy permits the connection</mark>, <mark style="background: #BBFABBA6;"><strong>VPN Peer A</strong> uses the <strong>IKE Crypto profile parameters (IKE Phase 1)</strong> to <u>establish a secure connection</u></mark> and <mark style="background: #ABF7F7A6;"><u>authenticate</u> <strong>VPN Peer B</strong></mark>. Then, <mark style="background: #ADCCFFA6;"><strong>VPN Peer A</strong> uses the <strong>IPsec Crypto profile</strong> to <u>establish the <strong>VPN tunnel</strong></u></mark>, <mark style="background: #D2B3FFA6;">which defines the IKE phase 2 parameters to allow the secure transfer of data between the two sites</mark>.
 
-## VPN Tunnel
+### VPN Tunnel
 Before you can set up VPNs, you must understand your network topology and be able to determine the required number of tunnels:
 - One VPN tunnel might be enough to connect a single central site and a remote site.
 - To connect a central site to multiple remote sites, you must create a VPN tunnel for each central site and remote site pair.
@@ -87,7 +87,7 @@ Configure the IPsec tunnel or <mark style="background: #FF5582A6;">Phase 2 objec
 - <mark style="background: #FFF3A3A6;">If the configuration is site-to-site with another Palo Alto Networks firewall, use the default Crypto profiles</mark>.
 - <mark style="background: #BBFABBA6;">If the configuration is site-to-site with a different vendor’s firewall, configure the advanced settings in the Crypto profiles to match</mark>.
 
-<mark style="background: #ABF7F7A6;">Add a static route to the virtual router or enable a dynamic routing protocol such as BGP, [[OSPF]], or RIP</mark>. 
+<mark style="background: #ABF7F7A6;">Add a static route to the virtual router or enable a dynamic routing protocol such as [[Border Gateway Protocol|BGP]], [[OSPF]], or RIP</mark>. 
 
 Then create a <mark style="background: #FF5582A6;">Security policy rule</mark> to allow the tunnel traffic:
 - <mark style="background: #FFB86CA6;">Add a route table entry</mark> <mark style="background: #BBFABBA6;">for the remote network that points to the tunnel interface</mark> that is used in step 1 and step 2. 

@@ -8,7 +8,6 @@ topic@security:
   - "[[NAC]]"
 tags:
   - project
-  - nac
   - cisco
   - scor/sise
   - ccnp

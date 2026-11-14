@@ -10,7 +10,7 @@ iconColor:
 last_update: 2026-07-15
 status: draft
 ---
-### SLAAC — Stateless Address Autoconfiguration
+## SLAAC — Stateless Address Autoconfiguration
 
 SLAAC lets a device configure a working, routable global address on its own, with no DHCP server required for the address itself. It leans entirely on link-local addressing and router advertisements to get there.
 
@@ -47,7 +47,7 @@ sequenceDiagram
 
 **⑤ One more Duplicate Address Detection** pass on the new global address, and it's live — no DHCP server ever had to hand out a lease.
 
-### Link-Local Behavior
+## Link-Local Behavior
 
 Every IPv6-capable interface carries a link-local address automatically, whether or not the network has a router or a DHCPv6 server anywhere on it. It needs no configuration and no help from anything else on the network.
 

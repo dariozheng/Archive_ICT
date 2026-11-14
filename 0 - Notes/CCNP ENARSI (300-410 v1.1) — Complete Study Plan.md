@@ -15,7 +15,7 @@ status: draft
 
 ---
 
-## Blueprint Weighting (study time should roughly mirror this)
+### Blueprint Weighting (study time should roughly mirror this)
 
 |Domain|Weight|
 |---|---|
@@ -26,7 +26,7 @@ status: draft
 
 ---
 
-# PHASE 0 — Setup & Prerequisites (Week 0)
+## PHASE 0 — Setup & Prerequisites (Week 0)
 
 Before touching ENARSI content:
 
@@ -43,11 +43,11 @@ Before touching ENARSI content:
 
 ---
 
-# PHASE 1 — Layer 3 Technologies Part I: IGPs (Weeks 1–4)
+## PHASE 1 — Layer 3 Technologies Part I: IGPs (Weeks 1–4)
 
 _This is the heart of the exam (35%). Do not rush it._
 
-## Week 1 — Routing Fundamentals & Route Manipulation
+### Week 1 — Routing Fundamentals & Route Manipulation
 
 Study order:
 
@@ -70,7 +70,7 @@ Sources:
 - Cisco doc: _"Bidirectional Forwarding Detection"_ — IOS-XE IP Routing BFD Configuration Guide — https://www.cisco.com/c/en/us/support/ios-nx-os-software/ios-xe-17/series.html (search "BFD configuration guide")
 - RFC 5880 (BFD) — skim sections 1–4 — https://www.rfc-editor.org/rfc/rfc5880
 
-## Week 2 — EIGRP (classic + named mode)
+### Week 2 — EIGRP (classic + named mode)
 
 Study order:
 
@@ -93,7 +93,7 @@ Sources:
 - RFC 7868 (Cisco's EIGRP informational RFC) — skim — https://www.rfc-editor.org/rfc/rfc7868
 - INE / CBT Nuggets EIGRP troubleshooting modules — https://ine.com | https://www.cbtnuggets.com/it-training/cisco/enarsi
 
-## Week 3 — OSPF (v2 and v3)
+### Week 3 — OSPF (v2 and v3)
 
 Study order:
 
@@ -121,7 +121,7 @@ Sources:
 - RFC 2328 (OSPFv2) — reference — https://www.rfc-editor.org/rfc/rfc2328 ; RFC 5340 (OSPFv3) — skim differences section — https://www.rfc-editor.org/rfc/rfc5340
 - Optional deep dive: _"OSPF and IS-IS: Choosing an IGP for Large-Scale Networks"_ concepts — https://www.amazon.com/s?k=OSPF+and+IS-IS+Choosing+an+IGP
 
-## Week 4 — Redistribution & Route Control (the exam's favorite trap area)
+### Week 4 — Redistribution & Route Control (the exam's favorite trap area)
 
 Study order:
 
@@ -146,9 +146,9 @@ Sources:
 
 ---
 
-# PHASE 2 — Layer 3 Technologies Part II: BGP (Weeks 5–6)
+## PHASE 2 — Layer 3 Technologies Part II: BGP (Weeks 5–6)
 
-## Week 5 — BGP Fundamentals & Neighbor Relationships
+### Week 5 — BGP Fundamentals & Neighbor Relationships
 
 Study order:
 
@@ -160,7 +160,7 @@ Study order:
 6. Next-hop-self, peer groups, dynamic neighbors
 7. BGP inside VRF-Lite (per-VRF address families) and IPv6 BGP (address families, activating neighbors)
 
-## Week 6 — BGP Path Selection & Policies
+### Week 6 — BGP Path Selection & Policies
 
 Study order:
 
@@ -188,9 +188,9 @@ Sources:
 
 ---
 
-# PHASE 3 — VPN Technologies (Weeks 7–9) — 20%
+## PHASE 3 — VPN Technologies (Weeks 7–9) — 20%
 
-## Week 7 — MPLS & MPLS L3VPN (describe-level, but know it well)
+### Week 7 — MPLS & MPLS L3VPN (describe-level, but know it well)
 
 Study order:
 
@@ -208,7 +208,7 @@ Sources:
 - RFC 3031 (MPLS architecture) — skim — https://www.rfc-editor.org/rfc/rfc3031 ; RFC 4364 (BGP/MPLS IP VPNs) — skim sections 1–4 — https://www.rfc-editor.org/rfc/rfc4364
 - Cisco Live session: _"Introduction to MPLS"_ (BRKMPL-1100, free on-demand) — https://www.ciscolive.com/on-demand.html (search "BRKMPL-1100")
 
-## Weeks 8–9 — DMVPN (configure & verify — heavily tested)
+### Weeks 8–9 — DMVPN (configure & verify — heavily tested)
 
 Study order:
 
@@ -235,9 +235,9 @@ Sources:
 
 ---
 
-# PHASE 4 — Infrastructure Security (Weeks 10–11) — 20%
+## PHASE 4 — Infrastructure Security (Weeks 10–11) — 20%
 
-## Week 10 — Device Security
+### Week 10 — Device Security
 
 Study order:
 
@@ -255,7 +255,7 @@ Sources:
 - Cisco doc: _"TACACS+ and RADIUS Comparison"_ (Doc ID 13838) — https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/13838-10.html
 - RFC 3704 (uRPF / ingress filtering BCP 84) — skim — https://www.rfc-editor.org/rfc/rfc3704
 
-## Week 11 — Router Security Features & IPv6 Security
+### Week 11 — Router Security Features & IPv6 Security
 
 Study order:
 
@@ -281,9 +281,9 @@ Sources:
 
 ---
 
-# PHASE 5 — Infrastructure Services (Weeks 12–13) — 25%
+## PHASE 5 — Infrastructure Services (Weeks 12–13) — 25%
 
-## Week 12 — Management, Logging, SNMP, DHCP
+### Week 12 — Management, Logging, SNMP, DHCP
 
 Study order:
 
@@ -300,7 +300,7 @@ Sources:
 - Cisco doc: _"IP Addressing: DHCP Configuration Guide"_ (includes relay agent concepts) — https://www.cisco.com/c/en/us/support/ios-nx-os-software/ios-xe-17/series.html (search "DHCP configuration guide")
 - Cisco doc: _"Conditionally Triggered Debugs / Troubleshooting and Fault Management"_ — https://www.cisco.com/c/en/us/support/ios-nx-os-software/ios-xe-17/series.html (search "troubleshooting and fault management")
 
-## Week 13 — IP SLA, Object Tracking, NetFlow, DNA Center
+### Week 13 — IP SLA, Object Tracking, NetFlow, DNA Center
 
 Study order:
 
@@ -325,9 +325,9 @@ Sources:
 
 ---
 
-# PHASE 6 — Review, Practice Exams, Final Prep (Weeks 14–16)
+## PHASE 6 — Review, Practice Exams, Final Prep (Weeks 14–16)
 
-## Week 14 — Full Blueprint Review
+### Week 14 — Full Blueprint Review
 
 1. Go line-by-line through the official exam topics PDF; anything not checked = immediate review
 2. Rebuild your three "mega labs" from scratch, no notes:
@@ -336,7 +336,7 @@ Sources:
     - Mega lab 3: DMVPN Phase 3 + IPsec + EIGRP + IP SLA failover
 3. Create/review flashcards (Anki) for: AD values, BGP best path order, OSPF LSA types, area type LSA filtering, syslog levels, SNMPv3 security levels, DMVPN phases, TACACS+/RADIUS differences, NetFlow versions
 
-## Week 15 — Practice Exams
+### Week 15 — Practice Exams
 
 1. **Boson ExSim-Max for 300-410** — the gold-standard practice exam; take Exam A in simulation mode — https://www.boson.com/practice-exam/300-410-cisco-exsim-max-practice-exam
 2. Review EVERY question (right and wrong); read all explanations
@@ -344,7 +344,7 @@ Sources:
 4. Pearson Test Prep exams (bundled with the OCG) as supplementary — https://www.pearsontestprep.com
 5. Drill weak domains in Boson's custom/domain mode
 
-## Week 16 — Final Week
+### Week 16 — Final Week
 
 1. Take Boson Exam C under strict exam conditions
 2. Light review only; re-read the OSPF Design Guide and BGP Best Path white papers one final time
@@ -354,11 +354,11 @@ Sources:
 
 ---
 
-# MASTER RESOURCE LIST
+## MASTER RESOURCE LIST
 
 > **Note on links:** Cisco doc-ID links (the `support/docs/...` URLs) have been stable for 20+ years, but Cisco occasionally reorganizes pages. If any link 404s, search Google for `Cisco Doc ID <number>` or the document title — it always resurfaces.
 
-## Primary Books
+### Primary Books
 
 1. **CCNP Enterprise Advanced Routing ENARSI 300-410 Official Cert Guide, 2nd Edition** — Raymond Lacoste & Brad Edgeworth (Cisco Press). Your backbone text; matches v1.1 blueprint. → https://www.ciscopress.com (search "ENARSI 300-410 Official Cert Guide") | https://www.amazon.com/s?k=ENARSI+300-410+Official+Cert+Guide
 2. _CCNP Enterprise ENARSI 300-410 Portable Command Guide_ (Cisco Press) — quick command reference for lab days. → https://www.amazon.com/s?k=CCNP+ENARSI+Portable+Command+Guide
@@ -368,7 +368,7 @@ Sources:
     - _IPv6 Security_ (Hogg/Vyncke) → https://www.ciscopress.com (search "IPv6 Security")
     - _Routing TCP/IP Vol. I_ (Doyle) → https://www.amazon.com/s?k=Routing+TCP%2FIP+Volume+1+Doyle
 
-## Video Courses (pick 1–2)
+### Video Courses (pick 1–2)
 
 4. **CBT Nuggets — Cisco CCNP ENARSI (300-410)** — engaging, lab-driven → https://www.cbtnuggets.com/it-training/cisco/enarsi
 5. **INE — CCNP Enterprise ENARSI course** — deepest technical treatment → https://ine.com (Networking → CCNP Enterprise learning path)
@@ -381,7 +381,7 @@ Sources:
     - NetworkChuck → https://www.youtube.com/@NetworkChuck
     - Art of Network Engineering (podcast) → https://artofnetworkengineering.com
 
-## Labs & Practice
+### Labs & Practice
 
 10. Lab platforms (hands-on labs are non-negotiable for ENARSI):
     - **Cisco Modeling Labs (CML) Personal** → https://developer.cisco.com/modeling-labs/
@@ -392,7 +392,7 @@ Sources:
 13. Pearson Test Prep (included with OCG) → https://www.pearsontestprep.com
 14. Cisco Learning Network — official ENARSI exam topics + study community → https://learningnetwork.cisco.com/s/enarsi-exam-topics
 
-## Cisco White Papers & Technical Documents (all free on cisco.com)
+### Cisco White Papers & Technical Documents (all free on cisco.com)
 
 15. **OSPF Design Guide** (Doc ID 7039) — mandatory → https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html
 16. **BGP Best Path Selection Algorithm** (Doc ID 13753) — mandatory → https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/13753-25.html
@@ -414,7 +414,7 @@ Sources:
 32. IP SLAs Configuration Guide (IOS-XE) — search "IP SLAs Configuration Guide" at: → https://www.cisco.com/c/en/us/support/ios-nx-os-software/ios-xe-17/series.html
 33. Cisco DNA Center (Catalyst Center) Assurance User Guide → https://www.cisco.com/c/en/us/support/cloud-systems-management/dna-center/products-user-guide-list.html
 
-## RFCs (skim-level, for depth and tie-breaker questions)
+### RFCs (skim-level, for depth and tie-breaker questions)
 
 34. RFC 2328 — OSPFv2 → https://www.rfc-editor.org/rfc/rfc2328
 35. RFC 5340 — OSPFv3 → https://www.rfc-editor.org/rfc/rfc5340
@@ -429,7 +429,7 @@ Sources:
 44. RFC 6105 — IPv6 RA Guard → https://www.rfc-editor.org/rfc/rfc6105
 45. RFC 4861 — IPv6 Neighbor Discovery → https://www.rfc-editor.org/rfc/rfc4861
 
-## Free Cisco Live On-Demand Sessions (free account required)
+### Free Cisco Live On-Demand Sessions (free account required)
 
 46. Cisco Live On-Demand Library → https://www.ciscolive.com/on-demand.html
     - Search "BRKMPL-1100" (Introduction to MPLS)
@@ -437,7 +437,7 @@ Sources:
     - Search "BRKRST OSPF" / "BRKRST BGP" (deployment & troubleshooting deep dives)
     - Search "IPv6 security" (BRKSEC-2003 and successors)
 
-## Communities
+### Communities
 
 47. Cisco Learning Network (official forums & study groups) → https://learningnetwork.cisco.com
 48. r/ccnp on Reddit → https://www.reddit.com/r/ccnp/
@@ -446,7 +446,7 @@ Sources:
 
 ---
 
-# QUICK MEMORIZATION HIT-LIST (make flashcards Day 1)
+## QUICK MEMORIZATION HIT-LIST (make flashcards Day 1)
 
 - Administrative distances: connected 0, static 1, eBGP 20, EIGRP 90, OSPF 110, IS-IS 115, RIP 120, EIGRP external 170, iBGP 200
 - BGP best-path order (all 11+ steps)
@@ -461,7 +461,7 @@ Sources:
 
 ---
 
-## Weekly Rhythm That Works
+### Weekly Rhythm That Works
 
 - **2–3 sessions of theory** (book/video), 60–90 min each
 - **2 lab sessions**, 90–120 min each — configure it, then BREAK it, then fix it (ENARSI is a troubleshooting exam)

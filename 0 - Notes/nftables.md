@@ -7,7 +7,6 @@ topic@linux:
 topic@security:
   - "[[Firewall]]"
 tags:
-  - firewall
   - claude
   - kernel
   - category/linux/linux_general
@@ -25,7 +24,7 @@ nftables is the modern packet-filtering framework for Linux: a single command, `
 
 ---
 
-# The nftables Object Model
+## The nftables Object Model
 
 _How rules are organized: a family holds tables, a table holds chains, a chain holds rules, and sets and maps keep those rules compact._
 
@@ -85,7 +84,7 @@ And the [[#Base Chains|base chain]] is the single seam to the kernel: registerin
 
 That seam is also the line between the two subjects. The objects here are nftables' way of _expressing_ a policy; the [[Netfilter#Hooks and Packet Flow|hooks]] they hang on, the [[Netfilter#Hook Priorities|priorities]] that order them, and the [[Netfilter#Connection Tracking|conntrack]] and [[Netfilter#Network Address Translation|NAT]] they drive all belong to [[Netfilter]] and are documented there. The sections below walk the tree from the outside in, starting with the family.
 
-## Address Families
+### Address Families
 
 _Which protocol's packets a [[#Tables|table]] sees, and which [[Netfilter#Hooks and Packet Flow|hooks]] are available to it._
 
@@ -115,7 +114,7 @@ The names are unrelated: `ip filter` and `inet filter` are two distinct tables t
 
 ![[netfilter-packet-flow.png]]
 
-### inet (dual-stack)
+#### inet (dual-stack)
 
 <mark style="background: #FFB8EBA6;">A virtual family that attaches to the IP hooks for both IPv4 and IPv6 at once</mark>, so a single ruleset covers both protocols. This is the <mark style="background: #FF5582A6;">recommended default for host and router firewalls</mark> — it removes the need to maintain parallel `ip` and `ip6` rulesets.
 
@@ -144,7 +143,7 @@ table inet filter {
 
 A dual-stack ruleset still has to honor a few IPv6-specific requirements — permitting ICMPv6, the no-NAT model, and `fib`-based anti-spoofing; these are covered in [[Netfilter#IPv6 and Netfilter]].
 
-### ip and ip6
+#### ip and ip6
 
 <mark style="background: #FFB86CA6;">Single-protocol families</mark> <mark style="background: #BBFABBA6;">that see only IPv4</mark> (`ip`) <mark style="background: #BBFABBA6;">or only IPv6</mark> (`ip6`) <mark style="background: #BBFABBA6;">traffic</mark>, each with all five IP hooks. Reach for them only when a rule genuinely applies to one protocol alone; otherwise prefer [[#inet (dual-stack)|inet]].
 
@@ -169,7 +168,7 @@ table ip6 filter {
 
 Because a NAT chain in `inet` needs kernel 5.2 or later, a separate `ip nat` table is also the compatible way to masquerade on older systems — see [[#Chain Types|chain types]].
 
-### arp
+#### arp
 
 The `arp` family <mark style="background: #ABF7F7A6;">filters ARP packets</mark> — the protocol that maps IPv4 addresses to MAC addresses on a local segment. <mark style="background: #ADCCFFA6;">It supports only the input and output hooks</mark> and replaces the old <strong>arptables</strong> tool. Typical uses are blocking or rate-limiting ARP to mitigate spoofing, or enforcing expected MAC/IP pairings.
 
@@ -187,7 +186,7 @@ table arp filter {
 }
 ```
 
-### bridge
+#### bridge
 
 The `bridge` family <mark style="background: #D2B3FFA6;">operates at Layer 2</mark>, <mark style="background: #D2B3FFA6;">on Ethernet frames passing through a Linux software bridge</mark> — <mark style="background: #CACFD9A6;">a virtual switch</mark> (for example `br0`) <mark style="background: #CACFD9A6;">that joins several interfaces into one segment</mark>, the <mark style="background: #FFB8EBA6;">kind</mark> <mark style="background: #FF5582A6;">hypervisors and container runtimes</mark> <mark style="background: #FFB8EBA6;">create</mark> <mark style="background: #FFB86CA6;">to connect VMs and containers</mark>. <strong>It replaces the old ebtables tool</strong>. <mark style="background: #FFF3A3A6;">The bridge normally lives in the host's initial [[Netfilter#Network Namespaces|namespace]]</mark>, <mark style="background: #BBFABBA6;">so its bridge-family rules are evaluated there</mark> rather than inside each container.
 
@@ -222,7 +221,7 @@ The bridge family defines its own [[Netfilter#Hook Priorities|priority]] scale, 
 
 This is why `priority filter` resolves to a different number depending on family: each family numbers its standard stages independently, and the keyword is just a friendly name for the family-specific value.
 
-### netdev (per-interface)
+#### netdev (per-interface)
 
 <mark style="background: #FFB8EBA6;">A `netdev` chain is bound to one specific interface</mark> and <mark style="background: #FF5582A6;">runs at the `ingress` hook</mark> — <mark style="background: #FF5582A6;">the earliest Netfilter point in the stack</mark>, <mark style="background: #FFB86CA6;">before [[Netfilter#Prerouting|prerouting]] and before [[Netfilter#Connection Tracking|conntrack]]</mark>. On the receive path only XDP and <strong>tc</strong> ingress run earlier: the order is XDP → tc ingress → [[netfilter]] ingress. Kernels 5.16 and later also offer an `egress` hook.
 
@@ -248,7 +247,7 @@ table netdev filter {
 }
 ```
 
-## Tables
+### Tables
 
 _Top-level containers; in nftables they carry no behavior of their own._
 
@@ -283,13 +282,13 @@ nft delete table inet filter   # and everything it contains goes with it
 > 
 > In iptables the tables were fixed and predefined (`filter`, `nat`, `mangle`, `raw`). In nftables you create tables yourself, the names are arbitrary, and a table has no built-in meaning. What a chain does is decided by its [[#Chain Types|type]] and [[Netfilter#Hooks and Packet Flow|hook]], not by the table's name. An empty table simply does nothing.
 
-## Chains
+### Chains
 
 _Ordered lists of rules. Whether a chain is reached automatically depends on its kind._
 
 A chain lives inside a [[#Tables|table]] and holds the rules that are evaluated in order. There are two kinds — [[#Base Chains|base]] and [[#Regular Chains|regular]] — and the difference is whether the kernel enters the chain on its own or only when another chain sends control to it.
 
-### Base Chains
+#### Base Chains
 
 A base chain is wired into the [[Netfilter#Hooks and Packet Flow|Netfilter packet flow]]. It declares four things — a [[#Chain Types|type]], a hook, a [[Netfilter#Hook Priorities|priority]] and a [[#Policy|policy]] — and packets reach it automatically because it is registered at one of the hooks.
 
@@ -317,7 +316,7 @@ table inet filter {
 
 A base chain in the `netdev` family additionally names its `device`; one in a `nat` chain type is restricted to the NAT-capable hooks. Everything else — matching, verdicts, references — works the same as in a regular chain.
 
-### Regular Chains
+#### Regular Chains
 
 A regular chain has no hook and is never entered on its own. It runs only when another chain [[#Verdict Statements|jumps or goes]] to it, which makes it useful for grouping rules into reusable blocks (for example a `tcp-services` chain called from `input`).
 
@@ -349,7 +348,7 @@ table inet filter {
 
 A regular chain has no [[#Policy|policy]]. When it ends without a verdict, control simply returns to the caller as if `return` had been issued.
 
-### Chain Types
+#### Chain Types
 
 The type of a [[#Base Chains|base chain]] selects which Netfilter semantics apply.
 
@@ -385,7 +384,7 @@ A `nat` chain only inspects the first packet of a connection; [[Netfilter#How NA
 
 The `route` type is a specialised output-only type. After the [[Netfilter#Output|output]] chain runs, if the packet's routing-relevant fields changed — destination address, source address, TOS/DSCP, or the firewall mark (`meta mark`) — the kernel performs a fresh [[Routing|routing]] lookup so the change takes effect. Use it when locally generated traffic must be policy-routed based on a mark set in the output path; it corresponds to the old iptables mangle OUTPUT behaviour.
 
-### Hook and Priority
+#### Hook and Priority
 
 A base chain must declare its hook (which of the five, or netdev/arp) and its [[Netfilter#Hook Priorities|priority]]. nftables names the common priorities so you rarely write the raw numbers:
 
@@ -426,7 +425,7 @@ table inet stack {
 
 Priorities also accept arithmetic on the keyword — `priority filter - 10` slips a chain in just ahead of the normal filtering stage without hard-coding `-10`.
 
-### Policy
+#### Policy
 
 The policy is the [[#Verdict Statements|verdict]] applied to a packet that reaches the end of a base chain without hitting a terminating rule. It can only be `accept` or `drop`. A base chain created without an explicit policy defaults to `accept`.
 
@@ -464,7 +463,7 @@ nft add rule inet filter input iif lo accept
 nft add rule inet filter input ct state established,related accept
 ```
 
-### Chain Evaluation Order
+#### Chain Evaluation Order
 
 Within a chain, rules are tried from top to bottom. For each rule, all of its [[#Match Statements|match]] conditions must pass; if they do, the rule's statements run, and the first terminal [[#Verdict Statements|verdict]] (accept, drop, reject, queue) ends evaluation immediately. A rule that does not match, or that only performs a non-terminal action (counter, log, mark), falls through to the next rule.
 
@@ -496,11 +495,11 @@ If the end of a [[#Base Chains|base chain]] is reached with no terminal verdict,
 
 ---
 
-# Rules, Statements and Verdicts
+## Rules, Statements and Verdicts
 
 _A rule is a list of statements evaluated left to right; matches gate the rule, and a verdict decides the packet's fate._
 
-## Anatomy of a Rule
+### Anatomy of a Rule
 
 A rule is a sequence of statements inside a [[#Chains|chain]]. Statements are read left to right and fall into two kinds: [[#Match Statements|match]] statements that test the packet, and action statements that do something (a [[#Verdict Statements|verdict]], or a non-terminal action like `counter` — see [[#Other Statements]]). Evaluation of a rule stops at the first match that fails; if every match passes, all the actions run.
 
@@ -523,7 +522,7 @@ A trailing `comment "…"` annotates a rule and survives in the listing.
 nft add rule inet filter input tcp dport 5432 accept comment "postgres, ticket #412"
 ```
 
-## Match Statements
+### Match Statements
 
 Match statements test packet fields. They come from three main sources: `meta` (packet metadata), header expressions (the protocol fields themselves), and `ct` (connection state).
 
@@ -603,7 +602,7 @@ Strict reverse-path filtering, working for IPv4 and [[IPv6]] alike, is a single 
 nft add rule inet filter prerouting fib saddr . iif oif missing drop
 ```
 
-## Verdict Statements
+### Verdict Statements
 
 Verdict statements decide what happens to the packet. The terminal ones map to [[Netfilter#Kernel Verdicts|kernel verdicts]]; the rest steer evaluation.
 
@@ -658,7 +657,7 @@ The difference between `jump` and `goto` is the return path. After a `jump`, a `
 
 ![[nftables-jump-vs-goto.png]]
 
-## Other Statements
+### Other Statements
 
 Besides verdicts, a rule can carry non-terminal action statements that change state or hand the packet elsewhere, then continue. Most are thin wrappers over a [[Netfilter]] subsystem.
 
@@ -720,7 +719,7 @@ The NAT statements above only take effect in a [[#Chain Types|nat-type]] chain a
 
 ---
 
-# Sets, Maps and Dictionaries
+## Sets, Maps and Dictionaries
 
 _Native data structures that keep rulesets short and lookups fast._
 
@@ -728,7 +727,7 @@ _Native data structures that keep rulesets short and lookups fast._
 > 
 > A chain of rules is evaluated one after another, while a set or map is a single hash lookup. Matching many addresses or ports against a [[#Sets|set]], or dispatching with a verdict [[#Maps|map]], is both faster and shorter than writing a rule per value — reach for them whenever a list starts to grow.
 
-## Sets
+### Sets
 
 A set holds many values of one type and is matched in a single rule. An anonymous set is written inline (`tcp dport { 22, 80, 443 }`) and dies with its rule; a named set exists independently and can be changed live without reloading.
 
@@ -796,7 +795,7 @@ nft list   set     inet filter blocklist
 nft flush  set     inet filter blocklist
 ```
 
-## Maps
+### Maps
 
 A map associates a key with a value. A verdict map (`vmap`) maps keys directly to [[#Verdict Statements|verdicts]], collapsing many rules into one lookup; other maps can return data such as a NAT target.
 
@@ -840,7 +839,7 @@ nft add element inet filter port_verdict { 8080 : accept }   # extend the dispat
 
 A vmap that finds no matching key simply falls through to the next rule, so a `vmap` is not itself a terminal statement — the verdict it returns is.
 
-## Dynamic Sets and Rate Limiting
+### Dynamic Sets and Rate Limiting
 
 A dynamic set is populated by the ruleset as packets arrive, which makes per-source tracking possible — the basis of connection-rate limiting and automated blocklists. The set must be declared with `flags dynamic` before a rule can add to it (a `timeout` and `size` keep it from growing stale or unbounded):
 
@@ -895,11 +894,11 @@ nft list set inet filter banned      # inspect current members and their remaini
 
 ---
 
-# Stateful Objects
+## Stateful Objects
 
 _Named objects that hold state independently of any single rule, referenced by name._
 
-## Counters and Quotas
+### Counters and Quotas
 
 A named `counter` accumulates across every rule that references it; a `quota` trips once a byte total is crossed, enabling usage-based rules.
 
@@ -938,7 +937,7 @@ nft list quotas                         # how much of each quota is consumed
 
 A quota is one-directional: once `over 100 gbytes` is reached it matches from then on, so the rule above starts dropping. Add `used 0 bytes` to a redefinition, or reload the object, to reset it.
 
-## Connection-Tracking Objects
+### Connection-Tracking Objects
 
 These objects configure [[Netfilter#Connection Tracking|conntrack]] behaviour and are then attached to traffic by a rule.
 
@@ -996,7 +995,7 @@ table inet filter {
 
 Traffic matched by an expectation arrives as `ct state related`, so a chain that already accepts `established,related` needs no further rule for it.
 
-## Flowtables
+### Flowtables
 
 A flowtable defines the [[Netfilter#Flow Offload|fast path]] for established forwarded connections. After the first packets establish the flow, a `flow add @name` statement moves it onto the flowtable, and its later packets bypass normal chain traversal — which also means they skip any counters or log rules in the forward chain.
 
@@ -1039,11 +1038,11 @@ nft list flowtables      # which devices each flowtable is attached to
 
 ---
 
-# Scripting and Syntax
+## Scripting and Syntax
 
 _Writing rulesets as maintainable files rather than long command sequences._
 
-## Variables and Includes
+### Variables and Includes
 
 A ruleset file can define variables and pull in other files, which keeps large configurations readable.
 
@@ -1065,7 +1064,7 @@ table inet filter {
 
 The leading shebang lets the file be executed directly; `nft` reads the whole file as one [[#Atomic Loading|atomic]] transaction.
 
-## Data Types and Intervals
+### Data Types and Intervals
 
 Values can be written in natural forms: addresses and CIDR prefixes (`192.0.2.0/24`), ranges (`1024-2048`, `192.0.2.10-192.0.2.20`), named services (`ssh`), time units (`30s`, `1h`), and data sizes (`10 mbytes`). Negation with `!=` and set membership with `{ … }` work across these types.
 
@@ -1081,7 +1080,7 @@ nft add set   inet filter recent { type ipv4_addr \; flags dynamic \; timeout 30
 nft add quota inet filter cap    { over 10 mbytes }
 ```
 
-## JSON and Monitoring
+### JSON and Monitoring
 
 `nft` speaks JSON for automation, and can stream live events.
 
@@ -1092,15 +1091,15 @@ nft monitor                    # watch ruleset changes as they happen
 
 ---
 
-# Operating nftables
+## Operating nftables
 
 _Loading, inspecting, persisting and debugging rules in day-to-day use._
 
-## Managing the Ruleset
+### Managing the Ruleset
 
 _Everything goes through the single `nft` command; file loads are applied atomically._
 
-### Atomic Loading
+#### Atomic Loading
 
 Loading a file with `nft -f` is atomic: the whole file is parsed and committed in one transaction, so the kernel never runs a half-applied ruleset. A syntax error anywhere aborts the load and leaves the running ruleset untouched.
 
@@ -1113,7 +1112,7 @@ nft -c -f /etc/nftables.conf   # check syntax only, change nothing
 > 
 > A file is layered on top of whatever is already loaded; it does not clear the existing ruleset first. To make a file fully replace the running configuration — the usual intent for `/etc/nftables.conf` — begin it with `flush ruleset`, which is why the complete configs in this note open with that line. Note that `flush ruleset` also discards state: counters reset and dynamic-set contents are lost on every reload.
 
-### Inspecting
+#### Inspecting
 
 ```bash
 nft list ruleset               # everything currently loaded
@@ -1124,7 +1123,7 @@ nft -a list ruleset            # show rule handles (needed for deletion)
 nft reset counters             # zero every counter (likewise: nft reset quotas)
 ```
 
-### Modifying Live
+#### Modifying Live
 
 Objects can be added or removed without reloading the whole ruleset. Deleting a specific rule needs its handle, obtained with `-a` (see [[#Anatomy of a Rule]]).
 
@@ -1134,7 +1133,7 @@ nft -a list chain inet filter input            # find the handle
 nft delete rule inet filter input handle 12    # delete that rule by handle
 ```
 
-### Flushing and Deleting
+#### Flushing and Deleting
 
 ```bash
 nft flush ruleset                   # wipe everything
@@ -1146,7 +1145,7 @@ nft destroy table inet filter       # like delete, but no error if it is already
 
 `destroy` (nftables 1.0.7 with kernel 6.3 or later) is the script-friendly counterpart to `delete`: it succeeds whether or not the object exists, so a teardown script need not guard against a missing table.
 
-### Persistence
+#### Persistence
 
 The running ruleset lives only in kernel memory and is lost on reboot. Snapshot it to the distribution's config file and enable the service so it is restored at boot.
 
@@ -1159,7 +1158,7 @@ Two caveats. First, `nft list ruleset` prints only the ruleset — the snapshot 
 
 The `nftables` service restores rules into the host (initial) [[Netfilter#Network Namespaces|namespace]] only. Rulesets for other namespaces need their own loading step, run after each namespace is created — for a container, that is normally the runtime's or the workload's responsibility, not the host service.
 
-## Debugging and Tracing
+### Debugging and Tracing
 
 To see exactly which rules a packet hits, tag it for tracing and watch the trace stream. The trace shows the packet entering each chain and the verdict at each step. Set the flag as early as possible (a chain at `raw` priority or earlier) if you want the trace to cover every chain the packet crosses.
 
@@ -1173,7 +1172,7 @@ Combine this with `nft -a list ruleset` to correlate trace output against rule h
 
 ---
 
-# Migrating from iptables
+## Migrating from iptables
 
 _Moving an existing iptables setup onto the nftables engine._
 
@@ -1198,11 +1197,11 @@ The biggest conceptual change is that iptables' fixed tables (`filter`, `nat`, `
 
 ---
 
-# Common Configurations
+## Common Configurations
 
 _Complete, adaptable rulesets for the scenarios a sysadmin meets most. Each is a starting point to tighten, not a drop-in._
 
-## Stateful Host Firewall
+### Stateful Host Firewall
 
 _Deny inbound by default; allow loopback, return traffic and a few services._
 
@@ -1237,7 +1236,7 @@ table inet filter {
 > 
 > `ip6 nexthdr icmpv6` reads only the first next-header field, so an ICMPv6 packet carrying any extension header slips past the rule — and with a drop policy, silently breaks neighbor discovery. `meta l4proto ipv6-icmp` matches the actual transport protocol regardless of extension headers.
 
-## NAT Gateway
+### NAT Gateway
 
 _A router that lets a private LAN reach the internet behind one public address._
 
@@ -1279,7 +1278,7 @@ table inet nat {
 
 The MSS-clamp line matters on PPPoE or tunnelled uplinks; the reasoning is in [[Netfilter#MSS Clamping]].
 
-## Port Forwarding
+### Port Forwarding
 
 _Publishing an internal service on the gateway's public address._
 
@@ -1311,7 +1310,7 @@ Two details are easy to get wrong here. The DNAT rule matches on the public dest
 
 Because [[Netfilter#DNAT|DNAT]] runs before the forward chain, the forward rule matches the internal address. The postrouting line is [[Netfilter#Hairpin NAT|hairpin NAT]]: it rewrites the source of hairpinned connections to the gateway, so the server's reply returns via the gateway (which can un-DNAT it) instead of going directly to the LAN client, where the untranslated source address would be rejected.
 
-## WireGuard Gateway
+### WireGuard Gateway
 
 _The firewall rules for a [[WireGuard]] server. WireGuard's own configuration — keys, peers, `AllowedIPs`, `wg-quick` — is a separate topic and is not shown here; these are only the nftables rules that turn a WireGuard host into a working gateway._
 
@@ -1355,7 +1354,7 @@ table inet nat {
 
 These let peers connect on the UDP listen port, route their traffic out (forward plus masquerade), and clamp the tunnel MSS. They can live in `nftables.conf`, or in `wg-quick`'s `PostUp` / `PostDown` if you prefer to tie them to the interface lifecycle. The rules deliberately match `wg0` by name (`iifname`), not by index (`iif`), because the interface only exists while the tunnel is up. Forwarding must be enabled, as for the [[#NAT Gateway|NAT gateway]].
 
-## Brute-Force Throttling
+### Brute-Force Throttling
 
 _Rate-limiting new SSH connections per source with a [[#Dynamic Sets and Rate Limiting|dynamic set]]._
 

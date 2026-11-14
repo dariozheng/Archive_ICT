@@ -20,7 +20,7 @@ Device-ID provides traceability for devices and the ability <mark style="backgro
 
 You can use <strong>Device-ID</strong> in <strong>Security</strong>, <strong>Decryption</strong>, <strong>Quality of Service</strong> (QoS), and <strong>Authentication</strong> policies.
 
-# IoT Security
+## IoT Security
 <mark style="background: #CACFD9A6;">For <strong>Device-ID</strong> features to be available on a firewall</mark>, <mark style="background: #FFB8EBA6;">you must purchase an <strong>IoT Security subscription</strong></mark> and select the firewall during the <strong>IoT Security onboarding process</strong>. 
 
 There are two types of IoT Security subscriptions:
@@ -37,7 +37,7 @@ With the second subscription, <mark style="background: #BBFABBA6;">firewalls sen
 <mark style="background: #FFF3A3A6;">A firewall also requires a <strong>device certificate</strong> to <strong>authenticate itself</strong> when connecting to <strong>IoT Security</strong> and the <strong>logging service</strong></mark>.
 
 If you use PAN-OS version 8.1.0 through PAN-OS 9.1.x on a firewall, the <mark style="background: #BBFABBA6;">IoT Security license provides <strong>device classification</strong>, <strong>behavior analysis</strong>, and <strong>threat analysis</strong> for your devices</mark>. If you use PAN-OS 10.0 or later, <mark style="background: #ABF7F7A6;">you can use Device-ID to obtain <strong>IP address-to-device mappings</strong></mark> <mark style="background: #ADCCFFA6;">to view <strong>device context</strong> for <strong>network events</strong></mark>, <mark style="background: #D2B3FFA6;">use IoT Security to obtain policy rule recommendations for these devices</mark>, and <mark style="background: #CACFD9A6;">gain visibility for devices in <strong>reports</strong> and the <strong>ACC</strong></mark>.
-## Device-ID Classification 
+### Device-ID Classification 
 <mark style="background: #FFB8EBA6;">To identify and classify devices</mark>, <mark style="background: #FF5582A6;">the <strong>IoT Security app</strong> uses <strong>metadata</strong> from <strong>network protocols</strong> and <strong>sessions</strong></mark> and <mark style="background: #FFB86CA6;">sends the <strong>metadata</strong> to the cloud logging service</mark> <mark style="background: #FFF3A3A6;">in <strong>Session logs</strong> and <strong>Enhanced Application logs</strong> (<strong>EALs</strong>)</mark>. 
 
 <mark style="background: #BBFABBA6;">The metadata collected does not include private or sensitive information or data that is not relevant for device identification</mark>. 

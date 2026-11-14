@@ -61,6 +61,9 @@ if (topicProp) {
     }
 }
 
+// The content of a new note is written today, so last_update starts at today's date.
+body = body.replace(/^last_update:[ \t]*$/m, `last_update: ${tp.date.now("YYYY-MM-DD")}`);
+
 console.log(`[New Note] ${category}`, { template: pick.path, topicProp });
 
 // Templater parses this frontmatter, merges it into the note and re-serialises it

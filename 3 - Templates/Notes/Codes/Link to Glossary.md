@@ -1,28 +1,39 @@
 <%*
-const glossary = [
-    { name: "cloud computing" },
-    { name: "networking" },
-    { name: "security" },
-    { name: "linux" }
-];
+// Turns the selected word into a link to the heading of the same name in a glossary.
+// The glossaries are read from the folder below, so a new glossary needs no edit here.
+const FOLDER = "0 - Notes/Glossaries";
 
-// Get selected text or prompt for alias
-let text = tp.file.selection();
-if (!text) {
-    text = await tp.system.prompt("Alias text:");
+// Templater replaces the selection with this script's output, so every way out
+// that does not create a link must hand the selection back, or the word is lost.
+const selection = tp.file.selection();
+const giveBack = () => { tR += selection; };
+
+let term = selection;
+if (!term) term = await tp.system.prompt("Term to link:");
+if (!term || !term.trim()) { giveBack(); return; }
+
+// Keep any spaces selected around the word outside the link.
+const [, lead, core, trail] = term.match(/^(\s*)([\s\S]*?)(\s*)$/);
+
+const glossaries = app.vault.getMarkdownFiles()
+    .filter((f) => f.parent?.path === FOLDER)
+    .sort((a, b) => a.basename.localeCompare(b.basename));
+if (!glossaries.length) {
+    new Notice(`Link to Glossary: no notes in ${FOLDER}.`, 8000);
+    giveBack();
+    return;
 }
-// Esc on the prompt returns null: stop here instead of linking the word "null".
-if (!text) return;
 
-// Ensure the suggester is awaited
-const choice = await tp.system.suggester(
-    glossary.map(c => c.name),
-    glossary.map(c => c.name) // Returns the same string selected
-);
+const pick = await tp.system.suggester(glossaries.map((f) => f.basename), glossaries, false, `Glossary for "${core}"`);
+if (!pick) { giveBack(); return; }
 
-// Exit if no choice is made (e.g., ESC pressed)
-if (!choice) return;
+// Warn when the glossary has no heading with that name: the link would then open
+// the glossary at the top instead of at the term.
+const norm = (s) => s.trim().replace(/\s+/g, " ").toLowerCase();
+const headings = (app.metadataCache.getFileCache(pick)?.headings ?? []).map((h) => norm(h.heading));
+if (!headings.includes(norm(core))) {
+    new Notice(`Link to Glossary: "${core}" is not a heading in ${pick.basename} yet. Add it there as a level 4 heading.`, 10000);
+}
 
-// Correct link syntax: [[File#Header|Alias]]
-tR += `[[${choice} glossary#${text}|${text}]]`;
+tR += `${lead}[[${pick.basename}#${core}|${core}]]${trail}`;
 -%>

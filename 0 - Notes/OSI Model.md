@@ -194,7 +194,7 @@ The layers are numbered from the medium upward: layer 1 is closest to the wire, 
 | 6   | Presentation | TLS, ASN.1/DER, JPEG, MPEG, ASCII, Unicode, MIME             | Terminating proxies, TLS offload                     |
 | 5   | Session      | RPC, NetBIOS, SIP, L2TP and PPTP control channels            | Session-aware gateways                               |
 | 4   | Transport    | TCP, UDP, SCTP, QUIC, DCCP                                   | Stateful firewall, NAT/PAT, L4 load balancer         |
-| 3   | Network      | IPv4, IPv6, ICMP, IPsec, [[OSPF]], IS-IS, BGP, EIGRP             | Router, layer 3 switch, packet filter                |
+| 3   | Network      | IPv4, IPv6, ICMP, IPsec, [[OSPF]], IS-IS, [[Border Gateway Protocol\|BGP]], EIGRP             | Router, layer 3 switch, packet filter                |
 | 2   | Data Link    | Ethernet 802.3, Wi-Fi 802.11, 802.1Q, STP, LACP, PPP, 802.1X | Switch, bridge, wireless access point, NIC           |
 | 1   | Physical     | 10BASE-T through 400GBASE, RS-232, DSL, SONET, radio         | Hub, repeater, transceiver, media converter, cabling |
 

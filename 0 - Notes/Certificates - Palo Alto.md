@@ -31,6 +31,6 @@ However, this may not be applicable if you are creating self-signed certificates
 
 <strong>Note:</strong> It is also recommended to use one Subordinate CA per gateway for easier management of certificates. Additionally, self-signed certificates should be installed in the operating system's certificate store for all browsers on Windows. This includes Chrome, Opera, Safari, and Explorer. For Firefox, the certificate store is built into the browser, with the option to default to the system's store if needed.
 
-# Forward Proxy
+## Forward Proxy
 
 To obtain a subordinate CA from your Root CA for the firewall to sign certificates for sites that require decryption, follow the best practice of generating a certificate signing request via the certificate page and using it to generate a subordinate CA from the enterprise root. This ensures that the private key remains secure on the firewall.

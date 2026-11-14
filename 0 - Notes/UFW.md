@@ -7,7 +7,6 @@ topic@linux:
 topic@security:
   - "[[Firewall]]"
 tags:
-  - firewall
   - category/linux/ubuntu
   - category/security/firewall
 icon: SiUbuntu

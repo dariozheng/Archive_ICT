@@ -11,7 +11,6 @@ topic@microsoft:
   - "[[Windows Server]]"
 tags:
   - project
-  - nac
   - cisco
   - scor/sise
   - ccnp

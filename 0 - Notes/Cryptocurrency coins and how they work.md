@@ -1172,7 +1172,7 @@ _What can go wrong, sorted by which layer it attacks._
 |Attack|Description|
 |---|---|
 |Eclipse|Monopolise all of a victim node's peer connections and feed it a fabricated view of the chain|
-|Partition|Split the network by BGP hijack or routing manipulation, so branches diverge|
+|Partition|Split the network by [[Border Gateway Protocol\|BGP]] hijack or routing manipulation, so branches diverge|
 |Transaction censorship|Refuse to relay or include specific transactions|
 |Denial of service|Exhaust mempool memory, connection slots, or validation CPU with cheap junk|
 
