@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+status: draft
 ---
 AWS networking is software-defined: instead of racking routers, switches, and firewalls, you describe the network you want and AWS realises it on shared physical infrastructure. The Virtual Private Cloud is the foundation — a logically isolated virtual network that behaves like a private data-centre network you design and control. This note covers the core building blocks of a VPC and how they fit together, with analogies to traditional on-premises networking throughout.
 

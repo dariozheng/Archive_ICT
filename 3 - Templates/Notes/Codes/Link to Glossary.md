@@ -11,6 +11,8 @@ let text = tp.file.selection();
 if (!text) {
     text = await tp.system.prompt("Alias text:");
 }
+// Esc on the prompt returns null: stop here instead of linking the word "null".
+if (!text) return;
 
 // Ensure the suggester is awaited
 const choice = await tp.system.suggester(
@@ -24,4 +26,3 @@ if (!choice) return;
 // Correct link syntax: [[File#Header|Alias]]
 tR += `[[${choice} glossary#${text}|${text}]]`;
 -%>
-

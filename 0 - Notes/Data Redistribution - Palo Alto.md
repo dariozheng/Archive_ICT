@@ -8,6 +8,7 @@ tags:
   - category/security/palo_alto_networks
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 aliases:
   - Data Redistribution
 ---

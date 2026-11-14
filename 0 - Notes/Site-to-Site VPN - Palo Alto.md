@@ -8,6 +8,7 @@ tags:
   - category/security/palo_alto_networks
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 ---
 <strong>Virtual private networks</strong> (VPNs) <mark style="background: #FFB8EBA6;">create <strong>tunnels</strong> that enable users and systems to connect securely over a <strong>public network</strong></mark>.
 

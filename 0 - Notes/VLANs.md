@@ -11,6 +11,7 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15
+status: draft
 aliases:
   - VLAN
 ---

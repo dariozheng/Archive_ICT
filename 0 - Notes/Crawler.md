@@ -10,6 +10,7 @@ aliases:
   - spider
 icon: FasNetworkWired
 iconColor: "#003791"
+status: draft
 ---
 <strong>Web crawler</strong>, sometimes called a <strong>spider</strong> or <strong>spiderbot</strong> and often shortened to <strong>crawler</strong>, <mark style="background: #FFF3A3A6;">is an Internet bot that systematically browses the <strong>World Wide Web</strong></mark> and that <mark style="background: #FFB8EBA6;">is typically operated by search engines for the purpose of <strong>Web indexing</strong></mark>.
  

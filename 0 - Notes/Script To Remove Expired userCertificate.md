@@ -12,6 +12,7 @@ tags:
   - category/microsoft/windows_server
 icon: SiWindows
 iconColor: "#0078D4"
+status: draft
 ---
 ```powershell
 <#

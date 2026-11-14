@@ -14,6 +14,7 @@ aliases:
   - CASB
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 ---
 <strong>Cloud Access Security Broker</strong> is a [[Cloud Computing Glossary#on premise| on premise]] or [[Cloud Computing Glossary#### cloud-based| cloud-based]] software that sits between cloud services users and cloud application, and it monitors all activity and enforces security policies.
 

@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+status: draft
 ---
 Cisco TrustSec is a software-defined segmentation architecture that enforces security policy based on the role of a user or device rather than its IP address. Each source is tagged with a [[#Security Group Tag (SGT)|Security Group Tag]] that represents its group, that tag travels with the traffic across the network, and policy is written between groups instead of between subnets. The result is segmentation that is independent of addressing and topology — the policy follows the endpoint wherever it connects. TrustSec operates in three steps: [[#Classification — Assigning the SGT|classification]], [[#Propagation — Carrying the SGT|propagation]], and [[#Enforcement — Applying Policy|enforcement]], all orchestrated by [[#Cisco ISE — The Policy Engine|Cisco ISE]]. For the ENCOR exam, TrustSec is the policy plane of Cisco SD-Access, layered on the [[LISP#Core Namespaces|LISP]] control plane and the [[VXLAN#VXLAN Encapsulation|VXLAN]] data plane. This note covers the SGT, the three pillars, the policy matrix, the role of ISE, and how it all fits the fabric.
 

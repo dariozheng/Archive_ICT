@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-07-15
+status: draft
 ---
 ### SLAAC — Stateless Address Autoconfiguration
 

@@ -130,7 +130,7 @@ Use the Authentication tab to <mark style="background: #FFF3A3A6;">configure the
 
 <mark style="background: #FFB86CA6;">The user account running the agent also must have permissions to start a <strong>Windows service</strong></mark>. 
 
-However, membership in these groups provides the account with more permissions than just the capability to perform [[#Server Monitoring|server monitoring]] or client probing. 
+However, membership in these groups provides the account with more permissions than just the capability to perform [[#Server Monitoring complete|server monitoring]] or client probing. 
 
 <mark style="background: #FFF3A3A6;">Therefore, you might want to run the agent using a restricted account with minimal permissions</mark>. 
 <mark style="background: #ADCCFFA6;">The steps to configure an account with minimal Windows permissions depend on the Windows operating system version you have</mark>.
@@ -138,7 +138,7 @@ However, membership in these groups provides the account with more permissions t
 ![[Authentication tab.png]]
 
 ###### Server Monitor Tab
-Use the Server Monitor tab to configure [[#Server Monitoring|server monitoring]] or to enable the optional [[#Windows Session Monitoring|session monitoring]].
+Use the Server Monitor tab to configure [[#Server Monitoring complete|server monitoring]] or to enable the optional [[#Windows User-ID Agent|session monitoring]].
 
 ![[Server Monitor Tab.png]]
 
@@ -395,7 +395,7 @@ By default, <mark style="background: #ABF7F7A6;">User-ID will try to map users f
 ### Include List
 <mark style="background: #FFB8EBA6;">Use the <strong>Include List</strong> to limit the subnetworks or specific addresses that the firewall will attempt to map to users</mark>.
 
-<mark style="background: #D2B3FFA6;">If [[#WMI Client Probing|WMI Probing]] is enabled, WMI will probe private IP addresses but not probe public IP addresses by default</mark>. 
+<mark style="background: #D2B3FFA6;">If [[#Client Probing complete|WMI Probing]] is enabled, WMI will probe private IP addresses but not probe public IP addresses by default</mark>. 
 
 <mark style="background: #FFB86CA6;">To enable WMI probing</mark> <mark style="background: #ABF7F7A6;">to map public addresses</mark>, <mark style="background: #FFB86CA6;">you must use the addresses or address ranges in the Include List</mark>.
 ### Exclude List

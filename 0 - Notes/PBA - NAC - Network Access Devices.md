@@ -19,13 +19,14 @@ tags:
 icon: SiCisco
 iconColor: "#1BA0D7"
 last_update: 2026-07-09
+status: draft
 ---
 Network Access Devices are the point of access for an endpoint and the main enforcement point of the policies decided by the [[PBA - NAC - ISE Server|ISE server]].
 
 NAD types include the following:
 
 - Access switch
-- [[Wireless LAN controller (WLC)]]
+- [[PBA - WLC 9800|Wireless LAN controller (WLC)]]
 - Cisco Adaptive Security Appliance (ASA)
 - Cisco Firepower device
 - Load balancer

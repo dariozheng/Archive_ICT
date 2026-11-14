@@ -10,6 +10,7 @@ tags:
 icon: SiCisco
 iconColor: "#1BA0D7"
 last_update: 2026-07-09
+status: draft
 ---
 Cisco DNA Center è un controller di rete intent-based e una piattaforma di gestione centrale per reti Cisco enterprise di campus, filiale e WAN. 
 
@@ -97,7 +98,7 @@ Vengono memorizzati più set di credenziali e uno per ciascun tipo viene marcato
 - Credenziali CLI (nome utente, password e password enable) per la gestione della configurazione e l'archivio della running-config.
 - Community string SNMP read e SNMP write (SNMPv2c), oppure SNMPv3 con autenticazione e privacy, usate per [[#Discovery|discovery]] e raccolta inventory.
 - Credenziali HTTPS read e write per piattaforme che espongono un'interfaccia programmabile.
-- NETCONF con una porta scelta (comunemente 830), richiesto per la [[#Attivazione della telemetria|telemetria]] model-driven sulle piattaforme IOS-XE supportate.
+- NETCONF con una porta scelta (comunemente 830), richiesto per la [[#Telemetry activation|telemetria]] model-driven sulle piattaforme IOS-XE supportate.
 
 > [!important] Le credenziali definite qui devono corrispondere al dispositivo
 > [[#Discovery|Discovery]] e provisioning usano entrambe queste credenziali. Se SNMP è errato, il dispositivo viene raccolto solo parzialmente; se CLI o NETCONF sono errati, il dispositivo non può essere gestito completamente. Un dispositivo ha quindi bisogno di una baseline funzionante di SSH, SNMP e, per la telemetria, NETCONF prima che il controller possa gestirlo. Questo è anche ciò che la [[#Device controllability|device controllability]] può stabilire automaticamente.
@@ -483,7 +484,7 @@ Dove non si usa segmentazione basata su SGT, le policy di access control basate 
 
 _Visibilità continua, guidata dalla telemetria, su salute della rete e dei client._
 
-Assurance (`Assurance` nella GUI) consuma la [[#Attivazione della telemetria|telemetria]] abilitata al provisioning per calcolare punteggi di salute ed esporre problemi. È principalmente un dominio di monitoraggio, ma ha dipendenze di configurazione reali, soprattutto il fatto che la telemetria sia attiva e, per i test sintetici, che sensori e test siano definiti.
+Assurance (`Assurance` nella GUI) consuma la [[#Telemetry activation|telemetria]] abilitata al provisioning per calcolare punteggi di salute ed esporre problemi. È principalmente un dominio di monitoraggio, ma ha dipendenze di configurazione reali, soprattutto il fatto che la telemetria sia attiva e, per i test sintetici, che sensori e test siano definiti.
 
 ### Health
 

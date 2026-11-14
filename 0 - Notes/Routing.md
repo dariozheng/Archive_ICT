@@ -11,6 +11,7 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15
+status: draft
 ---
 Routing is the process of moving a packet toward a destination that is not on the local network. A host can deliver a frame directly only inside its own subnet; anything else has to be handed to a router, which repeats the same decision — where does this go next? — until the packet reaches the network that owns the destination address.
 
@@ -47,7 +48,6 @@ A router is any device with interfaces in two or more IP networks that forwards 
 
 - It terminates the broadcast domain. Broadcasts and unknown-unicast floods do not cross it.
 - It owns a subnet on each interface, and every host in that subnet uses the router's address as its [[#Default Gateway|default gateway]].
-- 
 - It maintains a [[#The Routing Table|routing table]] describing every destination it believes is reachable.
 - It rewrites the Layer 2 header on every packet it forwards, because the next hop is a different neighbor on a different medium.
 
@@ -187,9 +187,9 @@ Every entry carries the same fields, regardless of where the route came from.
 |Route source|Which mechanism produced the route — connected, static, or a specific protocol. Shown as a one-letter code.|
 |Administrative distance|How much the router trusts the source. Used to choose between sources offering the same prefix. See [[#Administrative Distance]].|
 |Metric|The source protocol's own cost for this path. Used to choose between paths offered by the same source. See [[#Metric]].|
-|Next hop|The neighbor's IP address to send toward. May need [[#Recursive Lookup|
+|Next hop|The neighbor's IP address to send toward. May need [[#Recursive Lookup\|recursive lookup]] to find the exit interface.|
 |Exit interface|The local interface to transmit out of.|
-|Route age|How long since the route was learned or last changed. A rapidly resetting age indicates [[#Route Flapping and Dampening|
+|Route age|How long since the route was learned or last changed. A rapidly resetting age indicates [[#Route Flapping and Dampening\|route flapping]].|
 
 The AD and metric are shown together in brackets, in that order: `[110/65]` is an OSPF route with a cost of 65.
 
@@ -301,7 +301,7 @@ The metric is the cost of a path as measured by the protocol that learned it, an
 |OSPF|cost|inverse of interface bandwidth, summed along the path|
 |IS-IS|cost|an administratively assigned per-link value, summed|
 |EIGRP|composite|slowest bandwidth on the path plus cumulative delay|
-|BGP|no metric|replaced by a [[#Best Path Selection|
+|BGP|no metric|replaced by a [[#Best Path Selection\|tie-breaker list of path attributes]]|
 
 BGP is the outlier, and deliberately so. Inter-domain routing is about business relationships, not about which path is shortest, so BGP substitutes a tie-breaker list of attributes for a numeric cost.
 
@@ -514,7 +514,7 @@ The route is installed only while the tracked object is up. This turns a static 
 |Predictable; the path is exactly what was typed|Adaptive; the path is recomputed on change|
 |No CPU, memory, or bandwidth overhead|Consumes all three, continuously|
 |No neighbor relationship to fail or be attacked|Neighbors must be formed, maintained, secured|
-|Does not react to failure without [[#Static Route Tracking|tracking]]|
+|Does not react to failure without [[#Static Route Tracking\|tracking]]|Detects failure and reroutes on its own|
 |Effort grows with the square of the network|Effort is roughly constant regardless of size|
 |Silent failure modes; nothing tells you it is wrong|Failures are visible in protocol state|
 
@@ -622,10 +622,10 @@ It decomposes into four stages, and each is attacked with different tools:
 
 |Stage|What happens|Improved by|
 |---|---|---|
-|Detect|notice the failure|carrier loss, [[#Bidirectional Forwarding Detection|
+|Detect|notice the failure|carrier loss, [[#Bidirectional Forwarding Detection\|BFD]], fast hellos|
 |Propagate|tell the other routers|triggered updates, flooding|
-|Compute|recalculate paths|efficient algorithms, [[#OSPF Areas|
-|Install|program the RIB and FIB|hardware programming speed, [[#Fast Reroute|
+|Compute|recalculate paths|efficient algorithms, [[#OSPF Areas\|areas]] and summarization to shrink the problem|
+|Install|program the RIB and FIB|hardware programming speed, [[#Fast Reroute\|fast reroute]] with a pre-installed backup|
 
 Detection dominates. A protocol that recomputes in 50 ms but takes 40 seconds to notice the link is down converges in 40 seconds.
 
@@ -733,7 +733,7 @@ Cisco's advanced distance vector protocol, opened as an informational RFC in 201
 |---|---|
 |Neighbor table|every adjacent EIGRP router, per interface, with hold time and queue state|
 |Topology table|every route learned from every neighbor, with that neighbor's distance and the local distance through it|
-|Routing table|only the [[#Successor and Feasible Successor|
+|Routing table|only the [[#Successor and Feasible Successor\|successor]] routes — the best path to each destination|
 
 The topology table is the key structure and the reason EIGRP is fast: alternatives are already known and pre-validated, so a failure is a table lookup rather than a recalculation.
 
@@ -743,7 +743,7 @@ The topology table is the key structure and the reason EIGRP is fast: alternativ
 |---|---|---|
 |Hello|discover and maintain neighbors|no|
 |Update|advertise routes|yes|
-|Query|ask neighbors about a route that has gone [[#Active and Passive States|active]]|
+|Query|ask neighbors about a route that has gone [[#Active and Passive States\|active]]|yes|
 |Reply|answer a query|yes|
 |ACK|acknowledge a reliable packet (a hello with a non-zero ack number)|no|
 |SIA-Query / SIA-Reply|check whether a slow neighbor is still processing a query|yes|
@@ -905,8 +905,8 @@ A logical link that tunnels area 0 across a transit area, reconnecting a strande
 |---|---|
 |Internal router|all interfaces in one area|
 |Backbone router|at least one interface in area 0|
-|Area Border Router (ABR)|interfaces in two or more areas, one of which must be area 0. Generates [[#LSA Types|
-|Autonomous System Boundary Router (ASBR)|injects external routes into OSPF via [[#Redistribution|
+|Area Border Router (ABR)|interfaces in two or more areas, one of which must be area 0. Generates [[#LSA Types\|Type 3 and Type 4 LSAs]].|
+|Autonomous System Boundary Router (ASBR)|injects external routes into OSPF via [[#Redistribution\|redistribution]]. Generates Type 5 LSAs, or Type 7 inside an NSSA.|
 
 A router can hold several roles at once. The roles are consequences of where a router sits, not configuration.
 
@@ -921,12 +921,12 @@ LSAs age. Each is refreshed by its originator every 30 minutes and expires at Ma
 |Type|Name|Originated by|Flooding scope|Describes|
 |---|---|---|---|---|
 |1|Router LSA|every router|its own area|the router's own links, costs, and neighbors|
-|2|Network LSA|the [[#DR and BDR|DR]]|its own area|
+|2|Network LSA|the [[#DR and BDR\|DR]]|its own area|a multi-access segment and the routers attached to it|
 |3|Summary LSA|ABR|other areas|a prefix in another area, and its cost|
 |4|ASBR Summary LSA|ABR|other areas|how to reach an ASBR in another area|
 |5|AS External LSA|ASBR|the whole domain except stub areas|a route redistributed from outside OSPF|
 |7|NSSA External LSA|ASBR in an NSSA|its NSSA only|an external route, for translation to Type 5 by the ABR|
-|9, 10, 11|Opaque LSA|any router|link, area, or AS|arbitrary extensions — used by MPLS-TE and [[#Segment Routing|
+|9, 10, 11|Opaque LSA|any router|link, area, or AS|arbitrary extensions — used by MPLS-TE and [[#Segment Routing\|segment routing]]|
 
 Types 1 and 2 are the actual topology; they never leave their area. Everything else is a description of something happening elsewhere.
 
@@ -984,7 +984,7 @@ Routers must agree on all of the following before an adjacency forms. Any mismat
 |Down|no hello heard|
 |Attempt|NBMA only — actively trying a manually configured neighbor|
 |Init|a hello was received, but it did not list us|
-|2-Way|a hello was received listing us — bidirectional communication confirmed. [[#DR and BDR|
+|2-Way|a hello was received listing us — bidirectional communication confirmed. [[#DR and BDR\|DR and BDR]] election happens here, and DROTHERs stay in this state with each other|
 |ExStart|negotiating master/slave and sequence numbers|
 |Exchange|trading database descriptors|
 |Loading|requesting the LSAs found to be missing|
@@ -1028,7 +1028,7 @@ Unlike [[#EIGRP Summarization|EIGRP]], OSPF can only summarize at boundaries, be
 
 |Command|Where|Summarizes|
 |---|---|---|
-|`area X range`|on an [[#Router Roles|ABR]]|
+|`area X range`|on an [[#Router Roles\|ABR]]|inter-area routes, into Type 3|
 |`summary-address`|on an ASBR|external routes, into Type 5|
 
 Both create a [[#Null Route|Null0]] discard route locally. This constraint is precisely why OSPF area design has to be done before addressing is assigned: if the prefixes inside an area are not contiguous, no summary is possible and the hierarchy achieves nothing.
@@ -1148,12 +1148,12 @@ The same protocol, but the behaviour differs sharply depending on whether the pe
 |Aspect|eBGP|iBGP|
 |---|---|---|
 |Peer AS|different|same|
-|[[#Administrative Distance|AD]]|20|
+|[[#Administrative Distance\|AD]]|20|200|
 |Default TTL on the session|1 — peers must be directly connected|255|
 |AS_PATH|local AS prepended on advertisement|unchanged|
 |NEXT_HOP|set to self on advertisement|preserved unchanged|
 |LOCAL_PREF|not sent|sent, and is the main internal policy lever|
-|Re-advertisement|to everyone|see [[#iBGP Split Horizon|
+|Re-advertisement|to everyone|see [[#iBGP Split Horizon\|iBGP split horizon]] — never to another iBGP peer|
 
 The eBGP TTL of 1 is a deliberate security property — it means an eBGP session cannot be established from more than one hop away, which blocks a whole class of remote attack. Multihop peering (needed for loopback peering or through a firewall) requires `ebgp-multihop` and should be scoped tightly.
 
@@ -1230,7 +1230,7 @@ The two diagnostic states:
 |Table|Contents|
 |---|---|
 |Adj-RIB-In|everything received from each peer, before inbound policy|
-|Loc-RIB|what survived inbound policy, with the [[#Best Path Selection|
+|Loc-RIB|what survived inbound policy, with the [[#Best Path Selection\|best path]] for each prefix marked|
 |Adj-RIB-Out|what will be advertised to each peer, after outbound policy|
 
 The separation is what makes BGP a policy engine. Each peer gets its own inbound and outbound view, so a router can accept a route and not use it, use a route and not advertise it, or advertise a prefix differently to two peers.
@@ -1254,7 +1254,7 @@ The transitive/non-transitive split is what allowed BGP to be extended for 25 ye
 
 |Attribute|Meaning|
 |---|---|
-|ORIGIN|how the prefix entered BGP: IGP (`i`, a `network` statement), EGP (`e`, historical), or Incomplete (`?`, [[#Redistribution|
+|ORIGIN|how the prefix entered BGP: IGP (`i`, a `network` statement), EGP (`e`, historical), or Incomplete (`?`, [[#Redistribution\|redistribution]])|
 |AS_PATH|the ordered list of ASes traversed. Loop detection, length metric, and a policy handle all at once|
 |NEXT_HOP|where to send traffic for this prefix|
 
@@ -1296,7 +1296,7 @@ Extended communities (64-bit) carry structured values and are what [[#Route Dist
 |Attribute|Meaning|
 |---|---|
 |MED|a hint to a neighboring AS about which of several entry points into this AS to prefer. Lower wins|
-|ORIGINATOR_ID|the router ID of the iBGP router that originated the route — [[#Route Reflector|
+|ORIGINATOR_ID|the router ID of the iBGP router that originated the route — [[#Route Reflector\|route reflector]] loop prevention|
 |CLUSTER_LIST|the clusters a reflected route has passed through — RR loop prevention|
 
 MED is the mirror image of AS_PATH prepending: it influences inbound traffic, but only from a directly adjacent AS, and only if that AS chooses to honour it. Many providers ignore it entirely. By default it is compared only between paths from the _same_ neighboring AS, since MED values from different ASes are not on a common scale; `bgp always-compare-med` removes that guard and should be used with care.
@@ -1354,7 +1354,7 @@ Policy is applied per neighbor, per direction, and is the actual work of running
 |Prefix list|the prefix and its length, with `ge`/`le` range matching|
 |AS-path access list|the AS_PATH, as a regular expression|
 |Community list|community values|
-|[[#Route Map|Route map]]|
+|[[#Route Map\|Route map]]|any of the above, combined — and it can set attributes as well as match|
 
 The route map is the engine; the lists are what it matches. A typical inbound policy from a transit provider filters bogons and over-long prefixes, sets a LOCAL_PREF, and tags with a community for later reference. A typical outbound policy to a peer permits only your own prefixes and your customers' — nothing else, ever.
 
@@ -1382,8 +1382,8 @@ The benefit is not only table size. It is boundary:
 |---|---|
 |Smaller tables|less memory, faster lookup, faster convergence|
 |Hides instability|a flap inside the block does not change the summary, so nothing outside recomputes at all|
-|Bounds query scope|an [[#EIGRP Summarization|
-|Bounds SPF|an [[#OSPF Summarization|
+|Bounds query scope|an [[#EIGRP Summarization\|EIGRP summary]] is also a query boundary, which contains SIA|
+|Bounds SPF|an [[#OSPF Summarization\|OSPF area summary]] hides changes inside the area, so other areas do not recompute|
 
 Hiding instability is the real prize. An unsummarized network propagates every flap to every router; a summarized one contains it.
 
@@ -1665,7 +1665,7 @@ The dominant term in [[#Convergence|convergence]]. The options, from best to wor
 |Mechanism|Detection time|Limitation|
 |---|---|---|
 |Physical carrier loss|milliseconds|only detects a local link failure — useless if the break is beyond a media converter, switch, or provider handoff|
-|[[#Bidirectional Forwarding Detection|BFD]]|tens of milliseconds|
+|[[#Bidirectional Forwarding Detection\|BFD]]|tens of milliseconds|must be supported and configured on both ends of the path|
 |Aggressive protocol hellos|hundreds of ms to seconds|CPU cost scales with neighbor count; risks false failures under load|
 |Default protocol timers|10–180 s|far too slow for anything real-time|
 
@@ -1695,8 +1695,8 @@ Even with instant detection, recomputation and FIB reprogramming take time. Fast
 |---|---|
 |LFA (Loop-Free Alternate)|a neighbor that already has a loop-free path to the destination. Simple, but coverage is topology-dependent and often incomplete|
 |Remote LFA|extends coverage by tunnelling to a distant node that qualifies|
-|TI-LFA|uses [[#Segment Routing|
-|[[#Successor and Feasible Successor|EIGRP feasible successor]]|
+|TI-LFA|uses [[#Segment Routing\|segment routing]] to build an explicit repair path — complete coverage in any topology|
+|[[#Successor and Feasible Successor\|EIGRP feasible successor]]|a pre-validated backup next hop, promoted with no computation — only where the feasibility condition is met|
 
 EIGRP's feasible successor is the clearest illustration of the principle: the reason EIGRP converges in milliseconds is not that DUAL is fast, but that when a feasible successor exists there is nothing to compute at all.
 
@@ -1811,9 +1811,9 @@ Pushing the Layer 3 boundary down to the access switch, so that access-to-distri
 |---|---|---|
 |Access–distribution links|trunks|routed|
 |Loop prevention|spanning tree|routing protocol|
-|Convergence|seconds (STP)|sub-second (IGP + [[#Bidirectional Forwarding Detection|
-|Both uplinks active|only with MLAG or [[#GLBP|GLBP]]|
-|Gateway redundancy|needs an [[#First Hop Redundancy|FHRP]]|
+|Convergence|seconds (STP)|sub-second (IGP + [[#Bidirectional Forwarding Detection\|BFD]])|
+|Both uplinks active|only with MLAG or [[#GLBP\|GLBP]]|always, through ECMP|
+|Gateway redundancy|needs an [[#First Hop Redundancy\|FHRP]]|none needed — the access switch is the gateway|
 |VLAN spanning switches|possible|impossible by design|
 |Failure domain|the whole L2 domain|one switch|
 
@@ -1972,7 +1972,7 @@ The forwarding model is identical: [[#Longest Prefix Match|longest prefix match]
 |Header checksum|present, recomputed each hop|removed|
 |Addresses per interface|normally one|always several — link-local plus global|
 |Default gateway|configured or DHCP|learned from Router Advertisements|
-|Protocol next hop|global address|[[#Link-Local Next Hop|
+|Protocol next hop|global address|[[#Link-Local Next Hop\|link-local address]]|
 
 ICMPv6 is not optional. Neighbor Discovery, Router Advertisement, and Path MTU Discovery are all ICMPv6, so filtering it the way ICMP is often filtered in IPv4 breaks the network outright rather than degrading it.
 
@@ -1995,9 +1995,9 @@ ipv6 route 2001:db8:1::/48 GigabitEthernet0/1 FE80::1
 |Protocol|Transport|Multicast|Notes|
 |---|---|---|---|
 |RIPng|UDP 521|FF02::9|obsolete, like its predecessor|
-|[[#OSPFv3|OSPFv3]]|IP protocol 89|FF02::5, FF02::6|
-|EIGRP for IPv6|IP protocol 88|FF02::A|same [[#DUAL|
-|[[#IS-IS|IS-IS]]|Layer 2|—|
+|[[#OSPFv3\|OSPFv3]]|IP protocol 89|FF02::5, FF02::6|a new protocol version; runs per link, not per subnet|
+|EIGRP for IPv6|IP protocol 88|FF02::A|same [[#DUAL\|DUAL]] and metric as for IPv4|
+|[[#IS-IS\|IS-IS]]|Layer 2|—|IPv6 is one added TLV; one process and one set of adjacencies carry both families|
 |MP-BGP|TCP 179|—|the IPv6 unicast address family on the existing session|
 
 IS-IS is the standout: because it never ran over IP, adding IPv6 meant defining a TLV, and one process with one set of adjacencies carries both families. OSPF needed an entirely new protocol version. This is the clearest practical dividend of the design choice, and a large part of why providers chose IS-IS.
@@ -2098,7 +2098,7 @@ Validates _source_ addresses. Every check so far in this note has examined the d
 |Mode|Check|
 |---|---|
 |Strict|the source must be reachable via the _same_ interface the packet came in on|
-|Loose|the source must simply exist somewhere in the [[#The Routing Table|
+|Loose|the source must simply exist somewhere in the [[#The Routing Table\|routing table]], through any interface|
 
 ```cisco
 interface GigabitEthernet0/1
@@ -2214,17 +2214,17 @@ Always specify a source. An unsourced ping uses the exit interface's address, wh
 
 |Symptom|Usual cause|
 |---|---|
-|Route in the table, traffic goes elsewhere|a more specific [[#Longest Prefix Match|
-|Route absent despite correct configuration|it lost on [[#Administrative Distance|
-|Neighbor never forms|mismatched timers, area, AS, [[#Protocol Authentication|
+|Route in the table, traffic goes elsewhere|a more specific [[#Longest Prefix Match\|prefix]] is winning the lookup|
+|Route absent despite correct configuration|it lost on [[#Administrative Distance\|administrative distance]] to another source|
+|Neighbor never forms|mismatched timers, area, AS, [[#Protocol Authentication\|authentication]], or subnet|
 |OSPF stuck in ExStart/Exchange|MTU mismatch|
-|Route redistributed but never appears|missing [[#Seed Metric|
-|Traffic black-holed after a [[#Summarization|summary]]|
-|Works small, fails large|MTU — [[#MTU and Fragmentation|
-|Intermittent, path-dependent failure|[[#Hop-by-Hop Forwarding|
+|Route redistributed but never appears|missing [[#Seed Metric\|seed metric]]|
+|Traffic black-holed after a [[#Summarization\|summary]]|a component subnet is gone but the summary is still advertised|
+|Works small, fails large|MTU — [[#MTU and Fragmentation\|Path MTU Discovery]] broken by ICMP filtering|
+|Intermittent, path-dependent failure|[[#Hop-by-Hop Forwarding\|asymmetric routing]] through a stateful device|
 |BGP peer flaps Idle/Active|TCP failing — no route to the peer, port 179 filtered, or an AS mismatch|
-|EIGRP routes drop periodically|[[#Stuck in Active|
-|Everything reconverges constantly|a [[#Route Flapping and Dampening|
-|Loop only during failover|[[#Redistribution Loops|
+|EIGRP routes drop periodically|[[#Stuck in Active\|stuck in active]] — an unanswered query resets the adjacency|
+|Everything reconverges constantly|a [[#Route Flapping and Dampening\|flapping]] link or route|
+|Loop only during failover|[[#Redistribution Loops\|mutual redistribution]] without filtering or tags|
 
 The pattern behind most of these: routing problems are rarely a wrong route. They are an unnoticed _better_ route, a route silently rejected, or two routers holding different opinions that no protocol is able to reconcile.

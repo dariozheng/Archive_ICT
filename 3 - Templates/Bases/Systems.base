@@ -4,3 +4,4 @@ views:
     filters:
       and:
         - categories.contains(link("Systems"))
+        - '!file.name.contains("Template")'

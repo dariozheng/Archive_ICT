@@ -9,6 +9,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-09-24
+status: draft
 aliases:
   - Virtual Routing and Forwarding
 ---
@@ -591,7 +592,7 @@ VRF is one of several separation tools, and picking the wrong one produces eithe
 |---|---|
 |Separate broadcast domains within a switched segment|VLAN|
 |Separate routing tables, overlapping address space, one device|VRF|
-|Policy, inspection, and logging between segments|Firewall, optionally with [[#Inter-VRF Traffic via an External Firewall|
+|Policy, inspection, and logging between segments|Firewall, optionally with [[#Inter-VRF Traffic via an External Firewall\|each VRF routed through it]]|
 |Strong isolation with independent failure domains|Physically separate devices|
 |Scalable multi-site tenant separation over a shared core|MPLS L3VPN or a VXLAN/EVPN fabric|
 

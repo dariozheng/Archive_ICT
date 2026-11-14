@@ -9,6 +9,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-08-26
+status: draft
 ---
 _An 18-to-20-week, phase-ordered plan for the ENCOR 350-401 v1.2 exam, with topic lists, labs, books, courses, white papers, design guides, and RFCs per phase._
 

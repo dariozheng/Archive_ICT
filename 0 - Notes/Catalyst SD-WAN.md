@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+status: draft
 ---
 Cisco Catalyst SD-WAN, formerly Viptela and then Cisco SD-WAN, is a software-defined approach to the wide-area network. It separates the WAN into four planes and builds a transport-independent, encrypted overlay that rides on top of any underlying transport — MPLS, broadband internet, or cellular — while being managed centrally and driven by policy. Instead of configuring each branch router by hand and locking the design to one carrier, an operator defines intent in a controller and the fabric of edge routers is provisioned to match. This note covers the four planes and their components, the overlay [[Routing|routing]] protocol and its locators, the split between control and data connections, policy and application-aware routing, onboarding, and how the whole thing compares to a traditional WAN. It is the WAN sibling of [[SD-Access#What SD-Access Is|SD-Access]]: the same separation of control from data, applied to the WAN instead of the campus.
 

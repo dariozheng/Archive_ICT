@@ -7,6 +7,7 @@ tags:
 icon: SiBitcoin
 iconColor: "#F38423"
 last_update: 2026-08-26
+status: draft
 ---
 ## Foundations
 
@@ -373,7 +374,7 @@ The standard fix for a stuck transaction is to rebroadcast the same nonce with a
 |State representation|Set of unspent outputs|Map of address to account record|
 |Replay protection|Implicit, an output can only be spent once|Explicit per-account nonce|
 |Parallel validation|Natural|Requires dependency analysis|
-|Contract expressiveness|Deliberately limited|Arbitrary, Turing-complete within a [[#Gas Metering|
+|Contract expressiveness|Deliberately limited|Arbitrary, Turing-complete within a [[#Gas Metering\|gas budget]]|
 |State growth|Bounded by the unspent set|Grows monotonically without expiry mechanisms|
 |Default privacy|Better, new address per payment|Worse, address reuse is the norm|
 |Fee specification|Implicit, inputs minus outputs|Explicit gas limit and price|
@@ -525,7 +526,7 @@ Bitcoin's header is exactly 80 bytes:
 |---|---|---|
 |`version`|4 bytes|Rule signalling and soft-fork activation bits|
 |`prev_block_hash`|32 bytes|Hash of the previous block's header|
-|`merkle_root`|32 bytes|[[#Merkle Trees|
+|`merkle_root`|32 bytes|[[#Merkle Trees\|Merkle root]] committing to every transaction in the block|
 |`timestamp`|4 bytes|Miner-supplied Unix time, loosely constrained|
 |`nBits`|4 bytes|Compact encoding of the current difficulty target|
 |`nonce`|4 bytes|The value miners iterate|
@@ -888,7 +889,7 @@ A hard fork loosens or changes rules so that new blocks are invalid under the ol
 
 |Upgrade|Date|Principal change|
 |---|---|---|
-|The Merge|September 2022|Replaced proof of work with [[#Proof of Stake|
+|The Merge|September 2022|Replaced proof of work with [[#Proof of Stake\|proof of stake]]|
 |Shapella|April 2023|Enabled validator withdrawals|
 |Dencun|March 2024|Introduced blobs (EIP-4844) for rollup data|
 |Pectra|May 2025|Raised the maximum effective balance, added EOA code delegation, doubled blob throughput|

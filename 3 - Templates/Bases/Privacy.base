@@ -4,3 +4,4 @@ views:
     filters:
       and:
         - categories.contains(link("Privacy"))
+        - '!file.name.contains("Template")'

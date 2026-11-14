@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+status: draft
 aliases:
   - Locator/ID Separation Protocol
 ---

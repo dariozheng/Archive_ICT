@@ -11,6 +11,7 @@ tags:
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-14
+status: draft
 ---
 _Subnetting moves the boundary between the network portion and the host portion of an IP address, so that one allocated block can be split into smaller networks that route independently._
 

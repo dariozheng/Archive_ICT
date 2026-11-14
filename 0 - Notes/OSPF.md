@@ -9,6 +9,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-07-21
+status: draft
 aliases:
   - Open Shortest Path First
 ---

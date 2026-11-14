@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-11-12
+status: draft
 ---
 Enterprise wireless networking replaces the standalone access point with a controller-based design, where a central Wireless LAN Controller (WLC) manages a fleet of lightweight access points (APs) as a single system. Rather than configuring each AP by hand, an administrator defines wireless policy once on the controller and pushes it to every AP that matches. This note covers the Cisco enterprise model built around the Catalyst 9800 controller: how the AP and controller divide responsibility, how they communicate over CAPWAP, how APs forward client traffic, and how the controller manages radio frequency, roaming, and security across the whole deployment.
 
@@ -120,7 +121,7 @@ Profiles describe the "what":
 |WLAN Profile|The SSID and its Layer 2 security (WPA, 802.1X, PSK)|
 |Policy Profile|Layer 3 handling for that WLAN: VLAN/interface, central or local switching, QoS, ACLs, mobility|
 |AP Join Profile|CAPWAP settings, AP credentials, and timers for the AP itself|
-|Flex Profile|[[#FlexConnect|
+|Flex Profile|[[#FlexConnect\|FlexConnect]] behaviour for branch APs: local switching onto branch VLANs and local authentication|
 |RF Profile|Per-band RF parameters: data rates, power, channels|
 
 Tags describe the "who and where"; each AP receives one of each:
@@ -174,7 +175,12 @@ The default mode. Client traffic is tunnelled through CAPWAP to the controller a
 
 Designed for branch sites where the controller sits across a WAN. The AP can switch client traffic locally onto branch VLANs instead of tunnelling every frame back to a distant controller — local switching. It can also authenticate clients locally if the WAN link to the controller (and therefore to the RADIUS server) goes down.
 
-| Aspect | [[#Local Mode|Local mode]] | FlexConnect | |---|---|---| | Data path | Central (CAPWAP to WLC) | Local (branch switch) | | Controller location | Same LAN | Across a WAN | | If the WAN link fails | AP stops serving clients | Continues serving known clients | | Client-handling config | Policy Profile | Flex Profile |
+| Aspect | [[#Local Mode\|Local mode]] | FlexConnect |
+|---|---|---|
+| Data path | Central (CAPWAP to WLC) | Local (branch switch) |
+| Controller location | Same LAN | Across a WAN |
+| If the WAN link fails | AP stops serving clients | Continues serving known clients |
+| Client-handling config | Policy Profile | Flex Profile |
 
 ```
 LOCAL MODE  (central switching)
@@ -326,7 +332,7 @@ Because the medium is open air, wireless security has to do two jobs: authentica
 |Model|How clients authenticate|
 |---|---|
 |Personal (PSK / SAE)|A single pre-shared key or passphrase for the SSID; simple, and suited to small or IoT networks|
-|[[#802.1X and the WLC as Authenticator|Enterprise]] (802.1X/EAP)|
+|[[#802.1X and the WLC as Authenticator\|Enterprise]] (802.1X/EAP)|Each user or device authenticates individually against a RADIUS server such as Cisco ISE; suited to corporate networks|
 
 ### 802.1X and the WLC as Authenticator
 

@@ -2,4 +2,4 @@
 tags:
   - categories
 ---
-![[Networking.base]]
+![[Privacy.base]]

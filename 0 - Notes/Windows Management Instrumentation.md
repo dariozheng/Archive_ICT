@@ -9,6 +9,7 @@ aliases:
   - WMI
 icon: SiWindows
 iconColor: "#0078D4"
+status: draft
 ---
 <mark style="background: #ABF7F7A6;"><strong>Windows Management Instrumentation</strong> (WMI) is the infrastructure for management data and operations on Windows-based operating systems</mark>. It is standard technology for accessing management information in an enterprise environment. 
 

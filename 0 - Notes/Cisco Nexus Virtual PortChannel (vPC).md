@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+status: draft
 aliases:
   - vPC
   - Virtual PortChannel
@@ -929,12 +930,12 @@ For every approved failure test, record:
 
 | Failure | Expected behavior | Main risk or observation |
 |---|---|---|
-| [[#Member-Link Failure|One downstream member fails]] | LACP removes the member and rehashes traffic | Brief loss for affected flows and reduced capacity |
+| [[#Member-Link Failure\|One downstream member fails]] | LACP removes the member and rehashes traffic | Brief loss for affected flows and reduced capacity |
 | One peer-link member fails | Remaining peer-link members keep the peer-link up | Reduced peer-link capacity |
-| [[#Peer Failure|One Nexus peer fails]] | The surviving peer carries the downstream bundle and may become operational primary | Reduced chassis and link capacity |
-| [[#Keepalive-Only Failure|Keepalive fails while peer-link stays up]] | vPC forwarding continues | Peer liveness cannot be safely determined if the peer-link fails next |
-| [[#Peer-Link Failure with Keepalive Available|Peer-link fails while keepalive stays up]] | The secondary suspends its vPC member ports and associated SVIs; the primary continues | Orphan or Layer 3 isolation and reduced capacity |
-| [[#Dual-Active Condition|Keepalive fails first, then peer-link fails]] | Both switches can become operational primary | Dual-active, MAC divergence, duplicates, or blackholing |
+| [[#Peer Failure\|One Nexus peer fails]] | The surviving peer carries the downstream bundle and may become operational primary | Reduced chassis and link capacity |
+| [[#Keepalive-Only Failure\|Keepalive fails while peer-link stays up]] | vPC forwarding continues | Peer liveness cannot be safely determined if the peer-link fails next |
+| [[#Peer-Link Failure with Keepalive Available\|Peer-link fails while keepalive stays up]] | The secondary suspends its vPC member ports and associated SVIs; the primary continues | Orphan or Layer 3 isolation and reduced capacity |
+| [[#Dual-Active Condition\|Keepalive fails first, then peer-link fails]] | Both switches can become operational primary | Dual-active, MAC divergence, duplicates, or blackholing |
 | Both peers reload and only one returns | Member vPCs may remain suspended without a supported recovery policy | Service remains down until the peer returns or auto-recovery expires |
 | Mandatory mismatch | The vPC, secondary leg, or affected VLAN is suspended | Immediate or partial loss of forwarding |
 | Type-2 mismatch | vPC may remain up | Asymmetric or incorrect forwarding can remain hidden |

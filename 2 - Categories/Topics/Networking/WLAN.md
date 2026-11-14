@@ -1,12 +1,8 @@
 ---
-categories:
-  - "[[Networking]]"
-topic@networking:
-  - "[[WLAN]]"
 tags:
+  - topic
   - category/networking/wlan
 icon: FasNetworkWired
 iconColor:
-last_update:
 ---
 ![[WLAN.base]]

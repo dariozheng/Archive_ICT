@@ -14,6 +14,7 @@ tags:
 icon: SiWireguard
 iconColor: "#87151F"
 last_update: 2026-07-09
+status: draft
 ---
 
 <strong>WireGuard</strong> is a fast, modern VPN that runs as a <strong>virtual network interface</strong> in the Linux kernel, mainline since 5.6 (with portable userspace implementations such as wireguard-go and BoringTun for other platforms).

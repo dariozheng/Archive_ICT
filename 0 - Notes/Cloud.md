@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+status: draft
 ---
 Cloud computing delivers compute, storage, and networking on demand as a service over the network, billed by use and built on the same [[Hypervisors#Hypervisor Classification|virtualization]] that underpins the modern data center. Instead of buying and racking hardware, an organization consumes resources from a provider and scales them up or down as needed. For the ENCOR exam the relevant angles are the service and deployment models, the way responsibility is split between provider and customer, and — the networking piece — how an enterprise actually connects to cloud workloads. This note covers the essential characteristics, the service and deployment models, shared responsibility, regions and availability zones, the connectivity options, and the cloud-versus-on-premises tradeoff.
 

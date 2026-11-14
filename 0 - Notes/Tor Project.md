@@ -11,6 +11,7 @@ tags:
 icon: FasNetworkWired
 iconColor: "#4F2C5F"
 last_update: 2026-07-15
+status: draft
 aliases:
   - Tor
 ---

@@ -8,6 +8,7 @@ tags:
 icon: FasNetworkWired
 iconColor:
 last_update:
+status: draft
 ---
 Campus design is how the enterprise LAN is structured so that it scales, stays resilient, and remains manageable as it grows. Cisco's approach is hierarchical and modular: split the network into functional layers with clear jobs, build it from repeatable blocks, and add redundancy where failures would hurt. This note covers the design principles, the three hierarchical layers, the two- and three-tier models, the switch block, access-layer options, the spine-leaf fabric, and capacity planning. It is the traditional foundation that [[SD-Access#What SD-Access Is|SD-Access]] later automates and evolves. The high-availability techniques that make each layer redundant — first-hop redundancy, stateful switchover, and the like — are covered in the [[High Availability#Redundancy Fundamentals|High Availability]] note.
 

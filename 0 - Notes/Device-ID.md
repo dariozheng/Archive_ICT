@@ -8,6 +8,7 @@ tags:
   - category/security/palo_alto_networks
 icon: SiPaloaltonetworks
 iconColor: "#F04E23"
+status: draft
 ---
 <strong>Device-ID</strong> is a PAN-OS policy construct for enforcement and visibility. 
 It allows administrators <mark style="background: #FFB8EBA6;">to apply consistent <strong>policy control</strong> and <strong>threat prevention</strong> to a <strong>device</strong></mark> <mark style="background: #FF5582A6;">no matter where it <strong>moves</strong> within the network or what its <strong>IP address</strong> is at any given time</mark>. 
@@ -70,4 +71,3 @@ IoT Security also supports static IP devices. 
 The more traffic the firewall can observe, the more accurate the policy rule recommendations are for the device and the more rapid and accurate the IP address-to-device mappings are for the device. 
 
 When a device sends DHCP traffic to obtain its network settings, the firewall observes this type of request and generates EALs to send to the logging service, where IoT Security accesses them for analysis.
-# 
