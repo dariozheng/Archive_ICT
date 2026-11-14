@@ -2,9 +2,9 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Cloud Networking]]"
 tags:
-  - category/networking/networking_general
+  - category/networking/cloud_networking
 icon: FasNetworkWired
 iconColor:
 last_update:

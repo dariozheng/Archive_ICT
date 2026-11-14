@@ -2,11 +2,11 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Software-Defined Networking]]"
 tags:
   - cisco
   - PBA
-  - category/networking/networking_general
+  - category/networking/software-defined_networking
 icon: SiCisco
 iconColor: "#1BA0D7"
 last_update: 2026-07-09

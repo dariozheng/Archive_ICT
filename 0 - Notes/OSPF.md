@@ -2,9 +2,9 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Routing and Addressing]]"
 tags:
-  - category/networking/networking_general
+  - category/networking/routing_and_addressing
   - encor/routing
 icon: FasNetworkWired
 iconColor:

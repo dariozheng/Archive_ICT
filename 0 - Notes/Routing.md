@@ -2,12 +2,12 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Routing and Addressing]]"
 tags:
   - ccnp
   - claude
   - encor/routing
-  - category/networking/networking_general
+  - category/networking/routing_and_addressing
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15

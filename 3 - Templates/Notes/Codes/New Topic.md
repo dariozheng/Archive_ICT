@@ -42,7 +42,8 @@ const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "status
 let topicProp = null;
 const tmpl = app.vault.getAbstractFileByPath(`${CATEGORY_TEMPLATES}/${category} Template.md`);
 if (tmpl) {
-    const fm = (await app.vault.read(tmpl)).match(/^---\n([\s\S]*?)\n---/);
+    // replace(): a checkout on Windows can hand the file back with "\r\n".
+    const fm = (await app.vault.read(tmpl)).replace(/\r\n/g, "\n").match(/^---\n([\s\S]*?)\n---/);
     if (fm) {
         let keys = [...fm[1].matchAll(/^([A-Za-z][A-Za-z0-9_@-]*):/gm)]
             .map((m) => m[1])
@@ -101,7 +102,7 @@ const topicSlug = name.toLowerCase().replace(/\s+/g, "_");
 let kindTag = "topic";
 const generalNote = app.vault.getAbstractFileByPath(`${folder}/${category} General.md`);
 if (generalNote) {
-    const gm = (await app.vault.read(generalNote)).match(/^tags:\n((?:  - .*\n)*)/m);
+    const gm = (await app.vault.read(generalNote)).replace(/\r\n/g, "\n").match(/^tags:\n((?:  - .*\n)*)/m);
     if (gm) {
         const first = [...gm[1].matchAll(/  - (.*)/g)].map((x) => x[1].trim())
             .find((t) => !t.startsWith("category/"));

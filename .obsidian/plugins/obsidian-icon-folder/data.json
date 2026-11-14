@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "FasServer",
-      "LiLock",
-      "FasUserSecret",
+      "SiCisco",
       "FasNetworkWired",
-      "SiMicrosoft"
+      "SiLinux",
+      "SiUbuntu",
+      "SiBitcoin"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -383,5 +383,45 @@
   "0 - Notes/NETWORK CHECK.md": {
     "iconName": "FasNetworkWired",
     "iconColor": null
+  },
+  "0 - Notes/Multi-Factor Authentication - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "0 - Notes/Phishing Protection - Palo Alto.md": {
+    "iconName": "SiPaloaltonetworks",
+    "iconColor": "#F04E23"
+  },
+  "2 - Categories/Topics/Systems/Systems General.md": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7aff"
+  },
+  "2 - Categories/Topics/Hardware/Hardware General.md": {
+    "iconName": "LiHardDrive",
+    "iconColor": null
+  },
+  "2 - Categories/Topics/Networking/Routing and Addressing.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Networking/Switching.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Networking/Virtualization and Overlays.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Networking/Software-Defined Networking.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Networking/Cloud Networking.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Networking/Study Plans.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
   }
 }

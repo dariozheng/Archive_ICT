@@ -2,9 +2,9 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Software-Defined Networking]]"
 tags:
-  - category/networking/networking_general
+  - category/networking/software-defined_networking
 icon: FasNetworkWired
 iconColor:
 last_update:

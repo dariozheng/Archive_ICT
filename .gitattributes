@@ -1,0 +1,4 @@
+# Never convert line endings. The notes and templates are LF, and the Templater
+# scripts in 3 - Templates/Notes/Codes match on "\n". Without this, Git for
+# Windows (core.autocrlf=true) rewrites files as CRLF on checkout and pull.
+* -text

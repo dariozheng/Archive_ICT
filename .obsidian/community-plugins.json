@@ -9,12 +9,12 @@
   "linked-note-exporter",
   "highlightr-plugin",
   "obsidian-icon-folder",
-  "obsidian-git",
   "dataview",
   "notebook-navigator",
   "obsidian-style-settings",
   "find-orphaned-images",
   "obsidian-excalidraw-plugin",
   "category-tag-sync",
-  "xlsx-viewer"
+  "xlsx-viewer",
+  "obsidian-git"
 ]

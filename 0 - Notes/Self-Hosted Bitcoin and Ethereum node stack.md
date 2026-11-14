@@ -2,9 +2,10 @@
 categories:
   - "[[Systems]]"
 topic@systems:
+  - "[[Systems General]]"
 tags:
   - claude
-  - category/systems
+  - category/systems/systems_general
 icon: SiBitcoin
 iconColor: "#F38423"
 status: draft

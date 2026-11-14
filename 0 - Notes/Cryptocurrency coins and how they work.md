@@ -2,8 +2,9 @@
 categories:
   - "[[Systems]]"
 topic@systems:
+  - "[[Systems General]]"
 tags:
-  - category/systems
+  - category/systems/systems_general
 icon: SiBitcoin
 iconColor: "#F38423"
 last_update: 2026-08-26

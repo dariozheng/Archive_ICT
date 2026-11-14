@@ -2,12 +2,12 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Switching]]"
 tags:
   - ccnp
   - claude
   - encor/switching
-  - category/networking/networking_general
+  - category/networking/switching
 icon: FasNetworkWired
 iconColor: "#003791"
 last_update: 2026-07-15

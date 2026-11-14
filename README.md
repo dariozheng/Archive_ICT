@@ -23,13 +23,12 @@ Every template has the following properties:
 - last_update: the date of the last real change to the content. It is filled by hand.
 - status: <strong>stub</strong> (placeholder, no real content yet), <strong>draft</strong> (in progress) or <strong>complete</strong>. New notes start as draft. Use this instead of tags like tobecompleted
 - aliases: optional, the other names of the subject (BGP, ISE, ...).
-- Distro: only in the Linux template, a link to the distribution (`[[Ubuntu]]`). The Ubuntu base filters on it.
 
 # Categories
 This is the folder with the notes that are linked in the categories field.
 Each category note has the tag `categories` and embeds its corresponding <strong>.base</strong> file. To embed a base, use: `![[filename.base]]`
 In this folder there is also the <strong>Topics</strong> folder, where each category has a folder with its topic notes. A topic note has the tag `topic` (`product` for Linux and Microsoft) plus its <strong>category/&lt;cat&gt;/&lt;topic&gt;</strong> tag, and embeds its own base.
-Hardware and Systems do not have a topic folder yet, see Templater to scaffold it.
+Every category has at least its <strong>&lt;Category&gt; General</strong> topic.
 
 # Base
 The base files are in <strong>3 - Templates/Bases</strong>, the topic ones in <strong>3 - Templates/Bases/Topics/&lt;Category&gt;</strong>.
@@ -152,7 +151,7 @@ Script folder: <strong>1 - Excalidraw/Scripts</strong>. The two <strong>Import_H
 ## Others
 - Advanced Tables: Tab and Enter move between the cells of a table.
 - Minimal Theme Settings and Style Settings, with the CSS snippet <strong>headers</strong> for the colour and size of the headings.
-- Git: backup of the vault. It needs git installed and the vault to be a git repository.
+- Git: backup of the vault to GitHub, on the branch <strong>master</strong>. It needs git installed. The file <strong>.gitattributes</strong> stops git from converting line endings: the notes are LF and the Templater scripts expect that. The window layout (<strong>.obsidian/workspace.json</strong>) is not synced, each machine keeps its own.
 - Find orphaned images: lists the images that no note uses.
 - Linked Note Exporter: exports a note together with the notes and files it links.
 - Dataview, Metadata Menu and XLSX Viewer are installed, but no note uses them at the moment.

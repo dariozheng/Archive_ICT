@@ -2,9 +2,9 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[WLAN]]"
 tags:
-  - category/networking/networking_general
+  - category/networking/wlan
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-11-12

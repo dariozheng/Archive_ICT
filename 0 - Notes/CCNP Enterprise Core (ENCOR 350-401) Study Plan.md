@@ -2,10 +2,10 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Study Plans]]"
 tags:
   - ccnp
-  - category/networking/networking_general
+  - category/networking/study_plans
 icon: FasNetworkWired
 iconColor:
 last_update: 2026-08-26

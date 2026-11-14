@@ -3,4 +3,4 @@ views:
     name: Table
     filters:
       and:
-        - Distro == link("Ubuntu")
+        - note["topic@linux"].contains(link("Ubuntu"))

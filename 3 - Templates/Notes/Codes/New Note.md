@@ -22,7 +22,9 @@ const pick = await tp.system.suggester(cats, templates, false, "Which category?"
 if (!pick) { new Notice("New Note: cancelled."); return; }
 const category = pick.basename.slice(0, -SUFFIX.length);
 
-let body = await app.vault.read(pick);
+// Line endings are normalised first: everything below matches on "\n", and a
+// checkout on Windows can hand the template back with "\r\n".
+let body = (await app.vault.read(pick)).replace(/\r\n/g, "\n");
 
 // The topic property is whatever key the template declares that is not a fixed one
 // - the same discovery New Topic uses, so any per-category quirk (e.g. Linux's extra

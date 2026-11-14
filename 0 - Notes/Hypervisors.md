@@ -2,10 +2,10 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Virtualization and Overlays]]"
 tags:
   - encor
-  - category/networking/networking_general
+  - category/networking/virtualization_and_overlays
 icon: FasNetworkWired
 iconColor:
 last_update:

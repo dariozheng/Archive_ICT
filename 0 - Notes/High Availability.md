@@ -2,9 +2,9 @@
 categories:
   - "[[Networking]]"
 topic@networking:
-  - "[[Networking General]]"
+  - "[[Switching]]"
 tags:
-  - category/networking/networking_general
+  - category/networking/switching
 icon: FasNetworkWired
 iconColor:
 last_update:

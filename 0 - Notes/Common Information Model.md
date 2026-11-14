@@ -2,8 +2,9 @@
 categories:
   - "[[Systems]]"
 topic@systems:
+  - "[[Systems General]]"
 tags:
-  - category/systems
+  - category/systems/systems_general
 aliases:
   - CMI
   - CIM
