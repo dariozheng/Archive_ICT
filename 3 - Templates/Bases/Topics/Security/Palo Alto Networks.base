@@ -1,12 +1,8 @@
-formulas:
-  Untitled: ""
 properties:
   file.name:
     displayName: Page
-  note.created:
-    displayName: Created
-  note.modified:
-    displayName: Modified
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
@@ -15,9 +11,9 @@ views:
         - note["topic@security"].contains(link("Palo Alto Networks"))
     order:
       - file.name
+      - status
       - file.mtime
       - aliases
-      - formula.Untitled
     sort:
-      - property: created
-        direction: DESC
+      - property: file.name
+        direction: ASC

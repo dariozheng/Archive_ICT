@@ -202,7 +202,7 @@ The firewall has non-configurable timers for its communication to the agent.
 -  1 Hour
 <mark style="background: #FF5582A6;">Get the full list of IP address-to-username mappings from the agent</mark>.
 ##### Confirm Connection to the User-ID Agent #troubleshooting
-To confirm connection to the User-ID agent device, browse to <strong>Device > Data Redistribution > Agents</strong>.
+To confirm connection to the User-ID agent device, browse to <strong>Device > [[Data Redistribution - Palo Alto|Data Redistribution]] > Agents</strong>.
 
 Use the firewall’s web interface and the Windows agent to confirm connectivity between the firewall and the Windows agent. 
 

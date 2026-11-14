@@ -1,3 +1,8 @@
+properties:
+  file.name:
+    displayName: Page
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
@@ -5,3 +10,9 @@ views:
       and:
         - note["topic@microsoft"].contains(link("Windows Server"))
         - '!file.tags.contains("script")'
+    order:
+      - file.name
+      - status
+    sort:
+      - property: file.name
+        direction: ASC

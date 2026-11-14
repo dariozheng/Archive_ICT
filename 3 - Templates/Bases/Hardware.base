@@ -1,10 +1,23 @@
-filters:
-  and:
-    - categories.contains(link("Hardware"))
-    - '!file.name.contains("Template")'
 properties:
   file.name:
     displayName: Page
+  note.topic@hardware:
+    displayName: Topic
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
+    filters:
+      and:
+        - categories.contains(link("Hardware"))
+        - '!file.name.contains("Template")'
+    order:
+      - file.name
+      - topic@hardware
+      - status
+    sort:
+      - property: topic@hardware
+        direction: ASC
+      - property: file.name
+        direction: ASC

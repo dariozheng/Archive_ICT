@@ -160,9 +160,9 @@ _Two Cisco software-defined fabrics with the same philosophy applied to differen
 |Aspect|SD-Access|Catalyst SD-WAN|
 |---|---|---|
 |Domain|Campus|Wide-area network|
-|Control plane|LISP|OMP|
-|Data plane|VXLAN|IPsec overlay|
-|Policy|TrustSec security groups|Centralized vSmart policy and application-aware routing|
+|Control plane|[[LISP]]|OMP|
+|Data plane|[[VXLAN]]|IPsec overlay|
+|Policy|[[TrustSec]] security groups|Centralized vSmart policy and application-aware routing|
 |Manager|Catalyst Center|SD-WAN Manager (vManage)|
 
 ## Configuration

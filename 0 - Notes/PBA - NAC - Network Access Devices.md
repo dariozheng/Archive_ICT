@@ -3,7 +3,7 @@ categories:
   - "[[Networking]]"
   - "[[Security]]"
 topic@networking:
-  - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
+  - "[[Cisco ISE]]"
 topic@security:
   - "[[NAC]]"
 tags:
@@ -2067,7 +2067,7 @@ The keyword `network` specifically covers <strong>network access policy attribut
 |Downloadable ACL|`Cisco-AVPair = ip:inacl#10=...`|Apply a per-session ACL|
 |Redirect URL|`Cisco-AVPair = url-redirect=https://ise/portal/...`|Send traffic to a captive portal|
 |Redirect ACL|`Cisco-AVPair = url-redirect-acl=ACL_GUEST_REDIRECT`|Which traffic gets redirected|
-|SGT|`Cisco-AVPair = cts:security-group-tag=...`|Apply a Cisco TrustSec tag|
+|SGT|`Cisco-AVPair = cts:security-group-tag=...`|Apply a Cisco [[TrustSec]] tag|
 
 Without `aaa authorization network`, the switch ignores all policy attributes returned by ISE — endpoints authenticate successfully but never receive their VLAN, dACL, or redirect.
 

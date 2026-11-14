@@ -63,3 +63,16 @@ views:
       - file.name
       - categories
       - status
+  - type: table
+    name: PBA project
+    filters:
+      or:
+        - file.hasTag("PBA")
+        - file.name.startsWith("PBA - ")
+    order:
+      - file.name
+      - categories
+      - status
+    sort:
+      - property: file.name
+        direction: ASC

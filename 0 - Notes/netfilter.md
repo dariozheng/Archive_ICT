@@ -4,13 +4,15 @@ categories:
   - "[[Security]]"
 topic@linux:
   - "[[Linux General]]"
+topic@security:
+  - "[[Firewall]]"
 tags:
   - firewall
   - framework
   - claude
   - kernel
   - category/linux/linux_general
-  - category/security
+  - category/security/firewall
 icon: SiLinux
 iconColor: "#000000"
 last_update: 2026-07-09

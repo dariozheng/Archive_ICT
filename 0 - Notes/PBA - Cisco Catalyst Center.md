@@ -431,7 +431,7 @@ Gli indirizzi provengono da un pool IP riservato di tipo LAN. Da esso, ogni disp
 - Il multicast underlay è un attributo opzionale (necessario per flooding Layer 2 fabric e multicast nativo); quando è abilitato, i seed sono configurati come rendezvous point PIM.
 - Il summary del pool LAN può opzionalmente essere annunciato in un processo [[Border Gateway Protocol|BGP]] preconfigurato sui seed, così il controller mantiene raggiungibilità verso i dispositivi scoperti senza route statiche.
 
-> [!note] Perché IS-IS invece di OSPF o EIGRP
+> [!note] Perché IS-IS invece di [[OSPF]] o EIGRP
 > IS-IS gira direttamente su Layer 2 e non richiede un indirizzo IP per formare un'adiacenza, quindi il controller può portare su i vicini prima che l'indirizzamento sia convergito. Questa proprietà, insieme al supporto dual-stack nativo e al peering su loopback, è il motivo per cui Cisco ha standardizzato l'underlay automatizzato su IS-IS.
 
 ### Avvio e arresto di una sessione

@@ -4,12 +4,14 @@ categories:
   - "[[Security]]"
 topic@linux:
   - "[[Linux General]]"
+topic@security:
+  - "[[Firewall]]"
 tags:
   - firewall
   - claude
   - kernel
   - category/linux/linux_general
-  - category/security
+  - category/security/firewall
 icon: SiLinux
 iconColor: "#000000"
 last_update: 2026-07-09
@@ -189,7 +191,7 @@ table arp filter {
 
 The `bridge` family <mark style="background: #D2B3FFA6;">operates at Layer 2</mark>, <mark style="background: #D2B3FFA6;">on Ethernet frames passing through a Linux software bridge</mark> — <mark style="background: #CACFD9A6;">a virtual switch</mark> (for example `br0`) <mark style="background: #CACFD9A6;">that joins several interfaces into one segment</mark>, the <mark style="background: #FFB8EBA6;">kind</mark> <mark style="background: #FF5582A6;">hypervisors and container runtimes</mark> <mark style="background: #FFB8EBA6;">create</mark> <mark style="background: #FFB86CA6;">to connect VMs and containers</mark>. <strong>It replaces the old ebtables tool</strong>. <mark style="background: #FFF3A3A6;">The bridge normally lives in the host's initial [[Netfilter#Network Namespaces|namespace]]</mark>, <mark style="background: #BBFABBA6;">so its bridge-family rules are evaluated there</mark> rather than inside each container.
 
-<mark style="background: #ABF7F7A6;">Because bridging happens below IP</mark>, <mark style="background: #ADCCFFA6;">a bridge chain can match on MAC addresses, VLAN tags and EtherType</mark>, and <mark style="background: #D2B3FFA6;">can filter traffic flowing between bridge ports that may never reach the IP layer at all</mark>. It exposes the same five hook names as IP, but they fire on the bridge's L2 path — the `forward` hook, for instance, sees a frame moving from one bridge port to another.
+<mark style="background: #ABF7F7A6;">Because bridging happens below IP</mark>, <mark style="background: #ADCCFFA6;">a bridge chain can match on MAC addresses, [[VLANs|VLAN]] tags and EtherType</mark>, and <mark style="background: #D2B3FFA6;">can filter traffic flowing between bridge ports that may never reach the IP layer at all</mark>. It exposes the same five hook names as IP, but they fire on the bridge's L2 path — the `forward` hook, for instance, sees a frame moving from one bridge port to another.
 
 ```bash
 table bridge filter {
@@ -222,7 +224,7 @@ This is why `priority filter` resolves to a different number depending on family
 
 ### netdev (per-interface)
 
-<mark style="background: #FFB8EBA6;">A `netdev` chain is bound to one specific interface</mark> and <mark style="background: #FF5582A6;">runs at the `ingress` hook</mark> — <mark style="background: #FF5582A6;">the earliest Netfilter point in the stack</mark>, <mark style="background: #FFB86CA6;">before [[Netfilter#Prerouting|prerouting]] and before [[Netfilter#Connection Tracking|conntrack]]</mark>. On the receive path only XDP and <strong>tc</strong> ingress run earlier: the order is XDP → tc ingress → netfilter ingress. Kernels 5.16 and later also offer an `egress` hook.
+<mark style="background: #FFB8EBA6;">A `netdev` chain is bound to one specific interface</mark> and <mark style="background: #FF5582A6;">runs at the `ingress` hook</mark> — <mark style="background: #FF5582A6;">the earliest Netfilter point in the stack</mark>, <mark style="background: #FFB86CA6;">before [[Netfilter#Prerouting|prerouting]] and before [[Netfilter#Connection Tracking|conntrack]]</mark>. On the receive path only XDP and <strong>tc</strong> ingress run earlier: the order is XDP → tc ingress → [[netfilter]] ingress. Kernels 5.16 and later also offer an `egress` hook.
 
 Because packets dropped here never enter the rest of the stack, <mark style="background: #FFF3A3A6;"><strong>netdev</strong> is the place for high-volume early filtering</mark>: <strong>anti-spoofing</strong>, <strong>basic DDoS scrubbing</strong>, and <strong>dropping obvious garbage</strong> before it costs the kernel anything. A <strong>netdev</strong> base chain must name its device (and, like any base chain, declare a priority):
 

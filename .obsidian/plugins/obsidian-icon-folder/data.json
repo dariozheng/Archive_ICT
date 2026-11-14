@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
-      "SiWindows",
-      "FasNetworkWired",
-      "LiHardDrive",
       "SiPaloaltonetworks",
-      "FasServer"
+      "SiWindows",
+      "SiCisco",
+      "FasNetworkWired",
+      "SiLinux"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -392,23 +392,15 @@
     "iconName": "SiPaloaltonetworks",
     "iconColor": "#F04E23"
   },
+  "2 - Categories/Topics/Systems/Systems General.md": {
+    "iconName": "FasServer",
+    "iconColor": "#103f7aff"
+  },
   "2 - Categories/Topics/Hardware/Hardware General.md": {
     "iconName": "LiHardDrive",
     "iconColor": null
   },
-  "2 - Categories/Topics/Networking/Cloud Networking.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
   "2 - Categories/Topics/Networking/Routing and Addressing.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "2 - Categories/Topics/Networking/Software-Defined Networking.md": {
-    "iconName": "FasNetworkWired",
-    "iconColor": "#003791"
-  },
-  "2 - Categories/Topics/Networking/Study Plans.md": {
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
   },
@@ -420,8 +412,16 @@
     "iconName": "FasNetworkWired",
     "iconColor": "#003791"
   },
-  "2 - Categories/Topics/Systems/Systems General.md": {
-    "iconName": "FasServer",
-    "iconColor": "#103f7aff"
+  "2 - Categories/Topics/Networking/Software-Defined Networking.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Networking/Cloud Networking.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
+  },
+  "2 - Categories/Topics/Networking/Study Plans.md": {
+    "iconName": "FasNetworkWired",
+    "iconColor": "#003791"
   }
 }

@@ -27,14 +27,14 @@ const category = pick.basename.slice(0, -SUFFIX.length);
 let body = (await app.vault.read(pick)).replace(/\r\n/g, "\n");
 
 // The topic property is whatever key the template declares that is not a fixed one
-// - the same discovery New Topic uses, so any per-category quirk (e.g. Linux's extra
-// Distro key) needs no special casing here either.
+// - the same discovery New Topic uses, so a template that declares an extra key of
+// its own needs no special casing here either.
 const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "status", "aliases", "cssclasses"];
 const fm = body.match(/^---\n([\s\S]*?)\n---/);
 let keys = fm
     ? [...fm[1].matchAll(/^([A-Za-z][A-Za-z0-9_@-]*):/gm)].map((m) => m[1]).filter((k) => !FIXED.includes(k))
     : [];
-// Linux declares both Distro and topic@linux; the topic@ one wins.
+// If a template declares an extra key next to its topic@ one, the topic@ one wins.
 if (keys.length > 1 && keys.some((k) => k.startsWith("topic@"))) keys = keys.filter((k) => k.startsWith("topic@"));
 const topicProp = keys.length === 1 ? keys[0] : null;
 

@@ -1,6 +1,17 @@
+properties:
+  file.name:
+    displayName: Page
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
     filters:
       and:
         - note["topic@microsoft"].contains(link("Microsoft Protocols"))
+    order:
+      - file.name
+      - status
+    sort:
+      - property: file.name
+        direction: ASC

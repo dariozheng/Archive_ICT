@@ -1,12 +1,10 @@
 properties:
   file.name:
     displayName: Page
-  note.topic:
-    displayName: Topic
-  note.topic@networking:
-    displayName: Topic
   note.topic@cloud_computing:
     displayName: Topic
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
@@ -17,8 +15,9 @@ views:
     order:
       - file.name
       - topic@cloud_computing
+      - status
     sort:
-      - property: topic
-        direction: DESC
+      - property: topic@cloud_computing
+        direction: ASC
       - property: file.name
         direction: ASC

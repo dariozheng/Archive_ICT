@@ -22,9 +22,9 @@ status: draft
 ### Security as a Service 
 <mark style="background: #FFB86CA6;"><strong>Prisma Access</strong> is Palo Alto Networks cloud-delivered <strong>security</strong> platform</mark> <mark style="background: #FFF3A3A6;">that seamlessly connects and secures <strong>any user</strong> from <strong>any device</strong> accessing <strong>any app</strong></mark>.
 ### Network as a Service 
-<strong>Prisma SD-WAN</strong> ensures great user and network experiences in a lightweight, easy-to-deploy solution for branch offices and some home offices.
+<strong>[[Prisma SD-WAN®|Prisma SD-WAN]]</strong> ensures great user and network experiences in a lightweight, easy-to-deploy solution for branch offices and some home offices.
 ### Digital Experience Management
-<mark style="background: #BBFABBA6;"><strong>Autonomous Digital Experience Management</strong> (<strong>ADEM</strong>) is a service</mark> <mark style="background: #ABF7F7A6;">that provides native <strong>end-to-end visibility</strong> and <strong>performance metrics</strong> for <strong>real application traffic</strong> in your <strong>Secure Access Service Edge</strong> (<strong>SASE</strong>) environment</mark>.
+<mark style="background: #BBFABBA6;"><strong>[[Autonomous Digital Experience Management]]</strong> (<strong>ADEM</strong>) is a service</mark> <mark style="background: #ABF7F7A6;">that provides native <strong>end-to-end visibility</strong> and <strong>performance metrics</strong> for <strong>real application traffic</strong> in your <strong>Secure Access Service Edge</strong> (<strong>SASE</strong>) environment</mark>.
 # Prisma SASE Components
 ## Prisma Access
 [[Prisma Access]] is the primary security component of the Prisma SASE platform, utilizing a cloud-native virtual infrastructure to protect the hybrid workforce.

@@ -1,6 +1,10 @@
 properties:
+  file.name:
+    displayName: Page
   note.topic@networking:
     displayName: Topic
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
@@ -11,5 +15,11 @@ views:
     order:
       - file.name
       - topic@networking
+      - status
+    sort:
+      - property: topic@networking
+        direction: ASC
+      - property: file.name
+        direction: ASC
     columnSize:
       file.name: 232

@@ -34,7 +34,7 @@ In the example here, <mark style="background: #FFF3A3A6;">a user’s traffic is 
 <mark style="background: #BBFABBA6;">If logs are being analyzed locally on the firewall</mark>, <mark style="background: #ABF7F7A6;">the log forwarding configuration can <u>invoke a new built-in action</u></mark> <mark style="background: #ADCCFFA6;">that will associate a <strong>tag</strong> with a username</mark> <mark style="background: #CACFD9A6;">based on one or more events in a log</mark>. 
 
 <mark style="background: #FFB8EBA6;">A third-party system also can associate a <strong>tag</strong> with a username using the PAN-OS XML API</mark>. 
-<mark style="background: #FF5582A6;"><strong>Username-tag registrations</strong> are recorded in and maintained by a <strong>User-ID agent</strong></mark>. 
+<mark style="background: #FF5582A6;"><strong>Username-tag registrations</strong> are recorded in and maintained by a <strong>[[User-ID™|User-ID]] agent</strong></mark>. 
 
 <mark style="background: #D2B3FFA6;">The firewall uses these username-tag pairs to determine which users currently are members of a DUG</mark>. 
 

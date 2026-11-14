@@ -2,8 +2,9 @@
 categories:
   - "[[Security]]"
 topic@security:
+  - "[[Palo Alto Networks]]"
 tags:
-  - category/security
+  - category/security/palo_alto_networks
 aliases:
   - pki
 icon: SiPaloaltonetworks

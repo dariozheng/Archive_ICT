@@ -370,7 +370,7 @@ What to master:
 - REST API security: TLS, token-based auth, keys and secrets handling, rate limiting concepts
 - Threat-defense portfolio by function and current name: Cisco Secure Firewall (NGFW/NGIPS), Secure Email (ESA), Secure Web Appliance (WSA), Umbrella, Secure Endpoint (AMP), Secure Network Analytics (Stealthwatch), Talos as the intel backbone
 - Segmentation: TrustSec SGT classification, propagation inline vs SXP, SGACL enforcement; MACsec (802.1AE) with MKA for link encryption, switch-to-switch and host-to-switch
-- Zero trust and SASE concepts: multiple v1.2 change summaries report these entering the blueprint; learn the architecture vocabulary
+- Zero trust and [[Prisma SASE|SASE]] concepts: multiple v1.2 change summaries report these entering the blueprint; learn the architecture vocabulary
 
 > [!warning] v1.2 removed the wireless security line items (PSK, EAP, WebAuth for WLANs), and some change summaries report the wired NAC line (802.1X, MAB, WebAuth) was trimmed as well. Verify both against the official topics PDF before deciding how deep to go; as a working sysadmin you probably want 802.1X knowledge regardless of what the exam does with it.
 

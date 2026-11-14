@@ -205,7 +205,7 @@ A security group is a stateful firewall attached to an [[#Elastic Network Interf
 
 Rules can reference other security groups as their source or destination, not just IP ranges. This lets you express intent such as "the web tier may talk to the app tier" by referencing the tiers' groups, so the policy keeps working as instances come and go.
 
-> [!info] On-premises analogy A security group is a stateful host-based firewall wrapped around each interface — closest to iptables or nftables on the host, or a per-VM firewall — that also tracks connection state, so you only write the initiating direction.
+> [!info] On-premises analogy A security group is a stateful host-based firewall wrapped around each interface — closest to iptables or [[nftables]] on the host, or a per-VM firewall — that also tracks connection state, so you only write the initiating direction.
 
 ### Network ACLs
 

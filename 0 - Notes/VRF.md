@@ -594,7 +594,7 @@ VRF is one of several separation tools, and picking the wrong one produces eithe
 |Separate routing tables, overlapping address space, one device|VRF|
 |Policy, inspection, and logging between segments|Firewall, optionally with [[#Inter-VRF Traffic via an External Firewall\|each VRF routed through it]]|
 |Strong isolation with independent failure domains|Physically separate devices|
-|Scalable multi-site tenant separation over a shared core|MPLS L3VPN or a VXLAN/EVPN fabric|
+|Scalable multi-site tenant separation over a shared core|MPLS L3VPN or a [[VXLAN]]/EVPN fabric|
 
 > [!warning] A VRF is not a security boundary against device compromise VRFs isolate routing tables, not the device itself. They share one control plane, one operating system, and one management context. An attacker with administrative access to the device can leak between VRFs at will, and a control-plane vulnerability affects all of them at once. Use VRFs to prevent unintended routing between contexts, and firewalls or separate hardware where an adversarial boundary is required.
 

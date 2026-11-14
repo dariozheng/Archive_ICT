@@ -87,7 +87,7 @@ Configure the IPsec tunnel or <mark style="background: #FF5582A6;">Phase 2 objec
 - <mark style="background: #FFF3A3A6;">If the configuration is site-to-site with another Palo Alto Networks firewall, use the default Crypto profiles</mark>.
 - <mark style="background: #BBFABBA6;">If the configuration is site-to-site with a different vendor’s firewall, configure the advanced settings in the Crypto profiles to match</mark>.
 
-<mark style="background: #ABF7F7A6;">Add a static route to the virtual router or enable a dynamic routing protocol such as BGP, OSPF, or RIP</mark>. 
+<mark style="background: #ABF7F7A6;">Add a static route to the virtual router or enable a dynamic routing protocol such as BGP, [[OSPF]], or RIP</mark>. 
 
 Then create a <mark style="background: #FF5582A6;">Security policy rule</mark> to allow the tunnel traffic:
 - <mark style="background: #FFB86CA6;">Add a route table entry</mark> <mark style="background: #BBFABBA6;">for the remote network that points to the tunnel interface</mark> that is used in step 1 and step 2. 

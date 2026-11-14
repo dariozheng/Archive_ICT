@@ -10,7 +10,7 @@ icon: SiPaloaltonetworks
 iconColor: "#F04E23"
 status: draft
 ---
-Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <strong><mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark></strong> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust Network Access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">SWG</mark>, <strong>CASB</strong>, and <mark style="background: #BBFABBA6;">DLP</mark> for <mark style="background: #ABF7F7A6;">remote users, branches, and applications</mark>. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management ([[Autonomous Digital Experience Management|ADEM]]). 
+Palo Alto Networks <strong>Prisma Access</strong> is a leading cloud-delivered <strong><mark style="background: #FF5582A6;">Security Service Edge (SSE) solution</mark></strong> that provides comprehensive <mark style="background: #FFB86CA6;">Zero Trust Network Access (ZTNA)</mark>, <mark style="background: #FFF3A3A6;">SWG</mark>, <strong>[[Cloud Access Security Broker|CASB]]</strong>, and <mark style="background: #BBFABBA6;">DLP</mark> for <mark style="background: #ABF7F7A6;">remote users, branches, and applications</mark>. Powered by AI-driven security, it secures traffic via the GlobalProtect VPN agent and offers integrated digital experience management ([[Autonomous Digital Experience Management|ADEM]]). 
 
 Core Topology Components:
 - <mark style="background: #FFB86CA6;">Mobile Users</mark> Security Processing Node (<strong>MU-SPN</strong>): <mark style="background: #FFB8EBA6;">Individual users connecting via the <strong>GlobalProtect</strong> app</mark> to nearby <mark style="background: #FFF3A3A6;">cloud gateways</mark>. <mark style="background: #ABF7F7A6;">These gateways act as the security enforcement point for remote employees</mark>.
@@ -136,7 +136,7 @@ Devices that support policy-based VPN <mark style="background: #FFB86CA6;">use s
 ###  IPSec Templates
 <strong>Prisma Access</strong> includes predefined <strong>IPSec templates</strong> for <mark style="background: #BBFABBA6;">common third-party IPSec</mark> and <mark style="background: #ADCCFFA6;">SD-WAN devices</mark>. These templates simplify the onboarding of service connections and remote network connections.
 
-Templates for the following vendors are available: <mark style="background: #FFB8EBA6;">Cisco Integrated Services Routers (ISRs)</mark>, <mark style="background: #FF5582A6;">Cisco Adaptive Security Appliances (ASAs)</mark>, <mark style="background: #FFB86CA6;">Citrix</mark>, <mark style="background: #FFF3A3A6;">Prisma SD-WAN</mark>, <mark style="background: #BBFABBA6;">Riverbed</mark>, and <mark style="background: #ADCCFFA6;">Silver Peak</mark>. Modify predefined template settings to match your security requirements.
+Templates for the following vendors are available: <mark style="background: #FFB8EBA6;">Cisco Integrated Services Routers (ISRs)</mark>, <mark style="background: #FF5582A6;">Cisco Adaptive Security Appliances (ASAs)</mark>, <mark style="background: #FFB86CA6;">Citrix</mark>, <mark style="background: #FFF3A3A6;">[[Prisma SD-WAN®|Prisma SD-WAN]]</mark>, <mark style="background: #BBFABBA6;">Riverbed</mark>, and <mark style="background: #ADCCFFA6;">Silver Peak</mark>. Modify predefined template settings to match your security requirements.
 
 ![[IPSec Templates palo alto.png]]
 
@@ -274,7 +274,7 @@ Secure inbound access features:
 - The inbound access feature <mark style="background: #FFB86CA6;">is not available on remote networks that use ECMP load balancing</mark>. 
 - <mark style="background: #BBFABBA6;">Application port translation is not supported</mark>. 
 - <mark style="background: #ADCCFFA6;">Do not use remote network inbound access with traffic forwarding rules that have service connections</mark>. 
-- <mark style="background: #D2B3FFA6;">User-ID and application authentication are not supported</mark>.
+- <mark style="background: #D2B3FFA6;">[[User-ID™|User-ID]] and application authentication are not supported</mark>.
 
 Remote networks that are configured for <strong>secure inbound access</strong> <mark style="background: #FF5582A6;">can only be used for that purpose</mark>. <mark style="background: #BBFABBA6;">For <strong>inbound</strong> and <strong>outbound</strong> access at a remote network site, create two <strong>remote network</strong> sites in the same location</mark>—<mark style="background: #ADCCFFA6;">one for inbound access</mark> and <mark style="background: #ABF7F7A6;">one for outbound access</mark>. Customer routing at the branch needs <mark style="background: #D2B3FFA6;">to ensure symmetrical flows if both inbound and outbound access is required</mark>. 
 
@@ -684,7 +684,7 @@ A <strong>policy object</strong> is a <mark style="background: #FFB8EBA6;">singl
 #### Address-Related Objects
 The following are address-related objects available within Prisma Access.
 ##### Addresses, Address Groups, and Regions
-Allows you to <strong>group</strong> <mark style="background: #ADCCFFA6;">specific source</mark> or <mark style="background: #BBFABBA6;">destination addresses</mark> that require the same policy enforcement. <mark style="background: #FFB8EBA6;">Address objects can include IPv4 and IPv6 addresses</mark> (single IP, range, or subnet) or <mark style="background: #FFB8EBA6;">FQDN</mark>. Alternatively, you may define a <mark style="background: #FFB86CA6;">region by the latitude and longitude coordinates</mark>, or <mark style="background: #FFF3A3A6;">you can <mark style="background: #ADCCFFA6;">select a country</mark> and <mark style="background: #D2B3FFA6;">define an IP address or range</mark></mark>. You can then group a collection of address objects to create an address group object.
+Allows you to <strong>group</strong> <mark style="background: #ADCCFFA6;">specific source</mark> or <mark style="background: #BBFABBA6;">destination addresses</mark> that require the same policy enforcement. <mark style="background: #FFB8EBA6;">Address objects can include IPv4 and [[IPv6]] addresses</mark> (single IP, range, or subnet) or <mark style="background: #FFB8EBA6;">FQDN</mark>. Alternatively, you may define a <mark style="background: #FFB86CA6;">region by the latitude and longitude coordinates</mark>, or <mark style="background: #FFF3A3A6;">you can <mark style="background: #ADCCFFA6;">select a country</mark> and <mark style="background: #D2B3FFA6;">define an IP address or range</mark></mark>. You can then group a collection of address objects to create an address group object.
 ##### Dynamic User Groups (DUGs) 
 <strong>Dynamic user groups</strong> are groups <mark style="background: #FFB8EBA6;">where membership is based on tags</mark>. 
 

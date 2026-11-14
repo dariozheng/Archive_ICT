@@ -947,7 +947,7 @@ Every encapsulation costs bytes, and on a network with overlays or tunnels the e
 |802.1Q tag|4 bytes|
 |MPLS label|4 bytes per label|
 |GRE|24 bytes|
-|VXLAN|50 bytes, 54 with an inner tag|
+|[[VXLAN]]|50 bytes, 54 with an inner tag|
 |IPsec|Varies with cipher and mode, commonly 50 to 73 bytes|
 
 ```

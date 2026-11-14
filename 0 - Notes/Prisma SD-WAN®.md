@@ -90,7 +90,7 @@ Existing MPLS and internet connections can be directed into the Prisma SD-WAN IO
 # Prisma SD-WAN Site
 Sites include brach offices and data centers. 
 
-<mark style="background: #FFB8EBA6;">Prisma SD-WAN uses <strong>site prefixes</strong> to advertise <strong>reachability</strong> from branch sites <strong>into</strong> the SD-WAN fabric</mark>. <mark style="background: #FFB86CA6;">Site prefixes allow Prisma SD-WAN <strong>data center sites</strong> to easily advertise <strong>routes</strong> and <strong>reachability</strong> to branch sites</mark>. You can configure site prefixes for branch sites, but <mark style="background: #FFF3A3A6;">the preferred method for advertising branch reachability is through the use of global scope interfaces and static routes</mark>. From release 6.2.1, both IPv4 and [[IPv6]] prefixes are supported. From release 6.5.1, prefixes learned from global [[Border Gateway Protocol|BGP]]/OSPF peers by the DC ION can be exported into the SD-WAN fabric.
+<mark style="background: #FFB8EBA6;">Prisma SD-WAN uses <strong>site prefixes</strong> to advertise <strong>reachability</strong> from branch sites <strong>into</strong> the SD-WAN fabric</mark>. <mark style="background: #FFB86CA6;">Site prefixes allow Prisma SD-WAN <strong>data center sites</strong> to easily advertise <strong>routes</strong> and <strong>reachability</strong> to branch sites</mark>. You can configure site prefixes for branch sites, but <mark style="background: #FFF3A3A6;">the preferred method for advertising branch reachability is through the use of global scope interfaces and static routes</mark>. From release 6.2.1, both IPv4 and [[IPv6]] prefixes are supported. From release 6.5.1, prefixes learned from global [[Border Gateway Protocol|BGP]]/[[OSPF]] peers by the DC ION can be exported into the SD-WAN fabric.
 
 ## Control
 After a customer uses analytics-only mode, they can easily switch the device to <strong>control mode</strong>. 
@@ -305,7 +305,7 @@ The ION 3200 and 1200-S series provide integrated L2 switch ports.
 
 ![[Interface type Layer 2.png]]
 
-<strong>L2 LAN switch ports</strong> allow <mark style="background: #BBFABBA6;">per port configuration of <strong>access</strong> or <strong>trunk</strong> ports</mark> and <mark style="background: #ABF7F7A6;">Virtual LAN (<strong>VLAN</strong>)/Switch Virtual Interface (<strong>SVI</strong>) configuration</mark>. 
+<strong>L2 LAN switch ports</strong> allow <mark style="background: #BBFABBA6;">per port configuration of <strong>access</strong> or <strong>trunk</strong> ports</mark> and <mark style="background: #ABF7F7A6;">Virtual LAN (<strong>[[VLANs|VLAN]]</strong>)/Switch Virtual Interface (<strong>SVI</strong>) configuration</mark>. 
 These ports are supported on ION 3200, ION 1200-S, ION 1200-S-C-NA/ROW, and ION 1200-S-C5G-WW on ports 5 -10.
 L2 Switch ports require a minimum ION device version of 6.0.2 for the ION 1200-S series and 6.3.1 for the ION 3200. 
 ### AUX

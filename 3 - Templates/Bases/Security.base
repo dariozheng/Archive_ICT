@@ -1,12 +1,10 @@
 properties:
   file.name:
     displayName: Page
-  note.section:
-    displayName: Section
-  note.topic:
-    displayName: Topic
   note.topic@security:
     displayName: Topic
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
@@ -17,10 +15,11 @@ views:
     order:
       - file.name
       - topic@security
+      - status
     sort:
-      - property: icon
-        direction: DESC
-      - property: section
+      - property: topic@security
+        direction: ASC
+      - property: file.name
         direction: ASC
     columnSize:
       file.name: 503

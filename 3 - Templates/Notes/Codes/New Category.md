@@ -31,7 +31,7 @@ if (/[\\/:]/.test(name)) {
 }
 
 // Topic property. Every category now uses topic@<slug>; the prompt still lets you
-// override it for a one-off (a shorter slug, or a second axis like Linux's Distro).
+// override it for a one-off (a shorter slug, for example).
 // Slug for the nested tag tree: lowercase, spaces -> underscores (cloud_computing).
 const tagSlug = name.toLowerCase().replace(/\s+/g, "_");
 const propInput = await tp.system.prompt("Topic property", `topic@${tagSlug}`);
@@ -80,7 +80,16 @@ const ensureFile = async (path, content) => {
     created.push(path);
 };
 
+// Same layout as every other base: a category page shows Page, Topic and Status,
+// sorted by topic; a topic page shows Page and Status, sorted by name.
 const categoryBase = [
+    "properties:",
+    "  file.name:",
+    "    displayName: Page",
+    `  note.${topicProp}:`,
+    "    displayName: Topic",
+    "  note.status:",
+    "    displayName: Status",
     "views:",
     "  - type: table",
     "    name: Table",
@@ -88,16 +97,36 @@ const categoryBase = [
     "      and:",
     `        - categories.contains(link("${name}"))`,
     `        - '!file.name.contains("Template")'`,
+    "    order:",
+    "      - file.name",
+    `      - ${topicProp}`,
+    "      - status",
+    "    sort:",
+    `      - property: ${topicProp}`,
+    "        direction: ASC",
+    "      - property: file.name",
+    "        direction: ASC",
     "",
 ].join("\n");
 
 const generalBase = [
+    "properties:",
+    "  file.name:",
+    "    displayName: Page",
+    "  note.status:",
+    "    displayName: Status",
     "views:",
     "  - type: table",
     "    name: Table",
     "    filters:",
     "      and:",
     `        - ${topicRef}.contains(link("${general}"))`,
+    "    order:",
+    "      - file.name",
+    "      - status",
+    "    sort:",
+    "      - property: file.name",
+    "        direction: ASC",
     "",
 ].join("\n");
 

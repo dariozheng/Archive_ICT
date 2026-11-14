@@ -36,8 +36,8 @@ if (/[\\/:]/.test(name)) {
 }
 
 // Read the category's topic property back from its note template instead of deriving
-// it: robust even where a category carries a second key (Linux has Distro alongside
-// topic@linux). Whatever key is left after removing the fixed ones is the topic property.
+// it: robust even where a category template carries a second key of its own.
+// Whatever key is left after removing the fixed ones is the topic property.
 const FIXED = ["categories", "tags", "icon", "iconColor", "last_update", "status", "aliases", "cssclasses"];
 let topicProp = null;
 const tmpl = app.vault.getAbstractFileByPath(`${CATEGORY_TEMPLATES}/${category} Template.md`);
@@ -48,7 +48,7 @@ if (tmpl) {
         let keys = [...fm[1].matchAll(/^([A-Za-z][A-Za-z0-9_@-]*):/gm)]
             .map((m) => m[1])
             .filter((k) => !FIXED.includes(k));
-        // Linux declares both Distro and topic@linux; the topic@ one wins.
+        // If a template declares an extra key next to its topic@ one, the topic@ one wins.
         if (keys.length > 1 && keys.some((k) => k.startsWith("topic@"))) {
             keys = keys.filter((k) => k.startsWith("topic@"));
         }
@@ -110,13 +110,25 @@ if (generalNote) {
     }
 }
 
+// Same layout as every other topic base: Page and Status, sorted by name.
 const topicBase = [
+    "properties:",
+    "  file.name:",
+    "    displayName: Page",
+    "  note.status:",
+    "    displayName: Status",
     "views:",
     "  - type: table",
     "    name: Table",
     "    filters:",
     "      and:",
     `        - ${topicRef}.contains(link("${name}"))`,
+    "    order:",
+    "      - file.name",
+    "      - status",
+    "    sort:",
+    "      - property: file.name",
+    "        direction: ASC",
     "",
 ].join("\n");
 

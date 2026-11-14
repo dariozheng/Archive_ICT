@@ -1,3 +1,10 @@
+properties:
+  file.name:
+    displayName: Page
+  note.topic@systems:
+    displayName: Topic
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
@@ -5,3 +12,12 @@ views:
       and:
         - categories.contains(link("Systems"))
         - '!file.name.contains("Template")'
+    order:
+      - file.name
+      - topic@systems
+      - status
+    sort:
+      - property: topic@systems
+        direction: ASC
+      - property: file.name
+        direction: ASC

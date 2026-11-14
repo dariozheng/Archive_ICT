@@ -1,3 +1,10 @@
+properties:
+  file.name:
+    displayName: Page
+  note.topic@microsoft:
+    displayName: Topic
+  note.status:
+    displayName: Status
 views:
   - type: table
     name: Table
@@ -5,3 +12,12 @@ views:
       and:
         - categories.contains(link("Microsoft"))
         - '!file.name.contains("Template")'
+    order:
+      - file.name
+      - topic@microsoft
+      - status
+    sort:
+      - property: topic@microsoft
+        direction: ASC
+      - property: file.name
+        direction: ASC

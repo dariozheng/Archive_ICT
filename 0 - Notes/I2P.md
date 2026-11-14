@@ -4,9 +4,11 @@ categories:
   - "[[Networking]]"
 topic@privacy:
   - "[[Privacy General]]"
+topic@networking:
+  - "[[Networking General]]"
 tags:
   - claude
-  - category/networking
+  - category/networking/networking_general
   - category/privacy/privacy_general
 icon: FasNetworkWired
 iconColor: "#003791"

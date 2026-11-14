@@ -4,7 +4,7 @@ categories:
   - "[[Security]]"
   - "[[Microsoft]]"
 topic@networking:
-  - "[[2 - Categories/Topics/Networking/Cisco ISE|Cisco ISE]]"
+  - "[[Cisco ISE]]"
 topic@security:
   - "[[NAC]]"
 topic@microsoft:
@@ -725,7 +725,7 @@ Open the NIC <strong>properties</strong> → <strong>Authentication</strong> tab
     - Tick <strong>Specify authentication mode</strong> → <strong>User or computer authentication</strong>.
     - Tick <strong>Enable Single Sign On for this network</strong>
         - Tick <strong>Perform immediately before user logon</strong>
-        - Tick <strong>This network uses different VLAN for authentication with machine and user credentials</strong>. The <strong>Fallback to unauthorized network access</strong> option must remain <strong>ticked</strong>; without it, a user connecting to a switch port with no authenticator would get no network access.
+        - Tick <strong>This network uses different [[VLANs|VLAN]] for authentication with machine and user credentials</strong>. The <strong>Fallback to unauthorized network access</strong> option must remain <strong>ticked</strong>; without it, a user connecting to a switch port with no authenticator would get no network access.
 
 ##### Export the profile to XML
 
