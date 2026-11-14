@@ -25,8 +25,6 @@ iconColor: "#0078D4"
 last_update: 2026-09-25
 status: draft
 ---
-
-
 In most cases the external services used are Microsoft Servers: [[#Active Directory]] as the identity store, the [[#Certificate Authority]] providing the certificates that users and/or hosts present for authentication, and [[#Group Policy Management]] rolling out the configuration to clients.
 
 ## Active Directory

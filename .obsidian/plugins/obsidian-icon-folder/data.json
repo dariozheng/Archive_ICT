@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "SiWindows",
       "FasNetworkWired",
       "LiHardDrive",
       "SiPaloaltonetworks",
-      "FasServer",
-      "LiLock"
+      "FasServer"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
