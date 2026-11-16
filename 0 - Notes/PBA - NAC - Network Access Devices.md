@@ -1231,13 +1231,13 @@ ip dhcp snooping vlan 802-803,805
 
 This section breaks down the [[#DNA - PBA NAC|DNA - PBA NAC]] template above — everything a Cisco IOS-XE switch needs to integrate with Cisco ISE for 802.1X / MAB authentication, dynamic authorization (CoA), endpoint profiling, and Centralized Web Authentication for guests.
 
-#### `aaa new-model`
+#### aaa new-model
 
 Activates the AAA framework, replacing the legacy authentication engine. This is the prerequisite that enables the `aaa authentication`, `aaa authorization`, and `aaa accounting` command families.
 
 Enable this only after a local fallback user is defined or a RADIUS server is reachable. Without either, the next login attempt may lock you out of the switch.
 
-#### `aaa session-id common`
+#### aaa session-id common
 
 Forces the switch to use a <strong>single shared session ID</strong> across authentication, authorization, and accounting for the same session.
 
@@ -1271,7 +1271,7 @@ vlan 805
  name LAN-GUEST
 ```
 
-#### radius server
+#### RADIUS SERVER
 
 <strong>RADSERV vs ISESERV</strong>
 The switch talks RADIUS for two unrelated purposes, each with its own server, group and method lists:
@@ -1281,8 +1281,9 @@ The switch talks RADIUS for two unrelated purposes, each with its own server, gr
 | Device administration | RADSERV | PBA-RADIUS (10.140.2.27)                  | Who may log into the switch itself (SSH, HTTPS, console fallback) and with which privilege level. |
 | Endpoint NAC          | ISESERV | ISE01 / ISE02 (10.140.2.31 / 10.140.2.32) | Whether an endpoint plugged into a port may access the network, and with which authorization.     |
 
+#### radius server
+
 ```cisco
-!
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
  timeout 5
@@ -1296,7 +1297,6 @@ radius server ISE02
  retransmit 2
  automate-tester username test-user ignore-acct-port probe-on
  key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
-!
 ```
 
 `radius server ISE01`
@@ -1314,78 +1314,41 @@ A locally significant name for this ISE node. The label has no meaning to ISE it
 
 `probe-on` attribute tells the switch to send probe <strong>only when the server is currently marked dead</strong>. Without this, the switch probes continuously, generating unnecessary RADIUS traffic. 
 
-#### AAA Server Group — `ISESERV`
+#### radius-server timers
 
-```cisco
-aaa group server radius ISESERV
- server name ISE01
- server name ISE02
- deadtime 15
- ip radius source-interface Vlan800
-```
+These global timers control how the switch handles an unresponsive ISE PSN: how long it waits, how often it retries, and when it fails over to the next PSN in the server group. They apply to all RADIUS servers unless overridden under `radius server <name>`.
 
-A server group lets method lists reference one logical name instead of individual servers, and scopes timer and source-interface behavior to this group only.
+##### radius-server timeout 5
+Waits **5 seconds** for a reply from the PSN before resending the request (default: 5).
 
-|Line|Effect|
-|---|---|
-|`server name ISE01` / `ISE02`|Add the previously defined `radius server` blocks as members. Order matters — ISE01 is tried first, ISE02 is the failover.|
-|`deadtime 15`|A server marked dead is ignored for 15 minutes before being retried. Scoped to this group.|
-|`ip radius source-interface Vlan800`|All RADIUS packets from this group are sourced from VLAN 800. <strong>Critical</strong> — ISE identifies the NAD by source IP, and this must match the IP recorded in the ISE NAD configuration.|
+##### radius-server retransmit 3
+Resends an unanswered request up to **3 times** (4 attempts in total). After the last attempt, the request fails over to the next PSN in the group, or to the next method in the AAA method list.
 
-#### Global RADIUS Timers
+Worst case for one request on a down PSN: 5 s × 4 = **~20 s**.
 
-##### `radius-server timeout 5`
+##### radius-server dead-criteria time 5 tries 3
+Defines when a PSN is marked **dead**. This is the server's state, not a per-request setting. Both conditions must be met:
+- `time 5`: at least 5 s have passed since the PSN's last valid reply.
+- `tries 3`: 3 consecutive timeouts.
 
-How long the switch waits for a single RADIUS response before declaring that attempt failed.
+Counting rules:
+- Only retransmissions count, not the original send. With `retransmit 3`, one fully failed request reaches `tries 3`.
+- Authentication and accounting packets both count.
+- Malformed packets count as timeouts.
+- Any valid reply from the PSN resets the counter.
+- Keep `tries` equal to `retransmit` (Cisco recommendation), so a single failed request marks the PSN dead.
 
-##### `radius-server retransmit 3`
+Has no effect unless `radius-server deadtime` is set.
 
-How many additional attempts the switch makes against the same server before moving to the next one in the group.
+##### radius-server deadtime 15
+Skips a dead PSN for **15 minutes** (the value is in minutes; range 1–1440). Requests go straight to the next PSN with no waiting. After 15 minutes, the PSN is treated as alive again.
 
-```
-Attempt 1 → wait 5s → no response
-Attempt 2 → wait 5s → no response
-Attempt 3 → wait 5s → no response
-Attempt 4 → wait 5s → no response
-        ↓
-Give up on ISE01 → try ISE02
-```
+The default is 0, which means PSNs are never marked dead. Every request then waits the full ~20 s on a down PSN, which can be long enough for 802.1X clients to time out.
 
-> Worst-case failover time to the secondary server: <strong>(retransmit + 1) × timeout = 4 × 5 = 20 seconds</strong>.
-
-##### `radius-server dead-criteria time 5 tries 3`
-
-The threshold that causes a server to be marked <strong>dead</strong>. Both conditions must be true simultaneously:
-
-- `time 5` — at least 5 seconds have elapsed without a valid response.
-- `tries 3` — at least 3 consecutive failures occurred in that window.
-
-```
-Failure 1 at 0s   ─┐
-Failure 2 at 5s    ├── 3 failures + 5s elapsed → DEAD
-Failure 3 at 10s  ─┘
-        ↓
-ISE01 marked dead, failover to ISE02
-automate-tester begins probing ISE01
-```
-
-Requiring both conditions prevents a single slow response from prematurely killing the server.
-
-##### `radius-server deadtime 15`
-
-The global equivalent of the group-level `deadtime 15` above. Once a server is marked dead, ignore it for 15 minutes before probing again.
-
-Verification:
-
-```cisco
-show aaa servers
-show radius server-group ISESERV
-test aaa group ISESERV test-user <password> new-code
-```
-
-`show aaa servers` reports per-server state (UP / DEAD), time spent dead, and probe counters — the first stop when authentications stall or a node seems to be flapping.
-
----
+If the primary PSN goes down:
+1. **First request:** the original send and all 3 retransmissions go unanswered. The 3rd retransmission meets `tries 3`, so the PSN is marked dead and the request moves to the secondary PSN. This request can take up to ~20 s.
+2. **Next 15 minutes:** all requests go directly to the secondary PSN, with no delay.
+3. **After 15 minutes:** the primary PSN is tried again.
 
 ### RADIUS Attribute
 
@@ -1540,6 +1503,25 @@ With it:
     cisco-av-pair = nas-rx-speed=xxxxx
     cisco-av-pair = nas-tx-speed=xxxxx
 ```
+
+#### AAA Server Group — `ISESERV`
+
+```cisco
+aaa group server radius ISESERV
+ server name ISE01
+ server name ISE02
+ deadtime 15
+ ip radius source-interface Vlan800
+```
+
+A server group lets method lists reference one logical name instead of individual servers, and scopes timer and source-interface behavior to this group only.
+
+|Line|Effect|
+|---|---|
+|`server name ISE01` / `ISE02`|Add the previously defined `radius server` blocks as members. Order matters — ISE01 is tried first, ISE02 is the failover.|
+|`deadtime 15`|A server marked dead is ignored for 15 minutes before being retried. Scoped to this group.|
+|`ip radius source-interface Vlan800`|All RADIUS packets from this group are sourced from VLAN 800. <strong>Critical</strong> — ISE identifies the NAD by source IP, and this must match the IP recorded in the ISE NAD configuration.|
+
 
 ---
 
