@@ -473,12 +473,6 @@ vlan 830
 
 #### SVI
 
-<strong>Vlan1</strong> is shut down as unused. 
-
-As basic hardening, the management SVI (<strong>Vlan800</strong>) doesn't send ICMP redirects or unreachables and doesn't answer ARP on behalf of other hosts (proxy-ARP).
-
-`no ip route-cache` turns off the CPU's route cache (fast switching) on the SVI. Vlan800 only carries traffic to and from the switch itself, and traffic through the switch is forwarded in hardware.
-
 ```bash
 interface Vlan1
  no ip address
@@ -494,20 +488,21 @@ interface Vlan800
 !
 ```
 
+<strong>Vlan1</strong> is shut down as unused. 
+
+As basic hardening, the management SVI (<strong>Vlan800</strong>) doesn't send ICMP redirects or unreachables and doesn't answer ARP on behalf of other hosts (proxy-ARP).
+
+`no ip route-cache` turns off the CPU's route cache (fast switching) on the SVI. Vlan800 only carries traffic to and from the switch itself, and traffic through the switch is forwarded in hardware.
+
 #### local credentials 
 
 ```bash
 enable secret 9 $9$qO.VLlIA7cZqaU$dsUyyzqhHGvjYoY.LHxuKKkUq3IRwy94gsQWZwNM8Bg
+!
 username admin privilege 15 secret 9 $9$w3tUmJIppNRAE.$sG.1e4QLCLb/ZmAFZLbAV4LTa72sL6eQWiYXx41j3Zc
 ```
 
 #### SSH
-
-`ip ssh version 2`: Disables legacy, insecure SSHv1 and forces all management sessions to use SSHv2.
-
-`ip ssh time-out 30`: Sets the pre-login authentication timeout to **30 seconds** (down from the 120-second default). If a user or bot connects over SSH and does not finish authenticating within 30 seconds, the switch drops the session to free up VTY resources.
-
-`ip ssh source-interface Vlan800`: Forces any outbound SSH connections initiated _from_ the switch to use the IP address of `Vlan800` as their source IP.
 
 ```bash
 ip ssh version 2
@@ -515,7 +510,20 @@ ip ssh time-out 30
 ip ssh source-interface Vlan800
 ```
 
+`ip ssh version 2`: Disables legacy, insecure SSHv1 and forces all management sessions to use SSHv2.
+
+`ip ssh time-out 30`: Sets the pre-login authentication timeout to **30 seconds** (down from the 120-second default). If a user or bot connects over SSH and does not finish authenticating within 30 seconds, the switch drops the session to free up VTY resources.
+
+`ip ssh source-interface Vlan800`: Forces any outbound SSH connections initiated _from_ the switch to use the IP address of `Vlan800` as their source IP.
+
 #### SNMP
+
+```bash
+snmp-server community publiacqua RO
+snmp-server community publiacquarw RW
+snmp-server trap-source Vlan800
+snmp-server contact operationcenter@publiacqua.it
+```
 
 The `snmp-server community` command configures a shared password called a <strong>community string</strong> to control access for Simple Network Management Protocol (SNMP) monitoring and management.
 
@@ -525,19 +533,7 @@ The `snmp-server contact` command configures the <strong>system contact string</
 
 The rest of SNMP configuration is provided directly by the DNA center.
 
-```bash
-snmp-server community publiacqua RO
-snmp-server community publiacquarw RW
-snmp-server trap-source Vlan800
-snmp-server contact operationcenter@publiacqua.it
-```
-
 #### Logging
-
-`logging facility local6` tags all outgoing syslog messages from the switch with the local6 facility code so your syslog server can filter, sort, and store network logs separately from standard Linux/Windows system logs.
-
-`logging host` command specifies the IP address (or hostname) of an external syslog server where your Cisco switch sends its system log messages. 
-By default, typing `logging host <IP>` sends logs over <strong>UDP port 514</strong>, with severity levels 0 through 6.
 
 ```bash
 logging facility local6
@@ -546,6 +542,12 @@ logging host 10.140.2.181
 logging host 10.140.2.24
 logging host 10.139.108.10
 ```
+
+`logging facility local6` tags all outgoing syslog messages from the switch with the local6 facility code so your syslog server can filter, sort, and store network logs separately from standard Linux/Windows system logs.
+
+`logging host` command specifies the IP address (or hostname) of an external syslog server where your Cisco switch sends its system log messages. 
+By default, typing `logging host <IP>` sends logs over <strong>UDP port 514</strong>, with severity levels 0 through 6.
+
 #### NTP
 
 NTP time configuration.
@@ -557,6 +559,18 @@ ntp server 172.20.129.65 prefer
 ```
 
 #### call-home
+
+```bash
+service call-home
+!
+call-home
+ contact-email-addr operationcenter@publiacqua.it
+ source-interface Vlan800
+ no http secure server-identity-check
+ profile "CiscoTAC-1"
+  active
+  destination transport-method http
+```
 
 `service call-home` enables <strong>Cisco Smart Call Home</strong>, a feature that monitors your switch for hardware or software faults and automatically sends diagnostic alerts and inventory data to Cisco TAC or the internal support system. 
 
@@ -573,19 +587,11 @@ The profile `"CiscoTAC-1"` block activates Cisco's built-in Smart Call Home prof
 - `active`: Turns this specific profile on. Even if service call-home is enabled globally, the switch will not transmit any data unless at least one profile is marked active.
 - `destination transport-method http`: Sets the delivery method to web transport (which defaults to HTTPS on TCP port 443 for CiscoTAC-1) instead of legacy email (smtp).
 
-```bash
-service call-home
-!
-call-home
- contact-email-addr operationcenter@publiacqua.it
- source-interface Vlan800
- no http secure server-identity-check
- profile "CiscoTAC-1"
-  active
-  destination transport-method http
-```
-
 #### udld aggressive
+
+```bash
+udld aggressive
+```
 
 `udld aggressive` globally enables <strong>UniDirectional Link Detection (UDLD)</strong> in aggressive mode across all fiber-optic ports on the Cisco switch.
 <strong>UniDirectional Link Detection (UDLD)</strong> is a Cisco Layer 2 protocol that monitors physical network cables to ensure data flows in both directions and shuts down the port if the link becomes one-way. 
@@ -596,21 +602,17 @@ If the fiber strands connect to the correct ports but traffic flows in only one 
 
 Aggressive mode also err-disables a port in that second case, when UDLD messages stop arriving while the link is still up.
 
-```bash
-udld aggressive
-```
-
 #### errdisable recovery 
-
-The `errdisable recovery cause` command tells the switch to automatically re-enable ports err-disabled for the listed causes.
-
-- `errdisable recovery cause udld`: Enables automatic recovery specifically for ports placed into `err-disable` state by UDLD. 
-- `errdisable recovery interval 90`: Sets the wait timer to **90 seconds** (down from the Cisco default of 300 seconds) before the switch attempts to bring an err-disabled port back up.
 
 ```bash
 errdisable recovery cause udld
 errdisable recovery interval 90
 ```
+
+The `errdisable recovery cause` command tells the switch to automatically re-enable ports err-disabled for the listed causes.
+
+- `errdisable recovery cause udld`: Enables automatic recovery specifically for ports placed into `err-disable` state by UDLD. 
+- `errdisable recovery interval 90`: Sets the wait timer to **90 seconds** (down from the Cisco default of 300 seconds) before the switch attempts to bring an err-disabled port back up.
 
 #### diagnostic bootup level minimal
 
@@ -627,6 +629,14 @@ Until this command is used all other aaa configuration commands remain hidden an
 
 #### radius server 
 
+```bash
+radius server PBA-RADIUS
+ address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 3
+ key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK`]SETi`CKGAAB
+```
+
 The `radius server` block defines an external RADIUS server (10.140.2.27) for switch authentication and accounting, with its shared secret securely encrypted using the Type 6 AES master key.
 
 `radius server PBA-RADIUS`: Uses Cisco's modern named RADIUS server syntax (replacing legacy radius-server host commands). 
@@ -637,15 +647,14 @@ The `radius server` block defines an external RADIUS server (10.140.2.27) for sw
 
 `key 6`: The shared secret stored with strong Type 6 AES encryption, the radius server must use the same secret to communicate.
 
-```bash
-radius server PBA-RADIUS
- address ipv4 10.140.2.27 auth-port 1812 acct-port 1813
- timeout 2
- retransmit 3
- key 6 O\^XLFVFUfSiHPMdOXBBJE]bFK`]SETi`CKGAAB
-```
-
 #### aaa group server radius RADSERV
+
+```bash
+aaa group server radius RADSERV
+ server name PBA-RADIUS
+ deadtime 15
+ ip radius source-interface Vlan800
+```
 
 This command block bundles the RADIUS server in a single named group (RADSERV), sets how long to skip a failed server, and locks all RADIUS traffic to the management interface (Vlan800).
 
@@ -657,14 +666,13 @@ This command block bundles the RADIUS server in a single named group (RADSERV), 
 
 `ip radius source-interface Vlan800`: Forces all RADIUS authentication and accounting packets sent by this group to use the IP address of Vlan800 as their source IP. 
 
-```bash
-aaa group server radius RADSERV
- server name PBA-RADIUS
- deadtime 15
- ip radius source-interface Vlan800
-```
-
 #### aaa authentication login
+
+```bash
+aaa authentication login default group RADSERV local-case 
+aaa authentication login console local-case
+aaa authentication login HTTPSRV group RADSERV local-case
+```
 
 `aaa authentication login` tells the Cisco switch how to verify a user's identity (username and password) when they try to log in, and sets the exact order of backup methods if the primary server is unreachable.
 
@@ -675,12 +683,6 @@ aaa group server radius RADSERV
 `group RADSERV` command tells the switch to send the username and password to the `RADSERV` RADIUS server group first.
 
 `local-case` command tells the switch to check its own local `username` database requiring the username's uppercase and lowercase letters to match exactly.
-
-```bash
-aaa authentication login default group RADSERV local-case 
-aaa authentication login console local-case
-aaa authentication login HTTPSRV group RADSERV local-case
-```
 
 ##### aaa authentication login default group RADSERV local-case
 
@@ -700,6 +702,10 @@ If one is turned on later, logins go through RADIUS instead of the enable passwo
 
 #### aaa authentication enable 
 
+```bash
+aaa authentication enable default enable
+```
+
 When a user lands in unprivileged mode (`Switch>`) and types `enable`, the switch checks the `aaa authentication enable` rule to decide how to authenticate them.
 
 `aaa authentication enable default enable` tells the switch to verify the local enable secret password whenever a user types enable to escalate from basic user mode (>) into privileged admin mode (#). 
@@ -708,11 +714,12 @@ The keyword `enable` at the end of the line means "check the locally configured 
 
 This command is used so that even if the RADIUS server is down and you log in via your local account (`local-case`), having `enable` as the method ensures you can still elevate to `#` mode if your local user wasn't already assigned `privilege 15`.
 
-```bash
-aaa authentication enable default enable
-```
-
 #### aaa authorization exec
+
+```bash
+aaa authorization exec default group RADSERV local if-authenticated
+aaa authorization exec HTTPSRV group RADSERV if-authenticated
+```
 
 `aaa authorization exec` is a Cisco IOS global configuration command that verifies whether an authenticated user is permitted to start an interactive CLI shell (EXEC session) and determines their initial privilege level (User EXEC `>` vs. Privileged EXEC `#`).
 
@@ -721,12 +728,11 @@ With `aaa authorization exec` enabled, the switch reads this attribute and place
 
 Once `aaa authorization exec` is configured, a successful login is not enough: the switch also needs an <strong>authorization method to answer</strong>, or it refuses the shell. `if-authenticated` is the fallback for when none can (RADIUS down, no `local`): it allows the shell because the user already authenticated, but at level 1.
 
-```bash
-aaa authorization exec default group RADSERV local if-authenticated
-aaa authorization exec HTTPSRV group RADSERV if-authenticated
-```
-
 #### aaa accounting exec
+
+```bash
+aaa accounting exec default start-stop group RADSERV
+```
 
 `aaa accounting exec` logs when users start and stop an interactive CLI shell (EXEC session) on the device, sending audit records to the AAA server (`RADSERV`) for tracking and compliance.
 
@@ -735,31 +741,36 @@ The switch sends RADIUS Accounting-Request packets (UDP port 1813) to `RADSERV` 
 - Session Start (`Acct-Status-Type = Start`): Sent the moment a user opens a CLI shell (`Switch>` or `Switch#`) via SSH or the Console. It logs the username, source IP address, login time, and assigned privilege level.
 - Session Stop (`Acct-Status-Type = Stop`): Sent when the user exits the shell or disconnects. It logs the disconnect time, total session duration, and why the session ended.
 
-```bash
-aaa accounting exec default start-stop group RADSERV
-```
-
 #### aaa session-id common 
-
-`aaa session-id common` forces the Cisco switch to use the exact same <strong>Session ID</strong> across all AAA phases—<strong>Authentication</strong>, <strong>Authorization</strong>, and <strong>Accounting</strong>—for a single user login session.
-Every RADIUS packet generated during that user's SSH session shares one identical `Acct-Session-Id` value, making it simple to trace a user's complete session lifecycle from login to disconnect in RADIUS logs.
 
 ```bash
 aaa session-id common 
 ```
 
+`aaa session-id common` forces the Cisco switch to use the exact same <strong>Session ID</strong> across all AAA phases—<strong>Authentication</strong>, <strong>Authorization</strong>, and <strong>Accounting</strong>—for a single user login session.
+Every RADIUS packet generated during that user's SSH session shares one identical `Acct-Session-Id` value, making it simple to trace a user's complete session lifecycle from login to disconnect in RADIUS logs.
+
 #### login on-success log
-
-`login on-success log` generates a local syslog entry (`%SEC_LOGIN-5-LOGIN_SUCCESS`) whenever a user successfully authenticates to the switch, providing local audit visibility alongside external RADIUS accounting.
-
-`login on-failure log` generates a `%SEC_LOGIN-4-LOGIN_FAILED` syslog message whenever someone enters an invalid username or password. 
 
 ```bash
 login on-success log
 login on-failure log
 ```
 
+`login on-success log` generates a local syslog entry (`%SEC_LOGIN-5-LOGIN_SUCCESS`) whenever a user successfully authenticates to the switch, providing local audit visibility alongside external RADIUS accounting.
+
+`login on-failure log` generates a `%SEC_LOGIN-4-LOGIN_FAILED` syslog message whenever someone enters an invalid username or password. 
+
 #### ip http server
+
+```bash
+ip http server
+ip http secure-server
+ip http secure-active-session-modules none
+ip http active-session-modules none
+ip http authentication aaa login-authentication HTTPSRV
+ip http client source-interface Vlan800
+```
 
 This configuration block enables the switch's web server (HTTP/HTTPS) for [[#Centralized Web Authentication (CWA) for Guests|CWA redirect]], ties web login authentication to an AAA method list named HTTPSRV, and forces outbound HTTP client traffic to originate from Vlan800.
 
@@ -773,15 +784,6 @@ This allows CWA URL redirection to function without exposing the switch's admini
 - `ip http authentication aaa`: Instructs the switch's built-in web server (HTTP/HTTPS) to use AAA (Authentication, Authorization, and Accounting) instead of checking the local enable password.
 - `login-authentication`: Specifies that this rule applies to the <strong>login verification step</strong> (checking the username and password).
 - `HTTPSRV`: Points to the `aaa authentication login HTTPSRV group RADSERV local-case` method list (see [[#aaa authentication login HTTPSRV group RADSERV local-case]]).
-
-```bash
-ip http server
-ip http secure-server
-ip http secure-active-session-modules none
-ip http active-session-modules none
-ip http authentication aaa login-authentication HTTPSRV
-ip http client source-interface Vlan800
-```
 
 #### line con
 
