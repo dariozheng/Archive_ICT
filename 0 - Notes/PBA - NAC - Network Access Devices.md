@@ -857,25 +857,19 @@ The `#INTERACTIVE ... #ENDS_INTERACTIVE` markers answer IOS prompts during provi
 A few lines appear in both templates on purpose: `aaa new-model`, `aaa session-id common`, `ip radius source-interface Vlan800` and the VLAN declarations are owned by [[#DNA - PBA BASIC|DNA - PBA BASIC]] and merely re-asserted here so this template can stand on its own, while `ip http server` and `ip http secure-server` are re-asserted as a functional guard — [[#Centralized Web Authentication (CWA) for Guests|CWA]] breaks silently if the web server ever disappears from the baseline. When one of these shared lines has to change, change it in BASIC; the copies here follow.
 
 ```bash
-! Template to enable Cisco ISE - NAC
+! CISCO ISE - NAC Template
 !
 !
 !
 aaa new-model
-!
-!
-!
-dot1x system-auth-control 
-! 
-dot1x critical eapol 
-!
-#INTERACTIVE
-no access-session mac-move deny<IQ>.*Do you wish to continue\? \[yes\]:\s*<R>yes
-#ENDS_INTERACTIVE
-!
-!
-!
 aaa session-id common 
+!
+!
+!
+! @start-ignore-compliance
+key config-key password-encrypt {{ MASTER_KEY }}
+! @end-ignore-compliance
+password encryption aes
 !
 !
 !
@@ -893,33 +887,22 @@ vlan 805
 !
 !
 !
-! @start-ignore-compliance
-key config-key password-encrypt {{ MASTER_KEY }}
-! @end-ignore-compliance
-password encryption aes
-!
-!
-!
-!
-!
-!
 ip radius source-interface Vlan800
-!
-!
 !
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
  timeout 5
- retransmit 3
+ retransmit 2
  automate-tester username test-user ignore-acct-port probe-on
  key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
 !
 radius server ISE02
  address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
  timeout 5
- retransmit 3
+ retransmit 2
  automate-tester username test-user ignore-acct-port probe-on
  key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
+!
 !
 !
 ! @start-ignore-compliance
@@ -967,282 +950,8 @@ aaa server radius dynamic-author
 !
 !
 !
-! 
-device-tracking tracking auto-source 
-!
-! 
-device-tracking policy ISE_DT_Access
- no protocol udp
- security-level glean
- tracking enable
-!
-! 
-device-tracking policy Disable_DT_Trunk 
- trusted-port 
- device-role switch 
-!
-!
-!
-ip dhcp snooping 
-!
-! 
-no ip dhcp snooping information option 
-!
-!
-!
-!
-cdp run
-!
-! 
-device-sensor filter-list dhcp list dhcp_list
- option name host-name
- option name requested-address
- option name parameter-request-list
- option name class-identifier
- option name client-identifier
-device-sensor filter-spec dhcp include list dhcp_list 
-!
-!
-!
-device-sensor filter-list cdp list cdp_list 
- tlv name device-name
- tlv name address-type
- tlv name capabilities-type
- tlv name platform-type
- tlv name version-type
-device-sensor filter-spec cdp include list cdp_list
-!
-!
-device-sensor notify all-changes 
-!
-!
-access-session attributes filter-list list sensor_list 
- cdp
- dhcp
-!
-access-session accounting attributes filter-spec include list sensor_list 
-access-session authentication attributes filter-spec include list sensor_list 
-!
-!
-!
-ip access-list extended ACL_AAA-Down
- 10 permit udp any any eq domain
- 20 permit tcp any any eq domain
- 30 permit udp any eq bootpc any eq bootps
- 40 deny ip any 10.0.0.0 0.255.255.255
- 50 deny ip any 172.16.0.0 0.15.255.255
- 60 deny ip any 192.168.0.0 0.0.255.255
- 70 permit ip any any
-!
-ip access-list extended ACL_GUEST_REDIRECT
- 10 deny udp any any eq domain
- 20 deny tcp any any eq domain
- 30 deny udp any any eq bootps
- 40 deny udp any any eq bootpc
- 50 deny ip any host 10.140.2.31
- 60 deny ip any host 10.140.2.32
- 70 permit tcp any any eq www
- 80 permit tcp any any eq 443
-!
-!
-!
-service-template Critical_Access 
- vlan 802
- voice vlan
- access-group ACL_AAA-Down
-!
-service-template Guest_Redirect
-!
-!
-!
-parameter-map type webauth global
- type webauth
- virtual-ip ipv4 192.0.2.1
- intercept-https-enable
-!
-!
-!
-class-map type control subscriber match-all DOT1X
- match method dot1x
-!
-class-map type control subscriber match-all DOT1X_DENIED
- match method dot1x
- match result-type method dot1x authoritative
-!
-class-map type control subscriber match-all DOT1X_NO_SUPPLICANT
- match result-type method dot1x agent-not-found
-!
-class-map type control subscriber match-all DOT1X_TIMEOUT
- match method dot1x
- match result-type method dot1x method-timeout
-!
-class-map type control subscriber match-all MAB
- match method mab
-!
-class-map type control subscriber match-all MAB_DENIED
- match method mab
- match result-type method mab authoritative
-!
-class-map type control subscriber match-all AAA-DOWN_UNAUTH_USER
- match result-type aaa-timeout
- match authorization-status unauthorized
-!
-class-map type control subscriber match-all AAA-DOWN_GUEST_USER
- match result-type aaa-timeout
- match activated-service-template Guest_Redirect
-!
-class-map type control subscriber match-all AAA-DOWN_AUTH_USER
- match result-type aaa-timeout
- match authorization-status authorized
-!
-class-map type control subscriber match-all CRITICAL_AUTH
- match activated-service-template Critical_Access
-!
-class-map type control subscriber match-none NOT_CRITICAL_AUTH
- match activated-service-template Critical_Access
-!
-!
-!
-policy-map type control subscriber ISE-NAC-POLICY
-!
- event session-started match-all
-  10 class always do-until-failure
-    10 authenticate using dot1x priority 10
-!
- event authentication-failure match-first
-  5 class DOT1X_DENIED do-until-failure
-   10 terminate dot1x
-   20 authenticate using mab priority 20
-  10 class AAA-DOWN_GUEST_USER do-until-failure
-   10 activate service-template Critical_Access
-   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
-   30 authorize
-   40 pause reauthentication
-  20 class AAA-DOWN_AUTH_USER do-until-failure
-   10 authorize
-   20 pause reauthentication
-  30 class AAA-DOWN_UNAUTH_USER do-until-failure
-   10 activate service-template Critical_Access
-   20 activate service-template DEFAULT_CRITICAL_VOICE_TEMPLATE
-   30 authorize
-   40 pause reauthentication
-  40 class DOT1X_TIMEOUT do-until-failure
-   10 terminate dot1x
-   20 authenticate using mab priority 20 
-  50 class MAB_DENIED do-until-failure
-   10 terminate mab
-   20 unauthorize
-  60 class DOT1X_NO_SUPPLICANT do-until-failure
-   10 terminate dot1x
-   20 authenticate using mab priority 20
-  70 class always do-until-failure
-   10 terminate mab
-   20 terminate dot1x
-   30 authentication-restart 60
-!    
- event aaa-available match-all
-  10 class CRITICAL_AUTH do-until-failure
-   10 clear-session
-  20 class NOT_CRITICAL_AUTH do-until-failure
-   10 resume reauthentication
-!
- event agent-found match-all
-  10 class always do-until-failure
-   10 terminate mab
-   20 authenticate using dot1x priority 10
-!    
- event inactivity-timeout match-all
-  10 class always do-until-failure
-   10 clear-session
-!    
- event authentication-success match-all
-  10 class DOT1X do-until-failure
-   10 authorize
-  20 class MAB do-until-failure
-   10 authorize 
-!    
- event violation match-all
-  10 class always do-until-failure
-   10 restrict
-!
-!
-!
-template NAC-INT-TEMPLATE
- description NAC INTERFACE
- switchport mode access
- switchport access vlan 802
- spanning-tree portfast
- spanning-tree bpduguard enable
-!
- switchport nonegotiate    
- ip dhcp snooping limit rate 15 
-!
- authentication periodic
-!
- authentication timer reauthenticate server
- mab
-!
-access-session port-control auto
-access-session host-mode single-host
-access-session control-direction in
-access-session closed
-!
- dot1x pae authenticator
- dot1x timeout tx-period 7
- dot1x max-reauth-req 3
- device-tracking attach-policy ISE_DT_Access
- service-policy type control subscriber ISE-NAC-POLICY
-!
-!
-!
-!
-{% block interfaces %}
-{% for interface in __interface %}
-{% set name = interface.portName | default('') %}
-{% set mode = interface.portMode | default('') | lower %}
-{% set desc = interface.description | default('') | lower %}
-{% set vlan = interface.vlanId | default(0) | int %}
-{% if mode != 'trunk' and (vlan == 802 or vlan == 803) %}
-interface {{ name }}
- switchport access vlan 802
- switchport voice vlan 300
- source template NAC-INT-TEMPLATE
-{% elif mode == 'trunk' %}
-interface {{ name }}
-{% if 'Port-channel' in name %}
- device-tracking attach-policy Disable_DT_Trunk
- ip dhcp snooping trust
-{% elif 'po1' in desc or 'po2' in desc or 'po3' in desc or 'po4' in desc or 'po5' in desc or 'po6' in desc or 'po7' in desc or 'po8' in desc or 'po9' in desc %}
- ip dhcp snooping trust
-{% elif 'cw9171' in desc or 'cw9172' in desc or 'cw9174' in desc or 'cw9175' in desc or 'cw9176' in desc or 'cw9177' in desc or 'cw9178' in desc or 'cw9179' in desc %}
- switchport trunk allowed vlan add 803
-{% endif %}
-{% endif %}
-{% endfor %}
-{% endblock %}
-!
-!
-!
-!
-ip http server
-ip http secure-server
-!
-!
-!
-ip dhcp snooping vlan 802-803,805
-!
-!
-!! Template to enable Cisco ISE - NAC
-!
-!
-!
-aaa new-model
-!
-!
-!
-dot1x system-auth-control 
-! 
-dot1x critical eapol 
+dot1x system-auth-control
+dot1x critical eapol
 !
 #INTERACTIVE
 no access-session mac-move deny<IQ>.*Do you wish to continue\? \[yes\]:\s*<R>yes
@@ -1250,110 +959,30 @@ no access-session mac-move deny<IQ>.*Do you wish to continue\? \[yes\]:\s*<R>yes
 !
 !
 !
-aaa session-id common 
+no ip dhcp snooping information option 
+ip dhcp snooping 
 !
 !
 !
-vlan 800
- name LAN-MGMT
-!
-vlan 802
- name LAN-CLIENT
-!
-vlan 803
- name LAN-ADMIN
-!
-vlan 805
- name LAN-GUEST
+ip http server
+ip http secure-server
+ip http secure-active-session-modules none
+ip http active-session-modules none
 !
 !
 !
-! @start-ignore-compliance
-key config-key password-encrypt {{ MASTER_KEY }}
-! @end-ignore-compliance
-password encryption aes
-!
-!
-!
-! @start-ignore-compliance
-username test-user privilege 0 secret Test0
-! @end-ignore-compliance
-!
-!
-!
-ip radius source-interface Vlan800
-!
-!
-!
-radius server ISE01
- address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
- timeout 5
- retransmit 3
- automate-tester username test-user ignore-acct-port probe-on
- key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
-!
-radius server ISE02
- address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
- timeout 5
- retransmit 3
- automate-tester username test-user ignore-acct-port probe-on
- key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
-!
-!
-! @start-ignore-compliance
-radius-server timeout 5
-radius-server retransmit 3
-! @end-ignore-compliance
-radius-server dead-criteria time 5 tries 3
-radius-server deadtime 15
-!   
-! 
-radius-server attribute 6 on-for-login-auth
-radius-server attribute 6 support-multiple
-radius-server attribute 8 include-in-access-req
-radius-server attribute 25 access-request include
-radius-server attribute 31 mac format ietf upper-case
-radius-server attribute 31 send nas-port-detail mac-only
-radius-server attribute 32 include-in-access-req format %h
-!
-! @start-ignore-compliance
-radius-server vsa send authentication
-radius-server vsa send accounting
-! @end-ignore-compliance
-!
-!
-!
-aaa group server radius ISESERV
- server name ISE01
- server name ISE02
- deadtime 15
- ip radius source-interface Vlan800
-!
-aaa authentication dot1x default group ISESERV
-aaa authorization network default group ISESERV
-!
-#INTERACTIVE
-aaa accounting identity default start-stop group ISESERV<IQ>.*Do you wish to continue.*<R>yes
-#ENDS_INTERACTIVE
-aaa accounting update newinfo periodic 2880
-!
-!
-!
-aaa server radius dynamic-author
- client 10.140.2.31 server-key 6 gAiTI`bLACJdW[bEPceHa[EAXX[RgZFHVJbZAAB
- client 10.140.2.32 server-key 6 SUbKgg\P]_OROX]aLWWFRWEPLDgZdY`hQE]bAAB
-!
+errdisable recovery cause bpduguard
+errdisable recovery cause dhcp-rate-limit
+errdisable recovery interval 90
 !
 !
 ! 
 device-tracking tracking auto-source 
 !
-! 
 device-tracking policy ISE_DT_Access
  no protocol udp
  security-level glean
  tracking enable
-!
 ! 
 device-tracking policy Disable_DT_Trunk 
  trusted-port 
@@ -1361,15 +990,8 @@ device-tracking policy Disable_DT_Trunk
 !
 !
 !
-ip dhcp snooping 
-!
-! 
-no ip dhcp snooping information option 
-!
-!
-!
-!
 cdp run
+!
 !
 ! 
 device-sensor filter-list dhcp list dhcp_list
@@ -1390,8 +1012,8 @@ device-sensor filter-list cdp list cdp_list
  tlv name version-type
 device-sensor filter-spec cdp include list cdp_list
 !
-!
 device-sensor notify all-changes 
+!
 !
 !
 access-session attributes filter-list list sensor_list 
@@ -1424,19 +1046,19 @@ ip access-list extended ACL_GUEST_REDIRECT
 !
 !
 !
+parameter-map type webauth global
+ type webauth
+ virtual-ip ipv4 192.0.2.1
+ intercept-https-enable
+!
+!
+!
 service-template Critical_Access 
  vlan 802
  voice vlan
  access-group ACL_AAA-Down
 !
 service-template Guest_Redirect
-!
-!
-!
-parameter-map type webauth global
- type webauth
- virtual-ip ipv4 192.0.2.1
- intercept-https-enable
 !
 !
 !
@@ -1482,11 +1104,9 @@ class-map type control subscriber match-none NOT_CRITICAL_AUTH
 !
 !
 policy-map type control subscriber ISE-NAC-POLICY
-!
  event session-started match-all
   10 class always do-until-failure
     10 authenticate using dot1x priority 10
-!
  event authentication-failure match-first
   5 class DOT1X_DENIED do-until-failure
    10 terminate dot1x
@@ -1517,28 +1137,26 @@ policy-map type control subscriber ISE-NAC-POLICY
    10 terminate mab
    20 terminate dot1x
    30 authentication-restart 60
-!    
  event aaa-available match-all
   10 class CRITICAL_AUTH do-until-failure
    10 clear-session
   20 class NOT_CRITICAL_AUTH do-until-failure
    10 resume reauthentication
-!
  event agent-found match-all
   10 class always do-until-failure
    10 terminate mab
    20 authenticate using dot1x priority 10
-!    
  event inactivity-timeout match-all
   10 class always do-until-failure
    10 clear-session
-!    
  event authentication-success match-all
   10 class DOT1X do-until-failure
    10 authorize
   20 class MAB do-until-failure
    10 authorize 
-!    
+ event authorization-failure match-all
+  10 class always do-until-failure
+   10 authentication-restart 60
  event violation match-all
   10 class always do-until-failure
    10 restrict
@@ -1560,10 +1178,10 @@ template NAC-INT-TEMPLATE
  authentication timer reauthenticate server
  mab
 !
-access-session port-control auto
-access-session host-mode single-host
-access-session control-direction in
-access-session closed
+ access-session port-control auto
+ access-session host-mode single-host
+ access-session control-direction in
+ access-session closed
 !
  dot1x pae authenticator
  dot1x timeout tx-period 7
@@ -1585,6 +1203,7 @@ interface {{ name }}
  switchport access vlan 802
  switchport voice vlan 300
  source template NAC-INT-TEMPLATE
+ exit
 {% elif mode == 'trunk' %}
 interface {{ name }}
 {% if 'Port-channel' in name %}
@@ -1595,15 +1214,10 @@ interface {{ name }}
 {% elif 'cw9171' in desc or 'cw9172' in desc or 'cw9174' in desc or 'cw9175' in desc or 'cw9176' in desc or 'cw9177' in desc or 'cw9178' in desc or 'cw9179' in desc %}
  switchport trunk allowed vlan add 803
 {% endif %}
+ exit
 {% endif %}
 {% endfor %}
 {% endblock %}
-!
-!
-!
-!
-ip http server
-ip http secure-server
 !
 !
 !
@@ -1617,113 +1231,88 @@ ip dhcp snooping vlan 802-803,805
 
 This section breaks down the [[#DNA - PBA NAC|DNA - PBA NAC]] template above — everything a Cisco IOS-XE switch needs to integrate with Cisco ISE for 802.1X / MAB authentication, dynamic authorization (CoA), endpoint profiling, and Centralized Web Authentication for guests.
 
----
-
-### Two AAA Planes — RADSERV vs ISESERV
-
-The switch talks RADIUS for two unrelated purposes, each with its own server, group and method lists:
-
-|Plane|Group|Server|Purpose|
-|---|---|---|---|
-|Device administration|RADSERV|radius-mgmnt-auth01 (10.140.2.27)|Who may log into the switch itself (SSH, HTTPS, console fallback) and with which privilege level.|
-|Endpoint NAC|ISESERV|ISE01 / ISE02 (10.140.2.31 / 10.140.2.32)|Whether an endpoint plugged into a port may access the network, and with which authorization.|
-
-<strong>RADSERV</strong> is set up by the [[#Initial Configuration|initial]] and [[#DNA - PBA BASIC|BASIC]] provisioning and appears in [[PBA - NAC - ISE Server#Deployment Architecture|the ISE note's architecture section]]; everything from here on concerns the ISESERV plane only. Keeping the planes separate means an ISE PSN outage never locks administrators out of the switches, and a management RADIUS outage never touches endpoint authentication.
-
----
-
-### AAA Framework
-
-#### Enabling AAA — `aaa new-model`
+#### `aaa new-model`
 
 Activates the AAA framework, replacing the legacy authentication engine. This is the prerequisite that enables the `aaa authentication`, `aaa authorization`, and `aaa accounting` command families.
 
-> [!warning] Lockout risk 
-> Enable this only after a local fallback user is defined or a RADIUS server is reachable. Without either, the next login attempt may lock you out of the switch.
+Enable this only after a local fallback user is defined or a RADIUS server is reachable. Without either, the next login attempt may lock you out of the switch.
 
-#### Shared Session ID — `aaa session-id common`
+#### `aaa session-id common`
 
 Forces the switch to use a <strong>single shared session ID</strong> across authentication, authorization, and accounting for the same session.
 
-```
-Authentication  ┐
-Authorization   ├──→ all share the same session ID
-Accounting      ┘
-```
-
 Without this, each AAA service generates its own ID and correlating records in ISE becomes painful — Live Sessions, accounting history, and CoA targeting all rely on a consistent identifier.
 
-> [!note] What it actually changes 
-> For 802.1X / MAB, authentication and authorization are usually combined into a single Access-Request / Access-Accept exchange. Accounting then runs in parallel (Start, Update, Stop). `aaa session-id common` ensures the `Acct-Session-Id` carried in accounting matches the session referenced in authentication, so ISE stitches them into one record.
+For 802.1X / MAB, authentication and authorization are usually combined into a single <strong>Access-Request</strong> / <strong>Access-Accept</strong> exchange. Accounting then runs in parallel (<strong>Start</strong>, <strong>Update</strong>, <strong>Stop</strong>). `aaa session-id common` ensures the `Acct-Session-Id` carried in accounting matches the session referenced in authentication, so ISE stitches them into one record.
 
----
+#### key config-key password-encrypt {{ MASTER_KEY }}
 
-### RADIUS Server Configuration
+The `key config-key password-encrypt` command defines a <strong>master key</strong> used by Cisco IOS/IOS-XE to strongly encrypt sensitive passwords (<strong>Type 6</strong>) inside the configuration file.
+This command only defines the master key; to use it, enable the command [[#password encryption aes]].
 
-_Defines how the switch reaches ISE, how it health-checks it, and where its packets come from on the wire._
+`MASTER_KEY` must be identical on every switch: the Type 6 RADIUS key in [[#radius server]] is a fixed string and only decrypts with the master key that created it. A switch with a different master key can't use RADIUS.
 
-#### Local Probe User
+#### VLAN
 
-```cisco
-username test-user privilege 0 password 7 06120A3258031918160405041E00
+The site VLAN plan declares 800 (management — where RADIUS, SNMP, syslog and NTP are sourced), 802 (the client data VLAN endpoints are authorized into), 803 (the VLAN dedicated to ADMIN users) and 805 (the guest VLAN used by [[#Centralized Web Authentication (CWA) for Guests|CWA]]).
+
+```bash
+!
+vlan 800
+ name LAN-MGMT
+!
+vlan 802
+ name LAN-CLIENT
+!
+vlan 803
+ name LAN-ADMIN
+!
+vlan 805
+ name LAN-GUEST
 ```
 
-A local account whose only purpose is to populate the RADIUS health-check probe. `automate-tester` (configured on the RADIUS server block below) sends periodic Access-Requests using these credentials to verify ISE is alive.
+#### radius server
 
-| Field         | Meaning                                                                                                                                                                                   |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `privilege 0` | Lowest privilege level — allows only `disable`, `enable`, `exit`, `help`, and `logout`. Deliberately useless for management, so even if the credentials leak, the account grants nothing. |
-| `password 7`  | Cisco Type-7 reversible encryption. Weak — meaningful only as obfuscation. ISE will normally reject this account on policy (no matching identity), which is fine for the probe.           |
+<strong>RADSERV vs ISESERV</strong>
+The switch talks RADIUS for two unrelated purposes, each with its own server, group and method lists:
 
-> [!info] How the probe works 
-> The probe doesn't need to _succeed_ — a clean `Access-Reject` from ISE is enough to prove the server is responsive. What matters is that ISE answers at all.
-
-#### RADIUS Server Definition
+| Plane                 | Group   | Server                                    | Purpose                                                                                           |
+| --------------------- | ------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Device administration | RADSERV | PBA-RADIUS (10.140.2.27)                  | Who may log into the switch itself (SSH, HTTPS, console fallback) and with which privilege level. |
+| Endpoint NAC          | ISESERV | ISE01 / ISE02 (10.140.2.31 / 10.140.2.32) | Whether an endpoint plugged into a port may access the network, and with which authorization.     |
 
 ```cisco
+!
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
  timeout 5
- retransmit 3
+ retransmit 2
  automate-tester username test-user ignore-acct-port probe-on
- key 7 075F02457D0A36162421045C
+ key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
+!
+radius server ISE02
+ address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
+ timeout 5
+ retransmit 2
+ automate-tester username test-user ignore-acct-port probe-on
+ key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
+!
 ```
 
-##### `radius server ISE01`
-
+`radius server ISE01`
 A locally significant name for this ISE node. The label has no meaning to ISE itself — it is purely how the switch refers to this server internally and inside server groups.
 
-##### `address ipv4 10.140.2.31 auth-port 1812 acct-port 1813`
+`address ipv4 10.140.2.31 auth-port 1812 acct-port 1813`: Define the IP of the ISE Policy Service Node (PSN), `auth-port 1812` define the UDP port for <strong>Access-Request</strong> / <strong>Accept</strong> / <strong>Reject</strong> and `acct-port 1813` the UDP port for <strong>Accounting Start</strong> / <strong>Stop</strong> / <strong>Update</strong>.
 
-|Element|Meaning|
-|---|---|
-|`address ipv4 10.140.2.31`|IP of the ISE Policy Service Node (PSN)|
-|`auth-port 1812`|UDP port for Access-Request / Accept / Reject|
-|`acct-port 1813`|UDP port for Accounting Start / Stop / Update|
+<strong>1812</strong> and <strong>1813</strong> are the IANA-standard RADIUS ports. Use them unless ISE has been explicitly configured otherwise.
 
-> 1812 and 1813 are the IANA-standard RADIUS ports. Use them unless ISE has been explicitly configured otherwise.
+`timeout 5 / retransmit 2`: Tells the switch to wait 2 seconds for a reply and retry up to 3 times (8 seconds total) before marking the server unresponsive
+ 
+`automate-tester username test-user ignore-acct-port probe-on`: Sends periodic test probes using the named local account. ISE's response confirms the server is responsive. 
 
-##### `timeout 5`
+`ignore-acct-port` tells the switch to send probe to the auth port only. ISE may not always answer probes on 1813 the same way, and including it can cause false "dead" detections.  
 
-How long the switch waits for a single RADIUS response before declaring that attempt failed. It can be configured globally or locally under the `radius server` definition; if both are configured, the more specific per-server value wins — see [[#Global RADIUS Timers|Global RADIUS Timers]].
-
-##### `retransmit 3`
-
-How many additional attempts the switch makes against the same server before moving to the next one in the group. Same global-versus-local precedence as the timeout.
-
-##### `automate-tester username test-user ignore-acct-port probe-on`
-
-Three behaviors rolled into one command:
-
-|Keyword|Purpose|
-|---|---|
-|`automate-tester username ...`|Send periodic test probes using the named local account. ISE's response confirms the server is responsive.|
-|`ignore-acct-port`|Probe the auth port only. ISE may not always answer probes on 1813 the same way, and including it can cause false "dead" detections.|
-|`probe-on`|Probe <strong>only when the server is currently marked dead</strong>. Without this, the switch probes continuously, generating unnecessary RADIUS traffic.|
-
-##### `key 7 075F02457D0A36162421045C`
-
-The RADIUS shared secret. Must match the value configured on ISE for this NAD entry, otherwise every Access-Request fails the message-authenticator check.
+`probe-on` attribute tells the switch to send probe <strong>only when the server is currently marked dead</strong>. Without this, the switch probes continuously, generating unnecessary RADIUS traffic. 
 
 #### AAA Server Group — `ISESERV`
 
