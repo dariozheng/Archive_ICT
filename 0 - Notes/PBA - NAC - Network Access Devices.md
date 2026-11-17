@@ -1247,7 +1247,7 @@ Forces the switch to use a <strong>single shared session ID</strong> across auth
 
 For 802.1X / MAB, authentication and authorization are usually combined into a single <strong>Access-Request</strong> / <strong>Access-Accept</strong> exchange. Accounting then runs in parallel (<strong>Start</strong>, <strong>Update</strong>, <strong>Stop</strong>). 
 
-`aaa session-id common` ensures the `Acct-Session-Id` carried in accounting matches the session referenced in authentication, so ISE stitches them into one record.
+`aaa session-id common` keeps one session ID across the authentication and accounting packets of a session, so ISE can stitch them into one record.
 
 This command is the IOS default; it’s set explicitly so the template doesn’t depend on defaults. ISE itself correlates sessions and targets CoA with the Cisco `audit-session-id` AV-pair.
 
@@ -1316,9 +1316,9 @@ A locally significant name for this ISE node. The label has no meaning to ISE it
  
 `automate-tester username test-user ignore-acct-port probe-on`: Sends test Access-Requests with the username `test-user`. The account doesn’t have to exist on the switch or in ISE: any reply, even an Access-Reject, proves the PSN is alive. There is no need to create it as a local user on the switch.
 
-`ignore-acct-port` tells the switch to send probes to the auth port only. ISE may not always answer probes on 1813 the same way, and including it can cause false "dead" detections.  
+`ignore-acct-port` tells the switch to send probes to the auth port only. An auth probe is enough to prove the PSN is alive. Probing 1813 as well only adds accounting records for `test-user` in ISE.
 
-`probe-on` tells the switch to send probe <strong>only when the server is currently marked dead</strong>. Without this, the switch probes continuously, generating unnecessary RADIUS traffic. 
+`probe-on` tells the switch to send probe <strong> only when the server is currently marked dead</strong>. Without it, the switch also probes servers that are alive, on the `idle-time` interval, which adds RADIUS traffic and failed-auth entries in ISE Live Logs. `probe-on` and `idle-time` can’t be configured together.
 
 #### radius-server timers
 
@@ -1360,8 +1360,7 @@ The default is 0, which means PSNs are never marked dead. Every request then wai
 If the primary PSN goes down:
 1. **First request:** the original send and all 3 retransmissions go unanswered. The 3rd retransmission meets `tries 3`, so the PSN is marked dead and the request moves to the secondary PSN. This request can take up to ~20 s.
 2. **Next 15 minutes:** all requests go directly to the secondary PSN, with no delay.
-3. **After 15 minutes:** the primary PSN is tried again.
-
+3. **After 15 minutes, or when a probe gets a reply:** the primary PSN is used again.
 #### radius-server attribute
 
 The radius-server attribute shapes what the switch puts into RADIUS packets so that ISE has the context it needs for policy decisions and profiling.
@@ -1414,10 +1413,10 @@ For this to work on modern switches there has to be a `device-tracking` policy a
 
 The IP is included in these cases:
 
-- **Central WebAuth (CWA):** The client gets a redirect from MAB and picks up an IP through DHCP. After the user logs in on the ISE portal, ISE sends a CoA, and the switch’s next MAB request includes Attribute 8.
-- **Local WebAuth (LWA):** After MAB or 802.1X fails, the port falls back to webauth behind a pre-auth ACL. The client picks up an IP through DHCP and logs in on the switch’s own portal. The switch’s Access-Request with those credentials includes Attribute 8.
-- **Re-authentication:** When the session timer runs out, the client’s IP is already in the device-tracking table.
-- **Static IPs:** If device-tracking learns the IP from ARP or other traffic before a re-auth or later request.
+- <strong>Central WebAuth (CWA)</strong>: The client gets a redirect from MAB and picks up an IP through DHCP. After the user logs in on the ISE portal, ISE sends a CoA, and the switch’s next MAB request includes Attribute 8.
+- <strong>Local WebAuth (LWA)</strong>: After MAB or 802.1X fails, the port falls back to webauth behind a pre-auth ACL. The client picks up an IP through DHCP and logs in on the switch’s own portal. The switch’s Access-Request with those credentials includes Attribute 8.
+- <strong>Re-authentication</strong>: When the session timer runs out, the client’s IP is already in the device-tracking table.
+- <strong>Static IPs</strong>: If device-tracking learns the IP from ARP or other traffic before a re-auth or later request.
 
 #### Class (Attribute 25)
 
