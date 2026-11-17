@@ -304,6 +304,7 @@ ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
 ip http authentication aaa login-authentication HTTPSRV
+ip http authentication aaa exec-authorization HTTPSRV
 ip http client source-interface Vlan800
 !
 !
@@ -769,6 +770,7 @@ ip http secure-server
 ip http secure-active-session-modules none
 ip http active-session-modules none
 ip http authentication aaa login-authentication HTTPSRV
+ip http authentication aaa exec-authorization HTTPSRV
 ip http client source-interface Vlan800
 ```
 
@@ -776,14 +778,16 @@ This configuration block enables the switch's web server (HTTP/HTTPS) for [[#Cen
 
 `ip http server` is required so the switch can intercept HTTP and redirect guests to the ISE Guest Portal. `ip http secure-server` is only needed to intercept HTTPS as well, which always shows guests a certificate warning.
 
-`ip http active-session-modules none` and `ip http secure-active-session-modules none` disable interactive browser-based WebUI management modules while keeping the underlying HTTP/HTTPS engine active. 
+`ip http active-session-modules none` and `ip http secure-active-session-modules none` <strong>disable</strong> <mark style="background: #FFF3A3A6;">interactive browser-based WebUI management modules</mark> while keeping the underlying HTTP/HTTPS engine active. 
 This allows CWA URL redirection to function without exposing the switch's administrative web login page to users or guests.
 
 `ip http authentication aaa login-authentication HTTPSRV` tells the switch to verify incoming HTTP or HTTPS login requests using a custom AAA method list named `HTTPSRV`, rather than falling back to the switch's local `enable` password or the `default` AAA login list.
 
 - `ip http authentication aaa`: Instructs the switch's built-in web server (HTTP/HTTPS) to use AAA (Authentication, Authorization, and Accounting) instead of checking the local enable password.
 - `login-authentication`: Specifies that this rule applies to the <strong>login verification step</strong> (checking the username and password).
-- `HTTPSRV`: Points to the `aaa authentication login HTTPSRV group RADSERV local-case` method list (see [[#aaa authentication login HTTPSRV group RADSERV local-case]]).
+- `HTTPSRV`: Points to the `aaa authentication login HTTPSRV group RADSERV local-case` login method list (see [[#aaa authentication login HTTPSRV group RADSERV local-case]]).
+
+`ip http authentication aaa exec-authorization HTTPSRV` this command binds the HTTP/HTTPS web server to the named AAA EXEC authorization method list called HTTPSRV ([[#aaa authorization exec | aaa authorization exec HTTPSRV group RADSERV if-authenticated]]). This tells the switch which specific authorization policy to check immediately after a user successfully logs in through the web browser.
 
 #### line con
 
@@ -1271,7 +1275,7 @@ vlan 805
  name LAN-GUEST
 ```
 
-#### RADIUS SERVER
+### RADIUS
 
 <strong>RADSERV vs ISESERV</strong>
 The switch talks RADIUS for two unrelated purposes, each with its own server, group and method lists:
@@ -1319,14 +1323,17 @@ A locally significant name for this ISE node. The label has no meaning to ISE it
 These global timers control how the switch handles an unresponsive ISE PSN: how long it waits, how often it retries, and when it fails over to the next PSN in the server group. They apply to all RADIUS servers unless overridden under `radius server <name>`.
 
 ##### radius-server timeout 5
+
 Waits **5 seconds** for a reply from the PSN before resending the request (default: 5).
 
 ##### radius-server retransmit 3
+
 Resends an unanswered request up to **3 times** (4 attempts in total). After the last attempt, the request fails over to the next PSN in the group, or to the next method in the AAA method list.
 
-Worst case for one request on a down PSN: 5 s × 4 = **~20 s**.
+Worst case for one request on a down PSN: 5 s × 4 = **20 s**.
 
 ##### radius-server dead-criteria time 5 tries 3
+
 Defines when a PSN is marked **dead**. This is the server's state, not a per-request setting. Both conditions must be met:
 - `time 5`: at least 5 s have passed since the PSN's last valid reply.
 - `tries 3`: 3 consecutive timeouts.
@@ -1341,6 +1348,7 @@ Counting rules:
 Has no effect unless `radius-server deadtime` is set.
 
 ##### radius-server deadtime 15
+
 Skips a dead PSN for **15 minutes** (the value is in minutes; range 1–1440). Requests go straight to the next PSN with no waiting. After 15 minutes, the PSN is treated as alive again.
 
 The default is 0, which means PSNs are never marked dead. Every request then waits the full ~20 s on a down PSN, which can be long enough for 802.1X clients to time out.
@@ -1350,22 +1358,20 @@ If the primary PSN goes down:
 2. **Next 15 minutes:** all requests go directly to the secondary PSN, with no delay.
 3. **After 15 minutes:** the primary PSN is tried again.
 
-### RADIUS Attribute
+#### radius-server attribute
 
-_Shapes what the switch puts into RADIUS packets so that ISE has the context it needs for policy decisions and profiling._
+The radius-server attribute shapes what the switch puts into RADIUS packets so that ISE has the context it needs for policy decisions and profiling.
 
-> [!important] Why these matter 
+> [!important] 
 > Default attribute formatting often does not match what ISE expects. A classic cause of "MAB doesn't work" is a `Calling-Station-Id` that carries something other than the plain endpoint MAC in the format ISE stores (IETF upper-case, `00-50-56-AB-CD-EF`). The attribute commands in this section quietly determine whether your authentication policy will ever match.
 
-#### Service-Type (Attribute 6)
-
-##### `radius-server attribute 6 on-for-login-auth`
+##### radius-server attribute 6 on-for-login-auth
 
 Includes [[PBA - NAC - ISE Server#Service-Type|Service-Type]] in Access-Request packets for login authentication.
 
 ISE policy conditions that match on `Service-Type` will not evaluate correctly without it.
 
-##### `radius-server attribute 6 support-multiple`
+##### radius-server attribute 6 support-multiple
 
 Allows multiple [[PBA - NAC - ISE Server#Service-Type|Service-Type]] values in the same RADIUS packet — required when 802.1X and MAB run on the same ports, because they advertise different values (`Framed` for dot1x, `Call-Check` for MAB).
 
@@ -1378,9 +1384,7 @@ Multiple Service-Type:
   Service-Type = Call-Check (10)
 ```
 
-#### Framed-IP-Address (Attribute 8)
-
-##### `radius-server attribute 8 include-in-access-req`
+##### radius-server attribute 8 include-in-access-req
 
 Includes the endpoint's <strong>IP address</strong> in Access-Requests. ISE uses this for profiling, IP-based policy conditions, and correlation with DHCP snooping data.
 
@@ -1388,12 +1392,8 @@ Includes the endpoint's <strong>IP address</strong> in Access-Requests. ISE uses
 > The switch can only populate this attribute if it has actually learned an IP for the endpoint. Device tracking must be functional, otherwise the field will be empty or `0.0.0.0`.
 
 ```
-Without this:
-  Access-Request → no IP address included
   ISE sees: MAC address only
-
-With this:
-  Access-Request → includes device IP address
+  vs
   ISE sees: MAC address + IP address
 ```
 

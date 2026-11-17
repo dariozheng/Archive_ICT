@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiLock",
       "SiCisco",
       "SiLinux",
       "SiWireguard",
-      "SiWindows",
-      "FasNetworkWired"
+      "SiWindows"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -423,5 +423,9 @@
   "2 - Categories/Topics/Systems/Systems General.md": {
     "iconName": "FasServer",
     "iconColor": "#103f7aff"
+  },
+  "0 - Notes/PBA - NAC - Troubleshooting Commands.md": {
+    "iconName": "LiLock",
+    "iconColor": null
   }
 }
