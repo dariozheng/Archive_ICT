@@ -1398,7 +1398,7 @@ In practice, this only matters if an ISE authorization profile returns more than
 
 ##### radius-server attribute 8 include-in-access-req
 
-Makes the NAS include <strong>RADIUS Attribute 8 (Framed-IP-Address)</strong> in <strong>Access-Requests</strong> <mark style="background: #FFF3A3A6;">whenever it already knows the endpoint’s IPv4 address</mark>. 
+Makes the NAS include [[PBA - NAC - ISE Server#Framed-IP-Address|RADIUS Attribute 8 (Framed-IP-Address)]] in <strong>Access-Requests</strong> <mark style="background: #FFF3A3A6;">whenever it already knows the endpoint’s IPv4 address</mark>. 
 
 Without it, the IP normally appears only in Accounting. 
 
