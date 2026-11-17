@@ -896,14 +896,14 @@ ip radius source-interface Vlan800
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
  timeout 5
- retransmit 2
+ retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
  key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
 !
 radius server ISE02
  address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
  timeout 5
- retransmit 2
+ retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
  key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
 !
@@ -1245,9 +1245,11 @@ Enable this only after a local fallback user is defined or a RADIUS server is re
 
 Forces the switch to use a <strong>single shared session ID</strong> across authentication, authorization, and accounting for the same session.
 
-Without this, each AAA service generates its own ID and correlating records in ISE becomes painful — Live Sessions, accounting history, and CoA targeting all rely on a consistent identifier.
+For 802.1X / MAB, authentication and authorization are usually combined into a single <strong>Access-Request</strong> / <strong>Access-Accept</strong> exchange. Accounting then runs in parallel (<strong>Start</strong>, <strong>Update</strong>, <strong>Stop</strong>). 
 
-For 802.1X / MAB, authentication and authorization are usually combined into a single <strong>Access-Request</strong> / <strong>Access-Accept</strong> exchange. Accounting then runs in parallel (<strong>Start</strong>, <strong>Update</strong>, <strong>Stop</strong>). `aaa session-id common` ensures the `Acct-Session-Id` carried in accounting matches the session referenced in authentication, so ISE stitches them into one record.
+`aaa session-id common` ensures the `Acct-Session-Id` carried in accounting matches the session referenced in authentication, so ISE stitches them into one record.
+
+This command is the IOS default; it’s set explicitly so the template doesn’t depend on defaults. ISE itself correlates sessions and targets CoA with the Cisco `audit-session-id` AV-pair.
 
 #### key config-key password-encrypt {{ MASTER_KEY }}
 
@@ -1291,14 +1293,14 @@ The switch talks RADIUS for two unrelated purposes, each with its own server, gr
 radius server ISE01
  address ipv4 10.140.2.31 auth-port 1812 acct-port 1813
  timeout 5
- retransmit 2
+ retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
  key 6 BPZBCUe`WYU[W_VXYecbNZXbDG_\g\NbUaBNAAB
 !
 radius server ISE02
  address ipv4 10.140.2.32 auth-port 1812 acct-port 1813
  timeout 5
- retransmit 2
+ retransmit 3
  automate-tester username test-user ignore-acct-port probe-on
  key 6 IJEgJRHg]XCUgHVPhLfMG[^PQZL\fMcaXTa`AAB
 ```
@@ -1306,17 +1308,17 @@ radius server ISE02
 `radius server ISE01`
 A locally significant name for this ISE node. The label has no meaning to ISE itself — it is purely how the switch refers to this server internally and inside server groups.
 
-`address ipv4 10.140.2.31 auth-port 1812 acct-port 1813`: Define the IP of the ISE Policy Service Node (PSN), `auth-port 1812` define the UDP port for <strong>Access-Request</strong> / <strong>Accept</strong> / <strong>Reject</strong> and `acct-port 1813` the UDP port for <strong>Accounting Start</strong> / <strong>Stop</strong> / <strong>Update</strong>.
+`address ipv4 10.140.2.31 auth-port 1812 acct-port 1813`: Defines the IP of the ISE Policy Service Node (PSN), `auth-port 1812` defines the UDP port for <strong>Access-Request</strong> / <strong>Accept</strong> / <strong>Reject</strong> and `acct-port 1813` the UDP port for <strong>Accounting Start</strong> / <strong>Stop</strong> / <strong>Update</strong>.
 
 <strong>1812</strong> and <strong>1813</strong> are the IANA-standard RADIUS ports. Use them unless ISE has been explicitly configured otherwise.
 
-`timeout 5 / retransmit 2`: Tells the switch to wait 2 seconds for a reply and retry up to 3 times (8 seconds total) before marking the server unresponsive
+`timeout 5 / retransmit 3`: Tells the switch to wait 5 seconds for a reply and retry up to 3 times (20 seconds total) before failing over to the next PSN.
  
-`automate-tester username test-user ignore-acct-port probe-on`: Sends periodic test probes using the named local account. ISE's response confirms the server is responsive. 
+`automate-tester username test-user ignore-acct-port probe-on`: Sends test Access-Requests with the username `test-user`. The account doesn’t have to exist on the switch or in ISE: any reply, even an Access-Reject, proves the PSN is alive. There is no need to create it as a local user on the switch.
 
-`ignore-acct-port` tells the switch to send probe to the auth port only. ISE may not always answer probes on 1813 the same way, and including it can cause false "dead" detections.  
+`ignore-acct-port` tells the switch to send probes to the auth port only. ISE may not always answer probes on 1813 the same way, and including it can cause false "dead" detections.  
 
-`probe-on` attribute tells the switch to send probe <strong>only when the server is currently marked dead</strong>. Without this, the switch probes continuously, generating unnecessary RADIUS traffic. 
+`probe-on` tells the switch to send probe <strong>only when the server is currently marked dead</strong>. Without this, the switch probes continuously, generating unnecessary RADIUS traffic. 
 
 #### radius-server timers
 
@@ -1349,7 +1351,9 @@ Has no effect unless `radius-server deadtime` is set.
 
 ##### radius-server deadtime 15
 
-Skips a dead PSN for **15 minutes** (the value is in minutes; range 1–1440). Requests go straight to the next PSN with no waiting. After 15 minutes, the PSN is treated as alive again.
+Skips a dead PSN for **15 minutes** (the value is in minutes; range 1–1440). Requests go straight to the next PSN with no waiting. 
+
+After 15 minutes, the PSN is treated as alive again. Because `automate-tester username test-user ignore-acct-port probe-on` is configured, probes sent while the PSN is dead also affect when it’s marked up. 
 
 The default is 0, which means PSNs are never marked dead. Every request then waits the full ~20 s on a down PSN, which can be long enough for 802.1X clients to time out.
 
@@ -1367,35 +1371,53 @@ The radius-server attribute shapes what the switch puts into RADIUS packets so t
 
 ##### radius-server attribute 6 on-for-login-auth
 
-Includes [[PBA - NAC - ISE Server#Service-Type|Service-Type]] in Access-Request packets for login authentication.
+Includes [[PBA - NAC - ISE Server#Service-Type|Service-Type]] in Access-Requests for <strong>login authentication</strong>: someone logging into the switch itself (SSH, console, HTTPS through `aaa authentication login`), or a user signing in on the switch's own Local WebAuth portal.
 
-ISE policy conditions that match on `Service-Type` will not evaluate correctly without it.
+Without it, the switch removes the attribute from those requests. `debug radius` shows:
+`dropping service type, "radius-server attribute 6 on-for-login-auth" is off`
+
+With it, login requests carry:
+
+```
+Service-Type = Login (1)
+```
+
+Scope:
+- <strong>Device administration (RADSERV):</strong> PBA-RADIUS can tell an admin login apart from other requests and match its policy on `Service-Type = Login`.
+- <strong>Local WebAuth:</strong> the Access-Request built from the portal credentials also includes Service-Type.
+- <strong>802.1X / MAB: no effect.</strong> These requests always carry Service-Type, with or without this command: `Framed (2)` for 802.1X, `Call-Check (10)` for MAB.
 
 ##### radius-server attribute 6 support-multiple
 
-Allows multiple [[PBA - NAC - ISE Server#Service-Type|Service-Type]] values in the same RADIUS packet — required when 802.1X and MAB run on the same ports, because they advertise different values (`Framed` for dot1x, `Call-Check` for MAB).
+Allows the switch to accept more than one [[PBA - NAC - ISE Server#Service-Type|Service-Type]] attribute in an Access-Accept, i.e. multiple Service-Type values for each RADIUS profile. By default, the switch expects at most one.
+
+It doesn’t affect Access-Requests: each request carries exactly one Service-Type (RFC 2865), and 802.1X and MAB never share a packet.
 
 ```
-Single Service-Type:
-  Service-Type = Framed (2)       
-
-Multiple Service-Type:
-  Service-Type = Framed (2)
-  Service-Type = Call-Check (10)
+802.1X Access-Request:  Service-Type = Framed (2)
+MAB Access-Request:     Service-Type = Call-Check (10)
 ```
+
+In practice, this only matters if an ISE authorization profile returns more than one Service-Type. It is kept in the template because it's part of Cisco's baseline switch configuration for ISE, and it does no harm when unused.
 
 ##### radius-server attribute 8 include-in-access-req
 
-Includes the endpoint's <strong>IP address</strong> in Access-Requests. ISE uses this for profiling, IP-based policy conditions, and correlation with DHCP snooping data.
+Makes the NAS include <strong>RADIUS Attribute 8 (Framed-IP-Address)</strong> in <strong>Access-Requests</strong> <mark style="background: #FFF3A3A6;">whenever it already knows the endpoint’s IPv4 address</mark>. 
 
-> [!note] Requires [[#Device Tracking Policies|IPDT]] 
-> The switch can only populate this attribute if it has actually learned an IP for the endpoint. Device tracking must be functional, otherwise the field will be empty or `0.0.0.0`.
+Without it, the IP normally appears only in Accounting. 
 
-```
-  ISE sees: MAC address only
-  vs
-  ISE sees: MAC address + IP address
-```
+ISE uses it to link the IP to the MAC for profiling, for IP-based policy conditions, and for IP-to-user mapping (pxGrid, SXP).
+
+The switch can only add an address it has learned through <strong>device-tracking (SISF)</strong>, from <strong>DHCP snooping</strong>, <strong>ARP</strong> or other traffic. <mark style="background: #FFB8EBA6;">If there’s no binding, the attribute is left out</mark>. The first authentication after link-up usually has no IP.
+
+For this to work on modern switches there has to be a `device-tracking` policy attached to the access ports. Without it there’s no IP binding and the attribute is never sent.
+
+The IP is included in these cases:
+
+- **Central WebAuth (CWA):** The client gets a redirect from MAB and picks up an IP through DHCP. After the user logs in on the ISE portal, ISE sends a CoA, and the switch’s next MAB request includes Attribute 8.
+- **Local WebAuth (LWA):** After MAB or 802.1X fails, the port falls back to webauth behind a pre-auth ACL. The client picks up an IP through DHCP and logs in on the switch’s own portal. The switch’s Access-Request with those credentials includes Attribute 8.
+- **Re-authentication:** When the session timer runs out, the client’s IP is already in the device-tracking table.
+- **Static IPs:** If device-tracking learns the IP from ARP or other traffic before a re-auth or later request.
 
 #### Class (Attribute 25)
 
