@@ -455,11 +455,32 @@ This attribute identifies the <strong>endpoint device</strong> that is requestin
     - <strong>MAC Authentication Bypass (MAB):</strong> For headless devices like printers or security cameras, ISE copies the MAC address from this attribute and checks it against the internal endpoint database.
     - <strong>Device Profiling:</strong> The ISE Profiler evaluates this MAC address vendor prefix (OUI) to help determine if the device is an Apple iPhone, a Windows workstation, or an IP phone.
 
+
+##### Framed-IP-Address
+![[Pasted image 20261117152611.png]]
+The `Framed-IP-Address` (IETF RADIUS Attribute ID `8`) specifies an IPv4 address to be configured for a user or endpoint on the network.
+
+In ISE, this attribute is used in two primary ways:
+
+<strong>Inbound</strong> (<strong>Accounting</strong>/<strong>Requests</strong>):
+
+In wired and wireless environments, the endpoint typically authenticates _before_ it receives an IP address via DHCP. Once the switch or WLC learns the client's IP (via DHCP snooping, IP Device Tracking, or client state tables), it sends `Framed-IP-Address` in a RADIUS Accounting-Start or Interim-Update packet. ISE relies on this to populate Live Logs, build endpoint profiles, and distribute IP-to-SGT mappings over pxGrid/SXP.  
+
+NADs can also include `Framed-IP-Address` in an initial or subsequent `Access-Request` (for example, during re-authentication or when explicitly enabled on Cisco IOS/IOS-XE/WLC with [[PBA - NAC - Network Access Devices#radius-server attribute 8 include-in-access-req| radius-server attribute 8 include-in-access-req]]).
+
+<strong>Outbound</strong> (<strong>Authorization</strong>):
+
+In ISE, `Framed-IP-Address` is configured inside [[#Authorization Profiles]]—either as a static IP or dynamically mapped from an external identity store attribute (such as Active Directory's `msRADIUSFramedIPAddress`).  
+
+VPN vs. LAN/WLAN behavior: Remote Access VPN gateways (like Cisco ASA or Secure Firewall/FTD) actively honor this attribute to assign the client's tunnel IP. However, standard L2/L3 switches and WLCs ignore Framed-IP-Address in an Access-Accept, because Ethernet and Wi-Fi clients acquire their IP addresses via DHCP rather than session negotiation.  
+
+Special RFC Values: Beyond standard unicast IPv4 addresses, RFC 2865 reserves `255.255.255.254` (`0xFFFFFFFE`) to instruct the NAD to assign an IP from its own local pool, and `255.255.255.255` (`0xFFFFFFFF`) to allow the endpoint to select or negotiate its own address.
+
 ##### Dynamic VLAN Assignment Attributes
 
 For a network switch to accept a dynamic VLAN assignment from Cisco ISE, it must receive three IETF tunnel attributes in the [[#Authorization Profiles|Authorization Profile]]. The switch accepts and applies them via [[PBA - NAC - Network Access Devices#`aaa authorization network default group ISESERV`|`aaa authorization network`]].
 
-<strong>`Tunnel-Private-Group-ID` (RADIUS Attribute 81)</strong> is a standard IETF attribute used as an <strong>Authorization Result</strong> to dynamically assign a user or device to a specific <strong>VLAN</strong> upon successful authentication.
+<strong>Tunnel-Private-Group-ID (RADIUS Attribute 81)</strong> is a standard IETF attribute used as an <strong>Authorization Result</strong> to dynamically assign a user or device to a specific <strong>VLAN</strong> upon successful authentication.
 
 ![[Pasted image 20260513152509.png]]
 
