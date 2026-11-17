@@ -1365,9 +1365,6 @@ If the primary PSN goes down:
 
 The radius-server attribute shapes what the switch puts into RADIUS packets so that ISE has the context it needs for policy decisions and profiling.
 
-> [!important] 
-> Default attribute formatting often does not match what ISE expects. A classic cause of "MAB doesn't work" is a `Calling-Station-Id` that carries something other than the plain endpoint MAC in the format ISE stores (IETF upper-case, `00-50-56-AB-CD-EF`). The attribute commands in this section quietly determine whether your authentication policy will ever match.
-
 ##### radius-server attribute 6 on-for-login-auth
 
 Includes [[PBA - NAC - ISE Server#Service-Type|Service-Type]] in Access-Requests for <strong>login authentication</strong>: someone logging into the switch itself (SSH, console, HTTPS through `aaa authentication login`), or a user signing in on the switch's own Local WebAuth portal.
