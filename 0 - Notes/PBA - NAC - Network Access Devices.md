@@ -1415,9 +1415,7 @@ The IP is included in these cases:
 - <strong>Re-authentication</strong>: When the session timer runs out, the client’s IP is already in the device-tracking table.
 - <strong>Static IPs</strong>: If device-tracking learns the IP from ARP or other traffic before a re-auth or later request.
 
-#### Class (Attribute 25)
-
-##### `radius-server attribute 25 access-request include`
+#### radius-server attribute 25 access-request include
 
 Causes the switch to echo the `Class` attribute from previous Access-Accepts back into subsequent Access-Requests. ISE uses this to maintain continuity across re-authentication and CoA — it can recognize the session as a continuation of a previous one rather than treating it as brand new.
 
